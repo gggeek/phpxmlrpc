@@ -1,0 +1,29 @@
+
+I'm pleased to announce XML-RPC for PHP version 1.0 beta 7. This is
+fixes some critical bugs that crept in. If it shows itself to be stable
+then it'll become the 1.0 release.
+
+It can be downloaded from http://xmlrpc.usefulinc.com/php.html
+
+Comprehensive documentation is available in the distribution, but you
+can also browse it at http://xmlrpc.usefulinc.com/doc/
+
+Bugfixes in this release include:
+
+ * Passing of booleans should now work as expected
+ * Dollar signs and backslashes in strings should pass OK
+ * addScalar() now works properly to append to array vals
+
+New features include:
+
+ * Added support for HTTP Basic authorization through the 
+   xmlrpc_client::setCredentials method.
+
+ * Added test script and method for verifying correct passing of
+	 booleans
+
+The changelog is available at: http://xmlrpc.usefulinc.com/ChangeLog.txt
+
+Please test this as hard as possible and report bugs to the XML-RPC PHP
+mailing list, of which more details are available at
+http://xmlrpc.usefulinc.com/list.html, or to <xmlrpc@usefulinc.com>.

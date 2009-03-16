@@ -1,0 +1,33 @@
+
+I'm pleased to announce XML-RPC for PHP version 1.0 beta 8. 
+
+This release fixes several bugs and adds a couple of new helper
+functions. The most critical change in this release is that you can no
+longer print debug info in comments inside a server method -- you must
+now use the new xmlrpc_debugmsg() function.
+
+It can be downloaded from http://xmlrpc.usefulinc.com/php.html
+
+Comprehensive documentation is available in the distribution, but you
+can also browse it at http://xmlrpc.usefulinc.com/doc/
+
+Bugfixes in this release include:
+
+ * fixed whitespace handling in values
+ * correct sending of Content-length from the server
+
+New features include:
+
+ * xmlrpc_debugmsg() method allows sending of debug info in comments in
+   the return payload from a server
+
+ * xmlrpc_encode() and xmlrpc_decode() translate between xmlrpcval
+   objects and PHP language arrays. They aren't suitable for all
+   datatypes, but can speed up coding in simple scenarios. Thanks to Dan
+   Libby for these.
+	 
+The changelog is available at: http://xmlrpc.usefulinc.com/ChangeLog.txt
+
+Please test this as hard as possible and report bugs to the XML-RPC PHP
+mailing list, of which more details are available at
+http://xmlrpc.usefulinc.com/list.html, or to <xmlrpc@usefulinc.com>.

@@ -1,0 +1,23 @@
+
+I'm pleased to announce XML-RPC for PHP version 1.0 beta 6. This is the
+final beta before the 1.0 release.
+
+It can be downloaded from http://xmlrpc.usefulinc.com/php.html
+
+Comprehensive documentation is available in the distribution, but you
+can also browse it at http://xmlrpc.usefulinc.com/doc/
+
+New features in this release include:
+
+ * Perl and Python test programs for the demo server
+ * Proper fault generation on a non-"200 OK" response from a remote host
+ * Bugfixed base64 decoding
+ * ISO8601 helper routines for translation to and from UNIX timestamps
+ * reorganization of code to allow eventual integration of alternative
+   transports
+
+The changelog is available at: http://xmlrpc.usefulinc.com/ChangeLog.txt
+
+Please test this as hard as possible and report bugs to the XML-RPC PHP
+mailing list, of which more details are available at
+http://xmlrpc.usefulinc.com/list.html, or to <xmlrpc@usefulinc.com>.

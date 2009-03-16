@@ -1,0 +1,28 @@
+
+I'm pleased to announce XML-RPC for PHP version 1.0 beta 9. This is
+is largely a bugfix release.
+
+It can be downloaded from http://xmlrpc.usefulinc.com/php.html
+
+Comprehensive documentation is available in the distribution, but you
+can also browse it at http://xmlrpc.usefulinc.com/doc/
+
+Bugfixes in this release include:
+
+ * Fixed string handling bug where characters between a </string>
+   and </value> tag were not ignored.
+
+ * Added in support for PHP's native boolean type.
+
+New features include:
+
+ * new getval() method (experimental only) which has support for
+   recreating nested arrays.
+ * fledgling unit test suite
+ * server.php has support for basic interop test suite
+
+The changelog is available at: http://xmlrpc.usefulinc.com/ChangeLog.txt
+
+Please test this as hard as possible and report bugs to the XML-RPC PHP
+mailing list, of which more details are available at
+http://xmlrpc.usefulinc.com/list.html, or to <xmlrpc@usefulinc.com>.
