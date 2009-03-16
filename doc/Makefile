@@ -6,6 +6,12 @@ WEB=/var/www/xmlrpc/doc
 
 MKDIR=mkdir
 
+PHP=php
+
+FOP=fop
+
+PHPDOC=phpdoc
+
 
 #### DO NOT TOUCH FROM HERE ONWARDS ###
 
@@ -41,21 +47,21 @@ out/index.html xmlrpc_php.pdf: xmlrpc_php.xml
 #	-Dxslthl.config=file:///c:/htdocs/xmlrpc_cvs/docbook-xsl/highlighting/xslthl-config.xml \
 #	com.icl.saxon.StyleSheet -o xmlrpc_php.fo.xml xmlrpc_php.xml custom.fo.xsl use.extensions=1
 #
-	# custom php script that does the xslt magic
-	php convert.php xmlrpc_php.xml custom.xsl out/
-	# post process html files to highlight php code samples
-	php highlight.php out
-	# convert to fo and then to pdf using apache fop
-	php convert.php xmlrpc_php.xml custom.fo.xsl xmlrpc_php.fo.xml
-	fop xmlrpc_php.fo.xml xmlrpc_php.pdf
-	#-rm xmlrpc_php.fo.xml
+#	custom php script that does the xslt magic
+	${PHP} convert.php xmlrpc_php.xml custom.xsl out/
+#	post process html files to highlight php code samples
+	${PHP} highlight.php out
+#	convert to fo and then to pdf using apache fop
+	${PHP} convert.php xmlrpc_php.xml custom.fo.xsl xmlrpc_php.fo.xml
+	${FOP} xmlrpc_php.fo.xml xmlrpc_php.pdf
+#	-rm xmlrpc_php.fo.xml
 
-javadoc-out/index.html: ../xmlrpc.inc ../xmlrpcs.inc ../xmlrpc_wrappers.inc
+javadoc-out/index.html: ../lib/xmlrpc.inc ../lib/xmlrpcs.inc ../lib/xmlrpc_wrappers.inc
 # generate docs out of javadoc via doxygen
 #	doxygen phpxmlrpc.dox
 #
-	# generate docs out of javadoc via phpdocumentor
-	phpdoc -f ../xmlrpc.inc,../xmlrpcs.inc,../xmlrpc_wrappers.inc -t javadoc-out -ti PHP-XMLRPC -o HTML:frames:default -s
+#	generate docs out of javadoc via phpdocumentor
+	${PHPDOC} -f ../lib/xmlrpc.inc,../lib/xmlrpcs.inc,../lib/xmlrpc_wrappers.inc -t javadoc-out -ti PHP-XMLRPC -o HTML:frames:default -s
 
 dist: doc
 	${MKDIR} -p ../xmlrpc-${VERSION}/doc
