@@ -1,3 +1,21 @@
+XML-RPC for PHP version 2.2.2 - 2008/03/16
+
+This release corrects all bugs that have been reported and sucesfully reproduced since
+version 2.2.1.
+Regardless of the intimitading message about dropping PHP 4 support, it still does
+support that ancient, broken and insecure platform.
+
+* fixed: php warning when receiving 'false' in a bool value
+* fixed: improve robustness of the debugger when parsing weird results from non-compliant servers
+* fixed: format floating point values using the correct decimal separator even when php locale is set to one that uses comma
+* fixed: use feof() to test if socket connections are to be closed instead of the number of bytes read (rare bug when communicating with some servers)
+* fixed: be more tolerant in detection of charset in http headers
+* fixed: fix encoding of UTF8 chars outside of the BMP plane
+* fixed: fix detection of zlib.output_compression
+* improved: allow the add_to_map server method to add docs for single params too
+* improved: added the possibility to wrap for exposure as xmlrpc	methods plain php class methods, object methods and even whole classes
+
+
 XML-RPC for PHP version 2.2.1 - 2008/03/06
 
 This release corrects all bugs that have been reported and sucesfully reproduced.

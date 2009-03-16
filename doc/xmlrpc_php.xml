@@ -205,6 +205,10 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
     <sect1>
       <title>2.2.2</title>
 
+      <para><emphasis>Note:</emphasis> this might the last release of the
+      library that will support PHP 4. Future releases (if any) should target
+      php 5.0 as minimum supported version.</para>
+
       <para><itemizedlist>
           <listitem>
             <para>fixed: encoding of utf-8 characters outside of the BMP
@@ -215,15 +219,52 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
             <para>fixed: character set declarations surrounded by double
             quotes were not recognized in http headers</para>
           </listitem>
+
+          <listitem>
+            <para>fixed: be more tolerant in detection of charset in http
+            headers</para>
+          </listitem>
+
+          <listitem>
+            <para>fixed: fix detection of zlib.output_compression</para>
+          </listitem>
+
+          <listitem>
+            <para>fixed: use feof() to test if socket connections are to be
+            closed instead of the number of bytes read (rare bug when
+            communicating with some servers)</para>
+          </listitem>
+
+          <listitem>
+            <para>fixed: format floating point values using the correct
+            decimal separator even when php locale is set to one that uses
+            comma</para>
+          </listitem>
+
+          <listitem>
+            <para>fixed: improve robustness of the debugger when parsing weird
+            results from non-compliant servers</para>
+          </listitem>
+
+          <listitem>
+            <para>php warning when receiving 'false' in a bool value</para>
+          </listitem>
+
+          <listitem>
+            <para>improved: allow the add_to_map server method to add docs for
+            single params too</para>
+          </listitem>
+
+          <listitem>
+            <para>improved: added the possibility to wrap for exposure as
+            xmlrpc methods plain php class methods, object methods and even
+            whole classes</para>
+          </listitem>
         </itemizedlist></para>
     </sect1>
 
     <sect1>
       <title>2.2.1</title>
-
-      <para><emphasis>Note:</emphasis> this is the last release of the library
-      that will support PHP 4. Future releases (if any) will target php 5.0 as
-      minimum supported version.</para>
 
       <itemizedlist>
         <listitem>
