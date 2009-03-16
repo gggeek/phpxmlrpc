@@ -1,6 +1,12 @@
 2009-03-16 - G. Giunta (giunta.gaetano@gmail.com) thanks Tommaso Trani
 
+	* move from CVS to SVN on sf.net; file layout now is the same as in packaged lib
+
 	* xmlrpc.inc: fix php warning when receiving 'false' in a bool value
+
+    * Makefile, doc/Makefile: alter to follow new file layout
+
+	* tagged and released as 2.2.2
 
 2009-02-03 - G. Giunta (giunta.gaetano@gmail.com)
 
