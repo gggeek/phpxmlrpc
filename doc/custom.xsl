@@ -5,13 +5,13 @@
  Customization xsl stylesheet for docbook to chunked html transform
  @version $Id: custom.xsl,v 1.3 2008/03/06 18:58:44 ggiunta Exp $
  @author Gaetano Giunta
- @copyright (c) 2007-2008 G. Giunta
+ @copyright (c) 2007-2009 G. Giunta
  @license
 -->
 
 
 <!-- import base stylesheet -->
-<xsl:import href="../../docbook-xsl/xhtml/chunk.xsl"/>
+<xsl:import href="../../../docbook-xsl/xhtml/chunk.xsl"/>
 
 
 <!-- customization vars -->

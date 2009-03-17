@@ -4,7 +4,7 @@
  *
  * @version $Id$
  * @author Gaetano Giunta
- * @copyright (c) 2007-2008 G. Giunta
+ * @copyright (c) 2007-2009 G. Giunta
  */
 
 function highlight($file)
