@@ -1767,7 +1767,7 @@ $msg = new xmlrpcmsg("examples.getStateName", array(new xmlrpcval(23, "int")));
 
         <programlisting language="php">
 $client = new xmlrpc_client("http://phpxmlrpc.sourceforge.net/server.php");
-$another_client = new xmlrpc_client("https://james:bond@secret.service.com:4443/xmlrpcserver?agent=007");
+$another_client = new xmlrpc_client("https://james:bond@secret.service.com:443/xmlrpcserver?agent=007");
 </programlisting>
 
         <para>The second syntax does not allow to express a username and
