@@ -45,29 +45,6 @@
 		}
 	}
 
-	// Try to be backward compat with php < 4.2 (are we not being nice ?)
-	$phpversion = phpversion();
-	if($phpversion[0] == '4' && $phpversion[2] < 2)
-	{
-		// give an opportunity to user to specify where to include other files from
-		if(!defined('PHP_XMLRPC_COMPAT_DIR'))
-		{
-			define('PHP_XMLRPC_COMPAT_DIR',dirname(__FILE__).'/compat/');
-		}
-		if($phpversion[2] == '0')
-		{
-			if($phpversion[4] < 6)
-			{
-				include(PHP_XMLRPC_COMPAT_DIR.'is_callable.php');
-			}
-			include(PHP_XMLRPC_COMPAT_DIR.'is_scalar.php');
-			include(PHP_XMLRPC_COMPAT_DIR.'array_key_exists.php');
-			include(PHP_XMLRPC_COMPAT_DIR.'version_compare.php');
-		}
-		include(PHP_XMLRPC_COMPAT_DIR.'var_export.php');
-		include(PHP_XMLRPC_COMPAT_DIR.'is_a.php');
-	}
-
 	// G. Giunta 2005/01/29: declare global these variables,
 	// so that xmlrpc.inc will work even if included from within a function
 	// Milosch: 2005/08/07 - explicitly request these via $GLOBALS where used.
@@ -231,7 +208,7 @@
 	$GLOBALS['xmlrpc_internalencoding']='ISO-8859-1';
 
 	$GLOBALS['xmlrpcName']='XML-RPC for PHP';
-	$GLOBALS['xmlrpcVersion']='2.2.2';
+	$GLOBALS['xmlrpcVersion']='3.0.0.beta';
 
 	// let user errors start at 800
 	$GLOBALS['xmlrpcerruser']=800;
@@ -943,11 +920,7 @@
 			}
 
 			// keepalives: enabled by default ONLY for PHP >= 4.3.8
-			// (see http://curl.haxx.se/docs/faq.html#7.3)
-			if(version_compare(phpversion(), '4.3.8') >= 0)
-			{
-				$this->keepalive = true;
-			}
+			$this->keepalive = true;
 
 			// by default the xml parser can support these 3 charset encodings
 			$this->accepted_charset_encodings = array('UTF-8', 'ISO-8859-1', 'US-ASCII');

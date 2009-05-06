@@ -1,10 +1,17 @@
+2009-04-06 - G. Giunta (giunta.gaetano@gmail.com)
+
+	* create php4 branch, rename trunk to 3.0.0beta - it will be the php5-only version
+
+	* xmlrpc.inc: removed test fpr php version and inclusion of compat patches for really
+	really old versions of php 4
+
 2009-03-16 - G. Giunta (giunta.gaetano@gmail.com) thanks Tommaso Trani
 
 	* move from CVS to SVN on sf.net; file layout now is the same as in packaged lib
 
 	* xmlrpc.inc: fix php warning when receiving 'false' in a bool value
 
-    * Makefile, doc/Makefile: alter to follow new file layout
+	* Makefile, doc/Makefile: alter to follow new file layout
 
 	* tagged and released as 2.2.2
 
