@@ -29,15 +29,10 @@ function phpxmlrpc_verify_compat($mode='client')
     $ver = phpversion();
     $tests['php_version'] = array();
     $tests['php_version']['description'] = 'PHP version found: '.$ver.".\n\n";
-    if (version_compare($ver, '4') < 0)
+    if (version_compare($ver, '5') < 0)
     {
       $tests['php_version']['status'] = 0;
-      $tests['php_version']['description'] .= 'This version of PHP is not compatible with the PHP XMLRPC library. Please upgrade to 4.2 or later';
-    }
-    else if (version_compare($ver, '4.2') < 0)
-    {
-      $tests['php_version']['status'] = 1;
-      $tests['php_version']['description'] .= "This version of PHP is partially compatible with the PHP XMLRPC library.\nIn order to use the library, you will need to make sure the files from the compat directory are available on your server";
+      $tests['php_version']['description'] .= 'This version of PHP is not compatible with this release of the PHP XMLRPC library. Please upgrade to php 5 or later';
     }
     else if (version_compare($ver, '5.0.3') < 0)
     {
