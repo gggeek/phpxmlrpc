@@ -58,21 +58,21 @@
 			foreach ($data[$j] as $key => $val)
 			{
 				$values = array();
-				$values[] =& new xmlrpcval($val[0], 'int');
-				$values[] =& new xmlrpcval($val[1], 'double');
-				$values[] =& new xmlrpcval($val[2], 'string');
-				$values[] =& new xmlrpcval($val[3], 'boolean');
-				$values[] =& new xmlrpcval($val[4], 'dateTime.iso8601');
-				$values[] =& new xmlrpcval($val[5], 'i4');
-				$values[] =& new xmlrpcval($val[6], 'double');
-				$values[] =& new xmlrpcval($val[7], 'string');
-				$values[] =& new xmlrpcval($val[8], 'boolean');
-				$values[] =& new xmlrpcval($val[9], 'dateTime.iso8601');
-				$valarray[$key] =& new xmlrpcval($values, 'array');
+				$values[] = new xmlrpcval($val[0], 'int');
+				$values[] = new xmlrpcval($val[1], 'double');
+				$values[] = new xmlrpcval($val[2], 'string');
+				$values[] = new xmlrpcval($val[3], 'boolean');
+				$values[] = new xmlrpcval($val[4], 'dateTime.iso8601');
+				$values[] = new xmlrpcval($val[5], 'i4');
+				$values[] = new xmlrpcval($val[6], 'double');
+				$values[] = new xmlrpcval($val[7], 'string');
+				$values[] = new xmlrpcval($val[8], 'boolean');
+				$values[] = new xmlrpcval($val[9], 'dateTime.iso8601');
+				$valarray[$key] = new xmlrpcval($values, 'array');
 			}
-			$vals[] =& new xmlrpcval($valarray, 'struct');
+			$vals[] = new xmlrpcval($valarray, 'struct');
 		}
-		$value =& new xmlrpcval($vals, 'array');
+		$value = new xmlrpcval($vals, 'array');
 		$out = $value->serialize();
 	}
 	end_test('Data encoding (large array)', 'manual encoding', $out);
@@ -153,18 +153,18 @@
 
 	/// test multicall vs. many calls vs. keep-alives
 	$value = php_xmlrpc_encode($data1);
-	$msg =& new xmlrpcmsg('interopEchoTests.echoValue', array($value));
+	$msg = new xmlrpcmsg('interopEchoTests.echoValue', array($value));
 	$msgs=array();
 	for ($i = 0; $i < 25; $i++)
 		$msgs[] = $msg;
 	$server = split(':', $LOCALSERVER);
 	if(count($server) > 1)
 	{
-		$c =& new xmlrpc_client($URI, $server[0], $server[1]);
+		$c = new xmlrpc_client($URI, $server[0], $server[1]);
 	}
 	else
 	{
-		$c =& new xmlrpc_client($URI, $LOCALSERVER);
+		$c = new xmlrpc_client($URI, $LOCALSERVER);
 	}
 	// do not interfere with http compression
 	$c->accepted_compression = array();

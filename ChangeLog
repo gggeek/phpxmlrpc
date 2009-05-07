@@ -1,4 +1,9 @@
-2009-04-06 - G. Giunta (giunta.gaetano@gmail.com)
+2009-05-07 - G. Giunta (giunta.gaetano@gmail.com)
+
+	* replace all usage of '= & new' with '= new', as this is deprecated in php 5
+	and has been shown to cause problems too
+
+2009-05-06 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* create php4 branch, rename trunk to 3.0.0beta - it will be the php5-only version
 

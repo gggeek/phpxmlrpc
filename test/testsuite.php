@@ -54,11 +54,11 @@
 			$server = split(':', $LOCALSERVER);
 			if(count($server) > 1)
 			{
-				$this->client=&new xmlrpc_client($URI, $server[0], $server[1]);
+				$this->client=new xmlrpc_client($URI, $server[0], $server[1]);
 			}
 			else
 			{
-				$this->client=&new xmlrpc_client($URI, $LOCALSERVER);
+				$this->client=new xmlrpc_client($URI, $LOCALSERVER);
 			}
 			if($DEBUG)
 			{
@@ -1164,11 +1164,11 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 			$v1 = php_xmlrpc_encode($data, array('auto_dates'));
 			$v2 = php_xmlrpc_decode_xml($v1->serialize());
 			$this->assertEquals($v1, $v2);
-			$r1 =& new xmlrpcresp($v1);
+			$r1 = new xmlrpcresp($v1);
 			$r2 = php_xmlrpc_decode_xml($r1->serialize());
 			$r2->serialize(); // needed to set internal member payload
 			$this->assertEquals($r1, $r2);
-			$m1 =& new xmlrpcmsg('hello dolly', array($v1));
+			$m1 = new xmlrpcmsg('hello dolly', array($v1));
 			$m2 = php_xmlrpc_decode_xml($m1->serialize());
 			$m2->serialize(); // needed to set internal member payload
 			$this->assertEquals($m1, $m2);
