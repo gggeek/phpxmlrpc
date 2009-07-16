@@ -14,6 +14,7 @@
 	if ((int)ini_get('max_execution_time') < 180)
 		ini_set('max_execution_time', 180);
 
+	ini_set('max_execution_time', 180);
 
 	$suite = new PHPUnit_TestSuite();
 
@@ -51,7 +52,7 @@
 		function setUp()
 		{
 			global $DEBUG, $LOCALSERVER, $URI;
-			$server = split(':', $LOCALSERVER);
+			$server = explode(':', $LOCALSERVER);
 			if(count($server) > 1)
 			{
 				$this->client=new xmlrpc_client($URI, $server[0], $server[1]);
@@ -1307,7 +1308,7 @@ $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><valu
 			$this->assertEquals(8, $r->faultCode());
 
 			// now test a successful connection
-			$server = split(':', $LOCALSERVER);
+			$server = explode(':', $LOCALSERVER);
 			if(count($server) > 1)
 			{
 				$this->client->port = $server[1];
@@ -1409,6 +1410,7 @@ $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><valu
 		echo "<h3>Using lib version: $xmlrpcVersion on PHP version: ".phpversion()."</h3>\n";
 		echo '<h3>Running '.$suite->testCount().' tests (some of which are multiple) against servers: http://'.htmlspecialchars($LOCALSERVER.$URI).' and https://'.htmlspecialchars($HTTPSSERVER.$HTTPSURI)."\n ...</h3>\n";
 		flush();
+	    ob_flush();
 	}
 	else
 	{

@@ -1,3 +1,14 @@
+2009-07-16 - G. Giunta (giunta.gaetano@gmail.com) thanks Jean-Jacques Sarton
+
+	* xmlrpc.inc: add support for the <ex:nil/> from the apache library, both
+	in input and output
+
+	* xmlrpc.inc, testsuite.php: remove usage of split(), deprecated in php 5.3
+
+	* testsuite.php: flush better results with output_buffering on
+
+	* server: php: avoid one warning about static function calls
+
 2009-07-02 - G. Giunta (giunta.gaetano@gmail.com) thanks Heiko Stuebner
 
 	* xmlrpc.inc: fix: when checking the parameters against the signatures xmlrpc
@@ -12,7 +23,7 @@
 
 	* create php4 branch, rename trunk to 3.0.0beta - it will be the php5-only version
 
-	* xmlrpc.inc: removed test fpr php version and inclusion of compat patches for really
+	* xmlrpc.inc: removed test for php version and inclusion of compat patches for really
 	really old versions of php 4
 
 2009-03-16 - G. Giunta (giunta.gaetano@gmail.com) thanks Tommaso Trani

@@ -36,14 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST' && isset($_GET['showSource']))
 			return new xmlrpcresp(new xmlrpcval(1, 'boolean'));
 		}
 
-        /**
-        * a PHP version of the state-number server. Send me an integer and i'll sell you a state
-        * @param integer $s
-        * @return string
-        * */
-		function findstate($s)
-        {
-		    return inner_findstate($s);
+		/**
+		* a PHP version of the state-number server. Send me an integer and i'll sell you a state
+		* @param integer $s
+		* @return string
+		* */
+		static function findstate($s)
+		{
+			return inner_findstate($s);
 		}
 	}
 
@@ -129,7 +129,7 @@ in an alphabetic order.';
 
 	$findstate3_sig = wrap_php_function(array('xmlrpc_server_methods_container', 'findstate'));
 
-    $obj = new xmlrpc_server_methods_container();
+	$obj = new xmlrpc_server_methods_container();
 
 	$findstate4_sig = wrap_php_function(array($obj, 'findstate'));
 
@@ -241,7 +241,7 @@ in an alphabetic order.';
 	$agesorter_doc='Send this method an array of [string, int] structs, eg:
 <pre>
  Dave   35
- Edd    45
+ Edd	45
  Fred   23
  Barney 37
 </pre>
@@ -570,9 +570,9 @@ mimetype, a string, is a standard MIME type, for example, text/plain.
 		return new xmlrpcresp(new xmlrpcval(array(
 			"ctLeftAngleBrackets"  => new xmlrpcval($lt, "int"),
 			"ctRightAngleBrackets" => new xmlrpcval($gt, "int"),
-			"ctAmpersands"         => new xmlrpcval($amp, "int"),
-			"ctApostrophes"        => new xmlrpcval($ap, "int"),
-			"ctQuotes"             => new xmlrpcval($qu, "int")),
+			"ctAmpersands"		 => new xmlrpcval($amp, "int"),
+			"ctApostrophes"		=> new xmlrpcval($ap, "int"),
+			"ctQuotes"			 => new xmlrpcval($qu, "int")),
 			"struct"
 		));
 	}

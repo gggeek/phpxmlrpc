@@ -89,7 +89,8 @@
 		'METHODNAME' => array('METHODCALL'),
 		'PARAMS' => array('METHODCALL', 'METHODRESPONSE'),
 		'FAULT' => array('METHODRESPONSE'),
-		'NIL' => array('VALUE') // only used when extension activated
+		'NIL' => array('VALUE'), // only used when extension activated
+		'EX:NIL' => array('VALUE') // only used when extension activated
 	);
 
 	// define extra types for supporting NULL (useful for json or <NIL/>)
@@ -220,8 +221,11 @@
 	/// @deprecated
 	$GLOBALS['xmlrpc_backslash']=chr(92).chr(92);
 
-	// set to TRUE to enable correct decoding of <NIL/> values
+	// set to TRUE to enable correct decoding of <NIL/> and <EX:NIL/> values
 	$GLOBALS['xmlrpc_null_extension']=false;
+
+	// set to TRUE to enable encoding of php NULL values to <EX:NIL/> instead of <NIL/>
+	$GLOBALS['xmlrpc_null_apache_encoding']=false;
 
 	// used to store state during parsing
 	// quick explanation of components:
@@ -495,6 +499,7 @@
 					$GLOBALS['_xh']['vt']=null;
 					break;
 				case 'NIL':
+				case 'EX:NIL':
 					if ($GLOBALS['xmlrpc_null_extension'])
 					{
 						if ($GLOBALS['_xh']['vt']!='value')
@@ -720,6 +725,7 @@
 					$GLOBALS['_xh']['method']=preg_replace('/^[\n\r\t ]+/', '', $GLOBALS['_xh']['ac']);
 					break;
 				case 'NIL':
+				case 'EX:NIL':
 					if ($GLOBALS['xmlrpc_null_extension'])
 					{
 						$GLOBALS['_xh']['vt']='null';
@@ -2289,7 +2295,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 					}
 				}
 				// be tolerant to line endings, and extra empty lines
-				$ar = split("\r?\n", trim(substr($data, 0, $pos)));
+				$ar = preg_split("/\r?\n/", trim(substr($data, 0, $pos)));
 				while(list(,$line) = @each($ar))
 				{
 					// take care of multi-line headers and cookies
@@ -2922,7 +2928,14 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
     						$rs.="<${typ}>".preg_replace('/\\.?0+$/','',number_format((double)$val, 128, '.', ''))."</${typ}>";
 							break;
 						case $GLOBALS['xmlrpcNull']:
-							$rs.="<nil/>";
+						    if ($GLOBALS['xmlrpc_null_apache_encoding'])
+						    {
+						        $rs.="<ex:nil/>";
+						    }
+						    else
+                            {
+                                $rs.="<nil/>";
+                            }
 							break;
 						default:
 							// no standard type value should arrive here, but provide a possibility
@@ -3399,7 +3412,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 				{
 					$xmlrpc_val = new xmlrpcval('', $GLOBALS['xmlrpcString']);
 				}
-				if (in_array('null_extension', $options))
+				else if (in_array('null_extension', $options))
 				{
 					$xmlrpc_val = new xmlrpcval('', $GLOBALS['xmlrpcNull']);
 				}
