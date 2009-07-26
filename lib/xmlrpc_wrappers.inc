@@ -22,6 +22,7 @@
 	* accepted come from javadoc blocks), return corresponding phpxmlrpc type.
 	* NB: for php 'resource' types returns empty string, since resources cannot be serialized;
 	* for php class names returns 'struct', since php objects can be serialized as xmlrpc structs
+	* for php arrays always return array, even though arrays sometiles serialize as json structs
 	* @param string $phptype
 	* @return string
 	*/
