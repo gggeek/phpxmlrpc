@@ -435,7 +435,7 @@
 		/// array defining php functions exposed as xmlrpc methods by this server
 		var $dmap=array();
 		/**
-		* Defines how functions in dmap will be invokde: either using an xmlrpc msg object
+		* Defines how functions in dmap will be invoked: either using an xmlrpc msg object
 		* or plain php values.
 		* valid strings are 'xmlrpcvals', 'phpvals' or 'epivals'
 		*/
