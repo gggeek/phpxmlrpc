@@ -222,6 +222,20 @@ And turned it into nylon';
 			}
 		}
 
+        function testDateTime()
+        {
+            $time = time();
+            $t1 = new xmlrpcval($time, 'dateTime.iso8601');
+            $t2 = new xmlrpcval(iso8601_encode($time), 'dateTime.iso8601');
+            $this->assertEquals($t1->serialize(), $t2->serialize());
+            if (class_exists('DateTime'))
+            {
+                $datetime = new DateTime();
+                $t3 = new xmlrpcval($datetime->setTimestamp($time), 'dateTime.iso8601');
+                $this->assertEquals($t1->serialize(), $t3->serialize());
+            }
+        }
+
 		function testCountEntities()
 		{
 			$sendstring = "h'fd>onc>>l>>rw&bpu>q>e<v&gxs<ytjzkami<";
@@ -1345,6 +1359,7 @@ $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><valu
 	$suite->addTest(new LocalhostTests('testBoolean'));
 	$suite->addTest(new LocalhostTests('testCountEntities'));
 	$suite->addTest(new LocalhostTests('testBase64'));
+	$suite->addTest(new LocalhostTests('testDateTime'));
 	$suite->addTest(new LocalhostTests('testServerMulticall'));
 	$suite->addTest(new LocalhostTests('testClientMulticall1'));
 	$suite->addTest(new LocalhostTests('testClientMulticall2'));

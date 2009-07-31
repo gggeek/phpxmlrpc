@@ -407,6 +407,7 @@
 				else
 				{
 					$GLOBALS['_xh']['rt'] = strtolower($name);
+					$GLOBALS['_xh']['rt'] = strtolower($name);
 				}
 			}
 			else
@@ -1357,7 +1358,7 @@
 
 			if(!fputs($fp, $op, strlen($op)))
 			{
-    			fclose($fp);
+				fclose($fp);
 				$this->errstr='Write error';
 				$r=new xmlrpcresp(0, $GLOBALS['xmlrpcerr']['http_error'], $this->errstr);
 				return $r;
@@ -2187,7 +2188,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		* Given an open file handle, read all data available and parse it as axmlrpc response.
 		* NB: the file handle is not closed by this function.
 		* NNB: might have trouble in rare cases to work on network streams, as we
-        *      check for a read of 0 bytes instead of feof($fp).
+		*      check for a read of 0 bytes instead of feof($fp).
 		*      But since checking for feof(null) returns false, we would risk an
 		*      infinite loop in that case, because we cannot trust the caller
 		*      to give us a valid pointer to an open file...
@@ -2757,8 +2758,8 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			}
 
 			// coerce booleans into correct values
-			// NB: we should iether do it for datetimes, integers and doubles, too,
-			// or just plain remove this check, implemnted on booleans only...
+			// NB: we should either do it for datetimes, integers and doubles, too,
+			// or just plain remove this check, implemented on booleans only...
 			if($type==$GLOBALS['xmlrpcBoolean'])
 			{
 				if(strcasecmp($val,'true')==0 || $val==1 || ($val==true && strcasecmp($val,'false')))
@@ -2920,22 +2921,41 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 							$rs.="<${typ}>".(int)$val."</${typ}>";
 							break;
 						case $GLOBALS['xmlrpcDouble']:
-    						// avoid using standard conversion of float to string because it is locale-dependent,
-    						// and also because the xmlrpc spec forbids exponential notation
-    						// sprintf('%F') would be most likely ok but it is only available since PHP 4.3.10 and PHP 5.0.3.
-    						// The code below tries its best at keeping max precision while avoiding exp notation,
-    						// but there is of course no limit in the number of decimal places to be used...
-    						$rs.="<${typ}>".preg_replace('/\\.?0+$/','',number_format((double)$val, 128, '.', ''))."</${typ}>";
+							// avoid using standard conversion of float to string because it is locale-dependent,
+							// and also because the xmlrpc spec forbids exponential notation
+							// sprintf('%F') would be most likely ok but it is only available since PHP 4.3.10 and PHP 5.0.3.
+							// The code below tries its best at keeping max precision while avoiding exp notation,
+							// but there is of course no limit in the number of decimal places to be used...
+							$rs.="<${typ}>".preg_replace('/\\.?0+$/','',number_format((double)$val, 128, '.', ''))."</${typ}>";
+							break;
+						case $GLOBALS['xmlrpcDateTime']:
+							if (is_string($val))
+							{
+								$rs.="<${typ}>${val}</${typ}>";
+							}
+							else if(is_a($val, 'DateTime'))
+							{
+								$rs.="<${typ}>".$val->format('Ymd\TH:i:s')."</${typ}>";
+							}
+							else if(is_int($val))
+							{
+								$rs.="<${typ}>".strftime("%Y%m%dT%H:%M:%S", $val)."</${typ}>";
+							}
+							else
+							{
+								// not really a good idea here: but what shall we output anyway? left for backward compat...
+								$rs.="<${typ}>${val}</${typ}>";
+							}
 							break;
 						case $GLOBALS['xmlrpcNull']:
-						    if ($GLOBALS['xmlrpc_null_apache_encoding'])
-						    {
-						        $rs.="<ex:nil/>";
-						    }
-						    else
-                            {
-                                $rs.="<nil/>";
-                            }
+							if ($GLOBALS['xmlrpc_null_apache_encoding'])
+							{
+								$rs.="<ex:nil/>";
+							}
+							else
+							{
+								$rs.="<nil/>";
+							}
 							break;
 						default:
 							// no standard type value should arrive here, but provide a possibility
@@ -3235,7 +3255,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 	* @author Dan Libby (dan@libby.com)
 	*
 	* @param xmlrpcval $xmlrpc_val
-	* @param array $options if 'decode_php_objs' is set in the options array, xmlrpc structs can be decoded into php objects
+	* @param array $options if 'decode_php_objs' is set in the options array, xmlrpc structs can be decoded into php objects; if 'dates_as_objects' is set xmlrpc datetimes are decoded as php DateTime objects (standard is
 	* @return mixed
 	*/
 	function php_xmlrpc_decode($xmlrpc_val, $options=array())
@@ -3260,6 +3280,27 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 							return $xmlrpc_val;
 						default:
 							return $xmlrpc_val->scalarval();
+					}
+				}
+				if (in_array('dates_as_objects', $options) && $xmlrpc_val->scalartyp() == 'dateTime.iso8601')
+				{
+					// we return a Datetime object instead of a string
+					// since now the constructor of xmlrpcval accepts safely strings, ints and datetimes,
+					// we cater to all 3 cases here
+					$out = $xmlrpc_val->scalarval();
+					if (is_string($out))
+					{
+						$out= strtotime($out);
+					}
+					if (is_int($out))
+					{
+						$result = new Datetime();
+						$result->setTimestamp($out);
+						return $result;
+					}
+					elseif (is_a($out, 'Datetime'))
+					{
+						return $out;
 					}
 				}
 				return $xmlrpc_val->scalarval();
@@ -3390,6 +3431,10 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 				if(is_a($php_val, 'xmlrpcval'))
 				{
 					$xmlrpc_val = $php_val;
+				}
+				else if(is_a($php_val, 'DateTime'))
+				{
+					$xmlrpc_val = new xmlrpcval($php_val->format('Ymd\TH:i:s'), $GLOBALS['xmlrpcStruct']);
 				}
 				else
 				{
@@ -3602,7 +3647,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		// Note: we do not check for invalid chars in VALUE:
 		//   this had better be done using pure ereg as below
 		// Note 2: we might be removing whitespace/tabs that ought to be left in if
-        //   the received charset is a quoted string. But nobody uses such charset names...
+		//   the received charset is a quoted string. But nobody uses such charset names...
 
 		/// @todo this test will pass if ANY header has charset specification, not only Content-Type. Fix it?
 		$matches = array();

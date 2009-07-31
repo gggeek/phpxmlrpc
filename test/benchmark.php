@@ -157,7 +157,7 @@
 	$msgs=array();
 	for ($i = 0; $i < 25; $i++)
 		$msgs[] = $msg;
-	$server = split(':', $LOCALSERVER);
+	$server = explode(':', $LOCALSERVER);
 	if(count($server) > 1)
 	{
 		$c = new xmlrpc_client($URI, $server[0], $server[1]);
