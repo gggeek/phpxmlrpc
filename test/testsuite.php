@@ -1241,6 +1241,21 @@ $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><valu
 			$r = $m->parseresponse($s);
 			$v = $r->value();
 			$this->assertequals('null', $v->scalartyp());
+		    // test with the apache version: EX:NIL
+		    $GLOBALS['xmlrpc_null_apache_encoding'] = true;
+		    // serialization
+		    $v = new xmlrpcval('hello', 'null');
+		    $s = $v->serialize();
+		    $this->assertequals(1, preg_match( '#<value><ex:nil/></value>#', $s ));
+		    // deserialization
+            $r = new xmlrpcresp($v);
+            $s = $r->serialize();
+            $r = $m->parseresponse($s);
+            $v = $r->value();
+            $this->assertequals('null', $v->scalartyp());
+		    $GLOBALS['xmlrpc_null_extension'] = false;
+		    $r = $m->parseresponse($s);
+		    $this->assertequals(2, $r->faultCode());
 		}
 
 		function TestLocale()
