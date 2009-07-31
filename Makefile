@@ -23,7 +23,7 @@ FIND=find
 #   on unix shells lasts char should be \\2/g )
 export VERSION=$(shell egrep "\$GLOBALS *\[ *'xmlrpcVersion' *\] *= *'" lib/xmlrpc.inc | sed -r s/"(.*= *' *)([0-9a-zA-Z.-]+)(.*)"/\2/g )
 
-LIBFILES=lib/xmlrpc.inc lib/xmlrpcs.inc lib/xmlrpc_wrappers.inc lib/compat/*.php
+LIBFILES=lib/xmlrpc.inc lib/xmlrpcs.inc lib/xmlrpc_wrappers.inc
 
 EXTRAFILES=extras/test.pl \
  extras/test.py \
@@ -98,7 +98,6 @@ xmlrpc-${VERSION}.zip xmlrpc-${VERSION}.tar.gz: ${LIBFILES} ${DEBUGGERFILES} ${I
 	${MKDIR} xmlrpc-${VERSION}/test/PHPUnit
 	${MKDIR} xmlrpc-${VERSION}/extras
 	${MKDIR} xmlrpc-${VERSION}/lib
-	${MKDIR} xmlrpc-${VERSION}/lib/compat
 	${MKDIR} xmlrpc-${VERSION}/debugger
 	cp --parents ${DEMOFILES} xmlrpc-${VERSION}
 	cp --parents ${DEMOCFILES} xmlrpc-${VERSION}

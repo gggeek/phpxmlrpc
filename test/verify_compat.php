@@ -6,18 +6,9 @@
  * @author Gaetano Giunta
  * @copyright (C) 2006-2009 G. Giunta
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
+ *
+ * @todo add a test for php output buffering?
  */
-
-// be backward compat up to version 4.0.5...
-if (!function_exists('version_compare'))
-{
-		// give an opportunity to user to specify where to include other files from
-  if(!defined('PHP_XMLRPC_COMPAT_DIR'))
-  {
-    define('PHP_XMLRPC_COMPAT_DIR',dirname(__FILE__).'/compat/');
-  }
-  include(PHP_XMLRPC_COMPAT_DIR.'version_compare.php');
-}
 
 function phpxmlrpc_verify_compat($mode='client')
 {
@@ -58,7 +49,7 @@ function phpxmlrpc_verify_compat($mode='client')
       $tests['zlib']['description'] = "The zlib extension is enabled.\n\nYou will be able to receive compressed requests and send compressed responses for the 'HTTP' protocol";
     }
 
-    // test for diaply of php errors in xml reponse
+    // test for dispaly of php errors in xml reponse
     if (ini_get('display_errors'))
     {
       if (intval(ini_get('error_reporting')) && E_NOTICE )
@@ -81,15 +72,10 @@ function phpxmlrpc_verify_compat($mode='client')
     $ver = phpversion();
     $tests['php_version'] = array();
     $tests['php_version']['description'] = 'PHP version found: '.$ver.".\n\n";
-    if (version_compare($ver, '4') < 0)
+    if (version_compare($ver, '5') < 0)
     {
       $tests['php_version']['status'] = 0;
-      $tests['php_version']['description'] .= 'This version of PHP is not compatible with the PHP XMLRPC library. Please upgrade to 4.2 or later';
-    }
-    else if (version_compare($ver, '4.2') < 0)
-    {
-      $tests['php_version']['status'] = 1;
-      $tests['php_version']['description'] .= "This version of PHP is partially compatible with the PHP XMLRPC library.\nIn order to use the library, you will need to make sure the files from the compat directory are available on your server";
+      $tests['php_version']['description'] .= 'This version of PHP is not compatible with the PHP XMLRPC library. Please upgrade to 5.0 or later';
     }
     else
     {

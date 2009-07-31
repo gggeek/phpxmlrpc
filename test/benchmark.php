@@ -5,8 +5,10 @@
  * @version $Id$
  * @copyright (c) 2005-2009 G. Giunta
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
+ *
+ * @todo add a test for response ok in call testing?
  **/
-
+ini_set('max_execution_time', 300);
 	include(getcwd().'/parse_args.php');
 
 	require_once('xmlrpc.inc');
@@ -40,6 +42,7 @@
 		echo "<h3>Using lib version: $xmlrpcVersion on PHP version: ".phpversion()."</h3>\n";
 		if ($xd) echo "<h4>XDEBUG profiling enabled: skipping remote tests. Trace file is: ".htmlspecialchars(xdebug_get_profiler_filename())."</h4>\n";
 		flush();
+		ob_flush();
 	}
 	else
 	{
@@ -63,7 +66,7 @@
 				$values[] = new xmlrpcval($val[2], 'string');
 				$values[] = new xmlrpcval($val[3], 'boolean');
 				$values[] = new xmlrpcval($val[4], 'dateTime.iso8601');
-				$values[] = new xmlrpcval($val[5], 'i4');
+				$values[] = new xmlrpcval($val[5], 'int');
 				$values[] = new xmlrpcval($val[6], 'double');
 				$values[] = new xmlrpcval($val[7], 'string');
 				$values[] = new xmlrpcval($val[8], 'boolean');
@@ -152,7 +155,7 @@
 	if (!$xd) {
 
 	/// test multicall vs. many calls vs. keep-alives
-	$value = php_xmlrpc_encode($data1);
+	$value = php_xmlrpc_encode($data1, array('auto_dates'));
 	$msg = new xmlrpcmsg('interopEchoTests.echoValue', array($value));
 	$msgs=array();
 	for ($i = 0; $i < 25; $i++)
@@ -206,6 +209,10 @@
 
 	begin_test('Repeated send (small array)', 'multicall');
 	$response =& $c->send($msgs);
+	foreach ($response as $key =>& $val)
+	{
+	    $val = $val->value();
+	}
 	end_test('Repeated send (small array)', 'multicall', $response);
 
 	if (function_exists('gzinflate'))
@@ -221,6 +228,36 @@
 			$response[] = $resp->value();
 		}
 		end_test('Repeated send (small array)', 'http 10 w. compression', $response);
+
+        if (function_exists('curl_init'))
+        {
+            begin_test('Repeated send (small array)', 'http 11 w. keep-alive and compression');
+            $response = array();
+            for ($i = 0; $i < 25; $i++)
+            {
+                $resp =& $c->send($msg, 10, 'http11');
+                $response[] = $resp->value();
+            }
+            end_test('Repeated send (small array)', 'http 11 w. keep-alive and compression', $response);
+
+            $c->keepalive = false;
+            begin_test('Repeated send (small array)', 'http 11 w. compression');
+            $response = array();
+            for ($i = 0; $i < 25; $i++)
+            {
+                $resp =& $c->send($msg, 10, 'http11');
+                $response[] = $resp->value();
+            }
+            end_test('Repeated send (small array)', 'http 11 w. compression', $response);
+        }
+
+        begin_test('Repeated send (small array)', 'multicall w. compression');
+        $response =& $c->send($msgs);
+        foreach ($response as $key =>& $val)
+        {
+            $val = $val->value();
+        }
+        end_test('Repeated send (small array)', 'multicall w. compression', $response);
 	}
 
 	} // end of 'if no xdebug profiling'
@@ -231,20 +268,20 @@
 		if (!isset($test_results[$test_name]))
 			$test_results[$test_name]=array();
 		$test_results[$test_name][$test_case] = array();
-		list($micro, $sec) = explode(' ', microtime());
-		$test_results[$test_name][$test_case]['time'] = $sec + $micro;
+		$test_results[$test_name][$test_case]['time'] = microtime(true);
 	}
 
 	function end_test($test_name, $test_case, $test_result)
 	{
 		global $test_results;
-		list($micro, $sec) = explode(' ', microtime());
+		$end = microtime(true);
 		if (!isset($test_results[$test_name][$test_case]))
 			trigger_error('ending test that was not sterted');
-		$test_results[$test_name][$test_case]['time'] = $sec + $micro - $test_results[$test_name][$test_case]['time'];
+		$test_results[$test_name][$test_case]['time'] = $end - $test_results[$test_name][$test_case]['time'];
 		$test_results[$test_name][$test_case]['result'] = $test_result;
 		echo '.';
 		flush();
+		ob_flush();
 	}
 
 

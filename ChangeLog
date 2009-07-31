@@ -8,6 +8,14 @@
 	* benchmark.php, xmlrpc_wrappers.inc: remove usage of split(), deprecated in
 	php 5.3
 
+	* benchmark.php: fixed url of server page used for testing; improved
+	verification of correspondence of test results; added more variants for
+	http options comparison
+
+	* verify_compat.php: check for php version 5 for client side too
+
+	* makefile: remove from build the compat directory
+
 2009-07-26 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* server.php: remove usage of ereg*(), deprecated in php 5.3

@@ -81,7 +81,7 @@ td form {margin: 0;}
       $server = 'http://'.$server;
     }
     if ($proxy != '') {
-      $pproxy = split(':', $proxy);
+      $pproxy = explode(':', $proxy);
       if (count($pproxy) > 1)
         $pport = $pproxy[1];
       else

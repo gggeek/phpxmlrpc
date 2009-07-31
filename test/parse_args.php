@@ -106,14 +106,14 @@
 		{
 			$URI = str_replace('/test/testsuite.php', '/demo/server/server.php', $REQUEST_URI);
 			$URI = str_replace('/testsuite.php', '/server.php', $URI);
-			$URI = str_replace('/test/benchmark.php', '/server.php', $URI);
+			$URI = str_replace('/test/benchmark.php', '/demo/server/server.php', $URI);
 			$URI = str_replace('/benchmark.php', '/server.php', $URI);
 		}
 		elseif(isset($_SERVER['PHP_SELF']) && isset($_SERVER['REQUEST_METHOD']))
 		{
 			$URI = str_replace('/test/testsuite.php', '/demo/server/server.php', $_SERVER['PHP_SELF']);
 			$URI = str_replace('/testsuite.php', '/server.php', $URI);
-			$URI = str_replace('/test/benchmark.php', '/server.php', $URI);
+			$URI = str_replace('/test/benchmark.php', '/demo/server/server.php', $URI);
 			$URI = str_replace('/benchmark.php', '/server.php', $URI);
 		}
 		else

@@ -2,7 +2,7 @@ XML-RPC for PHP version 2.2.2 - 2009/03/16
 
 This release corrects all bugs that have been reported and sucesfully reproduced since
 version 2.2.1.
-Regardless of the intimitading message about dropping PHP 4 support, it still does
+Regardless of the intimidating message about dropping PHP 4 support, it still does
 support that ancient, broken and insecure platform.
 
 * fixed: php warning when receiving 'false' in a bool value
