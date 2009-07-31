@@ -148,7 +148,7 @@ tbody td { border-top: 1px solid gray; }
 </head>
 <body>
 <h1>PHPXMLRPC compatibility assessment with the current PHP install</h1>
-<h4>For phpxmlrpc version 2.0 or later</h4>
+<h4>For phpxmlrpc version 3.0 or later</h4>
 <h3>Server usage</h3>
 <table cellspacing="0">
 <thead>
