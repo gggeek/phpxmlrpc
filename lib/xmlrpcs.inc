@@ -432,7 +432,10 @@
 
 	class xmlrpc_server
 	{
-		/// array defining php functions exposed as xmlrpc methods by this server
+		/**
+		* Array defining php functions exposed as xmlrpc methods by this server
+		* @access private
+		*/
 		var $dmap=array();
 		/**
 		* Defines how functions in dmap will be invoked: either using an xmlrpc msg object
@@ -440,6 +443,13 @@
 		* valid strings are 'xmlrpcvals', 'phpvals' or 'epivals'
 		*/
 		var $functions_parameters_type='xmlrpcvals';
+	    /**
+	    * Option used for fine-tuning the encoding the php values returned from
+	    * functions registered in the dispatch map when the functions_parameters_types
+	    *  member is set to 'phpvals'
+	    * @see php_xmlrpc_encode for a list of values
+	    */
+	    var $phpvals_encoding_options = array( 'auto_dates' );
 		/// controls wether the server is going to echo debugging messages back to the client as comments in response body. valid values: 0,1,2,3
 		var $debug = 1;
 		/**
@@ -466,9 +476,14 @@
 		* NB: pretty dangerous if you accept every charset and do not have mbstring enabled)
 		*/
 		var $response_charset_encoding = '';
-		/// storage for internal debug info
+		/**
+		* Storage for internal debug info
+		* @access private
+		*/
 		var $debug_info = '';
-		/// extra data passed at runtime to method handling functions. Used only by EPI layer
+		/**
+		* Extra data passed at runtime to method handling functions. Used only by EPI layer
+		*/
 		var $user_data = null;
 
 		/**
@@ -974,7 +989,11 @@
 			else
 			{
 				xml_parser_free($parser);
-				if ($this->functions_parameters_type != 'xmlrpcvals')
+			    // small layering violation in favor of speed and memory usage:
+			    // we should allow the 'execute' method handle this, but in the
+			    // most common scenario (xmlrpcvals type server with some methods
+			    // registered as phpvals) that would mean a useless encode+decode pass
+				if ($this->functions_parameters_type != 'xmlrpcvals' || (isset($this->dmap[$GLOBALS['_xh']['method']]['parameters_type']) && ($this->dmap[$GLOBALS['_xh']['method']]['parameters_type'] == 'phpvals')))
 				{
 					if($this->debug > 1)
 					{
@@ -1077,6 +1096,7 @@
 			{
 				$GLOBALS['_xmlrpcs_prev_ehandler'] = set_error_handler('_xmlrpcs_errorHandler');
 			}
+		    // Allow mixed-convention servers
 			if (is_object($m))
 			{
 				if($sysCall)
@@ -1141,7 +1161,7 @@
 				{
 					// what should we assume here about automatic encoding of datetimes
 					// and php classes instances???
-					$r = new xmlrpcresp(php_xmlrpc_encode($r, array('auto_dates')));
+					$r = new xmlrpcresp(php_xmlrpc_encode($r, $this->phpvals_encoding_options));
 				}
 			}
 			if($this->debug > 2)

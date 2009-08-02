@@ -1,3 +1,17 @@
+2009-08-02 - G. Giunta (giunta.gaetano@gmail.com) thanks Laurens
+
+	* xmlrpcs.inc: add a new member var in server class to allow fine-tuning
+	of the encoding of returned values when the server is in 'phpvals' mode;
+	allow servers in 'xmlrpcvals' mode to also register plain php functions by
+	defining them in the dispatch map with an added option:
+	'parameters_type' => 'phpvals' (feature request #2806628)
+
+	* xmlrpc.inc: added new method xmrlpc_client::SetCurlOptions($array) to
+	allow extra flexibility in tweaking http config, such as explicitly
+	binding to an ip address (feature request #2787468); fix bad encoding if
+	same object is encoded twice using php_xmlrpc_encode; removed some by-ref
+	assignments and declarations
+
 2009-07-31 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* xmlrpc.inc: add support for dateTime objects in both in php_xmlrpc_encode
@@ -23,7 +37,7 @@
 2009-07-16 - G. Giunta (giunta.gaetano@gmail.com) thanks Jean-Jacques Sarton
 
 	* xmlrpc.inc: add support for the <ex:nil/> from the apache library, both
-	in input and output
+	in input and output (feature request #...)
 
 	* xmlrpc.inc, testsuite.php: remove usage of split(), deprecated in php 5.3
 
@@ -203,7 +217,7 @@
 
 2006-09-17 Gaetano Giunta <giunta.gaetano@gmail.com>
 
-	* xmlrpc.inc, xmlrpcs.inc, testsuite.php: added support for </NIL> and
+	* xmlrpc.inc, xmlrpcs.inc, testsuite.php: added support for <NIL/> and
 	system.getCapabilities, and one more testcase to go with it
 
 2006-09-05 Gaetano Giunta <giunta.gaetano@gmail.com>
@@ -1250,7 +1264,7 @@
 2004-12-27  Miles Lott <milos@groupwhere.org>
 	* xmlrpc.inc: A new constant, XMLRPC_EPI_ENABLED, is defined depending on
 	the existence of the function, xmlrpc_decode.  This function will exist in
-	PHP if the 	extension, XMLRPC-EPI (http://xmlrpc-epi.sourceforge.net), is
+	PHP if the extension, XMLRPC-EPI (http://xmlrpc-epi.sourceforge.net), is
 	loaded.  It defines the functions xmlrpc_encode and xmlrpc_decode, which
 	will conflict with functions of the same name in xmlrpc.inc.  If this
 	extension is loaded, we instead use the names php_xmlrpc_encode and

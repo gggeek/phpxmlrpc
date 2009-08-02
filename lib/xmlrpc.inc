@@ -828,6 +828,8 @@
 		var $proxy_pass='';
 		var $proxy_authtype=1;
 		var $cookies=array();
+	    var $extracurlopts=array();
+
 		/**
 		* List of http compression methods accepted by the client for responses.
 		* NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib
@@ -926,7 +928,7 @@
 				$this->accepted_compression = array('gzip', 'deflate');
 			}
 
-			// keepalives: enabled by default ONLY for PHP >= 4.3.8
+			// keepalives: enabled by default
 			$this->keepalive = true;
 
 			// by default the xml parser can support these 3 charset encodings
@@ -1096,6 +1098,16 @@
 				$this->cookies[$name]['version'] = 0;
 			}
 		}
+
+	    /**
+	    * Directly set cURL options, for extra flexibility
+	    * It allows eg. to bind client to a specific IP interface / address
+	    * @param $options array
+	    */
+	    function SetCurlOptions( $options )
+	    {
+	        $this->extracurlopts = $options;
+	    }
 
 		/**
 		* Send an xmlrpc request
@@ -1627,6 +1639,11 @@
 				}
 				curl_setopt($curl, CURLOPT_COOKIE, substr($cookieheader, 0, -2));
 			}
+
+		    foreach ($this->extracurlopts as $opt => $val)
+		    {
+		        curl_setopt($curl, $opt, $val);
+		    }
 
 			$result = curl_exec($curl);
 
@@ -3377,7 +3394,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 	* @param array $options	can include 'encode_php_objs', 'auto_dates', 'null_extension' or 'extension_api'
 	* @return xmlrpcval
 	*/
-	function &php_xmlrpc_encode($php_val, $options=array())
+	function php_xmlrpc_encode($php_val, $options=array())
 	{
 		$type = gettype($php_val);
 		switch($type)
@@ -3411,7 +3428,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 				$ko = false;
 				foreach($php_val as $key => $val)
 				{
-					$arr[$key] =& php_xmlrpc_encode($val, $options);
+					$arr[$key] = php_xmlrpc_encode($val, $options);
 					if(!$ko && $key !== $j)
 					{
 						$ko = true;
@@ -3439,6 +3456,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 				else
 				{
 					$arr = array();
+				    reset($php_val);
 					while(list($k,$v) = each($php_val))
 					{
 						$arr[$k] = php_xmlrpc_encode($v, $options);
