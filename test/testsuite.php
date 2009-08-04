@@ -542,7 +542,7 @@ And turned it into nylon';
 				'c4' => array('value' => 'c4', 'expires' => time()+60*60*24*30, 'path' => '/'),
 				'c5' => array('value' => 'c5', 'expires' => time()+60*60*24*30, 'path' => '/', 'domain' => 'localhost'),
 			);
-			$cookiesval =& php_xmlrpc_encode($cookies);
+			$cookiesval = php_xmlrpc_encode($cookies);
 			$f=new xmlrpcmsg('examples.setcookies',array($cookiesval));
 			$r=$this->send($f, 0, true);
 			if($r)
@@ -1346,8 +1346,9 @@ $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><valu
 			$this->client->path = $URI;
 
 			$r = $this->client->send($f, 5, 'http11');
-			$r = $r->value();
-			$this->assertEquals('hello', $r->scalarVal());
+			$ro = $r->value();
+var_dump($r);
+			$this->assertEquals('hello', $ro->scalarVal());
 		}
 	}
 
@@ -1440,7 +1441,7 @@ $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><valu
 		echo "<h3>Using lib version: $xmlrpcVersion on PHP version: ".phpversion()."</h3>\n";
 		echo '<h3>Running '.$suite->testCount().' tests (some of which are multiple) against servers: http://'.htmlspecialchars($LOCALSERVER.$URI).' and https://'.htmlspecialchars($HTTPSSERVER.$HTTPSURI)."\n ...</h3>\n";
 		flush();
-	    ob_flush();
+	    @ob_flush();
 	}
 	else
 	{

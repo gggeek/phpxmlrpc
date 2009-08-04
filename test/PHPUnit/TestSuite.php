@@ -157,7 +157,7 @@ class PHPUnit_TestSuite {
         for ($i = 0; $i < sizeof($this->_tests) && !$result->shouldStop(); $i++) {
             $this->_tests[$i]->run($result);
             if ($show_progress != '') {
-                echo $show_progress; flush(); ob_flush();
+                echo $show_progress; flush(); @ob_flush();
             }
         }
     }
