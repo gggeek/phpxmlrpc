@@ -158,6 +158,10 @@
 		}
 
         $exists = false;
+	    if (is_string($funcname) && strpos($funcname, '::') !== false)
+	    {
+	        $funcname = explode('::', $funcname);
+	    }
         if(is_array($funcname))
         {
             if(count($funcname) < 2 || (!is_string($funcname[0]) && !is_object($funcname[0])))
@@ -174,6 +178,11 @@
                 $plainfuncname = get_class($funcname[0]) . '->' . $funcname[1];
             }
             $exists = method_exists($funcname[0], $funcname[1]);
+            if (!$exists && version_compare(phpversion(), '5.1') < 0)
+            {
+               // workaround for php 5.0: static class methods are not seen by method_exists
+               $exists = is_callable( $funcname );
+            }
         }
         else
         {
@@ -231,7 +240,8 @@
     				error_log('XML-RPC: method to be wrapped is the constructor: '.$plainfuncname);
     				return false;
     			}
-    			if($func->isDestructor())
+			    // php 503 always says isdestructor = true...
+                if( version_compare(phpversion(), '5.0.3') != 0 && $func->isDestructor())
     			{
     				error_log('XML-RPC: method to be wrapped is the destructor: '.$plainfuncname);
     				return false;
