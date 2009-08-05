@@ -83,7 +83,7 @@
 	begin_test('Data encoding (large array)', 'automatic encoding');
 	for ($i = 0; $i < $num_tests; $i++)
 	{
-		$value =& php_xmlrpc_encode($data, array('auto_dates'));
+		$value = php_xmlrpc_encode($data, array('auto_dates'));
 		$out = $value->serialize();
 	}
 	end_test('Data encoding (large array)', 'automatic encoding', $out);
