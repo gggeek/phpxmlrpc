@@ -129,8 +129,9 @@ in an alphabetic order.';
 
 	$findstate3_sig = wrap_php_function(array('xmlrpc_server_methods_container', 'findstate'));
 
-	$obj = new xmlrpc_server_methods_container();
+	$findstate5_sig = wrap_php_function('xmlrpc_server_methods_container::findstate');
 
+	$obj = new xmlrpc_server_methods_container();
 	$findstate4_sig = wrap_php_function(array($obj, 'findstate'));
 
 	$addtwo_sig=array(array($xmlrpcInt, $xmlrpcInt, $xmlrpcInt));
@@ -822,6 +823,9 @@ mimetype, a string, is a standard MIME type, for example, text/plain.
 
 	if ($findstate4_sig)
 		$a['examples.php3.getStateName'] = $findstate4_sig;
+
+    if ($findstate5_sig)
+        $a['examples.php4.getStateName'] = $findstate5_sig;
 
 	$s=new xmlrpc_server($a, false);
 	$s->setdebug(3);
