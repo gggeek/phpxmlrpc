@@ -1,3 +1,8 @@
+2009-08-05 - G. Giunta (giunta.gaetano@gmail.com)
+
+	* xmlrpc_wrappers.inc: improve compatibility with php 5.0 when registering
+	class/object methods
+
 2009-08-02 - G. Giunta (giunta.gaetano@gmail.com) thanks Laurens
 
 	* xmlrpcs.inc: add a new member var in server class to allow fine-tuning
