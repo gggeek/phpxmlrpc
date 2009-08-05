@@ -1347,7 +1347,6 @@ $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><valu
 
 			$r = $this->client->send($f, 5, 'http11');
 			$ro = $r->value();
-var_dump($r);
 			$this->assertEquals('hello', $ro->scalarVal());
 		}
 	}
