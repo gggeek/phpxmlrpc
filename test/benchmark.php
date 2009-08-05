@@ -8,7 +8,7 @@
  *
  * @todo add a test for response ok in call testing?
  **/
-ini_set('max_execution_time', 300);
+
 	include(getcwd().'/parse_args.php');
 
 	require_once('xmlrpc.inc');
