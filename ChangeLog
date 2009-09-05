@@ -13,6 +13,8 @@
 	* xmlrpc.inc: added new method SetUserAgent to client to allow having different
 	user-agent http headers
 
+	* tagged and released as 3.0.0 beta
+
 2009-08-05 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* xmlrpc_wrappers.inc: improve compatibility with php 5.0 when registering
