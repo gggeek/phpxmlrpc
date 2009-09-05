@@ -460,6 +460,19 @@ And turned it into nylon';
 			}
 		}
 
+	    function testCatchExceptions()
+	    {
+	        global $URI;
+	        $f = new xmlrpcmsg('examples.raiseException', array(
+	        	new xmlrpcval('whatever', 'string')
+	        ));
+	        $v = $this->send($f, $GLOBALS['xmlrpcerr']['server_error']);
+	        $this->client->path = $URI.'?EXCEPTION_HANDLING=1';
+	        $v = $this->send($f, 1);
+	        $this->client->path = $URI.'?EXCEPTION_HANDLING=2';
+	        $v = $this->send($f, $GLOBALS['xmlrpcerr']['invalid_return']);
+	    }
+
 		function testZeroParams()
 		{
 			$f = new xmlrpcmsg('system.listMethods');
@@ -617,7 +630,7 @@ And turned it into nylon';
 			global $failed_tests;
 			foreach(get_class_methods('LocalhostTests') as $meth)
 			{
-				if(strpos($meth, 'test') === 0 && $meth != 'testHttps')
+				if(strpos($meth, 'test') === 0 && $meth != 'testHttps' && $meth != 'testCatchExceptions')
 				{
 					if (!isset($failed_tests[$meth]))
 						$this->$meth();
@@ -1365,6 +1378,7 @@ $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><valu
 	$suite->addTest(new LocalhostTests('testClientMulticall2'));
 	$suite->addTest(new LocalhostTests('testClientMulticall3'));
 	$suite->addTest(new LocalhostTests('testCatchWarnings'));
+	$suite->addTest(new LocalhostTests('testCatchExceptions'));
 	$suite->addTest(new LocalhostTests('testZeroParams'));
 	$suite->addTest(new LocalhostTests('testCodeInjectionServerSide'));
 	$suite->addTest(new LocalhostTests('testAutoRegisteredFunction'));
