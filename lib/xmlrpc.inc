@@ -828,7 +828,7 @@
 		var $proxy_pass='';
 		var $proxy_authtype=1;
 		var $cookies=array();
-	    var $extracurlopts=array();
+		var $extracurlopts=array();
 
 		/**
 		* List of http compression methods accepted by the client for responses.
@@ -861,6 +861,10 @@
 		* valid strings are 'xmlrpcvals', 'phpvals' or 'xml'
 		*/
 		var $return_type = 'xmlrpcvals';
+		/**
+		* Sent to servers in http headers
+		*/
+		var $user_agent;
 
 		/**
 		* @param string $path either the complete server URL or the PATH part of the xmlrc server URL, e.g. /xmlrpc/server.php
@@ -933,6 +937,9 @@
 
 			// by default the xml parser can support these 3 charset encodings
 			$this->accepted_charset_encodings = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
+
+			// initialize user_agent string
+			$this->user_agent = $GLOBALS['xmlrpcName'] . ' ' . $GLOBALS['xmlrpcVersion'];
 		}
 
 		/**
@@ -1099,15 +1106,24 @@
 			}
 		}
 
-	    /**
-	    * Directly set cURL options, for extra flexibility
-	    * It allows eg. to bind client to a specific IP interface / address
-	    * @param $options array
-	    */
-	    function SetCurlOptions( $options )
-	    {
-	        $this->extracurlopts = $options;
-	    }
+		/**
+		* Directly set cURL options, for extra flexibility
+		* It allows eg. to bind client to a specific IP interface / address
+		* @param $options array
+		*/
+		function SetCurlOptions( $options )
+		{
+			$this->extracurlopts = $options;
+		}
+
+		/**
+		* Set user-agent string that will be used by this client instance
+		* in http headers sent to the server
+		*/
+		function SetUserAgent( $agentstring )
+		{
+			$this->user_agent = $agentstring;
+		}
 
 		/**
 		* Send an xmlrpc request
@@ -1327,7 +1343,7 @@
 			}
 
 			$op= 'POST ' . $uri. " HTTP/1.0\r\n" .
-				'User-Agent: ' . $GLOBALS['xmlrpcName'] . ' ' . $GLOBALS['xmlrpcVersion'] . "\r\n" .
+				'User-Agent: ' . $this->user_agent . "\r\n" .
 				'Host: '. $server . ':' . $port . "\r\n" .
 				$credentials .
 				$proxy_credentials .
@@ -1510,7 +1526,7 @@
 			{
 				curl_setopt($curl, CURLOPT_VERBOSE, 1);
 			}
-			curl_setopt($curl, CURLOPT_USERAGENT, $GLOBALS['xmlrpcName'].' '.$GLOBALS['xmlrpcVersion']);
+			curl_setopt($curl, CURLOPT_USERAGENT, $this->user_agent);
 			// required for XMLRPC: post the data
 			curl_setopt($curl, CURLOPT_POST, 1);
 			// the data
@@ -3449,7 +3465,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 				else
 				{
 					$arr = array();
-				    reset($php_val);
+					reset($php_val);
 					while(list($k,$v) = each($php_val))
 					{
 						$arr[$k] = php_xmlrpc_encode($v, $options);

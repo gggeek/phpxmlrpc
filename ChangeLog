@@ -10,6 +10,9 @@
 	* server.php, testsuite.php: add a new test and server method for exception
 	catching in the server
 
+	* xmlrpc.inc: added new method SetUserAgent to client to allow having different
+	user-agent http headers
+
 2009-08-05 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* xmlrpc_wrappers.inc: improve compatibility with php 5.0 when registering
