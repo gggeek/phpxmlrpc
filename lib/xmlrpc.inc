@@ -3316,7 +3316,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 					$out = $xmlrpc_val->scalarval();
 					if (is_string($out))
 					{
-						$out= strtotime($out);
+						$out = strtotime($out);
 					}
 					if (is_int($out))
 					{
