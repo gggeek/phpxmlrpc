@@ -1,3 +1,26 @@
+XML-RPC for PHP version 3.0.0 beta - 2009/09/05
+
+This is the first release of the library to only support PHP 5.
+Some legacy code has been removed, and support for features such as exceptions
+and dateTime objects introduced.
+
+The "beta" tag is meant to indicate the fact that the refactoring has been more widespread
+than in precedent releases and that more changes are likely to be introduced with time -
+the library is still considered to be production quality.
+
+* improved: removed all usage of php functions deprecated in php 5.3, usage of assign-by-ref when creating new objects etc...
+* improved: add support for the <ex:nil/> tag used by the apache library, both in input and output
+* improved: add support for dateTime objects in both in php_xmlrpc_encode and as parameter for constructor of xmlrpcval
+* improved: add support for timestamps as parameter for constructor of xmlrpcval
+* improved: add option 'dates_as_objects' to php_xmlrpc_decode to return dateTime objects for xmlrpc datetimes
+* improved: add new method SetCurlOptions to xmrlpc_client to allow extra flexibility in tweaking http config, such as explicitly binding to an ip address
+* improved: add new method SetUserAgent to xmrlpc_client to to allow having different user-agent http headers
+* improved: add a new member variable in server class to allow fine-tuning of the encoding of returned values when the server is in 'phpvals' mode
+* improved: allow servers in 'xmlrpcvals' mode to also register plain php functions by defining them in the dispatch map with an added option
+* improved: catch exceptions thrown during execution of php functions exposed as methods by the server
+* fixed: bad encoding if same object is encoded twice using php_xmlrpc_encode
+
+
 XML-RPC for PHP version 2.2.2 - 2009/03/16
 
 This release corrects all bugs that have been reported and sucesfully reproduced since

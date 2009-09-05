@@ -9,10 +9,10 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
 <book lang="en">
   <title>XML-RPC for PHP</title>
 
-  <subtitle>version 2.2.2</subtitle>
+  <subtitle>version 3.0.0 beta</subtitle>
 
   <bookinfo>
-    <date>XXX YY, 2008</date>
+    <date>Sep 5, 2009</date>
 
     <authorgroup>
       <author>
@@ -112,8 +112,8 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
 
     <para>The original author is Edd Dumbill of <ulink
     url="http://usefulinc.com/">Useful Information Company</ulink>. As of the
-    1.0 stable release, the project has been opened to wider involvement and
-    moved to <ulink
+    1.0 stable release, the project was opened to wider involvement and moved
+    to <ulink
     url="http://phpxmlrpc.sourceforge.net/">SourceForge</ulink>.</para>
 
     <para>A list of XML-RPC implementations for other languages such as Perl
@@ -153,6 +153,8 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
 
       <para>A. Lambert</para>
 
+      <para>Frederic Lecointre</para>
+
       <para>Dan Libby</para>
 
       <para>Arnaud Limbourg</para>
@@ -175,13 +177,19 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
 
       <para>Peter Russel</para>
 
-      <para>Viliam Simko</para>
+      <para>Jean-Jacques Sarton</para>
 
-      <para>Douglas Squirrel</para>
+      <para>Viliam Simko</para>
 
       <para>Idan Sofer</para>
 
+      <para>Douglas Squirrel</para>
+
+      <para>Heiko Stübner</para>
+
       <para>Anatoly Techtonik</para>
+
+      <para>Tommaso Trani</para>
 
       <para>Eric van der Vlist</para>
 
@@ -190,6 +198,8 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
       <para>Jim Winstead</para>
 
       <para>Przemyslaw Wroblewski</para>
+
+      <para>Bruno Zanetti Melotti</para>
     </sect1>
   </chapter>
 
@@ -201,6 +211,88 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
     chapter in the manual. To find a more detailed description of new
     functions and methods please take a look at the source code of the
     library, which is quite thoroughly commented in javadoc-like form.</para>
+
+    <sect1>
+      <title>3.0.0 beta</title>
+
+      <para>This is the first release of the library to only support PHP 5.
+      Some legacy code has been removed, and support for features such as
+      exceptions and dateTime objects introduced.</para>
+
+      <para>The "beta" tag is meant to indicate the fact that the refactoring
+      has been more widespread than in precedent releases and that more
+      changes are likely to be introduced with time - the library is still
+      considered to be production quality.</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>improved: removed all usage of php functions deprecated in
+            php 5.3, usage of assign-by-ref when creating new objects
+            etc...</para>
+          </listitem>
+
+          <listitem>
+            <para>improved: add support for the &lt;ex:nil/&gt; tag used by
+            the apache library, both in input and output</para>
+          </listitem>
+
+          <listitem>
+            <para>improved: add support for <classname>dateTime</classname>
+            objects in both in <function>php_xmlrpc_encode</function> and as
+            parameter for constructor of
+            <classname>xmlrpcval</classname></para>
+          </listitem>
+
+          <listitem>
+            <para>improved: add support for timestamps as parameter for
+            constructor of <classname>xmlrpcval</classname></para>
+          </listitem>
+
+          <listitem>
+            <para>improved: add option 'dates_as_objects' to
+            <function>php_xmlrpc_decode</function> to return
+            <classname>dateTime</classname> objects for xmlrpc
+            datetimes</para>
+          </listitem>
+
+          <listitem>
+            <para>improved: add new method
+            <methodname>SetCurlOptions</methodname> to
+            <classname>xmrlpc_client</classname> to allow extra flexibility in
+            tweaking http config, such as explicitly binding to an ip
+            address</para>
+          </listitem>
+
+          <listitem>
+            <para>improved: add new method
+            <methodname>SetUserAgent</methodname> to
+            <classname>xmrlpc_client</classname> to to allow having different
+            user-agent http headers</para>
+          </listitem>
+
+          <listitem>
+            <para>improved: add a new member variable in server class to allow
+            fine-tuning of the encoding of returned values when the server is
+            in 'phpvals' mode</para>
+          </listitem>
+
+          <listitem>
+            <para>improved: allow servers in 'xmlrpcvals' mode to also
+            register plain php functions by defining them in the dispatch map
+            with an added option</para>
+          </listitem>
+
+          <listitem>
+            <para>improved: catch exceptions thrown during execution of php
+            functions exposed as methods by the server</para>
+          </listitem>
+
+          <listitem>
+            <para>fixed: bad encoding if same object is encoded twice using
+            php_xmlrpc_encode</para>
+          </listitem>
+        </itemizedlist></para>
+    </sect1>
 
     <sect1>
       <title>2.2.2</title>
@@ -763,11 +855,7 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
     configuration.</para>
 
     <para>The <emphasis>minimum supported</emphasis> PHP version is
-    4.2.</para>
-
-    <para>A compatibility layer is provided that allows the code to run on PHP
-    4.0.5 and 4.1. Note that if you are stuck on those platforms, we suggest
-    you upgrade as soon as possible.</para>
+    5.0.</para>
 
     <para>Automatic generation of xml-rpc methods from php functions is only
     supported with PHP version 5.0.3 and later (note that the lib will
@@ -775,9 +863,7 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
 
     <para>If you wish to use SSL or HTTP 1.1 to communicate with remote
     servers, you need the "curl" extension compiled into your PHP
-    installation. This is available in PHP 4.0.2 and greater, although 4.0.6
-    has a bug preventing SSL working, and versions prior to 4.3.8 do not
-    support streamlining multiple requests using HTTP Keep-Alive.</para>
+    installation.</para>
 
     <para>The "xmlrpc" native extension is not required to be compiled into
     your PHP installation, but if it is, there will be no interference with
@@ -812,18 +898,6 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
         <glossdef>
           <para>helper functions to "automagically" convert plain php
           functions to xmlrpc services and vice versa</para>
-        </glossdef>
-      </glossentry>
-
-      <glossentry>
-        <glossterm>lib/compat/array_key_exists.php, lib/compat/is_a.php,
-        lib/compat/is_scalar.php, lib/compat/var_export.php,
-        lib/compat/vesrions_compare.php</glossterm>
-
-        <glossdef>
-          <para>compatibility functions: these files implement the
-          compatibility layer needed to run the library with PHP versions 4.0
-          and 4.1</para>
         </glossdef>
       </glossentry>
 
@@ -1021,20 +1095,9 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
     content will be parsed as if it had been encoded using the charset defined
     by <xref linkend="xmlrpc-defencoding" /></para>
 
-    <para>Very large floating point numbers are serialized using exponential
-    notation, even though the spec explicitly forbids this behaviour. This
-    will not be a problem if this library is used on both ends of the
-    communication, but might cause problems with other implementations.</para>
-
     <para>Support for receiving from servers version 1 cookies (i.e.
     conforming to RFC 2965) is quite incomplete, and might cause unforeseen
     errors.</para>
-
-    <para>A PHP warning will be generated in many places when using
-    <filename>xmlrpc.inc</filename> and <filename>xmlrpcs.inc</filename> with
-    PHP 5 in strict error reporting mode. The simplest workaround to this
-    problem is to lower the <parameter>error_reporting</parameter> level in
-    php.ini.</para>
   </chapter>
 
   <chapter id="support">
@@ -1118,9 +1181,10 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
 
       <para>The <classname>xmlrpcval</classname> class can store arbitrarily
       complicated values using the following types: <literal>i4 int boolean
-      string double dateTime.iso8601 base64 array struct</literal>. You should
-      refer to the <ulink url="http://www.xmlrpc.com/spec">spec</ulink> for
-      more information on what each of these types mean.</para>
+      string double dateTime.iso8601 base64 array struct</literal>
+      <literal>null</literal>. You should refer to the <ulink
+      url="http://www.xmlrpc.com/spec">spec</ulink> for more information on
+      what each of these types mean.</para>
 
       <sect2>
         <title>Notes on types</title>
@@ -1167,6 +1231,16 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
           recommendation</ulink>. In particular, using character reference
           representation has the advantage of producing XML that is valid
           independently of the charset encoding assumed.</para>
+        </sect3>
+
+        <sect3>
+          <title>null</title>
+
+          <para>There is no support for encoding <literal>null</literal>
+          values in the XML-RPC spec, but at least a couple of extensions (and
+          many toolkits) do support it. Before using <literal>null</literal>
+          values in your messages, make sure that the responding party accepts
+          them, and uses the same encoding convention (see ...).</para>
         </sect3>
       </sect2>
 
@@ -1222,8 +1296,8 @@ $Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
         second parameter must be a name of an XML-RPC type. Valid types are:
         "<literal>int</literal>", "<literal>boolean</literal>",
         "<literal>string</literal>", "<literal>double</literal>",
-        "<literal>dateTime.iso8601</literal>",
-        "<literal>base64</literal>".</para>
+        "<literal>dateTime.iso8601</literal>", "<literal>base64</literal>" or
+        "null".</para>
 
         <para>Examples:</para>
 
@@ -2085,6 +2159,21 @@ $client = new xmlrpc_client("/RPC2", "betty.userland.com", 80);
         </sect3>
 
         <sect3>
+          <title>setCurlOptions</title>
+
+          <para><funcsynopsis>
+              <funcprototype>
+                <funcdef><type>void</type><function>setCurlOptions</function></funcdef>
+
+                <paramdef><type>array</type><parameter>$options</parameter></paramdef>
+              </funcprototype>
+            </funcsynopsis>This method allows to directly set any desired
+          option to manipulate the usage of the cURL client (when in cURL
+          mode). It can be used eg. to explicitly bind to an outgoing ip
+          address when the server is multihomed</para>
+        </sect3>
+
+        <sect3>
           <title>setDebug</title>
 
           <funcsynopsis>
@@ -2231,6 +2320,21 @@ $client = new xmlrpc_client("/RPC2", "betty.userland.com", 80);
           value. Default value: <constant>TRUE</constant>. To specify custom
           SSL certificates to validate the server with, use the
           <methodname>setCaCertificate</methodname> method.</para>
+        </sect3>
+
+        <sect3>
+          <title>setUserAgent</title>
+
+          <para><funcsynopsis>
+              <funcprototype>
+                <funcdef><type>void</type><function>Useragent</function></funcdef>
+
+                <paramdef><type>string</type><parameter>$useragent</parameter></paramdef>
+              </funcprototype>
+            </funcsynopsis>This method sets a custom user-agent that will be
+          used by the client in the http headers sent with the request. The
+          default value is built using the library name and version
+          constants.</para>
         </sect3>
       </sect2>
 
@@ -2472,7 +2576,11 @@ if ($resp-&gt;faultCode()) echo 'KO. Error: '.$resp-&gt;faultString(); else echo
         the appropriate parameters have been set in the php.in file. Another
         way to prevent echoing of errors inside the response and facilitate
         debugging is to use the server SetDebug method with debug level 3 (see
-        below).</para>
+        ...). Exceptions thrown duting execution of handler functions are
+        caught by default and a XML-RPC error reponse is generated instead.
+        This behaviour can be finetuned by usage of the
+        <varname>exception_handling</varname> member variable (see
+        ...).</para>
 
         <para>Note that if you implement a method with a name prefixed by
         <code>system.</code> the handler function will be invoked by the
@@ -2560,6 +2668,14 @@ if ($resp-&gt;faultCode()) echo 'KO. Error: '.$resp-&gt;faultString(); else echo
             extras package will take advantage of this, since the
             "system.methodHelp" protocol does not support documenting method
             parameters individually.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>parameters_type</literal> - this entry can be used
+            when the server is working in 'xmlrpcvals' mode (see ...) to
+            define one or more entries in the dispatch map as being functions
+            that follow the 'phpvals' calling convention. The only useful
+            value is currently the string <literal>phpvals</literal>.</para>
           </listitem>
         </itemizedlist>
 
@@ -2649,7 +2765,8 @@ $s-&gt;service();
         <para>Note that the <methodname>service</methodname> method will print
         the complete result payload to screen and send appropriate HTTP
         headers back to the client, but also return the response object. This
-        permits further manipulation of the response.</para>
+        permits further manipulation of the response, possibly in combination
+        with output buffering.</para>
 
         <para>To prevent the server from sending HTTP headers back to the
         client, you can pass a second parameter with a value of
@@ -2711,6 +2828,19 @@ $resp = $s-&gt;service($xmlrpc_request_body, true); // parse a variable instead 
           <para>Note that the ZLIB php extension must be installed for this to
           work. If it is, <varname>compress_response</varname> will default to
           TRUE.</para>
+        </sect3>
+
+        <sect3>
+          <title>exception_handling</title>
+
+          <para>This variable controls the behaviour of the server when an
+          exception is thrown by a method handler php function. Valid values:
+          0,1,2, with 0 being the default. At level 0, the server catches the
+          exception and return an 'internal error' xmlrpc response; at 1 it
+          catches the exceptions and return an xmlrpc response with the error
+          code and error message corresponding to the exception that was
+          thron; at 2 = the exception is floated to the upper layers in the
+          code</para>
         </sect3>
 
         <sect3>
@@ -2896,8 +3026,10 @@ $resp = $s-&gt;service($xmlrpc_request_body, true); // parse a variable instead 
         simplified syntax:</para>
 
         <para>to return an xmlrpc error, the method handler function must
-        return an instance of xmlrpcresp. There is no other way for the server
-        to know when an error response should be served to the client;</para>
+        return an instance of <classname>xmlrpcresp</classname>. The only
+        other way for the server to know when an error response should be
+        served to the client is to throw an exception and set the server's
+        <varname>exception_handling</varname> memeber var to 1;</para>
 
         <para>to return a base64 value, the method handler function must
         encode it on its own, creating an instance of an xmlrpcval
@@ -3067,10 +3199,22 @@ $v = new xmlrpcval('Îºá½¹ÏÎ¼Îµ'); // This xmlrpc value will be corre
         <title>xmlrpc_null_extension</title>
 
         <para>When set to <constant>TRUE</constant>, the lib will enable
-        support for the &lt;NIL/&gt; xmlrpc value, as per the extension to the
-        standard proposed here. This means that &lt;NIL/&gt; tags will be
-        parsed as valid xmlrpc, and the corresponding xmlrpcvals will return
-        "null" for <methodname>scalarTyp()</methodname>.</para>
+        support for the &lt;NIL/&gt; (and &lt;EX:NIL/&gt;) xmlrpc value, as
+        per the extension to the standard proposed here. This means that
+        &lt;NIL/&gt; and &lt;EX:NIL/&gt; tags received will be parsed as valid
+        xmlrpc, and the corresponding xmlrpcvals will return "null" for
+        <methodname>scalarTyp()</methodname>.</para>
+      </sect2>
+
+      <sect2>
+        <title>xmlrpc_null_apache_encoding</title>
+
+        <para>When set to <literal>TRUE</literal>, php NULL values encoded
+        into <classname>xmlrpcval</classname> objects get serialized using the
+        <literal>&lt;EX:NIL/&gt;</literal> tag instead of
+        <literal>&lt;NIL/&gt;</literal>. Please note that both forms are
+        always accepted as input regardless of the value of this
+        variable.</para>
       </sect2>
     </sect1>
   </chapter>
@@ -3205,13 +3349,16 @@ $v = new xmlrpcval('Îºá½¹ÏÎ¼Îµ'); // This xmlrpc value will be corre
 
         <para>The <parameter>options</parameter> parameter is optional. If
         specified, it must consist of an array of options to be enabled in the
-        decoding process. At the moment the only valid option is
-        <symbol>decode_php_objs</symbol>. When it is set, php objects that
-        have been converted to xml-rpc structs using the
+        decoding process. At the moment the only valid option are
+        <symbol>decode_php_objs</symbol> and
+        <literal>dates_as_objects</literal>. When the first is set, php
+        objects that have been converted to xml-rpc structs using the
         <function>php_xmlrpc_encode</function> function and a corresponding
         encoding option will be converted back into object values instead of
         arrays (provided that the class definition is available at
-        reconstruction time).</para>
+        reconstruction time). When the second is set, XML-RPC datetime values
+        will be converted into native <classname>dateTime</classname> objects
+        instead of strings.</para>
 
         <para><emphasis><emphasis>WARNING</emphasis>:</emphasis> please take
         extreme care before enabling the <symbol>decode_php_objs</symbol>
@@ -3266,15 +3413,19 @@ $s = new xmlrpc_server(array(
         <para>The <parameter>options</parameter> parameter is optional. If
         specified, it must consist of an array of options to be enabled in the
         encoding process. At the moment the only valid options are
-        <symbol>encode_php_objs</symbol> and
-        <symbol>auto_dates</symbol>.</para>
+        <symbol>encode_php_objs</symbol>, <literal>null_extension</literal>
+        and <symbol>auto_dates</symbol>.</para>
 
         <para>The first will enable the creation of 'particular' xmlrpcval
         objects out of php objects, that add a "php_class" xml attribute to
         their serialized representation. This attribute allows the function
         php_xmlrpc_decode to rebuild the native php objects (provided that the
-        same class definition exists on both sides of the
-        communication)</para>
+        same class definition exists on both sides of the communication). The
+        second allows to encode php <literal>NULL</literal> values to the
+        <literal>&lt;NIL/&gt;</literal> (or
+        <literal>&lt;EX:NIL/&gt;</literal>, see ...) tag. The last encodes any
+        string that matches the ISO8601 format into an XML-RPC
+        datetime.</para>
 
         <para>Example:<programlisting language="php">
 // the easy way to build a complex xml-rpc struct, showing nested base64 value and datetime values
@@ -3839,18 +3990,6 @@ if ($v-&gt;kindOf() != "array") {
       returns accented characters</title>
 
       <para>To be documented...</para>
-    </sect1>
-
-    <sect1>
-      <title>My php error log is getting full of "deprecated" errors on
-      different lines of xmlrpc.inc and xmlrpcs.inc</title>
-
-      <para>This happens when the PHP in usage is version 5, and the error
-      reporting level is set to include <constant>E_STRICT</constant> errors.
-      Since the main development platform of the library remains (for the time
-      being) PHP 4, there are no plans to fix this asap. The best workaround
-      is to set the error reporting level to <constant>E_ALL ^
-      E_STRICT</constant>.</para>
     </sect1>
 
     <sect1>
