@@ -36,6 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST' && isset($_GET['showSource']))
 			return new xmlrpcresp(new xmlrpcval(1, 'boolean'));
 		}
 
+	    /**
+	     * Method used to testcatching of exceptions in the server.
+	     */
+	    function exceptiongenerator($m)
+	    {
+	        throw new Exception("it's just a test", 1);
+	    }
+
 		/**
 		* a PHP version of the state-number server. Send me an integer and i'll sell you a state
 		* @param integer $s
@@ -693,6 +701,9 @@ mimetype, a string, is a standard MIME type, for example, text/plain.
 			"function" => array($o, "phpwarninggenerator")
 			//'function' => 'xmlrpc_server_methods_container::phpwarninggenerator'
 		),
+		"examples.raiseException" => array(
+			"function" => array($o, "exceptiongenerator")
+		),
 		"examples.getallheaders" => array(
 			"function" => 'getallheaders_xmlrpc',
 			"signature" => $getallheaders_sig,
@@ -835,7 +846,8 @@ mimetype, a string, is a standard MIME type, for example, text/plain.
 	// we do this to help the testsuite script: do not reproduce in production!
 	if (isset($_GET['RESPONSE_ENCODING']))
 		$s->response_charset_encoding = $_GET['RESPONSE_ENCODING'];
-
+	if (isset($_GET['EXCEPTION_HANDLING']))
+		$s->exception_handling = $_GET['EXCEPTION_HANDLING'];
 	$s->service();
 	// that should do all we need!
 ?>

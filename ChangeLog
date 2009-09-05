@@ -1,3 +1,15 @@
+2009-09-05 - G. Giunta (giunta.gaetano@gmail.com)
+
+	* xmlrpcs.inc, xmlrpcs.inc: remove code that was left for compatibility
+	with php 4; use __METHOD__ constant for error messages instead of hardcoded
+	values
+
+	* xmlrpcs.inc: catch exceptions thrown during execution of invoked methods;
+	check for $_SERVER having been disabled via php.ini and log an error if so
+
+	* server.php, testsuite.php: add a new test and server method for exception
+	catching in the server
+
 2009-08-05 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* xmlrpc_wrappers.inc: improve compatibility with php 5.0 when registering

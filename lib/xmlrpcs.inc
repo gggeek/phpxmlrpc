@@ -365,6 +365,7 @@
 
 	$GLOBALS['_xmlrpcs_occurred_errors'] = '';
 	$GLOBALS['_xmlrpcs_prev_ehandler'] = '';
+
 	/**
 	* Error handler used to track errors that occur during server-side execution of PHP code.
 	* This allows to report back to the client whether an internal error has occurred or not
@@ -381,7 +382,7 @@
 			return;
 
 		//if($errcode != E_NOTICE && $errcode != E_WARNING && $errcode != E_USER_NOTICE && $errcode != E_USER_WARNING)
-		if($errcode != 2048) // do not use E_STRICT by name, since on PHP 4 it will not be defined
+		if($errcode != E_STRICT)
 		{
 			$GLOBALS['_xmlrpcs_occurred_errors'] = $GLOBALS['_xmlrpcs_occurred_errors'] . $errstring . "\n";
 		}
@@ -443,15 +444,22 @@
 		* valid strings are 'xmlrpcvals', 'phpvals' or 'epivals'
 		*/
 		var $functions_parameters_type='xmlrpcvals';
-	    /**
-	    * Option used for fine-tuning the encoding the php values returned from
-	    * functions registered in the dispatch map when the functions_parameters_types
-	    *  member is set to 'phpvals'
-	    * @see php_xmlrpc_encode for a list of values
-	    */
-	    var $phpvals_encoding_options = array( 'auto_dates' );
+		/**
+		* Option used for fine-tuning the encoding the php values returned from
+		* functions registered in the dispatch map when the functions_parameters_types
+		* member is set to 'phpvals'
+		* @see php_xmlrpc_encode for a list of values
+		*/
+		var $phpvals_encoding_options = array( 'auto_dates' );
 		/// controls wether the server is going to echo debugging messages back to the client as comments in response body. valid values: 0,1,2,3
 		var $debug = 1;
+		/**
+		* Controls behaviour of server when invoked user function throws an exception:
+		* 0 = catch it and return an 'internal error' xmlrpc response (default)
+		* 1 = catch it and return an xmlrpc response with the error corresponding to the exception
+		* 2 = allow the exception to float to the upper layers
+		*/
+		var $exception_handling = 0;
 		/**
 		* When set to true, it will enable HTTP compression of the response, in case
 		* the client has declared its support for compression in the request.
@@ -674,7 +682,7 @@
 			}
 			else
 			{
-				error_log('XML-RPC: xmlrpc_server::service: http headers already sent before response is fully generated. Check for php warning or error messages');
+				error_log('XML-RPC: '.__METHOD__.': http headers already sent before response is fully generated. Check for php warning or error messages');
 			}
 
 			print $payload;
@@ -704,7 +712,7 @@
 			}
 			if ($sigdoc)
 			{
-			    $this->dmap[$methodname]['signature_docs'] = $sigdoc;
+				$this->dmap[$methodname]['signature_docs'] = $sigdoc;
 			}
 		}
 
@@ -782,10 +790,11 @@
 		*/
 		function parseRequestHeaders(&$data, &$req_encoding, &$resp_encoding, &$resp_compression)
 		{
-			// Play nice to PHP 4.0.x: superglobals were not yet invented...
-			if(!isset($_SERVER))
+			// check if $_SERVER is populated: it might have been disabled via ini file
+			// (this is true even when in CLI mode)
+			if (count($_SERVER) == 0)
 			{
-				$_SERVER = $GLOBALS['HTTP_SERVER_VARS'];
+				error_log('XML-RPC: '.__METHOD__.': cannot parse request headers as $_SERVER is not populated');
 			}
 
 			if($this->debug > 1)
@@ -934,7 +943,7 @@
 				// makes the lib about 200% slower...
 				//if (!is_valid_charset($req_encoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
 				{
-					error_log('XML-RPC: xmlrpc_server::parseRequest: invalid charset encoding of received request: '.$req_encoding);
+					error_log('XML-RPC: '.__METHOD__.': invalid charset encoding of received request: '.$req_encoding);
 					$req_encoding = $GLOBALS['xmlrpc_defencoding'];
 				}
 				/// @BUG this will fail on PHP 5 if charset is not specified in the xml prologue,
@@ -989,10 +998,10 @@
 			else
 			{
 				xml_parser_free($parser);
-			    // small layering violation in favor of speed and memory usage:
-			    // we should allow the 'execute' method handle this, but in the
-			    // most common scenario (xmlrpcvals type server with some methods
-			    // registered as phpvals) that would mean a useless encode+decode pass
+				// small layering violation in favor of speed and memory usage:
+				// we should allow the 'execute' method handle this, but in the
+				// most common scenario (xmlrpcvals type server with some methods
+				// registered as phpvals) that would mean a useless encode+decode pass
 				if ($this->functions_parameters_type != 'xmlrpcvals' || (isset($this->dmap[$GLOBALS['_xh']['method']]['parameters_type']) && ($this->dmap[$GLOBALS['_xh']['method']]['parameters_type'] == 'phpvals')))
 				{
 					if($this->debug > 1)
@@ -1082,7 +1091,7 @@
 			// verify that function to be invoked is in fact callable
 			if(!is_callable($func))
 			{
-				error_log("XML-RPC: xmlrpc_server::execute: function $func registered as method handler is not callable");
+				error_log("XML-RPC: ".__METHOD__.": function $func registered as method handler is not callable");
 				return new xmlrpcresp(
 					0,
 					$GLOBALS['xmlrpcerr']['server_error'],
@@ -1096,72 +1105,91 @@
 			{
 				$GLOBALS['_xmlrpcs_prev_ehandler'] = set_error_handler('_xmlrpcs_errorHandler');
 			}
-		    // Allow mixed-convention servers
-			if (is_object($m))
+			try
 			{
-				if($sysCall)
+				// Allow mixed-convention servers
+				if (is_object($m))
 				{
-					$r = call_user_func($func, $this, $m);
-				}
-				else
-				{
-					$r = call_user_func($func, $m);
-				}
-				if (!is_a($r, 'xmlrpcresp'))
-				{
-					error_log("XML-RPC: xmlrpc_server::execute: function $func registered as method handler does not return an xmlrpcresp object");
-					if (is_a($r, 'xmlrpcval'))
+					if($sysCall)
 					{
-						$r = new xmlrpcresp($r);
+						$r = call_user_func($func, $this, $m);
 					}
 					else
 					{
-						$r = new xmlrpcresp(
-							0,
-							$GLOBALS['xmlrpcerr']['server_error'],
-							$GLOBALS['xmlrpcstr']['server_error'] . ": function does not return xmlrpcresp object"
-						);
+						$r = call_user_func($func, $m);
 					}
-				}
-			}
-			else
-			{
-				// call a 'plain php' function
-				if($sysCall)
-				{
-					array_unshift($params, $this);
-					$r = call_user_func_array($func, $params);
-				}
-				else
-				{
-					// 3rd API convention for method-handling functions: EPI-style
-					if ($this->functions_parameters_type == 'epivals')
+					if (!is_a($r, 'xmlrpcresp'))
 					{
-						$r = call_user_func_array($func, array($methName, $params, $this->user_data));
-						// mimic EPI behaviour: if we get an array that looks like an error, make it
-						// an eror response
-						if (is_array($r) && array_key_exists('faultCode', $r) && array_key_exists('faultString', $r))
+						error_log("XML-RPC: ".__METHOD__.": function $func registered as method handler does not return an xmlrpcresp object");
+						if (is_a($r, 'xmlrpcval'))
 						{
-							$r = new xmlrpcresp(0, (integer)$r['faultCode'], (string)$r['faultString']);
+							$r = new xmlrpcresp($r);
 						}
 						else
 						{
-							// functions using EPI api should NOT return resp objects,
-							// so make sure we encode the return type correctly
-							$r = new xmlrpcresp(php_xmlrpc_encode($r, array('extension_api')));
+							$r = new xmlrpcresp(
+								0,
+								$GLOBALS['xmlrpcerr']['server_error'],
+								$GLOBALS['xmlrpcstr']['server_error'] . ": function does not return xmlrpcresp object"
+							);
 						}
+					}
+				}
+				else
+				{
+					// call a 'plain php' function
+					if($sysCall)
+					{
+						array_unshift($params, $this);
+						$r = call_user_func_array($func, $params);
 					}
 					else
 					{
-						$r = call_user_func_array($func, $params);
+						// 3rd API convention for method-handling functions: EPI-style
+						if ($this->functions_parameters_type == 'epivals')
+						{
+							$r = call_user_func_array($func, array($methName, $params, $this->user_data));
+							// mimic EPI behaviour: if we get an array that looks like an error, make it
+							// an eror response
+							if (is_array($r) && array_key_exists('faultCode', $r) && array_key_exists('faultString', $r))
+							{
+								$r = new xmlrpcresp(0, (integer)$r['faultCode'], (string)$r['faultString']);
+							}
+							else
+							{
+								// functions using EPI api should NOT return resp objects,
+								// so make sure we encode the return type correctly
+								$r = new xmlrpcresp(php_xmlrpc_encode($r, array('extension_api')));
+							}
+						}
+						else
+						{
+							$r = call_user_func_array($func, $params);
+						}
+					}
+					// the return type can be either an xmlrpcresp object or a plain php value...
+					if (!is_a($r, 'xmlrpcresp'))
+					{
+						// what should we assume here about automatic encoding of datetimes
+						// and php classes instances???
+						$r = new xmlrpcresp(php_xmlrpc_encode($r, $this->phpvals_encoding_options));
 					}
 				}
-				// the return type can be either an xmlrpcresp object or a plain php value...
-				if (!is_a($r, 'xmlrpcresp'))
+			}
+			catch(Exception $e)
+			{
+				// (barring errors in the lib) an uncatched exception happened
+				// in the called function, we wrap it in a proper error-response
+				switch($this->exception_handling)
 				{
-					// what should we assume here about automatic encoding of datetimes
-					// and php classes instances???
-					$r = new xmlrpcresp(php_xmlrpc_encode($r, $this->phpvals_encoding_options));
+					case 2:
+						throw $e;
+						break;
+					case 1:
+						$r = new xmlrpcresp(0, $e->getCode(), $e->getMessage());
+						break;
+					default:
+						$r = new xmlrpcresp(0, $GLOBALS['xmlrpcerr']['server_error'], $GLOBALS['xmlrpcstr']['server_error']);
 				}
 			}
 			if($this->debug > 2)

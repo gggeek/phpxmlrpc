@@ -1263,7 +1263,7 @@
 				$credentials='Authorization: Basic ' . base64_encode($username . ':' . $password) . "\r\n";
 				if ($authtype != 1)
 				{
-					error_log('XML-RPC: xmlrpc_client::send: warning. Only Basic auth is supported with HTTP 1.0');
+					error_log('XML-RPC: '.__METHOD__.': warning. Only Basic auth is supported with HTTP 1.0');
 				}
 			}
 
@@ -1287,7 +1287,7 @@
 				{
 					if ($proxyauthtype != 1)
 					{
-						error_log('XML-RPC: xmlrpc_client::send: warning. Only Basic auth to proxy is supported with HTTP 1.0');
+						error_log('XML-RPC: '.__METHOD__.': warning. Only Basic auth to proxy is supported with HTTP 1.0');
 					}
 					$proxy_credentials = 'Proxy-Authorization: Basic ' . base64_encode($proxyusername.':'.$proxypassword) . "\r\n";
 				}
@@ -1563,7 +1563,7 @@
 				}
 				else if ($authtype != 1)
 				{
-					error_log('XML-RPC: xmlrpc_client::send: warning. Only Basic auth is supported by the current PHP/curl install');
+					error_log('XML-RPC: '.__METHOD__.': warning. Only Basic auth is supported by the current PHP/curl install');
 				}
 			}
 
@@ -1622,7 +1622,7 @@
 					}
 					else if ($proxyauthtype != 1)
 					{
-						error_log('XML-RPC: xmlrpc_client::send: warning. Only Basic auth to proxy is supported by the current PHP/curl install');
+						error_log('XML-RPC: '.__METHOD__.': warning. Only Basic auth to proxy is supported by the current PHP/curl install');
 					}
 				}
 			}
@@ -1640,10 +1640,10 @@
 				curl_setopt($curl, CURLOPT_COOKIE, substr($cookieheader, 0, -2));
 			}
 
-		    foreach ($this->extracurlopts as $opt => $val)
-		    {
-		        curl_setopt($curl, $opt, $val);
-		    }
+			foreach ($this->extracurlopts as $opt => $val)
+			{
+				curl_setopt($curl, $opt, $val);
+			}
 
 			$result = curl_exec($curl);
 
@@ -2262,7 +2262,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 					}
 					else
 					{
-						error_log('XML-RPC: xmlrpcmsg::parseResponse: HTTPS via proxy error, tunnel connection possibly failed');
+						error_log('XML-RPC: '.__METHOD__.': HTTPS via proxy error, tunnel connection possibly failed');
 						$r=new xmlrpcresp(0, $GLOBALS['xmlrpcerr']['http_error'], $GLOBALS['xmlrpcstr']['http_error']. ' (HTTPS via proxy error, tunnel connection possibly failed)');
 						return $r;
 					}
@@ -2283,7 +2283,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 				if(!preg_match('/^HTTP\/[0-9.]+ 200 /', $data))
 				{
 					$errstr= substr($data, 0, strpos($data, "\n")-1);
-					error_log('XML-RPC: xmlrpcmsg::parseResponse: HTTP error, got response: ' .$errstr);
+					error_log('XML-RPC: '.__METHOD__.': HTTP error, got response: ' .$errstr);
 					$r=new xmlrpcresp(0, $GLOBALS['xmlrpcerr']['http_error'], $GLOBALS['xmlrpcstr']['http_error']. ' (' . $errstr . ')');
 					return $r;
 				}
@@ -2408,7 +2408,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 					{
 						if(!$data = decode_chunked($data))
 						{
-							error_log('XML-RPC: xmlrpcmsg::parseResponse: errors occurred when trying to rebuild the chunked data received from server');
+							error_log('XML-RPC: '.__METHOD__.': errors occurred when trying to rebuild the chunked data received from server');
 							$r = new xmlrpcresp(0, $GLOBALS['xmlrpcerr']['dechunk_fail'], $GLOBALS['xmlrpcstr']['dechunk_fail']);
 							return $r;
 						}
@@ -2438,14 +2438,14 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 								}
 								else
 								{
-									error_log('XML-RPC: xmlrpcmsg::parseResponse: errors occurred when trying to decode the deflated data received from server');
+									error_log('XML-RPC: '.__METHOD__.': errors occurred when trying to decode the deflated data received from server');
 									$r = new xmlrpcresp(0, $GLOBALS['xmlrpcerr']['decompress_fail'], $GLOBALS['xmlrpcstr']['decompress_fail']);
 									return $r;
 								}
 							}
 							else
 							{
-								error_log('XML-RPC: xmlrpcmsg::parseResponse: the server sent deflated data. Your php install must have the Zlib extension compiled in to support this.');
+								error_log('XML-RPC: '.__METHOD__.': the server sent deflated data. Your php install must have the Zlib extension compiled in to support this.');
 								$r = new xmlrpcresp(0, $GLOBALS['xmlrpcerr']['cannot_decompress'], $GLOBALS['xmlrpcstr']['cannot_decompress']);
 								return $r;
 							}
@@ -2453,7 +2453,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 					}
 				} // end of 'if needed, de-chunk, re-inflate response'
 
-				// real stupid hack to avoid PHP 4 complaining about returning NULL by ref
+				// real stupid hack to avoid PHP complaining about returning NULL by ref
 				$r = null;
 				$r =& $r;
 				return $r;
@@ -2477,7 +2477,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 
 			if($data == '')
 			{
-				error_log('XML-RPC: xmlrpcmsg::parseResponse: no response received from server.');
+				error_log('XML-RPC: '.__METHOD__.': no response received from server.');
 				$r = new xmlrpcresp(0, $GLOBALS['xmlrpcerr']['no_data'], $GLOBALS['xmlrpcstr']['no_data']);
 				return $r;
 			}
@@ -2522,17 +2522,10 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 
 			// be tolerant of junk after methodResponse (e.g. javascript ads automatically inserted by free hosts)
 			// idea from Luca Mariano <luca.mariano@email.it> originally in PEARified version of the lib
-			$bd = false;
-			// Poor man's version of strrpos for php 4...
-			$pos = strpos($data, '</methodResponse>');
-			while($pos || is_int($pos))
+			$pos = strrpos($data, '</methodResponse>');
+			if($pos !== false)
 			{
-				$bd = $pos+17;
-				$pos = strpos($data, '</methodResponse>', $bd);
-			}
-			if($bd)
-			{
-				$data = substr($data, 0, $bd);
+				$data = substr($data, 0, $pos+17);
 			}
 
 			// if user wants back raw xml, give it to him
@@ -2563,7 +2556,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			// makes the lib about 200% slower...
 			//if (!is_valid_charset($resp_encoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
 			{
-				error_log('XML-RPC: xmlrpcmsg::parseResponse: invalid charset encoding of received response: '.$resp_encoding);
+				error_log('XML-RPC: '.__METHOD__.': invalid charset encoding of received response: '.$resp_encoding);
 				$resp_encoding = $GLOBALS['xmlrpc_defencoding'];
 			}
 			$parser = xml_parser_create($resp_encoding);
@@ -2738,7 +2731,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 						$this->me['struct']=$val;
 						break;
 					default:
-						error_log("XML-RPC: xmlrpcval::xmlrpcval: not a known type ($type)");
+						error_log("XML-RPC: ".__METHOD__.": not a known type ($type)");
 				}
 				/*if($type=='')
 				{
@@ -2770,7 +2763,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			$typeof=@$GLOBALS['xmlrpcTypes'][$type];
 			if($typeof!=1)
 			{
-				error_log("XML-RPC: xmlrpcval::addScalar: not a scalar type ($type)");
+				error_log("XML-RPC: ".__METHOD__.": not a scalar type ($type)");
 				return 0;
 			}
 
@@ -2792,10 +2785,10 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			switch($this->mytype)
 			{
 				case 1:
-					error_log('XML-RPC: xmlrpcval::addScalar: scalar xmlrpcval can have only one value');
+					error_log('XML-RPC: '.__METHOD__.': scalar xmlrpcval can have only one value');
 					return 0;
 				case 3:
-					error_log('XML-RPC: xmlrpcval::addScalar: cannot add anonymous scalar to struct xmlrpcval');
+					error_log('XML-RPC: '.__METHOD__.': cannot add anonymous scalar to struct xmlrpcval');
 					return 0;
 				case 2:
 					// we're adding a scalar value to an array here
@@ -2837,7 +2830,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			}
 			else
 			{
-				error_log('XML-RPC: xmlrpcval::addArray: already initialized as a [' . $this->kindOf() . ']');
+				error_log('XML-RPC: '.__METHOD__.': already initialized as a [' . $this->kindOf() . ']');
 				return 0;
 			}
 		}
@@ -2866,7 +2859,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			}
 			else
 			{
-				error_log('XML-RPC: xmlrpcval::addStruct: already initialized as a [' . $this->kindOf() . ']');
+				error_log('XML-RPC: '.__METHOD__.': already initialized as a [' . $this->kindOf() . ']');
 				return 0;
 			}
 		}
@@ -2939,8 +2932,8 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 							break;
 						case $GLOBALS['xmlrpcDouble']:
 							// avoid using standard conversion of float to string because it is locale-dependent,
-							// and also because the xmlrpc spec forbids exponential notation
-							// sprintf('%F') would be most likely ok but it is only available since PHP 4.3.10 and PHP 5.0.3.
+							// and also because the xmlrpc spec forbids exponential notation.
+							// sprintf('%F') could be most likely ok but it fails eg. on 2e-14.
 							// The code below tries its best at keeping max precision while avoiding exp notation,
 							// but there is of course no limit in the number of decimal places to be used...
 							$rs.="<${typ}>".preg_replace('/\\.?0+$/','',number_format((double)$val, 128, '.', ''))."</${typ}>";
