@@ -1,0 +1,38 @@
+XMLRPC for PHP
+
+Requirements
+------------
+
+The following requirements should be met prior to using 'XMLRPC for PHP': 
+. PHP 5.0 or later; 5.0.3 or later recommended to have all functionality enabled
+. the php "curl" extension is needed if you wish to use SSL or HTTP 1.1 to
+  communicate with remote servers
+
+The php "xmlrpc" native extension is not required, but if it is installed,
+there will be no interference with the operation of this library.
+
+
+Installation instructions
+-------------------------
+
+Installation of the library is quite easy:
+
+1. copy the contents of the lib/ folder to any location required by your
+   application (it can be inside the web server root or not).
+
+2. make sure your app can include those files. This can be achieved by setting
+   the PHP include path, either in the php.ini file or directly in the php code
+   of your application, using the 'set_include_path' function
+
+
+Example of php code allowing an application to import the library:
+
+set_include_path(get_include_path() . PATH_SEPARATOR . '/path/to/phpxmlrpc/lib/');
+require_once( 'xmlrpc.inc' );
+require_once( 'xmlrpcs.inc' );
+require_once( 'xmlrpc_wrappers.inc' );
+
+
+Please note that usage of the 'make' command for installation of the library is
+not recommended, as it will generally involve editing of the makefile for a
+succesfull run.
