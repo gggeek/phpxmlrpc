@@ -70,7 +70,7 @@ DEBUGGERFILES=debugger/index.php \
 all: install
 
 install:
-	cd lib && cp ${LIBFILES} ${PHPINCLUDEDIR}
+	cp ${LIBFILES} ${PHPINCLUDEDIR}
 	@echo Lib files have been copied to ${PHPINCLUDEDIR}
 	cd doc && $(MAKE) install
 
