@@ -226,6 +226,7 @@
 
 	// set to TRUE to enable encoding of php NULL values to <EX:NIL/> instead of <NIL/>
 	$GLOBALS['xmlrpc_null_apache_encoding']=false;
+    $GLOBALS['xmlrpc_null_apache_encoding_ns']='http://ws.apache.org/xmlrpc/namespaces/extensions';
 
 	// used to store state during parsing
 	// quick explanation of components:
@@ -2053,7 +2054,14 @@
 				$this->content_type = 'text/xml; charset=' . $charset_encoding;
 			else
 				$this->content_type = 'text/xml';
-			$result = "<methodResponse>\n";
+		    if ($GLOBALS['xmlrpc_null_apache_encoding'])
+		    {
+		        $result = "<methodResponse xmlns:ex=\"".$GLOBALS['xmlrpc_null_apache_encoding_ns']."\">\n";
+		    }
+		    else
+		    {
+		        $result = "<methodResponse>\n";
+		    }
 			if($this->errno)
 			{
 				// G. Giunta 2005/2/13: let non-ASCII response messages be tolerated by clients
