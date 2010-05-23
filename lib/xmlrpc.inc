@@ -1350,7 +1350,7 @@
 			}
 
 		    // omit port if 80
-		    $port = ($port == '80') ? '' : (':' . $port);
+		    $port = ($port == 80) ? '' : (':' . $port);
 
 			$op= 'POST ' . $uri. " HTTP/1.0\r\n" .
 				'User-Agent: ' . $this->user_agent . "\r\n" .

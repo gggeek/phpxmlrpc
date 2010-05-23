@@ -1,3 +1,8 @@
+2010-05-23 - G. Giunta (giunta.gaetano@gmail.com)
+
+	* xmlrpc.inc: omit port on http 'Host' header if it is 80;
+	add a namespace declaration in response if ex:nil is in use
+
 2010-04-12 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* testsuite.php, parse_args.php: testsuite allows interrogating https servers ignoring their certs
