@@ -708,7 +708,6 @@
 					$GLOBALS['_xh']['value'] = $curr_val['values'];
 					$GLOBALS['_xh']['vt']=strtolower($name);
 					if (isset($curr_val['php_class']))
-
 					{
 						$GLOBALS['_xh']['php_class'] = $curr_val['php_class'];
 					}
@@ -990,7 +989,6 @@
 		function setCaCertificate($cacert, $is_dir=false)
 		{
 			if ($is_dir)
-
 			{
 				$this->cacertdir = $cacert;
 			}
@@ -1065,10 +1063,10 @@
 			if ($compmethod == 'any')
 				$this->accepted_compression = array('gzip', 'deflate');
 			else
-			    if ($compmethod == false )
-			        $this->accepted_compression = array();
-    		    else
-    				$this->accepted_compression = array($compmethod);
+				if ($compmethod == false )
+					$this->accepted_compression = array();
+				else
+					$this->accepted_compression = array($compmethod);
 		}
 
 		/**
@@ -1165,7 +1163,6 @@
 			$msg->debug=$this->debug;
 
 			if($method == 'https')
-
 			{
 				$r =& $this->sendPayloadHTTPS(
 					$msg,
@@ -1349,8 +1346,8 @@
 				$cookieheader = 'Cookie:' . $version . substr($cookieheader, 0, -1) . "\r\n";
 			}
 
-		    // omit port if 80
-		    $port = ($port == 80) ? '' : (':' . $port);
+			// omit port if 80
+			$port = ($port == 80) ? '' : (':' . $port);
 
 			$op= 'POST ' . $uri. " HTTP/1.0\r\n" .
 				'User-Agent: ' . $this->user_agent . "\r\n" .
@@ -1864,7 +1861,6 @@
 						case 1:
 							if(!isset($val[0]))
 							{
-
 								return false;		// Bad value
 							}
 							// Normal return value
@@ -2057,14 +2053,14 @@
 				$this->content_type = 'text/xml; charset=' . $charset_encoding;
 			else
 				$this->content_type = 'text/xml';
-		    if ($GLOBALS['xmlrpc_null_apache_encoding'])
-		    {
-		        $result = "<methodResponse xmlns:ex=\"".$GLOBALS['xmlrpc_null_apache_encoding_ns']."\">\n";
-		    }
-		    else
-		    {
-		        $result = "<methodResponse>\n";
-		    }
+			if ($GLOBALS['xmlrpc_null_apache_encoding'])
+			{
+				$result = "<methodResponse xmlns:ex=\"".$GLOBALS['xmlrpc_null_apache_encoding_ns']."\">\n";
+			}
+			else
+			{
+			$result = "<methodResponse>\n";
+			}
 			if($this->errno)
 			{
 				// G. Giunta 2005/2/13: let non-ASCII response messages be tolerated by clients
@@ -3524,7 +3520,6 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 					$xmlrpc_val = new xmlrpcval((int)$php_val, $GLOBALS['xmlrpcInt']);
 				}
 				else
-
 				{
 					$xmlrpc_val = new xmlrpcval();
 				}
@@ -3726,7 +3721,6 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		}
 		elseif(preg_match('/^(\xEF\xBB\xBF)/', $xmlchunk))
 		{
-
 			return 'UTF-8';
 		}
 
