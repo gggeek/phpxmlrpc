@@ -8,7 +8,6 @@
  *
  * Please do not copy this file verbatim into your production server.
  *
- * @version $Id$
  **/
 
 // give user a chance to see the source for this server instead of running the services

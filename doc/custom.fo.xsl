@@ -4,9 +4,8 @@
 	xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <!--
  Customization xsl stylesheet for docbook to pdf transform
- @version $Id: custom.fo.xsl,v 1.4 2008/03/06 18:58:44 ggiunta Exp $
  @author Gaetano Giunta
- @copyright (c) 2007-2009 G. Giunta
+ @copyright (c) 2007-2013 G. Giunta
  @license
 -->
 

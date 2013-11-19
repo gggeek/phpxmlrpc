@@ -4,9 +4,8 @@
  * (useful e.g. for ajax-originated calls that can only connect back to
  * the originating server)
  *
- * @version $Id$
  * @author Gaetano Giunta
- * @copyright (C) 2006-2009 G. Giunta
+ * @copyright (C) 2006-2013 G. Giunta
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
  */
 

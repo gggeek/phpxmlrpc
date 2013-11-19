@@ -1,5 +1,5 @@
 <?php
-// $Id$
+
 	include("xmlrpc.inc");
 	include("xmlrpcs.inc");
 

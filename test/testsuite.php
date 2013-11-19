@@ -1,5 +1,4 @@
 <?php
-	/* $Id$ */
 
 	include(getcwd().'/parse_args.php');
 
@@ -101,7 +100,7 @@
 				"a simple CR here".chr(13).
 				"a simple LF here".chr(10).
 				"and then LFCR".chr(10).chr(13).
-				"last but not least weird names: Günter, Elène, and an xml comment closing tag: -->";
+				"last but not least weird names: Gï¿½nter, Elï¿½ne, and an xml comment closing tag: -->";
 			$f=new xmlrpcmsg('examples.stringecho', array(
 				new xmlrpcval($sendstring, 'string')
 			));
@@ -832,13 +831,13 @@ And turned it into nylon';
 		}
 
 		function testUnicodeInMemberName(){
-			$v = array('Günter, Elène' => new xmlrpcval(1));
+			$v = array('Gï¿½nter, Elï¿½ne' => new xmlrpcval(1));
 			$r = new xmlrpcresp(new xmlrpcval($v, 'struct'));
 			$r = $r->serialize();
 			$m = new xmlrpcmsg('dummy');
 			$r = $m->parseResponse($r);
 			$v = $r->value();
-			$this->assertEquals($v->structmemexists('Günter, Elène'), true);
+			$this->assertEquals($v->structmemexists('Gï¿½nter, Elï¿½ne'), true);
 		}
 
 		function testUnicodeInErrorString()
@@ -848,7 +847,7 @@ And turned it into nylon';
 <!-- $Id -->
 <!-- found by G. giunta, covers what happens when lib receives
   UTF8 chars in reponse text and comments -->
-<!-- àüè&#224;&#252;&#232; -->
+<!-- ï¿½ï¿½ï¿½&#224;&#252;&#232; -->
 <methodResponse>
 <fault>
 <value>
@@ -859,7 +858,7 @@ And turned it into nylon';
 </member>
 <member>
 <name>faultString</name>
-<value><string>àüè&#224;&#252;&#232;</string></value>
+<value><string>ï¿½ï¿½ï¿½&#224;&#252;&#232;</string></value>
 </member>
 </struct>
 </value>
@@ -868,7 +867,7 @@ And turned it into nylon';
 			$m=new xmlrpcmsg('dummy');
 			$r=$m->parseResponse($response);
 			$v=$r->faultString();
-			$this->assertEquals('àüèàüè', $v);
+			$this->assertEquals('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½', $v);
 		}
 
 		function testValidNumbers()
@@ -1216,19 +1215,19 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 		{
 			$s = new xmlrpcmsg('dummy');
 $f = "HTTP/1.1 200 OK\r\nContent-type: text/xml; charset=UTF-8\r\n\r\n".'<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
-<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>'.utf8_encode('àüèàüè').'</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
+<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>'.utf8_encode('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½').'</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
 			$r = $s->parseResponse($f, false, 'phpvals');
 			$v = $r->value();
 			$v = $v['content'];
-			$this->assertEquals("àüèàüè", $v);
+			$this->assertEquals("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", $v);
 $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
-<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>'.utf8_encode('àüèàüè').'</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
+<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>'.utf8_encode('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½').'</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
 			$r = $s->parseResponse($f, false, 'phpvals');
 			$v = $r->value();
 			$v = $v['content'];
-			$this->assertEquals("àüèàüè", $v);
+			$this->assertEquals("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", $v);
 		}
 
 		function testUTF8IntString()

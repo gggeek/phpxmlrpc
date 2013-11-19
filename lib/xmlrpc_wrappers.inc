@@ -3,9 +3,8 @@
  * PHP-XMLRPC "wrapper" functions
  * Generate stubs to transparently access xmlrpc methods as php functions and viceversa
  *
- * @version $Id: xmlrpc_wrappers.inc,v 1.13 2008/09/20 01:23:47 ggiunta Exp $
  * @author Gaetano Giunta
- * @copyright (C) 2006-2009 G. Giunta
+ * @copyright (C) 2006-2013 G. Giunta
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
  *
  * @todo separate introspection from code generation for func-2-method wrapping

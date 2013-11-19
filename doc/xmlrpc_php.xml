@@ -4,7 +4,6 @@
 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <!--
 PHP-XMLRPC User manual
-$Id: xmlrpc_php.xml,v 1.27 2008/09/19 18:35:33 ggiunta Exp $
 -->
 <book lang="en">
   <title>XML-RPC for PHP</title>

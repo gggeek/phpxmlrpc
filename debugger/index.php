@@ -1,5 +1,4 @@
 <?php
-// $Id$
   $query = '';
   if (isset($_GET['run']))
   {

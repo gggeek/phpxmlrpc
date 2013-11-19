@@ -2,9 +2,8 @@
 /**
  * takes a dir as arg, highlights all php code found in html files inside
  *
- * @version $Id$
  * @author Gaetano Giunta
- * @copyright (c) 2007-2009 G. Giunta
+ * @copyright (c) 2007-2013 G. Giunta
  */
 
 function highlight($file)

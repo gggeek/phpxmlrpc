@@ -2,8 +2,7 @@
 /**
  * Benchamrking suite for the PHP-XMLRPC lib
  * @author Gaetano Giunta
- * @version $Id$
- * @copyright (c) 2005-2009 G. Giunta
+ * @copyright (c) 2005-2013 G. Giunta
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
  *
  * @todo add a test for response ok in call testing?

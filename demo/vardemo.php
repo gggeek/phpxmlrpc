@@ -87,7 +87,5 @@ And turned it into nylon", "base64"
 
 	print "</pre>\n";
 ?>
-<hr/>
-<em>$Id$</em>
 </body>
 </html>

@@ -1,4 +1,3 @@
-# $Id: Makefile,v 1.13 2008/03/07 13:01:55 ggiunta Exp $
 
 ### USER EDITABLE VARS ###
 
