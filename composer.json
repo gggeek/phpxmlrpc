@@ -1,0 +1,10 @@
+{
+    "name": "phpxmlrpc/phpxmlrpc",
+    "description": "A php library for building xmlrpc clients and servers",
+    "license": "BSD-3-Clause",
+    "homepage": "http://phpxmlrpc.sourceforge.net/",
+    "keywords": [ "xmlrpc", "webservices" ],
+    "autoload": {
+        "classmap": [ "lib/xmlrpc.inc", "lib/xmlrpcs.inc" ]
+    }
+}

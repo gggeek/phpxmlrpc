@@ -1,7 +1,10 @@
-XML-RPC for PHP version 3.0.0 - 2010/xx/yy
+XML-RPC for PHP version 3.0.0 - 2013/xx/yy
 
-This release corrects all bugs that have been reported and sucesfully reproduced since
-version 3.0.0 beta
+This release corrects all bugs that have been reported and successfully reproduced since
+version 3.0.0 beta.
+
+It also is the first release to be installable via composer.
+
 
 XML-RPC for PHP version 3.0.0 beta - 2009/09/05
 
@@ -50,7 +53,7 @@ XML-RPC for PHP version 2.2.1 - 2008/03/06
 This release corrects all bugs that have been reported and sucesfully reproduced.
 It is the last release of the library that will support PHP 4.
 
-* fixed: work aroung bug in php 5.2.2 which broke support of HTTP_RAW_POST_DATA
+* fixed: work around bug in php 5.2.2 which broke support of HTTP_RAW_POST_DATA
 * fixed: is_dir parameter of setCaCertificate() method is reversed
 * fixed: a php warning in xmlrpc_client creator method
 * fixed: parsing of '1e+1' as valid float
