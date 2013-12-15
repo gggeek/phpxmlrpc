@@ -1,0 +1,239 @@
+<?xml version="1.0"?>
+<definitions name="XMLRPCDemoService-interface"
+  targetNamespace="XMLRPCDemoServer"
+  xmlns:tns="XMLRPCDemoServer"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:whttp="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:wmime="http://schemas.xmlsoap.org/wsdl/mime/"
+  xmlns:xmlrpc="http://phpxmlrpc.sourceforge.net/wsdl/schema"
+  xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+  <!--
+       Test WSDL for describing xml-rpc web services
+       $Id: xmlrpc.wsdl,v 1.7 2005/12/09 10:14:26 ggiunta Exp $
+  -->
+
+  <documentation>
+    Defines the methods exposed by the XMLRPC demo server
+  </documentation>
+
+
+  <wsdl:import location="http://phpxmlrpc.sourceforge.net/wsdl/xmlrpc.xsd"
+               namespace="http://phpxmlrpc.sourceforge.net/wsdl/schema"/>
+
+
+  <wsdl:types>
+    <xsd:schema targetNamespace="XMLRPCDemoServer"
+      xmlns:tns="XMLRPCDemoServer"
+      xmlns="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:import schemaLocation="http://phpxmlrpc.sourceforge.net/wsdl/xmlrpc.xsd"
+                namespace="http://phpxmlrpc.sourceforge.net/wsdl/schema"/>
+
+    <!-- Add one type definition for every xml-rpc method exposed -->
+    <xsd:complexType name="system.listMethodsMethodCallType">
+      <xsd:sequence>
+        <xsd:element name="methodCall">
+          <xsd:complexType>
+            <xsd:all>
+              <xsd:element name="methodName" type="xsd:string" fixed="system.listMethods"/>
+              <xsd:element name="params" minOccurs="0" maxOccurs="1"/>
+            </xsd:all>
+          </xsd:complexType>xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="system.methodHelpMethodCallType">
+      <xsd:sequence>
+        <xsd:element name="methodCall">
+          <xsd:complexType>
+      <xsd:all>
+        <xsd:element name="methodName" type="xsd:string" fixed="system.methodHelp"/>
+        <xsd:element name="params">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="param">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="value" type="xmlrpc:StringType"/>
+                  </xsd:sequence>
+		        </xsd:complexType>
+			  </xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+		</xsd:element>
+      </xsd:all>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="system.methodSignatureMethodCallType">
+      <xsd:sequence>
+        <xsd:element name="methodCall">
+          <xsd:complexType>
+      <xsd:all>
+        <xsd:element name="methodName" type="xsd:string" fixed="system.methodSignature"/>
+        <xsd:element name="params">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="param">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="value" type="xmlrpc:StringType"/>
+                  </xsd:sequence>
+		        </xsd:complexType>
+			  </xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+		</xsd:element>
+      </xsd:all>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="system.multicallMethodCallType">
+      <xsd:sequence>
+        <xsd:element name="methodCall">
+          <xsd:complexType>
+      <xsd:all>
+        <xsd:element name="methodName" type="xsd:string" fixed="system.multicall"/>
+        <xsd:element name="params">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="param">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="value" type="xmlrpc:ArrayType"/>
+                  </xsd:sequence>
+		        </xsd:complexType>
+			  </xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+		</xsd:element>
+      </xsd:all>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    </xsd:schema>
+  </wsdl:types>
+
+  <!-- Add one input message for every xml-rpc method exposed -->
+  <wsdl:message name="system.listMethodsMethodCall">
+    <part name="system.listMethodsmethodCall" type="tns:system.listMethodsMethodCallType"/>
+  </wsdl:message>
+
+  <wsdl:message name="system.methodHelpMethodCall">
+    <part name="system.methodHelpMethodCall" type="tns:system.methodHelpMethodCallType"/>
+  </wsdl:message>
+
+  <wsdl:message name="system.methodSignatureMethodCall">
+    <part name="system.methodSignatureMethodCall" type="tns:system.methodSignatureMethodCallType"/>
+  </wsdl:message>
+
+  <wsdl:message name="system.multicallMethodCall">
+    <part name="system.multicallMethodCall" type="tns:system.multicallMethodCallType"/>
+  </wsdl:message>
+
+  <!-- Add one output message for every response type of xml-rpc methods exposed -->
+  <wsdl:message name="arrayMethodResponse">
+    <part name="methodResponse" type="xmlrpc:ArrayMethodResponseType"/>
+  </wsdl:message>
+
+  <wsdl:message name="stringMethodResponse">
+    <part name="methodResponse" type="xmlrpc:StringMethodResponseType"/>
+  </wsdl:message>
+
+  <wsdl:message name="faultMethodResponse">
+    <part name="methodResponse" type="xmlrpc:FaultMethodResponseType"/>
+  </wsdl:message>
+
+  <wsdl:portType name="XMLRPCDemoServiceInterface">
+
+    <!-- Add one operation for every xml-rpc method exposed -->
+    <operation name="system.listMethods">
+      <input message="tns:system.listMethodsMethodCall" name="system.listMethodsMethodCall"/>
+      <output message="tns:arrayMethodResponse" name="system.listMethodsMethodResponse"/>
+      <fault message="tns:faultMethodResponse" name="system.listMethodsFaultResponse"/>
+    </operation>
+
+    <operation name="system.methodHelp">
+      <input message="tns:system.methodHelpMethodCall" name="system.methodHelpMethodCall"/>
+      <output message="tns:stringMethodResponse" name="system.methodHelpMethodResponse"/>
+      <fault message="tns:faultMethodResponse" name="system.methodHelpFaultResponse"/>
+    </operation>
+
+    <operation name="system.methodSignature">
+      <input message="tns:system.methodSignatureMethodCall" name="system.methodSignatureMethodCall"/>
+      <output message="tns:arrayMethodResponse" name="system.methodSignatureMethodResponse"/>
+      <fault message="tns:faultMethodResponse" name="system.methodSignatureFaultResponse"/>
+    </operation>
+
+    <operation name="system.multicall">
+      <input message="tns:system.multicallMethodCall" name="system.multicallMethodCall"/>
+      <output message="tns:arrayMethodResponse" name="system.multicallMethodResponse"/>
+      <fault message="tns:faultMethodResponse" name="system.multicallFaultResponse"/>
+    </operation>
+
+  </wsdl:portType>
+
+
+  <wsdl:binding name="XMLRPCDemoServiceBinding"
+				type="tns:XMLRPCDemoServiceInterface">
+    <whttp:binding verb="POST"/>
+
+    <!-- Add one operation binding for every xml-rpc method exposed -->
+    <operation name="system.listMethods">
+      <input name="system.listMethodsMethodCall">
+        <wmime:content type="text/xml"/>
+      </input>
+      <output name="system.listMethodsMethodResponse">
+        <wmime:content type="text/xml"/>
+      </output>
+    </operation>
+
+    <operation name="system.methodHelp">
+      <input name="system.methodHelpMethodCall">
+        <wmime:content type="text/xml"/>
+      </input>
+      <output name="system.methodHelpMethodResponse">
+        <wmime:content type="text/xml"/>
+      </output>
+    </operation>
+
+    <operation name="system.methodSignature">
+      <input name="system.methodSignatureMethodCall">
+        <wmime:content type="text/xml"/>
+      </input>
+      <output name="system.methodSignatureMethodResponse">
+        <wmime:content type="text/xml"/>
+      </output>
+    </operation>
+
+    <operation name="system.multicall">
+      <input name="system.multicallMethodCall">
+        <wmime:content type="text/xml"/>
+      </input>
+      <output name="system.multicallMethodResponse">
+        <wmime:content type="text/xml"/>
+      </output>
+    </operation>
+  </wsdl:binding>
+
+
+  <wsdl:service name="XMLRPCDemoService">
+
+    <port name="XMLRPCDemoServiceEndpoint"
+          binding="tns:XMLRPCDemoServiceBinding">
+      <whttp:address location="../server.php"/>
+    </port>
+
+  </wsdl:service>
+
+
+</definitions>

@@ -1,0 +1,17 @@
+body, html {background-color: white; font-family: Arial, Verdana, Geneva, sans-serif; font-size: small; margin: 0;}
+img {border-width: 0;}
+h1 {background-color: #9999cc; border-bottom: 1px solid #333366; padding: 0.25em; margin: 0; font-size: 2em;}
+h2 {font-size: 1.5em;}
+table {border: 1px solid gray;}
+td {padding: 0.5em}
+#menu {color: black; background-color: #666699; border-bottom: 1px solid #333366; height: 20px; font-size: 14px; text-align: right; padding-right: 1em;}
+#menu a {color: white; font-size: 11px; text-decoration: none;}
+#menu a:hover {text-decoration: underline;}
+#content {margin: 8px}
+#sflogo {position: absolute; top: 5px; right: 5px; margin: 0;}
+.odd {background-color: #eeeeee;}
+th {padding: 0.5em; background-color: silver;}
+.evidence {color: red; font-weight: bold}
+.news {background-color: yellow; border: 1px solid silver; padding: 0.5em;}
+.incident {border: 1px dashed silver; padding: 0.5em; margin-bottom: 1em;}
+.incident li {padding: 0.25em;}

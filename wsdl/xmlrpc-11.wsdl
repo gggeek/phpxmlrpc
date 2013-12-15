@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<definitions name="XMLRPCDemoService-interface"
+  targetNamespace="XMLRPCDemoServer"
+  xmlns:tns="XMLRPCDemoServer"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:whttp="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:xmlrpc="http://10.1.1.151/xmlrpc_cvs/extras/wsdl/xmlrpc.xsd"
+  xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+
+  <documentation>
+    Defines the methods exposed by the XMLRPC demo server
+  </documentation>
+
+
+  <import location="xmlrpc.xsd" namespace="xmlrpc"/>
+
+	   
+  <types>
+  <schema targetNamespace="XMLRPCDemoServer"
+    xmlns:tns="XMLRPCDemoServer"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns="http://www.w3.org/2001/XMLSchema">
+
+    <!-- top-level elements
+    <element name="MethodsRequest" type="listMethodsRequestType"/>
+    <element name="MethodsResponse" type="xmlrpc:ArrayMethodResponseType"/>
+    -->
+
+    <!-- takes either 0 or 1 params... -->
+    <complexType name="listMethodsRequestType">
+      <xsd:all>
+        <xsd:element name="methodName" type="MethodNameType" fixed="system.Listmethods"/>
+        <xsd:element name="params" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="param" minOccurs="0" maxOccurs="1">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="value" type="xmlrpc:StringType"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:all>
+    </complexType>
+
+  </schema>
+  </types>
+
+
+  <message name="listMethodsRequest">
+    <part name="Request" type="listMethodsRequestType"/>
+  </message>
+
+  <message name="listMethodsResponse">
+    <part name="Response" type="xmlrpc:ArrayMethodResponseType"/>
+  </message>
+
+
+  <portType name="XMLRPCDemoServiceInterface">
+
+    <!-- todo: how to have element MethodResponse declared twice, once for
+         error responses, once for correct responses ? -->         
+    <!--<fault name = "ErrorResponse"
+           element = "ghns:invalidDataError"/>-->
+
+    <operation name="system.listMethods"
+               pattern="http://www.w3.org/2005/08/wsdl/in-out">
+      <input message="listMethodsRequest" name="methodCall"/>
+      <output message="listMethodsResponse" name="methodResponse"/>
+      <!--<outfault messageLabel="Out" ref="tns:ErrorResponse"/>-->
+    </operation>
+
+  </portType>
+
+
+  <binding name="XMLRPCDemoServiceBinding"
+           type="XMLRPCDemoServiceInterface">
+    <whttp:binding verb="POST"/>
+    <operation ref="tns:system.listMethods"
+               whttp:inputSerialization="text/xml"
+               whttp:outputSerialization="text/xml"
+               whttp:faultSerialization="text/xml">
+      <input message="listMethodsRequest"/>
+      <output message="listMethodsResponse"/>
+    </operation>
+
+  </binding>
+
+
+  <service name="XMLRPCDemoService"
+           interface="">
+    <port name="XMLRPCDemoServiceEndpoint"
+          binding="tns:XMLRPCDemoServiceBinding">
+	  <whttp:address location="../server.php"
+	</port>
+  </service>
+
+
+</definitions>

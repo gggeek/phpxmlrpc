@@ -1,0 +1,61 @@
+# RelaxNG schema for XML-RPC (http://www.xmlrpc.com/spec)
+#
+# Original implementation by Stephane Bortzmeyer
+#
+# $Id: schema.rnc,v 1.1 2005/12/01 14:44:38 ggiunta Exp $
+
+start = methodcall | methodresponse
+
+methodcall = element methodCall {methodname, params?}
+
+methodresponse = element methodResponse {fault | uniqueparams}
+
+methodname = element methodName {text} # TODO: restrict the methodName to
+                                       # authorized characters
+
+params = element params {param+}
+
+uniqueparams = element params {param}
+
+param = element param {value}
+
+value = element value {typedparam | text}
+
+typedparam = integer | boolean | stringval | double | datetime | base64 | 
+             array | struct # string is a keyword
+
+integer = element i4 {xsd:int} | element int {xsd:int} 
+
+boolean = element boolean {"0" | "1"} # *Not* xsd:boolean (see the spec)
+
+stringval = element string {text} 
+
+double = element double {xsd:double}
+
+datetime = element dateTime.iso8601 {text} # xsd:date does not allow 
+                                           # "20051130T12:10:56"
+
+base64 = element base64 {text}
+
+array = element array {element data {value*}}
+
+struct = element struct {namedmember*}
+
+namedmember = element member {membername & value}
+
+membername = element name {text}
+
+fault = element fault {faultvalue}
+
+faultvalue = element value {faultstruct}
+
+faultstruct = element struct {faultcode, faultstring} # we cannot use interleaving
+                                                      # here, or the two 'member'
+													  # elements will not be
+													  # distinguishable
+
+faultcode = element member {element name {"faultCode"} &
+                            element value {integer}}
+
+faultstring = element member {element name {"faultString"} &
+                              element value {stringval | text}}

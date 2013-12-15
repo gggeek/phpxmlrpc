@@ -1,0 +1,416 @@
+<?xml version="1.0"?>
+<xsd:schema  
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:xmlrpc="http://phpxmlrpc.sourceforge.net/wsdl/schema"
+  targetNamespace="http://phpxmlrpc.sourceforge.net/wsdl/schema">
+  <!--
+       XML-RPC non-authoritative XML Schema definition
+       $Id: xmlrpc.xsd,v 1.3 2005/12/07 14:45:40 ggiunta Exp $
+
+       This XML Schema is aimed at providing a working WSDL
+       description of xmlrpc webservices.
+
+       XML-RPC spec: http://www.xmlrpc.com/spec
+  -->
+  <!--
+       Used with kind permission from Elliotte Rusty Harold
+
+       Copyright 2000-2002 Elliotte Rusty Harold
+       elharo@metalab.unc.edu
+       http://www.ibiblio.org/xml/books/xmljava/chapters/ch02s05.html
+  -->
+  <!-- The only two possible root elements are methodResponse and
+       methodCall so these are the only two to use a top-level
+       element declaration for.
+
+      The generic method call and response elements could be defined as:
+    <xsd:element name="methodCall" type="xmlrpc:MethodCallType"/>
+    <xsd:element name="methodResponse" type="xmlrpc:MethodResponseType"/>
+
+	  To get some more meaningful description of a web-service implementation,
+	  a more specific type can be used to describe the response, eg:
+    <xsd:element name="methodCall" type="xmlrpc:MethodCallType"/>
+    <xsd:element name="methodResponse" type="xmlrpc:StructMethodResponseType"/>
+
+      Unfortunately, describing an xmlrpc method as accepting only specific
+	  parameters is not possible (afaik) in XML Schema language, because
+	  it is not feasible to have many successive <param> elements, with a
+	  different type for every one.
+  -->
+
+  <!--  generic method call type, any number of params of any type -->
+  <xsd:complexType name="MethodCallType">
+    <!-- as per the spec, methodname and params have NO predefined order,
+         even though most implementations are likely to break on reverse
+         order... -->
+    <xsd:all>
+      <xsd:element name="methodName" type="xmlrpc:MethodNameType"/>
+      <!-- "If the procedure call has parameters, the <methodCall> must contain
+           a <params> sub-item. The <params> sub-item can contain any number of
+           <param>s, each of which has a <value>" -->
+      <xsd:element name="params" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <!--
+               To generate a specific definition for a single method call,
+               we should restrict the following sequence, using the appropriate
+               values
+          -->
+          <xsd:sequence>
+            <xsd:element name="param"  type="xmlrpc:ParamType"
+                         minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+       </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+
+  <!-- generic response type -->
+  <xsd:complexType name="MethodResponseType">
+    <xsd:choice>
+      <xsd:element name="params">
+        <xsd:complexType>
+          <xsd:sequence>
+          <!--
+               To generate a specific response definition for a single method
+               call, restrict the following element, using the appropriate type
+          -->
+            <xsd:element name="param" type="xmlrpc:ParamType"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="fault" type="xmlrpc:FaultType"/>
+    </xsd:choice>
+  </xsd:complexType>
+
+ <!-- specific responses types, where each response allows one return parameter
+      type but no fault, and one fault reponse type -->
+
+  <xsd:complexType name="IntMethodResponseType">
+    <xsd:choice>
+      <xsd:element name="params">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="param">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="value" type="xmlrpc:IntType"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="fault" type="xmlrpc:FaultType"/>
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:complexType name="BooleanMethodResponseType">
+    <xsd:sequence>
+      <xsd:element name="params">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="param">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="value" type="xmlrpc:BooleanType"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="StringMethodResponseType">
+    <xsd:sequence>
+      <xsd:element name="params">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="param">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="value" type="xmlrpc:StringType"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="DoubleMethodResponseType">
+    <xsd:sequence>
+      <xsd:element name="params">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="param">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="value" type="xmlrpc:DoubleType"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="DateTimeMethodResponseType">
+    <xsd:sequence>
+      <xsd:element name="params">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="param">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="value" type="xmlrpc:DateTimeType"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="StructMethodResponseType">
+    <xsd:sequence>
+      <xsd:element name="params">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="param">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="value" type="xmlrpc:StructType"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ArrayMethodResponseType">
+    <xsd:sequence>
+      <xsd:element name="params">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="param">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="value" type="xmlrpc:ArrayType"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="FaultMethodResponseType">
+    <xsd:sequence>
+      <xsd:element name="fault" type="xmlrpc:FaultType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!-- "The <methodResponse> could also contain a <fault> which contains a
+       <value> which is a <struct> containing two elements, one named
+       <faultCode>, an <int> and one named <faultString>, a <string>" -->
+  <xsd:complexType name="FaultType">
+    <xsd:sequence>
+      <xsd:element name="value">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="struct">
+              <xsd:complexType>
+                <xsd:sequence>
+                <!-- We need to figure out how to have two different 'member'
+                     elements in a sequence: is this impossible in XSD?
+                  <xsd:element name="member" type="">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="name"  type="xsd:string" fixed="faultCode"/>
+                        <xsd:element name="value" type="IntType"/>
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="member">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="name"  type="xsd:string" fixed="faultString"/>
+                        <xsd:element name="value" type="StringType"/>
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element> -->
+                  <xsd:element name="member"
+                               type="xmlrpc:MemberType">
+                  </xsd:element>
+                  <xsd:element name="member"
+                               type="xmlrpc:MemberType">
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ParamType">
+    <xsd:sequence>
+      <xsd:element name="value"   type="xmlrpc:ValueType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="MethodNameType">
+    <!-- "The <methodCall> must contain a <methodName> sub-item, a string,
+         containing the name of the method to be called. The string may 
+         only contain identifier characters, upper and lower-case A-Z, the
+         numeric characters, 0-9, underscore, dot, colon and slash" -->
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="([A-Za-z0-9]|/|\.|:|_)*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+        
+  <!-- xmlrpc value elements: a generic type, followed by specific types -->
+
+  <xsd:complexType name="ValueType" mixed="true">
+    <!-- We need to figure out how to say that this
+         is either a simple xsd:string type or that
+         it contains one of these elements; but that otherwise
+         it does not have mixed content -->
+    <xsd:choice>
+      <xsd:element name="i4"            type="xsd:int"/>
+      <xsd:element name="int"           type="xsd:int"/>
+      <xsd:element name="boolean"       type="xmlrpc:NumericBoolean"/>
+      <xsd:element name="string"        type="xmlrpc:ASCIIString"/>
+      <xsd:element name="double"        type="xsd:decimal"/>
+      <xsd:element name="dateTime.iso8601" type="xsd:dateTime"/>
+      <xsd:element name="base64"        type="xsd:base64Binary"/>
+      <xsd:element name="struct">
+        <xsd:complexType>
+          <xsd:sequence>
+            <!-- note: the spec is not very clear on structs with no members,
+                 but we allow them for maximum interoperability -->
+            <xsd:element name="member" type="xmlrpc:MemberType"
+                         minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="array">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="data">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="value"  type="xmlrpc:ValueType"
+                               minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:complexType name="IntType">
+    <xsd:choice>
+      <xsd:element name="i4"            type="xsd:int"/>
+      <xsd:element name="int"           type="xsd:int"/>
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:complexType name="BooleanType">
+    <xsd:sequence>
+      <xsd:element name="boolean"       type="xmlrpc:NumericBoolean"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="StringType"  mixed="true">
+    <xsd:sequence>
+      <xsd:element name="string"        type="xmlrpc:ASCIIString"
+                   minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="DoubleType">
+    <xsd:sequence>
+      <xsd:element name="double"        type="xsd:decimal"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="DateTimeType">
+    <xsd:sequence>
+      <xsd:element name="dateTime.iso8601" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Base64Type">
+    <xsd:sequence>
+      <xsd:element name="base64"        type="xsd:base64Binary"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="StructType">
+    <xsd:sequence>
+      <xsd:element name="struct">
+        <xsd:complexType>
+          <xsd:sequence>
+            <!-- note: the spec is not very clear on structs with no members,
+                 but we allow them for maximum interoperability -->
+            <xsd:element name="member" type="xmlrpc:MemberType"
+                         minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ArrayType">
+    <xsd:sequence>
+      <xsd:element name="array">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="data">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="value"  type="xmlrpc:ValueType"
+                               minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!-- parts of xmlrpc value elements -->
+
+  <xsd:complexType name="MemberType">
+    <xsd:sequence>
+      <xsd:element name="name"  type="xsd:string"/>
+      <xsd:element name="value" type="xmlrpc:ValueType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="ASCIIString">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="([ -~]|\n|\r|\t)*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="NumericBoolean">
+    <xsd:restriction base="xsd:boolean">
+      <xsd:pattern value="0|1"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+</xsd:schema>

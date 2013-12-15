@@ -1,0 +1,68 @@
+# RelaxNG non authoritative schema for XML-RPC (http://www.xmlrpc.com/spec)
+
+namespace dublin = "http://purl.org/dc/elements/1.1/"
+
+dublin:title [ "RelaxNG non authoritative schema for XML-RPC" ]
+dublin:description [ "The XML-RPC protocol (http://www.xmlrpc.com/spec) has been
+  specified a long time ago, at the dawn of XML and is described only in natural
+  language. Attempts have been made to reverse specify it with DTD or XSD
+  (http://www.cafeconleche.org/books/xmljava/chapters/ch02s05.html), with little
+  success. We try here with RelaxNG." ]
+dublin:creator [ "Stephane Bortzmeyer <bortzmeyer@...>" ]
+dublin:contributor [ "Gaetano Giunta" ]
+dublin:contributor [ "Eric van der Vlist" ]
+dublin:identifier [ "$Id: schema.rnc,v 1.3 2005/12/03 18:27:12 ggiunta Exp $" ]
+dublin:rights [ "Use as you please" ]
+
+start = methodcall | methodresponse
+
+methodcall = element methodCall {methodname, params?}
+
+methodresponse = element methodResponse {fault | uniqueparams}
+
+methodname = element methodName {xsd:string {pattern = "[a-zA-Z0-9_\.,/]+"}}
+
+params = element params {param+}
+
+uniqueparams = element params {param}
+
+param = element param {value}
+
+value = element value {typedparam | text}
+
+typedparam = integer | boolean | stringval | double | datetime | base64 | 
+             array | struct # string is a keyword
+
+integer = element i4 {xsd:int} | element int {xsd:int} 
+
+boolean = element boolean {"0" | "1"} # *Not* xsd:boolean (see the spec)
+
+stringval = element string {text} 
+
+double = element double {xsd:double}
+
+datetime = element dateTime.iso8601 {xsd:string {pattern = "[0-9]{4}[0-1][0-9][0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]"}}
+                                     # xsd:date does not allow "20051130T12:10:56"
+
+base64 = element base64 {xsd:base64Binary}
+
+array = element array {element data {value*}}
+
+struct = element struct {namedmember*}
+
+namedmember = element member {membername & value}
+
+membername = element name {text}
+
+fault = element fault {faultvalue}
+
+faultvalue = element value {faultstruct}
+
+faultstruct = element struct {(faultcode, faultstring) |
+                              (faultstring, faultcode)}
+
+faultcode = element member {element name {"faultCode"} &
+                            element value {integer}}
+
+faultstring = element member {element name {"faultString"} &
+                              element value {stringval | text}}
