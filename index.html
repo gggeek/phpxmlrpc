@@ -24,8 +24,6 @@
 </div>
 <div id="content">
 
-<p id="sflogo"><a href="http://sourceforge.net/projects/phpxmlrpc"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=34455&amp;type=12" width="120" height="30" alt="Get XML-RPC for PHP at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a></p>
-
 <h2>Introduction</h2>
 <p>Welcome to the homepage of "XML-RPC for PHP". It is a library implementing the <a href="http://www.xmlrpc.com/">XML-RPC</a> protocol, written in <a href="http://www.php.net/">PHP</a>. It is also known as PHPXMLRPC.<br/>
 It is designed for ease of use, flexibility and completeness. High speed and reduced memory footprint are not the main goals of the project.
@@ -33,7 +31,7 @@ It is designed for ease of use, flexibility and completeness. High speed and red
 <p>Note that this is not the same library as <a href="http://pear.php.net/package/XML_RPC/">the one</a> that is part of PEAR. They both share a common ancestry, since the PEAR version is a branch of the original phpxmlrpc library, now independently maintained.<br/>
 This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> which can be compiled as a php extension and has been bundled with php since version 4.1.0, either.</p>
 <p>PHPXMLRPC or derivative versions are or have been used in many open source projects, including <a href="http://www.ampache.org/">Ampache</a>, <a href="http://xaraya.org/">Xaraya</a>, <a href="http://www.drupal.org/">Drupal</a> (only up to releases 4.6.2 and 4.5.4), <a href="http://www.postnuke.com/">PostNuke</a>, <a href="http://b2evolution.net/">b2evolution</a>, <a href="http://nucleuscms.org/">nucleus cms</a>, <a href="http://www.phpmyfaq.de/">phpmyfaq</a>, <a href="http://www.phppgads.com/">phpPgAds</a>, <a href="http://www.phpgroupware.org/">phpgroupware</a>, <a href="http://www.egroupware.org/">egroupware</a>, <a href="http://tikiwiki.org">TikiWiki</a>, <a href="http://civicspacelabs.org/home/">Civicspace</a> (old release only), <a href="http://mailwatch.sourceforge.net/">MailWatch for MailScanner</a> and <a href="http://wikisophia.org/wiki/Wikitex">WikiTeX</a>.</p>
-<p>XML-RPC for PHP was originally developed by Edd Dumbill of <a href="http://usefulinc.com/">Useful Information Company</a>. As of the 1.0 stable release, the project was opened to wider involvement and moved to SourceForge.</p>
+<p>XML-RPC for PHP was originally developed by Edd Dumbill of <a href="http://usefulinc.com/">Useful Information Company</a>. As of the 1.0 stable release, the project was opened to wider involvement and moved to SourceForge. It is hosted on GitHub since December 2013.</p>
 
 <h2><a name="features">Features</a></h2>
 <ul>
@@ -47,7 +45,7 @@ This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> wh
 <li>Possibility to register php function or class methods as webservices, extracting value-added information from phpdoc comments</li>
 <li>A web based visual debugger is included with the library</li>
 <li>Many other cool features are delivered with the 'Extras' package, such as a complete emulation layer of php native xmlrpc calls, an xmlrpc server that generates html documentation of exposed webservices, and a complete jsonrpc library...</li>
-<li>Last but not least, <a href="/jsxmlrpc">a version of the library</a> implementing the same API in Javascript is available, allowing to leverage acquired knowledge to easily build ajax/dhtml clients</li>
+<li>Last but not least, <a href="/jsxmlrpc/">a version of the library</a> implementing the same API in Javascript is available, allowing to leverage acquired knowledge to easily build ajax/dhtml clients</li>
 </ul>
 
 <h2><a name="download">Requirements</a></h2>
@@ -73,6 +71,11 @@ More info on the vulnerabilities can be found <a href="#security">at the bottom 
 <ul>
 
 <li>
+    15th of December, 2013<br/>
+    The project moved to GitHub<br/><br/>
+</li>
+
+<li>
 2nd of February, 2013<br/>
 The Online XML-RPC debugger is back online, at the new address <a href="http://gggeek.altervista.org/sw/xmlrpc/debugger/">http://gggeek.altervista.org/sw/xmlrpc/debugger/</a><br/><br/>
 </li>
@@ -83,7 +86,7 @@ Released lib version 3.0.0 beta.<br/>
 This is the first release of the library to only support PHP 5. Some legacy code has been removed, and support for features such as exceptions and dateTime objects introduced.<br/>
 The "beta" tag is meant to indicate the fact that the refactoring has been more widespread than in precedent releases and that more changes are likely to be introduced with time - the library is still considered to be production quality.<br/>
 <br/>
-The "Extras" Package and the <a href="/jsxmlrpc">JS-XMLRPC</a> library have also been updated with bugfix releases.<br/><br/>
+The "Extras" Package and the <a href="/jsxmlrpc/">JS-XMLRPC</a> library have also been updated with bugfix releases.<br/><br/>
 </li>
 
 <li>
@@ -122,7 +125,7 @@ It can be added to the php debugger or the self-documenting server class to prov
 10th of February, 2007<br/>
 The Online XMLRPC debugger is unfortunately not available any more.<br/>
 Anyone willing to provide a hosting server with php 4 or 5 (and fsockopen or cURL active) will be heartily welcome. Monthly bandwidth consumed up to now was very low.<br/>
-While a suitable relocation is found, please use the javascript debugger available <a href="http://phpxmlrpc.sf.net/jsxmlrpc/debugger/debugger.html">here</a>.<br/><br/>
+While a suitable relocation is found, please use the javascript debugger available <a href="/jsxmlrpc/debugger/debugger.html">here</a>.<br/><br/>
 </li>
 
 <li>
@@ -130,7 +133,7 @@ While a suitable relocation is found, please use the javascript debugger availab
 The <a href="http://phpxmlrpc.sf.net/server.php">Online XMLRPC demo Server</a> is now better than ever, with a new visual value editor (as was previously added to the oline debugger).<br/>
 To see it in action, click on a method name in the page listing all available methods, then on "edit" button below the textarea dedicated to method testing.<br/>
 This improvement is currently only available in the CVS version of the documenting_xmlrpc_server class, and it will be part of the next release of the EXTRAS package.<br/>
-The Javascript version of the library also got its own <a href="jsxmlrpc">Homepage</a>.<br/><br/>
+The Javascript version of the library also got its own <a href="/jsxmlrpc/">Homepage</a>.<br/><br/>
 </li>
 
 </ul>
@@ -153,16 +156,16 @@ You can see the source code here: <a href="server.php?showSource=TRUE">http://ph
 You can use the debugger to e.g. query the SF demo server, or debug your own personal xmlrpc server, if it is accessible on the net.</p>
 
 <h2><a name="development">Development</a></h2>
-<p><a href="http://sourceforge.net/projects/phpxmlrpc/">SourceForge home page</a> (downloads, CVS access and bug tracker).</p>
+<p><a href="http://gggeek.github.io/phpxmlrpc/">GitHub home page</a> (downloads, source code and bug tracker).</p>
 
 <h2><a name="mailinglists">Mailing lists</a></h2>
 <ul>
-<li><a href="http://lists.gnomehack.com/mailman/listinfo/phpxmlrpc">User's mailing list</a> (very low traffic)</li>
-<li><a href="http://sourceforge.net/mail/?group_id=34455">Developers' mailing list</a> (practically abandoned)</li>
+<li><a href="http://lists.gnomehack.com/mailman/listinfo/phpxmlrpc">User's mailing list - very low traffic</a></li>
+<li><a href="http://sourceforge.net/mail/?group_id=34455">Developers' mailing list - discontinued as of December 2013</a></li>
 </ul>
 
 <h2><a name="contact">Contact</a></h2>
-See the lib's <a href="http://sourceforge.net/projects/phpxmlrpc/">SourceForge home page</a> for the complete list of maintainers, file a bug report, feature request or patch.<br/>
+<!-- See the lib's <a href="http://sourceforge.net/projects/phpxmlrpc/">SourceForge home page</a> for the complete list of maintainers, file a bug report, feature request or patch.<br/> -->
 For security related issues feel free to contact <a href="http://sourceforge.net/sendmessage.php?touser=114789">ggiunta at users.sourceforge.net</a>
 
 <h2><a name="roadmap">Roadmap</a></h2>
@@ -202,7 +205,7 @@ For security related issues feel free to contact <a href="http://sourceforge.net
 <tr><td>Write a php extension that will accelerate the most heavily used functions of the lib</td><td>See how adodb did it for an example</td></tr>
 <tr><td class="odd">Test speed/memory gains using simplexml and relaxng instead of hand parsing of xml</td><td></td></tr>
 </table>
-<p>See also the TODO file at <a href="http://phpxmlrpc.svn.sourceforge.net/viewvc/phpxmlrpc/trunk/todo.txt">http://phpxmlrpc.svn.sourceforge.net/viewvc/phpxmlrpc/trunk/todo.txt</a></p>
+<!-- <p>See also the TODO file at <a href="http://phpxmlrpc.svn.sourceforge.net/viewvc/phpxmlrpc/trunk/todo.txt">http://phpxmlrpc.svn.sourceforge.net/viewvc/phpxmlrpc/trunk/todo.txt</a></p> -->
 
 <h2><a name="security">Security</a></h2>
 <div class="incident">
@@ -429,18 +432,11 @@ if/else removed, such that there is zero chance for this type of exploit.
 
 
 <hr/>
-<a href="http://validator.w3.org/check?uri=http%3A%2F%2Fphpxmlrpc.sourceforge.net"><img
+<a href="http://validator.w3.org/check?uri=http%3A%2F%2Fhgggeek.github.io%2Fhphpxmlrpc%2Fh"><img
         src="http://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
         alt="Valid XHTML 1.0!" /></a><br/>
 Page last updated: 2013/12/15
 
-<!--<h2>Contact:</h2>
-
-To contact the maintainers of the library please goto the library <a href="http://sourceforge.net/projects/phpxmlrpc"> Sourceforge Home Page</a> and use the mail addresses of the developers listed there. You can also file bug reports, fetaure requests or patches.-->
-
-<!--
-<p>The original <a href="http://xmlrpc.usefulinc.com/php.html">project homepage</a> is still available.</p>
--->
 </div>
 </body>
 </html>
