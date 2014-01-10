@@ -1,3 +1,7 @@
+2014-01-10 - G. Giunta (giunta.gaetano@gmail.com)
+
+	* xmlrpc.inc: when using curl and keepalive, reset curl handle if we did not get back an http 200 response (eg a 302)
+
 2010-05-23 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* xmlrpc.inc: omit port on http 'Host' header if it is 80;

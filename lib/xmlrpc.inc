@@ -850,7 +850,7 @@
 		* http://curl.haxx.se/docs/faq.html#7.3)
 		*/
 		var $xmlrpc_curl_handle = null;
-		/// Wheter to use persistent connections for http 1.1 and https
+		/// Whether to use persistent connections for http 1.1 and https
 		var $keepalive = false;
 		/// Charset encodings that can be decoded without problems by the client
 		var $accepted_charset_encodings = array();
@@ -1701,6 +1701,12 @@
 					curl_close($curl);
 				}
 				$resp =& $msg->parseResponse($result, true, $this->return_type);
+                // if we got back a 302, we can not reuse the curl handle for later calls
+                if($resp->faultCode() == $GLOBALS['xmlrpcerr']['http_error'] && $keepalive)
+                {
+                    curl_close($curl);
+                    $this->xmlrpc_curl_handle = null;
+                }
 			}
 			return $resp;
 		}
