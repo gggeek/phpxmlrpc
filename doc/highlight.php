@@ -3,7 +3,7 @@
  * takes a dir as arg, highlights all php code found in html files inside
  *
  * @author Gaetano Giunta
- * @copyright (c) 2007-2013 G. Giunta
+ * @copyright (c) 2007-2014 G. Giunta
  */
 
 function highlight($file)

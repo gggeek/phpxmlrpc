@@ -2,13 +2,13 @@
 /**
  * Helper function for the terminally lazy
  *
- * @copyright (c) 2006-2013 G. Giunta
+ * @copyright (c) 2006-2014 G. Giunta
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
  */
 
 	/**
 	 * Takes a client object, a remote method name, and a variable numbers of
-	 * php values, and calls the method with the supplied parameters. The 
+	 * php values, and calls the method with the supplied parameters. The
 	 * parameters are native php values and the result is an xmlrpcresp object.
 	 *
 	 * Notes:

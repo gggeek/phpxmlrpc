@@ -4,7 +4,7 @@
  * Generate stubs to transparently access xmlrpc methods as php functions and viceversa
  *
  * @author Gaetano Giunta
- * @copyright (C) 2006-2013 G. Giunta
+ * @copyright (C) 2006-2014 G. Giunta
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
  *
  * @todo separate introspection from code generation for func-2-method wrapping

@@ -1,10 +1,10 @@
 <?xml version='1.0'?>
-<xsl:stylesheet  
+<xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <!--
  Customization xsl stylesheet for docbook to chunked html transform
  @author Gaetano Giunta
- @copyright (c) 2007-2013 G. Giunta
+ @copyright (c) 2007-2014 G. Giunta
  @license
 -->
 
