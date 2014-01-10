@@ -18,7 +18,8 @@
     $action = 'list';
 
   // relative path to the visual xmlrpc editing dialog
-  $editorpath = '../../javascript/';
+  $editorpath = '../../javascript/debugger/';
+  $editorlibs = '../../javascript/lib/';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -31,8 +32,8 @@
     top.location.replace('index.php?run='+escape(self.location));
 </script>
 <!-- xmlrpc/jsonrpc base library -->
-<script type="text/javascript" src="<?php echo $editorpath; ?>xmlrpc_lib.js"></script>
-<script type="text/javascript" src="<?php echo $editorpath; ?>jsonrpc_lib.js"></script>
+<script type="text/javascript" src="<?php echo $editorlibs; ?>xmlrpc_lib.js"></script>
+<script type="text/javascript" src="<?php echo $editorlibs; ?>jsonrpc_lib.js"></script>
 <style type="text/css">
 <!--
 html {overflow: -moz-scrollbars-vertical;}
