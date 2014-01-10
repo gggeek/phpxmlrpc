@@ -79,6 +79,10 @@
 	{
 		$HTTPSURI = '/server.php';
 	}
+	if(!isset($HTTPSIGNOREPEER))
+	{
+		$HTTPSIGNOREPEER = false;
+	}
 	if(!isset($PROXY))
 	{
 		$PROXYSERVER = null;

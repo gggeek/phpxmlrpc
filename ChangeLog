@@ -2,6 +2,8 @@
 
 	* xmlrpc.inc: when using curl and keepalive, reset curl handle if we did not get back an http 200 response (eg a 302)
 
+	* testsuite.php, parse_args.php: update testsuite
+
 2010-05-23 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* xmlrpc.inc: omit port on http 'Host' header if it is 80;
@@ -10,6 +12,7 @@
 2010-04-12 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* testsuite.php, parse_args.php: testsuite allows interrogating https servers ignoring their certs
+
 	* xmlrpc.inc: method setAcceptedCompression was failing to disable reception
 	of compressed responses if the client supported them (triggering a bug with
 	https and php < 5.3 on windows due); remove a php warning that could be
