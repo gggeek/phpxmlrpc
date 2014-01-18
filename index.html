@@ -45,7 +45,7 @@ This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> wh
 <li>Possibility to register php function or class methods as webservices, extracting value-added information from phpdoc comments</li>
 <li>A web based visual debugger is included with the library</li>
 <li>Many other cool features are delivered with the 'Extras' package, such as a complete emulation layer of php native xmlrpc calls, an xmlrpc server that generates html documentation of exposed webservices, and a complete jsonrpc library...</li>
-<li>Last but not least, <a href="/jsxmlrpc/">a version of the library</a> implementing the same API in Javascript is available, allowing to leverage acquired knowledge to easily build ajax/dhtml clients</li>
+<li>Last but not least, <a href="http://gggeek.github.io/jsxmlrpc/">a version of the library</a> implementing the same API in Javascript is available, allowing to leverage acquired knowledge to easily build ajax/dhtml clients</li>
 </ul>
 
 <h2><a name="download">Requirements</a></h2>
@@ -56,8 +56,8 @@ This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> wh
 </ul>
 
 <h2><a name="download">Download</a></h2>
-<p>The latest stable release is version <a href="http://sourceforge.net/projects/phpxmlrpc/files/phpxmlrpc/3.0.0beta/xmlrpc-3.0.0.beta.zip/download"><span class="evidence">3.0.0beta</span></a> released on September 5, 2009</p>
-<p>The previous stable release is version <a href="http://sourceforge.net/project/showfiles.php?group_id=34455&amp;package_id=26601&amp;release_id=668732"><span class="evidence">2.2.2</span></a> released on March 16, 2009</p>
+<p>The latest stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/3.0.0-beta"><span class="evidence">3.0.0beta</span></a> released on September 5, 2009</p>
+<p>The previous stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/2.2.2"><span class="evidence">2.2.2</span></a> released on March 16, 2009</p>
 <p class="news">
 <b>Note:</b> there is a known bug in PHP version 5.2.2 that prevents the php-xmlrpc server from working. If you are experiencing this problem please upgrade your php install or use library version 2.2.1 or later.
 </p>
@@ -86,7 +86,7 @@ Released lib version 3.0.0 beta.<br/>
 This is the first release of the library to only support PHP 5. Some legacy code has been removed, and support for features such as exceptions and dateTime objects introduced.<br/>
 The "beta" tag is meant to indicate the fact that the refactoring has been more widespread than in precedent releases and that more changes are likely to be introduced with time - the library is still considered to be production quality.<br/>
 <br/>
-The "Extras" Package and the <a href="/jsxmlrpc/">JS-XMLRPC</a> library have also been updated with bugfix releases.<br/><br/>
+The "Extras" Package and the <a href="http://gggeek.github.io/jsxmlrpc/">JS-XMLRPC</a> library have also been updated with bugfix releases.<br/><br/>
 </li>
 
 <li>
@@ -105,37 +105,6 @@ Released lib version 2.2.1.<br/><br/>
 Updated the online documentation to match release 2.2 (with better formatting than before)<br/><br/>
 </li>
 
-<li>
-1st of March, 2007<br/>
-The Online XML-RPC debugger is back online, at the new address <a href="http://gggeek.raprap.it/debugger/">http://gggeek.raprap.it/debugger/</a>.<br/>
-Grazie Davide!!!<br/><br/>
-</li>
-
-<li>
-25th of February, 2007<br/>
-I am pleased to announce the release of PHP-XMLRPC version 2.2 (<a href="http://sourceforge.net/project/shownotes.php?group_id=34455&amp;release_id=489189">release notes</a>), as well as the EXTRAS package version 0.4 (<a href="http://sourceforge.net/project/shownotes.php?group_id=34455&amp;release_id=489183">release notes</a>).<br/>
-Both releases bring minor bug fixes and incremental improvements, especially in the json parsing area.<br/>
-The initial release (version 0.1) of php-xmlrpc <a href="/jsxmlrpc/">sister-library</a> is also <a href="http://sourceforge.net/project/showfiles.php?group_id=34455&amp;package_id=223089&amp;release_id=489178">available</a>.
-It is written in pure javascript, and implements the same API.<br/>
-It can be added to the php debugger or the self-documenting server class to provide a visual editor component for xmlrpc values.
-<br/><br/>
-</li>
-
-<li>
-10th of February, 2007<br/>
-The Online XMLRPC debugger is unfortunately not available any more.<br/>
-Anyone willing to provide a hosting server with php 4 or 5 (and fsockopen or cURL active) will be heartily welcome. Monthly bandwidth consumed up to now was very low.<br/>
-While a suitable relocation is found, please use the javascript debugger available <a href="/jsxmlrpc/debugger/debugger.html">here</a>.<br/><br/>
-</li>
-
-<li>
-26th of January, 2007<br/>
-The <a href="http://phpxmlrpc.sf.net/server.php">Online XMLRPC demo Server</a> is now better than ever, with a new visual value editor (as was previously added to the oline debugger).<br/>
-To see it in action, click on a method name in the page listing all available methods, then on "edit" button below the textarea dedicated to method testing.<br/>
-This improvement is currently only available in the CVS version of the documenting_xmlrpc_server class, and it will be part of the next release of the EXTRAS package.<br/>
-The Javascript version of the library also got its own <a href="/jsxmlrpc/">Homepage</a>.<br/><br/>
-</li>
-
 </ul>
 <a href="news.html">Older news...</a>
 
@@ -149,7 +118,7 @@ For the adventurous there is even an <a href="doc-2/xmlrpc_php.xml">xml+css</a> 
 
 <h2><a name="demoserver">Online demo server</a></h2>
 <p>A demo server is active at the address <b>http://phpxmlrpc.sourceforge.net/server.php</b>. It exposes functions that can be used for interoperability testing. (the full code for the server is included in the CVS version of the library).<br/>
-You can see the source code here: <a href="server.php?showSource=TRUE">http://phpxmlrpc.sourceforge.net/server.php</a> (the xmlrpc server will activate on POST requests, and display its API on GET requests), and auto-generated documentation <a href="server.php">here</a></p>
+You can see the source code here: <a href="http://phpxmlrpc.sourceforge.net/server.php?showSource=TRUE">http://phpxmlrpc.sourceforge.net/server.php</a> (the xmlrpc server will activate on POST requests, and display its API on GET requests), and auto-generated documentation <a href="server.php">here</a></p>
 
 <h2><a name="debugger">Online xmlrpc debugger</a></h2>
 <p>A demo xmlrpc debugger application, built on top of this library, is active at the address <a href="http://gggeek.altervista.org/sw/xmlrpc/debugger/">http://gggeek.altervista.org/sw/xmlrpc/debugger/</a>.
@@ -432,10 +401,10 @@ if/else removed, such that there is zero chance for this type of exploit.
 
 
 <hr/>
-<a href="http://validator.w3.org/check?uri=http%3A%2F%2Fhgggeek.github.io%2Fhphpxmlrpc%2Fh"><img
+<a href="http://validator.w3.org/check?uri=http%3A%2F%2Fgggeek.github.io%2Fhphpxmlrpc%2F"><img
         src="http://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
         alt="Valid XHTML 1.0!" /></a><br/>
-Page last updated: 2013/12/15
+Page last updated: 2014/1/18
 
 </div>
 </body>
