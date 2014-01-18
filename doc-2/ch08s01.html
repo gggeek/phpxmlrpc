@@ -1,0 +1,16 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>1.&nbsp;"Constant" variables</title><link rel="stylesheet" href="html.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.1"><link rel="start" href="index.html" title="XML-RPC for PHP"><link rel="up" href="ch08.html" title="Chapter&nbsp;8.&nbsp;Global variables"><link rel="prev" href="ch08.html" title="Chapter&nbsp;8.&nbsp;Global variables"><link rel="next" href="ch08s02.html" title="2.&nbsp;Variables whose value can be modified"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">1.&nbsp;"Constant" variables</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch08.html">Prev</a>&nbsp;</td><th width="60%" align="center">Chapter&nbsp;8.&nbsp;Global variables</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch08s02.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e2726"></a>1.&nbsp;"Constant" variables</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2729"></a>1.1.&nbsp;$xmlrpcerruser</h3></div></div></div><p><code class="fieldsynopsis"><span class="varname">$xmlrpcerruser&nbsp;</span><span class="initializer">=&nbsp;800</span>;</code>The minimum value for errors reported by user implemented XML-RPC servers. Error numbers lower than that are reserved for library usage.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2739"></a>1.2.&nbsp;$xmlrpcI4, $xmlrpcInt, $xmlrpcBoolean, $xmlrpcDouble, $xmlrpcString, $xmlrpcDateTime, $xmlrpcBase64 , $xmlrpcArray, $xmlrpcStruct, $xmlrpcValue, $xmlrpcNull</h3></div></div></div><p>For convenience the strings representing the XML-RPC types have been encoded as global variables:</p><pre class="programlisting">
+$xmlrpcI4="i4";
+$xmlrpcInt="int";
+$xmlrpcBoolean="boolean";
+$xmlrpcDouble="double";
+$xmlrpcString="string";
+$xmlrpcDateTime="dateTime.iso8601";
+$xmlrpcBase64="base64";
+$xmlrpcArray="array";
+$xmlrpcStruct="struct";
+$xmlrpcValue="undefined";
+$xmlrpcNull="null";
+
+</pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2746"></a>1.3.&nbsp;$xmlrpcTypes, $xmlrpc_valid_parents, $xmlrpcerr, $xmlrpcstr, $xmlrpcerrxml, $xmlrpc_backslash, $_xh, $xml_iso88591_Entities, $xmlEntities, $xmlrpcs_capabilities</h3></div></div></div><p>Reserved for internal usage.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch08.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch08.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch08s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter&nbsp;8.&nbsp;Global variables&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.&nbsp;Variables whose value can be modified</td></tr></table></div></body></html>

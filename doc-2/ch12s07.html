@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Can I use the ms windows character set?</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="ch12.html" title="Chapter 12. Frequently Asked Questions" /><link rel="prev" href="ch12s06.html" title="How can I save to a file the xml of the xmlrpc responses received from servers?" /><link rel="next" href="ch12s08.html" title="Does the library support using cookies / http sessions?" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Can I use the ms windows character set?</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch12s06.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Frequently Asked Questions</th><td width="20%" align="right"> <a accesskey="n" href="ch12s08.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id939059"></a>Can I use the ms windows character set?</h2></div></div></div><p>If the data your application is using comes from a Microsoft
+      application, there are some chances that the character set used to
+      encode it is CP1252 (the same might apply to data received from an
+      external xmlrpc server/client, but it is quite rare to find xmlrpc
+      toolkits that encode to CP1252 instead of UTF8). It is a character set
+      which is "almost" compatible with ISO 8859-1, but for a few extra
+      characters.</p><p>PHP-XMLRPC only supports the ISO 8859-1 and UTF8 character sets.
+      The net result of this situation is that those extra characters will not
+      be properly encoded, and will be received at the other end of the
+      XML-RPC tranmission as "garbled data". Unfortunately the library cannot
+      provide real support for CP1252 because of limitations in the PHP 4 xml
+      parser. Luckily, we tried our best to support this character set anyway,
+      and, since version 2.2.1, there is some form of support, left commented
+      in the code.</p><p>To properly encode outgoing data that is natively in CP1252, you
+      will have to uncomment all relative code in the file
+      <code class="filename">xmlrpc.inc</code> (you can search for the string "1252"),
+      then set <code class="code">$GLOBALS['xmlrpc_internalencoding']='CP1252';</code>
+      Please note that all incoming data will then be fed to your application
+      as UTF-8 to avoid any potentail data loss.</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch12s06.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch12.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch12s08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">How can I save to a file the xml of the xmlrpc responses received
+      from servers? </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Does the library support using cookies / http sessions?</td></tr></table></div></body></html>

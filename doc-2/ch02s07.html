@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>2.0 Release candidate 3</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="ch02.html" title="Chapter 2. What's new" /><link rel="prev" href="ch02s06.html" title="2.0 final" /><link rel="next" href="ch02s08.html" title="2.0 Release candidate 2" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.0 Release candidate 3</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s06.html">Prev</a> </td><th width="60%" align="center">Chapter 2. What's new</th><td width="20%" align="right"> <a accesskey="n" href="ch02s08.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id931316"></a>2.0 Release candidate 3</h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Added to server class the property
+            <span class="property">functions_parameters_type</span>, that allows the
+            server to register plain php functions as xmlrpc methods (i.e.
+            functions that do not take an xmlrpcmsg object as unique
+            param)</p></li><li><p>let server and client objects serialize calls using a
+            specified character set encoding for the produced xml instead of
+            US-ASCII (ISO-8859-1 and UTF-8 supported)</p></li><li><p>let php_xmlrpc_decode accept xmlrpcmsg objects as valid
+            input</p></li><li><p>'class::method' syntax is now accepted in the server
+            dispatch map</p></li><li><p><code class="function">xmlrpc_clent::SetDebug()</code> accepts
+            integer values instead of a boolean value, with debugging level 2
+            adding to the information printed to screen the complete client
+            request</p></li></ul></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s06.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.0 final </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.0 Release candidate 2</td></tr></table></div></body></html>

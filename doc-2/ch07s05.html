@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>xmlrpc_server</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="ch07.html" title="Chapter 7. Class documentation" /><link rel="prev" href="ch07s04.html" title="xmlrpcresp" /><link rel="next" href="ch08.html" title="Chapter 8. Global variables" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">xmlrpc_server</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s04.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Class documentation</th><td width="20%" align="right"> <a accesskey="n" href="ch08.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="xmlrpc-server"></a>xmlrpc_server</h2></div></div></div><p>The implementation of this class has been kept as simple to use as
+      possible. The constructor for the server basically does all the work.
+      Here's a minimal example:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">&nbsp;&nbsp;</span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">foo&nbsp;</span><span style="color: #007700">(</span><span style="color: #0000BB">$xmlrpcmsg</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;...<br />&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpcresp</span><span style="color: #007700">(</span><span style="color: #0000BB">$some_xmlrpc_val</span><span style="color: #007700">);<br />&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;class&nbsp;</span><span style="color: #0000BB">bar&nbsp;</span><span style="color: #007700">{<br />&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;</span><span style="color: #0000BB">foobar</span><span style="color: #007700">(</span><span style="color: #0000BB">$xmlrpcmsg</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpcresp</span><span style="color: #007700">(</span><span style="color: #0000BB">$some_xmlrpc_val</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;</span><span style="color: #0000BB">$s&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_server</span><span style="color: #007700">(<br />&nbsp;&nbsp;&nbsp;&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"examples.myFunc1"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;array(</span><span style="color: #DD0000">"function"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">"foo"</span><span style="color: #007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"examples.myFunc2"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;array(</span><span style="color: #DD0000">"function"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">"bar::foobar"</span><span style="color: #007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;));</span>
+</span>
+</code></pre><p>This performs everything you need to do with a server. The single
+      constructor argument is an associative array from xmlrpc method names to
+      php function names. The incoming request is parsed and dispatched to the
+      relevant php function, which is responsible for returning a
+      <code class="classname">xmlrpcresp</code> object, that will be serialized back
+      to the caller.</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id936390"></a>Method handler functions</h3></div></div></div><p>Both php functions and class methods can be registered as xmlrpc
+        method handlers.</p><p>The synopsis of a method handler function is:</p><pre class="synopsis">xmlrpcresp $resp = function (xmlrpcmsg $msg)</pre><p>No text should be echoed 'to screen' by the handler function, or
+        it will break the xml response sent back to the client. This applies
+        also to error and warning messages that PHP prints to screen unless
+        the appropriate parameters have been set in the php.in file. Another
+        way to prevent echoing of errors inside the response and facilitate
+        debugging is to use the server SetDebug method with debug level 3 (see
+        ...). Exceptions thrown duting execution of handler functions are
+        caught by default and a XML-RPC error reponse is generated instead.
+        This behaviour can be finetuned by usage of the
+        <code class="varname">exception_handling</code> member variable (see
+        ...).</p><p>Note that if you implement a method with a name prefixed by
+        <code class="code">system.</code> the handler function will be invoked by the
+        server with two parameters, the first being the server itself and the
+        second being the <code class="classname">xmlrpcmsg</code> object.</p><p>The same php function can be registered as handler of multiple
+        xmlrpc methods.</p><p>Here is a more detailed example of what the handler function
+        <code class="function">foo</code> may do:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">&nbsp;&nbsp;</span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">foo&nbsp;</span><span style="color: #007700">(</span><span style="color: #0000BB">$xmlrpcmsg</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;global&nbsp;</span><span style="color: #0000BB">$xmlrpcerruser</span><span style="color: #007700">;&nbsp;</span><span style="color: #FF8000">//&nbsp;import&nbsp;user&nbsp;errcode&nbsp;base&nbsp;value<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$meth&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$xmlrpcmsg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">method</span><span style="color: #007700">();&nbsp;</span><span style="color: #FF8000">//&nbsp;retrieve&nbsp;method&nbsp;name<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$par&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$xmlrpcmsg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getParam</span><span style="color: #007700">(</span><span style="color: #0000BB">0</span><span style="color: #007700">);&nbsp;</span><span style="color: #FF8000">//&nbsp;retrieve&nbsp;value&nbsp;of&nbsp;first&nbsp;parameter&nbsp;-&nbsp;assumes&nbsp;at&nbsp;least&nbsp;one&nbsp;param&nbsp;received<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$val&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$par</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">scalarval</span><span style="color: #007700">();&nbsp;</span><span style="color: #FF8000">//&nbsp;decode&nbsp;value&nbsp;of&nbsp;first&nbsp;parameter&nbsp;-&nbsp;assumes&nbsp;it&nbsp;is&nbsp;a&nbsp;scalar&nbsp;value<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">...<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span style="color: #0000BB">$err</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;this&nbsp;is&nbsp;an&nbsp;error&nbsp;condition<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">return&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpcresp</span><span style="color: #007700">(</span><span style="color: #0000BB">0</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$xmlrpcerruser</span><span style="color: #007700">+</span><span style="color: #0000BB">1</span><span style="color: #007700">,&nbsp;</span><span style="color: #FF8000">//&nbsp;user&nbsp;error&nbsp;1<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"There's&nbsp;a&nbsp;problem,&nbsp;Captain"</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;else&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #FF8000">//&nbsp;this&nbsp;is&nbsp;a&nbsp;successful&nbsp;value&nbsp;being&nbsp;returned<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">return&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpcresp</span><span style="color: #007700">(new&nbsp;</span><span style="color: #0000BB">xmlrpcval</span><span style="color: #007700">(</span><span style="color: #DD0000">"All's&nbsp;fine!"</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">"string"</span><span style="color: #007700">));<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;}</span>
+</span>
+</code></pre><p>See <code class="filename">server.php</code> in this distribution for
+        more examples of how to do this.</p><p>Since release 2.0RC3 there is a new, even simpler way of
+        registering php functions with the server. See section 5.7
+        below</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id936453"></a>The dispatch map</h3></div></div></div><p>The first argument to the <code class="function">xmlrpc_server</code>
+        constructor is an array, called the <span class="emphasis"><em>dispatch map</em></span>.
+        In this array is the information the server needs to service the
+        XML-RPC methods you define.</p><p>The dispatch map takes the form of an associative array of
+        associative arrays: the outer array has one entry for each method, the
+        key being the method name. The corresponding value is another
+        associative array, which can have the following members:</p><div class="itemizedlist"><ul type="disc"><li><p><code class="function"><code class="literal">function</code></code> - this
+            entry is mandatory. It must be either a name of a function in the
+            global scope which services the XML-RPC method, or an array
+            containing an instance of an object and a static method name (for
+            static class methods the 'class::method' syntax is also
+            supported).</p></li><li><p><code class="function"><code class="literal">signature</code></code> - this
+            entry is an array containing the possible signatures (see <a class="xref" href="ch07s05.html#signatures" title="Method signatures">Signatures</a>) for the method. If this entry is present
+            then the server will check that the correct number and type of
+            parameters have been sent for this method before dispatching
+            it.</p></li><li><p><code class="function"><code class="literal">docstring</code></code> - this
+            entry is a string containing documentation for the method. The
+            documentation may contain HTML markup.</p></li><li><p><code class="literal">signature_docs</code> - this entry can be used
+            to provide documentation for the single parameters. It must match
+            in structure the 'signature' member. By default, only the
+            <code class="classname">documenting_xmlrpc_server</code> class in the
+            extras package will take advantage of this, since the
+            "system.methodHelp" protocol does not support documenting method
+            parameters individually.</p></li><li><p><code class="literal">parameters_type</code> - this entry can be used
+            when the server is working in 'xmlrpcvals' mode (see ...) to
+            define one or more entries in the dispatch map as being functions
+            that follow the 'phpvals' calling convention. The only useful
+            value is currently the string <code class="literal">phpvals</code>.</p></li></ul></div><p>Look at the <code class="filename">server.php</code> example in the
+        distribution to see what a dispatch map looks like.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="signatures"></a>Method signatures</h3></div></div></div><p>A signature is a description of a method's return type and its
+        parameter types. A method may have more than one signature.</p><p>Within a server's dispatch map, each method has an array of
+        possible signatures. Each signature is an array of types. The first
+        entry is the return type. For instance, the method </p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php&nbsp;string&nbsp;examples</span><span style="color: #007700">.</span><span style="color: #0000BB">getStateName</span><span style="color: #007700">(int)</span>
+</span>
+</code></pre><p> has the signature </p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php&nbsp;</span><span style="color: #007700">array(</span><span style="color: #0000BB">$xmlrpcString</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$xmlrpcInt</span><span style="color: #007700">)</span>
+</span>
+</code></pre><p> and, assuming that it is the only possible signature for the
+        method, it might be used like this in server creation: </p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">$findstate_sig&nbsp;</span><span style="color: #007700">=&nbsp;array(array(</span><span style="color: #0000BB">$xmlrpcString</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$xmlrpcInt</span><span style="color: #007700">));<br /><br /></span><span style="color: #0000BB">$findstate_doc&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'When&nbsp;passed&nbsp;an&nbsp;integer&nbsp;between&nbsp;1&nbsp;and&nbsp;51&nbsp;returns&nbsp;the<br />name&nbsp;of&nbsp;a&nbsp;US&nbsp;state,&nbsp;where&nbsp;the&nbsp;integer&nbsp;is&nbsp;the&nbsp;index&nbsp;of&nbsp;that&nbsp;state&nbsp;name<br />in&nbsp;an&nbsp;alphabetic&nbsp;order.'</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$s&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_server</span><span style="color: #007700">(&nbsp;array(<br />&nbsp;&nbsp;</span><span style="color: #DD0000">"examples.getStateName"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"function"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">"findstate"</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"signature"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #0000BB">$findstate_sig</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"docstring"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #0000BB">$findstate_doc<br />&nbsp;&nbsp;</span><span style="color: #007700">)));</span>
+</span>
+</code></pre><p>Note that method signatures do not allow to check nested
+        parameters, e.g. the number, names and types of the members of a
+        struct param cannot be validated.</p><p>If a method that you want to expose has a definite number of
+        parameters, but each of those parameters could reasonably be of
+        multiple types, the array of acceptable signatures will easily grow
+        into a combinatorial explosion. To avoid such a situation, the lib
+        defines the global var <code class="varname">$xmlrpcValue</code>, which can be
+        used in method signatures as a placeholder for 'any xmlrpc
+        type':</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">$echoback_sig&nbsp;</span><span style="color: #007700">=&nbsp;array(array(</span><span style="color: #0000BB">$xmlrpcValue</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$xmlrpcValue</span><span style="color: #007700">));<br /><br /></span><span style="color: #0000BB">$findstate_doc&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'Echoes&nbsp;back&nbsp;to&nbsp;the&nbsp;client&nbsp;the&nbsp;received&nbsp;value,&nbsp;regardless&nbsp;of&nbsp;its&nbsp;type'</span><span style="color: #007700">;<br /><br /></span><span style="color: #0000BB">$s&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_server</span><span style="color: #007700">(&nbsp;array(<br />&nbsp;&nbsp;</span><span style="color: #DD0000">"echoBack"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"function"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">"echoback"</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"signature"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #0000BB">$echoback_sig</span><span style="color: #007700">,&nbsp;</span><span style="color: #FF8000">//&nbsp;this&nbsp;sig&nbsp;guarantees&nbsp;that&nbsp;the&nbsp;method&nbsp;handler&nbsp;will&nbsp;be&nbsp;called&nbsp;with&nbsp;one&nbsp;and&nbsp;only&nbsp;one&nbsp;parameter<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"docstring"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #0000BB">$echoback_doc<br />&nbsp;&nbsp;</span><span style="color: #007700">)));</span>
+</span>
+</code></pre><p>Methods <code class="methodname">system.listMethods</code>,
+        <code class="methodname">system.methodHelp</code>,
+        <code class="methodname">system.methodSignature</code> and
+        <code class="methodname">system.multicall</code> are already defined by the
+        server, and should not be reimplemented (see Reserved Methods
+        below).</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id936613"></a>Delaying the server response</h3></div></div></div><p>You may want to construct the server, but for some reason not
+        fulfill the request immediately (security verification, for instance).
+        If you omit to pass to the constructor the dispatch map or pass it a
+        second argument of <code class="literal">0</code> this will have the desired
+        effect. You can then use the <code class="function">service()</code> method of
+        the server class to service the request. For example:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">$s&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_server</span><span style="color: #007700">(</span><span style="color: #0000BB">$myDispMap</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">0</span><span style="color: #007700">);&nbsp;</span><span style="color: #FF8000">//&nbsp;second&nbsp;parameter&nbsp;=&nbsp;0&nbsp;prevents&nbsp;automatic&nbsp;servicing&nbsp;of&nbsp;request<br /><br />//&nbsp;...&nbsp;some&nbsp;code&nbsp;that&nbsp;does&nbsp;other&nbsp;stuff&nbsp;here<br /><br /></span><span style="color: #0000BB">$s</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">service</span><span style="color: #007700">();</span>
+</span>
+</code></pre><p>Note that the <code class="methodname">service</code> method will print
+        the complete result payload to screen and send appropriate HTTP
+        headers back to the client, but also return the response object. This
+        permits further manipulation of the response, possibly in combination
+        with output buffering.</p><p>To prevent the server from sending HTTP headers back to the
+        client, you can pass a second parameter with a value of
+        <code class="literal">TRUE</code> to the <code class="methodname">service</code>
+        method. In this case, the response payload will be returned instead of
+        the response object.</p><p>Xmlrpc requests retrieved by other means than HTTP POST bodies
+        can also be processed. For example:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">$s&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_server</span><span style="color: #007700">();&nbsp;</span><span style="color: #FF8000">//&nbsp;not&nbsp;passing&nbsp;a&nbsp;dispatch&nbsp;map&nbsp;prevents&nbsp;automatic&nbsp;servicing&nbsp;of&nbsp;request<br /><br />//&nbsp;...&nbsp;some&nbsp;code&nbsp;that&nbsp;does&nbsp;other&nbsp;stuff&nbsp;here,&nbsp;including&nbsp;setting&nbsp;dispatch&nbsp;map&nbsp;into&nbsp;server&nbsp;object<br /><br /></span><span style="color: #0000BB">$resp&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$s</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">service</span><span style="color: #007700">(</span><span style="color: #0000BB">$xmlrpc_request_body</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">);&nbsp;</span><span style="color: #FF8000">//&nbsp;parse&nbsp;a&nbsp;variable&nbsp;instead&nbsp;of&nbsp;POST&nbsp;body,&nbsp;retrieve&nbsp;response&nbsp;payload<br /><br />//&nbsp;...&nbsp;some&nbsp;code&nbsp;that&nbsp;does&nbsp;other&nbsp;stuff&nbsp;with&nbsp;xml&nbsp;response&nbsp;$resp&nbsp;here</span>
+</span>
+</code></pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id936662"></a>Modifying the server behaviour</h3></div></div></div><p>A couple of methods / class variables are available to modify
+        the behaviour of the server. The only way to take advantage of their
+        existence is by usage of a delayed server response (see above)</p><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id936672"></a>setDebug()</h4></div></div></div><p>This function controls weather the server is going to echo
+          debugging messages back to the client as comments in response body.
+          Valid values: 0,1,2,3, with 1 being the default. At level 0, no
+          debug info is returned to the client. At level 2, the complete
+          client request is added to the response, as part of the xml
+          comments. At level 3, a new PHP error handler is set when executing
+          user functions exposed as server methods, and all non-fatal errors
+          are trapped and added as comments into the response.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id936682"></a>allow_system_funcs</h4></div></div></div><p>Default_value: TRUE. When set to FALSE, disables support for
+          <code class="methodname">System.xxx</code> functions in the server. It
+          might be useful e.g. if you do not wish the server to respond to
+          requests to <code class="methodname">System.ListMethods</code>.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id936700"></a>compress_response</h4></div></div></div><p>When set to TRUE, enables the server to take advantage of HTTP
+          compression, otherwise disables it. Responses will be transparently
+          compressed, but only when an xmlrpc-client declares its support for
+          compression in the HTTP headers of the request.</p><p>Note that the ZLIB php extension must be installed for this to
+          work. If it is, <code class="varname">compress_response</code> will default to
+          TRUE.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id936718"></a>exception_handling</h4></div></div></div><p>This variable controls the behaviour of the server when an
+          exception is thrown by a method handler php function. Valid values:
+          0,1,2, with 0 being the default. At level 0, the server catches the
+          exception and return an 'internal error' xmlrpc response; at 1 it
+          catches the exceptions and return an xmlrpc response with the error
+          code and error message corresponding to the exception that was
+          thron; at 2 = the exception is floated to the upper layers in the
+          code</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id936729"></a>response_charset_encoding</h4></div></div></div><p>Charset encoding to be used for response (only affects string
+          values).</p><p>If it can, the server will convert the generated response from
+          internal_encoding to the intended one.</p><p>Valid values are: a supported xml encoding (only UTF-8 and
+          ISO-8859-1 at present, unless mbstring is enabled), null (leave
+          charset unspecified in response and convert output stream to
+          US_ASCII), 'default' (use xmlrpc library default as specified in
+          xmlrpc.inc, convert output stream if needed), or 'auto' (use
+          client-specified charset encoding or same as request if request
+          headers do not specify it (unless request is US-ASCII: then use
+          library default anyway).</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id936748"></a>Fault reporting</h3></div></div></div><p>Fault codes for your servers should start at the value indicated
+        by the global <code class="literal">$xmlrpcerruser</code> + 1.</p><p>Standard errors returned by the server include:</p><div class="variablelist"><dl><dt><span class="term"><code class="literal">1</code> <span>Unknown method</span></span></dt><dd><p>Returned if the server was asked to dispatch a method it
+              didn't know about</p></dd><dt><span class="term"><code class="literal">2</code> <span>Invalid return
+            payload</span></span></dt><dd><p>This error is actually generated by the client, not
+              server, code, but signifies that a server returned something it
+              couldn't understand. A more detailed error report is sometimes
+              added onto the end of the phrase above.</p></dd><dt><span class="term"><code class="literal">3</code> <span>Incorrect
+            parameters</span></span></dt><dd><p>This error is generated when the server has signature(s)
+              defined for a method, and the parameters passed by the client do
+              not match any of signatures.</p></dd><dt><span class="term"><code class="literal">4</code> <span>Can't introspect: method
+            unknown</span></span></dt><dd><p>This error is generated by the builtin
+              <code class="function">system.*</code> methods when any kind of
+              introspection is attempted on a method undefined by the
+              server.</p></dd><dt><span class="term"><code class="literal">5</code> <span>Didn't receive 200 OK from
+            remote server</span></span></dt><dd><p>This error is generated by the client when a remote server
+              doesn't return HTTP/1.1 200 OK in response to a request. A more
+              detailed error report is added onto the end of the phrase
+              above.</p></dd><dt><span class="term"><code class="literal">6</code> <span>No data received from
+            server</span></span></dt><dd><p>This error is generated by the client when a remote server
+              returns HTTP/1.1 200 OK in response to a request, but no
+              response body follows the HTTP headers.</p></dd><dt><span class="term"><code class="literal">7</code> <span>No SSL support compiled
+            in</span></span></dt><dd><p>This error is generated by the client when trying to send
+              a request with HTTPS and the CURL extension is not available to
+              PHP.</p></dd><dt><span class="term"><code class="literal">8</code> <span>CURL error</span></span></dt><dd><p>This error is generated by the client when trying to send
+              a request with HTTPS and the HTTPS communication fails.</p></dd><dt><span class="term"><code class="literal">9-14</code> <span>multicall
+            errors</span></span></dt><dd><p>These errors are generated by the server when something
+              fails inside a system.multicall request.</p></dd><dt><span class="term"><code class="literal">100-</code> <span>XML parse
+            errors</span></span></dt><dd><p>Returns 100 plus the XML parser error code for the fault
+              that occurred. The <code class="function">faultString</code> returned
+              explains where the parse error was in the incoming XML
+              stream.</p></dd></dl></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id937308"></a>'New style' servers</h3></div></div></div><p>In the same spirit of simplification that inspired the
+        <code class="varname">xmlrpc_client::return_type</code> class variable, a new
+        class variable has been added to the server class:
+        <code class="varname">functions_parameters_type</code>. When set to 'phpvals',
+        the functions registered in the server dispatch map will be called
+        with plain php values as parameters, instead of a single xmlrpcmsg
+        instance parameter. The return value of those functions is expected to
+        be a plain php value, too. An example is worth a thousand
+        words:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">&nbsp;&nbsp;</span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">foo</span><span style="color: #007700">(</span><span style="color: #0000BB">$usr_id</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$out_lang</span><span style="color: #007700">=</span><span style="color: #DD0000">'en'</span><span style="color: #007700">)&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;global&nbsp;</span><span style="color: #0000BB">$xmlrpcerruser</span><span style="color: #007700">;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;...<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(</span><span style="color: #0000BB">$someErrorCondition</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpcresp</span><span style="color: #007700">(</span><span style="color: #0000BB">0</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$xmlrpcerruser</span><span style="color: #007700">+</span><span style="color: #0000BB">1</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'DOH!'</span><span style="color: #007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;else<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'name'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">'Joe'</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'age'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #0000BB">27</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">'picture'&nbsp;</span><span style="color: #007700">=&gt;&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpcval</span><span style="color: #007700">(</span><span style="color: #0000BB">file_get_contents</span><span style="color: #007700">(</span><span style="color: #0000BB">$picOfTheGuy</span><span style="color: #007700">),&nbsp;</span><span style="color: #DD0000">'base64'</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br />&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;</span><span style="color: #0000BB">$s&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_server</span><span style="color: #007700">(<br />&nbsp;&nbsp;&nbsp;&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"examples.myFunc"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"function"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;</span><span style="color: #DD0000">"bar::foobar"</span><span style="color: #007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #DD0000">"signature"&nbsp;</span><span style="color: #007700">=&gt;&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(</span><span style="color: #0000BB">$xmlrpcString</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$xmlrpcInt</span><span style="color: #007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(</span><span style="color: #0000BB">$xmlrpcString</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$xmlrpcInt</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">$xmlrpcString</span><span style="color: #007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br />&nbsp;&nbsp;&nbsp;&nbsp;),&nbsp;</span><span style="color: #0000BB">false</span><span style="color: #007700">);<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$s</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">functions_parameters_type&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'phpvals'</span><span style="color: #007700">;<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$s</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">service</span><span style="color: #007700">();</span>
+</span>
+</code></pre><p>There are a few things to keep in mind when using this
+        simplified syntax:</p><p>to return an xmlrpc error, the method handler function must
+        return an instance of <code class="classname">xmlrpcresp</code>. The only
+        other way for the server to know when an error response should be
+        served to the client is to throw an exception and set the server's
+        <code class="varname">exception_handling</code> memeber var to 1;</p><p>to return a base64 value, the method handler function must
+        encode it on its own, creating an instance of an xmlrpcval
+        object;</p><p>the method handler function cannot determine the name of the
+        xmlrpc method it is serving, unlike standard handler functions that
+        can retrieve it from the message object;</p><p>when receiving nested parameters, the method handler function
+        has no way to distinguish a php string that was sent as base64 value
+        from one that was sent as a string value;</p><p>this has a direct consequence on the support of
+        system.multicall: a method whose signature contains datetime or base64
+        values will not be available to multicall calls;</p><p>last but not least, the direct parsing of xml to php values is
+        much faster than using xmlrpcvals, and allows the library to handle
+        much bigger messages without allocating all available server memory or
+        smashing PHP recursive call stack.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s04.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">xmlrpcresp </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 8. Global variables</td></tr></table></div></body></html>

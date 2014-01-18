@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>2.1</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="ch02.html" title="Chapter 2. What's new" /><link rel="prev" href="ch02s04.html" title="2.2" /><link rel="next" href="ch02s06.html" title="2.0 final" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.1</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s04.html">Prev</a> </td><th width="60%" align="center">Chapter 2. What's new</th><td width="20%" align="right"> <a accesskey="n" href="ch02s06.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id931019"></a>2.1</h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>The <code class="function">wrap_php_function</code> and
+            <code class="function">wrap_xmlrpc_method</code> functions have been moved
+            out of the base library file <code class="filename">xmlrpc.inc</code> into
+            a file of their own: <code class="filename">xmlrpc_wrappers.inc</code>. You
+            will have to include() / require() it in your scripts if you have
+            been using those functions. For increased security, the automatic
+            rebuilding of php object instances out of received xmlrpc structs
+            in <code class="function">wrap_xmlrpc_method()</code> has been disabled
+            (but it can be optionally re-enabled). Both
+            <code class="function">wrap_php_function()</code> and
+            <code class="function">wrap_xmlrpc_method()</code> functions accept many
+            more options to fine tune their behaviour, including one to return
+            the php code to be saved and later used as standalone php
+            script</p></li><li><p>The constructor of xmlrpcval() values has seen some internal
+            changes, and it will not throw a php warning anymore when invoked
+            using an unknown xmlrpc type: the error will only be written to
+            php error log. Also <code class="code">new xmlrpcval('true', 'boolean')</code>
+            is not supported anymore</p></li><li><p>The new function
+            <code class="function">php_xmlrpc_decode_xml()</code> will take the xml
+            representation of either an xmlrpc request, response or single
+            value and return the corresponding php-xmlrpc object
+            instance</p></li><li><p>A new function <code class="function">wrap_xmlrpc_server()</code>has
+            been added, to wrap all (or some) of the methods exposed by a
+            remote xmlrpc server into a php class</p></li><li><p>A new file has been added:
+            <code class="filename">verify_compat.php</code>, to help users diagnose the
+            level of compliance of their php installation with the
+            library</p></li><li><p>Restored compatibility with php 4.0.5 (for those poor souls
+            still stuck on it)</p></li><li><p>Method <code class="methodname">xmlrpc_server-&gt;service()</code>
+            now returns a value: either the response payload or xmlrpcresp
+            object instance</p></li><li><p>Method
+            <code class="methodname">xmlrpc_server-&gt;add_to_map()</code> now
+            accepts xmlrpc methods with no param definitions</p></li><li><p>Documentation for single parameters of exposed methods can
+            be added to the dispatch map (and turned into html docs in
+            conjunction with a future release of the 'extras' package)</p></li><li><p>Full response payload is saved into xmlrpcresp object for
+            further debugging</p></li><li><p>The debugger can now generate code that wraps a remote
+            method into a php function (works for jsonrpc, too); it also has
+            better support for being activated via a single GET call (e.g. for
+            integration into other tools)</p></li><li><p>Stricter parsing of incoming xmlrpc messages: two more
+            invalid cases are now detected (double <code class="literal">data</code>
+            element inside <code class="literal">array</code> and
+            <code class="literal">struct</code>/<code class="literal">array</code> after scalar
+            inside <code class="literal">value</code> element)</p></li><li><p>More logging of errors in a lot of situations</p></li><li><p>Javadoc documentation of lib files (almost) complete</p></li><li><p>Many performance tweaks and code cleanups, plus the usual
+            crop of bugs fixed (see NEWS file for complete list of
+            bugs)</p></li><li><p>Lib internals have been modified to provide better support
+            for grafting extra functionality on top of it. Stay tuned for
+            future releases of the EXTRAS package (or go read Appendix
+            B)...</p></li></ul></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s04.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.2 </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.0 final</td></tr></table></div></body></html>

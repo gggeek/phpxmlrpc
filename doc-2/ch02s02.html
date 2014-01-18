@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>2.2.2</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="ch02.html" title="Chapter 2. What's new" /><link rel="prev" href="ch02.html" title="Chapter 2. What's new" /><link rel="next" href="ch02s03.html" title="2.2.1" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.2.2</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><th width="60%" align="center">Chapter 2. What's new</th><td width="20%" align="right"> <a accesskey="n" href="ch02s03.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id930754"></a>2.2.2</h2></div></div></div><p><span class="emphasis"><em>Note:</em></span> this might the last release of the
+      library that will support PHP 4. Future releases (if any) should target
+      php 5.0 as minimum supported version.</p><div class="itemizedlist"><ul type="disc"><li><p>fixed: encoding of utf-8 characters outside of the BMP
+            plane</p></li><li><p>fixed: character set declarations surrounded by double
+            quotes were not recognized in http headers</p></li><li><p>fixed: be more tolerant in detection of charset in http
+            headers</p></li><li><p>fixed: fix detection of zlib.output_compression</p></li><li><p>fixed: use feof() to test if socket connections are to be
+            closed instead of the number of bytes read (rare bug when
+            communicating with some servers)</p></li><li><p>fixed: format floating point values using the correct
+            decimal separator even when php locale is set to one that uses
+            comma</p></li><li><p>fixed: improve robustness of the debugger when parsing weird
+            results from non-compliant servers</p></li><li><p>php warning when receiving 'false' in a bool value</p></li><li><p>improved: allow the add_to_map server method to add docs for
+            single params too</p></li><li><p>improved: added the possibility to wrap for exposure as
+            xmlrpc methods plain php class methods, object methods and even
+            whole classes</p></li></ul></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch02s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. What's new </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.2.1</td></tr></table></div></body></html>

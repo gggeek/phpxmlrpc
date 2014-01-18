@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>2.0 Release candidate 1</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="ch02.html" title="Chapter 2. What's new" /><link rel="prev" href="ch02s08.html" title="2.0 Release candidate 2" /><link rel="next" href="ch03.html" title="Chapter 3. System Requirements" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.0 Release candidate 1</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s08.html">Prev</a> </td><th width="60%" align="center">Chapter 2. What's new</th><td width="20%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id931426"></a>2.0 Release candidate 1</h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Support for HTTP proxies (new method:
+          <code class="code">xmlrpc_client::setProxy()</code>)</p></li><li><p>Support HTTP compression of both requests and responses.
+          Clients can specify what kind of compression they accept for
+          responses between deflate/gzip/any, and whether to compress the
+          requests. Servers by default compress responses to clients that
+          explicitly declare support for compression (new methods:
+          <code class="code">xmlrpc_client::setAcceptedCompression()</code>,
+          <code class="code">xmlrpc_client::setRequestCompression()</code>). Note that the
+          ZLIB php extension needs to be enabled in PHP to support
+          compression.</p></li><li><p>Implement HTTP 1.1 connections, but only if CURL is enabled
+          (added an extra parameter to
+          <code class="code">xmlrpc_client::xmlrpc_client</code> to set the desired HTTP
+          protocol at creation time and a new supported value for the last
+          parameter of <code class="code">xmlrpc_client::send</code>, which now can be
+          safely omitted if it has been specified at creation time)</p><p>With PHP versions greater than 4.3.8 keep-alives are enabled
+          by default for HTTP 1.1 connections. This should yield faster
+          execution times when making multiple calls in sequence to the same
+          xml-rpc server from a single client.</p></li><li><p>Introduce support for cookies. Cookies to be sent to the
+          server with a request can be set using
+          <code class="code">xmlrpc_client::setCookie()</code>, while cookies received from
+          the server are found in <code class="code">xmlrpcresp::cookies()</code>. It is
+          left to the user to check for validity of received cookies and
+          decide whether they apply to successive calls or not.</p></li><li><p>Better support for detecting different character set encodings
+          of xml-rpc requests and responses: both client and server objects
+          will correctly detect the charset encoding of received xml, and use
+          an appropriate xml parser.</p><p>Supported encodings are US-ASCII, UTF-8 and ISO-8859-1.</p></li><li><p>Added one new xmlrpcmsg constructor syntax, allowing usage of
+          a single string with the complete URL of the target server</p></li><li><p>Convert xml-rpc boolean values into native php values instead
+          of 0 and 1</p></li><li><p>Force the <code class="code">php_xmlrpc_encode</code> function to properly
+          encode numerically indexed php arrays into xml-rpc arrays
+          (numerically indexed php arrays always start with a key of 0 and
+          increment keys by values of 1)</p></li><li><p>Prevent the <code class="code">php_xmlrpc_encode</code> function from
+          further re-encoding any objects of class <code class="code">xmlrpcval</code> that
+          are passed to it. This allows to call the function with arguments
+          consisting of mixed php values / xmlrpcval objects.</p></li><li><p>Allow a server to NOT respond to system.* method calls
+          (setting the <code class="code">$server-&gt;allow_system_funcs</code>
+          property).</p></li><li><p>Implement a new xmlrpcval method to determine if a value of
+          type struct has a member of a given name without having to loop
+          trough all members: <code class="code">xmlrpcval::structMemExists()</code></p></li><li><p>Expand methods <code class="code">xmlrpcval::addArray</code>,
+          <code class="code">addScalar</code> and <code class="code">addStruct</code> allowing extra php
+          values to be added to xmlrpcval objects already formed.</p></li><li><p>Let the <code class="code">xmlrpc_client::send</code> method accept an XML
+          string for sending instead of an xmlrpcmsg object, to facilitate
+          debugging and integration with the php native xmlrpc
+          extension</p></li><li><p>Extend the <code class="code">php_xmlrpc_encode</code> and
+          <code class="code">php_xmlrpc_decode</code> functions to allow serialization and
+          rebuilding of PHP objects. To successfully rebuild a serialized
+          object, the object class must be defined in the deserializing end of
+          the transfer. Note that object members of type resource will be
+          deserialized as NULL values.</p><p>Note that his has been implemented adding a "php_class"
+          attribute to xml representation of xmlrpcval of STRUCT type, which,
+          strictly speaking, breaks the xml-rpc spec. Other xmlrpc
+          implementations are supposed to ignore such an attribute (unless
+          they implement a brain-dead custom xml parser...), so it should be
+          safe enabling it in heterogeneous environments. The activation of
+          this feature is done by usage of an option passed as second
+          parameter to both <code class="code">php_xmlrpc_encode</code> and
+          <code class="code">php_xmlrpc_decode</code>.</p></li><li><p>Extend the <code class="code">php_xmlrpc_encode</code> function to allow
+          automatic serialization of iso8601-conforming php strings as
+          datetime.iso8601 xmlrpcvals, by usage of an optional
+          parameter</p></li><li><p>Added an automatic stub code generator for converting xmlrpc
+          methods to php functions and vice-versa.</p><p>This is done via two new functions:
+          <code class="code">wrap_php_function</code> and <code class="code">wrap_xmlrpc_method</code>,
+          and has many caveats, with php being a typeless language and
+          all...</p><p>With PHP versions lesser than 5.0.3 wrapping of php functions
+          into xmlrpc methods is not supported yet.</p></li><li><p>Allow object methods to be used in server dispatch map</p></li><li><p>Added a complete debugger solution, in the
+          <code class="filename">debugger</code> folder</p></li><li><p>Added configurable server-side debug messages, controlled by
+          the new method <code class="code">xmlrpc_server::SetDebug()</code>. At level 0,
+          no debug messages are sent to the client; level 1 is the same as the
+          old behaviour; at level 2 a lot more info is echoed back to the
+          client, regarding the received call; at level 3 all warnings raised
+          during server processing are trapped (this prevents breaking the xml
+          to be echoed back to the client) and added to the debug info sent
+          back to the client</p></li><li><p>New XML parsing code, yields smaller memory footprint and
+          faster execution times, not to mention complete elimination of the
+          dreaded <code class="filename">eval()</code> construct, so prone to code
+          injection exploits</p></li><li><p>Rewritten most of the error messages, making text more
+          explicative</p></li></ul></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s08.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.0 Release candidate 2 </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. System Requirements</td></tr></table></div></body></html>

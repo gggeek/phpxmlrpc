@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>xmlrpc_client</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="ch07.html" title="Chapter 7. Class documentation" /><link rel="prev" href="ch07s02.html" title="xmlrpcmsg" /><link rel="next" href="ch07s04.html" title="xmlrpcresp" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">xmlrpc_client</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch07s02.html">Prev</a> </td><th width="60%" align="center">Chapter 7. Class documentation</th><td width="20%" align="right"> <a accesskey="n" href="ch07s04.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="xmlrpc-client"></a>xmlrpc_client</h2></div></div></div><p>This is the basic class used to represent a client of an XML-RPC
+      server.</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id934526"></a>Creation</h3></div></div></div><p>The constructor accepts one of two possible syntaxes:</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">xmlrpc_clientnew
+            <b class="fsfunc">xmlrpc_client</b>(</code></td><td>string<var class="pdparam">$server_url</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">xmlrpc_clientnew
+            <b class="fsfunc">xmlrpc_client</b>(</code></td><td>string<var class="pdparam">$server_path</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$server_hostname</var>, </td></tr><tr><td> </td><td>int<var class="pdparam">$server_port</var>80, </td></tr><tr><td> </td><td>string<var class="pdparam">$transport</var>'http'<code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>Here are a couple of usage examples of the first form:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">$client&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_client</span><span style="color: #007700">(</span><span style="color: #DD0000">"http://phpxmlrpc.sourceforge.net/server.php"</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$another_client&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_client</span><span style="color: #007700">(</span><span style="color: #DD0000">"https://james:bond@secret.service.com:443/xmlrpcserver?agent=007"</span><span style="color: #007700">);</span>
+</span>
+</code></pre><p>The second syntax does not allow to express a username and
+        password to be used for basic HTTP authorization as in the second
+        example above, but instead it allows to choose whether xmlrpc calls
+        will be made using the HTTP 1.0 or 1.1 protocol.</p><p>Here's another example client set up to query Userland's XML-RPC
+        server at <span class="emphasis"><em>betty.userland.com</em></span>:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">$client&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_client</span><span style="color: #007700">(</span><span style="color: #DD0000">"/RPC2"</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">"betty.userland.com"</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">80</span><span style="color: #007700">);</span>
+</span>
+</code></pre><p>The <em class="parameter"><code>server_port</code></em> parameter is optional,
+        and if omitted will default to 80 when using HTTP and 443 when using
+        HTTPS (see the <a class="xref" href="ch07s03.html#xmlrpc-client-send" title="send">xmlrpc_client-&gt;send</a> method
+        below).</p><p>The <em class="parameter"><code>transport</code></em> parameter is optional, and
+        if omitted will default to 'http'. Allowed values are either
+        '<span class="symbol">http'</span>, '<span class="symbol">https</span>' or
+        '<span class="symbol">http11'</span>. Its value can be overridden with every call
+        to the <code class="methodname">send</code> method. See the
+        <code class="methodname">send</code> method below for more details about the
+        meaning of the different values.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id934666"></a>Methods</h3></div></div></div><p>This class supports the following methods.</p><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="xmlrpc-client-send"></a>send</h4></div></div></div><p>This method takes the forms:</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">xmlrpcresp<b class="fsfunc">send</b>(</code></td><td>xmlrpcmsg<var class="pdparam">$xmlrpc_message</var>, </td></tr><tr><td> </td><td>int<var class="pdparam">$timeout</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$transport</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">array<b class="fsfunc">send</b>(</code></td><td>array<var class="pdparam">$xmlrpc_messages</var>, </td></tr><tr><td> </td><td>int<var class="pdparam">$timeout</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$transport</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">xmlrpcresp<b class="fsfunc">send</b>(</code></td><td>string<var class="pdparam">$xml_payload</var>, </td></tr><tr><td> </td><td>int<var class="pdparam">$timeout</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$transport</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>Where <em class="parameter"><code>xmlrpc_message</code></em> is an instance of
+          <code class="classname">xmlrpcmsg</code> (see <a class="xref" href="ch07s02.html" title="xmlrpcmsg">xmlrpcmsg</a>),
+          and <em class="parameter"><code>response</code></em> is an instance of
+          <code class="classname">xmlrpcresp</code> (see <a class="xref" href="ch07s04.html" title="xmlrpcresp">xmlrpcresp</a>).</p><p><em class="parameter"><code>If xmlrpc_messages</code></em> is an array of
+          message instances, <code class="code">responses</code> will be an array of
+          response instances. The client will try to make use of a single
+          <code class="code">system.multicall</code> xml-rpc method call to forward to the
+          server all the messages in a single HTTP round trip, unless
+          <code class="code">$client-&gt;no_multicall</code> has been previously set to
+          <code class="code">TRUE</code> (see the multicall method below), in which case
+          many consecutive xmlrpc requests will be sent.</p><p>The third syntax allows to build by hand (or any other means)
+          a complete xmlrpc request message, and send it to the server.
+          <em class="parameter"><code>xml_payload</code></em> should be a string containing the
+          complete xml representation of the request. It is e.g. useful when,
+          for maximal speed of execution, the request is serialized into a
+          string using the native php xmlrpc functions (see <a class="ulink" href="http://www.php.net/xmlrpc" target="_top">the php manual on
+          xmlrpc</a>).</p><p>The <em class="parameter"><code>timeout</code></em> is optional, and will be
+          set to <code class="literal">0</code> (wait for platform-specific predefined
+          timeout) if omitted. This timeout value is passed to
+          <code class="function">fsockopen()</code>. It is also used for detecting
+          server timeouts during communication (i.e. if the server does not
+          send anything to the client for <em class="parameter"><code>timeout</code></em>
+          seconds, the connection will be closed).</p><p>The <em class="parameter"><code>transport</code></em> parameter is optional,
+          and if omitted will default to the transport set using instance
+          creator or 'http' if omitted. The only other valid values are
+          'https', which will use an SSL HTTP connection to connect to the
+          remote server, and 'http11'. Note that your PHP must have the "curl"
+          extension compiled in order to use both these features. Note that
+          when using SSL you should normally set your port number to 443,
+          unless the SSL server you are contacting runs at any other
+          port.</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>PHP 4.0.6 has a bug which prevents SSL working.</p></div><p>In addition to low-level errors, the XML-RPC server you were
+          querying may return an error in the
+          <code class="classname">xmlrpcresp</code> object. See <a class="xref" href="ch07s04.html" title="xmlrpcresp">xmlrpcresp</a> for details of how to handle these
+          errors.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="multicall"></a>multiCall</h4></div></div></div><p>This method takes the form:</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">array<b class="fsfunc">multiCall</b>(</code></td><td>array<var class="pdparam">$messages</var>, </td></tr><tr><td> </td><td>int<var class="pdparam">$timeout</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$transport</var>, </td></tr><tr><td> </td><td>bool<var class="pdparam">$fallback</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method is used to boxcar many method calls in a single
+          xml-rpc request. It will try first to make use of the
+          <code class="code">system.multicall</code> xml-rpc method call, and fall back to
+          executing many separate requests if the server returns any
+          error.</p><p><em class="parameter"><code>msgs</code></em> is an array of
+          <code class="classname">xmlrpcmsg</code> objects (see <a class="xref" href="ch07s02.html" title="xmlrpcmsg">xmlrpcmsg</a>), and <em class="parameter"><code>response</code></em> is an
+          array of <code class="classname">xmlrpcresp</code> objects (see <a class="xref" href="ch07s04.html" title="xmlrpcresp">xmlrpcresp</a>).</p><p>The <em class="parameter"><code>timeout</code></em> and
+          <em class="parameter"><code>transport</code></em> parameters are optional, and behave
+          as in the <code class="methodname">send</code> method above.</p><p>The <em class="parameter"><code>fallback</code></em> parameter is optional, and
+          defaults to <code class="constant">TRUE</code>. When set to
+          <code class="constant">FALSE</code> it will prevent the client to try using
+          many single method calls in case of failure of the first multicall
+          request. It should be set only when the server is known to support
+          the multicall extension.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935048"></a>setAcceptedCompression</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setAcceptedCompression</b>(</code></td><td>string<var class="pdparam">$compressionmethod</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method defines whether the client will accept compressed
+          xml payload forming the bodies of the xmlrpc responses received from
+          servers. Note that enabling reception of compressed responses merely
+          adds some standard http headers to xmlrpc requests. It is up to the
+          xmlrpc server to return compressed responses when receiving such
+          requests. Allowed values for
+          <em class="parameter"><code>compressionmethod</code></em> are: 'gzip', 'deflate',
+          'any' or null (with any meaning either gzip or deflate).</p><p>This requires the "zlib" extension to be enabled in your php
+          install. If it is, by default <code class="classname">xmlrpc_client</code>
+          instances will enable reception of compressed content.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935091"></a>setCaCertificate</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setCaCertificate</b>(</code></td><td>string<var class="pdparam">$certificate</var>, </td></tr><tr><td> </td><td>bool<var class="pdparam">$is_dir</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method sets an optional certificate to be used in
+          SSL-enabled communication to validate a remote server with (when the
+          <em class="parameter"><code>server_method</code></em> is set to 'https' in the
+          client's construction or in the send method and
+          <code class="methodname">SetSSLVerifypeer</code> has been set to
+          <code class="constant">TRUE</code>).</p><p>The <em class="parameter"><code>certificate</code></em> parameter must be the
+          filename of a PEM formatted certificate, or a directory containing
+          multiple certificate files. The <em class="parameter"><code>is_dir</code></em>
+          parameter defaults to <code class="constant">FALSE</code>, set it to
+          <code class="constant">TRUE</code> to specify that
+          <em class="parameter"><code>certificate</code></em> indicates a directory instead of
+          a single file.</p><p>This requires the "curl" extension to be compiled into your
+          installation of PHP. For more details see the man page for the
+          <code class="function">curl_setopt</code> function.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935172"></a>setCertificate</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setCertificate</b>(</code></td><td>string<var class="pdparam">$certificate</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$passphrase</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method sets the optional certificate and passphrase used
+          in SSL-enabled communication with a remote server (when the
+          <em class="parameter"><code>server_method</code></em> is set to 'https' in the
+          client's construction or in the send method).</p><p>The <em class="parameter"><code>certificate</code></em> parameter must be the
+          filename of a PEM formatted certificate. The
+          <em class="parameter"><code>passphrase</code></em> parameter must contain the
+          password required to use the certificate.</p><p>This requires the "curl" extension to be compiled into your
+          installation of PHP. For more details see the man page for the
+          <code class="function">curl_setopt</code> function.</p><p>Note: to retrieve information about the client certificate on
+          the server side, you will need to look into the environment
+          variables which are set up by the webserver. Different webservers
+          will typically set up different variables.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935237"></a>setCookie</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setCookie</b>(</code></td><td>string<var class="pdparam">$name</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$value</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$path</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$domain</var>, </td></tr><tr><td> </td><td>int<var class="pdparam">$port</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method sets a cookie that will be sent to the xmlrpc
+          server along with every further request (useful e.g. for keeping
+          session info outside of the xml-rpc payload).</p><p><em class="parameter"><code>$value</code></em> is optional, and defaults to
+          null.</p><p><em class="parameter"><code>$path, $domain and $port</code></em> are optional,
+          and will be omitted from the cookie header if unspecified. Note that
+          setting any of these values will turn the cookie into a 'version 1'
+          cookie, that might not be fully supported by the server (see RFC2965
+          for more details).</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935310"></a>setCredentials</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setCredentials</b>(</code></td><td>string<var class="pdparam">$username</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$password</var>, </td></tr><tr><td> </td><td>int<var class="pdparam">$authtype</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method sets the username and password for authorizing the
+          client to a server. With the default (HTTP) transport, this
+          information is used for HTTP Basic authorization. Note that username
+          and password can also be set using the class constructor. With HTTP
+          1.1 and HTTPS transport, NTLM and Digest authentication protocols
+          are also supported. To enable them use the constants
+          <code class="constant">CURLAUTH_DIGEST</code> and
+          <code class="constant">CURLAUTH_NTLM</code> as values for the authtype
+          parameter.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935364"></a>setCurlOptions</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setCurlOptions</b>(</code></td><td>array<var class="pdparam">$options</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method allows to directly set any desired
+          option to manipulate the usage of the cURL client (when in cURL
+          mode). It can be used eg. to explicitly bind to an outgoing ip
+          address when the server is multihomed</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935395"></a>setDebug</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setDebug</b>(</code></td><td>int<var class="pdparam">$debugLvl</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p><em class="parameter"><code>debugLvl</code></em> is either <code class="literal">0,
+          1</code> or 2 depending on whether you require the client to
+          print debugging information to the browser. The default is not to
+          output this information (0).</p><p>The debugging information at level 1includes the raw data
+          returned from the XML-RPC server it was querying (including bot HTTP
+          headers and the full XML payload), and the PHP value the client
+          attempts to create to represent the value returned by the server. At
+          level2, the complete payload of the xmlrpc request is also printed,
+          before being sent t the server.</p><p>This option can be very useful when debugging servers as it
+          allows you to see exactly what the client sends and the server
+          returns.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935441"></a>setKey</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setKey</b>(</code></td><td>int<var class="pdparam">$key</var>, </td></tr><tr><td> </td><td>int<var class="pdparam">$keypass</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method sets the optional certificate key and passphrase
+          used in SSL-enabled communication with a remote server (when the
+          <em class="parameter"><code>transport</code></em> is set to 'https' in the client's
+          construction or in the send method).</p><p>This requires the "curl" extension to be compiled into your
+          installation of PHP. For more details see the man page for the
+          <code class="function">curl_setopt</code> function.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935491"></a>setProxy</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setProxy</b>(</code></td><td>string<var class="pdparam">$proxyhost</var>, </td></tr><tr><td> </td><td>int<var class="pdparam">$proxyport</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$proxyusername</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$proxypassword</var>, </td></tr><tr><td> </td><td>int<var class="pdparam">$authtype</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method enables calling servers via an HTTP proxy. The
+          <em class="parameter"><code>proxyusername</code></em>,<em class="parameter"><code>
+          proxypassword</code></em> and <em class="parameter"><code>authtype</code></em>
+          parameters are optional. <em class="parameter"><code>Authtype</code></em> defaults to
+          <code class="constant">CURLAUTH_BASIC</code> (Basic authentication protocol);
+          the only other valid value is the constant
+          <code class="constant">CURLAUTH_NTLM</code>, and has effect only when the
+          client uses the HTTP 1.1 protocol.</p><p>NB: CURL versions before 7.11.10 cannot use a proxy to
+          communicate with https servers.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935642"></a>setRequestCompression</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setRequestCompression</b>(</code></td><td>string<var class="pdparam">$compressionmethod</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method defines whether the xml payload forming the
+          request body will be sent to the server in compressed format, as per
+          the HTTP specification. This is particularly useful for large
+          request parameters and over slow network connections. Allowed values
+          for <em class="parameter"><code>compressionmethod</code></em> are: 'gzip', 'deflate',
+          'any' or null (with any meaning either gzip or deflate). Note that
+          there is no automatic fallback mechanism in place for errors due to
+          servers not supporting receiving compressed request bodies, so make
+          sure that the particular server you are querying does accept
+          compressed requests before turning it on.</p><p>This requires the "zlib" extension to be enabled in your php
+          install.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935682"></a>setSSLVerifyHost</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setSSLVerifyHost</b>(</code></td><td>int<var class="pdparam">$i</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method defines whether connections made to XML-RPC
+          backends via HTTPS should verify the remote host's SSL certificate's
+          common name (CN). By default, only the existence of a CN is checked.
+          <em class="parameter"><code><em class="parameter"><code>$i</code></em></code></em> should be an
+          integer value; 0 to not check the CN at all, 1 to merely check for
+          its existence, and 2 to check that the CN on the certificate matches
+          the hostname that is being connected to.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935719"></a>setSSLVerifyPeer</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">setSSLVerifyPeer</b>(</code></td><td>bool<var class="pdparam">$i</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method defines whether connections made to XML-RPC
+          backends via HTTPS should verify the remote host's SSL certificate,
+          and cause the connection to fail if the cert verification fails.
+          <em class="parameter"><code><em class="parameter"><code>$i</code></em></code></em> should be a boolean
+          value. Default value: <code class="constant">TRUE</code>. To specify custom
+          SSL certificates to validate the server with, use the
+          <code class="methodname">setCaCertificate</code> method.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935763"></a>setUserAgent</h4></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">void<b class="fsfunc">Useragent</b>(</code></td><td>string<var class="pdparam">$useragent</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>This method sets a custom user-agent that will be
+          used by the client in the http headers sent with the request. The
+          default value is built using the library name and version
+          constants.</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id935796"></a>Variables</h3></div></div></div><p>NB: direct manipulation of these variables is only recommended
+        for advanced users.</p><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935805"></a>no_multicall</h4></div></div></div><p>This member variable determines whether the multicall() method
+          will try to take advantage of the system.multicall xmlrpc method to
+          dispatch to the server an array of requests in a single http
+          roundtrip or simply execute many consecutive http calls. Defaults to
+          FALSE, but it will be enabled automatically on the first failure of
+          execution of system.multicall.</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id935816"></a>request_charset_encoding</h4></div></div></div><p>This is the charset encoding that will be used for serializing
+          request sent by the client.</p><p>If defaults to NULL, which means using US-ASCII and encoding
+          all characters outside of the ASCII range using their xml character
+          entity representation (this has the benefit that line end characters
+          will not be mangled in the transfer, a CR-LF will be preserved as
+          well as a singe LF).</p><p>Valid values are 'US-ASCII', 'UTF-8' and 'ISO-8859-1'</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="return-type"></a>return_type</h4></div></div></div><p>This member variable determines whether the value returned
+          inside an xmlrpcresp object as results of calls to the send() and
+          multicall() methods will be an xmlrpcval object, a plain php value
+          or a raw xml string. Allowed values are 'xmlrpcvals' (the default),
+          'phpvals' and 'xml'. To allow the user to differentiate between a
+          correct and a faulty response, fault responses will be returned as
+          xmlrpcresp objects in any case. Note that the 'phpvals' setting will
+          yield faster execution times, but some of the information from the
+          original response will be lost. It will be e.g. impossible to tell
+          whether a particular php string value was sent by the server as an
+          xmlrpc string or base64 value.</p><p>Example usage:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">$client&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_client</span><span style="color: #007700">(</span><span style="color: #DD0000">"phpxmlrpc.sourceforge.net/server"</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$client</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">return_type&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'phpvals'</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$message&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpcmsg</span><span style="color: #007700">(</span><span style="color: #DD0000">"examples.getStateName"</span><span style="color: #007700">,&nbsp;array(new&nbsp;</span><span style="color: #0000BB">xmlrpcval</span><span style="color: #007700">(</span><span style="color: #0000BB">23</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">"int"</span><span style="color: #007700">)));<br /></span><span style="color: #0000BB">$resp&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$client</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">send</span><span style="color: #007700">(</span><span style="color: #0000BB">$message</span><span style="color: #007700">);<br />if&nbsp;(</span><span style="color: #0000BB">$resp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">faultCode</span><span style="color: #007700">())&nbsp;echo&nbsp;</span><span style="color: #DD0000">'KO.&nbsp;Error:&nbsp;'</span><span style="color: #007700">.</span><span style="color: #0000BB">$resp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">faultString</span><span style="color: #007700">();&nbsp;else&nbsp;echo&nbsp;</span><span style="color: #DD0000">'OK:&nbsp;got&nbsp;'</span><span style="color: #007700">.</span><span style="color: #0000BB">$resp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">value</span><span style="color: #007700">();</span>
+</span>
+</code></pre><p>For more details about usage of the 'xml' value, see Appendix
+          A.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch07s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch07.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch07s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">xmlrpcmsg </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> xmlrpcresp</td></tr></table></div></body></html>

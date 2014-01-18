@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Appendix D. Usage of the debugger</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="index.html" title="XML-RPC for PHP" /><link rel="prev" href="apc.html" title="Appendix C. 'Enough of xmlrpcvals!': new style library usage" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix D. Usage of the debugger</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="apc.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> </td></tr></table><hr /></div><div class="appendix" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="debugger"></a>Appendix D. Usage of the debugger</h2></div></div></div><p>A webservice debugger is included in the library to help during
+    development and testing.</p><p>The interface should be self-explicative enough to need little
+    documentation.</p><div align="center"><img src="debugger.gif" align="middle" /></div><p>The most useful feature of the debugger is without doubt the "Show
+    debug info" option. It allows to have a screen dump of the complete http
+    communication between client and server, including the http headers as
+    well as the request and response payloads, and is invaluable when
+    troubleshooting problems with charset encoding, authentication or http
+    compression.</p><p>The debugger can take advantage of the JSONRPC library extension, to
+    allow debugging of JSON-RPC webservices, and of the JS-XMLRPC library
+    visual editor to allow easy mouse-driven construction of the payload for
+    remote methods. Both components have to be downloaded separately from the
+    sourceforge.net web pages and copied to the debugger directory to enable
+    the extra functionality:</p><div class="itemizedlist"><ul type="disc"><li><p>to enable jsonrpc functionality, download the PHP-XMLRPC
+          EXTRAS package, and copy the file <code class="filename">jsonrpc.inc</code>
+          either to the same directory as the debugger or somewhere in your
+          php include path</p></li></ul></div><div class="itemizedlist"><ul type="disc"><li><p>to enable the visual value editing dialog, download the
+          JS-XMLRPC library, and copy somewhere in the web root files
+          <code class="filename">visualeditor.php</code>,
+          <code class="filename">visualeditor.css</code> and the folders
+          <code class="filename">yui</code> and <code class="filename">img</code>. Then edit the
+          debugger file <code class="filename">controller.php</code> and set
+          appropriately the variable <code class="varname">$editorpath</code>.</p></li></ul></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="apc.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> </td></tr><tr><td width="40%" align="left" valign="top">Appendix C. 'Enough of xmlrpcvals!': new style library usage </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>

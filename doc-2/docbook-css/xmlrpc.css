@@ -1,0 +1,42 @@
+funcsynopsis>* {
+	margin-left:10%;
+	margin-right:10%;
+}
+
+funcprototype {
+	display: block;
+	text-align: justify;
+	font-family:monospace;
+}
+
+funcprototype:after {
+  	content:");";
+}
+
+funcdef:after {
+	content:"(";
+}
+
+paramdef type:after {
+	content:" ";
+}
+
+funcdef function {
+	font-weight:bold;
+}
+
+paramdef initializer:before
+{
+	content:" = ";
+}
+
+paramdef:after
+{
+  	content:",";
+}
+
+/* remove the extra comma after the last paramdef of a funcprotoype */
+paramdef:last-child:after
+{
+  	content:"";
+}

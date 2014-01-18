@@ -1,0 +1,14 @@
+/**
+ * CSS stylesheet for xmlrpc documentation.
+ * Applies to docbook-xslt generated content
+ *
+ * @version $Id: $
+ * @author Gaetano Giunta
+ * @copyright (c) 2007-2008 G. Giunta
+ * @license
+ */
+
+.programlisting {
+	background-color: #e0e0e0;
+	padding: 0.5em;
+}

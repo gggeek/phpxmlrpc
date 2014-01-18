@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Variables whose value can be modified</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="ch08.html" title="Chapter 8. Global variables" /><link rel="prev" href="ch08.html" title="Chapter 8. Global variables" /><link rel="next" href="ch09.html" title="Chapter 9. Helper functions" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Variables whose value can be modified</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch08.html">Prev</a> </td><th width="60%" align="center">Chapter 8. Global variables</th><td width="20%" align="right"> <a accesskey="n" href="ch09.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id937427"></a>Variables whose value can be modified</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="xmlrpc-defencoding"></a>xmlrpc_defencoding</h3></div></div></div><code class="fieldsynopsis"><span class="varname">$xmlrpc_defencoding </span><span class="initializer">= "UTF8"</span>;</code><p>This variable defines the character set encoding that will be
+        used by the xml-rpc client and server to decode the received messages,
+        when a specific charset declaration is not found (in the messages sent
+        non-ascii chars are always encoded using character references, so that
+        the produced xml is valid regardless of the charset encoding
+        assumed).</p><p>Allowed values: <code class="literal">"UTF8"</code>,
+        <code class="literal">"ISO-8859-1"</code>, <code class="literal">"ASCII".</code></p><p>Note that the appropriate RFC actually mandates that XML
+        received over HTTP without indication of charset encoding be treated
+        as US-ASCII, but many servers and clients 'in the wild' violate the
+        standard, and assume the default encoding is UTF-8.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id937475"></a>xmlrpc_internalencoding</h3></div></div></div><p><code class="fieldsynopsis"><span class="varname">$xmlrpc_internalencoding </span><span class="initializer">= "ISO-8859-1"</span>;</code>This variable defines the character set encoding
+        that the library uses to transparently encode into valid XML the
+        xml-rpc values created by the user and to re-encode the received
+        xml-rpc values when it passes them to the PHP application. It only
+        affects xml-rpc values of string type. It is a separate value from
+        xmlrpc_defencoding, allowing e.g. to send/receive xml messages encoded
+        on-the-wire in US-ASCII and process them as UTF-8. It defaults to the
+        character set used internally by PHP (unless you are running an
+        MBString-enabled installation), so you should change it only in
+        special situations, if e.g. the string values exchanged in the xml-rpc
+        messages are directly inserted into / fetched from a database
+        configured to return UTF8 encoded strings to PHP. Example
+        usage:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #007700">&lt;?</span><span style="color: #0000BB">php<br /><br /></span><span style="color: #007700">include(</span><span style="color: #DD0000">'xmlrpc.inc'</span><span style="color: #007700">);<br /></span><span style="color: #0000BB">$xmlrpc_internalencoding&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'UTF-8'</span><span style="color: #007700">;&nbsp;</span><span style="color: #FF8000">//&nbsp;this&nbsp;has&nbsp;to&nbsp;be&nbsp;set&nbsp;after&nbsp;the&nbsp;inclusion&nbsp;above<br /></span><span style="color: #0000BB">$v&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpcval</span><span style="color: #007700">(</span><span style="color: #DD0000">'Îºá½¹ÏÎ¼Îµ'</span><span style="color: #007700">);&nbsp;</span><span style="color: #FF8000">//&nbsp;This&nbsp;xmlrpc&nbsp;value&nbsp;will&nbsp;be&nbsp;correctly&nbsp;serialized&nbsp;as&nbsp;the&nbsp;greek&nbsp;word&nbsp;'kosme'</span>
+</span>
+</code></pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id937501"></a>xmlrpcName</h3></div></div></div><p><code class="fieldsynopsis"><span class="varname">$xmlrpcName </span><span class="initializer">= "XML-RPC for PHP"</span>;</code>The string representation of the name of the XML-RPC
+        for PHP library. It is used by the client for building the User-Agent
+        HTTP header that is sent with every request to the server. You can
+        change its value if you need to customize the User-Agent
+        string.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id937522"></a>xmlrpcVersion</h3></div></div></div><p><code class="fieldsynopsis"><span class="varname">$xmlrpcVersion </span><span class="initializer">= "2.2"</span>;</code>The string representation of the version number of
+        the XML-RPC for PHP library in use. It is used by the client for
+        building the User-Agent HTTP header that is sent with every request to
+        the server. You can change its value if you need to customize the
+        User-Agent string.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id937542"></a>xmlrpc_null_extension</h3></div></div></div><p>When set to <code class="constant">TRUE</code>, the lib will enable
+        support for the &lt;NIL/&gt; (and &lt;EX:NIL/&gt;) xmlrpc value, as
+        per the extension to the standard proposed here. This means that
+        &lt;NIL/&gt; and &lt;EX:NIL/&gt; tags received will be parsed as valid
+        xmlrpc, and the corresponding xmlrpcvals will return "null" for
+        <code class="methodname">scalarTyp()</code>.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id937560"></a>xmlrpc_null_apache_encoding</h3></div></div></div><p>When set to <code class="literal">TRUE</code>, php NULL values encoded
+        into <code class="classname">xmlrpcval</code> objects get serialized using the
+        <code class="literal">&lt;EX:NIL/&gt;</code> tag instead of
+        <code class="literal">&lt;NIL/&gt;</code>. Please note that both forms are
+        always accepted as input regardless of the value of this
+        variable.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch08.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch08.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch09.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 8. Global variables </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 9. Helper functions</td></tr></table></div></body></html>

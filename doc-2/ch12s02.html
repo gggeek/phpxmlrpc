@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Is there any limitation on the size of the requests / responses that can be successfully sent?</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="ch12.html" title="Chapter 12. Frequently Asked Questions" /><link rel="prev" href="ch12.html" title="Chapter 12. Frequently Asked Questions" /><link rel="next" href="ch12s03.html" title="My server (client) returns an error whenever the client (server) returns accented characters" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Is there any limitation on the size of the requests / responses
+      that can be successfully sent?</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch12.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Frequently Asked Questions</th><td width="20%" align="right"> <a accesskey="n" href="ch12s03.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id938956"></a>Is there any limitation on the size of the requests / responses
+      that can be successfully sent?</h2></div></div></div><p>Yes. But I have no hard figure to give; it most likely will depend
+      on the version of PHP in usage and its configuration.</p><p>Keep in mind that this library is not optimized for speed nor for
+      memory usage. Better alternatives exist when there are strict
+      requirements on throughput or resource usage, such as the php native
+      xmlrpc extension (see the PHP manual for more information).</p><p>Keep in mind also that HTTP is probably not the best choice in
+      such a situation, and XML is a deadly enemy. CSV formatted data over
+      socket would be much more efficient.</p><p>If you really need to move a massive amount of data around, and
+      you are crazy enough to do it using phpxmlrpc, your best bet is to
+      bypass usage of the xmlrpcval objects, at least in the decoding phase,
+      and have the server (or client) object return to the calling function
+      directly php values (see <code class="varname">xmlrpc_client::return_type</code>
+      and <code class="varname">xmlrpc_server::functions_parameters_type</code> for more
+      details).</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch12.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch12.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch12s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 12. Frequently Asked Questions </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> My server (client) returns an error whenever the client (server)
+      returns accented characters</td></tr></table></div></body></html>

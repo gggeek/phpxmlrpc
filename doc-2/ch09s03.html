@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Automatic conversion of php functions into xmlrpc methods (and vice versa)</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="ch09.html" title="Chapter 9. Helper functions" /><link rel="prev" href="ch09s02.html" title="Easy use with nested PHP values" /><link rel="next" href="ch09s04.html" title="Functions removed from the library" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Automatic conversion of php functions into xmlrpc methods (and
+      vice versa)</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09s02.html">Prev</a> </td><th width="60%" align="center">Chapter 9. Helper functions</th><td width="20%" align="right"> <a accesskey="n" href="ch09s04.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id938271"></a>Automatic conversion of php functions into xmlrpc methods (and
+      vice versa)</h2></div></div></div><p>For the extremely lazy coder, helper functions have been added
+      that allow to convert a php function into an xmlrpc method, and a
+      remotely exposed xmlrpc method into a local php function - or a set of
+      methods into a php class. Note that these comes with many caveat.</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id938280"></a>wrap_xmlrpc_method</h3></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">string<b class="fsfunc">wrap_xmlrpc_method</b>(</code></td><td>$client, </td></tr><tr><td> </td><td>$methodname, </td></tr><tr><td> </td><td>$extra_options<code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">string<b class="fsfunc">wrap_xmlrpc_method</b>(</code></td><td>$client, </td></tr><tr><td> </td><td>$methodname, </td></tr><tr><td> </td><td>$signum, </td></tr><tr><td> </td><td>$timeout, </td></tr><tr><td> </td><td>$protocol, </td></tr><tr><td> </td><td>$funcname<code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>Given an xmlrpc server and a method name, creates a php wrapper
+        function that will call the remote method and return results using
+        native php types for both params and results. The generated php
+        function will return an xmlrpcresp object for failed xmlrpc
+        calls.</p><p>The second syntax is deprecated, and is listed here only for
+        backward compatibility.</p><p>The server must support the
+        <code class="methodname">system.methodSignature</code> xmlrpc method call for
+        this function to work.</p><p>The <em class="parameter"><code>client</code></em> param must be a valid
+        xmlrpc_client object, previously created with the address of the
+        target xmlrpc server, and to which the preferred communication options
+        have been set.</p><p>The optional parameters can be passed as array key,value pairs
+        in the <em class="parameter"><code>extra_options</code></em> param.</p><p>The <em class="parameter"><code>signum</code></em> optional param has the purpose
+        of indicating which method signature to use, if the given server
+        method has multiple signatures (defaults to 0).</p><p>The <em class="parameter"><code>timeout</code></em> and
+        <em class="parameter"><code>protocol</code></em> optional params are the same as in the
+        <code class="methodname">xmlrpc_client::send()</code> method.</p><p>If set, the optional <em class="parameter"><code>new_function_name</code></em>
+        parameter indicates which name should be used for the generated
+        function. In case it is not set the function name will be
+        auto-generated.</p><p>If the <code class="literal">return_source</code> optional parameter is
+        set, the function will return the php source code to build the wrapper
+        function, instead of evaluating it (useful to save the code and use it
+        later as stand-alone xmlrpc client).</p><p>If the <code class="literal">encode_php_objs</code> optional parameter is
+        set, instances of php objects later passed as parameters to the newly
+        created function will receive a 'special' treatment that allows the
+        server to rebuild them as php objects instead of simple arrays. Note
+        that this entails using a "slightly augmented" version of the xmlrpc
+        protocol (ie. using element attributes), which might not be understood
+        by xmlrpc servers implemented using other libraries.</p><p>If the <code class="literal">decode_php_objs</code> optional parameter is
+        set, instances of php objects that have been appropriately encoded by
+        the server using a coordinate option will be deserialized as php
+        objects instead of simple arrays (the same class definition should be
+        present server side and client side).</p><p><span class="emphasis"><em>Note that this might pose a security risk</em></span>,
+        since in order to rebuild the object instances their constructor
+        method has to be invoked, and this means that the remote server can
+        trigger execution of unforeseen php code on the client: not really a
+        code injection, but almost. Please enable this option only when you
+        trust the remote server.</p><p>In case of an error during generation of the wrapper function,
+        FALSE is returned, otherwise the name (or source code) of the new
+        function.</p><p>Known limitations: server must support
+        <code class="methodname">system.methodsignature</code> for the wanted xmlrpc
+        method; for methods that expose multiple signatures, only one can be
+        picked; for remote calls with nested xmlrpc params, the caller of the
+        generated php function has to encode on its own the params passed to
+        the php function if these are structs or arrays whose (sub)members
+        include values of type base64.</p><p>Note: calling the generated php function 'might' be slow: a new
+        xmlrpc client is created on every invocation and an xmlrpc-connection
+        opened+closed. An extra 'debug' param is appended to the parameter
+        list of the generated php function, useful for debugging
+        purposes.</p><p>Example usage:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">$c&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_client</span><span style="color: #007700">(</span><span style="color: #DD0000">'http://phpxmlrpc.sourceforge.net/server.php'</span><span style="color: #007700">);<br /><br /></span><span style="color: #0000BB">$function&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">wrap_xmlrpc_method</span><span style="color: #007700">(</span><span style="color: #0000BB">$client</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'examples.getStateName'</span><span style="color: #007700">);<br /><br />if&nbsp;(!</span><span style="color: #0000BB">$function</span><span style="color: #007700">)<br />&nbsp;&nbsp;die(</span><span style="color: #DD0000">'Cannot&nbsp;introspect&nbsp;remote&nbsp;method'</span><span style="color: #007700">);<br />else&nbsp;{<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$stateno&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">15</span><span style="color: #007700">;<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$statename&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">$function</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">);<br />&nbsp;&nbsp;if&nbsp;(</span><span style="color: #0000BB">is_a</span><span style="color: #007700">(</span><span style="color: #0000BB">$statename</span><span style="color: #007700">,&nbsp;</span><span style="color: #DD0000">'xmlrpcresp'</span><span style="color: #007700">))&nbsp;</span><span style="color: #FF8000">//&nbsp;call&nbsp;failed<br />&nbsp;&nbsp;</span><span style="color: #007700">{<br />&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;</span><span style="color: #DD0000">'Call&nbsp;failed:&nbsp;'</span><span style="color: #007700">.</span><span style="color: #0000BB">$statename</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">faultCode</span><span style="color: #007700">().</span><span style="color: #DD0000">'.&nbsp;Calling&nbsp;again&nbsp;with&nbsp;debug&nbsp;on'</span><span style="color: #007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">$function</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">true</span><span style="color: #007700">);<br />&nbsp;&nbsp;}<br />&nbsp;&nbsp;else<br />&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;</span><span style="color: #DD0000">"OK,&nbsp;state&nbsp;nr.&nbsp;</span><span style="color: #0000BB">$stateno</span><span style="color: #DD0000">&nbsp;is&nbsp;</span><span style="color: #0000BB">$statename</span><span style="color: #DD0000">"</span><span style="color: #007700">;<br />}</span>
+</span>
+</code></pre></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="wrap_php_function"></a>wrap_php_function</h3></div></div></div><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">array<b class="fsfunc">wrap_php_function</b>(</code></td><td>string<var class="pdparam">$funcname</var>, </td></tr><tr><td> </td><td>string<var class="pdparam">$wrapper_function_name</var>, </td></tr><tr><td> </td><td>array<var class="pdparam">$extra_options</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>Given a user-defined PHP function, create a PHP 'wrapper'
+        function that can be exposed as xmlrpc method from an xmlrpc_server
+        object and called from remote clients, and return the appropriate
+        definition to be added to a server's dispatch map.</p><p>The optional <em class="parameter"><code>$wrapper_function_name</code></em>
+        specifies the name that will be used for the auto-generated
+        function.</p><p>Since php is a typeless language, to infer types of input and
+        output parameters, it relies on parsing the javadoc-style comment
+        block associated with the given function. Usage of xmlrpc native types
+        (such as datetime.dateTime.iso8601 and base64) in the docblock @param
+        tag is also allowed, if you need the php function to receive/send data
+        in that particular format (note that base64 encoding/decoding is
+        transparently carried out by the lib, while datetime vals are passed
+        around as strings).</p><p>Known limitations: requires PHP 5.0.3 +; only works for
+        user-defined functions, not for PHP internal functions (reflection
+        does not support retrieving number/type of params for those); the
+        wrapped php function will not be able to programmatically return an
+        xmlrpc error response.</p><p>If the <code class="literal">return_source</code> optional parameter is
+        set, the function will return the php source code to build the wrapper
+        function, instead of evaluating it (useful to save the code and use it
+        later in a stand-alone xmlrpc server). It will be in the stored in the
+        <code class="literal">source</code> member of the returned array.</p><p>If the <code class="literal">suppress_warnings</code> optional parameter
+        is set, any runtime warning generated while processing the
+        user-defined php function will be catched and not be printed in the
+        generated xml response.</p><p>If the <em class="parameter"><code>extra_options</code></em> array contains the
+        <code class="literal">encode_php_objs</code> value, wrapped functions returning
+        php objects will generate "special" xmlrpc responses: when the xmlrpc
+        decoding of those responses is carried out by this same lib, using the
+        appropriate param in php_xmlrpc_decode(), the objects will be
+        rebuilt.</p><p>In short: php objects can be serialized, too (except for their
+        resource members), using this function. Other libs might choke on the
+        very same xml that will be generated in this case (i.e. it has a
+        nonstandard attribute on struct element tags)</p><p>If the <code class="literal">decode_php_objs</code> optional parameter is
+        set, instances of php objects that have been appropriately encoded by
+        the client using a coordinate option will be deserialized and passed
+        to the user function as php objects instead of simple arrays (the same
+        class definition should be present server side and client
+        side).</p><p><span class="emphasis"><em>Note that this might pose a security risk</em></span>,
+        since in order to rebuild the object instances their constructor
+        method has to be invoked, and this means that the remote client can
+        trigger execution of unforeseen php code on the server: not really a
+        code injection, but almost. Please enable this option only when you
+        trust the remote clients.</p><p>Example usage:</p><pre class="programlisting"><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php&nbsp;</span><span style="color: #FF8000">/**<br />*&nbsp;State&nbsp;name&nbsp;from&nbsp;state&nbsp;number&nbsp;decoder.&nbsp;NB:&nbsp;do&nbsp;NOT&nbsp;remove&nbsp;this&nbsp;comment&nbsp;block.<br />*&nbsp;@param&nbsp;integer&nbsp;$stateno&nbsp;the&nbsp;state&nbsp;number<br />*&nbsp;@return&nbsp;string&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;state&nbsp;(or&nbsp;error&nbsp;description)<br />*/<br /></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">findstate</span><span style="color: #007700">(</span><span style="color: #0000BB">$stateno</span><span style="color: #007700">)<br />{<br />&nbsp;&nbsp;global&nbsp;</span><span style="color: #0000BB">$stateNames</span><span style="color: #007700">;<br />&nbsp;&nbsp;if&nbsp;(isset(</span><span style="color: #0000BB">$stateNames</span><span style="color: #007700">[</span><span style="color: #0000BB">$stateno</span><span style="color: #007700">-</span><span style="color: #0000BB">1</span><span style="color: #007700">]))<br />&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #0000BB">$stateNames</span><span style="color: #007700">[</span><span style="color: #0000BB">$stateno</span><span style="color: #007700">-</span><span style="color: #0000BB">1</span><span style="color: #007700">];<br />&nbsp;&nbsp;}<br />&nbsp;&nbsp;else<br />&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;</span><span style="color: #DD0000">"I&nbsp;don't&nbsp;have&nbsp;a&nbsp;state&nbsp;for&nbsp;the&nbsp;index&nbsp;'"&nbsp;</span><span style="color: #007700">.&nbsp;</span><span style="color: #0000BB">$stateno&nbsp;</span><span style="color: #007700">.&nbsp;</span><span style="color: #DD0000">"'"</span><span style="color: #007700">;<br />&nbsp;&nbsp;}<br />}<br /><br /></span><span style="color: #FF8000">//&nbsp;wrap&nbsp;php&nbsp;function,&nbsp;build&nbsp;xmlrpc&nbsp;server<br /></span><span style="color: #0000BB">$methods&nbsp;</span><span style="color: #007700">=&nbsp;array();<br /></span><span style="color: #0000BB">$findstate_sig&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">wrap_php_function</span><span style="color: #007700">(</span><span style="color: #DD0000">'findstate'</span><span style="color: #007700">);<br />if&nbsp;(</span><span style="color: #0000BB">$findstate_sig</span><span style="color: #007700">)<br />&nbsp;&nbsp;</span><span style="color: #0000BB">$methods</span><span style="color: #007700">[</span><span style="color: #DD0000">'examples.getStateName'</span><span style="color: #007700">]&nbsp;=&nbsp;</span><span style="color: #0000BB">$findstate_sig</span><span style="color: #007700">;<br /></span><span style="color: #0000BB">$srv&nbsp;</span><span style="color: #007700">=&nbsp;new&nbsp;</span><span style="color: #0000BB">xmlrpc_server</span><span style="color: #007700">(</span><span style="color: #0000BB">$methods</span><span style="color: #007700">);</span>
+</span>
+</code></pre></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch09.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch09s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Easy use with nested PHP values </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Functions removed from the library</td></tr></table></div></body></html>

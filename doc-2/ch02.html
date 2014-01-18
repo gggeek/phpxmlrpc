@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 2. What's new</title><link rel="stylesheet" href="xmlrpc.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.74.3" /><link rel="home" href="index.html" title="XML-RPC for PHP" /><link rel="up" href="index.html" title="XML-RPC for PHP" /><link rel="prev" href="ch01.html" title="Chapter 1. Introduction" /><link rel="next" href="ch02s02.html" title="2.2.2" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. What's new</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch02s02.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="news"></a>Chapter 2. What's new</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch02.html#id930465">3.0.0 beta</a></span></dt><dt><span class="sect1"><a href="ch02s02.html">2.2.2</a></span></dt><dt><span class="sect1"><a href="ch02s03.html">2.2.1</a></span></dt><dt><span class="sect1"><a href="ch02s04.html">2.2</a></span></dt><dt><span class="sect1"><a href="ch02s05.html">2.1</a></span></dt><dt><span class="sect1"><a href="ch02s06.html">2.0 final</a></span></dt><dt><span class="sect1"><a href="ch02s07.html">2.0 Release candidate 3</a></span></dt><dt><span class="sect1"><a href="ch02s08.html">2.0 Release candidate 2</a></span></dt><dt><span class="sect1"><a href="ch02s09.html">2.0 Release candidate 1</a></span></dt></dl></div><p><span class="emphasis"><em>Note:</em></span> not all items the following list have
+    (yet) been fully documented, and some might not be present in any other
+    chapter in the manual. To find a more detailed description of new
+    functions and methods please take a look at the source code of the
+    library, which is quite thoroughly commented in javadoc-like form.</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id930465"></a>3.0.0 beta</h2></div></div></div><p>This is the first release of the library to only support PHP 5.
+      Some legacy code has been removed, and support for features such as
+      exceptions and dateTime objects introduced.</p><p>The "beta" tag is meant to indicate the fact that the refactoring
+      has been more widespread than in precedent releases and that more
+      changes are likely to be introduced with time - the library is still
+      considered to be production quality.</p><div class="itemizedlist"><ul type="disc"><li><p>improved: removed all usage of php functions deprecated in
+            php 5.3, usage of assign-by-ref when creating new objects
+            etc...</p></li><li><p>improved: add support for the &lt;ex:nil/&gt; tag used by
+            the apache library, both in input and output</p></li><li><p>improved: add support for <code class="classname">dateTime</code>
+            objects in both in <code class="function">php_xmlrpc_encode</code> and as
+            parameter for constructor of
+            <code class="classname">xmlrpcval</code></p></li><li><p>improved: add support for timestamps as parameter for
+            constructor of <code class="classname">xmlrpcval</code></p></li><li><p>improved: add option 'dates_as_objects' to
+            <code class="function">php_xmlrpc_decode</code> to return
+            <code class="classname">dateTime</code> objects for xmlrpc
+            datetimes</p></li><li><p>improved: add new method
+            <code class="methodname">SetCurlOptions</code> to
+            <code class="classname">xmrlpc_client</code> to allow extra flexibility in
+            tweaking http config, such as explicitly binding to an ip
+            address</p></li><li><p>improved: add new method
+            <code class="methodname">SetUserAgent</code> to
+            <code class="classname">xmrlpc_client</code> to to allow having different
+            user-agent http headers</p></li><li><p>improved: add a new member variable in server class to allow
+            fine-tuning of the encoding of returned values when the server is
+            in 'phpvals' mode</p></li><li><p>improved: allow servers in 'xmlrpcvals' mode to also
+            register plain php functions by defining them in the dispatch map
+            with an added option</p></li><li><p>improved: catch exceptions thrown during execution of php
+            functions exposed as methods by the server</p></li><li><p>fixed: bad encoding if same object is encoded twice using
+            php_xmlrpc_encode</p></li></ul></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch02s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Introduction </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 2.2.2</td></tr></table></div></body></html>
