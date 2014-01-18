@@ -113,7 +113,8 @@ PHP-XMLRPC User manual
     url="http://usefulinc.com/">Useful Information Company</ulink>. As of the
     1.0 stable release, the project was opened to wider involvement and moved
     to <ulink
-    url="http://phpxmlrpc.sourceforge.net/">SourceForge</ulink>.</para>
+    url="http://phpxmlrpc.sourceforge.net/">SourceForge</ulink>; later, to <ulink
+    url="https://github.com/">Github</ulink></para>
 
     <para>A list of XML-RPC implementations for other languages such as Perl
     and Python can be found on the <ulink
@@ -1114,9 +1115,9 @@ PHP-XMLRPC User manual
         <listitem>
           <para>The <emphasis>XML-RPC for PHP</emphasis> development is hosted
           on <ulink
-          url="http://phpxmlrpc.sourceforge.net">phpxmlrpc.sourceforge.net</ulink>.
+          url="https://github.com/gggeek/phpxmlrpc">github.com/gggeek/phpxmlrpc</ulink>.
           Bugs, feature requests and patches can be posted to the <ulink
-          url="http://sourceforge.net/projects/phpxmlrpc">project's
+          url="https://github.com/gggeek/phpxmlrpc/issues">project's
           website</ulink>.</para>
         </listitem>
 
@@ -1337,9 +1338,9 @@ $myStruct = new xmlrpcval(
       array(
         "street" =&gt; new xmlrpcval("Fifht Ave", "string"),
         "city" =&gt; new xmlrpcval("NY", "string")
-      ), 
+      ),
       "struct")
-  ), 
+  ),
   "struct");
 </programlisting>
 
@@ -2387,7 +2388,7 @@ $client = new xmlrpc_client("/RPC2", "betty.userland.com", 80);
           <para>Example usage:</para>
 
           <programlisting language="php">
-$client = new xmlrpc_client("phpxmlrpc.sourceforge.net/server");
+$client = new xmlrpc_client("phpxmlrpc.sourceforge.net/server.php");
 $client-&gt;return_type = 'phpvals';
 $message = new xmlrpcmsg("examples.getStateName", array(new xmlrpcval(23, "int")));
 $resp = $client-&gt;send($message);
