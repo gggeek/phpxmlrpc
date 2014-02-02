@@ -6,11 +6,12 @@
  @author Gaetano Giunta
  @copyright (c) 2007-2014 G. Giunta
  @license
+ @todo make the xsl more dynamic: the path to import chunk.xsl could be f.e. rewritten/injected by the php user
 -->
 
 
 <!-- import base stylesheet -->
-<xsl:import href="../../../docbook-xsl/xhtml/chunk.xsl"/>
+<xsl:import href="../../../tools/docbook-xsl/xhtml/chunk.xsl"/>
 
 
 <!-- customization vars -->
