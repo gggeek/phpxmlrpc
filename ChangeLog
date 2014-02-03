@@ -1,8 +1,14 @@
+2014-02-3 - G. Giunta (giunta.gaetano@gmail.com)
+
+	* bumped up requirements to php 5.1.0
+
 2014-01-10 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* xmlrpc.inc: when using curl and keepalive, reset curl handle if we did not get back an http 200 response (eg a 302)
 
 	* testsuite.php, parse_args.php: update testsuite
+
+	* debugger/controller.php: change default path to javascript debugger
 
 2010-05-23 - G. Giunta (giunta.gaetano@gmail.com)
 

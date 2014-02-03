@@ -944,7 +944,7 @@
 
 		/**
 		* Enables/disables the echoing to screen of the xmlrpc responses received
-		* @param integer $debug values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
+		* @param integer $in values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
 		* @access public
 		*/
 		function setDebug($in)
@@ -980,7 +980,7 @@
 
 		/**
 		* Add a CA certificate to verify server with (see man page about
-		* CURLOPT_CAINFO for more details
+		* CURLOPT_CAINFO for more details)
 		* @param string $cacert certificate file name (or dir holding certificates)
 		* @param bool $is_dir set to true to indicate cacert is a dir. defaults to false
 		* @access public
@@ -1112,7 +1112,7 @@
 		/**
 		* Directly set cURL options, for extra flexibility
 		* It allows eg. to bind client to a specific IP interface / address
-		* @param $options array
+		* @param array $options
 		*/
 		function SetCurlOptions( $options )
 		{
@@ -1399,11 +1399,11 @@
 			}
 			else
 			{
-				// reset errno and errstr on succesful socket connection
+				// reset errno and errstr on successful socket connection
 				$this->errstr = '';
 			}
 			// G. Giunta 2005/10/24: close socket before parsing.
-			// should yeld slightly better execution times, and make easier recursive calls (e.g. to follow http redirects)
+			// should yield slightly better execution times, and make easier recursive calls (e.g. to follow http redirects)
 			$ipd='';
 			do
 			{
@@ -1541,7 +1541,6 @@
 			// return the header too
 			curl_setopt($curl, CURLOPT_HEADER, 1);
 
-			// will only work with PHP >= 5.0
 			// NB: if we set an empty string, CURL will add http header indicating
 			// ALL methods it is supporting. This is possibly a better option than
 			// letting the user tell what curl can / cannot do...
@@ -1729,7 +1728,7 @@
 		* @param array $msgs an array of xmlrpcmsg objects
 		* @param integer $timeout connection timeout (in seconds)
 		* @param string $method the http protocol variant to be used
-		* @param boolean fallback When true, upon receiveing an error during multicall, multiple single calls will be attempted
+		* @param boolean fallback When true, upon receiving an error during multicall, multiple single calls will be attempted
 		* @return array
 		* @access public
 		*/
@@ -2036,7 +2035,7 @@
 		* with attributes being e.g. 'expires', 'path', domain'.
 		* NB: cookies sent as 'expired' by the server (i.e. with an expiry date in the past)
 		* are still present in the array. It is up to the user-defined code to decide
-		* how to use the received cookies, and wheter they have to be sent back with the next
+		* how to use the received cookies, and whether they have to be sent back with the next
 		* request to the server (using xmlrpc_client::setCookie) or not
 		* @return array array of cookies received from the server
 		* @access public
@@ -2115,7 +2114,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 
 		/**
 		* @param string $meth the name of the method to invoke
-		* @param array $pars array of parameters to be paased to the method (xmlrpcval objects)
+		* @param array $pars array of parameters to be passed to the method (xmlrpcval objects)
 		*/
 		function xmlrpcmsg($meth, $pars=0)
 		{
@@ -2199,6 +2198,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 
 		/**
 		* Returns xml representation of the message. XML prologue included
+		* @param string $charset_encoding
 		* @return string the xml representation of the message, xml prologue included
 		* @access public
 		*/
@@ -2252,6 +2252,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		*      infinite loop in that case, because we cannot trust the caller
 		*      to give us a valid pointer to an open file...
 		* @access public
+		* @param resource $fp stream pointer
 		* @return xmlrpcresp
 		* @todo add 2nd & 3rd param to be passed to ParseResponse() ???
 		*/
@@ -3081,7 +3082,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		}
 
 		/**
-		* Checks wheter a struct member with a given name is present.
+		* Checks whether a struct member with a given name is present.
 		* Works only on xmlrpcvals of type struct.
 		* @param string $m the name of the struct member to be looked up
 		* @return boolean
@@ -3680,9 +3681,10 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 	* we SHOULD assume it is strictly US-ASCII. But we try to be more tolerant of unconforming (legacy?) clients/servers,
 	* which will be most probably using UTF-8 anyway...
 	*
-	* @param string $httpheaders the http Content-type header
+	* @param string $httpheader the http Content-type header
 	* @param string $xmlchunk xml content buffer
 	* @param string $encoding_prefs comma separated list of character encodings to be used as default (when mb extension is enabled)
+	* @return string
 	*
 	* @todo explore usage of mb_http_input(): does it detect http headers + post data? if so, use it instead of hand-detection!!!
 	*/
@@ -3775,6 +3777,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 	* if it is a valid subset of any encoding in the list
 	* @param string $encoding charset to be tested
 	* @param mixed $validlist comma separated list of valid charsets (or array of charsets)
+	* @return bool
 	*/
 	function is_valid_charset($encoding, $validlist)
 	{
@@ -3795,7 +3798,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 				foreach ($validlist as $allowed)
 					if (in_array($allowed, $charset_supersets[$encoding]))
 						return true;
-				return false;
+			return false;
 		}
 	}
 

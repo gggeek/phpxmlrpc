@@ -4,7 +4,7 @@ Requirements
 ------------
 
 The following requirements should be met prior to using 'XMLRPC for PHP': 
-. PHP 5.0 or later; 5.0.3 or later recommended to have all functionality enabled
+. PHP 5.1.0 or later
 . the php "curl" extension is needed if you wish to use SSL or HTTP 1.1 to
   communicate with remote servers
 

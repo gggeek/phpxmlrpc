@@ -2,8 +2,11 @@
     "name": "phpxmlrpc/phpxmlrpc",
     "description": "A php library for building xmlrpc clients and servers",
     "license": "BSD-3-Clause",
-    "homepage": "http://phpxmlrpc.sourceforge.net/",
+    "homepage": "http://gggeek.github.io/phpxmlrpc/",
     "keywords": [ "xmlrpc", "webservices" ],
+    "require": {
+        "php": ">=5.1.0"
+    }
     "autoload": {
         "classmap": [ "lib/xmlrpc.inc", "lib/xmlrpcs.inc" ]
     }

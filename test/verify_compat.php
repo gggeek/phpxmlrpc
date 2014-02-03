@@ -19,15 +19,10 @@ function phpxmlrpc_verify_compat($mode='client')
     $ver = phpversion();
     $tests['php_version'] = array();
     $tests['php_version']['description'] = 'PHP version found: '.$ver.".\n\n";
-    if (version_compare($ver, '5') < 0)
+    if (version_compare($ver, '5.1.0') < 0)
     {
       $tests['php_version']['status'] = 0;
-      $tests['php_version']['description'] .= 'This version of PHP is not compatible with this release of the PHP XMLRPC library. Please upgrade to php 5 or later';
-    }
-    else if (version_compare($ver, '5.0.3') < 0)
-    {
-      $tests['php_version']['status'] = 1;
-      $tests['php_version']['description'] .= "This version of PHP is almost completely compatible with the PHP XMLRPC library.\nThe only unavailable function is automatic mapping of php functions to xmlrpc methods";
+      $tests['php_version']['description'] .= 'This version of PHP is not compatible with this release of the PHP XMLRPC library. Please upgrade to php 5.1.0 or later';
     }
     else
     {
@@ -71,10 +66,10 @@ function phpxmlrpc_verify_compat($mode='client')
     $ver = phpversion();
     $tests['php_version'] = array();
     $tests['php_version']['description'] = 'PHP version found: '.$ver.".\n\n";
-    if (version_compare($ver, '5') < 0)
+    if (version_compare($ver, '5.1.0') < 0)
     {
       $tests['php_version']['status'] = 0;
-      $tests['php_version']['description'] .= 'This version of PHP is not compatible with the PHP XMLRPC library. Please upgrade to 5.0 or later';
+      $tests['php_version']['description'] .= 'This version of PHP is not compatible with the PHP XMLRPC library. Please upgrade to 5.1.0 or later';
     }
     else
     {
