@@ -6,7 +6,7 @@
     "keywords": [ "xmlrpc", "webservices" ],
     "require": {
         "php": ">=5.1.0"
-    }
+    },
     "autoload": {
         "classmap": [ "lib/xmlrpc.inc", "lib/xmlrpcs.inc" ]
     }
