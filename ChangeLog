@@ -2,6 +2,7 @@
 
 	* removed obsolete xml.so open; dl() is deprecated and removed from 5.3.0
 	* removed deprecated xmlEntities
+	* removed deprecated xmlrpc_backslash
 
 2014-02-03 - G. Giunta (giunta.gaetano@gmail.com)
 

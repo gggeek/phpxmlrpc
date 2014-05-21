@@ -195,11 +195,6 @@
 	// let XML parse errors start at 100
 	$GLOBALS['xmlrpcerrxml']=100;
 
-	// formulate backslashes for escaping regexp
-	// Not in use anymore since 2.0. Shall we remove it?
-	/// @deprecated
-	$GLOBALS['xmlrpc_backslash']=chr(92).chr(92);
-
 	// set to TRUE to enable correct decoding of <NIL/> and <EX:NIL/> values
 	$GLOBALS['xmlrpc_null_extension']=false;
 
