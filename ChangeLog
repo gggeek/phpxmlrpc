@@ -3,6 +3,7 @@
 	* removed obsolete xml.so open; dl() is deprecated and removed from 5.3.0
 	* removed deprecated xmlEntities
 	* removed deprecated xmlrpc_backslash
+	* converted $GLOBALS to internal class. This makes testing much easier and should be more flexible regarding other projects
 
 2014-02-03 - G. Giunta (giunta.gaetano@gmail.com)
 
