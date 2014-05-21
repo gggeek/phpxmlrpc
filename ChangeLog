@@ -1,4 +1,8 @@
-2014-02-3 - G. Giunta (giunta.gaetano@gmail.com)
+2014-05-12 - Samu Voutilainen (smar@smar.fi)
+
+	* removed obsolete xml.so open; dl() is deprecated and removed from 5.3.0
+
+2014-02-03 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* bumped up requirements to php 5.1.0
 

@@ -34,16 +34,6 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 
-	if(!function_exists('xml_parser_create'))
-	{
-		// For PHP 4 onward, XML functionality is always compiled-in on windows:
-		// no more need to dl-open it. It might have been compiled out on *nix...
-		if(strtoupper(substr(PHP_OS, 0, 3) != 'WIN'))
-		{
-			dl('xml.so');
-		}
-	}
-
 	// G. Giunta 2005/01/29: declare global these variables,
 	// so that xmlrpc.inc will work even if included from within a function
 	// Milosch: 2005/08/07 - explicitly request these via $GLOBALS where used.
