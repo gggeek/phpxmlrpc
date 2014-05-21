@@ -86,16 +86,6 @@
 	$GLOBALS['xmlrpcNull']='null';
 	$GLOBALS['xmlrpcTypes']['null']=1;
 
-	// Not in use anymore since 2.0. Shall we remove it?
-	/// @deprecated
-	$GLOBALS['xmlEntities']=array(
-		'amp'  => '&',
-		'quot' => '"',
-		'lt'   => '<',
-		'gt'   => '>',
-		'apos' => "'"
-	);
-
 	// tables used for transcoding different charsets into us-ascii xml
 
 	$GLOBALS['xml_iso88591_Entities']=array();
