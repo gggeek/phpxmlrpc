@@ -4,6 +4,7 @@
 	* removed deprecated xmlEntities
 	* removed deprecated xmlrpc_backslash
 	* converted $GLOBALS to internal class. This makes testing much easier and should be more flexible regarding other projects
+	* changed verifyhost from 1 to 2. This makes modern php versions work properly.
 
 2014-02-03 - G. Giunta (giunta.gaetano@gmail.com)
 
