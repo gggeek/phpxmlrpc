@@ -1,76 +1,77 @@
 <?php
 class xmlrpc_client
 {
-    var $path;
-    var $server;
-    var $port=0;
-    var $method='http';
-    var $errno;
-    var $errstr;
-    var $debug=0;
-    var $username='';
-    var $password='';
-    var $authtype=1;
-    var $cert='';
-    var $certpass='';
-    var $cacert='';
-    var $cacertdir='';
-    var $key='';
-    var $keypass='';
-    var $verifypeer=true;
-    var $verifyhost=2;
-    var $no_multicall=false;
-    var $proxy='';
-    var $proxyport=0;
-    var $proxy_user='';
-    var $proxy_pass='';
-    var $proxy_authtype=1;
-    var $cookies=array();
-    var $extracurlopts=array();
+    /// @todo: does these need to be public?
+    public $path;
+    public $server;
+    public $port=0;
+    public $method='http';
+    public $errno;
+    public $errstr;
+    public $debug=0;
+    public $username='';
+    public $password='';
+    public $authtype=1;
+    public $cert='';
+    public $certpass='';
+    public $cacert='';
+    public $cacertdir='';
+    public $key='';
+    public $keypass='';
+    public $verifypeer=true;
+    public $verifyhost=2;
+    public $no_multicall=false;
+    public $proxy='';
+    public $proxyport=0;
+    public $proxy_user='';
+    public $proxy_pass='';
+    public $proxy_authtype=1;
+    public $cookies=array();
+    public $extracurlopts=array();
 
     /**
-    * List of http compression methods accepted by the client for responses.
-    * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib
-    *
-    * NNB: you can set it to any non-empty array for HTTP11 and HTTPS, since
-    * in those cases it will be up to CURL to decide the compression methods
-    * it supports. You might check for the presence of 'zlib' in the output of
-    * curl_version() to determine wheter compression is supported or not
-    */
-    var $accepted_compression = array();
+     * List of http compression methods accepted by the client for responses.
+     * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib
+     *
+     * NNB: you can set it to any non-empty array for HTTP11 and HTTPS, since
+     * in those cases it will be up to CURL to decide the compression methods
+     * it supports. You might check for the presence of 'zlib' in the output of
+     * curl_version() to determine wheter compression is supported or not
+     */
+    public $accepted_compression = array();
     /**
-    * Name of compression scheme to be used for sending requests.
-    * Either null, gzip or deflate
-    */
-    var $request_compression = '';
+     * Name of compression scheme to be used for sending requests.
+     * Either null, gzip or deflate
+     */
+    public $request_compression = '';
     /**
-    * CURL handle: used for keep-alive connections (PHP 4.3.8 up, see:
-    * http://curl.haxx.se/docs/faq.html#7.3)
-    */
-    var $xmlrpc_curl_handle = null;
+     * CURL handle: used for keep-alive connections (PHP 4.3.8 up, see:
+     * http://curl.haxx.se/docs/faq.html#7.3)
+     */
+    public $xmlrpc_curl_handle = null;
     /// Whether to use persistent connections for http 1.1 and https
-    var $keepalive = false;
+    public $keepalive = false;
     /// Charset encodings that can be decoded without problems by the client
-    var $accepted_charset_encodings = array();
+    public $accepted_charset_encodings = array();
     /// Charset encoding to be used in serializing request. NULL = use ASCII
-    var $request_charset_encoding = '';
+    public $request_charset_encoding = '';
     /**
-    * Decides the content of xmlrpcresp objects returned by calls to send()
-    * valid strings are 'xmlrpcvals', 'phpvals' or 'xml'
-    */
-    var $return_type = 'xmlrpcvals';
+     * Decides the content of xmlrpcresp objects returned by calls to send()
+     * valid strings are 'xmlrpcvals', 'phpvals' or 'xml'
+     */
+    public $return_type = 'xmlrpcvals';
     /**
-    * Sent to servers in http headers
-    */
-    var $user_agent;
+     * Sent to servers in http headers
+     */
+    public $user_agent;
 
     /**
-    * @param string $path either the complete server URL or the PATH part of the xmlrc server URL, e.g. /xmlrpc/server.php
-    * @param string $server the server name / ip address
-    * @param integer $port the port the server is listening on, defaults to 80 or 443 depending on protocol used
-    * @param string $method the http protocol variant: defaults to 'http', 'https' and 'http11' can be used if CURL is installed
-    */
-    function xmlrpc_client($path, $server='', $port='', $method='')
+     * @param string $path either the complete server URL or the PATH part of the xmlrc server URL, e.g. /xmlrpc/server.php
+     * @param string $server the server name / ip address
+     * @param integer $port the port the server is listening on, defaults to 80 or 443 depending on protocol used
+     * @param string $method the http protocol variant: defaults to 'http', 'https' and 'http11' can be used if CURL is installed
+     */
+    function __construct($path, $server='', $port='', $method='')
     {
         $xmlrpc = Phpxmlrpc::instance();
 
@@ -143,23 +144,21 @@ class xmlrpc_client
     }
 
     /**
-    * Enables/disables the echoing to screen of the xmlrpc responses received
-    * @param integer $in values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
-    * @access public
-    */
-    function setDebug($in)
+     * Enables/disables the echoing to screen of the xmlrpc responses received
+     * @param integer $in values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
+     */
+    public function setDebug($in)
     {
         $this->debug=$in;
     }
 
     /**
-    * Add some http BASIC AUTH credentials, used by the client to authenticate
-    * @param string $u username
-    * @param string $p password
-    * @param integer $t auth type. See curl_setopt man page for supported auth types. Defaults to CURLAUTH_BASIC (basic auth)
-    * @access public
-    */
-    function setCredentials($u, $p, $t=1)
+     * Add some http BASIC AUTH credentials, used by the client to authenticate
+     * @param string $u username
+     * @param string $p password
+     * @param integer $t auth type. See curl_setopt man page for supported auth types. Defaults to CURLAUTH_BASIC (basic auth)
+     */
+    public function setCredentials($u, $p, $t=1)
     {
         $this->username=$u;
         $this->password=$p;
@@ -167,25 +166,23 @@ class xmlrpc_client
     }
 
     /**
-    * Add a client-side https certificate
-    * @param string $cert
-    * @param string $certpass
-    * @access public
-    */
-    function setCertificate($cert, $certpass)
+     * Add a client-side https certificate
+     * @param string $cert
+     * @param string $certpass
+     */
+    public function setCertificate($cert, $certpass)
     {
         $this->cert = $cert;
         $this->certpass = $certpass;
     }
 
     /**
-    * Add a CA certificate to verify server with (see man page about
-    * CURLOPT_CAINFO for more details)
-    * @param string $cacert certificate file name (or dir holding certificates)
-    * @param bool $is_dir set to true to indicate cacert is a dir. defaults to false
-    * @access public
-    */
-    function setCaCertificate($cacert, $is_dir=false)
+     * Add a CA certificate to verify server with (see man page about
+     * CURLOPT_CAINFO for more details)
+     * @param string $cacert certificate file name (or dir holding certificates)
+     * @param bool $is_dir set to true to indicate cacert is a dir. defaults to false
+     */
+    public function setCaCertificate($cacert, $is_dir=false)
     {
         if ($is_dir)
         {
@@ -198,49 +195,45 @@ class xmlrpc_client
     }
 
     /**
-    * Set attributes for SSL communication: private SSL key
-    * NB: does not work in older php/curl installs
-    * Thanks to Daniel Convissor
-    * @param string $key The name of a file containing a private SSL key
-    * @param string $keypass The secret password needed to use the private SSL key
-    * @access public
-    */
-    function setKey($key, $keypass)
+     * Set attributes for SSL communication: private SSL key
+     * NB: does not work in older php/curl installs
+     * Thanks to Daniel Convissor
+     * @param string $key The name of a file containing a private SSL key
+     * @param string $keypass The secret password needed to use the private SSL key
+     */
+    public function setKey($key, $keypass)
     {
         $this->key = $key;
         $this->keypass = $keypass;
     }
 
     /**
-    * Set attributes for SSL communication: verify server certificate
-    * @param bool $i enable/disable verification of peer certificate
-    * @access public
-    */
-    function setSSLVerifyPeer($i)
+     * Set attributes for SSL communication: verify server certificate
+     * @param bool $i enable/disable verification of peer certificate
+     */
+    public function setSSLVerifyPeer($i)
     {
         $this->verifypeer = $i;
     }
 
     /**
-    * Set attributes for SSL communication: verify match of server cert w. hostname
-    * @param int $i
-    * @access public
-    */
-    function setSSLVerifyHost($i)
+     * Set attributes for SSL communication: verify match of server cert w. hostname
+     * @param int $i
+     */
+    public function setSSLVerifyHost($i)
     {
         $this->verifyhost = $i;
     }
 
     /**
-    * Set proxy info
-    * @param string $proxyhost
-    * @param string $proxyport Defaults to 8080 for HTTP and 443 for HTTPS
-    * @param string $proxyusername Leave blank if proxy has public access
-    * @param string $proxypassword Leave blank if proxy has public access
-    * @param int $proxyauthtype set to constant CURLAUTH_NTLM to use NTLM auth with proxy
-    * @access public
-    */
-    function setProxy($proxyhost, $proxyport, $proxyusername = '', $proxypassword = '', $proxyauthtype = 1)
+     * Set proxy info
+     * @param string $proxyhost
+     * @param string $proxyport Defaults to 8080 for HTTP and 443 for HTTPS
+     * @param string $proxyusername Leave blank if proxy has public access
+     * @param string $proxypassword Leave blank if proxy has public access
+     * @param int $proxyauthtype set to constant CURLAUTH_NTLM to use NTLM auth with proxy
+     */
+    public function setProxy($proxyhost, $proxyport, $proxyusername = '', $proxypassword = '', $proxyauthtype = 1)
     {
         $this->proxy = $proxyhost;
         $this->proxyport = $proxyport;
@@ -250,14 +243,13 @@ class xmlrpc_client
     }
 
     /**
-    * Enables/disables reception of compressed xmlrpc responses.
-    * Note that enabling reception of compressed responses merely adds some standard
-    * http headers to xmlrpc requests. It is up to the xmlrpc server to return
-    * compressed responses when receiving such requests.
-    * @param string $compmethod either 'gzip', 'deflate', 'any' or ''
-    * @access public
-    */
-    function setAcceptedCompression($compmethod)
+     * Enables/disables reception of compressed xmlrpc responses.
+     * Note that enabling reception of compressed responses merely adds some standard
+     * http headers to xmlrpc requests. It is up to the xmlrpc server to return
+     * compressed responses when receiving such requests.
+     * @param string $compmethod either 'gzip', 'deflate', 'any' or ''
+     */
+    public function setAcceptedCompression($compmethod)
     {
         if ($compmethod == 'any')
             $this->accepted_compression = array('gzip', 'deflate');
@@ -269,31 +261,29 @@ class xmlrpc_client
     }
 
     /**
-    * Enables/disables http compression of xmlrpc request.
-    * Take care when sending compressed requests: servers might not support them
-    * (and automatic fallback to uncompressed requests is not yet implemented)
-    * @param string $compmethod either 'gzip', 'deflate' or ''
-    * @access public
-    */
-    function setRequestCompression($compmethod)
+     * Enables/disables http compression of xmlrpc request.
+     * Take care when sending compressed requests: servers might not support them
+     * (and automatic fallback to uncompressed requests is not yet implemented)
+     * @param string $compmethod either 'gzip', 'deflate' or ''
+     */
+    public function setRequestCompression($compmethod)
     {
         $this->request_compression = $compmethod;
     }
 
     /**
-    * Adds a cookie to list of cookies that will be sent to server.
-    * NB: setting any param but name and value will turn the cookie into a 'version 1' cookie:
-    * do not do it unless you know what you are doing
-    * @param string $name
-    * @param string $value
-    * @param string $path
-    * @param string $domain
-    * @param int $port
-    * @access public
-    *
-    * @todo check correctness of urlencoding cookie value (copied from php way of doing it...)
-    */
-    function setCookie($name, $value='', $path='', $domain='', $port=null)
+     * Adds a cookie to list of cookies that will be sent to server.
+     * NB: setting any param but name and value will turn the cookie into a 'version 1' cookie:
+     * do not do it unless you know what you are doing
+     * @param string $name
+     * @param string $value
+     * @param string $path
+     * @param string $domain
+     * @param int $port
+     *
+     * @todo check correctness of urlencoding cookie value (copied from php way of doing it...)
+     */
+    public function setCookie($name, $value='', $path='', $domain='', $port=null)
     {
         $this->cookies[$name]['value'] = urlencode($value);
         if ($path || $domain || $port)
@@ -310,33 +300,32 @@ class xmlrpc_client
     }
 
     /**
-    * Directly set cURL options, for extra flexibility
-    * It allows eg. to bind client to a specific IP interface / address
-    * @param array $options
-    */
+     * Directly set cURL options, for extra flexibility
+     * It allows eg. to bind client to a specific IP interface / address
+     * @param array $options
+     */
     function SetCurlOptions( $options )
     {
         $this->extracurlopts = $options;
     }
 
     /**
-    * Set user-agent string that will be used by this client instance
-    * in http headers sent to the server
-    */
+     * Set user-agent string that will be used by this client instance
+     * in http headers sent to the server
+     */
     function SetUserAgent( $agentstring )
     {
         $this->user_agent = $agentstring;
     }
 
     /**
-    * Send an xmlrpc request
-    * @param mixed $msg The message object, or an array of messages for using multicall, or the complete xml representation of a request
-    * @param integer $timeout Connection timeout, in seconds, If unspecified, a platform specific timeout will apply
-    * @param string $method if left unspecified, the http protocol chosen during creation of the object will be used
-    * @return xmlrpcresp
-    * @access public
-    */
-    function& send($msg, $timeout=0, $method='')
+     * Send an xmlrpc request
+     * @param mixed $msg The message object, or an array of messages for using multicall, or the complete xml representation of a request
+     * @param integer $timeout Connection timeout, in seconds, If unspecified, a platform specific timeout will apply
+     * @param string $method if left unspecified, the http protocol chosen during creation of the object will be used
+     * @return xmlrpcresp
+     */
+    public function& send($msg, $timeout=0, $method='')
     {
         // if user deos not specify http protocol, use native method of this client
         // (i.e. method set during call to constructor)
@@ -429,10 +418,7 @@ class xmlrpc_client
         return $r;
     }
 
-    /**
-    * @access private
-    */
-    function &sendPayloadHTTP10($msg, $server, $port, $timeout=0,
+    private function &sendPayloadHTTP10($msg, $server, $port, $timeout=0,
         $username='', $password='', $authtype=1, $proxyhost='',
         $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1)
     {
@@ -619,10 +605,7 @@ class xmlrpc_client
 
     }
 
-    /**
-    * @access private
-    */
-    function &sendPayloadHTTPS($msg, $server, $port, $timeout=0, $username='',
+    private function &sendPayloadHTTPS($msg, $server, $port, $timeout=0, $username='',
         $password='', $authtype=1, $cert='',$certpass='', $cacert='', $cacertdir='',
         $proxyhost='', $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1,
         $keepalive=false, $key='', $keypass='')
@@ -634,12 +617,11 @@ class xmlrpc_client
     }
 
     /**
-    * Contributed by Justin Miller <justin@voxel.net>
-    * Requires curl to be built into PHP
-    * NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!
-    * @access private
-    */
-    function &sendPayloadCURL($msg, $server, $port, $timeout=0, $username='',
+     * Contributed by Justin Miller <justin@voxel.net>
+     * Requires curl to be built into PHP
+     * NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!
+     */
+    private function &sendPayloadCURL($msg, $server, $port, $timeout=0, $username='',
         $password='', $authtype=1, $cert='', $certpass='', $cacert='', $cacertdir='',
         $proxyhost='', $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1, $method='https',
         $keepalive=false, $key='', $keypass='')
@@ -915,28 +897,27 @@ class xmlrpc_client
     }
 
     /**
-    * Send an array of request messages and return an array of responses.
-    * Unless $this->no_multicall has been set to true, it will try first
-    * to use one single xmlrpc call to server method system.multicall, and
-    * revert to sending many successive calls in case of failure.
-    * This failure is also stored in $this->no_multicall for subsequent calls.
-    * Unfortunately, there is no server error code universally used to denote
-    * the fact that multicall is unsupported, so there is no way to reliably
-    * distinguish between that and a temporary failure.
-    * If you are sure that server supports multicall and do not want to
-    * fallback to using many single calls, set the fourth parameter to FALSE.
-    *
-    * NB: trying to shoehorn extra functionality into existing syntax has resulted
-    * in pretty much convoluted code...
-    *
-    * @param array $msgs an array of xmlrpcmsg objects
-    * @param integer $timeout connection timeout (in seconds)
-    * @param string $method the http protocol variant to be used
-    * @param boolean fallback When true, upon receiving an error during multicall, multiple single calls will be attempted
-    * @return array
-    * @access public
-    */
-    function multicall($msgs, $timeout=0, $method='', $fallback=true)
+     * Send an array of request messages and return an array of responses.
+     * Unless $this->no_multicall has been set to true, it will try first
+     * to use one single xmlrpc call to server method system.multicall, and
+     * revert to sending many successive calls in case of failure.
+     * This failure is also stored in $this->no_multicall for subsequent calls.
+     * Unfortunately, there is no server error code universally used to denote
+     * the fact that multicall is unsupported, so there is no way to reliably
+     * distinguish between that and a temporary failure.
+     * If you are sure that server supports multicall and do not want to
+     * fallback to using many single calls, set the fourth parameter to FALSE.
+     *
+     * NB: trying to shoehorn extra functionality into existing syntax has resulted
+     * in pretty much convoluted code...
+     *
+     * @param array $msgs an array of xmlrpcmsg objects
+     * @param integer $timeout connection timeout (in seconds)
+     * @param string $method the http protocol variant to be used
+     * @param boolean fallback When true, upon receiving an error during multicall, multiple single calls will be attempted
+     * @return array
+     */
+    public function multicall($msgs, $timeout=0, $method='', $fallback=true)
     {
         $xmlrpc = Phpxmlrpc::instance();
 
@@ -1005,12 +986,11 @@ class xmlrpc_client
     }
 
     /**
-    * Attempt to boxcar $msgs via system.multicall.
-    * Returns either an array of xmlrpcreponses, an xmlrpc error response
-    * or false (when received response does not respect valid multicall syntax)
-    * @access private
-    */
-    function _try_multicall($msgs, $timeout, $method)
+     * Attempt to boxcar $msgs via system.multicall.
+     * Returns either an array of xmlrpcreponses, an xmlrpc error response
+     * or false (when received response does not respect valid multicall syntax)
+     */
+    private function _try_multicall($msgs, $timeout, $method)
     {
         // Construct multicall message
         $calls = array();

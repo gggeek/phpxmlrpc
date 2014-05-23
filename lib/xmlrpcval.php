@@ -1,17 +1,17 @@
 <?php
 
-class xmlrpcval
-{
-    var $me=array();
-    var $mytype=0;
-    var $_php_class=null;
+class xmlrpcval {
+
+    /// @todo: does these need to be public?
+    public $me=array();
+    public $mytype=0;
+    public $_php_class=null;
 
     /**
-    * @param mixed $val
-    * @param string $type any valid xmlrpc type name (lowercase). If null, 'string' is assumed
-    */
-    function xmlrpcval($val=-1, $type='')
-    {
+      * @param mixed $val
+      * @param string $type any valid xmlrpc type name (lowercase). If null, 'string' is assumed
+      */
+    function __construct($val=-1, $type='') {
         /// @todo: optimization creep - do not call addXX, do it all inline.
         /// downside: booleans will not be coerced anymore
         if($val!==-1 || $type!='')
@@ -65,11 +65,11 @@ class xmlrpcval
     }
 
     /**
-    * Add a single php value to an (unitialized) xmlrpcval
-    * @param mixed $val
-    * @param string $type
-    * @return int 1 or 0 on failure
-    */
+      * Add a single php value to an (unitialized) xmlrpcval
+      * @param mixed $val
+      * @param string $type
+      * @return int 1 or 0 on failure
+      */
     function addScalar($val, $type='string')
     {
         $xmlrpc = Phpxmlrpc::instance();
@@ -125,14 +125,13 @@ class xmlrpcval
     }
 
     /**
-    * Add an array of xmlrpcval objects to an xmlrpcval
-    * @param array $vals
-    * @return int 1 or 0 on failure
-    * @access public
-    *
-    * @todo add some checking for $vals to be an array of xmlrpcvals?
-    */
-    function addArray($vals)
+      * Add an array of xmlrpcval objects to an xmlrpcval
+      * @param array $vals
+      * @return int 1 or 0 on failure
+      *
+      * @todo add some checking for $vals to be an array of xmlrpcvals?
+      */
+    public function addArray($vals)
     {
         $xmlrpc = Phpxmlrpc::instance();
         if($this->mytype==0)
@@ -155,14 +154,13 @@ class xmlrpcval
     }
 
     /**
-    * Add an array of named xmlrpcval objects to an xmlrpcval
-    * @param array $vals
-    * @return int 1 or 0 on failure
-    * @access public
-    *
-    * @todo add some checking for $vals to be an array?
-    */
-    function addStruct($vals)
+     * Add an array of named xmlrpcval objects to an xmlrpcval
+     * @param array $vals
+     * @return int 1 or 0 on failure
+     *
+     * @todo add some checking for $vals to be an array?
+     */
+    public function addStruct($vals)
     {
         $xmlrpc = Phpxmlrpc::instance();
 
@@ -185,29 +183,11 @@ class xmlrpcval
         }
     }
 
-    // poor man's version of print_r ???
-    // DEPRECATED!
-    function dump($ar)
-    {
-        foreach($ar as $key => $val)
-        {
-            echo "$key => $val<br />";
-            if($key == 'array')
-            {
-                while(list($key2, $val2) = each($val))
-                {
-                    echo "-- $key2 => $val2<br />";
-                }
-            }
-        }
-    }
-
     /**
-    * Returns a string containing "struct", "array" or "scalar" describing the base type of the value
-    * @return string
-    * @access public
-    */
-    function kindOf()
+     * Returns a string containing "struct", "array" or "scalar" describing the base type of the value
+     * @return string
+     */
+    public function kindOf()
     {
         switch($this->mytype)
         {
@@ -225,10 +205,7 @@ class xmlrpcval
         }
     }
 
-    /**
-    * @access private
-    */
-    function serializedata($typ, $val, $charset_encoding='')
+    private function serializedata($typ, $val, $charset_encoding='')
     {
         $xmlrpc = Phpxmlrpc::instance();
         $rs='';
@@ -336,12 +313,11 @@ class xmlrpcval
     }
 
     /**
-    * Returns xml representation of the value. XML prologue not included
-    * @param string $charset_encoding the charset to be used for serialization. if null, US-ASCII is assumed
-    * @return string
-    * @access public
-    */
-    function serialize($charset_encoding='')
+     * Returns xml representation of the value. XML prologue not included
+     * @param string $charset_encoding the charset to be used for serialization. if null, US-ASCII is assumed
+     * @return string
+     */
+    public function serialize($charset_encoding='')
     {
         // add check? slower, but helps to avoid recursion in serializing broken xmlrpcvals...
         //if (is_object($o) && (get_class($o) == 'xmlrpcval' || is_subclass_of($o, 'xmlrpcval')))
@@ -366,44 +342,40 @@ class xmlrpcval
     }
 
     /**
-    * Checks whether a struct member with a given name is present.
-    * Works only on xmlrpcvals of type struct.
-    * @param string $m the name of the struct member to be looked up
-    * @return boolean
-    * @access public
-    */
-    function structmemexists($m)
+     * Checks whether a struct member with a given name is present.
+     * Works only on xmlrpcvals of type struct.
+     * @param string $m the name of the struct member to be looked up
+     * @return boolean
+     */
+    public function structmemexists($m)
     {
         return array_key_exists($m, $this->me['struct']);
     }
 
     /**
-    * Returns the value of a given struct member (an xmlrpcval object in itself).
-    * Will raise a php warning if struct member of given name does not exist
-    * @param string $m the name of the struct member to be looked up
-    * @return xmlrpcval
-    * @access public
-    */
-    function structmem($m)
+     * Returns the value of a given struct member (an xmlrpcval object in itself).
+     * Will raise a php warning if struct member of given name does not exist
+     * @param string $m the name of the struct member to be looked up
+     * @return xmlrpcval
+     */
+    public function structmem($m)
     {
         return $this->me['struct'][$m];
     }
 
     /**
-    * Reset internal pointer for xmlrpcvals of type struct.
-    * @access public
-    */
-    function structreset()
+     * Reset internal pointer for xmlrpcvals of type struct.
+     */
+    public function structreset()
     {
         reset($this->me['struct']);
     }
 
     /**
-    * Return next member element for xmlrpcvals of type struct.
-    * @return xmlrpcval
-    * @access public
-    */
-    function structeach()
+     * Return next member element for xmlrpcvals of type struct.
+     * @return xmlrpcval
+     */
+    public function structeach()
     {
         return each($this->me['struct']);
     }
@@ -449,11 +421,10 @@ class xmlrpcval
     }
 
     /**
-    * Returns the value of a scalar xmlrpcval
-    * @return mixed
-    * @access public
-    */
-    function scalarval()
+     * Returns the value of a scalar xmlrpcval
+     * @return mixed
+     */
+    public function scalarval()
     {
         reset($this->me);
         list(,$b)=each($this->me);
@@ -461,12 +432,11 @@ class xmlrpcval
     }
 
     /**
-    * Returns the type of the xmlrpcval.
-    * For integers, 'int' is always returned in place of 'i4'
-    * @return string
-    * @access public
-    */
-    function scalartyp()
+     * Returns the type of the xmlrpcval.
+     * For integers, 'int' is always returned in place of 'i4'
+     * @return string
+     */
+    public function scalartyp()
     {
         $xmlrpc = Phpxmlrpc::instance();
 
@@ -480,32 +450,29 @@ class xmlrpcval
     }
 
     /**
-    * Returns the m-th member of an xmlrpcval of struct type
-    * @param integer $m the index of the value to be retrieved (zero based)
-    * @return xmlrpcval
-    * @access public
-    */
-    function arraymem($m)
+     * Returns the m-th member of an xmlrpcval of struct type
+     * @param integer $m the index of the value to be retrieved (zero based)
+     * @return xmlrpcval
+     */
+    public function arraymem($m)
     {
         return $this->me['array'][$m];
     }
 
     /**
-    * Returns the number of members in an xmlrpcval of array type
-    * @return integer
-    * @access public
-    */
-    function arraysize()
+     * Returns the number of members in an xmlrpcval of array type
+     * @return integer
+     */
+    public function arraysize()
     {
         return count($this->me['array']);
     }
 
     /**
-    * Returns the number of members in an xmlrpcval of struct type
-    * @return integer
-    * @access public
-    */
-    function structsize()
+     * Returns the number of members in an xmlrpcval of struct type
+     * @return integer
+     */
+    public function structsize()
     {
         return count($this->me['struct']);
     }
