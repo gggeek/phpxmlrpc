@@ -46,7 +46,7 @@ class xmlrpcmsg {
         return 'msg';
     }
 
-    private function createPayload($charset_encoding='')
+    public function createPayload($charset_encoding='')
     {
         if ($charset_encoding != '')
             $this->content_type = 'text/xml; charset=' . $charset_encoding;
