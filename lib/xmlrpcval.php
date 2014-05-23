@@ -72,7 +72,7 @@ class xmlrpcval
     */
     function addScalar($val, $type='string')
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
 
         $typeof = null;
         if(isset($xmlrpc->xmlrpcTypes[$type])) {
@@ -134,7 +134,7 @@ class xmlrpcval
     */
     function addArray($vals)
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
         if($this->mytype==0)
         {
             $this->mytype=$xmlrpc->xmlrpcTypes['array'];
@@ -164,7 +164,7 @@ class xmlrpcval
     */
     function addStruct($vals)
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
 
         if($this->mytype==0)
         {
@@ -230,7 +230,7 @@ class xmlrpcval
     */
     function serializedata($typ, $val, $charset_encoding='')
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
         $rs='';
 
         if(!isset($xmlrpc->xmlrpcTypes[$typ])) {
@@ -468,7 +468,7 @@ class xmlrpcval
     */
     function scalartyp()
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
 
         reset($this->me);
         list($a,)=each($this->me);

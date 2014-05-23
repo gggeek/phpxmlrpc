@@ -114,7 +114,7 @@ class xmlrpcresp
     */
     function serialize($charset_encoding='')
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
 
         if ($charset_encoding != '')
             $this->content_type = 'text/xml; charset=' . $charset_encoding;

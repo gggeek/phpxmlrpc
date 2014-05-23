@@ -72,7 +72,7 @@ class xmlrpc_client
     */
     function xmlrpc_client($path, $server='', $port='', $method='')
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
 
         // allow user to specify all params in $path
         if($server == '' and $port == '' and $method == '')
@@ -436,7 +436,7 @@ class xmlrpc_client
         $username='', $password='', $authtype=1, $proxyhost='',
         $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1)
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
 
         if($port==0)
         {
@@ -644,7 +644,7 @@ class xmlrpc_client
         $proxyhost='', $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1, $method='https',
         $keepalive=false, $key='', $keypass='')
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
 
         if(!function_exists('curl_init'))
         {
@@ -938,7 +938,7 @@ class xmlrpc_client
     */
     function multicall($msgs, $timeout=0, $method='', $fallback=true)
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
 
         if ($method == '')
         {

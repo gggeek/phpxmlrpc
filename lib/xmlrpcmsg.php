@@ -170,7 +170,7 @@ class xmlrpcmsg
     */
     function &parseResponseHeaders(&$data, $headers_processed=false)
     {
-            $xmlrpc = Xmlrpc::instance();
+            $xmlrpc = Phpxmlrpc::instance();
             // Support "web-proxy-tunelling" connections for https through proxies
             if(preg_match('/^HTTP\/1\.[0-1] 200 Connection established/', $data))
             {
@@ -409,7 +409,7 @@ class xmlrpcmsg
     */
     function &parseResponse($data='', $headers_processed=false, $return_type='xmlrpcvals')
     {
-        $xmlrpc = Xmlrpc::instance();
+        $xmlrpc = Phpxmlrpc::instance();
 
         if($this->debug)
         {

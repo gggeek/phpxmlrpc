@@ -39,7 +39,7 @@ require_once __DIR__ . "/xmlrpcresp.php";
 require_once __DIR__ . "/xmlrpcmsg.php";
 require_once __DIR__ . "/xmlrpcval.php";
 
-class Xmlrpc {
+class Phpxmlrpc {
 
     public $xmlrpcI4 = "i4";
     public $xmlrpcInt = "int";
@@ -225,11 +225,11 @@ class Xmlrpc {
     * This class is singleton for performance reasons: this way the ASCII array needs to be done only once.
     */
     public static function instance() {
-        if(Xmlrpc::$instance === null) {
-            Xmlrpc::$instance = new Xmlrpc();
+        if(Phpxmlrpc::$instance === null) {
+            Phpxmlrpc::$instance = new Xmlrpc();
         }
 
-        return Xmlrpc::$instance;
+        return Phpxmlrpc::$instance;
     }
 }
 
@@ -250,7 +250,7 @@ class Xmlrpc {
  */
 function xmlrpc_encode_entitites($data, $src_encoding='', $dest_encoding='')
 {
-    $xmlrpc = Xmlrpc::instance();
+    $xmlrpc = Phpxmlrpc::instance();
     if ($src_encoding == '')
     {
         // lame, but we know no better...
@@ -383,7 +383,7 @@ for ($nn = 0; $nn < $ns; $nn++)
 /// xml parser handler function for opening element tags
 function xmlrpc_se($parser, $name, $attrs, $accept_single_vals=false)
 {
-    $xmlrpc = Xmlrpc::instance();
+    $xmlrpc = Phpxmlrpc::instance();
     // if invalid xmlrpc already detected, skip all processing
     if ($xmlrpc->_xh['isf'] < 2)
     {
@@ -538,7 +538,7 @@ function xmlrpc_se_any($parser, $name, $attrs)
 /// xml parser handler function for close element tags
 function xmlrpc_ee($parser, $name, $rebuild_xmlrpcvals = true)
 {
-    $xmlrpc = Xmlrpc::instance();
+    $xmlrpc = Phpxmlrpc::instance();
 
     if ($xmlrpc->_xh['isf'] < 2)
     {
@@ -755,7 +755,7 @@ function xmlrpc_ee_fast($parser, $name)
 /// xml parser handler function for character data
 function xmlrpc_cd($parser, $data)
 {
-    $xmlrpc = Xmlrpc::instance();
+    $xmlrpc = Phpxmlrpc::instance();
     // skip processing if xml fault already detected
     if ($xmlrpc->_xh['isf'] < 2)
     {
@@ -784,7 +784,7 @@ function xmlrpc_cd($parser, $data)
 /// element start/end tag. In fact it only gets called on unknown entities...
 function xmlrpc_dh($parser, $data)
 {
-    $xmlrpc = Xmlrpc::instance();
+    $xmlrpc = Phpxmlrpc::instance();
     // skip processing if xml fault already detected
     if ($xmlrpc->_xh['isf'] < 2)
     {
@@ -1007,7 +1007,7 @@ else
  */
 function php_xmlrpc_encode($php_val, $options=array())
 {
-    $xmlrpc = Xmlrpc::instance();
+    $xmlrpc = Phpxmlrpc::instance();
     $type = gettype($php_val);
     switch($type)
     {
@@ -1125,7 +1125,7 @@ function php_xmlrpc_encode($php_val, $options=array())
  */
 function php_xmlrpc_decode_xml($xml_val, $options=array())
 {
-    $xmlrpc = Xmlrpc::instance();
+    $xmlrpc = Phpxmlrpc::instance();
 
     $xmlrpc->_xh = array();
     $xmlrpc->_xh['ac'] = '';
@@ -1268,7 +1268,7 @@ function decode_chunked($buffer)
  */
 function guess_encoding($httpheader='', $xmlchunk='', $encoding_prefs=null)
 {
-    $xmlrpc = Xmlrpc::instance();
+    $xmlrpc = Phpxmlrpc::instance();
 
     // discussion: see http://www.yale.edu/pclt/encoding/
     // 1 - test if encoding is specified in HTTP HEADERS
