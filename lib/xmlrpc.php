@@ -52,7 +52,7 @@ require_once __DIR__ . "/xmlrpcval.php";
  * along with http headers, so we are bound by RFC 3023 to emit strict us-ascii.
  *
  * @todo do a bit of basic benchmarking (strtr vs. str_replace)
- * @todo	make usage of iconv() or recode_string() or mb_string() where available
+ * @todo make usage of iconv() or recode_string() or mb_string() where available
  */
 function xmlrpc_encode_entitites($data, $src_encoding='', $dest_encoding='')
 {
