@@ -2,7 +2,7 @@
 
 class xmlrpc_client
 {
-    /// @todo: does these need to be public?
+    /// @todo: do these need to be public?
     public $path;
     public $server;
     public $port=0;

@@ -1,7 +1,9 @@
 <?php
 
-class xmlrpcresp {
-    /// @todo: does these need to be public?
+class xmlrpcresp
+{
+
+    /// @todo: do these need to be public?
     public $val = 0;
     public $valtyp;
     public $errno = 0;

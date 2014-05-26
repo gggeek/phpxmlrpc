@@ -1,6 +1,7 @@
 <?php
 
-class Phpxmlrpc {
+class Phpxmlrpc
+{
 
     public $xmlrpcI4 = "i4";
     public $xmlrpcInt = "int";
@@ -45,12 +46,12 @@ class Phpxmlrpc {
     /// These will NOT be present in true ISO-8859-1, but will save the unwary
     /// windows user from sending junk (though no luck when reciving them...)
     /*
-    $GLOBALS['xml_cp1252_Entities']=array();
+    public $xml_cp1252_Entities'=array();
     for ($i = 128; $i < 160; $i++)
     {
         $GLOBALS['xml_cp1252_Entities']['in'][] = chr($i);
     }
-    $GLOBALS['xml_cp1252_Entities']['out'] = array(
+    public $xml_cp1252_Entities['out'] = array(
         '&#x20AC;', '?',        '&#x201A;', '&#x0192;',
         '&#x201E;', '&#x2026;', '&#x2020;', '&#x2021;',
         '&#x02C6;', '&#x2030;', '&#x0160;', '&#x2039;',

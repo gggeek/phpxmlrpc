@@ -1,6 +1,7 @@
 <?php
 
-class xmlrpcval {
+class xmlrpcval
+{
 
     /// @todo: does these need to be public?
     public $me=array();

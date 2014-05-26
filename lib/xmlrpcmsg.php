@@ -1,7 +1,9 @@
 <?php
 
-class xmlrpcmsg {
-    /// @todo: does these need to be public?
+class xmlrpcmsg
+{
+
+    /// @todo: do these need to be public?
     public $payload;
     public $methodname;
     public $params=array();
