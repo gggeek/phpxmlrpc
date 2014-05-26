@@ -46,12 +46,7 @@ class Phpxmlrpc
     /// These will NOT be present in true ISO-8859-1, but will save the unwary
     /// windows user from sending junk (though no luck when reciving them...)
     /*
-    public $xml_cp1252_Entities'=array();
-    for ($i = 128; $i < 160; $i++)
-    {
-        $GLOBALS['xml_cp1252_Entities']['in'][] = chr($i);
-    }
-    public $xml_cp1252_Entities['out'] = array(
+    public $xml_cp1252_Entities = array('in' => array(), out' => array(
         '&#x20AC;', '?',        '&#x201A;', '&#x0192;',
         '&#x201E;', '&#x2026;', '&#x2020;', '&#x2021;',
         '&#x02C6;', '&#x2030;', '&#x0160;', '&#x2039;',
@@ -60,7 +55,7 @@ class Phpxmlrpc
         '&#x201D;', '&#x2022;', '&#x2013;', '&#x2014;',
         '&#x02DC;', '&#x2122;', '&#x0161;', '&#x203A;',
         '&#x0153;', '?',        '&#x017E;', '&#x0178;'
-    );
+    ));
     */
 
     public $xmlrpcerr = array(
@@ -181,6 +176,11 @@ class Phpxmlrpc
             $this->xml_iso88591_Entities["in"][] = chr($i);
             $this->xml_iso88591_Entities["out"][] = "&#{$i};";
         }
+
+        /*for ($i = 128; $i < 160; $i++)
+        {
+            $this->xml_cp1252_Entities['in'][] = chr($i);
+        }*/
     }
 
     /**
