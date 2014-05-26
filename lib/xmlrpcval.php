@@ -477,5 +477,3 @@ class xmlrpcval {
         return count($this->me['struct']);
     }
 }
-
-?>

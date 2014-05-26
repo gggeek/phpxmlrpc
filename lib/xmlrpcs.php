@@ -259,7 +259,7 @@ function _xmlrpcs_multicall_do_call($server, $call)
 
     if($result->faultCode() != 0)
     {
-        return _xmlrpcs_multicall_error($result);		// Method returned fault.
+        return _xmlrpcs_multicall_error($result); // Method returned fault.
     }
 
     return new xmlrpcval(array($result->value()), 'array');
@@ -303,7 +303,7 @@ function _xmlrpcs_multicall_do_call_phpvals($server, $call)
 
     if($result->faultCode() != 0)
     {
-        return _xmlrpcs_multicall_error($result);		// Method returned fault.
+        return _xmlrpcs_multicall_error($result); // Method returned fault.
     }
 
     return new xmlrpcval(array($result->value()), 'array');
@@ -695,7 +695,7 @@ class xmlrpc_server
     function add_to_map($methodname,$function,$sig=null,$doc=false,$sigdoc=false)
     {
         $this->dmap[$methodname] = array(
-            'function'	=> $function,
+            'function' => $function,
             'docstring' => $doc
         );
         if ($sig)
@@ -910,7 +910,7 @@ class xmlrpc_server
         // 2005/05/07 commented and moved into caller function code
         //if($data=='')
         //{
-        //	$data=$GLOBALS['HTTP_RAW_POST_DATA'];
+        //    $data=$GLOBALS['HTTP_RAW_POST_DATA'];
         //}
 
         // G. Giunta 2005/02/13: we do NOT expect to receive html entities
@@ -1236,4 +1236,3 @@ class xmlrpc_server
         print $r->serialize();
     }
 }
-?>

@@ -1521,4 +1521,3 @@ Proxy Server: <input name="PROXY" size="30" value="<?php echo isset($PROXY) ? ht
 <?php
 echo $result->toHTML()."\n</body>\n</html>\n";
 }
-?>

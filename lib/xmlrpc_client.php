@@ -1,4 +1,5 @@
 <?php
+
 class xmlrpc_client
 {
     /// @todo: does these need to be public?
@@ -1123,5 +1124,4 @@ class xmlrpc_client
             return $response;
         }
     }
-} // end class xmlrpc_client
-?>
+}

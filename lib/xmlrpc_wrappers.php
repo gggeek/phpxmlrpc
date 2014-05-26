@@ -443,7 +443,7 @@ function wrap_php_function($funcname, $newfuncname='', $extra_options=array())
         }
         // shall we exclude functions returning by ref?
         // if($func->returnsReference())
-        // 	return false;
+        //     return false;
         $code = "function $xmlrpcfuncname(\$msg) {\n" . $innercode . "}\n}";
         //print_r($code);
         if ($buildit)
@@ -930,4 +930,3 @@ function build_client_wrapper_code($client, $verbatim_client_copy, $prefix='xmlr
     //$code .= "\$client->setDebug(\$debug);\n";
     return $code;
 }
-?>

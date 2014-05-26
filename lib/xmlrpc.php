@@ -579,7 +579,7 @@ function xmlrpc_cd($parser, $data)
             // we always initialize the accumulator before starting parsing, anyway...
             //if(!@isset($xmlrpc->_xh['ac']))
             //{
-            //	$xmlrpc->_xh['ac'] = '';
+            //    $xmlrpc->_xh['ac'] = '';
             //}
             $xmlrpc->_xh['ac'].=$data;
         }
@@ -599,7 +599,7 @@ function xmlrpc_dh($parser, $data)
             // G. Giunta 2006-08-25: useless change of 'lv' from 1 to 2
             //if($xmlrpc->_xh['lv']==1)
             //{
-            //	$xmlrpc->_xh['lv']=2;
+            //    $xmlrpc->_xh['lv']=2;
             //}
             $xmlrpc->_xh['ac'].=$data;
         }
@@ -808,7 +808,7 @@ else
  * @author Dan Libby (dan@libby.com)
  *
  * @param mixed $php_val the value to be converted into an xmlrpcval object
- * @param array $options	can include 'encode_php_objs', 'auto_dates', 'null_extension' or 'extension_api'
+ * @param array $options can include 'encode_php_objs', 'auto_dates', 'null_extension' or 'extension_api'
  * @return xmlrpcval
  */
 function php_xmlrpc_encode($php_val, $options=array())
@@ -1187,5 +1187,3 @@ function is_valid_charset($encoding, $validlist)
         return false;
     }
 }
-
-?>

@@ -1,6 +1,6 @@
 # Makefile for phpxmlrpc library
 
-### USER EDITABLE VARS ###
+### USER EDITABLE VARS - can be passed as command-line options ###
 
 # path to PHP executable, preferably CLI version
 PHP=/usr/local/bin/php
@@ -14,13 +14,15 @@ MKDIR=mkdir
 #find too
 FIND=find
 
+DOS2UNIX=dos2unix
 
 #### DO NOT TOUCH FROM HERE ONWARDS ###
 
 # recover version number from code
 # thanks to Firman Pribadi for unix command line help
 #   on unix shells lasts char should be \\2/g )
-export VERSION=$(shell egrep "\$GLOBALS *\[ *'xmlrpcVersion' *\] *= *'" lib/xmlrpc.inc | sed -r s/"(.*= *' *)([0-9a-zA-Z.-]+)(.*)"/\2/g )
+###export VERSION=$(shell grep -E "\$GLOBALS *\[ *'xmlrpcVersion' *\] *= *'" lib/xmlrpc.inc | sed -r s/"(.*= *' *)([0-9a-zA-Z.-]+)(.*)"/\2/g )
+export VERSION=3.0.0
 
 LIBFILES=lib/xmlrpc.inc lib/xmlrpcs.inc lib/xmlrpc_wrappers.inc
 
@@ -79,10 +81,10 @@ test:
 
 ### the following targets are to be used for library development ###
 
-# make tag target: tag existing working copy as release in cvs.
-# todo: convert dots in underscore in $VERSION
+# make tag target: tag existing working copy as release in git.
 tag:
-	cvs -q tag -p release_${VERSION}
+	git tag v${VERSION}
+	git push origin --tags
 
 dist: xmlrpc-${VERSION}.zip xmlrpc-${VERSION}.tar.gz
 
@@ -108,7 +110,7 @@ xmlrpc-${VERSION}.zip xmlrpc-${VERSION}.tar.gz: ${LIBFILES} ${DEBUGGERFILES} ${I
 	cp ${INFOFILES} xmlrpc-${VERSION}
 	cd doc && $(MAKE) dist
 #   on unix shells last char should be \;
-	${FIND} xmlrpc-${VERSION} -type f ! -name "*.fttb" ! -name "*.pdf" ! -name "*.gif" -exec dos2unix {} ;
+	${FIND} xmlrpc-${VERSION} -type f ! -name "*.fttb" ! -name "*.pdf" ! -name "*.gif" -exec ${DOS2UNIX} {} ;
 	-rm xmlrpc-${VERSION}.zip xmlrpc-${VERSION}.tar.gz
 	tar -cvf xmlrpc-${VERSION}.tar xmlrpc-${VERSION}
 	gzip xmlrpc-${VERSION}.tar

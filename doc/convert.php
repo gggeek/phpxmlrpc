@@ -55,4 +55,3 @@ if (!is_dir($_SERVER['argv'][3]))
     file_put_contents($_SERVER['argv'][3], $out);
 
 echo "OK\n";
-?>

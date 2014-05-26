@@ -609,4 +609,3 @@ class xmlrpcmsg {
         return $r;
     }
 }
-?>

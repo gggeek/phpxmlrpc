@@ -8,10 +8,10 @@ PHP-XMLRPC User manual
 <book lang="en">
   <title>XML-RPC for PHP</title>
 
-  <subtitle>version 3.0.0 beta</subtitle>
+  <subtitle>version 3.0.0</subtitle>
 
   <bookinfo>
-    <date>Sep 5, 2009</date>
+    <date>Feb 2, 2014</date>
 
     <authorgroup>
       <author>
@@ -211,6 +211,15 @@ PHP-XMLRPC User manual
     chapter in the manual. To find a more detailed description of new
     functions and methods please take a look at the source code of the
     library, which is quite thoroughly commented in javadoc-like form.</para>
+
+    <sect1>
+      <title>3.0.0</title>
+      <para><itemizedlist>
+        <listitem>
+            <para>...</para>
+        </listitem>
+      </itemizedlist></para>
+    </sect1>
 
     <sect1>
       <title>3.0.0 beta</title>
@@ -806,9 +815,6 @@ PHP-XMLRPC User manual
           <code>wrap_php_function</code> and <code>wrap_xmlrpc_method</code>,
           and has many caveats, with php being a typeless language and
           all...</para>
-
-          <para>With PHP versions lesser than 5.0.3 wrapping of php functions
-          into xmlrpc methods is not supported yet.</para>
         </listitem>
 
         <listitem>
@@ -855,11 +861,7 @@ PHP-XMLRPC User manual
     configuration.</para>
 
     <para>The <emphasis>minimum supported</emphasis> PHP version is
-    5.0.</para>
-
-    <para>Automatic generation of xml-rpc methods from php functions is only
-    supported with PHP version 5.0.3 and later (note that the lib will
-    generate some warnings with PHP 5 in strict error reporting mode).</para>
+    5.1.0</para>
 
     <para>If you wish to use SSL or HTTP 1.1 to communicate with remote
     servers, you need the "curl" extension compiled into your PHP
@@ -3642,7 +3644,7 @@ else {
         transparently carried out by the lib, while datetime vals are passed
         around as strings).</para>
 
-        <para>Known limitations: requires PHP 5.0.3 +; only works for
+        <para>Known limitations: only works for
         user-defined functions, not for PHP internal functions (reflection
         does not support retrieving number/type of params for those); the
         wrapped php function will not be able to programmatically return an

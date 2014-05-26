@@ -193,5 +193,3 @@ class Phpxmlrpc {
         return Phpxmlrpc::$instance;
     }
 }
-
-?>

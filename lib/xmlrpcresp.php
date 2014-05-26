@@ -161,5 +161,3 @@ xmlrpc_encode_entitites($this->errstr, $xmlrpc->xmlrpc_internalencoding, $charse
         return $result;
     }
 }
-
-?>
