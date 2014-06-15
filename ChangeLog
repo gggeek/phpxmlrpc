@@ -21,7 +21,7 @@
 
 	* xmlrpc.inc: method setAcceptedCompression was failing to disable reception
 	of compressed responses if the client supported them (triggering a bug with
-	https and php < 5.3 on windows due); remove a php warning that could be
+	https and php < 5.3 on windows); remove a php warning that could be
 	generated when using debug=2 in a client connecting to an https
 	server
 

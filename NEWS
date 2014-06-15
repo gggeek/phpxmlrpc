@@ -1,9 +1,13 @@
-XML-RPC for PHP version 3.0.0 - 2014/xx/yy
+XML-RPC for PHP version 3.0.0 - 2014/6/15
 
 This release corrects all bugs that have been reported and successfully reproduced since
 version 3.0.0 beta.
 
+The requirements have increased to php 5.1.0 - which is still way older than what you should be running for any serious purpose, really.
+
 It also is the first release to be installable via composer.
+
+See the Changelog file or the pdf docs for a complete list of changes.
 
 
 XML-RPC for PHP version 3.0.0 beta - 2009/09/05
@@ -45,7 +49,7 @@ support that ancient, broken and insecure platform.
 * fixed: fix encoding of UTF8 chars outside of the BMP plane
 * fixed: fix detection of zlib.output_compression
 * improved: allow the add_to_map server method to add docs for single params too
-* improved: added the possibility to wrap for exposure as xmlrpc	methods plain php class methods, object methods and even whole classes
+* improved: added the possibility to wrap for exposure as xmlrpc methods plain php class methods, object methods and even whole classes
 
 
 XML-RPC for PHP version 2.2.1 - 2008/03/06
@@ -87,7 +91,7 @@ There is a minor security enhancement and overall speedup too.
 It has been tested with PHP 4.0.5 up to 4.4.4 and 5.1.5.
 Please note that 404pl1 is NOT supported, and has not been since 2.0.
 
-*** PLASE READ CAREFULLY BELOW ***
+*** PLEASE READ CAREFULLY BELOW ***
 
 CHANGES THAT MIGHT AFFECT DEPLOYED APPLICATIONS:
 
