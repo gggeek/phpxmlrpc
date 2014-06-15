@@ -25,7 +25,5 @@
 			. " Reason: '" . ($r->faultString()) . "'<br/>";
 	}
 ?>
-<hr/>
-<em>$Id$</em>
 </body>
 </html>

@@ -52,7 +52,5 @@
 		}
 	}
 ?>
-<hr/>
-<em>$Id$</em>
 </body>
 </html>

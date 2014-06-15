@@ -48,7 +48,5 @@
 <p>Enter a state number to query its name</p>";
 
 ?>
-<hr/>
-<em>$Id$</em>
 </body>
 </html>

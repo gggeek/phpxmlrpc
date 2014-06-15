@@ -65,7 +65,5 @@ Subject <input size="60" name="mailsub" value="A message from xmlrpc"/>
 Body <textarea rows="7" cols="60" name="mailmsg">Your message here</textarea><br/>
 <input type="Submit" value="Send"/>
 </form>
-<hr/>
-<em>$Id$</em>
 </body>
 </html>
