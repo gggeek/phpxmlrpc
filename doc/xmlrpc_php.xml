@@ -4097,7 +4097,7 @@ if (!$resp-&gt;faultCode())
       <para>PHP-XMLRPC only supports the ISO 8859-1 and UTF8 character sets.
       The net result of this situation is that those extra characters will not
       be properly encoded, and will be received at the other end of the
-      XML-RPC tranmission as "garbled data". Unfortunately the library cannot
+      XML-RPC transmission as "garbled data". Unfortunately the library cannot
       provide real support for CP1252 because of limitations in the PHP 4 xml
       parser. Luckily, we tried our best to support this character set anyway,
       and, since version 2.2.1, there is some form of support, left commented
@@ -4108,7 +4108,7 @@ if (!$resp-&gt;faultCode())
       <filename>xmlrpc.inc</filename> (you can search for the string "1252"),
       then set <code>$GLOBALS['xmlrpc_internalencoding']='CP1252';</code>
       Please note that all incoming data will then be fed to your application
-      as UTF-8 to avoid any potentail data loss.</para>
+      as UTF-8 to avoid any potential data loss.</para>
     </sect1>
 
     <sect1>
