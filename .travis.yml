@@ -13,6 +13,9 @@ install:
   #composer install
 
 before_script:
+  # Disable xdebug
+  - phpenv config-rm xdebug.ini
+
   # TODO: we should set up an Apache instance inside the Travis VM and test it.
   # But it looks a bit complex, esp. as it seems that php has to be set up differently (cgi vs fpm) depending on version
   # So for now we just take an easy way out using a known remote server.
