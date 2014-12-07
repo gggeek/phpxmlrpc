@@ -100,6 +100,11 @@
 			$PROXYPORT = 8080;
 		}
 	}
+    // used to silence testsuite warnings about proxy code not being tested
+    if(!isset($NOPROXY))
+    {
+        $NOPROXY = false;
+    }
 	if(!isset($URI))
 	{
 		// GUESTIMATE the url of local demo server

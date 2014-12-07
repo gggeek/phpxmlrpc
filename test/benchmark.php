@@ -8,7 +8,7 @@
  * @todo add a test for response ok in call testing?
  **/
 
-	include(getcwd().'/parse_args.php');
+	include(dirname(__FILE__).'/parse_args.php');
 
 	require_once('xmlrpc.inc');
 

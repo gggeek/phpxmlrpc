@@ -1,6 +1,6 @@
 <?php
 
-include(getcwd().'/parse_args.php');
+include(dirname(__FILE__).'/parse_args.php');
 
 require_once('xmlrpc.inc');
 require_once('xmlrpcs.inc');
@@ -561,6 +561,10 @@ And turned it into nylon';
             $this->assertEquals(1, $v->scalarval());
             // now check if we decoded the cookies as we had set them
             $rcookies = $r->cookies();
+            // remove extra cookies which might have been set by proxies
+            foreach($rcookies as $c => $v)
+                if(!in_array($c, array('c2', 'c3', 'c4', 'c5')))
+                    unset($rcookies[$c]);
             foreach($cookies as $c => $v)
                 // format for date string in cookies: 'Mon, 31 Oct 2005 13:50:56 GMT'
                 // but PHP versions differ on that, some use 'Mon, 31-Oct-2005 13:50:56 GMT'...
@@ -677,14 +681,15 @@ class LocalHostMultiTests extends LocalhostTests
 
     function testProxy()
     {
-        global $PROXYSERVER, $PROXYPORT;
+        global $PROXYSERVER, $PROXYPORT, $NOPROXY;
         if ($PROXYSERVER)
         {
             $this->client->setProxy($PROXYSERVER, $PROXYPORT);
             $this->_runtests();
         }
         else
-            $this->fail('PROXY definition missing: cannot test proxy');
+            if (!$NOPROXY)
+                $this->fail('PROXY definition missing: cannot test proxy');
     }
 
     function testHttp11()
@@ -734,7 +739,7 @@ class LocalHostMultiTests extends LocalhostTests
 
     function testHttp11Proxy()
     {
-        global $PROXYSERVER, $PROXYPORT;
+        global $PROXYSERVER, $PROXYPORT, $NOPROXY;
         if(!function_exists('curl_init'))
         {
             $this->fail('CURL missing: cannot test http 1.1 w. proxy');
@@ -742,7 +747,8 @@ class LocalHostMultiTests extends LocalhostTests
         }
         else if ($PROXYSERVER == '')
         {
-            $this->fail('PROXY definition missing: cannot test proxy w. http 1.1');
+            if (!$NOPROXY)
+                $this->fail('PROXY definition missing: cannot test proxy w. http 1.1');
             return;
         }
         $this->method = 'http11'; // not an error the double assignment!
@@ -772,7 +778,7 @@ class LocalHostMultiTests extends LocalhostTests
 
     function testHttpsProxy()
     {
-        global $HTTPSSERVER, $HTTPSURI, $PROXYSERVER, $PROXYPORT;;
+        global $HTTPSSERVER, $HTTPSURI, $PROXYSERVER, $PROXYPORT, $NOPROXY;
         if(!function_exists('curl_init'))
         {
             $this->fail('CURL missing: cannot test https functionality');
@@ -780,7 +786,8 @@ class LocalHostMultiTests extends LocalhostTests
         }
         else if ($PROXYSERVER == '')
         {
-            $this->fail('PROXY definition missing: cannot test proxy w. http 1.1');
+            if (!$NOPROXY)
+                $this->fail('PROXY definition missing: cannot test proxy w. http 1.1');
             return;
         }
         $this->client->server = $HTTPSSERVER;

@@ -1,3 +1,8 @@
+XML-RPC for PHP version 3.0.1 - 201X/Y/Z
+
+Taking baby steps to modern-world php, this release is now tested using Travis ( https://travis-ci.org/ ).
+
+
 XML-RPC for PHP version 3.0.0 - 2014/6/15
 
 This release corrects all bugs that have been reported and successfully reproduced since

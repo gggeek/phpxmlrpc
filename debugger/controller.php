@@ -13,7 +13,7 @@
  * @todo add http no-cache headers
  **/
 
-  include(getcwd().'/common.php');
+  include(dirname(__FILE__).'/common.php');
   if ($action == '')
     $action = 'list';
 
