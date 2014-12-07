@@ -2,6 +2,8 @@ XML-RPC for PHP version 3.0.1 - 201X/Y/Z
 
 Taking baby steps to modern-world php, this release is now tested using Travis ( https://travis-ci.org/ ).
 
+Improved: no need to call anymore $client->setSSLVerifyHost(2) to silence a curl warning when using https with recent curl builds
+
 
 XML-RPC for PHP version 3.0.0 - 2014/6/15
 

@@ -1621,6 +1621,13 @@
 				{
 					curl_setopt($curl, CURLOPT_SSLKEYPASSWD, $keypass);
 				}
+
+                // Upgrade transparently to more stringent check for versions of php which do not support otherwise.
+                // Doing it in constructor would be cleaner; doing it here saves us a couple of function calls
+                if($this->verifyhost == 1 && $info = curl_version() && version_compare($info['version'], '7.28.1') >= 0)
+                {
+                    $this->verifyhost = 2;
+                }
 				// whether to verify cert's common name (CN); 0 for no, 1 to verify that it exists, and 2 to verify that it matches the hostname used
 				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->verifyhost);
 			}

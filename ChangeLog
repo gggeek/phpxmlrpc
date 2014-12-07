@@ -1,3 +1,8 @@
+NB: All recent commits are available online.
+This file will not be updated further.
+See https://github.com/gggeek/phpxmlrpc/commits/master
+
+
 2014-02-3 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* bumped up requirements to php 5.1.0
@@ -1374,7 +1379,7 @@
 	* xmlrpc.inc: added setSSLVerifyPeer and setSSLVerifyHost; as
 	of curl 7.10, various certificate checks are done (by default).
 	The default for CURLOPT_SSL_VERIFYHOST is to ensure the common
-	name on the cert matches the provided hostname.  This breaks a
+	name on the cert matches the provided hostname. This breaks a
 	lot of stuff, so allow users to override it.
 	* doc/xmlrpc_php.sgml: updated documentation accordingly.
 
