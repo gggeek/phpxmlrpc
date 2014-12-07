@@ -228,8 +228,12 @@ And turned it into nylon';
         if (class_exists('DateTime'))
         {
             $datetime = new DateTime();
-            $t3 = new xmlrpcval($datetime->setTimestamp($time), 'dateTime.iso8601');
-            $this->assertEquals($t1->serialize(), $t3->serialize());
+            // skip this test for php 5.2. It is a bit harder there to build a DateTime from unix timestamp with proper TZ info
+            if(is_callable(array($datetime,'setTimestamp')))
+            {
+                $t3 = new xmlrpcval($datetime->setTimestamp($time), 'dateTime.iso8601');
+                $this->assertEquals($t1->serialize(), $t3->serialize());
+            }
         }
     }
 
