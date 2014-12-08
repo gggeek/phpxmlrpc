@@ -515,12 +515,12 @@
 	* Given an xmlrpc client and a method name, register a php wrapper function
 	* that will call it and return results using native php types for both
 	* params and results. The generated php function will return an xmlrpcresp
-	* oject for failed xmlrpc calls
+	* object for failed xmlrpc calls
 	*
 	* Known limitations:
 	* - server must support system.methodsignature for the wanted xmlrpc method
 	* - for methods that expose many signatures, only one can be picked (we
-	*   could in priciple check if signatures differ only by number of params
+	*   could in principle check if signatures differ only by number of params
 	*   and not by type, but it would be more complication than we can spare time)
 	* - nested xmlrpc params: the caller of the generated php function has to
 	*   encode on its own the params passed to the php function if these are structs
@@ -536,11 +536,11 @@
 	*
 	* @param xmlrpc_client $client     an xmlrpc client set up correctly to communicate with target server
 	* @param string        $methodname the xmlrpc method to be mapped to a php function
-	* @param array         $extra_options array of options that specify conversion details. valid ptions include
+	* @param array         $extra_options array of options that specify conversion details. valid options include
 	*        integer       signum      the index of the method signature to use in mapping (if method exposes many sigs)
 	*        integer       timeout     timeout (in secs) to be used when executing function/calling remote method
 	*        string        protocol    'http' (default), 'http11' or 'https'
-	*        string        new_function_name the name of php function to create. If unsepcified, lib will pick an appropriate name
+	*        string        new_function_name the name of php function to create. If unspecified, lib will pick an appropriate name
 	*        string        return_source if true return php code w. function definition instead fo function name
 	*        bool          encode_php_objs let php objects be sent to server using the 'improved' xmlrpc notation, so server can deserialize them as php objects
 	*        bool          decode_php_objs --- WARNING !!! possible security hazard. only use it with trusted servers ---
@@ -570,6 +570,7 @@
 
 		$encode_php_objects = isset($extra_options['encode_php_objs']) ? (bool)$extra_options['encode_php_objs'] : false;
 		$decode_php_objects = isset($extra_options['decode_php_objs']) ? (bool)$extra_options['decode_php_objs'] : false;
+		// it seems like the meaning of 'simple_client_copy' here is swapped wrt client_copy_mode later on...
 		$simple_client_copy = isset($extra_options['simple_client_copy']) ? (int)($extra_options['simple_client_copy']) : 0;
 		$buildit = isset($extra_options['return_source']) ? !($extra_options['return_source']) : true;
 		$prefix = isset($extra_options['prefix']) ? $extra_options['prefix'] : 'xmlrpc';

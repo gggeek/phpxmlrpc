@@ -534,7 +534,8 @@ And turned it into nylon';
 
     function testAutoRegisteredMethod()
     {
-        $func=wrap_xmlrpc_method($this->client, 'examples.getStateName');
+        // make a 'deep client copy' as the original one might have many properties set
+        $func=wrap_xmlrpc_method($this->client, 'examples.getStateName', array('simple_client_copy' => 1));
         if($func == '')
         {
             $this->fail('Registration of examples.getStateName failed');
@@ -542,6 +543,11 @@ And turned it into nylon';
         else
         {
             $v=$func(23);
+            // work around bug in current version of phpunit
+            if(is_object($v))
+            {
+                $v = var_export($v, true);
+            }
             $this->assertEquals('Michigan', $v);
         }
     }
@@ -638,7 +644,9 @@ class LocalHostMultiTests extends LocalhostTests
             if(strpos($meth, 'test') === 0 && $meth != 'testHttps' && $meth != 'testCatchExceptions')
             {
                 if (!isset($failed_tests[$meth]))
+                {
                     $this->$meth();
+                }
             }
             if ($this->_failed)
             {
@@ -777,6 +785,8 @@ class LocalHostMultiTests extends LocalhostTests
         $this->client->method = 'https';
         $this->client->path = $HTTPSURI;
         $this->client->setSSLVerifyPeer( !$HTTPSIGNOREPEER );
+        // silence warning with newish php versions
+        $this->client->setSSLVerifyHost(2);
         $this->_runtests();
     }
 
