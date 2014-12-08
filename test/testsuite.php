@@ -1540,6 +1540,10 @@ Proxy Server: <input name="PROXY" size="30" value="<?php echo isset($PROXY) ? ht
 </form>
 </div>
 <?php
-echo $result->toHTML()."\n</body>\n</html>\n";
+    echo $result->toHTML()."\n</body>\n</html>\n";
+}
+else
+{
+    exit($result->failureCount());
 }
 ?>
