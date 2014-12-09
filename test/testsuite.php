@@ -1546,4 +1546,3 @@ else
 {
     exit($result->failureCount());
 }
-?>

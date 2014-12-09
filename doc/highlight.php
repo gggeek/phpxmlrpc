@@ -17,12 +17,12 @@ function highlight($file)
   while(($start = strpos($content, $starttag, $last)) !== false)
   {
     $end = strpos($content, $endtag, $start);
-	$code = substr($content, $start+strlen($starttag), $end-$start-strlen($starttag));
-	if ($code[strlen($code)-1] == "\n") {
-		$code = substr($code, 0, -1);
-	}
+    $code = substr($content, $start+strlen($starttag), $end-$start-strlen($starttag));
+    if ($code[strlen($code)-1] == "\n") {
+        $code = substr($code, 0, -1);
+    }
 //var_dump($code);
-	$code = str_replace(array('&gt;', '&lt;'), array('>', '<'), $code);
+    $code = str_replace(array('&gt;', '&lt;'), array('>', '<'), $code);
     $code = highlight_string('<?php '.$code, true);
     $code = str_replace('<span style="color: #0000BB">&lt;?php&nbsp;<br />', '<span style="color: #0000BB">', $code);
 //echo($code);
@@ -38,11 +38,9 @@ $dir = $argv[1];
 $files = scandir($dir);
 foreach($files as $file)
 {
-	if (substr($file, -5, 5) == '.html')
-	{
-		$out = highlight($dir.'/'.$file);
-		file_put_contents($dir.'/'.$file, $out);
-	}
+    if (substr($file, -5, 5) == '.html')
+    {
+        $out = highlight($dir.'/'.$file);
+        file_put_contents($dir.'/'.$file, $out);
+    }
 }
-
-?>

@@ -172,20 +172,20 @@ td {vertical-align: top; font-family: Verdana, Arial, Helvetica; font-size: 8pt;
   {
     if (show && ((typeof base64_decode) == 'function'))
     {
-	  document.getElementById('methodpayloadbtn').innerHTML = '[<a href="#" onclick="activateeditor(); return false;">Edit</a>]';
-	}
-	else
+      document.getElementById('methodpayloadbtn').innerHTML = '[<a href="#" onclick="activateeditor(); return false;">Edit</a>]';
+    }
+    else
     {
-	  document.getElementById('methodpayloadbtn').innerHTML = '';
-	}
+      document.getElementById('methodpayloadbtn').innerHTML = '';
+    }
   }
 
   function activateeditor()
   {
-	  var url = '<?php echo $editorpath; ?>visualeditor.php?params=<?php echo $alt_payload; ?>';
-	  if (document.frmaction.wstype.value == "1")
-	    url += '&type=jsonrpc';
-	  var wnd = window.open(url, '_blank', 'width=750, height=400, location=0, resizable=1, menubar=0, scrollbars=1');
+      var url = '<?php echo $editorpath; ?>visualeditor.php?params=<?php echo $alt_payload; ?>';
+      if (document.frmaction.wstype.value == "1")
+        url += '&type=jsonrpc';
+      var wnd = window.open(url, '_blank', 'width=750, height=400, location=0, resizable=1, menubar=0, scrollbars=1');
   }
 
   // if javascript version of the lib is found, allow it to send us params
@@ -193,9 +193,9 @@ td {vertical-align: top; font-family: Verdana, Arial, Helvetica; font-size: 8pt;
   {
     if (typeof base64_decode == 'function')
     {
-	  if (base64data == '0') // workaround for bug in base64_encode...
-	    document.getElementById('methodpayload').value = '';
-	  else
+      if (base64data == '0') // workaround for bug in base64_encode...
+        document.getElementById('methodpayload').value = '';
+      else
         document.getElementById('methodpayload').value = base64_decode(base64data);
     }
   }

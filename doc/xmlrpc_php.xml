@@ -12,7 +12,6 @@ PHP-XMLRPC User manual
 
   <bookinfo>
     <date>June 15, 2014</date>
-
     <authorgroup>
       <author>
         <firstname>Edd</firstname>
@@ -239,8 +238,7 @@ PHP-XMLRPC User manual
       </itemizedlist></para>
     </sect1>
 
-    <sect1>
-      <title>3.0.0 beta</title>
+    <sect1>      <title>3.0.0 beta</title>
 
       <para>This is the first release of the library to only support PHP 5.
       Some legacy code has been removed, and support for features such as
@@ -833,9 +831,6 @@ PHP-XMLRPC User manual
           <code>wrap_php_function</code> and <code>wrap_xmlrpc_method</code>,
           and has many caveats, with php being a typeless language and
           all...</para>
-
-          <para>With PHP versions lesser than 5.0.3 wrapping of php functions
-          into xmlrpc methods is not supported yet.</para>
         </listitem>
 
         <listitem>
@@ -882,7 +877,7 @@ PHP-XMLRPC User manual
     configuration.</para>
 
     <para>The <emphasis>minimum supported</emphasis> PHP version is
-    5.1.</para>
+    5.3.</para>
 
     <para>If you wish to use SSL or HTTP 1.1 to communicate with remote
     servers, you need the "curl" extension compiled into your PHP

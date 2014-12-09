@@ -1,8 +1,8 @@
 <?php
 // Allow users to see the source of this file even if PHP is not configured for it
 if ((isset($HTTP_GET_VARS['showSource']) && $HTTP_GET_VARS['showSource']) ||
-	(isset($_GET['showSource']) && $_GET['showSource']))
-	{ highlight_file(__FILE__); die(); }
+    (isset($_GET['showSource']) && $_GET['showSource']))
+    { highlight_file(__FILE__); die(); }
 ?>
 <html>
 <head><title>xmlrpc</title></head>
@@ -18,36 +18,36 @@ include("xmlrpc.inc");
 
 // Play nice to PHP 5 installations with REGISTER_LONG_ARRAYS off
 if (!isset($HTTP_POST_VARS) && isset($_POST))
-	$HTTP_POST_VARS = $_POST;
+    $HTTP_POST_VARS = $_POST;
 
 if (isset($HTTP_POST_VARS["server"]) && $HTTP_POST_VARS["server"]) {
-	if ($HTTP_POST_VARS["server"]=="Userland") {
-		$XP="/RPC2"; $XS="206.204.24.2";
-	} else {
-		$XP="/xmlrpc/server.php"; $XS="pingu.heddley.com";
-	}
-	$f=new xmlrpcmsg('mail.send');
-	$f->addParam(new xmlrpcval($HTTP_POST_VARS["mailto"]));
-	$f->addParam(new xmlrpcval($HTTP_POST_VARS["mailsub"]));
-	$f->addParam(new xmlrpcval($HTTP_POST_VARS["mailmsg"]));
-	$f->addParam(new xmlrpcval($HTTP_POST_VARS["mailfrom"]));
-	$f->addParam(new xmlrpcval($HTTP_POST_VARS["mailcc"]));
-	$f->addParam(new xmlrpcval($HTTP_POST_VARS["mailbcc"]));
-	$f->addParam(new xmlrpcval("text/plain"));
+    if ($HTTP_POST_VARS["server"]=="Userland") {
+        $XP="/RPC2"; $XS="206.204.24.2";
+    } else {
+        $XP="/xmlrpc/server.php"; $XS="pingu.heddley.com";
+    }
+    $f=new xmlrpcmsg('mail.send');
+    $f->addParam(new xmlrpcval($HTTP_POST_VARS["mailto"]));
+    $f->addParam(new xmlrpcval($HTTP_POST_VARS["mailsub"]));
+    $f->addParam(new xmlrpcval($HTTP_POST_VARS["mailmsg"]));
+    $f->addParam(new xmlrpcval($HTTP_POST_VARS["mailfrom"]));
+    $f->addParam(new xmlrpcval($HTTP_POST_VARS["mailcc"]));
+    $f->addParam(new xmlrpcval($HTTP_POST_VARS["mailbcc"]));
+    $f->addParam(new xmlrpcval("text/plain"));
 
-	$c=new xmlrpc_client($XP, $XS, 80);
-	$c->setDebug(2);
-	$r=&$c->send($f);
-	if (!$r->faultCode()) {
-		print "Mail sent OK<br/>\n";
-	} else {
-		print "<fonr color=\"red\">";
-		print "Mail send failed<br/>\n";
-		print "Fault: ";
-		print "Code: " . htmlspecialchars($r->faultCode()) .
-	  " Reason: '" . htmlspecialchars($r->faultString()) . "'<br/>";
-		print "</font><br/>";
-	}
+    $c=new xmlrpc_client($XP, $XS, 80);
+    $c->setDebug(2);
+    $r=&$c->send($f);
+    if (!$r->faultCode()) {
+        print "Mail sent OK<br/>\n";
+    } else {
+        print "<fonr color=\"red\">";
+        print "Mail send failed<br/>\n";
+        print "Fault: ";
+        print "Code: " . htmlspecialchars($r->faultCode()) .
+      " Reason: '" . htmlspecialchars($r->faultString()) . "'<br/>";
+        print "</font><br/>";
+    }
 }
 ?>
 <form method="POST">
