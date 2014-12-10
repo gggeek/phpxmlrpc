@@ -13,17 +13,6 @@
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
  **/
 
-    require_once('xmlrpc.inc');
-    require_once('xmlrpcs.inc');
-
-    // play nice to older PHP versions that miss superglobals
-    if(!isset($_SERVER))
-    {
-        $_SERVER = $HTTP_SERVER_VARS;
-        $_GET = isset($HTTP_GET_VARS) ? $HTTP_GET_VARS : array();
-        $_POST = isset($HTTP_POST_VARS) ? $HTTP_POST_VARS : array();
-    }
-
     // check for command line vs web page input params
     if(!isset($_SERVER['REQUEST_METHOD']))
     {
@@ -135,5 +124,5 @@
     }
     if(!isset($LOCALPATH))
     {
-        $LOCALPATH = dirname(__FILE__);
+        $LOCALPATH = __DIR__;
     }

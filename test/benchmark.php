@@ -8,9 +8,9 @@
  * @todo add a test for response ok in call testing?
  **/
 
-	include(dirname(__FILE__).'/parse_args.php');
+    include_once(__DIR__.'/../vendor/autoload.php');
 
-    require_once('xmlrpc.inc');
+    include(__DIR__.'/parse_args.php');
 
     // Set up PHP structures to be used in many tests
     $data1 = array(1, 1.0, 'hello world', true, '20051021T23:43:00', -1, 11.0, '~!@#$%^&*()_+|', false, '20051021T23:43:00');

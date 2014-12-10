@@ -1,24 +1,23 @@
 <?php
 
-include(dirname(__FILE__).'/parse_args.php');
+include_once(__DIR__.'/../vendor/autoload.php');
 
-require_once('xmlrpc.inc');
-require_once('xmlrpcs.inc');
-require_once('xmlrpc_wrappers.inc');
+include(__DIR__.'/parse_args.php');
 
-require_once 'phpunit.php';
+require_once(__DIR__.'/../lib/xmlrpc_wrappers.php');
+
 //require_once 'PHPUnit/TestDecorator.php';
 
-// let testuite run for the needed time
+// let testsuite run for the needed time
 if ((int)ini_get('max_execution_time') < 180)
     ini_set('max_execution_time', 180);
 
-$suite = new PHPUnit_TestSuite();
+$suite = new PHPUnit_Framework_TestSuite();
 
 // array with list of failed tests
 $failed_tests = array();
 
-class LocalhostTests extends PHPUnit_TestCase
+class LocalhostTests extends PHPUnit_Framework_TestCase
 {
     var $client = null;
     var $method = 'http';
@@ -26,9 +25,9 @@ class LocalhostTests extends PHPUnit_TestCase
     var $request_compression = null;
     var $accepted_compression = '';
 
-    function fail($message = '')
+    static function fail($message = '')
     {
-        PHPUnit_TestCase::fail($message);
+        parent::fail($message);
         // save in global var that this particular test has failed
         // (but only if not called from subclass objects / multitests)
         if (function_exists('debug_backtrace') && strtolower(get_class($this)) == 'localhosttests')
@@ -841,7 +840,7 @@ class LocalHostMultiTests extends LocalhostTests
     }
 }
 
-class ParsingBugsTests extends PHPUnit_TestCase
+class ParsingBugsTests extends PHPUnit_Framework_TestCase
 {
     function testMinusOneString()
     {
@@ -1322,7 +1321,7 @@ $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><valu
     }
 }
 
-class InvalidHostTests extends PHPUnit_TestCase
+class InvalidHostTests extends PHPUnit_Framework_TestCase
 {
     var $client = null;
 
@@ -1477,22 +1476,23 @@ else
 if(isset($_SERVER['REQUEST_METHOD']))
 {
     echo "<h3>Using lib version: $xmlrpcVersion on PHP version: ".phpversion()."</h3>\n";
-    echo '<h3>Running '.$suite->testCount().' tests (some of which are multiple) against servers: http://'.htmlspecialchars($LOCALSERVER.$URI).' and https://'.htmlspecialchars($HTTPSSERVER.$HTTPSURI)."\n ...</h3>\n";
+    echo '<h3>Running '.$suite->count().' tests (some of which are multiple) against servers: http://'.htmlspecialchars($LOCALSERVER.$URI).' and https://'.htmlspecialchars($HTTPSSERVER.$HTTPSURI)."\n ...</h3>\n";
     flush();
     @ob_flush();
 }
 else
 {
     echo "Using lib version: $xmlrpcVersion on PHP version: ".phpversion()."\n";
-    echo 'Running '.$suite->testCount().' tests (some of which are multiple) against servers: http://'.$LOCALSERVER.$URI.' and https://'.$HTTPSSERVER.$HTTPSURI."\n\n";
+    echo 'Running '.$suite->count().' tests (some of which are multiple) against servers: http://'.$LOCALSERVER.$URI.' and https://'.$HTTPSSERVER.$HTTPSURI."\n\n";
 }
 
 // do some basic timing measurement
 list($micro, $sec) = explode(' ', microtime());
 $start_time = $sec + $micro;
 
-$PHPUnit = new PHPUnit;
-$result = $PHPUnit->run($suite, ($DEBUG == 0 ? '.' : '<hr/>'));
+//$PHPUnit = new PHPUnit;
+//$result = $PHPUnit->run($suite, ($DEBUG == 0 ? '.' : '<hr/>'));
+$result = $suite->run();
 
 list($micro, $sec) = explode(' ', microtime());
 $end_time = $sec + $micro;
