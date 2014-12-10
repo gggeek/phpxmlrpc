@@ -55,4 +55,3 @@
             return $client->send(new xmlrpcmsg($remote_function_name, $xmlrpcval_array));
         }
     }
-?>

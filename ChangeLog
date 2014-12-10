@@ -4,7 +4,7 @@ See https://github.com/gggeek/phpxmlrpc/commits/master
 
 2014-05-26 - G. Giunta (giunta.gaetano@gmail.com)
 
-	* removed bundled php unit
+	* removed bundled phpunit
 	* converted all tabs to spaces in php files and removed closing tags
 
 2014-05-12 - Samu Voutilainen (smar@smar.fi)

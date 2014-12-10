@@ -12,6 +12,7 @@ PHP-XMLRPC User manual
 
   <bookinfo>
     <date>June 15, 2014</date>
+
     <authorgroup>
       <author>
         <firstname>Edd</firstname>
@@ -238,7 +239,8 @@ PHP-XMLRPC User manual
       </itemizedlist></para>
     </sect1>
 
-    <sect1>      <title>3.0.0 beta</title>
+    <sect1>
+      <title>3.0.0 beta</title>
 
       <para>This is the first release of the library to only support PHP 5.
       Some legacy code has been removed, and support for features such as

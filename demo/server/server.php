@@ -166,7 +166,6 @@ in an alphabetic order.';
         // just sends back a string
         $s=$m->getParam(0);
         $v = $s->scalarval();
-file_put_contents('D:/temp/zozzo.log', $v, FILE_APPEND);
         return new xmlrpcresp(new xmlrpcval($s->scalarval()));
     }
 

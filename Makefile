@@ -21,8 +21,7 @@ DOS2UNIX=dos2unix
 # recover version number from code
 # thanks to Firman Pribadi for unix command line help
 #   on unix shells lasts char should be \\2/g )
-###export VERSION=$(shell grep -E "\$GLOBALS *\[ *'xmlrpcVersion' *\] *= *'" lib/xmlrpc.inc | sed -r s/"(.*= *' *)([0-9a-zA-Z.-]+)(.*)"/\2/g )
-export VERSION=3.0.0
+export VERSION=$(shell grep -E "\$GLOBALS *\[ *'xmlrpcVersion' *\] *= *'" lib/xmlrpc.inc | sed -r s/"(.*= *' *)([0-9a-zA-Z.-]+)(.*)"/\2/g )
 
 LIBFILES=lib/xmlrpc.inc lib/xmlrpcs.inc lib/xmlrpc_wrappers.inc
 

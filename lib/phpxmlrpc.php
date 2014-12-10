@@ -123,7 +123,7 @@ class Phpxmlrpc
     public $xmlrpc_internalencoding = "ISO-8859-1"; // TODO: maybe this would be better as UTF-8, or atleast configurable?
 
     public $xmlrpcName = "XML-RPC for PHP";
-    public $xmlrpcVersion = "3.0.0.beta";
+    public $xmlrpcVersion = "4.0.0.beta";
 
     // let user errors start at 800
     public $xmlrpcerruser = 800;

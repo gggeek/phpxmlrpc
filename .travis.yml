@@ -1,7 +1,6 @@
 language: php
 
 php:
-  - 5.2
   - 5.3
   - 5.4
   - 5.5
@@ -9,8 +8,7 @@ php:
   - hhvm
 
 install:
-  # NB: the lib does not declare dependencies for now. Also, composer will not run on php 5.2
-  - if [ $TRAVIS_PHP_VERSION != "5.2" ]; then composer self-update && composer install; fi
+  - composer self-update && composer install
 
 before_script:
   # Disable xdebug. NB: this should NOT be done for hhvm...

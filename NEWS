@@ -1,8 +1,20 @@
-XML-RPC for PHP version 3.0.1 - 201X/Y/Z
+XML-RPC for PHP version 4.0.0 - 201X/Y/Z
 
-Taking baby steps to modern-world php, this release is now tested using Travis ( https://travis-ci.org/ ).
+This release does away with the past and starts a transition to modern-world php.
 
-Improved: no need to call anymore $client->setSSLVerifyHost(2) to silence a curl warning when using https with recent curl builds
+Code has been heavily refactored, taking care to preserve backwards compatibility as much as possible,
+but some breackage is to be expected.
+
+PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
+
+The minimum requied php version has been increase to 5.3,
+even though we stronly urge you to use more recent versions.
+
+* improved: this release is now tested using Travis ( https://travis-ci.org/ ).
+
+* improved: no need to call anymore $client->setSSLVerifyHost(2) to silence a curl warning when using https with recent curl builds
+
+* improved: phpunit is now installed via composer, not bundled anymore 
 
 
 XML-RPC for PHP version 3.0.0 - 2014/6/15
