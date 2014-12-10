@@ -36,7 +36,7 @@ td form {margin: 0;}
 <body>
 <?php
 
-  include(dirname(__FILE__).'/common.php');
+  include(__DIR__.'/common.php');
   if ($action)
   {
 
@@ -149,10 +149,10 @@ td form {margin: 0;}
     switch ($action) {
 
       case 'wrap':
-        @include('xmlrpc_wrappers.inc');
+        @include('xmlrpc_wrappers.php');
         if (!function_exists('build_remote_method_wrapper_code'))
         {
-          die('Error: to enable creation of method stubs the xmlrpc_wrappers.inc file is needed');
+          die('Error: to enable creation of method stubs the xmlrpc_wrappers.php file is needed');
         }
         // fall thru intentionally
       case 'describe':
