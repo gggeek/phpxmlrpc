@@ -151,7 +151,7 @@ class Phpxmlrpc
     //           used to validate nesting of xmlrpc elements
     public $_xh = null;
 
-    private static $instance = null;
+    protected static $instance = null;
 
     private function __construct() {
         $this->xmlrpcTypes = array(
@@ -187,10 +187,10 @@ class Phpxmlrpc
      * This class is singleton for performance reasons: this way the ASCII array needs to be done only once.
      */
     public static function instance() {
-        if(Phpxmlrpc::$instance === null) {
-            Phpxmlrpc::$instance = new Phpxmlrpc();
+        if(self::$instance === null) {
+            self::$instance = new self();
         }
 
-        return Phpxmlrpc::$instance;
+        return self::$instance;
     }
 }
