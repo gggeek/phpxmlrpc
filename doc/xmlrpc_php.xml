@@ -997,7 +997,7 @@ PHP-XMLRPC User manual
       </glossentry>
 
       <glossentry>
-        <glossterm>demo/demo1.txt, demo/demo2.txt, demo/demo3.txt</glossterm>
+        <glossterm>demo/demo1.xml, demo/demo2.xml, demo/demo3.xml</glossterm>
 
         <glossdef>
           <para>XML-RPC responses captured in a file for testing purposes (you
@@ -1801,7 +1801,7 @@ $msg = new xmlrpcmsg("examples.getStateName", array(new xmlrpcval(23, "int")));
           <function>parseResponse.</function></para>
 
           <para>This method is useful to construct responses from pre-prepared
-          files (see files <literal>demo1.txt, demo2.txt, demo3.txt</literal>
+          files (see files <literal>demo1.xml, demo2.xml, demo3.xml</literal>
           in this distribution). It processes any HTTP headers it finds, and
           does not close the file handle.</para>
         </sect3>
