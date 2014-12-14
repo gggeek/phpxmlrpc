@@ -1,7 +1,35 @@
 <?php
 
-class xmlrpcval
+namespace PhpXmlRpc;
+
+use PhpXmlRpc\Helper\Charset;
+
+class Value
 {
+    public static $xmlrpcI4 = "i4";
+    public static $xmlrpcInt = "int";
+    public static $xmlrpcBoolean = "boolean";
+    public static $xmlrpcDouble = "double";
+    public static $xmlrpcString = "string";
+    public static $xmlrpcDateTime = "dateTime.iso8601";
+    public static $xmlrpcBase64 = "base64";
+    public static $xmlrpcArray = "array";
+    public static $xmlrpcStruct = "struct";
+    public static $xmlrpcValue = "undefined";
+    public static $xmlrpcNull = "null";
+
+    public static $xmlrpcTypes = array(
+        "i4" => 1,
+        "int" => 1,
+        "boolean" => 1,
+        "double" => 1,
+        "string" => 1,
+        "dateTime.iso8601" => 1,
+        "base64" => 1,
+        "array" => 2,
+        "struct" => 3,
+        "null" => 1
+        );
 
     /// @todo: does these need to be public?
     public $me=array();
@@ -50,15 +78,15 @@ class xmlrpcval
             {
                 $type='string';
             }
-            if($GLOBALS['xmlrpcTypes'][$type]==1)
+            if(static::$xmlrpcTypes[$type]==1)
             {
                 $this->addScalar($val,$type);
             }
-            elseif($GLOBALS['xmlrpcTypes'][$type]==2)
+            elseif(static::$xmlrpcTypes[$type]==2)
             {
                 $this->addArray($val);
             }
-            elseif($GLOBALS['xmlrpcTypes'][$type]==3)
+            elseif(static::$xmlrpcTypes[$type]==3)
             {
                 $this->addStruct($val);
             }*/
@@ -73,11 +101,9 @@ class xmlrpcval
       */
     function addScalar($val, $type='string')
     {
-        $xmlrpc = Phpxmlrpc::instance();
-
         $typeof = null;
-        if(isset($xmlrpc->xmlrpcTypes[$type])) {
-            $typeof = $xmlrpc->xmlrpcTypes[$type];
+        if(isset(static::$xmlrpcTypes[$type])) {
+            $typeof = static::$xmlrpcTypes[$type];
         }
 
         if($typeof!=1)
@@ -89,7 +115,7 @@ class xmlrpcval
         // coerce booleans into correct values
         // NB: we should either do it for datetimes, integers and doubles, too,
         // or just plain remove this check, implemented on booleans only...
-        if($type==$xmlrpc->xmlrpcBoolean)
+        if($type==static::$xmlrpcBoolean)
         {
             if(strcasecmp($val,'true')==0 || $val==1 || ($val==true && strcasecmp($val,'false')))
             {
@@ -112,10 +138,10 @@ class xmlrpcval
             case 2:
                 // we're adding a scalar value to an array here
                 //$ar=$this->me['array'];
-                //$ar[]=new xmlrpcval($val, $type);
+                //$ar[]=new Value($val, $type);
                 //$this->me['array']=$ar;
                 // Faster (?) avoid all the costly array-copy-by-val done here...
-                $this->me['array'][]=new xmlrpcval($val, $type);
+                $this->me['array'][]=new Value($val, $type);
                 return 1;
             default:
                 // a scalar, so set the value and remember we're scalar
@@ -134,10 +160,9 @@ class xmlrpcval
       */
     public function addArray($vals)
     {
-        $xmlrpc = Phpxmlrpc::instance();
         if($this->mytype==0)
         {
-            $this->mytype=$xmlrpc->xmlrpcTypes['array'];
+            $this->mytype=static::$xmlrpcTypes['array'];
             $this->me['array']=$vals;
             return 1;
         }
@@ -163,11 +188,9 @@ class xmlrpcval
      */
     public function addStruct($vals)
     {
-        $xmlrpc = Phpxmlrpc::instance();
-
         if($this->mytype==0)
         {
-            $this->mytype=$xmlrpc->xmlrpcTypes['struct'];
+            $this->mytype=static::$xmlrpcTypes['struct'];
             $this->me['struct']=$vals;
             return 1;
         }
@@ -208,34 +231,33 @@ class xmlrpcval
 
     private function serializedata($typ, $val, $charset_encoding='')
     {
-        $xmlrpc = Phpxmlrpc::instance();
         $rs='';
 
-        if(!isset($xmlrpc->xmlrpcTypes[$typ])) {
+        if(!isset(static::$xmlrpcTypes[$typ])) {
             return $rs;
         }
 
-        switch($xmlrpc->xmlrpcTypes[$typ])
+        switch(static::$xmlrpcTypes[$typ])
         {
             case 1:
                 switch($typ)
                 {
-                    case $xmlrpc->xmlrpcBase64:
+                    case static::$xmlrpcBase64:
                         $rs.="<${typ}>" . base64_encode($val) . "</${typ}>";
                         break;
-                    case $xmlrpc->xmlrpcBoolean:
+                    case static::$xmlrpcBoolean:
                         $rs.="<${typ}>" . ($val ? '1' : '0') . "</${typ}>";
                         break;
-                    case $xmlrpc->xmlrpcString:
+                    case static::$xmlrpcString:
                         // G. Giunta 2005/2/13: do NOT use htmlentities, since
                         // it will produce named html entities, which are invalid xml
-                        $rs.="<${typ}>" . xmlrpc_encode_entitites($val, $xmlrpc->xmlrpc_internalencoding, $charset_encoding). "</${typ}>";
+                        $rs.="<${typ}>" . Charset::instance()->encode_entities($val, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding). "</${typ}>";
                         break;
-                    case $xmlrpc->xmlrpcInt:
-                    case $xmlrpc->xmlrpcI4:
+                    case static::$xmlrpcInt:
+                    case static::$xmlrpcI4:
                         $rs.="<${typ}>".(int)$val."</${typ}>";
                         break;
-                    case $xmlrpc->xmlrpcDouble:
+                    case static::$xmlrpcDouble:
                         // avoid using standard conversion of float to string because it is locale-dependent,
                         // and also because the xmlrpc spec forbids exponential notation.
                         // sprintf('%F') could be most likely ok but it fails eg. on 2e-14.
@@ -243,7 +265,7 @@ class xmlrpcval
                         // but there is of course no limit in the number of decimal places to be used...
                         $rs.="<${typ}>".preg_replace('/\\.?0+$/','',number_format((double)$val, 128, '.', ''))."</${typ}>";
                         break;
-                    case $xmlrpc->xmlrpcDateTime:
+                    case static::$xmlrpcDateTime:
                         if (is_string($val))
                         {
                             $rs.="<${typ}>${val}</${typ}>";
@@ -262,8 +284,8 @@ class xmlrpcval
                             $rs.="<${typ}>${val}</${typ}>";
                         }
                         break;
-                    case $xmlrpc->xmlrpcNull:
-                        if ($xmlrpc->xmlrpc_null_apache_encoding)
+                    case static::$xmlrpcNull:
+                        if (PhpXmlRpc::$xmlrpc_null_apache_encoding)
                         {
                             $rs.="<ex:nil/>";
                         }
@@ -288,9 +310,10 @@ class xmlrpcval
                 {
                     $rs.="<struct>\n";
                 }
+                $charsetEncoder = Charset::instance();
                 foreach($val as $key2 => $val2)
                 {
-                    $rs.='<member><name>'.xmlrpc_encode_entitites($key2, $xmlrpc->xmlrpc_internalencoding, $charset_encoding)."</name>\n";
+                    $rs.='<member><name>'.$charsetEncoder->encode_entities($key2, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding)."</name>\n";
                     //$rs.=$this->serializeval($val2);
                     $rs.=$val2->serialize($charset_encoding);
                     $rs.="</member>\n";
@@ -300,10 +323,10 @@ class xmlrpcval
             case 2:
                 // array
                 $rs.="<array>\n<data>\n";
-                for($i=0; $i<count($val); $i++)
+                foreach($val as $element)
                 {
                     //$rs.=$this->serializeval($val[$i]);
-                    $rs.=$val[$i]->serialize($charset_encoding);
+                    $rs.=$element->serialize($charset_encoding);
                 }
                 $rs.="</data>\n</array>";
                 break;
@@ -439,13 +462,11 @@ class xmlrpcval
      */
     public function scalartyp()
     {
-        $xmlrpc = Phpxmlrpc::instance();
-
         reset($this->me);
         list($a,)=each($this->me);
-        if($a==$xmlrpc->xmlrpcI4)
+        if($a==static::xmlrpcI4)
         {
-            $a=$xmlrpc->xmlrpcInt;
+            $a=static::xmlrpcInt;
         }
         return $a;
     }

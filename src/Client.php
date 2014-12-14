@@ -1,6 +1,8 @@
 <?php
 
-class xmlrpc_client
+namespace PhpXmlRpc;
+
+class Client
 {
     /// @todo: do these need to be public?
     public $path;
@@ -74,8 +76,6 @@ class xmlrpc_client
      */
     function __construct($path, $server='', $port='', $method='')
     {
-        $xmlrpc = Phpxmlrpc::instance();
-
         // allow user to specify all params in $path
         if($server == '' and $port == '' and $method == '')
         {
@@ -141,7 +141,7 @@ class xmlrpc_client
         $this->accepted_charset_encodings = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
 
         // initialize user_agent string
-        $this->user_agent = $xmlrpc->xmlrpcName . ' ' . $xmlrpc->xmlrpcVersion;
+        $this->user_agent = PhpXmlRpc::$xmlrpcName . ' ' . PhpXmlRpc::$xmlrpcVersion;
     }
 
     /**
@@ -321,7 +321,7 @@ class xmlrpc_client
 
     /**
      * Send an xmlrpc request
-     * @param mixed $msg The message object, or an array of messages for using multicall, or the complete xml representation of a request
+     * @param mixed $msg The request object, or an array of requests for using multicall, or the complete xml representation of a request
      * @param integer $timeout Connection timeout, in seconds, If unspecified, a platform specific timeout will apply
      * @param string $method if left unspecified, the http protocol chosen during creation of the object will be used
      * @return xmlrpcresp
@@ -343,7 +343,7 @@ class xmlrpc_client
         }
         elseif(is_string($msg))
         {
-            $n = new xmlrpcmsg('');
+            $n = new Message('');
             $n->payload = $msg;
             $msg = $n;
         }
@@ -353,7 +353,7 @@ class xmlrpc_client
 
         if($method == 'https')
         {
-            $r =& $this->sendPayloadHTTPS(
+            $r = $this->sendPayloadHTTPS(
                 $msg,
                 $this->server,
                 $this->port,
@@ -377,7 +377,7 @@ class xmlrpc_client
         }
         elseif($method == 'http11')
         {
-            $r =& $this->sendPayloadCURL(
+            $r = $this->sendPayloadCURL(
                 $msg,
                 $this->server,
                 $this->port,
@@ -400,7 +400,7 @@ class xmlrpc_client
         }
         else
         {
-            $r =& $this->sendPayloadHTTP10(
+            $r = $this->sendPayloadHTTP10(
                 $msg,
                 $this->server,
                 $this->port,
@@ -419,12 +419,10 @@ class xmlrpc_client
         return $r;
     }
 
-    private function &sendPayloadHTTP10($msg, $server, $port, $timeout=0,
+    private function sendPayloadHTTP10($msg, $server, $port, $timeout=0,
         $username='', $password='', $authtype=1, $proxyhost='',
         $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1)
     {
-        $xmlrpc = Phpxmlrpc::instance();
-
         if($port==0)
         {
             $port=80;
@@ -575,7 +573,7 @@ class xmlrpc_client
         else
         {
             $this->errstr='Connect error: '.$this->errstr;
-            $r=new xmlrpcresp(0, $xmlrpc->xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
+            $r=new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
             return $r;
         }
 
@@ -583,7 +581,7 @@ class xmlrpc_client
         {
             fclose($fp);
             $this->errstr='Write error';
-            $r=new xmlrpcresp(0, $xmlrpc->xmlrpcerr['http_error'], $this->errstr);
+            $r=new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
             return $r;
         }
         else
@@ -601,17 +599,17 @@ class xmlrpc_client
             $ipd.=fread($fp, 32768);
         } while(!feof($fp));
         fclose($fp);
-        $r =& $msg->parseResponse($ipd, false, $this->return_type);
+        $r = $msg->parseResponse($ipd, false, $this->return_type);
         return $r;
 
     }
 
-    private function &sendPayloadHTTPS($msg, $server, $port, $timeout=0, $username='',
+    private function sendPayloadHTTPS($msg, $server, $port, $timeout=0, $username='',
         $password='', $authtype=1, $cert='',$certpass='', $cacert='', $cacertdir='',
         $proxyhost='', $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1,
         $keepalive=false, $key='', $keypass='')
     {
-        $r =& $this->sendPayloadCURL($msg, $server, $port, $timeout, $username,
+        $r = $this->sendPayloadCURL($msg, $server, $port, $timeout, $username,
             $password, $authtype, $cert, $certpass, $cacert, $cacertdir, $proxyhost, $proxyport,
             $proxyusername, $proxypassword, $proxyauthtype, 'https', $keepalive, $key, $keypass);
         return $r;
@@ -622,17 +620,15 @@ class xmlrpc_client
      * Requires curl to be built into PHP
      * NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!
      */
-    private function &sendPayloadCURL($msg, $server, $port, $timeout=0, $username='',
+    private function sendPayloadCURL($msg, $server, $port, $timeout=0, $username='',
         $password='', $authtype=1, $cert='', $certpass='', $cacert='', $cacertdir='',
         $proxyhost='', $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1, $method='https',
         $keepalive=false, $key='', $keypass='')
     {
-        $xmlrpc = Phpxmlrpc::instance();
-
         if(!function_exists('curl_init'))
         {
             $this->errstr='CURL unavailable on this install';
-            $r=new xmlrpcresp(0, $xmlrpc->xmlrpcerr['no_curl'], $xmlrpc->xmlrpcstr['no_curl']);
+            $r=new Response(0, PhpXmlRpc::$xmlrpcerr['no_curl'], PhpXmlRpc::$xmlrpcstr['no_curl']);
             return $r;
         }
         if($method == 'https')
@@ -641,7 +637,7 @@ class xmlrpc_client
                 ((is_string($info) && strpos($info, 'OpenSSL') === null) || (is_array($info) && !isset($info['ssl_version']))))
             {
                 $this->errstr='SSL unavailable on this install';
-                $r=new xmlrpcresp(0, $xmlrpc->xmlrpcerr['no_ssl'], $xmlrpc->xmlrpcstr['no_ssl']);
+                $r=new Response(0, PhpXmlRpc::$xmlrpcerr['no_ssl'], PhpXmlRpc::$xmlrpcstr['no_ssl']);
                 return $r;
             }
         }
@@ -873,7 +869,7 @@ class xmlrpc_client
         if(!$result) /// @todo we should use a better check here - what if we get back '' or '0'?
         {
             $this->errstr='no response';
-            $resp=new xmlrpcresp(0, $xmlrpc->xmlrpcerr['curl_fail'], $xmlrpc->xmlrpcstr['curl_fail']. ': '. curl_error($curl));
+            $resp=new Response(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail']. ': '. curl_error($curl));
             curl_close($curl);
             if($keepalive)
             {
@@ -886,9 +882,9 @@ class xmlrpc_client
             {
                 curl_close($curl);
             }
-            $resp =& $msg->parseResponse($result, true, $this->return_type);
+            $resp = $msg->parseResponse($result, true, $this->return_type);
             // if we got back a 302, we can not reuse the curl handle for later calls
-            if($resp->faultCode() == $xmlrpc->xmlrpcerr['http_error'] && $keepalive)
+            if($resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error'] && $keepalive)
             {
                 curl_close($curl);
                 $this->xmlrpc_curl_handle = null;
@@ -898,7 +894,7 @@ class xmlrpc_client
     }
 
     /**
-     * Send an array of request messages and return an array of responses.
+     * Send an array of requests and return an array of responses.
      * Unless $this->no_multicall has been set to true, it will try first
      * to use one single xmlrpc call to server method system.multicall, and
      * revert to sending many successive calls in case of failure.
@@ -920,8 +916,6 @@ class xmlrpc_client
      */
     public function multicall($msgs, $timeout=0, $method='', $fallback=true)
     {
-        $xmlrpc = Phpxmlrpc::instance();
-
         if ($method == '')
         {
             $method = $this->method;
@@ -951,7 +945,7 @@ class xmlrpc_client
                     }
                     else
                     {
-                        $result = new xmlrpcresp(0, $xmlrpc->xmlrpcerr['multicall_error'], $xmlrpc->xmlrpcstr['multicall_error']);
+                        $result = new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'], PhpXmlRpc::$xmlrpcstr['multicall_error']);
                     }
                 }
             }
@@ -970,7 +964,7 @@ class xmlrpc_client
             // emulate multicall via multiple requests
             foreach($msgs as $msg)
             {
-                $results[] =& $this->send($msg, $timeout, $method);
+                $results[] = $this->send($msg, $timeout, $method);
             }
         }
         else
@@ -993,25 +987,25 @@ class xmlrpc_client
      */
     private function _try_multicall($msgs, $timeout, $method)
     {
-        // Construct multicall message
+        // Construct multicall request
         $calls = array();
         foreach($msgs as $msg)
         {
-            $call['methodName'] = new xmlrpcval($msg->method(),'string');
+            $call['methodName'] = new Value($msg->method(),'string');
             $numParams = $msg->getNumParams();
             $params = array();
             for($i = 0; $i < $numParams; $i++)
             {
                 $params[$i] = $msg->getParam($i);
             }
-            $call['params'] = new xmlrpcval($params, 'array');
-            $calls[] = new xmlrpcval($call, 'struct');
+            $call['params'] = new Value($params, 'array');
+            $calls[] = new Value($call, 'struct');
         }
-        $multicall = new xmlrpcmsg('system.multicall');
-        $multicall->addParam(new xmlrpcval($calls, 'array'));
+        $multicall = new Request('system.multicall');
+        $multicall->addParam(new Value($calls, 'array'));
 
         // Attempt RPC call
-        $result =& $this->send($multicall, $timeout, $method);
+        $result = $this->send($multicall, $timeout, $method);
 
         if($result->faultCode() != 0)
         {
@@ -1055,7 +1049,7 @@ class xmlrpc_client
                             return false;       // Bad value
                         }
                         // Normal return value
-                        $response[$i] = new xmlrpcresp($val[0], 0, '', 'phpvals');
+                        $response[$i] = new Response($val[0], 0, '', 'phpvals');
                         break;
                     case 2:
                         /// @todo remove usage of @: it is apparently quite slow
@@ -1069,7 +1063,7 @@ class xmlrpc_client
                         {
                             return false;
                         }
-                        $response[$i] = new xmlrpcresp(0, $code, $str);
+                        $response[$i] = new Response(0, $code, $str);
                         break;
                     default:
                         return false;
@@ -1102,7 +1096,7 @@ class xmlrpc_client
                             return false;       // Bad value
                         }
                         // Normal return value
-                        $response[$i] = new xmlrpcresp($val->arraymem(0));
+                        $response[$i] = new Response($val->arraymem(0));
                         break;
                     case 'struct':
                         $code = $val->structmem('faultCode');
@@ -1115,7 +1109,7 @@ class xmlrpc_client
                         {
                             return false;
                         }
-                        $response[$i] = new xmlrpcresp(0, $code->scalarval(), $str->scalarval());
+                        $response[$i] = new Response(0, $code->scalarval(), $str->scalarval());
                         break;
                     default:
                         return false;

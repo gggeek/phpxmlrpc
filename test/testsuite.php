@@ -2,9 +2,11 @@
 
 include_once(__DIR__.'/../vendor/autoload.php');
 
-include(__DIR__.'/parse_args.php');
+include_once(__DIR__.'/../lib/xmlrpc.inc');
+include_once(__DIR__.'/../lib/xmlrpcs.inc');
+include_once(__DIR__.'/../lib/xmlrpc_wrappers.inc');
 
-require_once(__DIR__.'/../lib/xmlrpc_wrappers.php');
+include(__DIR__.'/parse_args.php');
 
 //require_once 'PHPUnit/TestDecorator.php';
 

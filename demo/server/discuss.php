@@ -68,15 +68,7 @@ and comment text.';
         global $xmlrpcerruser;
         $err="";
         $ra=array();
-        // get the first param
-        if(XMLRPC_EPI_ENABLED == '1')
-        {
-            $msgID=xmlrpc_decode($m->getParam(0));
-        }
-        else
-        {
-            $msgID=php_xmlrpc_decode($m->getParam(0));
-        }
+        $msgID=php_xmlrpc_decode($m->getParam(0));
         $dbh=dba_open("/tmp/comments.db", "r", "db2");
         if($dbh)
         {

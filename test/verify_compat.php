@@ -19,7 +19,7 @@ function phpxmlrpc_verify_compat($mode='client')
     $ver = phpversion();
     $tests['php_version'] = array();
     $tests['php_version']['description'] = 'PHP version found: '.$ver.".\n\n";
-    if (version_compare($ver, '5.1.0') < 0)
+    if (version_compare($ver, '5.3.0') < 0)
     {
       $tests['php_version']['status'] = 0;
       $tests['php_version']['description'] .= 'This version of PHP is not compatible with this release of the PHP XMLRPC library. Please upgrade to php 5.1.0 or later';
@@ -66,7 +66,7 @@ function phpxmlrpc_verify_compat($mode='client')
     $ver = phpversion();
     $tests['php_version'] = array();
     $tests['php_version']['description'] = 'PHP version found: '.$ver.".\n\n";
-    if (version_compare($ver, '5.1.0') < 0)
+    if (version_compare($ver, '5.3.0') < 0)
     {
       $tests['php_version']['status'] = 0;
       $tests['php_version']['description'] .= 'This version of PHP is not compatible with the PHP XMLRPC library. Please upgrade to 5.1.0 or later';
@@ -142,7 +142,7 @@ tbody td { border-top: 1px solid gray; }
 </head>
 <body>
 <h1>PHPXMLRPC compatibility assessment with the current PHP install</h1>
-<h4>For phpxmlrpc version 3.0 or later</h4>
+<h4>For phpxmlrpc version 4.0 or later</h4>
 <h3>Server usage</h3>
 <table cellspacing="0">
 <thead>

@@ -1,6 +1,10 @@
 <?php
 
-class xmlrpcresp
+namespace PhpXmlRpc;
+
+use PhpXmlRpc\Helper\Charset;
+
+class Response
 {
 
     /// @todo: do these need to be public?
@@ -40,14 +44,13 @@ class xmlrpcresp
             if ($valtyp == '')
             {
                 // user did not declare type of response value: try to guess it
-                if (is_object($this->val) && is_a($this->val, 'xmlrpcval'))
+                if (is_object($this->val) && is_a($this->val, 'PhpXmlRpc\Value'))
                 {
                     $this->valtyp = 'xmlrpcvals';
                 }
                 else if (is_string($this->val))
                 {
                     $this->valtyp = 'xml';
-
                 }
                 else
                 {
@@ -111,28 +114,27 @@ class xmlrpcresp
      */
     public function serialize($charset_encoding='')
     {
-        $xmlrpc = Phpxmlrpc::instance();
-
         if ($charset_encoding != '')
             $this->content_type = 'text/xml; charset=' . $charset_encoding;
         else
             $this->content_type = 'text/xml';
-        if ($xmlrpc->xmlrpc_null_apache_encoding)
+        if (PhpXmlRpc::$xmlrpc_null_apache_encoding)
         {
-            $result = "<methodResponse xmlns:ex=\"".$xmlrpc->xmlrpc_null_apache_encoding_ns."\">\n";
+            $result = "<methodResponse xmlns:ex=\"".PhpXmlRpc::$xmlrpc_null_apache_encoding_ns."\">\n";
         }
         else
         {
-        $result = "<methodResponse>\n";
+            $result = "<methodResponse>\n";
         }
         if($this->errno)
         {
             // G. Giunta 2005/2/13: let non-ASCII response messages be tolerated by clients
             // by xml-encoding non ascii chars
+            $charsetEncoder =
             $result .= "<fault>\n" .
 "<value>\n<struct><member><name>faultCode</name>\n<value><int>" . $this->errno .
 "</int></value>\n</member>\n<member>\n<name>faultString</name>\n<value><string>" .
-xmlrpc_encode_entitites($this->errstr, $xmlrpc->xmlrpc_internalencoding, $charset_encoding) . "</string></value>\n</member>\n" .
+Charset::instance()->encode_entitites($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</string></value>\n</member>\n" .
 "</struct>\n</value>\n</fault>";
         }
         else
