@@ -139,7 +139,7 @@ Charset::instance()->encode_entitites($this->errstr, PhpXmlRpc::$xmlrpc_internal
         }
         else
         {
-            if(!is_object($this->val) || !is_a($this->val, 'xmlrpcval'))
+            if(!is_object($this->val) || !is_a($this->val, 'PhpXmlRpc\Value'))
             {
                 if (is_string($this->val) && $this->valtyp == 'xml')
                 {

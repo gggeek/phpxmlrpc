@@ -9,7 +9,7 @@
 </h3>
 <?php
     include("xmlrpc.inc");
-    include("xmlrpc_wrappers.php");
+    include("xmlrpc_wrappers.inc");
 
     $c = new xmlrpc_client("/server.php", "phpxmlrpc.sourceforge.net", 80);
     $c->return_type = 'phpvals'; // let client give us back php values instead of xmlrpcvals

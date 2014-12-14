@@ -149,10 +149,10 @@ td form {margin: 0;}
     switch ($action) {
 
       case 'wrap':
-        @include('xmlrpc_wrappers.php');
+        @include('xmlrpc_wrappers.inc');
         if (!function_exists('build_remote_method_wrapper_code'))
         {
-          die('Error: to enable creation of method stubs the xmlrpc_wrappers.php file is needed');
+          die('Error: to enable creation of method stubs the xmlrpc_wrappers.inc file is needed');
         }
         // fall thru intentionally
       case 'describe':

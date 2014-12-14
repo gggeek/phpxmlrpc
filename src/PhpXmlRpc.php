@@ -83,4 +83,39 @@ class PhpXmlRpc
     public static $xmlrpc_null_apache_encoding = false;
 
     public static $xmlrpc_null_apache_encoding_ns = "http://ws.apache.org/xmlrpc/namespaces/extensions";
+
+    /**
+     * A function to be used for compatibility with legacy code: it creates all global variables which used to be declared,
+     * such as library version etc...
+     */
+    public static function exportGlobals()
+    {
+        $reflection = new \ReflectionClass('PhpXmlRpc\PhpXmlRpc');
+        $staticProperties = $reflection->getStaticProperties();
+        foreach ($staticProperties as $name => $value)
+        {
+            $GLOBALS[$name] = $value;
+        }
+    }
+
+    /**
+     * A function to be used for compatibility with legacy code: it gets the values of all global variables which used
+     * to be declared, such as library version etc... and sets them to php classes.
+     * It should be used by code which changed the values of those global variables to alter the working of the library.
+     * Example code:
+     * 1. include xmlrpc.inc
+     * 2. set the values, e.g. $GLOBALS['xmlrpc_internalencoding'] = 'UTF-8';
+     * 3. import them: PhpXmlRpc\PhpXmlRpc::importGlobals();
+     * 4. run your own code
+     */
+    public static function importGlobals()
+    {
+        $reflection = new \ReflectionClass('PhpXmlRpc\PhpXmlRpc');
+        $staticProperties = $reflection->getStaticProperties();
+        foreach ($staticProperties as $name => $value)
+        {
+            if(isset($GLOBALS[$name]))
+                self::$$name = $GLOBALS[$name];
+        }
+    }
 }

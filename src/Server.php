@@ -740,7 +740,7 @@ class Server
                 if (!is_a($r, 'xmlrpcresp'))
                 {
                     error_log("XML-RPC: ".__METHOD__.": function $func registered as method handler does not return an xmlrpcresp object");
-                    if (is_a($r, 'xmlrpcval'))
+                    if (is_a($r, 'PhpXmlRpc\Value'))
                     {
                         $r = new Response($r);
                     }

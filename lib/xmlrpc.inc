@@ -49,6 +49,10 @@ include_once(__DIR__.'/../src/Response.php');
 include_once(__DIR__.'/../src/Client.php');
 include_once(__DIR__.'/../src/Encoder.php');
 
+
+/* Expose the global variables which used to be defined */
+PhpXmlRpc\PhpXmlRpc::exportGlobals();
+
 /* Expose with the old names the classes which have been namespaced */
 
 class xmlrpcval extends PhpXmlRpc\Value

@@ -130,10 +130,10 @@ class Value
         switch($this->mytype)
         {
             case 1:
-                error_log('XML-RPC: '.__METHOD__.': scalar xmlrpcval can have only one value');
+                error_log('XML-RPC: '.__METHOD__.': scalar xmlrpc value can have only one value');
                 return 0;
             case 3:
-                error_log('XML-RPC: '.__METHOD__.': cannot add anonymous scalar to struct xmlrpcval');
+                error_log('XML-RPC: '.__METHOD__.': cannot add anonymous scalar to struct xmlrpc value');
                 return 0;
             case 2:
                 // we're adding a scalar value to an array here
@@ -464,9 +464,9 @@ class Value
     {
         reset($this->me);
         list($a,)=each($this->me);
-        if($a==static::xmlrpcI4)
+        if($a==static::$xmlrpcI4)
         {
-            $a=static::xmlrpcInt;
+            $a=static::$xmlrpcInt;
         }
         return $a;
     }

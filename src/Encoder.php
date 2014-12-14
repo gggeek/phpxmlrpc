@@ -185,7 +185,7 @@ class Encoder
                 }
                 break;
             case 'object':
-                if(is_a($php_val, 'xmlrpcval'))
+                if(is_a($php_val, 'PhpXmlRpc\Value'))
                 {
                     $xmlrpc_val = $php_val;
                 }
