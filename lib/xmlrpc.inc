@@ -3037,7 +3037,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 					{
 						$rs.='<member><name>'.xmlrpc_encode_entitites($key2, $GLOBALS['xmlrpc_internalencoding'], $charset_encoding)."</name>\n";
 						//$rs.=$this->serializeval($val2);
-						$rs.=$val2->serialize($charset_encoding);
+						$rs.='<value>'.$val2->serialize($charset_encoding).'</value>';
 						$rs.="</member>\n";
 					}
 					$rs.='</struct>';
