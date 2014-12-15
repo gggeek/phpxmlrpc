@@ -4,6 +4,7 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Helper\Encoder;
 
 class Request
 {
@@ -463,7 +464,7 @@ class Request
         }
 
         // try to 'guestimate' the character encoding of the received response
-        $resp_encoding = guess_encoding(@$this->httpResponse['headers']['content-type'], $data);
+        $resp_encoding = Encoder::guess_encoding(@$this->httpResponse['headers']['content-type'], $data);
 
         // if response charset encoding is not known / supported, try to use
         // the default encoding and parse the xml anyway, but log a warning...

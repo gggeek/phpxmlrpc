@@ -4,6 +4,7 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\XMLParser;
 use PhpXmlRpc\Helper\Charset;
+use PhpXmlRpc\Helper\Encoder;
 
 /**
 * Error handler used to track errors that occur during server-side execution of PHP code.
@@ -225,7 +226,7 @@ class Server
      * Execute the xmlrpc request, printing the response
      * @param string $data the request body. If null, the http POST request will be examined
      * @param bool $return_payload When true, return the response but do not echo it or any http header
-     * @return xmlrpcresp the response object (usually not used by caller...)
+     * @return Response the response object (usually not used by caller...)
      */
     function service($data=null, $return_payload=false)
     {
@@ -532,7 +533,7 @@ class Server
 
         // 'guestimate' request encoding
         /// @todo check if mbstring is enabled and automagic input conversion is on: it might mingle with this check???
-        $req_encoding = guess_encoding(isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '',
+        $req_encoding = Encoder::guess_encoding(isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '',
             $data);
 
         return null;
@@ -673,7 +674,7 @@ class Server
             $methName = $m;
         }
         $sysCall = $this->allow_system_funcs && (strpos($methName, "system.") === 0);
-        $dmap = $sysCall ? $GLOBALS['_xmlrpcs_dmap'] : $this->dmap;
+        $dmap = $sysCall ? $this->getSystemDispatchMap() : $this->dmap;
 
         if(!isset($dmap[$methName]['function']))
         {
@@ -865,7 +866,7 @@ class Server
 
     /* Functions that implement system.XXX methods of xmlrpc servers */
 
-    protected function getSystemDispatchMap()
+    public function getSystemDispatchMap()
     {
         return array(
             'system.listMethods' => array(
@@ -944,7 +945,7 @@ class Server
         }
         if($server->allow_system_funcs)
         {
-            foreach($GLOBALS['_xmlrpcs_dmap'] as $key => $val)
+            foreach($server->getSystemDispatchMap() as $key => $val)
             {
                 $outAr[]=new Value($key, 'string');
             }
@@ -966,11 +967,11 @@ class Server
         }
         if(strpos($methName, "system.") === 0)
         {
-            $dmap=$GLOBALS['_xmlrpcs_dmap']; $sysCall=1;
+            $dmap=$server->getSystemDispatchMap();
         }
         else
         {
-            $dmap=$server->dmap; $sysCall=0;
+            $dmap=$server->dmap;
         }
         if(isset($dmap[$methName]))
         {
@@ -1016,11 +1017,11 @@ class Server
         }
         if(strpos($methName, "system.") === 0)
         {
-            $dmap=$GLOBALS['_xmlrpcs_dmap']; $sysCall=1;
+            $dmap=$server->getSystemDispatchMap();
         }
         else
         {
-            $dmap=$server->dmap; $sysCall=0;
+            $dmap=$server->dmap;
         }
         if(isset($dmap[$methName]))
         {
