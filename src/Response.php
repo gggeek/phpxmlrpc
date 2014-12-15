@@ -134,7 +134,7 @@ class Response
             $result .= "<fault>\n" .
 "<value>\n<struct><member><name>faultCode</name>\n<value><int>" . $this->errno .
 "</int></value>\n</member>\n<member>\n<name>faultString</name>\n<value><string>" .
-Charset::instance()->encode_entitites($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</string></value>\n</member>\n" .
+Charset::instance()->encode_entities($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</string></value>\n</member>\n" .
 "</struct>\n</value>\n</fault>";
         }
         else

@@ -2,7 +2,9 @@
 <head><title>xmlrpc</title></head>
 <body>
 <?php
-    include("xmlrpc.inc");
+    include_once(__DIR__."/../vendor/autoload.php");
+
+    include_once(__DIR__."/../lib/xmlrpc.inc");
 
     $f = new xmlrpcmsg('examples.getStateName');
 

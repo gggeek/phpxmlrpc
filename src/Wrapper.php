@@ -214,7 +214,7 @@ class Wrapper
             // start to introspect PHP code
             if(is_array($funcname))
             {
-                $func = new ReflectionMethod($funcname[0], $funcname[1]);
+                $func = new \ReflectionMethod($funcname[0], $funcname[1]);
                 if($func->isPrivate())
                 {
                     error_log('XML-RPC: method to be wrapped is private: '.$plainfuncname);
@@ -244,7 +244,7 @@ class Wrapper
             }
             else
             {
-                $func = new ReflectionFunction($funcname);
+                $func = new \ReflectionFunction($funcname);
             }
             if($func->isInternal())
             {

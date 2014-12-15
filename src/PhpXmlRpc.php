@@ -91,8 +91,13 @@ class PhpXmlRpc
     public static function exportGlobals()
     {
         $reflection = new \ReflectionClass('PhpXmlRpc\PhpXmlRpc');
-        $staticProperties = $reflection->getStaticProperties();
-        foreach ($staticProperties as $name => $value)
+        foreach ($reflection->getStaticProperties() as $name => $value)
+        {
+            $GLOBALS[$name] = $value;
+        }
+
+        $reflection = new \ReflectionClass('PhpXmlRpc\Value');
+        foreach ($reflection->getStaticProperties() as $name => $value)
         {
             $GLOBALS[$name] = $value;
         }

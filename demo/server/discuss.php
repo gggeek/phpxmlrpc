@@ -1,7 +1,7 @@
 <?php
 
-    include("xmlrpc.inc");
-    include("xmlrpcs.inc");
+    include_once(__DIR__."/../../lib/xmlrpc.inc");
+    include_once(__DIR__."/../../lib/xmlrpcs.inc");
 
     $addcomment_sig=array(array($xmlrpcInt, $xmlrpcString, $xmlrpcString, $xmlrpcString));
 

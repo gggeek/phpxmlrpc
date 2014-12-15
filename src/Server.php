@@ -205,10 +205,10 @@ class Server
         {
             $out .= "<!-- SERVER DEBUG INFO (BASE64 ENCODED):\n".base64_encode($this->debug_info)."\n-->\n";
         }
-        if($GLOBALS['_xmlrpc_debuginfo']!='')
+        if( static::$_xmlrpc_debuginfo!='')
         {
 
-            $out .= "<!-- DEBUG INFO:\n" . Charset::instance()->encode_entitites(str_replace('--', '_-', static::$_xmlrpc_debuginfo), $GLOBALS['xmlrpc_internalencoding'], $charset_encoding) . "\n-->\n";
+            $out .= "<!-- DEBUG INFO:\n" . Charset::instance()->encode_entities(str_replace('--', '_-', static::$_xmlrpc_debuginfo), PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "\n-->\n";
             // NB: a better solution MIGHT be to use CDATA, but we need to insert it
             // into return payload AFTER the beginning tag
             //$out .= "<![CDATA[ DEBUG INFO:\n\n" . str_replace(']]>', ']_]_>', static::$_xmlrpc_debuginfo) . "\n]]>\n";
@@ -388,7 +388,7 @@ class Server
                     }
 
                     // param index is $n+1, as first member of sig is return type
-                    if($pt != $cursig[$n+1] && $cursig[$n+1] != $GLOBALS['xmlrpcValue'])
+                    if($pt != $cursig[$n+1] && $cursig[$n+1] != Value::$xmlrpcValue)
                     {
                         $itsOK=0;
                         $pno=$n+1;
@@ -472,14 +472,14 @@ class Server
                     }
                     else
                     {
-                        $r = new Response(0, $GLOBALS['xmlrpcerr']['server_decompress_fail'], $GLOBALS['xmlrpcstr']['server_decompress_fail']);
+                        $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_decompress_fail'], PhpXmlRpc::$xmlrpcstr['server_decompress_fail']);
                         return $r;
                     }
                 }
                 else
                 {
                     //error_log('The server sent deflated data. Your php install must have the Zlib extension compiled in to support this.');
-                    $r = new Response(0, $GLOBALS['xmlrpcerr']['server_cannot_decompress'], $GLOBALS['xmlrpcstr']['server_cannot_decompress']);
+                    $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_cannot_decompress'], PhpXmlRpc::$xmlrpcstr['server_cannot_decompress']);
                     return $r;
                 }
             }
@@ -497,7 +497,7 @@ class Server
                 /// @todo we should parse q=0.x preferences instead of getting first charset specified...
                 $client_accepted_charsets = explode(',', strtoupper($_SERVER['HTTP_ACCEPT_CHARSET']));
                 // Give preference to internal encoding
-                $known_charsets = array($GLOBALS['xmlrpc_internalencoding'], 'UTF-8', 'ISO-8859-1', 'US-ASCII');
+                $known_charsets = array(PhpXmlRpc::$xmlrpc_internalencoding, 'UTF-8', 'ISO-8859-1', 'US-ASCII');
                 foreach ($known_charsets as $charset)
                 {
                     foreach ($client_accepted_charsets as $accepted)
@@ -561,7 +561,7 @@ class Server
             //if (!is_valid_charset($req_encoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
             {
                 error_log('XML-RPC: '.__METHOD__.': invalid charset encoding of received request: '.$req_encoding);
-                $req_encoding = $GLOBALS['xmlrpc_defencoding'];
+                $req_encoding = PhpXmlRpc::$xmlrpc_defencoding;
             }
             /// @BUG this will fail on PHP 5 if charset is not specified in the xml prologue,
             // the encoding is not UTF8 and there are non-ascii chars in the text...
@@ -579,14 +579,14 @@ class Server
         // What if internal encoding is not in one of the 3 allowed?
         // we use the broadest one, ie. utf8
         // This allows to send data which is native in various charset,
-        // by extending xmlrpc_encode_entitites() and setting xmlrpc_internalencoding
-        if (!in_array($GLOBALS['xmlrpc_internalencoding'], array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
+        // by extending xmlrpc_encode_entities() and setting xmlrpc_internalencoding
+        if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
         {
             xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, 'UTF-8');
         }
         else
         {
-            xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, $GLOBALS['xmlrpc_internalencoding']);
+            xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, PhpXmlRpc::$xmlrpc_internalencoding);
         }
 
         $xmlRpcParser = new XMLParser();
@@ -674,8 +674,8 @@ class Server
         {
             // No such method
             return new Response(0,
-                $GLOBALS['xmlrpcerr']['unknown_method'],
-                $GLOBALS['xmlrpcstr']['unknown_method']);
+                PhpXmlRpc::$xmlrpcerr['unknown_method'],
+                PhpXmlRpc::$xmlrpcstr['unknown_method']);
         }
 
         // Check signature
@@ -695,8 +695,8 @@ class Server
                 // Didn't match.
                 return new Response(
                     0,
-                    $GLOBALS['xmlrpcerr']['incorrect_params'],
-                    $GLOBALS['xmlrpcstr']['incorrect_params'] . ": ${errstr}"
+                    PhpXmlRpc::$xmlrpcerr['incorrect_params'],
+                    PhpXmlRpc::$xmlrpcstr['incorrect_params'] . ": ${errstr}"
                 );
             }
         }
@@ -713,8 +713,8 @@ class Server
             error_log("XML-RPC: ".__METHOD__.": function $func registered as method handler is not callable");
             return new Response(
                 0,
-                $GLOBALS['xmlrpcerr']['server_error'],
-                $GLOBALS['xmlrpcstr']['server_error'] . ": no function matches method"
+                PhpXmlRpc::$xmlrpcerr['server_error'],
+                PhpXmlRpc::$xmlrpcstr['server_error'] . ": no function matches method"
             );
         }
 
@@ -748,8 +748,8 @@ class Server
                     {
                         $r = new Response(
                             0,
-                            $GLOBALS['xmlrpcerr']['server_error'],
-                            $GLOBALS['xmlrpcstr']['server_error'] . ": function does not return xmlrpcresp object"
+                            PhpXmlRpc::$xmlrpcerr['server_error'],
+                            PhpXmlRpc::$xmlrpcstr['server_error'] . ": function does not return xmlrpcresp object"
                         );
                     }
                 }
@@ -808,7 +808,7 @@ class Server
                     $r = new Response(0, $e->getCode(), $e->getMessage());
                     break;
                 default:
-                    $r = new Response(0, $GLOBALS['xmlrpcerr']['server_error'], $GLOBALS['xmlrpcstr']['server_error']);
+                    $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_error'], PhpXmlRpc::$xmlrpcstr['server_error']);
             }
         }
         if($this->debug > 2)
@@ -891,7 +891,7 @@ class Server
             ),
             'system.getCapabilities' => array(
                 'function' => 'PhpXmlRpc\Server::_xmlrpcs_getCapabilities',
-                'signature' => array(array($GLOBALS['xmlrpcStruct'])),
+                'signature' => array(array(Value::$xmlrpcStruct)),
                 'docstring' => 'This method lists all the capabilites that the XML-RPC server has: the (more or less standard) extensions to the xmlrpc spec that it adheres to',
                 'signature_docs' => array(array('list of capabilities, described as structs with a version number and url for the spec'))
             )
@@ -920,7 +920,7 @@ class Server
         );
 
         // NIL extension
-        if ($GLOBALS['xmlrpc_null_extension']) {
+        if (PhpXmlRpc::$xmlrpc_null_extension) {
             $outAr['nil'] = new Value(array(
                 'specUrl' => new Value('http://www.ontosys.com/xml-rpc/extensions.php', 'string'),
                 'specVersion' => new Value(1, 'int')
@@ -992,7 +992,7 @@ class Server
         }
         else
         {
-            $r=new Response(0,$GLOBALS['xmlrpcerr']['introspect_unknown'], $GLOBALS['xmlrpcstr']['introspect_unknown']);
+            $r=new Response(0,PhpXmlRpc::$xmlrpcerr['introspect_unknown'], PhpXmlRpc::$xmlrpcstr['introspect_unknown']);
         }
         return $r;
     }
@@ -1030,7 +1030,7 @@ class Server
         }
         else
         {
-            $r=new Response(0, $GLOBALS['xmlrpcerr']['introspect_unknown'], $GLOBALS['xmlrpcstr']['introspect_unknown']);
+            $r=new Response(0, PhpXmlRpc::$xmlrpcerr['introspect_unknown'], PhpXmlRpc::$xmlrpcstr['introspect_unknown']);
         }
         return $r;
     }
@@ -1039,8 +1039,8 @@ class Server
     {
         if(is_string($err))
         {
-            $str = $GLOBALS['xmlrpcstr']["multicall_${err}"];
-            $code = $GLOBALS['xmlrpcerr']["multicall_${err}"];
+            $str = PhpXmlRpc::$xmlrpcstr["multicall_${err}"];
+            $code = PhpXmlRpc::$xmlrpcerr["multicall_${err}"];
         }
         else
         {
@@ -1091,8 +1091,8 @@ class Server
             {
                 $i++;
                 return _xmlrpcs_multicall_error(new Response(0,
-                    $GLOBALS['xmlrpcerr']['incorrect_params'],
-                    $GLOBALS['xmlrpcstr']['incorrect_params'] . ": probable xml error in param " . $i));
+                    PhpXmlRpc::$xmlrpcerr['incorrect_params'],
+                    PhpXmlRpc::$xmlrpcstr['incorrect_params'] . ": probable xml error in param " . $i));
             }
         }
 

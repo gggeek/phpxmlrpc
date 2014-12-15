@@ -9,8 +9,8 @@
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
  */
 
-    include("xmlrpc.inc");
-    include("xmlrpcs.inc");
+    include_once(__DIR__."/../../lib/xmlrpc.inc");
+    include_once(__DIR__."/../../lib/xmlrpcs.inc");
 
     /**
     * Forward an xmlrpc request to another server, and return to client the response received.

@@ -17,9 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST' && isset($_GET['showSource']))
     die();
 }
 
-    include("xmlrpc.inc");
-    include("xmlrpcs.inc");
-    include("xmlrpc_wrappers.inc");
+    include_once(__DIR__."/../../vendor/autoload.php");
+
+    include_once(__DIR__."/../../lib/xmlrpc.inc");
+    include_once(__DIR__."/../../lib/xmlrpcs.inc");
+    include_once(__DIR__."/../../lib/xmlrpc_wrappers.inc");
 
     /**
     * Used to test usage of object methods in dispatch maps and in wrapper code
@@ -238,7 +240,7 @@ in an alphabetic order.';
         $a=str_replace("-", "", $a);
         $b=str_replace("-", "", $b);
 
-        if ($agesorter_arr[$a]==$agesorter[$b])
+        if ($agesorter_arr[$a]==$agesorter_arr[$b])
         {
             return 0;
         }

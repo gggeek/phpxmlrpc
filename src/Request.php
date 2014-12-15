@@ -482,7 +482,7 @@ class Request
         // What if internal encoding is not in one of the 3 allowed?
         // we use the broadest one, ie. utf8
         // This allows to send data which is native in various charset,
-        // by extending xmlrpc_encode_entitites() and setting xmlrpc_internalencoding
+        // by extending xmlrpc_encode_entities() and setting xmlrpc_internalencoding
         if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
         {
             xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, 'UTF-8');
