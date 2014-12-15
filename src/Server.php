@@ -23,7 +23,7 @@ function _xmlrpcs_errorHandler($errcode, $errstring, $filename=null, $lineno=nul
     //if($errcode != E_NOTICE && $errcode != E_WARNING && $errcode != E_USER_NOTICE && $errcode != E_USER_WARNING)
     if($errcode != E_STRICT)
     {
-        $GLOBALS['_xmlrpcs_occurred_errors'] = $GLOBALS['_xmlrpcs_occurred_errors'] . $errstring . "\n";
+        \PhpXmlRpc\Server::error_occurred($errstring);
     }
     // Try to avoid as much as possible disruption to the previous error handling
     // mechanism in place
@@ -118,7 +118,7 @@ class Server
     var $user_data = null;
 
     static protected $_xmlrpc_debuginfo = '';
-    static $_xmlrpcs_occurred_errors = '';
+    static protected $_xmlrpcs_occurred_errors = '';
     static $_xmlrpcs_prev_ehandler = '';
 
     /**
@@ -188,6 +188,11 @@ class Server
         static::$_xmlrpc_debuginfo .= $m . "\n";
     }
 
+    public static function error_occurred($m)
+    {
+        static::$_xmlrpcs_occurred_errors .= $m . "\n";
+    }
+
     /**
     * Return a string with the serialized representation of all debug info
     * @param string $charset_encoding the target charset encoding for the serialization
@@ -249,10 +254,10 @@ class Server
         // save full body of request into response, for more debugging usages
         $r->raw_data = $raw_data;
 
-        if($this->debug > 2 && $GLOBALS['_xmlrpcs_occurred_errors'])
+        if($this->debug > 2 && static::$_xmlrpcs_occurred_errors)
         {
             $this->debugmsg("+++PROCESSING ERRORS AND WARNINGS+++\n" .
-                $GLOBALS['_xmlrpcs_occurred_errors'] . "+++END+++");
+                static::$_xmlrpcs_occurred_errors . "+++END+++");
         }
 
         $payload=$this->xml_header($resp_charset);
