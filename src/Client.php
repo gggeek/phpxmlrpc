@@ -59,7 +59,7 @@ class Client
     /// Charset encoding to be used in serializing request. NULL = use ASCII
     public $request_charset_encoding = '';
     /**
-     * Decides the content of xmlrpcresp objects returned by calls to send()
+     * Decides the content of Response objects returned by calls to send()
      * valid strings are 'xmlrpcvals', 'phpvals' or 'xml'
      */
     public $return_type = 'xmlrpcvals';
@@ -324,7 +324,7 @@ class Client
      * @param mixed $msg The request object, or an array of requests for using multicall, or the complete xml representation of a request
      * @param integer $timeout Connection timeout, in seconds, If unspecified, a platform specific timeout will apply
      * @param string $method if left unspecified, the http protocol chosen during creation of the object will be used
-     * @return xmlrpcresp
+     * @return Response
      */
     public function& send($msg, $timeout=0, $method='')
     {
@@ -337,7 +337,7 @@ class Client
 
         if(is_array($msg))
         {
-            // $msg is an array of xmlrpcmsg's
+            // $msg is an array of Requests
             $r = $this->multicall($msg, $timeout, $method);
             return $r;
         }
@@ -348,7 +348,7 @@ class Client
             $msg = $n;
         }
 
-        // where msg is an xmlrpcmsg
+        // where msg is a Request
         $msg->debug=$this->debug;
 
         if($method == 'https')
@@ -908,7 +908,7 @@ class Client
      * NB: trying to shoehorn extra functionality into existing syntax has resulted
      * in pretty much convoluted code...
      *
-     * @param array $msgs an array of xmlrpcmsg objects
+     * @param Request[] $msgs an array of Request objects
      * @param integer $timeout connection timeout (in seconds)
      * @param string $method the http protocol variant to be used
      * @param boolean fallback When true, upon receiving an error during multicall, multiple single calls will be attempted
@@ -939,7 +939,7 @@ class Client
                 }
                 else
                 {
-                    if (is_a($results, 'xmlrpcresp'))
+                    if (is_a($results, '\PhpXmlRpc\Response'))
                     {
                         $result = $results;
                     }

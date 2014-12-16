@@ -122,7 +122,7 @@ class Wrapper
     *   function prototype is not considered valid (to be fixed?)
     *
     * Note that since rel. 2.0RC3 the preferred method to have the server call 'standard'
-    * php functions (ie. functions not expecting a single xmlrpcmsg obj as parameter)
+    * php functions (ie. functions not expecting a single Request obj as parameter)
     * is by making use of the functions_parameters_type class member.
     *
     * @param string $funcname the name of the PHP user function to be exposed as xmlrpc method; array($obj, 'methodname') and array('class', 'methodname') are ok too
@@ -518,7 +518,7 @@ class Wrapper
     /**
     * Given an xmlrpc client and a method name, register a php wrapper function
     * that will call it and return results using native php types for both
-    * params and results. The generated php function will return an xmlrpcresp
+    * params and results. The generated php function will return a Response
     * object for failed xmlrpc calls
     *
     * Known limitations:
@@ -538,7 +538,7 @@ class Wrapper
     * An extra 'debug' param is appended to param list of xmlrpc method, useful
     * for debugging purposes.
     *
-    * @param xmlrpc_client $client     an xmlrpc client set up correctly to communicate with target server
+    * @param Client        $client     an xmlrpc client set up correctly to communicate with target server
     * @param string        $methodname the xmlrpc method to be mapped to a php function
     * @param array         $extra_options array of options that specify conversion details. valid options include
     *        integer       signum      the index of the method signature to use in mapping (if method exposes many sigs)
@@ -548,7 +548,7 @@ class Wrapper
     *        string        return_source if true return php code w. function definition instead fo function name
     *        bool          encode_php_objs let php objects be sent to server using the 'improved' xmlrpc notation, so server can deserialize them as php objects
     *        bool          decode_php_objs --- WARNING !!! possible security hazard. only use it with trusted servers ---
-    *        mixed         return_on_fault a php value to be returned when the xmlrpc call fails/returns a fault response (by default the xmlrpcresp object is returned in this case). If a string is used, '%faultCode%' and '%faultString%' tokens will be substituted with actual error values
+    *        mixed         return_on_fault a php value to be returned when the xmlrpc call fails/returns a fault response (by default the Response object is returned in this case). If a string is used, '%faultCode%' and '%faultString%' tokens will be substituted with actual error values
     *        bool          debug        set it to 1 or 2 to see debug results of querying server for method synopsis
     * @return string                   the name of the generated php function (or false) - OR AN ARRAY...
     */
@@ -688,7 +688,7 @@ class Wrapper
     * Similar to wrap_xmlrpc_method, but will generate a php class that wraps
     * all xmlrpc methods exposed by the remote server as own methods.
     * For more details see wrap_xmlrpc_method.
-    * @param xmlrpc_client $client the client obj all set to query the desired server
+    * @param Client $client the client obj all set to query the desired server
     * @param array $extra_options list of options for wrapped code
     * @return mixed false on error, the name of the created class if all ok or an array with code, class name and comments (if the appropriatevoption is set in extra_options)
     */

@@ -4,7 +4,6 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\XMLParser;
-use PhpXmlRpc\Helper\Encoder;
 
 class Request
 {

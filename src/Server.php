@@ -4,58 +4,6 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\XMLParser;
 use PhpXmlRpc\Helper\Charset;
-use PhpXmlRpc\Helper\Encoder;
-
-/**
-* Error handler used to track errors that occur during server-side execution of PHP code.
-* This allows to report back to the client whether an internal error has occurred or not
-* using an xmlrpc response object, instead of letting the client deal with the html junk
-* that a PHP execution error on the server generally entails.
-*
-* NB: in fact a user defined error handler can only handle WARNING, NOTICE and USER_* errors.
-*
-*/
-function _xmlrpcs_errorHandler($errcode, $errstring, $filename=null, $lineno=null, $context=null)
-{
-    // obey the @ protocol
-    if (error_reporting() == 0)
-        return;
-
-    //if($errcode != E_NOTICE && $errcode != E_WARNING && $errcode != E_USER_NOTICE && $errcode != E_USER_WARNING)
-    if($errcode != E_STRICT)
-    {
-        \PhpXmlRpc\Server::error_occurred($errstring);
-    }
-    // Try to avoid as much as possible disruption to the previous error handling
-    // mechanism in place
-    if($GLOBALS['_xmlrpcs_prev_ehandler'] == '')
-    {
-        // The previous error handler was the default: all we should do is log error
-        // to the default error log (if level high enough)
-        if(ini_get('log_errors') && (intval(ini_get('error_reporting')) & $errcode))
-        {
-            error_log($errstring);
-        }
-    }
-    else
-    {
-        // Pass control on to previous error handler, trying to avoid loops...
-        if($GLOBALS['_xmlrpcs_prev_ehandler'] != '_xmlrpcs_errorHandler')
-        {
-            // NB: this code will NOT work on php < 4.0.2: only 2 params were used for error handlers
-            if(is_array($GLOBALS['_xmlrpcs_prev_ehandler']))
-            {
-                // the following works both with static class methods and plain object methods as error handler
-                call_user_func_array($GLOBALS['_xmlrpcs_prev_ehandler'], array($errcode, $errstring, $filename, $lineno, $context));
-            }
-            else
-            {
-                $GLOBALS['_xmlrpcs_prev_ehandler']($errcode, $errstring, $filename, $lineno, $context);
-            }
-        }
-    }
-}
-
 
 class Server
 {
@@ -421,7 +369,7 @@ class Server
 
     /**
     * Parse http headers received along with xmlrpc request. If needed, inflate request
-    * @return mixed null on success or an xmlrpcresp
+    * @return mixed null on success or a Response
     */
     protected function parseRequestHeaders(&$data, &$req_encoding, &$resp_encoding, &$resp_compression)
     {
@@ -544,7 +492,7 @@ class Server
     * php function registered with the server
     * @param string $data the xml request
     * @param string $req_encoding (optional) the charset encoding of the xml request
-    * @return xmlrpcresp
+    * @return Response
     */
     public function parseRequest($data, $req_encoding='')
     {
@@ -658,10 +606,10 @@ class Server
 
     /**
     * Execute a method invoked by the client, checking parameters used
-    * @param mixed $m either an xmlrpcmsg obj or a method name
+    * @param mixed $m either a Request obj or a method name
     * @param array $params array with method parameters as php types (if m is method name only)
     * @param array $paramtypes array with xmlrpc types of method parameters (if m is method name only)
-    * @return xmlrpcresp
+    * @return Response
     */
     protected function execute($m, $params=null, $paramtypes=null)
     {
@@ -728,7 +676,7 @@ class Server
         // processing of user function, and log them as part of response
         if($this->debug > 2)
         {
-            $GLOBALS['_xmlrpcs_prev_ehandler'] = set_error_handler('_xmlrpcs_errorHandler');
+            $GLOBALS['_xmlrpcs_prev_ehandler'] = set_error_handler(array('\PhpXmlRpc\Server', '_xmlrpcs_errorHandler'));
         }
         try
         {
@@ -743,9 +691,9 @@ class Server
                 {
                     $r = call_user_func($func, $m);
                 }
-                if (!is_a($r, 'xmlrpcresp'))
+                if (!is_a($r, 'PhpXmlRpc\Response'))
                 {
-                    error_log("XML-RPC: ".__METHOD__.": function $func registered as method handler does not return an xmlrpcresp object");
+                    error_log("XML-RPC: ".__METHOD__.": function $func registered as method handler does not return an xmlrpc response object");
                     if (is_a($r, 'PhpXmlRpc\Value'))
                     {
                         $r = new Response($r);
@@ -755,7 +703,7 @@ class Server
                         $r = new Response(
                             0,
                             PhpXmlRpc::$xmlrpcerr['server_error'],
-                            PhpXmlRpc::$xmlrpcstr['server_error'] . ": function does not return xmlrpcresp object"
+                            PhpXmlRpc::$xmlrpcstr['server_error'] . ": function does not return xmlrpc response object"
                         );
                     }
                 }
@@ -792,8 +740,8 @@ class Server
                         $r = call_user_func_array($func, $params);
                     }
                 }
-                // the return type can be either an xmlrpcresp object or a plain php value...
-                if (!is_a($r, 'xmlrpcresp'))
+                // the return type can be either a Response object or a plain php value...
+                if (!is_a($r, '\PhpXmlRpc\Response'))
                 {
                     // what should we assume here about automatic encoding of datetimes
                     // and php classes instances???
@@ -1181,4 +1129,54 @@ class Server
 
         return new Response(new Value($result, 'array'));
     }
+
+    /**
+     * Error handler used to track errors that occur during server-side execution of PHP code.
+     * This allows to report back to the client whether an internal error has occurred or not
+     * using an xmlrpc response object, instead of letting the client deal with the html junk
+     * that a PHP execution error on the server generally entails.
+     *
+     * NB: in fact a user defined error handler can only handle WARNING, NOTICE and USER_* errors.
+     *
+     */
+    public static function _xmlrpcs_errorHandler($errcode, $errstring, $filename=null, $lineno=null, $context=null)
+    {
+        // obey the @ protocol
+        if (error_reporting() == 0)
+            return;
+
+        //if($errcode != E_NOTICE && $errcode != E_WARNING && $errcode != E_USER_NOTICE && $errcode != E_USER_WARNING)
+        if($errcode != E_STRICT)
+        {
+            \PhpXmlRpc\Server::error_occurred($errstring);
+        }
+        // Try to avoid as much as possible disruption to the previous error handling
+        // mechanism in place
+        if($GLOBALS['_xmlrpcs_prev_ehandler'] == '')
+        {
+            // The previous error handler was the default: all we should do is log error
+            // to the default error log (if level high enough)
+            if(ini_get('log_errors') && (intval(ini_get('error_reporting')) & $errcode))
+            {
+                error_log($errstring);
+            }
+        }
+        else
+        {
+            // Pass control on to previous error handler, trying to avoid loops...
+            if($GLOBALS['_xmlrpcs_prev_ehandler'] != array('\PhpXmlRpc\Server', '_xmlrpcs_errorHandler'))
+            {
+                if(is_array($GLOBALS['_xmlrpcs_prev_ehandler']))
+                {
+                    // the following works both with static class methods and plain object methods as error handler
+                    call_user_func_array($GLOBALS['_xmlrpcs_prev_ehandler'], array($errcode, $errstring, $filename, $lineno, $context));
+                }
+                else
+                {
+                    $GLOBALS['_xmlrpcs_prev_ehandler']($errcode, $errstring, $filename, $lineno, $context);
+                }
+            }
+        }
+    }
+
 }

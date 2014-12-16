@@ -26,7 +26,7 @@ class Response
      *
      * @todo add check that $val / $fcode / $fstr is of correct type???
      * NB: as of now we do not do it, since it might be either an xmlrpcval or a plain
-     * php val, or a complete xml chunk, depending on usage of xmlrpc_client::send() inside which creator is called...
+     * php val, or a complete xml chunk, depending on usage of Client::send() inside which creator is called...
      */
     function __construct($val, $fcode = 0, $fstr = '', $valtyp='')
     {
@@ -85,7 +85,7 @@ class Response
 
     /**
      * Returns the value received by the server.
-     * @return mixed the xmlrpcval object returned by the server. Might be an xml string or php value if the response has been created by specially configured xmlrpc_client objects
+     * @return mixed the xmlrpcval object returned by the server. Might be an xml string or php value if the response has been created by specially configured Client objects
      */
     public function value()
     {
@@ -99,7 +99,7 @@ class Response
      * NB: cookies sent as 'expired' by the server (i.e. with an expiry date in the past)
      * are still present in the array. It is up to the user-defined code to decide
      * how to use the received cookies, and whether they have to be sent back with the next
-     * request to the server (using xmlrpc_client::setCookie) or not
+     * request to the server (using Client::setCookie) or not
      * @return array array of cookies received from the server
      */
     public function cookies()
@@ -150,7 +150,7 @@ Charset::instance()->encode_entities($this->errstr, PhpXmlRpc::$xmlrpc_internale
                 else
                 {
                     /// @todo try to build something serializable?
-                    die('cannot serialize xmlrpcresp objects whose content is native php values');
+                    die('cannot serialize xmlrpc response objects whose content is native php values');
                 }
             }
             else
