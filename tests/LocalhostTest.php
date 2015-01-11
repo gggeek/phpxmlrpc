@@ -45,7 +45,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         $server = explode(':', $this->args['LOCALSERVER']);
         if(count($server) > 1)
         {
-            $this->client=new xmlrpc_client(['URI'], $server[0], $server[1]);
+            $this->client=new xmlrpc_client($this->args['URI'], $server[0], $server[1]);
         }
         else
         {
