@@ -749,7 +749,7 @@ class Server
                 }
             }
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
             // (barring errors in the lib) an uncatched exception happened
             // in the called function, we wrap it in a proper error-response
@@ -1011,30 +1011,30 @@ class Server
     {
         if($call->kindOf() != 'struct')
         {
-            return _xmlrpcs_multicall_error('notstruct');
+            return static::_xmlrpcs_multicall_error('notstruct');
         }
         $methName = @$call->structmem('methodName');
         if(!$methName)
         {
-            return _xmlrpcs_multicall_error('nomethod');
+            return static::_xmlrpcs_multicall_error('nomethod');
         }
         if($methName->kindOf() != 'scalar' || $methName->scalartyp() != 'string')
         {
-            return _xmlrpcs_multicall_error('notstring');
+            return static::_xmlrpcs_multicall_error('notstring');
         }
         if($methName->scalarval() == 'system.multicall')
         {
-            return _xmlrpcs_multicall_error('recursion');
+            return static::_xmlrpcs_multicall_error('recursion');
         }
 
         $params = @$call->structmem('params');
         if(!$params)
         {
-            return _xmlrpcs_multicall_error('noparams');
+            return static::_xmlrpcs_multicall_error('noparams');
         }
         if($params->kindOf() != 'array')
         {
-            return _xmlrpcs_multicall_error('notarray');
+            return static::_xmlrpcs_multicall_error('notarray');
         }
         $numParams = $params->arraysize();
 
@@ -1044,7 +1044,7 @@ class Server
             if(!$msg->addParam($params->arraymem($i)))
             {
                 $i++;
-                return _xmlrpcs_multicall_error(new Response(0,
+                return static::_xmlrpcs_multicall_error(new Response(0,
                     PhpXmlRpc::$xmlrpcerr['incorrect_params'],
                     PhpXmlRpc::$xmlrpcstr['incorrect_params'] . ": probable xml error in param " . $i));
             }
@@ -1054,7 +1054,7 @@ class Server
 
         if($result->faultCode() != 0)
         {
-            return _xmlrpcs_multicall_error($result); // Method returned fault.
+            return static::_xmlrpcs_multicall_error($result); // Method returned fault.
         }
 
         return new Value(array($result->value()), 'array');
@@ -1064,27 +1064,27 @@ class Server
     {
         if(!is_array($call))
         {
-            return _xmlrpcs_multicall_error('notstruct');
+            return static::_xmlrpcs_multicall_error('notstruct');
         }
         if(!array_key_exists('methodName', $call))
         {
-            return _xmlrpcs_multicall_error('nomethod');
+            return static::_xmlrpcs_multicall_error('nomethod');
         }
         if (!is_string($call['methodName']))
         {
-            return _xmlrpcs_multicall_error('notstring');
+            return static::_xmlrpcs_multicall_error('notstring');
         }
         if($call['methodName'] == 'system.multicall')
         {
-            return _xmlrpcs_multicall_error('recursion');
+            return static::_xmlrpcs_multicall_error('recursion');
         }
         if(!array_key_exists('params', $call))
         {
-            return _xmlrpcs_multicall_error('noparams');
+            return static::_xmlrpcs_multicall_error('noparams');
         }
         if(!is_array($call['params']))
         {
-            return _xmlrpcs_multicall_error('notarray');
+            return static::_xmlrpcs_multicall_error('notarray');
         }
 
         // this is a real dirty and simplistic hack, since we might have received a
@@ -1098,7 +1098,7 @@ class Server
 
         if($result->faultCode() != 0)
         {
-            return _xmlrpcs_multicall_error($result); // Method returned fault.
+            return static::_xmlrpcs_multicall_error($result); // Method returned fault.
         }
 
         return new Value(array($result->value()), 'array');
@@ -1115,7 +1115,7 @@ class Server
             for($i = 0; $i < $numCalls; $i++)
             {
                 $call = $calls->arraymem($i);
-                $result[$i] = _xmlrpcs_multicall_do_call($server, $call);
+                $result[$i] = static::_xmlrpcs_multicall_do_call($server, $call);
             }
         }
         else
@@ -1123,7 +1123,7 @@ class Server
             $numCalls=count($m);
             for($i = 0; $i < $numCalls; $i++)
             {
-                $result[$i] = _xmlrpcs_multicall_do_call_phpvals($server, $m[$i]);
+                $result[$i] = static::_xmlrpcs_multicall_do_call_phpvals($server, $m[$i]);
             }
         }
 
