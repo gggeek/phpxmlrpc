@@ -1,16 +1,22 @@
 <?php
 /**
- * Benchamrking suite for the PHP-XMLRPC lib
+ * Benchmarking suite for the PHP-XMLRPC lib
  * @author Gaetano Giunta
  * @copyright (c) 2005-2014 G. Giunta
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
  *
- * @todo add a test for response ok in call testing?
+ * @todo add a test for response ok in call testing
+ * @todo add support for --help option to give users the list of supported parameters
  **/
 
-include_once(__DIR__.'/../vendor/autoload.php');
+use PhpXmlRpc\PhpXmlRpc;
+use PhpXmlRpc\Value;
+use PhpXmlRpc\Request;
+use PhpXmlRpc\Client;
+use PhpXmlRpc\Response;
+use PhpXmlRpc\Encoder;
 
-include_once(__DIR__.'/../lib/xmlrpc.inc');
+include_once(__DIR__.'/../vendor/autoload.php');
 
 include(__DIR__.'/parse_args.php');
 $args = argParser::getArgs();
@@ -29,7 +35,7 @@ function end_test($test_name, $test_case, $test_result)
     global $test_results;
     $end = microtime(true);
     if (!isset($test_results[$test_name][$test_case]))
-        trigger_error('ending test that was not sterted');
+        trigger_error('ending test that was not started');
     $test_results[$test_name][$test_case]['time'] = $end - $test_results[$test_name][$test_case]['time'];
     $test_results[$test_name][$test_case]['result'] = $test_result;
     echo '.';
@@ -67,14 +73,14 @@ else
 
 if($is_web)
 {
-    echo "<h3>Using lib version: $xmlrpcVersion on PHP version: ".phpversion()."</h3>\n";
+    echo "<h3>Using lib version: ".PhpXmlRpc::$xmlrpcVersion." on PHP version: ".phpversion()."</h3>\n";
     if ($xd) echo "<h4>XDEBUG profiling enabled: skipping remote tests. Trace file is: ".htmlspecialchars(xdebug_get_profiler_filename())."</h4>\n";
     flush();
     ob_flush();
 }
 else
 {
-    echo "Using lib version: $xmlrpcVersion on PHP version: ".phpversion()."\n";
+    echo "Using lib version: ".PhpXmlRpc::$xmlrpcVersion." on PHP version: ".phpversion()."\n";
     if ($xd) echo "XDEBUG profiling enabled: skipping remote tests\nTrace file is: ".xdebug_get_profiler_filename()."\n";
 }
 
@@ -89,29 +95,30 @@ for ($i = 0; $i < $num_tests; $i++)
         foreach ($data[$j] as $key => $val)
         {
             $values = array();
-            $values[] = new xmlrpcval($val[0], 'int');
-            $values[] = new xmlrpcval($val[1], 'double');
-            $values[] = new xmlrpcval($val[2], 'string');
-            $values[] = new xmlrpcval($val[3], 'boolean');
-            $values[] = new xmlrpcval($val[4], 'dateTime.iso8601');
-            $values[] = new xmlrpcval($val[5], 'int');
-            $values[] = new xmlrpcval($val[6], 'double');
-            $values[] = new xmlrpcval($val[7], 'string');
-            $values[] = new xmlrpcval($val[8], 'boolean');
-            $values[] = new xmlrpcval($val[9], 'dateTime.iso8601');
-            $valarray[$key] = new xmlrpcval($values, 'array');
+            $values[] = new Value($val[0], 'int');
+            $values[] = new Value($val[1], 'double');
+            $values[] = new Value($val[2], 'string');
+            $values[] = new Value($val[3], 'boolean');
+            $values[] = new Value($val[4], 'dateTime.iso8601');
+            $values[] = new Value($val[5], 'int');
+            $values[] = new Value($val[6], 'double');
+            $values[] = new Value($val[7], 'string');
+            $values[] = new Value($val[8], 'boolean');
+            $values[] = new Value($val[9], 'dateTime.iso8601');
+            $valarray[$key] = new Value($values, 'array');
         }
-        $vals[] = new xmlrpcval($valarray, 'struct');
+        $vals[] = new Value($valarray, 'struct');
     }
-    $value = new xmlrpcval($vals, 'array');
+    $value = new Value($vals, 'array');
     $out = $value->serialize();
 }
 end_test('Data encoding (large array)', 'manual encoding', $out);
 
 begin_test('Data encoding (large array)', 'automatic encoding');
+$encoder = new Encoder();
 for ($i = 0; $i < $num_tests; $i++)
 {
-    $value = php_xmlrpc_encode($data, array('auto_dates'));
+    $value = $encoder->encode($data, array('auto_dates'));
     $out = $value->serialize();
 }
 end_test('Data encoding (large array)', 'automatic encoding', $out);
@@ -133,8 +140,8 @@ if (function_exists('xmlrpc_set_type'))
 }
 
 // test 'old style' data decoding vs. 'automatic style' decoding
-$dummy = new xmlrpcmsg('');
-$out = new xmlrpcresp($value);
+$dummy = new Request('');
+$out = new Response($value);
 $in = '<?xml version="1.0" ?>'."\n".$out->serialize();
 
 begin_test('Data decoding (large array)', 'manual decoding');
@@ -184,109 +191,114 @@ if (!$xd)
 {
 
     /// test multicall vs. many calls vs. keep-alives
-    $value = php_xmlrpc_encode($data1, array('auto_dates'));
-    $msg = new xmlrpcmsg('interopEchoTests.echoValue', array($value));
-    $msgs=array();
+    $encoder = new Encoder();
+    $value = $encoder->encode($data1, array('auto_dates'));
+    $req = new Request('interopEchoTests.echoValue', array($value));
+    $reqs = array();
     for ($i = 0; $i < 25; $i++)
-        $msgs[] = $msg;
+        $reqs[] = $req;
     $server = explode(':', $args['LOCALSERVER']);
     if(count($server) > 1)
     {
-        $c = new xmlrpc_client($args['URI'], $server[0], $server[1]);
+        $srv = $server[1] . '://' . $server[0] . $args['URI'];
+        $c = new Client($args['URI'], $server[0], $server[1]);
     }
     else
     {
-        $c = new xmlrpc_client($args['URI'], $args['LOCALSERVER']);
+        $srv = $args['LOCALSERVER'] . $args['URI'];
+        $c = new Client($args['URI'], $args['LOCALSERVER']);
     }
     // do not interfere with http compression
     $c->accepted_compression = array();
     //$c->debug=true;
 
+    $testName = "Repeated send (small array) to $srv";
+
     if (function_exists('gzinflate')) {
         $c->accepted_compression = null;
     }
-    begin_test('Repeated send (small array)', 'http 10');
+    begin_test($testName, 'http 10');
     $response = array();
     for ($i = 0; $i < 25; $i++)
     {
-        $resp = $c->send($msg);
+        $resp = $c->send($req);
         $response[] = $resp->value();
     }
-    end_test('Repeated send (small array)', 'http 10', $response);
+    end_test($testName, 'http 10', $response);
 
     if (function_exists('curl_init'))
     {
-        begin_test('Repeated send (small array)', 'http 11 w. keep-alive');
+        begin_test($testName, 'http 11 w. keep-alive');
         $response = array();
         for ($i = 0; $i < 25; $i++)
         {
-            $resp = $c->send($msg, 10, 'http11');
+            $resp = $c->send($req, 10, 'http11');
             $response[] = $resp->value();
         }
-        end_test('Repeated send (small array)', 'http 11 w. keep-alive', $response);
+        end_test($testName, 'http 11 w. keep-alive', $response);
 
         $c->keepalive = false;
-        begin_test('Repeated send (small array)', 'http 11');
+        begin_test($testName, 'http 11');
         $response = array();
         for ($i = 0; $i < 25; $i++)
         {
-            $resp = $c->send($msg, 10, 'http11');
+            $resp = $c->send($req, 10, 'http11');
             $response[] = $resp->value();
         }
-        end_test('Repeated send (small array)', 'http 11', $response);
+        end_test($testName, 'http 11', $response);
     }
 
-    begin_test('Repeated send (small array)', 'multicall');
-    $response = $c->send($msgs);
+    begin_test($testName, 'multicall');
+    $response = $c->send($reqs);
     foreach ($response as $key =>& $val)
     {
         $val = $val->value();
     }
-    end_test('Repeated send (small array)', 'multicall', $response);
+    end_test($testName, 'multicall', $response);
 
     if (function_exists('gzinflate'))
     {
         $c->accepted_compression = array('gzip');
         $c->request_compression = 'gzip';
 
-        begin_test('Repeated send (small array)', 'http 10 w. compression');
+        begin_test($testName, 'http 10 w. compression');
         $response = array();
         for ($i = 0; $i < 25; $i++)
         {
-            $resp = $c->send($msg);
+            $resp = $c->send($req);
             $response[] = $resp->value();
         }
-        end_test('Repeated send (small array)', 'http 10 w. compression', $response);
+        end_test($testName, 'http 10 w. compression', $response);
 
         if (function_exists('curl_init'))
         {
-            begin_test('Repeated send (small array)', 'http 11 w. keep-alive and compression');
+            begin_test($testName, 'http 11 w. keep-alive and compression');
             $response = array();
             for ($i = 0; $i < 25; $i++)
             {
-                $resp = $c->send($msg, 10, 'http11');
+                $resp = $c->send($req, 10, 'http11');
                 $response[] = $resp->value();
             }
-            end_test('Repeated send (small array)', 'http 11 w. keep-alive and compression', $response);
+            end_test($testName, 'http 11 w. keep-alive and compression', $response);
 
             $c->keepalive = false;
-            begin_test('Repeated send (small array)', 'http 11 w. compression');
+            begin_test($testName, 'http 11 w. compression');
             $response = array();
             for ($i = 0; $i < 25; $i++)
             {
-                $resp = $c->send($msg, 10, 'http11');
+                $resp = $c->send($req, 10, 'http11');
                 $response[] = $resp->value();
             }
-            end_test('Repeated send (small array)', 'http 11 w. compression', $response);
+            end_test($testName, 'http 11 w. compression', $response);
         }
 
-        begin_test('Repeated send (small array)', 'multicall w. compression');
-        $response = $c->send($msgs);
+        begin_test($testName, 'multicall w. compression');
+        $response = $c->send($reqs);
         foreach ($response as $key =>& $val)
         {
             $val = $val->value();
         }
-        end_test('Repeated send (small array)', 'multicall w. compression', $response);
+        end_test($testName, 'multicall w. compression', $response);
     }
 
 } // end of 'if no xdebug profiling'
