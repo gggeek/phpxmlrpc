@@ -157,20 +157,20 @@ td form {margin: 0;}
         // fall thru intentionally
       case 'describe':
       case 'wrap':
-        $msg[0] = new $msgclass('system.methodHelp', null, $id);
+        $msg[0] = new $msgclass('system.methodHelp', array(), $id);
         $msg[0]->addparam(new xmlrpcval($method));
-        $msg[1] = new $msgclass('system.methodSignature', null, $id+1);
+        $msg[1] = new $msgclass('system.methodSignature', array(), $id+1);
         $msg[1]->addparam(new xmlrpcval($method));
         $actionname = 'Description of method "'.$method.'"';
         break;
       case 'list':
-        $msg[0] = new $msgclass('system.listMethods', null, $id);
+        $msg[0] = new $msgclass('system.listMethods', array(), $id);
         $actionname = 'List of available methods';
         break;
       case 'execute':
         if (!payload_is_safe($payload))
           die("Tsk tsk tsk, please stop it or I will have to call in the cops!");
-        $msg[0] = new $msgclass($method, null, $id);
+        $msg[0] = new $msgclass($method, array(), $id);
         // hack! build xml payload by hand
         if ($wstype == 1)
         {

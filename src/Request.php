@@ -31,7 +31,7 @@ class Request
         }
     }
 
-    private function xml_header($charset_encoding='')
+    public function xml_header($charset_encoding='')
     {
         if ($charset_encoding != '')
         {
@@ -43,7 +43,7 @@ class Request
         }
     }
 
-    private function xml_footer()
+    public function xml_footer()
     {
         return '</methodCall>';
     }
