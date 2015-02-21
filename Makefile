@@ -3,7 +3,7 @@
 ### USER EDITABLE VARS - can be passed as command-line options ###
 
 # path to PHP executable, preferably CLI version
-PHP=/usr/local/bin/php
+PHP=php
 
 # path were xmlrpc lib files will be copied to
 PHPINCLUDEDIR=/usr/local/lib/php
@@ -23,7 +23,8 @@ DOS2UNIX=dos2unix
 #   on unix shells lasts char should be \\2/g )
 export VERSION=$(shell grep -E "\$GLOBALS *\[ *'xmlrpcVersion' *\] *= *'" lib/xmlrpc.inc | sed -r s/"(.*= *' *)([0-9a-zA-Z.-]+)(.*)"/\2/g )
 
-LIBFILES=lib/xmlrpc.inc lib/xmlrpcs.inc lib/xmlrpc_wrappers.inc
+LIBFILES=lib/xmlrpc.inc lib/xmlrpcs.inc lib/xmlrpc_wrappers.inc \
+ src/*.php src/Helper/*.php
 
 EXTRAFILES=extras/test.pl \
  extras/test.py \
@@ -31,9 +32,9 @@ EXTRAFILES=extras/test.pl \
  extras/workspace.testPhpServer.fttb
 
 DEMOFILES=demo/vardemo.php \
- demo/demo1.txt \
- demo/demo2.txt \
- demo/demo3.txt
+ demo/demo1.xml \
+ demo/demo2.xml \
+ demo/demo3.xml
 
 DEMOSFILES=demo/server/discuss.php \
  demo/server/server.php \
@@ -50,11 +51,12 @@ DEMOCFILES=demo/client/agesort.php \
  demo/client/zopetest.php
 
 TESTFILES=test/testsuite.php \
- test/benchmark.php \
- test/parse_args.php \
- test/phpunit.php \
- test/verify_compat.php \
- test/PHPUnit/*.php
+ tests/benchmark.php \
+ tests/parse_args.php \
+ test/InvalidHostTest.php \
+ test/LocalHostTest.php \
+ test/ParsingBugsTest.php \
+ tests/verify_compat.php
 
 INFOFILES=Changelog \
  Makefile \
