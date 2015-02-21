@@ -6,7 +6,6 @@ use PhpXmlRpc\Helper\Charset;
 
 class Response
 {
-
     /// @todo: do these need to be public?
     public $val = 0;
     public $valtyp;
@@ -28,37 +27,26 @@ class Response
      * NB: as of now we do not do it, since it might be either an xmlrpcval or a plain
      * php val, or a complete xml chunk, depending on usage of Client::send() inside which creator is called...
      */
-    function __construct($val, $fcode = 0, $fstr = '', $valtyp='')
+    public function __construct($val, $fcode = 0, $fstr = '', $valtyp = '')
     {
-        if($fcode != 0)
-        {
+        if ($fcode != 0) {
             // error response
             $this->errno = $fcode;
             $this->errstr = $fstr;
             //$this->errstr = htmlspecialchars($fstr); // XXX: encoding probably shouldn't be done here; fix later.
-        }
-        else
-        {
+        } else {
             // successful response
             $this->val = $val;
-            if ($valtyp == '')
-            {
+            if ($valtyp == '') {
                 // user did not declare type of response value: try to guess it
-                if (is_object($this->val) && is_a($this->val, 'PhpXmlRpc\Value'))
-                {
+                if (is_object($this->val) && is_a($this->val, 'PhpXmlRpc\Value')) {
                     $this->valtyp = 'xmlrpcvals';
-                }
-                else if (is_string($this->val))
-                {
+                } elseif (is_string($this->val)) {
                     $this->valtyp = 'xml';
-                }
-                else
-                {
+                } else {
                     $this->valtyp = 'phpvals';
                 }
-            }
-            else
-            {
+            } else {
                 // user declares type of resp value: believe him
                 $this->valtyp = $valtyp;
             }
@@ -67,6 +55,7 @@ class Response
 
     /**
      * Returns the error code of the response.
+     *
      * @return integer the error code of this response (0 for not-error responses)
      */
     public function faultCode()
@@ -76,6 +65,7 @@ class Response
 
     /**
      * Returns the error code of the response.
+     *
      * @return string the error string of this response ('' for not-error responses)
      */
     public function faultString()
@@ -85,6 +75,7 @@ class Response
 
     /**
      * Returns the value received by the server.
+     *
      * @return mixed the xmlrpcval object returned by the server. Might be an xml string or php value if the response has been created by specially configured Client objects
      */
     public function value()
@@ -99,7 +90,8 @@ class Response
      * NB: cookies sent as 'expired' by the server (i.e. with an expiry date in the past)
      * are still present in the array. It is up to the user-defined code to decide
      * how to use the received cookies, and whether they have to be sent back with the next
-     * request to the server (using Client::setCookie) or not
+     * request to the server (using Client::setCookie) or not.
+     *
      * @return array array of cookies received from the server
      */
     public function cookies()
@@ -108,53 +100,44 @@ class Response
     }
 
     /**
-     * Returns xml representation of the response. XML prologue not included
+     * Returns xml representation of the response. XML prologue not included.
+     *
      * @param string $charset_encoding the charset to be used for serialization. if null, US-ASCII is assumed
+     *
      * @return string the xml representation of the response
      */
-    public function serialize($charset_encoding='')
+    public function serialize($charset_encoding = '')
     {
-        if ($charset_encoding != '')
+        if ($charset_encoding != '') {
             $this->content_type = 'text/xml; charset=' . $charset_encoding;
-        else
+        } else {
             $this->content_type = 'text/xml';
-        if (PhpXmlRpc::$xmlrpc_null_apache_encoding)
-        {
-            $result = "<methodResponse xmlns:ex=\"".PhpXmlRpc::$xmlrpc_null_apache_encoding_ns."\">\n";
         }
-        else
-        {
+        if (PhpXmlRpc::$xmlrpc_null_apache_encoding) {
+            $result = "<methodResponse xmlns:ex=\"" . PhpXmlRpc::$xmlrpc_null_apache_encoding_ns . "\">\n";
+        } else {
             $result = "<methodResponse>\n";
         }
-        if($this->errno)
-        {
+        if ($this->errno) {
             // G. Giunta 2005/2/13: let non-ASCII response messages be tolerated by clients
             // by xml-encoding non ascii chars
             $charsetEncoder =
             $result .= "<fault>\n" .
-"<value>\n<struct><member><name>faultCode</name>\n<value><int>" . $this->errno .
-"</int></value>\n</member>\n<member>\n<name>faultString</name>\n<value><string>" .
-Charset::instance()->encode_entities($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</string></value>\n</member>\n" .
-"</struct>\n</value>\n</fault>";
-        }
-        else
-        {
-            if(!is_object($this->val) || !is_a($this->val, 'PhpXmlRpc\Value'))
-            {
-                if (is_string($this->val) && $this->valtyp == 'xml')
-                {
+                "<value>\n<struct><member><name>faultCode</name>\n<value><int>" . $this->errno .
+                "</int></value>\n</member>\n<member>\n<name>faultString</name>\n<value><string>" .
+                Charset::instance()->encode_entities($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</string></value>\n</member>\n" .
+                "</struct>\n</value>\n</fault>";
+        } else {
+            if (!is_object($this->val) || !is_a($this->val, 'PhpXmlRpc\Value')) {
+                if (is_string($this->val) && $this->valtyp == 'xml') {
                     $result .= "<params>\n<param>\n" .
                         $this->val .
                         "</param>\n</params>";
-                }
-                else
-                {
+                } else {
                     /// @todo try to build something serializable?
                     die('cannot serialize xmlrpc response objects whose content is native php values');
                 }
-            }
-            else
-            {
+            } else {
                 $result .= "<params>\n<param>\n" .
                     $this->val->serialize($charset_encoding) .
                     "</param>\n</params>";
@@ -162,6 +145,7 @@ Charset::instance()->encode_entities($this->errstr, PhpXmlRpc::$xmlrpc_internale
         }
         $result .= "\n</methodResponse>";
         $this->payload = $result;
+
         return $result;
     }
 }

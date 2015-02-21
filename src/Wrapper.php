@@ -19,20 +19,20 @@ namespace PhpXmlRpc;
  */
 class Wrapper
 {
-
     /**
-    * Given a string defining a php type or phpxmlrpc type (loosely defined: strings
-    * accepted come from javadoc blocks), return corresponding phpxmlrpc type.
-    * NB: for php 'resource' types returns empty string, since resources cannot be serialized;
-    * for php class names returns 'struct', since php objects can be serialized as xmlrpc structs
-    * for php arrays always return array, even though arrays sometimes serialize as json structs
-    * @param string $phptype
-    * @return string
-    */
+     * Given a string defining a php type or phpxmlrpc type (loosely defined: strings
+     * accepted come from javadoc blocks), return corresponding phpxmlrpc type.
+     * NB: for php 'resource' types returns empty string, since resources cannot be serialized;
+     * for php class names returns 'struct', since php objects can be serialized as xmlrpc structs
+     * for php arrays always return array, even though arrays sometimes serialize as json structs.
+     *
+     * @param string $phptype
+     *
+     * @return string
+     */
     public function php_2_xmlrpc_type($phptype)
     {
-        switch(strtolower($phptype))
-        {
+        switch (strtolower($phptype)) {
             case 'string':
                 return Value::$xmlrpcString;
             case 'integer':
@@ -53,12 +53,9 @@ class Wrapper
             case 'resource':
                 return '';
             default:
-                if(class_exists($phptype))
-                {
+                if (class_exists($phptype)) {
                     return Value::$xmlrpcStruct;
-                }
-                else
-                {
+                } else {
                     // unknown: might be any 'extended' xmlrpc type
                     return Value::$xmlrpcValue;
                 }
@@ -66,14 +63,15 @@ class Wrapper
     }
 
     /**
-    * Given a string defining a phpxmlrpc type return corresponding php type.
-    * @param string $xmlrpctype
-    * @return string
-    */
+     * Given a string defining a phpxmlrpc type return corresponding php type.
+     *
+     * @param string $xmlrpctype
+     *
+     * @return string
+     */
     public function xmlrpc_2_php_type($xmlrpctype)
     {
-        switch(strtolower($xmlrpctype))
-        {
+        switch (strtolower($xmlrpctype)) {
             case 'base64':
             case 'datetime.iso8601':
             case 'string':
@@ -97,54 +95,55 @@ class Wrapper
     }
 
     /**
-    * Given a user-defined PHP function, create a PHP 'wrapper' function that can
-    * be exposed as xmlrpc method from an xmlrpc_server object and called from remote
-    * clients (as well as its corresponding signature info).
-    *
-    * Since php is a typeless language, to infer types of input and output parameters,
-    * it relies on parsing the javadoc-style comment block associated with the given
-    * function. Usage of xmlrpc native types (such as datetime.dateTime.iso8601 and base64)
-    * in the @param tag is also allowed, if you need the php function to receive/send
-    * data in that particular format (note that base64 encoding/decoding is transparently
-    * carried out by the lib, while datetime vals are passed around as strings)
-    *
-    * Known limitations:
-    * - only works for user-defined functions, not for PHP internal functions
-    *   (reflection does not support retrieving number/type of params for those)
-    * - functions returning php objects will generate special xmlrpc responses:
-    *   when the xmlrpc decoding of those responses is carried out by this same lib, using
-    *   the appropriate param in php_xmlrpc_decode, the php objects will be rebuilt.
-    *   In short: php objects can be serialized, too (except for their resource members),
-    *   using this function.
-    *   Other libs might choke on the very same xml that will be generated in this case
-    *   (i.e. it has a nonstandard attribute on struct element tags)
-    * - usage of javadoc @param tags using param names in a different order from the
-    *   function prototype is not considered valid (to be fixed?)
-    *
-    * Note that since rel. 2.0RC3 the preferred method to have the server call 'standard'
-    * php functions (ie. functions not expecting a single Request obj as parameter)
-    * is by making use of the functions_parameters_type class member.
-    *
-    * @param string $funcname the name of the PHP user function to be exposed as xmlrpc method; array($obj, 'methodname') and array('class', 'methodname') are ok too
-    * @param string $newfuncname (optional) name for function to be created
-    * @param array $extra_options (optional) array of options for conversion. valid values include:
-    *        bool  return_source when true, php code w. function definition will be returned, not evaluated
-    *        bool  encode_php_objs let php objects be sent to server using the 'improved' xmlrpc notation, so server can deserialize them as php objects
-    *        bool  decode_php_objs --- WARNING !!! possible security hazard. only use it with trusted servers ---
-    *        bool  suppress_warnings  remove from produced xml any runtime warnings due to the php function being invoked
-    * @return false on error, or an array containing the name of the new php function,
-    *         its signature and docs, to be used in the server dispatch map
-    *
-    * @todo decide how to deal with params passed by ref: bomb out or allow?
-    * @todo finish using javadoc info to build method sig if all params are named but out of order
-    * @todo add a check for params of 'resource' type
-    * @todo add some trigger_errors / error_log when returning false?
-    * @todo what to do when the PHP function returns NULL? we are currently returning an empty string value...
-    * @todo add an option to suppress php warnings in invocation of user function, similar to server debug level 3?
-    * @todo if $newfuncname is empty, we could use create_user_func instead of eval, as it is possibly faster
-    * @todo add a verbatim_object_copy parameter to allow avoiding the same obj instance?
-    */
-    public function wrap_php_function($funcname, $newfuncname='', $extra_options=array())
+     * Given a user-defined PHP function, create a PHP 'wrapper' function that can
+     * be exposed as xmlrpc method from an xmlrpc_server object and called from remote
+     * clients (as well as its corresponding signature info).
+     *
+     * Since php is a typeless language, to infer types of input and output parameters,
+     * it relies on parsing the javadoc-style comment block associated with the given
+     * function. Usage of xmlrpc native types (such as datetime.dateTime.iso8601 and base64)
+     * in the @param tag is also allowed, if you need the php function to receive/send
+     * data in that particular format (note that base64 encoding/decoding is transparently
+     * carried out by the lib, while datetime vals are passed around as strings)
+     *
+     * Known limitations:
+     * - only works for user-defined functions, not for PHP internal functions
+     *   (reflection does not support retrieving number/type of params for those)
+     * - functions returning php objects will generate special xmlrpc responses:
+     *   when the xmlrpc decoding of those responses is carried out by this same lib, using
+     *   the appropriate param in php_xmlrpc_decode, the php objects will be rebuilt.
+     *   In short: php objects can be serialized, too (except for their resource members),
+     *   using this function.
+     *   Other libs might choke on the very same xml that will be generated in this case
+     *   (i.e. it has a nonstandard attribute on struct element tags)
+     * - usage of javadoc @param tags using param names in a different order from the
+     *   function prototype is not considered valid (to be fixed?)
+     *
+     * Note that since rel. 2.0RC3 the preferred method to have the server call 'standard'
+     * php functions (ie. functions not expecting a single Request obj as parameter)
+     * is by making use of the functions_parameters_type class member.
+     *
+     * @param string $funcname the name of the PHP user function to be exposed as xmlrpc method; array($obj, 'methodname') and array('class', 'methodname') are ok too
+     * @param string $newfuncname (optional) name for function to be created
+     * @param array $extra_options (optional) array of options for conversion. valid values include:
+     *                              bool  return_source when true, php code w. function definition will be returned, not evaluated
+     *                              bool  encode_php_objs let php objects be sent to server using the 'improved' xmlrpc notation, so server can deserialize them as php objects
+     *                              bool  decode_php_objs --- WARNING !!! possible security hazard. only use it with trusted servers ---
+     *                              bool  suppress_warnings  remove from produced xml any runtime warnings due to the php function being invoked
+     *
+     * @return false on error, or an array containing the name of the new php function,
+     *               its signature and docs, to be used in the server dispatch map
+     *
+     * @todo decide how to deal with params passed by ref: bomb out or allow?
+     * @todo finish using javadoc info to build method sig if all params are named but out of order
+     * @todo add a check for params of 'resource' type
+     * @todo add some trigger_errors / error_log when returning false?
+     * @todo what to do when the PHP function returns NULL? we are currently returning an empty string value...
+     * @todo add an option to suppress php warnings in invocation of user function, similar to server debug level 3?
+     * @todo if $newfuncname is empty, we could use create_user_func instead of eval, as it is possibly faster
+     * @todo add a verbatim_object_copy parameter to allow avoiding the same obj instance?
+     */
+    public function wrap_php_function($funcname, $newfuncname = '', $extra_options = array())
     {
         $buildit = isset($extra_options['return_source']) ? !($extra_options['return_source']) : true;
         $prefix = isset($extra_options['prefix']) ? $extra_options['prefix'] : 'xmlrpc';
@@ -153,104 +152,86 @@ class Wrapper
         $catch_warnings = isset($extra_options['suppress_warnings']) && $extra_options['suppress_warnings'] ? '@' : '';
 
         $exists = false;
-        if (is_string($funcname) && strpos($funcname, '::') !== false)
-        {
+        if (is_string($funcname) && strpos($funcname, '::') !== false) {
             $funcname = explode('::', $funcname);
         }
-        if(is_array($funcname))
-        {
-            if(count($funcname) < 2 || (!is_string($funcname[0]) && !is_object($funcname[0])))
-            {
+        if (is_array($funcname)) {
+            if (count($funcname) < 2 || (!is_string($funcname[0]) && !is_object($funcname[0]))) {
                 error_log('XML-RPC: syntax for function to be wrapped is wrong');
+
                 return false;
             }
-            if(is_string($funcname[0]))
-            {
+            if (is_string($funcname[0])) {
                 $plainfuncname = implode('::', $funcname);
-            }
-            elseif(is_object($funcname[0]))
-            {
+            } elseif (is_object($funcname[0])) {
                 $plainfuncname = get_class($funcname[0]) . '->' . $funcname[1];
             }
             $exists = method_exists($funcname[0], $funcname[1]);
-        }
-        else
-        {
+        } else {
             $plainfuncname = $funcname;
             $exists = function_exists($funcname);
         }
 
-        if(!$exists)
-        {
-            error_log('XML-RPC: function to be wrapped is not defined: '.$plainfuncname);
+        if (!$exists) {
+            error_log('XML-RPC: function to be wrapped is not defined: ' . $plainfuncname);
+
             return false;
-        }
-        else
-        {
+        } else {
             // determine name of new php function
-            if($newfuncname == '')
-            {
-                if(is_array($funcname))
-                {
-                    if(is_string($funcname[0]))
-                        $xmlrpcfuncname = "{$prefix}_".implode('_', $funcname);
-                    else
-                        $xmlrpcfuncname = "{$prefix}_".get_class($funcname[0]) . '_' . $funcname[1];
-                }
-                else
-                {
+            if ($newfuncname == '') {
+                if (is_array($funcname)) {
+                    if (is_string($funcname[0])) {
+                        $xmlrpcfuncname = "{$prefix}_" . implode('_', $funcname);
+                    } else {
+                        $xmlrpcfuncname = "{$prefix}_" . get_class($funcname[0]) . '_' . $funcname[1];
+                    }
+                } else {
                     $xmlrpcfuncname = "{$prefix}_$funcname";
                 }
-            }
-            else
-            {
+            } else {
                 $xmlrpcfuncname = $newfuncname;
             }
-            while($buildit && function_exists($xmlrpcfuncname))
-            {
+            while ($buildit && function_exists($xmlrpcfuncname)) {
                 $xmlrpcfuncname .= 'x';
             }
 
             // start to introspect PHP code
-            if(is_array($funcname))
-            {
+            if (is_array($funcname)) {
                 $func = new \ReflectionMethod($funcname[0], $funcname[1]);
-                if($func->isPrivate())
-                {
-                    error_log('XML-RPC: method to be wrapped is private: '.$plainfuncname);
+                if ($func->isPrivate()) {
+                    error_log('XML-RPC: method to be wrapped is private: ' . $plainfuncname);
+
                     return false;
                 }
-                if($func->isProtected())
-                {
-                    error_log('XML-RPC: method to be wrapped is protected: '.$plainfuncname);
+                if ($func->isProtected()) {
+                    error_log('XML-RPC: method to be wrapped is protected: ' . $plainfuncname);
+
                     return false;
                 }
-                if($func->isConstructor())
-                {
-                    error_log('XML-RPC: method to be wrapped is the constructor: '.$plainfuncname);
+                if ($func->isConstructor()) {
+                    error_log('XML-RPC: method to be wrapped is the constructor: ' . $plainfuncname);
+
                     return false;
                 }
-                if($func->isDestructor())
-                {
-                    error_log('XML-RPC: method to be wrapped is the destructor: '.$plainfuncname);
+                if ($func->isDestructor()) {
+                    error_log('XML-RPC: method to be wrapped is the destructor: ' . $plainfuncname);
+
                     return false;
                 }
-                if($func->isAbstract())
-                {
-                    error_log('XML-RPC: method to be wrapped is abstract: '.$plainfuncname);
+                if ($func->isAbstract()) {
+                    error_log('XML-RPC: method to be wrapped is abstract: ' . $plainfuncname);
+
                     return false;
                 }
                 /// @todo add more checks for static vs. nonstatic?
-            }
-            else
-            {
+            } else {
                 $func = new \ReflectionFunction($funcname);
             }
-            if($func->isInternal())
-            {
+            if ($func->isInternal()) {
                 // Note: from PHP 5.1.0 onward, we will possibly be able to use invokeargs
                 // instead of getparameters to fully reflect internal php functions ?
-                error_log('XML-RPC: function to be wrapped is internal: '.$plainfuncname);
+                error_log('XML-RPC: function to be wrapped is internal: ' . $plainfuncname);
+
                 return false;
             }
 
@@ -266,49 +247,35 @@ class Wrapper
             $paramDocs = array();
 
             $docs = $func->getDocComment();
-            if($docs != '')
-            {
+            if ($docs != '') {
                 $docs = explode("\n", $docs);
                 $i = 0;
-                foreach($docs as $doc)
-                {
+                foreach ($docs as $doc) {
                     $doc = trim($doc, " \r\t/*");
-                    if(strlen($doc) && strpos($doc, '@') !== 0 && !$i)
-                    {
-                        if($desc)
-                        {
+                    if (strlen($doc) && strpos($doc, '@') !== 0 && !$i) {
+                        if ($desc) {
                             $desc .= "\n";
                         }
                         $desc .= $doc;
-                    }
-                    elseif(strpos($doc, '@param') === 0)
-                    {
+                    } elseif (strpos($doc, '@param') === 0) {
                         // syntax: @param type [$name] desc
-                        if(preg_match('/@param\s+(\S+)(\s+\$\S+)?\s+(.+)/', $doc, $matches))
-                        {
-                            if(strpos($matches[1], '|'))
-                            {
+                        if (preg_match('/@param\s+(\S+)(\s+\$\S+)?\s+(.+)/', $doc, $matches)) {
+                            if (strpos($matches[1], '|')) {
                                 //$paramDocs[$i]['type'] = explode('|', $matches[1]);
                                 $paramDocs[$i]['type'] = 'mixed';
-                            }
-                            else
-                            {
+                            } else {
                                 $paramDocs[$i]['type'] = $matches[1];
                             }
                             $paramDocs[$i]['name'] = trim($matches[2]);
                             $paramDocs[$i]['doc'] = $matches[3];
                         }
                         $i++;
-                    }
-                    elseif(strpos($doc, '@return') === 0)
-                    {
+                    } elseif (strpos($doc, '@return') === 0) {
                         // syntax: @return type desc
                         //$returns = preg_split('/\s+/', $doc);
-                        if(preg_match('/@return\s+(\S+)\s+(.+)/', $doc, $matches))
-                        {
+                        if (preg_match('/@return\s+(\S+)\s+(.+)/', $doc, $matches)) {
                             $returns = php_2_xmlrpc_type($matches[1]);
-                            if(isset($matches[2]))
-                            {
+                            if (isset($matches[2])) {
                                 $returnsDocs = $matches[2];
                             }
                         }
@@ -319,14 +286,12 @@ class Wrapper
             // execute introspection of actual function prototype
             $params = array();
             $i = 0;
-            foreach($func->getParameters() as $paramobj)
-            {
+            foreach ($func->getParameters() as $paramobj) {
                 $params[$i] = array();
-                $params[$i]['name'] = '$'.$paramobj->getName();
+                $params[$i]['name'] = '$' . $paramobj->getName();
                 $params[$i]['isoptional'] = $paramobj->isOptional();
                 $i++;
             }
-
 
             // start  building of PHP code to be eval'd
             $innercode = '';
@@ -334,38 +299,30 @@ class Wrapper
             $parsvariations = array();
             $pars = array();
             $pnum = count($params);
-            foreach($params as $param)
-            {
-                if (isset($paramDocs[$i]['name']) && $paramDocs[$i]['name'] && strtolower($paramDocs[$i]['name']) != strtolower($param['name']))
-                {
+            foreach ($params as $param) {
+                if (isset($paramDocs[$i]['name']) && $paramDocs[$i]['name'] && strtolower($paramDocs[$i]['name']) != strtolower($param['name'])) {
                     // param name from phpdoc info does not match param definition!
                     $paramDocs[$i]['type'] = 'mixed';
                 }
 
-                if($param['isoptional'])
-                {
+                if ($param['isoptional']) {
                     // this particular parameter is optional. save as valid previous list of parameters
                     $innercode .= "if (\$paramcount > $i) {\n";
                     $parsvariations[] = $pars;
                 }
                 $innercode .= "\$p$i = \$msg->getParam($i);\n";
-                if ($decode_php_objects)
-                {
+                if ($decode_php_objects) {
                     $innercode .= "if (\$p{$i}->kindOf() == 'scalar') \$p$i = \$p{$i}->scalarval(); else \$p$i = php_{$prefix}_decode(\$p$i, array('decode_php_objs'));\n";
-                }
-                else
-                {
+                } else {
                     $innercode .= "if (\$p{$i}->kindOf() == 'scalar') \$p$i = \$p{$i}->scalarval(); else \$p$i = php_{$prefix}_decode(\$p$i);\n";
                 }
 
                 $pars[] = "\$p$i";
                 $i++;
-                if($param['isoptional'])
-                {
+                if ($param['isoptional']) {
                     $innercode .= "}\n";
                 }
-                if($i == $pnum)
-                {
+                if ($i == $pnum) {
                     // last allowed parameters combination
                     $parsvariations[] = $pars;
                 }
@@ -373,56 +330,42 @@ class Wrapper
 
             $sigs = array();
             $psigs = array();
-            if(count($parsvariations) == 0)
-            {
+            if (count($parsvariations) == 0) {
                 // only known good synopsis = no parameters
                 $parsvariations[] = array();
                 $minpars = 0;
-            }
-            else
-            {
+            } else {
                 $minpars = count($parsvariations[0]);
             }
 
-            if($minpars)
-            {
+            if ($minpars) {
                 // add to code the check for min params number
                 // NB: this check needs to be done BEFORE decoding param values
                 $innercode = "\$paramcount = \$msg->getNumParams();\n" .
-                "if (\$paramcount < $minpars) return new {$prefix}resp(0, ".PhpXmlRpc::$xmlrpcerr['incorrect_params'].", '".PhpXmlRpc::$xmlrpcerr['incorrect_params']."');\n" . $innercode;
-            }
-            else
-            {
+                    "if (\$paramcount < $minpars) return new {$prefix}resp(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . "');\n" . $innercode;
+            } else {
                 $innercode = "\$paramcount = \$msg->getNumParams();\n" . $innercode;
             }
 
             $innercode .= "\$np = false;\n";
             // since there are no closures in php, if we are given an object instance,
             // we store a pointer to it in a global var...
-            if ( is_array($funcname) && is_object($funcname[0]) )
-            {
-                $GLOBALS['xmlrpcWPFObjHolder'][$xmlrpcfuncname] =& $funcname[0];
+            if (is_array($funcname) && is_object($funcname[0])) {
+                $GLOBALS['xmlrpcWPFObjHolder'][$xmlrpcfuncname] = &$funcname[0];
                 $innercode .= "\$obj =& \$GLOBALS['xmlrpcWPFObjHolder']['$xmlrpcfuncname'];\n";
-                $realfuncname = '$obj->'.$funcname[1];
-            }
-            else
-            {
+                $realfuncname = '$obj->' . $funcname[1];
+            } else {
                 $realfuncname = $plainfuncname;
             }
-            foreach($parsvariations as $pars)
-            {
+            foreach ($parsvariations as $pars) {
                 $innercode .= "if (\$paramcount == " . count($pars) . ") \$retval = {$catch_warnings}$realfuncname(" . implode(',', $pars) . "); else\n";
                 // build a 'generic' signature (only use an appropriate return type)
                 $sig = array($returns);
                 $psig = array($returnsDocs);
-                for($i=0; $i < count($pars); $i++)
-                {
-                    if (isset($paramDocs[$i]['type']))
-                    {
+                for ($i = 0; $i < count($pars); $i++) {
+                    if (isset($paramDocs[$i]['type'])) {
                         $sig[] = $this->php_2_xmlrpc_type($paramDocs[$i]['type']);
-                    }
-                    else
-                    {
+                    } else {
                         $sig[] = Value::$xmlrpcValue;
                     }
                     $psig[] = isset($paramDocs[$i]['doc']) ? $paramDocs[$i]['doc'] : '';
@@ -431,35 +374,32 @@ class Wrapper
                 $psigs[] = $psig;
             }
             $innercode .= "\$np = true;\n";
-            $innercode .= "if (\$np) return new {$prefix}resp(0, ".PhpXmlRpc::$xmlrpcerr['incorrect_params'].", '".PhpXmlRpc::$xmlrpcerr['incorrect_params']."'); else {\n";
+            $innercode .= "if (\$np) return new {$prefix}resp(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . "'); else {\n";
             //$innercode .= "if (\$_xmlrpcs_error_occurred) return new Response(0, $GLOBALS['xmlrpcerr']user, \$_xmlrpcs_error_occurred); else\n";
             $innercode .= "if (is_a(\$retval, '{$prefix}resp')) return \$retval; else\n";
-            if($returns == Value::$xmlrpcDateTime || $returns == Value::$xmlrpcBase64)
-            {
+            if ($returns == Value::$xmlrpcDateTime || $returns == Value::$xmlrpcBase64) {
                 $innercode .= "return new {$prefix}resp(new {$prefix}val(\$retval, '$returns'));";
-            }
-            else
-            {
-                if ($encode_php_objects)
+            } else {
+                if ($encode_php_objects) {
                     $innercode .= "return new {$prefix}resp(php_{$prefix}_encode(\$retval, array('encode_php_objs')));\n";
-                else
+                } else {
                     $innercode .= "return new {$prefix}resp(php_{$prefix}_encode(\$retval));\n";
+                }
             }
             // shall we exclude functions returning by ref?
             // if($func->returnsReference())
             //     return false;
             $code = "function $xmlrpcfuncname(\$msg) {\n" . $innercode . "}\n}";
             //print_r($code);
-            if ($buildit)
-            {
+            if ($buildit) {
                 $allOK = 0;
-                eval($code.'$allOK=1;');
+                eval($code . '$allOK=1;');
                 // alternative
                 //$xmlrpcfuncname = create_function('$m', $innercode);
 
-                if(!$allOK)
-                {
-                    error_log('XML-RPC: could not create function '.$xmlrpcfuncname.' to wrap php function '.$plainfuncname);
+                if (!$allOK) {
+                    error_log('XML-RPC: could not create function ' . $xmlrpcfuncname . ' to wrap php function ' . $plainfuncname);
+
                     return false;
                 }
             }
@@ -468,101 +408,98 @@ class Wrapper
             /// usage as method signature, plus put together a nice string for docs
 
             $ret = array('function' => $xmlrpcfuncname, 'signature' => $sigs, 'docstring' => $desc, 'signature_docs' => $psigs, 'source' => $code);
+
             return $ret;
         }
     }
 
     /**
-    * Given a user-defined PHP class or php object, map its methods onto a list of
-    * PHP 'wrapper' functions that can be exposed as xmlrpc methods from an xmlrpc_server
-    * object and called from remote clients (as well as their corresponding signature info).
-    *
-    * @param mixed $classname the name of the class whose methods are to be exposed as xmlrpc methods, or an object instance of that class
-    * @param array $extra_options see the docs for wrap_php_method for more options
-    *        string method_type 'static', 'nonstatic', 'all' and 'auto' (default); the latter will switch between static and non-static depending on wheter $classname is a class name or object instance
-    * @return array or false on failure
-    *
-    * @todo get_class_methods will return both static and non-static methods.
-    *       we have to differentiate the action, depending on wheter we recived a class name or object
-    */
-    public function wrap_php_class($classname, $extra_options=array())
+     * Given a user-defined PHP class or php object, map its methods onto a list of
+     * PHP 'wrapper' functions that can be exposed as xmlrpc methods from an xmlrpc_server
+     * object and called from remote clients (as well as their corresponding signature info).
+     *
+     * @param mixed $classname the name of the class whose methods are to be exposed as xmlrpc methods, or an object instance of that class
+     * @param array $extra_options see the docs for wrap_php_method for more options
+     *                             string method_type 'static', 'nonstatic', 'all' and 'auto' (default); the latter will switch between static and non-static depending on wheter $classname is a class name or object instance
+     *
+     * @return array or false on failure
+     *
+     * @todo get_class_methods will return both static and non-static methods.
+     *       we have to differentiate the action, depending on wheter we recived a class name or object
+     */
+    public function wrap_php_class($classname, $extra_options = array())
     {
         $methodfilter = isset($extra_options['method_filter']) ? $extra_options['method_filter'] : '';
         $methodtype = isset($extra_options['method_type']) ? $extra_options['method_type'] : 'auto';
 
         $result = array();
         $mlist = get_class_methods($classname);
-        foreach($mlist as $mname)
-        {
-            if ($methodfilter == '' || preg_match($methodfilter, $mname))
-            {
+        foreach ($mlist as $mname) {
+            if ($methodfilter == '' || preg_match($methodfilter, $mname)) {
                 // echo $mlist."\n";
                 $func = new ReflectionMethod($classname, $mname);
-                if(!$func->isPrivate() && !$func->isProtected() && !$func->isConstructor() && !$func->isDestructor() && !$func->isAbstract())
-                {
-                    if(($func->isStatic && ($methodtype == 'all' || $methodtype == 'static' || ($methodtype == 'auto' && is_string($classname)))) ||
-                        (!$func->isStatic && ($methodtype == 'all' || $methodtype == 'nonstatic' || ($methodtype == 'auto' && is_object($classname)))))
-                    {
+                if (!$func->isPrivate() && !$func->isProtected() && !$func->isConstructor() && !$func->isDestructor() && !$func->isAbstract()) {
+                    if (($func->isStatic && ($methodtype == 'all' || $methodtype == 'static' || ($methodtype == 'auto' && is_string($classname)))) ||
+                        (!$func->isStatic && ($methodtype == 'all' || $methodtype == 'nonstatic' || ($methodtype == 'auto' && is_object($classname))))
+                    ) {
                         $methodwrap = wrap_php_function(array($classname, $mname), '', $extra_options);
-                        if ( $methodwrap )
-                        {
+                        if ($methodwrap) {
                             $result[$methodwrap['function']] = $methodwrap['function'];
                         }
                     }
                 }
             }
         }
+
         return $result;
     }
 
     /**
-    * Given an xmlrpc client and a method name, register a php wrapper function
-    * that will call it and return results using native php types for both
-    * params and results. The generated php function will return a Response
-    * object for failed xmlrpc calls
-    *
-    * Known limitations:
-    * - server must support system.methodsignature for the wanted xmlrpc method
-    * - for methods that expose many signatures, only one can be picked (we
-    *   could in principle check if signatures differ only by number of params
-    *   and not by type, but it would be more complication than we can spare time)
-    * - nested xmlrpc params: the caller of the generated php function has to
-    *   encode on its own the params passed to the php function if these are structs
-    *   or arrays whose (sub)members include values of type datetime or base64
-    *
-    * Notes: the connection properties of the given client will be copied
-    * and reused for the connection used during the call to the generated
-    * php function.
-    * Calling the generated php function 'might' be slow: a new xmlrpc client
-    * is created on every invocation and an xmlrpc-connection opened+closed.
-    * An extra 'debug' param is appended to param list of xmlrpc method, useful
-    * for debugging purposes.
-    *
-    * @param Client        $client     an xmlrpc client set up correctly to communicate with target server
-    * @param string        $methodname the xmlrpc method to be mapped to a php function
-    * @param array         $extra_options array of options that specify conversion details. valid options include
-    *        integer       signum      the index of the method signature to use in mapping (if method exposes many sigs)
-    *        integer       timeout     timeout (in secs) to be used when executing function/calling remote method
-    *        string        protocol    'http' (default), 'http11' or 'https'
-    *        string        new_function_name the name of php function to create. If unspecified, lib will pick an appropriate name
-    *        string        return_source if true return php code w. function definition instead fo function name
-    *        bool          encode_php_objs let php objects be sent to server using the 'improved' xmlrpc notation, so server can deserialize them as php objects
-    *        bool          decode_php_objs --- WARNING !!! possible security hazard. only use it with trusted servers ---
-    *        mixed         return_on_fault a php value to be returned when the xmlrpc call fails/returns a fault response (by default the Response object is returned in this case). If a string is used, '%faultCode%' and '%faultString%' tokens will be substituted with actual error values
-    *        bool          debug        set it to 1 or 2 to see debug results of querying server for method synopsis
-    * @return string                   the name of the generated php function (or false) - OR AN ARRAY...
-    */
-    public function wrap_xmlrpc_method($client, $methodname, $extra_options=0, $timeout=0, $protocol='', $newfuncname='')
+     * Given an xmlrpc client and a method name, register a php wrapper function
+     * that will call it and return results using native php types for both
+     * params and results. The generated php function will return a Response
+     * object for failed xmlrpc calls.
+     *
+     * Known limitations:
+     * - server must support system.methodsignature for the wanted xmlrpc method
+     * - for methods that expose many signatures, only one can be picked (we
+     *   could in principle check if signatures differ only by number of params
+     *   and not by type, but it would be more complication than we can spare time)
+     * - nested xmlrpc params: the caller of the generated php function has to
+     *   encode on its own the params passed to the php function if these are structs
+     *   or arrays whose (sub)members include values of type datetime or base64
+     *
+     * Notes: the connection properties of the given client will be copied
+     * and reused for the connection used during the call to the generated
+     * php function.
+     * Calling the generated php function 'might' be slow: a new xmlrpc client
+     * is created on every invocation and an xmlrpc-connection opened+closed.
+     * An extra 'debug' param is appended to param list of xmlrpc method, useful
+     * for debugging purposes.
+     *
+     * @param Client $client an xmlrpc client set up correctly to communicate with target server
+     * @param string $methodname the xmlrpc method to be mapped to a php function
+     * @param array $extra_options array of options that specify conversion details. valid options include
+     *                              integer       signum      the index of the method signature to use in mapping (if method exposes many sigs)
+     *                              integer       timeout     timeout (in secs) to be used when executing function/calling remote method
+     *                              string        protocol    'http' (default), 'http11' or 'https'
+     *                              string        new_function_name the name of php function to create. If unspecified, lib will pick an appropriate name
+     *                              string        return_source if true return php code w. function definition instead fo function name
+     *                              bool          encode_php_objs let php objects be sent to server using the 'improved' xmlrpc notation, so server can deserialize them as php objects
+     *                              bool          decode_php_objs --- WARNING !!! possible security hazard. only use it with trusted servers ---
+     *                              mixed         return_on_fault a php value to be returned when the xmlrpc call fails/returns a fault response (by default the Response object is returned in this case). If a string is used, '%faultCode%' and '%faultString%' tokens will be substituted with actual error values
+     *                              bool          debug        set it to 1 or 2 to see debug results of querying server for method synopsis
+     *
+     * @return string the name of the generated php function (or false) - OR AN ARRAY...
+     */
+    public function wrap_xmlrpc_method($client, $methodname, $extra_options = 0, $timeout = 0, $protocol = '', $newfuncname = '')
     {
         // mind numbing: let caller use sane calling convention (as per javadoc, 3 params),
         // OR the 2.0 calling convention (no options) - we really love backward compat, don't we?
-        if (!is_array($extra_options))
-        {
+        if (!is_array($extra_options)) {
             $signum = $extra_options;
             $extra_options = array();
-        }
-        else
-        {
+        } else {
             $signum = isset($extra_options['signum']) ? (int)$extra_options['signum'] : 0;
             $timeout = isset($extra_options['timeout']) ? (int)$extra_options['timeout'] : 0;
             $protocol = isset($extra_options['protocol']) ? $extra_options['protocol'] : '';
@@ -578,59 +515,47 @@ class Wrapper
         $simple_client_copy = isset($extra_options['simple_client_copy']) ? (int)($extra_options['simple_client_copy']) : 0;
         $buildit = isset($extra_options['return_source']) ? !($extra_options['return_source']) : true;
         $prefix = isset($extra_options['prefix']) ? $extra_options['prefix'] : 'xmlrpc';
-        if (isset($extra_options['return_on_fault']))
-        {
+        if (isset($extra_options['return_on_fault'])) {
             $decode_fault = true;
             $fault_response = $extra_options['return_on_fault'];
-        }
-        else
-        {
+        } else {
             $decode_fault = false;
             $fault_response = '';
         }
         $debug = isset($extra_options['debug']) ? ($extra_options['debug']) : 0;
 
-        $msgclass = $prefix.'msg';
-        $valclass = $prefix.'val';
-        $decodefunc = 'php_'.$prefix.'_decode';
+        $msgclass = $prefix . 'msg';
+        $valclass = $prefix . 'val';
+        $decodefunc = 'php_' . $prefix . '_decode';
 
         $msg = new $msgclass('system.methodSignature');
         $msg->addparam(new $valclass($methodname));
         $client->setDebug($debug);
         $response = $client->send($msg, $timeout, $protocol);
-        if($response->faultCode())
-        {
-            error_log('XML-RPC: could not retrieve method signature from remote server for method '.$methodname);
+        if ($response->faultCode()) {
+            error_log('XML-RPC: could not retrieve method signature from remote server for method ' . $methodname);
+
             return false;
-        }
-        else
-        {
+        } else {
             $msig = $response->value();
-            if ($client->return_type != 'phpvals')
-            {
+            if ($client->return_type != 'phpvals') {
                 $msig = $decodefunc($msig);
             }
-            if(!is_array($msig) || count($msig) <= $signum)
-            {
-                error_log('XML-RPC: could not retrieve method signature nr.'.$signum.' from remote server for method '.$methodname);
+            if (!is_array($msig) || count($msig) <= $signum) {
+                error_log('XML-RPC: could not retrieve method signature nr.' . $signum . ' from remote server for method ' . $methodname);
+
                 return false;
-            }
-            else
-            {
+            } else {
                 // pick a suitable name for the new function, avoiding collisions
-                if($newfuncname != '')
-                {
+                if ($newfuncname != '') {
                     $xmlrpcfuncname = $newfuncname;
-                }
-                else
-                {
+                } else {
                     // take care to insure that methodname is translated to valid
                     // php function name
-                    $xmlrpcfuncname = $prefix.'_'.preg_replace(array('/\./', '/[^a-zA-Z0-9_\x7f-\xff]/'),
-                        array('_', ''), $methodname);
+                    $xmlrpcfuncname = $prefix . '_' . preg_replace(array('/\./', '/[^a-zA-Z0-9_\x7f-\xff]/'),
+                            array('_', ''), $methodname);
                 }
-                while($buildit && function_exists($xmlrpcfuncname))
-                {
+                while ($buildit && function_exists($xmlrpcfuncname)) {
                     $xmlrpcfuncname .= 'x';
                 }
 
@@ -638,16 +563,13 @@ class Wrapper
                 $mdesc = '';
                 // if in 'offline' mode, get method description too.
                 // in online mode, favour speed of operation
-                if(!$buildit)
-                {
+                if (!$buildit) {
                     $msg = new $msgclass('system.methodHelp');
                     $msg->addparam(new $valclass($methodname));
                     $response = $client->send($msg, $timeout, $protocol);
-                    if (!$response->faultCode())
-                    {
+                    if (!$response->faultCode()) {
                         $mdesc = $response->value();
-                        if ($client->return_type != 'phpvals')
-                        {
+                        if ($client->return_type != 'phpvals') {
                             $mdesc = $mdesc->scalarval();
                         }
                     }
@@ -659,25 +581,21 @@ class Wrapper
                     $fault_response);
 
                 //print_r($code);
-                if ($buildit)
-                {
+                if ($buildit) {
                     $allOK = 0;
-                    eval($results['source'].'$allOK=1;');
+                    eval($results['source'] . '$allOK=1;');
                     // alternative
                     //$xmlrpcfuncname = create_function('$m', $innercode);
-                    if($allOK)
-                    {
+                    if ($allOK) {
                         return $xmlrpcfuncname;
-                    }
-                    else
-                    {
-                        error_log('XML-RPC: could not create function '.$xmlrpcfuncname.' to wrap remote method '.$methodname);
+                    } else {
+                        error_log('XML-RPC: could not create function ' . $xmlrpcfuncname . ' to wrap remote method ' . $methodname);
+
                         return false;
                     }
-                }
-                else
-                {
+                } else {
                     $results['function'] = $xmlrpcfuncname;
+
                     return $results;
                 }
             }
@@ -685,14 +603,16 @@ class Wrapper
     }
 
     /**
-    * Similar to wrap_xmlrpc_method, but will generate a php class that wraps
-    * all xmlrpc methods exposed by the remote server as own methods.
-    * For more details see wrap_xmlrpc_method.
-    * @param Client $client the client obj all set to query the desired server
-    * @param array $extra_options list of options for wrapped code
-    * @return mixed false on error, the name of the created class if all ok or an array with code, class name and comments (if the appropriatevoption is set in extra_options)
-    */
-    public function wrap_xmlrpc_server($client, $extra_options=array())
+     * Similar to wrap_xmlrpc_method, but will generate a php class that wraps
+     * all xmlrpc methods exposed by the remote server as own methods.
+     * For more details see wrap_xmlrpc_method.
+     *
+     * @param Client $client the client obj all set to query the desired server
+     * @param array $extra_options list of options for wrapped code
+     *
+     * @return mixed false on error, the name of the created class if all ok or an array with code, class name and comments (if the appropriatevoption is set in extra_options)
+     */
+    public function wrap_xmlrpc_server($client, $extra_options = array())
     {
         $methodfilter = isset($extra_options['method_filter']) ? $extra_options['method_filter'] : '';
         //$signum = isset($extra_options['signum']) ? (int)$extra_options['signum'] : 0;
@@ -705,43 +625,34 @@ class Wrapper
         $buildit = isset($extra_options['return_source']) ? !($extra_options['return_source']) : true;
         $prefix = isset($extra_options['prefix']) ? $extra_options['prefix'] : 'xmlrpc';
 
-        $msgclass = $prefix.'msg';
+        $msgclass = $prefix . 'msg';
         //$valclass = $prefix.'val';
-        $decodefunc = 'php_'.$prefix.'_decode';
+        $decodefunc = 'php_' . $prefix . '_decode';
 
         $msg = new $msgclass('system.listMethods');
         $response = $client->send($msg, $timeout, $protocol);
-        if($response->faultCode())
-        {
+        if ($response->faultCode()) {
             error_log('XML-RPC: could not retrieve method list from remote server');
+
             return false;
-        }
-        else
-        {
+        } else {
             $mlist = $response->value();
-            if ($client->return_type != 'phpvals')
-            {
+            if ($client->return_type != 'phpvals') {
                 $mlist = $decodefunc($mlist);
             }
-            if(!is_array($mlist) || !count($mlist))
-            {
+            if (!is_array($mlist) || !count($mlist)) {
                 error_log('XML-RPC: could not retrieve meaningful method list from remote server');
+
                 return false;
-            }
-            else
-            {
+            } else {
                 // pick a suitable name for the new function, avoiding collisions
-                if($newclassname != '')
-                {
+                if ($newclassname != '') {
                     $xmlrpcclassname = $newclassname;
+                } else {
+                    $xmlrpcclassname = $prefix . '_' . preg_replace(array('/\./', '/[^a-zA-Z0-9_\x7f-\xff]/'),
+                            array('_', ''), $client->server) . '_client';
                 }
-                else
-                {
-                    $xmlrpcclassname = $prefix.'_'.preg_replace(array('/\./', '/[^a-zA-Z0-9_\x7f-\xff]/'),
-                        array('_', ''), $client->server).'_client';
-                }
-                while($buildit && class_exists($xmlrpcclassname))
-                {
+                while ($buildit && class_exists($xmlrpcclassname)) {
                     $xmlrpcclassname .= 'x';
                 }
 
@@ -753,49 +664,38 @@ class Wrapper
                 $opts = array('simple_client_copy' => 2, 'return_source' => true,
                     'timeout' => $timeout, 'protocol' => $protocol,
                     'encode_php_objs' => $encode_php_objects, 'prefix' => $prefix,
-                    'decode_php_objs' => $decode_php_objects
-                    );
+                    'decode_php_objs' => $decode_php_objects,
+                );
                 /// @todo build javadoc for class definition, too
-                foreach($mlist as $mname)
-                {
-                    if ($methodfilter == '' || preg_match($methodfilter, $mname))
-                    {
+                foreach ($mlist as $mname) {
+                    if ($methodfilter == '' || preg_match($methodfilter, $mname)) {
                         $opts['new_function_name'] = preg_replace(array('/\./', '/[^a-zA-Z0-9_\x7f-\xff]/'),
                             array('_', ''), $mname);
                         $methodwrap = wrap_xmlrpc_method($client, $mname, $opts);
-                        if ($methodwrap)
-                        {
-                            if (!$buildit)
-                            {
+                        if ($methodwrap) {
+                            if (!$buildit) {
                                 $source .= $methodwrap['docstring'];
                             }
-                            $source .= $methodwrap['source']."\n";
-                        }
-                        else
-                        {
-                            error_log('XML-RPC: will not create class method to wrap remote method '.$mname);
+                            $source .= $methodwrap['source'] . "\n";
+                        } else {
+                            error_log('XML-RPC: will not create class method to wrap remote method ' . $mname);
                         }
                     }
                 }
                 $source .= "}\n";
-                if ($buildit)
-                {
+                if ($buildit) {
                     $allOK = 0;
-                    eval($source.'$allOK=1;');
+                    eval($source . '$allOK=1;');
                     // alternative
                     //$xmlrpcfuncname = create_function('$m', $innercode);
-                    if($allOK)
-                    {
+                    if ($allOK) {
                         return $xmlrpcclassname;
-                    }
-                    else
-                    {
-                        error_log('XML-RPC: could not create class '.$xmlrpcclassname.' to wrap remote server '.$client->server);
+                    } else {
+                        error_log('XML-RPC: could not create class ' . $xmlrpcclassname . ' to wrap remote server ' . $client->server);
+
                         return false;
                     }
-                }
-                else
-                {
+                } else {
                     return array('class' => $xmlrpcclassname, 'code' => $source, 'docstring' => '');
                 }
             }
@@ -803,126 +703,101 @@ class Wrapper
     }
 
     /**
-    * Given the necessary info, build php code that creates a new function to
-    * invoke a remote xmlrpc method.
-    * Take care that no full checking of input parameters is done to ensure that
-    * valid php code is emitted.
-    * Note: real spaghetti code follows...
-    */
+     * Given the necessary info, build php code that creates a new function to
+     * invoke a remote xmlrpc method.
+     * Take care that no full checking of input parameters is done to ensure that
+     * valid php code is emitted.
+     * Note: real spaghetti code follows...
+     */
     protected function build_remote_method_wrapper_code($client, $methodname, $xmlrpcfuncname,
-        $msig, $mdesc='', $timeout=0, $protocol='', $client_copy_mode=0, $prefix='xmlrpc',
-        $decode_php_objects=false, $encode_php_objects=false, $decode_fault=false,
-        $fault_response='')
+                                                        $msig, $mdesc = '', $timeout = 0, $protocol = '', $client_copy_mode = 0, $prefix = 'xmlrpc',
+                                                        $decode_php_objects = false, $encode_php_objects = false, $decode_fault = false,
+                                                        $fault_response = '')
     {
         $code = "function $xmlrpcfuncname (";
-        if ($client_copy_mode < 2)
-        {
+        if ($client_copy_mode < 2) {
             // client copy mode 0 or 1 == partial / full client copy in emitted code
             $innercode = $this->build_client_wrapper_code($client, $client_copy_mode, $prefix);
             $innercode .= "\$client->setDebug(\$debug);\n";
             $this_ = '';
-        }
-        else
-        {
+        } else {
             // client copy mode 2 == no client copy in emitted code
             $innercode = '';
             $this_ = 'this->';
         }
         $innercode .= "\$msg = new {$prefix}msg('$methodname');\n";
 
-        if ($mdesc != '')
-        {
+        if ($mdesc != '') {
             // take care that PHP comment is not terminated unwillingly by method description
-            $mdesc = "/**\n* ".str_replace('*/', '* /', $mdesc)."\n";
-        }
-        else
-        {
+            $mdesc = "/**\n* " . str_replace('*/', '* /', $mdesc) . "\n";
+        } else {
             $mdesc = "/**\nFunction $xmlrpcfuncname\n";
         }
 
         // param parsing
         $plist = array();
         $pcount = count($msig);
-        for($i = 1; $i < $pcount; $i++)
-        {
+        for ($i = 1; $i < $pcount; $i++) {
             $plist[] = "\$p$i";
             $ptype = $msig[$i];
-            if($ptype == 'i4' || $ptype == 'int' || $ptype == 'boolean' || $ptype == 'double' ||
-                $ptype == 'string' || $ptype == 'dateTime.iso8601' || $ptype == 'base64' || $ptype == 'null')
-            {
+            if ($ptype == 'i4' || $ptype == 'int' || $ptype == 'boolean' || $ptype == 'double' ||
+                $ptype == 'string' || $ptype == 'dateTime.iso8601' || $ptype == 'base64' || $ptype == 'null'
+            ) {
                 // only build directly xmlrpcvals when type is known and scalar
                 $innercode .= "\$p$i = new {$prefix}val(\$p$i, '$ptype');\n";
-            }
-            else
-            {
-                if ($encode_php_objects)
-                {
+            } else {
+                if ($encode_php_objects) {
                     $innercode .= "\$p$i = php_{$prefix}_encode(\$p$i, array('encode_php_objs'));\n";
-                }
-                else
-                {
+                } else {
                     $innercode .= "\$p$i = php_{$prefix}_encode(\$p$i);\n";
                 }
             }
             $innercode .= "\$msg->addparam(\$p$i);\n";
-            $mdesc .= '* @param '.$this->xmlrpc_2_php_type($ptype)." \$p$i\n";
+            $mdesc .= '* @param ' . $this->xmlrpc_2_php_type($ptype) . " \$p$i\n";
         }
-        if ($client_copy_mode < 2)
-        {
+        if ($client_copy_mode < 2) {
             $plist[] = '$debug=0';
             $mdesc .= "* @param int \$debug when 1 (or 2) will enable debugging of the underlying {$prefix} call (defaults to 0)\n";
         }
         $plist = implode(', ', $plist);
-        $mdesc .= '* @return '.$this->xmlrpc_2_php_type($msig[0])." (or an {$prefix}resp obj instance if call fails)\n*/\n";
+        $mdesc .= '* @return ' . $this->xmlrpc_2_php_type($msig[0]) . " (or an {$prefix}resp obj instance if call fails)\n*/\n";
 
         $innercode .= "\$res = \${$this_}client->send(\$msg, $timeout, '$protocol');\n";
-        if ($decode_fault)
-        {
-            if (is_string($fault_response) && ((strpos($fault_response, '%faultCode%') !== false) || (strpos($fault_response, '%faultString%') !== false)))
-            {
-                $respcode = "str_replace(array('%faultCode%', '%faultString%'), array(\$res->faultCode(), \$res->faultString()), '".str_replace("'", "''", $fault_response)."')";
-            }
-            else
-            {
+        if ($decode_fault) {
+            if (is_string($fault_response) && ((strpos($fault_response, '%faultCode%') !== false) || (strpos($fault_response, '%faultString%') !== false))) {
+                $respcode = "str_replace(array('%faultCode%', '%faultString%'), array(\$res->faultCode(), \$res->faultString()), '" . str_replace("'", "''", $fault_response) . "')";
+            } else {
                 $respcode = var_export($fault_response, true);
             }
-        }
-        else
-        {
+        } else {
             $respcode = '$res';
         }
-        if ($decode_php_objects)
-        {
+        if ($decode_php_objects) {
             $innercode .= "if (\$res->faultcode()) return $respcode; else return php_{$prefix}_decode(\$res->value(), array('decode_php_objs'));";
-        }
-        else
-        {
+        } else {
             $innercode .= "if (\$res->faultcode()) return $respcode; else return php_{$prefix}_decode(\$res->value());";
         }
 
-        $code = $code . $plist. ") {\n" . $innercode . "\n}\n";
+        $code = $code . $plist . ") {\n" . $innercode . "\n}\n";
 
         return array('source' => $code, 'docstring' => $mdesc);
     }
 
     /**
-    * Given necessary info, generate php code that will rebuild a client object
-    * Take care that no full checking of input parameters is done to ensure that
-    * valid php code is emitted.
-    */
-    protected function build_client_wrapper_code($client, $verbatim_client_copy, $prefix='xmlrpc')
+     * Given necessary info, generate php code that will rebuild a client object
+     * Take care that no full checking of input parameters is done to ensure that
+     * valid php code is emitted.
+     */
+    protected function build_client_wrapper_code($client, $verbatim_client_copy, $prefix = 'xmlrpc')
     {
-        $code = "\$client = new {$prefix}_client('".str_replace("'", "\'", $client->path).
+        $code = "\$client = new {$prefix}_client('" . str_replace("'", "\'", $client->path) .
             "', '" . str_replace("'", "\'", $client->server) . "', $client->port);\n";
 
         // copy all client fields to the client that will be generated runtime
         // (this provides for future expansion or subclassing of client obj)
-        if ($verbatim_client_copy)
-        {
-            foreach($client as $fld => $val)
-            {
-                if($fld != 'debug' && $fld != 'return_type')
-                {
+        if ($verbatim_client_copy) {
+            foreach ($client as $fld => $val) {
+                if ($fld != 'debug' && $fld != 'return_type') {
                     $val = var_export($val, true);
                     $code .= "\$client->$fld = $val;\n";
                 }
@@ -933,5 +808,4 @@ class Wrapper
         //$code .= "\$client->setDebug(\$debug);\n";
         return $code;
     }
-
 }

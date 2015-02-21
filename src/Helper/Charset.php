@@ -6,7 +6,6 @@ use PhpXmlRpc\PhpXmlRpc;
 
 class Charset
 {
-
     // tables used for transcoding different charsets into us-ascii xml
     protected $xml_iso88591_Entities = array("in" => array(), "out" => array());
 
@@ -27,23 +26,23 @@ class Charset
     */
 
     protected $charset_supersets = array(
-        'US-ASCII' => array ('ISO-8859-1', 'ISO-8859-2', 'ISO-8859-3', 'ISO-8859-4',
+        'US-ASCII' => array('ISO-8859-1', 'ISO-8859-2', 'ISO-8859-3', 'ISO-8859-4',
             'ISO-8859-5', 'ISO-8859-6', 'ISO-8859-7', 'ISO-8859-8',
             'ISO-8859-9', 'ISO-8859-10', 'ISO-8859-11', 'ISO-8859-12',
             'ISO-8859-13', 'ISO-8859-14', 'ISO-8859-15', 'UTF-8',
-            'EUC-JP', 'EUC-', 'EUC-KR', 'EUC-CN')
+            'EUC-JP', 'EUC-', 'EUC-KR', 'EUC-CN',),
     );
 
     protected static $instance = null;
 
     /**
-     * This class is singleton for performance reasons
+     * This class is singleton for performance reasons.
+     *
      * @return Charset
      */
     public static function instance()
     {
-        if(self::$instance === null)
-        {
+        if (self::$instance === null) {
             self::$instance = new self();
         }
 
@@ -52,12 +51,12 @@ class Charset
 
     private function __construct()
     {
-        for($i = 0; $i < 32; $i++) {
+        for ($i = 0; $i < 32; $i++) {
             $this->xml_iso88591_Entities["in"][] = chr($i);
             $this->xml_iso88591_Entities["out"][] = "&#{$i};";
         }
 
-        for($i = 160; $i < 256; $i++) {
+        for ($i = 160; $i < 256; $i++) {
             $this->xml_iso88591_Entities["in"][] = chr($i);
             $this->xml_iso88591_Entities["out"][] = "&#{$i};";
         }
@@ -66,7 +65,6 @@ class Charset
         {
             $this->xml_cp1252_Entities['in'][] = chr($i);
         }*/
-
     }
 
     /**
@@ -86,18 +84,17 @@ class Charset
      * @param string $data
      * @param string $src_encoding
      * @param string $dest_encoding
+     *
      * @return string
      */
-    public function encode_entities($data, $src_encoding='', $dest_encoding='')
+    public function encode_entities($data, $src_encoding = '', $dest_encoding = '')
     {
-        if ($src_encoding == '')
-        {
+        if ($src_encoding == '') {
             // lame, but we know no better...
             $src_encoding = PhpXmlRpc::$xmlrpc_internalencoding;
         }
 
-        switch(strtoupper($src_encoding.'_'.$dest_encoding))
-        {
+        switch (strtoupper($src_encoding . '_' . $dest_encoding)) {
             case 'ISO-8859-1_':
             case 'ISO-8859-1_US-ASCII':
                 $escaped_data = str_replace(array('&', '"', "'", '<', '>'), array('&amp;', '&quot;', '&apos;', '&lt;', '&gt;'), $data);
@@ -122,17 +119,15 @@ class Charset
                 // NB: this will choke on invalid UTF-8, going most likely beyond EOF
                 $escaped_data = '';
                 // be kind to users creating string xmlrpcvals out of different php types
-                $data = (string) $data;
-                $ns = strlen ($data);
-                for ($nn = 0; $nn < $ns; $nn++)
-                {
+                $data = (string)$data;
+                $ns = strlen($data);
+                for ($nn = 0; $nn < $ns; $nn++) {
                     $ch = $data[$nn];
                     $ii = ord($ch);
                     //1 7 0bbbbbbb (127)
-                    if ($ii < 128)
-                    {
+                    if ($ii < 128) {
                         /// @todo shall we replace this with a (supposedly) faster str_replace?
-                        switch($ii){
+                        switch ($ii) {
                             case 34:
                                 $escaped_data .= '&quot;';
                                 break;
@@ -151,43 +146,37 @@ class Charset
                             default:
                                 $escaped_data .= $ch;
                         } // switch
-                    }
-                    //2 11 110bbbbb 10bbbbbb (2047)
-                    else if ($ii>>5 == 6)
-                    {
+                    } //2 11 110bbbbb 10bbbbbb (2047)
+                    elseif ($ii >> 5 == 6) {
                         $b1 = ($ii & 31);
-                        $ii = ord($data[$nn+1]);
+                        $ii = ord($data[$nn + 1]);
                         $b2 = ($ii & 63);
                         $ii = ($b1 * 64) + $b2;
-                        $ent = sprintf ('&#%d;', $ii);
+                        $ent = sprintf('&#%d;', $ii);
                         $escaped_data .= $ent;
                         $nn += 1;
-                    }
-                    //3 16 1110bbbb 10bbbbbb 10bbbbbb
-                    else if ($ii>>4 == 14)
-                    {
+                    } //3 16 1110bbbb 10bbbbbb 10bbbbbb
+                    elseif ($ii >> 4 == 14) {
                         $b1 = ($ii & 15);
-                        $ii = ord($data[$nn+1]);
+                        $ii = ord($data[$nn + 1]);
                         $b2 = ($ii & 63);
-                        $ii = ord($data[$nn+2]);
+                        $ii = ord($data[$nn + 2]);
                         $b3 = ($ii & 63);
                         $ii = ((($b1 * 64) + $b2) * 64) + $b3;
-                        $ent = sprintf ('&#%d;', $ii);
+                        $ent = sprintf('&#%d;', $ii);
                         $escaped_data .= $ent;
                         $nn += 2;
-                    }
-                    //4 21 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
-                    else if ($ii>>3 == 30)
-                    {
+                    } //4 21 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
+                    elseif ($ii >> 3 == 30) {
                         $b1 = ($ii & 7);
-                        $ii = ord($data[$nn+1]);
+                        $ii = ord($data[$nn + 1]);
                         $b2 = ($ii & 63);
-                        $ii = ord($data[$nn+2]);
+                        $ii = ord($data[$nn + 2]);
                         $b3 = ($ii & 63);
-                        $ii = ord($data[$nn+3]);
+                        $ii = ord($data[$nn + 3]);
                         $b4 = ($ii & 63);
                         $ii = ((((($b1 * 64) + $b2) * 64) + $b3) * 64) + $b4;
-                        $ent = sprintf ('&#%d;', $ii);
+                        $ent = sprintf('&#%d;', $ii);
                         $escaped_data .= $ent;
                         $nn += 3;
                     }
@@ -216,31 +205,36 @@ class Charset
                 $escaped_data = '';
                 error_log("Converting from $src_encoding to $dest_encoding: not supported...");
         }
+
         return $escaped_data;
     }
 
     /**
      * Checks if a given charset encoding is present in a list of encodings or
-     * if it is a valid subset of any encoding in the list
+     * if it is a valid subset of any encoding in the list.
+     *
      * @param string $encoding charset to be tested
      * @param string|array $validList comma separated list of valid charsets (or array of charsets)
+     *
      * @return bool
      */
     public function is_valid_charset($encoding, $validList)
     {
-
-        if (is_string($validList))
+        if (is_string($validList)) {
             $validList = explode(',', $validList);
-        if (@in_array(strtoupper($encoding), $validList))
+        }
+        if (@in_array(strtoupper($encoding), $validList)) {
             return true;
-        else
-        {
-            if (array_key_exists($encoding, $this->charset_supersets))
-                foreach ($validList as $allowed)
-                    if (in_array($allowed, $this->charset_supersets[$encoding]))
+        } else {
+            if (array_key_exists($encoding, $this->charset_supersets)) {
+                foreach ($validList as $allowed) {
+                    if (in_array($allowed, $this->charset_supersets[$encoding])) {
                         return true;
+                    }
+                }
+            }
+
             return false;
         }
     }
-
 }
