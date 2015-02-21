@@ -33,7 +33,12 @@ if (version_compare(PHP_VERSION, '5.4', "<")) {
         ini_set("xsl.security_prefs", XSL_SECPREF_CREATE_DIRECTORY | XSL_SECPREF_WRITE_FILE);
     }
 } else {
-    $proc->setSecurityPreferences(XSL_SECPREF_CREATE_DIRECTORY | XSL_SECPREF_WRITE_FILE);
+    // the php online docs only mention setSecurityPrefs, but somehow some installs have setSecurityPreferences...
+    if (method_exists('XSLTProcessor', 'setSecurityPrefs')) {
+        $proc->setSecurityPrefs(XSL_SECPREF_CREATE_DIRECTORY | XSL_SECPREF_WRITE_FILE);
+    } else {
+        $proc->setSecurityPreferences(XSL_SECPREF_CREATE_DIRECTORY | XSL_SECPREF_WRITE_FILE);
+    }
 }
 $proc->importStyleSheet($xsl); // attach the xsl rules
 
