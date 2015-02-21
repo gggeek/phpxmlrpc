@@ -5,7 +5,7 @@
  Customization xsl stylesheet for docbook to chunked html transform
  @author Gaetano Giunta
  @copyright (c) 2007-2015 G. Giunta
- @license
+ @license code licensed under the BSD License
  @todo make the xsl more dynamic: the path to import chunk.xsl could be f.e. rewritten/injected by the php user
 -->
 

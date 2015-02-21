@@ -12,7 +12,7 @@
  * @param string  NOPROXY
  *
  * @copyright (C) 2007-20014 G. Giunta
- * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
+ * @license code licensed under the BSD License: see file license.txt
  **/
 class argParser
 {
