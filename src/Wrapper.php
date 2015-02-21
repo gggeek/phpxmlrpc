@@ -437,7 +437,7 @@ class Wrapper
         foreach ($mlist as $mname) {
             if ($methodfilter == '' || preg_match($methodfilter, $mname)) {
                 // echo $mlist."\n";
-                $func = new ReflectionMethod($classname, $mname);
+                $func = new \ReflectionMethod($classname, $mname);
                 if (!$func->isPrivate() && !$func->isProtected() && !$func->isConstructor() && !$func->isDestructor() && !$func->isAbstract()) {
                     if (($func->isStatic && ($methodtype == 'all' || $methodtype == 'static' || ($methodtype == 'auto' && is_string($classname)))) ||
                         (!$func->isStatic && ($methodtype == 'all' || $methodtype == 'nonstatic' || ($methodtype == 'auto' && is_object($classname))))

@@ -336,7 +336,7 @@ class Client
 
             return $r;
         } elseif (is_string($msg)) {
-            $n = new Message('');
+            $n = new Request('');
             $n->payload = $msg;
             $msg = $n;
         }
