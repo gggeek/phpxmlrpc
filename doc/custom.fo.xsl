@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-	xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <!--
  Customization xsl stylesheet for docbook to pdf transform
  @author Gaetano Giunta

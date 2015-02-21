@@ -70,7 +70,7 @@
     </xsl:when>
     <xsl:otherwise>
       <code>
-	<xsl:apply-templates mode="ansi-nontabular"/>
+        <xsl:apply-templates mode="ansi-nontabular"/>
       </code>
     </xsl:otherwise>
   </xsl:choose>
