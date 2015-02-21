@@ -1,6 +1,7 @@
 <?php
 /**
- * Benchmarking suite for the PHP-XMLRPC lib
+ * Benchmarking suite for the PHP-XMLRPC lib.
+ *
  * @author Gaetano Giunta
  * @copyright (c) 2005-2014 G. Giunta
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
@@ -16,16 +17,17 @@ use PhpXmlRpc\Client;
 use PhpXmlRpc\Response;
 use PhpXmlRpc\Encoder;
 
-include_once(__DIR__.'/../vendor/autoload.php');
+include_once __DIR__ . '/../vendor/autoload.php';
 
-include(__DIR__.'/parse_args.php');
+include __DIR__ . '/parse_args.php';
 $args = argParser::getArgs();
 
 function begin_test($test_name, $test_case)
 {
     global $test_results;
-    if (!isset($test_results[$test_name]))
-        $test_results[$test_name]=array();
+    if (!isset($test_results[$test_name])) {
+        $test_results[$test_name] = array();
+    }
     $test_results[$test_name][$test_case] = array();
     $test_results[$test_name][$test_case]['time'] = microtime(true);
 }
@@ -34,8 +36,9 @@ function end_test($test_name, $test_case, $test_result)
 {
     global $test_results;
     $end = microtime(true);
-    if (!isset($test_results[$test_name][$test_case]))
+    if (!isset($test_results[$test_name][$test_case])) {
         trigger_error('ending test that was not started');
+    }
     $test_results[$test_name][$test_case]['time'] = $end - $test_results[$test_name][$test_case]['time'];
     $test_results[$test_name][$test_case]['result'] = $test_result;
     echo '.';
@@ -52,48 +55,44 @@ $keys = array('zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'ei
 
 // Begin execution
 
-$test_results=array();
+$test_results = array();
 $is_web = isset($_SERVER['REQUEST_METHOD']);
 $xd = extension_loaded('xdebug') && ini_get('xdebug.profiler_enable');
-if ($xd)
+if ($xd) {
     $num_tests = 1;
-else
+} else {
     $num_tests = 10;
+}
 
 $title = 'XML-RPC Benchmark Tests';
 
-if($is_web)
-{
+if ($is_web) {
     echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n<head>\n<title>$title</title>\n</head>\n<body>\n<h1>$title</h1>\n<pre>\n";
-}
-else
-{
+} else {
     echo "$title\n\n";
 }
 
-if($is_web)
-{
-    echo "<h3>Using lib version: ".PhpXmlRpc::$xmlrpcVersion." on PHP version: ".phpversion()."</h3>\n";
-    if ($xd) echo "<h4>XDEBUG profiling enabled: skipping remote tests. Trace file is: ".htmlspecialchars(xdebug_get_profiler_filename())."</h4>\n";
+if ($is_web) {
+    echo "<h3>Using lib version: " . PhpXmlRpc::$xmlrpcVersion . " on PHP version: " . phpversion() . "</h3>\n";
+    if ($xd) {
+        echo "<h4>XDEBUG profiling enabled: skipping remote tests. Trace file is: " . htmlspecialchars(xdebug_get_profiler_filename()) . "</h4>\n";
+    }
     flush();
     ob_flush();
-}
-else
-{
-    echo "Using lib version: ".PhpXmlRpc::$xmlrpcVersion." on PHP version: ".phpversion()."\n";
-    if ($xd) echo "XDEBUG profiling enabled: skipping remote tests\nTrace file is: ".xdebug_get_profiler_filename()."\n";
+} else {
+    echo "Using lib version: " . PhpXmlRpc::$xmlrpcVersion . " on PHP version: " . phpversion() . "\n";
+    if ($xd) {
+        echo "XDEBUG profiling enabled: skipping remote tests\nTrace file is: " . xdebug_get_profiler_filename() . "\n";
+    }
 }
 
 // test 'old style' data encoding vs. 'automatic style' encoding
 begin_test('Data encoding (large array)', 'manual encoding');
-for ($i = 0; $i < $num_tests; $i++)
-{
+for ($i = 0; $i < $num_tests; $i++) {
     $vals = array();
-    for ($j = 0; $j < 10; $j++)
-    {
+    for ($j = 0; $j < 10; $j++) {
         $valarray = array();
-        foreach ($data[$j] as $key => $val)
-        {
+        foreach ($data[$j] as $key => $val) {
             $values = array();
             $values[] = new Value($val[0], 'int');
             $values[] = new Value($val[1], 'double');
@@ -116,24 +115,21 @@ end_test('Data encoding (large array)', 'manual encoding', $out);
 
 begin_test('Data encoding (large array)', 'automatic encoding');
 $encoder = new Encoder();
-for ($i = 0; $i < $num_tests; $i++)
-{
+for ($i = 0; $i < $num_tests; $i++) {
     $value = $encoder->encode($data, array('auto_dates'));
     $out = $value->serialize();
 }
 end_test('Data encoding (large array)', 'automatic encoding', $out);
 
-if (function_exists('xmlrpc_set_type'))
-{
+if (function_exists('xmlrpc_set_type')) {
     begin_test('Data encoding (large array)', 'xmlrpc-epi encoding');
-    for ($i = 0; $i < $num_tests; $i++)
-    {
-        for ($j = 0; $j < 10; $j++)
-            foreach ($keys as $k)
-            {
+    for ($i = 0; $i < $num_tests; $i++) {
+        for ($j = 0; $j < 10; $j++) {
+            foreach ($keys as $k) {
                 xmlrpc_set_type($data[$j][$k][4], 'datetime');
                 xmlrpc_set_type($data[$j][$k][8], 'datetime');
             }
+        }
         $out = xmlrpc_encode($data);
     }
     end_test('Data encoding (large array)', 'xmlrpc-epi encoding', $out);
@@ -142,23 +138,19 @@ if (function_exists('xmlrpc_set_type'))
 // test 'old style' data decoding vs. 'automatic style' decoding
 $dummy = new Request('');
 $out = new Response($value);
-$in = '<?xml version="1.0" ?>'."\n".$out->serialize();
+$in = '<?xml version="1.0" ?>' . "\n" . $out->serialize();
 
 begin_test('Data decoding (large array)', 'manual decoding');
-for ($i = 0; $i < $num_tests; $i++)
-{
+for ($i = 0; $i < $num_tests; $i++) {
     $response = $dummy->ParseResponse($in, true);
     $value = $response->value();
     $result = array();
-    for ($k = 0; $k < $value->arraysize(); $k++)
-    {
+    for ($k = 0; $k < $value->arraysize(); $k++) {
         $val1 = $value->arraymem($k);
         $out = array();
-        while (list($name, $val) = $val1->structeach())
-        {
+        while (list($name, $val) = $val1->structeach()) {
             $out[$name] = array();
-            for ($j = 0; $j < $val->arraysize(); $j++)
-            {
+            for ($j = 0; $j < $val->arraysize(); $j++) {
                 $data = $val->arraymem($j);
                 $out[$name][] = $data->scalarval();
             }
@@ -169,42 +161,36 @@ for ($i = 0; $i < $num_tests; $i++)
 end_test('Data decoding (large array)', 'manual decoding', $result);
 
 begin_test('Data decoding (large array)', 'automatic decoding');
-for ($i = 0; $i < $num_tests; $i++)
-{
+for ($i = 0; $i < $num_tests; $i++) {
     $response = $dummy->ParseResponse($in, true, 'phpvals');
     $value = $response->value();
 }
 end_test('Data decoding (large array)', 'automatic decoding', $value);
 
-if (function_exists('xmlrpc_decode'))
-{
+if (function_exists('xmlrpc_decode')) {
     begin_test('Data decoding (large array)', 'xmlrpc-epi decoding');
-    for ($i = 0; $i < $num_tests; $i++)
-    {
+    for ($i = 0; $i < $num_tests; $i++) {
         $response = $dummy->ParseResponse($in, true, 'xml');
         $value = xmlrpc_decode($response->value());
     }
     end_test('Data decoding (large array)', 'xmlrpc-epi decoding', $value);
 }
 
-if (!$xd)
-{
+if (!$xd) {
 
     /// test multicall vs. many calls vs. keep-alives
     $encoder = new Encoder();
     $value = $encoder->encode($data1, array('auto_dates'));
     $req = new Request('interopEchoTests.echoValue', array($value));
     $reqs = array();
-    for ($i = 0; $i < 25; $i++)
+    for ($i = 0; $i < 25; $i++) {
         $reqs[] = $req;
+    }
     $server = explode(':', $args['LOCALSERVER']);
-    if(count($server) > 1)
-    {
+    if (count($server) > 1) {
         $srv = $server[1] . '://' . $server[0] . $args['URI'];
         $c = new Client($args['URI'], $server[0], $server[1]);
-    }
-    else
-    {
+    } else {
         $srv = $args['LOCALSERVER'] . $args['URI'];
         $c = new Client($args['URI'], $args['LOCALSERVER']);
     }
@@ -219,19 +205,16 @@ if (!$xd)
     }
     begin_test($testName, 'http 10');
     $response = array();
-    for ($i = 0; $i < 25; $i++)
-    {
+    for ($i = 0; $i < 25; $i++) {
         $resp = $c->send($req);
         $response[] = $resp->value();
     }
     end_test($testName, 'http 10', $response);
 
-    if (function_exists('curl_init'))
-    {
+    if (function_exists('curl_init')) {
         begin_test($testName, 'http 11 w. keep-alive');
         $response = array();
-        for ($i = 0; $i < 25; $i++)
-        {
+        for ($i = 0; $i < 25; $i++) {
             $resp = $c->send($req, 10, 'http11');
             $response[] = $resp->value();
         }
@@ -240,8 +223,7 @@ if (!$xd)
         $c->keepalive = false;
         begin_test($testName, 'http 11');
         $response = array();
-        for ($i = 0; $i < 25; $i++)
-        {
+        for ($i = 0; $i < 25; $i++) {
             $resp = $c->send($req, 10, 'http11');
             $response[] = $resp->value();
         }
@@ -250,32 +232,27 @@ if (!$xd)
 
     begin_test($testName, 'multicall');
     $response = $c->send($reqs);
-    foreach ($response as $key =>& $val)
-    {
+    foreach ($response as $key => & $val) {
         $val = $val->value();
     }
     end_test($testName, 'multicall', $response);
 
-    if (function_exists('gzinflate'))
-    {
+    if (function_exists('gzinflate')) {
         $c->accepted_compression = array('gzip');
         $c->request_compression = 'gzip';
 
         begin_test($testName, 'http 10 w. compression');
         $response = array();
-        for ($i = 0; $i < 25; $i++)
-        {
+        for ($i = 0; $i < 25; $i++) {
             $resp = $c->send($req);
             $response[] = $resp->value();
         }
         end_test($testName, 'http 10 w. compression', $response);
 
-        if (function_exists('curl_init'))
-        {
+        if (function_exists('curl_init')) {
             begin_test($testName, 'http 11 w. keep-alive and compression');
             $response = array();
-            for ($i = 0; $i < 25; $i++)
-            {
+            for ($i = 0; $i < 25; $i++) {
                 $resp = $c->send($req, 10, 'http11');
                 $response[] = $resp->value();
             }
@@ -284,8 +261,7 @@ if (!$xd)
             $c->keepalive = false;
             begin_test($testName, 'http 11 w. compression');
             $response = array();
-            for ($i = 0; $i < 25; $i++)
-            {
+            for ($i = 0; $i < 25; $i++) {
                 $resp = $c->send($req, 10, 'http11');
                 $response[] = $resp->value();
             }
@@ -294,26 +270,22 @@ if (!$xd)
 
         begin_test($testName, 'multicall w. compression');
         $response = $c->send($reqs);
-        foreach ($response as $key =>& $val)
-        {
+        foreach ($response as $key => & $val) {
             $val = $val->value();
         }
         end_test($testName, 'multicall w. compression', $response);
     }
-
 } // end of 'if no xdebug profiling'
 
 
 echo "\n";
-foreach($test_results as $test => $results)
-{
+foreach ($test_results as $test => $results) {
     echo "\nTEST: $test\n";
-    foreach ($results as $case => $data)
-        echo "  $case: {$data['time']} secs - Output data CRC: ".crc32(serialize($data['result']))."\n";
+    foreach ($results as $case => $data) {
+        echo "  $case: {$data['time']} secs - Output data CRC: " . crc32(serialize($data['result'])) . "\n";
+    }
 }
 
-
-if($is_web)
-{
+if ($is_web) {
     echo "\n</pre>\n</body>\n</html>\n";
 }

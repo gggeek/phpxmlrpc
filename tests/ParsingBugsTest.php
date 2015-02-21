@@ -1,22 +1,22 @@
 <?php
 /**
- * NB: do not let your IDE fool you. The correct encoding for this file is NOT UTF8
+ * NB: do not let your IDE fool you. The correct encoding for this file is NOT UTF8.
  */
-
-include_once(__DIR__.'/../lib/xmlrpc.inc');
-include_once(__DIR__.'/../lib/xmlrpcs.inc');
+include_once __DIR__ . '/../lib/xmlrpc.inc';
+include_once __DIR__ . '/../lib/xmlrpcs.inc';
 
 class ParsingBugsTests extends PHPUnit_Framework_TestCase
 {
-    function testMinusOneString()
+    public function testMinusOneString()
     {
         $v = new xmlrpcval('-1');
         $u = new xmlrpcval('-1', 'string');
         $this->assertEquals($u->scalarval(), $v->scalarval());
     }
 
-    function testUnicodeInMemberName(){
-        $str = "G".chr(252)."nter, El".chr(232)."ne";
+    public function testUnicodeInMemberName()
+    {
+        $str = "G" . chr(252) . "nter, El" . chr(232) . "ne";
         $v = array($str => new xmlrpcval(1));
         $r = new xmlrpcresp(new xmlrpcval($v, 'struct'));
         $r = $r->serialize();
@@ -26,14 +26,14 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($v->structmemexists($str), true);
     }
 
-    function testUnicodeInErrorString()
+    public function testUnicodeInErrorString()
     {
         $response = utf8_encode(
             '<?xml version="1.0"?>
 <!-- $Id -->
 <!-- found by G. giunta, covers what happens when lib receives
   UTF8 chars in response text and comments -->
-<!-- '.chr(224).chr(252).chr(232).'&#224;&#252;&#232; -->
+<!-- ' . chr(224) . chr(252) . chr(232) . '&#224;&#252;&#232; -->
 <methodResponse>
 <fault>
 <value>
@@ -44,7 +44,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
 </member>
 <member>
 <name>faultString</name>
-<value><string>'.chr(224).chr(252).chr(232).'&#224;&#252;&#232;</string></value>
+<value><string>' . chr(224) . chr(252) . chr(232) . '&#224;&#252;&#232;</string></value>
 </member>
 </struct>
 </value>
@@ -53,13 +53,13 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $m = new xmlrpcmsg('dummy');
         $r = $m->parseResponse($response);
         $v = $r->faultString();
-        $this->assertEquals(chr(224).chr(252).chr(232).chr(224).chr(252).chr(232), $v);
+        $this->assertEquals(chr(224) . chr(252) . chr(232) . chr(224) . chr(252) . chr(232), $v);
     }
 
-    function testValidNumbers()
+    public function testValidNumbers()
     {
         $m = new xmlrpcmsg('dummy');
-        $fp=
+        $fp =
             '<?xml version="1.0"?>
 <methodResponse>
 <params>
@@ -91,13 +91,13 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
 </param>
 </params>
 </methodResponse>';
-        $r=$m->parseResponse($fp);
-        $v=$r->value();
-        $s=$v->structmem('integer1');
-        $t=$v->structmem('float1');
-        $u=$v->structmem('integer2');
-        $w=$v->structmem('float2');
-        $x=$v->structmem('float3');
+        $r = $m->parseResponse($fp);
+        $v = $r->value();
+        $s = $v->structmem('integer1');
+        $t = $v->structmem('float1');
+        $u = $v->structmem('integer2');
+        $w = $v->structmem('float2');
+        $x = $v->structmem('float3');
         $this->assertEquals(1, $s->scalarval());
         $this->assertEquals(1.1, $t->scalarval());
         $this->assertEquals(1, $u->scalarval());
@@ -105,15 +105,15 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(-110.0, $x->scalarval());
     }
 
-    function testAddScalarToStruct()
+    public function testAddScalarToStruct()
     {
         $v = new xmlrpcval(array('a' => 'b'), 'struct');
         // use @ operator in case error_log gets on screen
-        $r =  @$v->addscalar('c');
+        $r = @$v->addscalar('c');
         $this->assertEquals(0, $r);
     }
 
-    function testAddStructToStruct()
+    public function testAddStructToStruct()
     {
         $v = new xmlrpcval(array('a' => new xmlrpcval('b')), 'struct');
         $r = $v->addstruct(array('b' => new xmlrpcval('c')));
@@ -123,7 +123,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $v->structsize());
     }
 
-    function testAddArrayToArray()
+    public function testAddArrayToArray()
     {
         $v = new xmlrpcval(array(new xmlrpcval('a'), new xmlrpcval('b')), 'array');
         $r = $v->addarray(array(new xmlrpcval('b'), new xmlrpcval('c')));
@@ -131,20 +131,20 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $r);
     }
 
-    function testEncodeArray()
+    public function testEncodeArray()
     {
         $r = range(1, 100);
         $v = php_xmlrpc_encode($r);
         $this->assertEquals('array', $v->kindof());
     }
 
-    function testEncodeRecursive()
+    public function testEncodeRecursive()
     {
         $v = php_xmlrpc_encode(php_xmlrpc_encode('a simple string'));
         $this->assertEquals('scalar', $v->kindof());
     }
 
-    function testBrokenRequests()
+    public function testBrokenRequests()
     {
         $s = new xmlrpc_server();
         // omitting the 'params' tag: not tolerated by the lib anymore
@@ -179,7 +179,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(15, $r->faultCode());
     }
 
-    function testBrokenResponses()
+    public function testBrokenResponses()
     {
         $m = new xmlrpcmsg('dummy');
         //$m->debug = 1;
@@ -212,7 +212,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $r->faultCode());
     }
 
-    function testBuggyHttp()
+    public function testBuggyHttp()
     {
         $s = new xmlrpcmsg('dummy');
         $f = 'HTTP/1.1 100 Welcome to the jungle
@@ -239,7 +239,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals("hello world. 2 newlines follow\n\n\nand there they were.", $s->scalarval());
     }
 
-    function testStringBug()
+    public function testStringBug()
     {
         $s = new xmlrpcmsg('dummy');
         $f = '<?xml version="1.0"?>
@@ -275,7 +275,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals('S300510007I', $s->scalarval());
     }
 
-    function testWhiteSpace()
+    public function testWhiteSpace()
     {
         $s = new xmlrpcmsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
@@ -290,7 +290,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals("hello world. 2 newlines follow\n\n\nand there they were.", $s->scalarval());
     }
 
-    function testDoubleDataInArrayTag()
+    public function testDoubleDataInArrayTag()
     {
         $s = new xmlrpcmsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value><array>
@@ -311,7 +311,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals(2, $v);
     }
 
-    function testDoubleStuffInValueTag()
+    public function testDoubleStuffInValueTag()
     {
         $s = new xmlrpcmsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value>
@@ -340,7 +340,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals(2, $v);
     }
 
-    function testAutodecodeResponse()
+    public function testAutodecodeResponse()
     {
         $s = new xmlrpcmsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
@@ -355,7 +355,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals("hello world. 2 newlines follow\n\n\nand there they were.", $s);
     }
 
-    function testNoDecodeResponse()
+    public function testNoDecodeResponse()
     {
         $s = new xmlrpcmsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
@@ -368,7 +368,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals($f, $v);
     }
 
-    function testAutoCoDec()
+    public function testAutoCoDec()
     {
         $data1 = array(1, 1.0, 'hello world', true, '20051021T23:43:00', -1, 11.0, '~!@#$%^&*()_+|', false, '20051021T23:43:00');
         $data2 = array('zero' => $data1, 'one' => $data1, 'two' => $data1, 'three' => $data1, 'four' => $data1, 'five' => $data1, 'six' => $data1, 'seven' => $data1, 'eight' => $data1, 'nine' => $data1);
@@ -387,9 +387,9 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals($m1, $m2);
     }
 
-    function testUTF8Request()
+    public function testUTF8Request()
     {
-        $sendstring='Œ∫·ΩπœÉŒºŒµ'; // Greek word 'kosme'. NB: NOT a valid ISO8859 string!
+        $sendstring = 'Œ∫·ΩπœÉŒºŒµ'; // Greek word 'kosme'. NB: NOT a valid ISO8859 string!
         $GLOBALS['xmlrpc_internalencoding'] = 'UTF-8';
         \PhpXmlRpc\PhpXmlRpc::importGlobals();
         $f = new xmlrpcval($sendstring, 'string');
@@ -399,18 +399,18 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         \PhpXmlRpc\PhpXmlRpc::importGlobals();
     }
 
-    function testUTF8Response()
+    public function testUTF8Response()
     {
         $s = new xmlrpcmsg('dummy');
-        $f = "HTTP/1.1 200 OK\r\nContent-type: text/xml; charset=UTF-8\r\n\r\n".'<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
-<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>'.utf8_encode('‡¸Ë‡¸Ë').'</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
+        $f = "HTTP/1.1 200 OK\r\nContent-type: text/xml; charset=UTF-8\r\n\r\n" . '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
+<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . utf8_encode('‡¸Ë‡¸Ë') . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
         $r = $s->parseResponse($f, false, 'phpvals');
         $v = $r->value();
         $v = $v['content'];
         $this->assertEquals("‡¸Ë‡¸Ë", $v);
         $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
-<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>'.utf8_encode('‡¸Ë‡¸Ë').'</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
+<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . utf8_encode('‡¸Ë‡¸Ë') . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
         $r = $s->parseResponse($f, false, 'phpvals');
         $v = $r->value();
@@ -418,21 +418,21 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals("‡¸Ë‡¸Ë", $v);
     }
 
-    function testUTF8IntString()
+    public function testUTF8IntString()
     {
         $v = new xmlrpcval(100, 'int');
         $s = $v->serialize('UTF-8');
         $this->assertequals("<value><int>100</int></value>\n", $s);
     }
 
-    function testStringInt()
+    public function testStringInt()
     {
         $v = new xmlrpcval('hello world', 'int');
         $s = $v->serialize();
         $this->assertequals("<value><int>0</int></value>\n", $s);
     }
 
-    function testStructMemExists()
+    public function testStructMemExists()
     {
         $v = php_xmlrpc_encode(array('hello' => 'world'));
         $b = $v->structmemexists('hello');
@@ -441,7 +441,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertequals(false, $b);
     }
 
-    function testNilvalue()
+    public function testNilvalue()
     {
         // default case: we do not accept nil values received
         $v = new xmlrpcval('hello', 'null');
@@ -462,7 +462,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         // serialization
         $v = new xmlrpcval('hello', 'null');
         $s = $v->serialize();
-        $this->assertequals(1, preg_match( '#<value><ex:nil/></value>#', $s ));
+        $this->assertequals(1, preg_match('#<value><ex:nil/></value>#', $s));
         // deserialization
         $r = new xmlrpcresp($v);
         $s = $r->serialize();
@@ -475,27 +475,21 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertequals(2, $r->faultCode());
     }
 
-    function TestLocale()
+    public function TestLocale()
     {
         $locale = setlocale(LC_NUMERIC, 0);
         /// @todo on php 5.3/win setting locale to german does not seem to set decimal separator to comma...
-        if (setlocale(LC_NUMERIC,'deu', 'de_DE@euro', 'de_DE', 'de', 'ge') !== false)
-        {
+        if (setlocale(LC_NUMERIC, 'deu', 'de_DE@euro', 'de_DE', 'de', 'ge') !== false) {
             $v = new xmlrpcval(1.1, 'double');
-            if (strpos($v->scalarval(), ',') == 1)
-            {
+            if (strpos($v->scalarval(), ',') == 1) {
                 $r = $v->serialize();
                 $this->assertequals(false, strpos($r, ','));
                 setlocale(LC_NUMERIC, $locale);
-            }
-            else
-            {
+            } else {
                 setlocale(LC_NUMERIC, $locale);
                 $this->markTestSkipped('did not find a locale which sets decimal separator to comma');
             }
-        }
-        else
-        {
+        } else {
             $this->markTestSkipped('did not find a locale which sets decimal separator to comma');
         }
     }
