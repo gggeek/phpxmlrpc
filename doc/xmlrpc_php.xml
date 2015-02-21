@@ -1322,10 +1322,10 @@ PHP-XMLRPC User manual
         <para>Examples:</para>
 
         <programlisting language="php">
-$myInt = new xmlrpcvalue(1267, "int");
-$myString = new xmlrpcvalue("Hello, World!", "string");
-$myBool = new xmlrpcvalue(1, "boolean");
-$myString2 = new xmlrpcvalue(1.24, "string"); // note: this will serialize a php float value as xmlrpc string
+$myInt = new xmlrpcval(1267, "int");
+$myString = new xmlrpcval("Hello, World!", "string");
+$myBool = new xmlrpcval(1, "boolean");
+$myString2 = new xmlrpcval(1.24, "string"); // note: this will serialize a php float value as xmlrpc string
 </programlisting>
 
         <para>The fourth constructor form can be used to compose complex
