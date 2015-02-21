@@ -324,7 +324,7 @@ class Client
      */
     public function & send($msg, $timeout = 0, $method = '')
     {
-        // if user deos not specify http protocol, use native method of this client
+        // if user does not specify http protocol, use native method of this client
         // (i.e. method set during call to constructor)
         if ($method == '') {
             $method = $this->method;

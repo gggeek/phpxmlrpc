@@ -7,14 +7,23 @@ but some breackage is to be expected.
 
 PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
 
-The minimum requied php version has been increase to 5.3,
-even though we stronly urge you to use more recent versions.
+The minimum required php version has been increased to 5.3,
+even though we strongly urge you to use more recent versions.
+
+* new: introduction of namespaces.
+
+  All php classes have been renamed and moved to separate files.
+  Class autoloading can now be done in accord with the PSR-4 standard.
+  Backward compatibility is maintained via lib/xmlrpc.inc, lib/xmlrpcs.inc and lib/xmlrpc_wrappers.inc.
+
+* improved: all php code is now formatted according to the PSR-2 standard
 
 * improved: this release is now tested using Travis ( https://travis-ci.org/ ).
 
-* improved: no need to call anymore $client->setSSLVerifyHost(2) to silence a curl warning when using https with recent curl builds
+* improved: no need to call anymore $client->setSSLVerifyHost(2) to silence a curl warning when using https
+  with recent curl builds
 
-* improved: phpunit is now installed via composer, not bundled anymore 
+* improved: phpunit is now installed via composer, not bundled anymore
 
 
 XML-RPC for PHP version 3.0.0 - 2014/6/15
@@ -164,7 +173,7 @@ CHANGELOG IN DETAIL:
 * documentation for single parameters of exposed methods can be added to the dispatch map
   (and turned into html docs in conjunction with a future release of the extras package)
 * full response payload is saved into xmlrpcresp object for further debugging
-* stricter parsing of incmoing xmlrpc messages: two more invalid cases are now detected
+* stricter parsing of incoming xmlrpc messages: two more invalid cases are now detected
   (double data element inside array and struct/array after scalar inside value element)
 * debugger can now generate code that wraps a remote method into php function (works for jsonrpc, too)
 * debugger has better support for being activated via a single GET call (for integration into other tools?)
@@ -259,7 +268,7 @@ HTTPS support:
    $xmlrpc_internalencoding was set to UTF-8
  * fixed bug in xmlrpc_server::echoInput() (and marked method as deprecated)
  * correctly set cookies/http headers into xmlrpcresp objects even when the
-   sned() method call fails for some reason
+   send() method call fails for some reason
  * added a benchmark file in the testsuite directory
 
 A couple of (private/protected) methods have been refactored, as well as a
@@ -336,9 +345,9 @@ This is a bugfix and maintenance release. No major new features have been added.
 All known bugs have been ironed out, unless fixing would have meant breaking
 the API.
 The code has been tested with PHP 3, 4 and 5, even tough PHP 4 is the main
-development platform (and some warnings will be emitted when runnning PHP5).
+development platform (and some warnings will be emitted when running PHP5).
 
-Notheworthy changes include:
+Noteworthy changes include:
 
  * do not clash any more with the EPI xmlrpc extension bundled with PHP 4 and 5
  * fixed the unicode/charset problems that have been plaguing the lib for years
