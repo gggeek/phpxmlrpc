@@ -5,7 +5,7 @@
  * the originating server).
  *
  * @author Gaetano Giunta
- * @copyright (C) 2006-2014 G. Giunta
+ * @copyright (C) 2006-2015 G. Giunta
  * @license code licensed under the BSD License: http://phpxmlrpc.sourceforge.net/license.txt
  */
 include_once __DIR__ . "/../../vendor/autoload.php";

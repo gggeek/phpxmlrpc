@@ -2,7 +2,7 @@
 /**
  * Script used to convert docbook source to human readable docs.
  *
- * @copyright (c) 2007-2014 G. Giunta
+ * @copyright (c) 2007-2015 G. Giunta
  */
 if ($_SERVER['argc'] < 4) {
     die("Usage: php convert.php docbook.xml \path\\to\stylesheet.xsl output-dir|output_file\n");
