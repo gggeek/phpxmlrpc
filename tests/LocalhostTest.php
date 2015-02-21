@@ -525,7 +525,8 @@ And turned it into nylon';
                     unset($rcookies[$c]);
                 }
             }
-            foreach ($cookies as $c => $v) {// format for date string in cookies: 'Mon, 31 Oct 2005 13:50:56 GMT'
+            foreach ($cookies as $c => $v) {
+                // format for date string in cookies: 'Mon, 31 Oct 2005 13:50:56 GMT'
                 // but PHP versions differ on that, some use 'Mon, 31-Oct-2005 13:50:56 GMT'...
                 if (isset($v['expires'])) {
                     if (isset($rcookies[$c]['expires']) && strpos($rcookies[$c]['expires'], '-')) {
@@ -534,8 +535,9 @@ And turned it into nylon';
                         $cookies[$c]['expires'] = gmdate('D, d M Y H:i:s \G\M\T', $cookies[$c]['expires']);
                     }
                 }
-                $this->assertEquals($cookies, $rcookies);
             }
+
+            $this->assertEquals($cookies, $rcookies);
         }
     }
 
