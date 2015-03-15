@@ -8,19 +8,19 @@ php:
   - 7.0
   - hhvm
 
+before_install:
+  - sudo apt-get update -qq
+
 install:
   - composer self-update && composer install
+  - sudo apt-get install -y apache2 libapache2-mod-fastcgi
 
 before_script:
   # Disable xdebug. NB: this should NOT be done for hhvm...
   - if [ $TRAVIS_PHP_VERSION != "hhvm" -a $TRAVIS_PHP_VERSION != "7.0" ]; then phpenv config-rm xdebug.ini; fi
 
-  # TODO: we should set up an Apache instance inside the Travis VM and test it.
-  # But it looks a bit complex, esp. as it seems that php has to be set up differently (cgi vs fpm) depending on version
-  # So for now we just take an easy way out using a known remote server.
-  # See: https://gist.github.com/roderik/3123962
+  # We set up an Apache instance inside the Travis VM and test it.
   # See: http://docs.travis-ci.com/user/languages/php/#Apache-%2B-PHP
-  - sudo apt-get install apache2 libapache2-mod-fastcgi
 
   # enable php-fpm
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
