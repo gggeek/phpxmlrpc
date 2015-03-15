@@ -20,20 +20,8 @@ before_script:
   - if [ $TRAVIS_PHP_VERSION != "hhvm" -a $TRAVIS_PHP_VERSION != "7.0" ]; then phpenv config-rm xdebug.ini; fi
 
   # We set up an Apache instance inside the Travis VM and test it.
-  # See: http://docs.travis-ci.com/user/languages/php/#Apache-%2B-PHP
-
-  # enable php-fpm/hhvm-fcgi
-  - sudo a2enmod rewrite actions fastcgi alias
-  - if [ $TRAVIS_PHP_VERSION != "hhvm" ]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - if [ $TRAVIS_PHP_VERSION != "hhvm" ]; then ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-  - if [ $TRAVIS_PHP_VERSION = "hhvm" ]; then hhvm -m daemon -vServer.Type=fastcgi -vServer.Port=9000 -vServer.FixPathInfo=true
-  # configure apache virtual hosts
-  - if [ $TRAVIS_PHP_VERSION != "hhvm" ]; then sudo cp -f .travis/apache_vhost /etc/apache2/sites-available/default
-  - if [ $TRAVIS_PHP_VERSION = "hhvm" ]; then sudo cp -f .travis/apache_vhost_hhvm /etc/apache2/sites-available/default
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
-
-  - sudo service apache2 restart
+  - sh -c "if [ '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then ./.travis/install_apache.sh; fi"
+  - sh -c "if [ '$TRAVIS_PHP_VERSION' = 'hhvm' ]; then ./.travis/install_apache_hhvm.sh; fi"
 
 script:
   # to have code coverage: --coverage-clover=coverage.clover
