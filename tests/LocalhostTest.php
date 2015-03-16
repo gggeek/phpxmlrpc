@@ -59,7 +59,12 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         if (is_array($r)) {
             return $r;
         }
-        $this->assertEquals($r->faultCode(), $errrorcode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
+        if (is_array($errrorcode)) {
+            $this->assertContains($r->faultCode(), $errrorcode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
+        }
+        else {
+            $this->assertEquals($r->faultCode(), $errrorcode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
+        }
         if (!$r->faultCode()) {
             if ($return_response) {
                 return $r;
@@ -432,7 +437,9 @@ And turned it into nylon';
         $this->client->path = $this->args['URI'] . '?EXCEPTION_HANDLING=1';
         $v = $this->send($f, 1);
         $this->client->path = $this->args['URI'] . '?EXCEPTION_HANDLING=2';
-        $v = $this->send($f, $GLOBALS['xmlrpcerr']['invalid_return']);
+        // depending on whether display_errors is ON or OFF on the server, we will get back a different error here,
+        // as php will generate an http status code of either 200 or 500...
+        $v = $this->send($f, array($GLOBALS['xmlrpcerr']['invalid_return'], $GLOBALS['xmlrpcerr']['http_error']));
     }
 
     public function testZeroParams()
