@@ -6,12 +6,16 @@
  @author Gaetano Giunta
  @copyright (c) 2007-2015 G. Giunta
  @license code licensed under the BSD License
- @todo make the xsl more dynamic: the path to import chunk.xsl could be f.e. rewritten/injected by the php user
+
+ @todo make the xsl more dynamic: the path to import chunk.xsl could be f.e. rewritten/injected by the php user.
+       This would be needed f.e. if the lib is installed as a dependency and is not the top-level composer project.
+       Note: according to http://stackoverflow.com/questions/9861355/using-dynamic-href-in-xslt-import-include this is
+       not easy to do - it would have to be done f.e. by the invoking php script...
 -->
 
 
 <!-- import base stylesheet -->
-<xsl:import href="../../../tools/docbook-xsl/xhtml/chunk.xsl"/>
+<xsl:import href="../vendor/docbook/docbook-xsl/xhtml/chunk.xsl"/>
 
 
 <!-- customization vars -->

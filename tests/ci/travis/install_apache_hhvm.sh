@@ -10,6 +10,6 @@ sudo a2enmod rewrite actions fastcgi alias
 hhvm -m daemon -vServer.Type=fastcgi -vServer.Port=9000 -vServer.FixPathInfo=true
 
 # configure apache virtual hosts
-sudo cp -f .travis/apache_vhost_hhvm /etc/apache2/sites-available/default
+sudo cp -f tests/ci/travis/apache_vhost_hhvm /etc/apache2/sites-available/default
 sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
 sudo service apache2 restart
