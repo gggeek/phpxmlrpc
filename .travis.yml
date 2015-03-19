@@ -20,12 +20,13 @@ before_script:
   - if [ $TRAVIS_PHP_VERSION != "hhvm" -a $TRAVIS_PHP_VERSION != "7.0" ]; then phpenv config-rm xdebug.ini; fi
 
   # We set up an Apache instance inside the Travis VM and test it.
-  - sh -c "if [ '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then ./tests/ci/travis/install_apache.sh; fi"
-  - sh -c "if [ '$TRAVIS_PHP_VERSION' = 'hhvm' ]; then ./tests/ci/travis/install_apache_hhvm.sh; fi"
+  - if [ '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then ./tests/ci/travis/install_apache.sh; fi
+  - if [ '$TRAVIS_PHP_VERSION' = 'hhvm' ]; then ./tests/ci/travis/install_apache_hhvm.sh; fi
+  - ./tests/ci/travis/install_nginx.sh
 
 script:
   # to have code coverage: --coverage-clover=coverage.clover
-  phpunit tests LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=gggeek.ssl.altervista.org HTTPSURI=/sw/xmlrpc/demo/server/server.php NOPROXY=1 DEBUG=1
+  phpunit tests LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=gggeek.ssl.altervista.org HTTPSURI=/sw/xmlrpc/demo/server/server.php PROXY=localhost:8080 DEBUG=1
 
 #after_script:
 #  # upload code-coverage to Scrutinizer
