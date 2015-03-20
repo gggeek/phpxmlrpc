@@ -9,13 +9,7 @@ sudo a2enmod rewrite actions fastcgi alias
 sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
 # work around travis issue #3385
 if [ "$TRAVIS_PHP_VERSION" = "7.0" -a -n "$(ls -A ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d)" ]; then
-  echo "[www]" > ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/travis.conf
-  echo "user = travis" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/travis.conf
-  echo "listen = 127.0.0.1:9000" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/travis.conf
-  echo "pm = dynamic" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/travis.conf
-  echo "pm.max_children = 5" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/travis.conf
-  echo "pm.min_spare_servers = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/travis.conf
-  echo "pm.max_spare_servers = 3" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/travis.conf
+  sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf
 fi
 echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 echo "always_populate_raw_post_data = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
