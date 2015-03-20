@@ -5,7 +5,7 @@ include_once __DIR__ . '/../lib/xmlrpc_wrappers.inc';
 
 include_once __DIR__ . '/parse_args.php';
 
-include_once __DIR__ . '/LocalHostTest.php';
+include_once __DIR__ . '/LocalhostTest.php';
 
 class LocalhostMultiTest extends LocalhostTest
 {
