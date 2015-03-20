@@ -29,7 +29,8 @@ script:
   # to have code coverage: --coverage-clover=coverage.clover
   phpunit tests LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=gggeek.ssl.altervista.org HTTPSURI=/sw/xmlrpc/demo/server/server.php PROXY=localhost:8080
 
-#after_script:
+after_script:
+  cat $TRAVIS_BUILD_DIR/apache_error.log $TRAVIS_BUILD_DIR/apache_access.log /tmp/hhvm.log
 #  # upload code-coverage to Scrutinizer
 #  - wget https://scrutinizer-ci.com/ocular.phar
 #  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
