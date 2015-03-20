@@ -16,3 +16,4 @@ sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-availa
 sudo service apache2 restart
 
 sudo echo "$(pwd) !!!"
+suco cat /etc/apache2/sites-available/default
