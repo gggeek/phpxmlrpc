@@ -333,12 +333,12 @@ class Request
                         if ($this->httpResponse['headers']['content-encoding'] == 'deflate' && $degzdata = @gzuncompress($data)) {
                             $data = $degzdata;
                             if ($this->debug) {
-                                print "<PRE>---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n" . htmlentities($data) . "\n---END---</PRE>";
+                                $this->debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
                             }
                         } elseif ($this->httpResponse['headers']['content-encoding'] == 'gzip' && $degzdata = @gzinflate(substr($data, 10))) {
                             $data = $degzdata;
                             if ($this->debug) {
-                                print "<PRE>---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n" . htmlentities($data) . "\n---END---</PRE>";
+                                $this->debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
                             }
                         } else {
                             error_log('XML-RPC: ' . __METHOD__ . ': errors occurred when trying to decode the deflated data received from server');
@@ -372,7 +372,7 @@ class Request
     {
         if ($this->debug) {
             // by maHo, replaced htmlspecialchars with htmlentities
-            print "<PRE>---GOT---\n" . htmlentities($data) . "\n---END---\n</PRE>";
+            $this->debugMessage("---GOT---\n$data\n---END---");
         }
 
         $this->httpResponse = array();
@@ -405,7 +405,7 @@ class Request
                 $start += strlen('<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
                 $end = strpos($data, '-->', $start);
                 $comments = substr($data, $start, $end - $start);
-                print "<PRE>---SERVER DEBUG INFO (DECODED) ---\n\t" . htmlentities(str_replace("\n", "\n\t", base64_decode($comments))) . "\n---END---\n</PRE>";
+                $this->debugMessage("---SERVER DEBUG INFO (DECODED) ---\n\t" . str_replace("\n", "\n\t", base64_decode($comments))) . "\n---END---\n</PRE>";
             }
         }
 
@@ -512,11 +512,9 @@ class Request
                 PhpXmlRpc::$xmlrpcstr['invalid_return']);
         } else {
             if ($this->debug) {
-                print "<PRE>---PARSED---\n";
-                // somehow htmlentities chokes on var_export, and some full html string...
-                //print htmlentitites(var_export($xmlRpcParser->_xh['value'], true));
-                print htmlspecialchars(var_export($xmlRpcParser->_xh['value'], true));
-                print "\n---END---</PRE>";
+                $this->debugMessage(
+                    "---PARSED---\n".var_export($xmlRpcParser->_xh['value'], true)."\n---END---", false
+                );
             }
 
             // note that using =& will raise an error if $xmlRpcParser->_xh['st'] does not generate an object.
@@ -551,5 +549,25 @@ class Request
         $r->raw_data = $this->httpResponse['raw_data'];
 
         return $r;
+    }
+
+    /**
+     * Echoes a debug message, taking care of escaping it when not in console mode
+     *
+     * @param string $message
+     */
+    protected function debugMessage($message, $encodeEntities = true)
+    {
+        if (PHP_SAPI != 'cli') {
+            if ($encodeEntities)
+                print "<PRE>\n".htmlentities($message)."\n</PRE>";
+            else
+                print "<PRE>\n".htmlspecialchars($message)."\n</PRE>";
+        }
+        else {
+            print "\n$message\n";
+        }
+        // let the client see this now in case http times out...
+        flush();
     }
 }

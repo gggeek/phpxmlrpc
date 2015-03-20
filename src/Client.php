@@ -516,9 +516,7 @@ class Client
             $payload;
 
         if ($this->debug > 1) {
-            print "<PRE>\n---SENDING---\n" . htmlentities($op) . "\n---END---\n</PRE>";
-            // let the client see this now in case http times out...
-            flush();
+            $this->debugMessage("---SENDING---\n$op\n---END---");
         }
 
         if ($timeout > 0) {
@@ -634,7 +632,7 @@ class Client
         }
 
         if ($this->debug > 1) {
-            print "<PRE>\n---SENDING---\n" . htmlentities($payload) . "\n---END---\n</PRE>";
+            $this->debugMessage("---SENDING---\n$payload\n---END---");
             // let the client see this now in case http times out...
             flush();
         }
@@ -766,15 +764,15 @@ class Client
         $result = curl_exec($curl);
 
         if ($this->debug > 1) {
-            print "<PRE>\n---CURL INFO---\n";
+            $message = "---CURL INFO---\n";
             foreach (curl_getinfo($curl) as $name => $val) {
                 if (is_array($val)) {
                     $val = implode("\n", $val);
                 }
-                print $name . ': ' . htmlentities($val) . "\n";
+                $message .= $name . ': ' . $val . "\n";
             }
-
-            print "---END---\n</PRE>";
+            $message .= "---END---";
+            $this->debugMessage($message);
         }
 
         if (!$result) {
@@ -991,5 +989,22 @@ class Client
 
             return $response;
         }
+    }
+
+    /**
+     * Echoes a debug message, taking care of escaping it when not in console mode
+     *
+     * @param string $message
+     */
+    protected function debugMessage($message)
+    {
+        if (PHP_SAPI != 'cli') {
+            print "<PRE>\n".htmlentities($message)."\n</PRE>";
+        }
+        else {
+            print "\n$message\n";
+        }
+        // let the client see this now in case http times out...
+        flush();
     }
 }
