@@ -180,7 +180,6 @@ class Server
     public function service($data = null, $return_payload = false)
     {
         if ($data === null) {
-            // workaround for a known bug in php ver. 5.2.2 that broke $HTTP_RAW_POST_DATA
             $data = file_get_contents('php://input');
         }
         $raw_data = $data;
