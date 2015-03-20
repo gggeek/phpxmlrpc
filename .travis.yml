@@ -12,17 +12,18 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  - composer self-update && composer install
   - sudo apt-get install -y apache2 libapache2-mod-fastcgi
+  - sudo apt-get install -y privoxy
+  - composer self-update && composer install
 
 before_script:
   # Disable xdebug. NB: this should NOT be done for hhvm...
   - if [ $TRAVIS_PHP_VERSION != "hhvm" -a $TRAVIS_PHP_VERSION != "7.0" ]; then phpenv config-rm xdebug.ini; fi
 
   # We set up an Apache instance inside the Travis VM and test it.
-  - if [ '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then ./tests/ci/travis/install_apache.sh; fi
-  - if [ '$TRAVIS_PHP_VERSION' = 'hhvm' ]; then ./tests/ci/travis/install_apache_hhvm.sh; fi
-  - ./tests/ci/travis/install_nginx.sh
+  - if [ '$TRAVIS_PHP_VERSION' != 'hhvm' ]; then ./tests/ci/travis/setup_apache.sh; fi
+  - if [ '$TRAVIS_PHP_VERSION' = 'hhvm' ]; then ./tests/ci/travis/setup_apache_hhvm.sh; fi
+  - ./tests/ci/travis/setup_privoxy.sh
 
 script:
   # to have code coverage: --coverage-clover=coverage.clover
