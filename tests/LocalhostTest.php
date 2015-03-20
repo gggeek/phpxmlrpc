@@ -7,12 +7,15 @@ include_once __DIR__ . '/parse_args.php';
 
 class LocalhostTest extends PHPUnit_Framework_TestCase
 {
+    /** @var xmlrpc_client $client */
     public $client = null;
     public $method = 'http';
     public $timeout = 10;
     public $request_compression = null;
     public $accepted_compression = '';
     public $args = array();
+
+    protected static $failed_tests = array();
 
     public static function fail($message = '')
     {
@@ -23,7 +26,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
             $trace = debug_backtrace();
             for ($i = 0; $i < count($trace); $i++) {
                 if (strpos($trace[$i]['function'], 'test') === 0) {
-                    $failed_tests[$trace[$i]['function']] = true;
+                    self::$failed_tests[$trace[$i]['function']] = true;
                     break;
                 }
             }

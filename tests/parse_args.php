@@ -67,7 +67,7 @@ class argParser
             $args['HTTPSURI'] = $HTTPSURI;
         }
         if (isset($HTTPSIGNOREPEER)) {
-            $args['HTTPSIGNOREPEER'] = bool($HTTPSIGNOREPEER);
+            $args['HTTPSIGNOREPEER'] = (bool)$HTTPSIGNOREPEER;
         }
         if (isset($PROXY)) {
             $arr = explode(':', $PROXY);

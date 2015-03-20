@@ -6,6 +6,7 @@ include_once __DIR__ . '/parse_args.php';
 
 class InvalidHostTest extends PHPUnit_Framework_TestCase
 {
+    /** @var xmlrpc_client $client */
     public $client = null;
     public $args = array();
 
