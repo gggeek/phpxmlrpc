@@ -25,6 +25,8 @@ even though we strongly urge you to use more recent versions.
 
 * improved: phpunit is now installed via composer, not bundled anymore
 
+* improved: debug messages are not html-escaped when executing from the command line
+
 
 XML-RPC for PHP version 3.0.0 - 2014/6/15
 

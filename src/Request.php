@@ -567,7 +567,5 @@ class Request
         else {
             print "\n$message\n";
         }
-        // let the client see this now in case http times out...
-        flush();
     }
 }
