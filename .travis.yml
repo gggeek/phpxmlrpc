@@ -32,7 +32,7 @@ script:
 after_failure:
   - cat apache_error.log
   - cat apache_access.log
-  - cat /tmp/hhvm.log
+  - cat /etc/apache2/sites-available/default-ssl
 
 after_script:
 #  # upload code-coverage to Scrutinizer
