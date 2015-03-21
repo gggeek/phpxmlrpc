@@ -27,7 +27,7 @@ before_script:
 
 script:
   # to have code coverage: --coverage-clover=coverage.clover
-  phpunit tests LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php PROXY=localhost:8080
+  phpunit tests LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php PROXY=localhost:8080 HTTPSIGNOREPEER=1
 
 after_failure:
   - cat apache_error.log
