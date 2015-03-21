@@ -153,8 +153,9 @@ class LocalhostMultiTest extends LocalhostTest
         $this->method = 'https';
         $this->client->method = 'https';
         $this->client->path = $this->args['HTTPSURI'];
-        $this->client->setSSLVerifyPeer( !$this->args['HTTPSIGNOREPEER'] );
-        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST'] );
+        $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
+        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
+        $this->client->setSSLVersion($this->args['SSLVERSION']);
         $this->_runtests();
     }
 
@@ -175,8 +176,9 @@ class LocalhostMultiTest extends LocalhostTest
         $this->client->method = 'https';
         $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
         $this->client->path = $this->args['HTTPSURI'];
-        $this->client->setSSLVerifyPeer( !$this->args['HTTPSIGNOREPEER'] );
-        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST'] );
+        $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
+        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
+        $this->client->setSSLVersion($this->args['SSLVERSION']);
         $this->_runtests();
     }
 

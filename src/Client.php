@@ -23,6 +23,7 @@ class Client
     public $keypass = '';
     public $verifypeer = true;
     public $verifyhost = 2;
+    public $sslversion = 0; // corresponds to CURL_SSLVERSION_DEFAULT
     public $no_multicall = false;
     public $proxy = '';
     public $proxyport = 0;
@@ -219,6 +220,16 @@ class Client
     }
 
     /**
+     * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value ): let cURL decide
+     *
+     * @param int $i
+     */
+    public function setSSLVersion($i)
+    {
+        $this->sslversion = $i;
+    }
+
+    /**
      * Set proxy info.
      *
      * @param string $proxyhost
@@ -364,7 +375,8 @@ class Client
                 $this->proxy_authtype,
                 $this->keepalive,
                 $this->key,
-                $this->keypass
+                $this->keypass,
+                $this->sslversion
             );
         } elseif ($method == 'http11') {
             $r = $this->sendPayloadCURL(
@@ -562,11 +574,11 @@ class Client
     private function sendPayloadHTTPS($msg, $server, $port, $timeout = 0, $username = '',
                                       $password = '', $authtype = 1, $cert = '', $certpass = '', $cacert = '', $cacertdir = '',
                                       $proxyhost = '', $proxyport = 0, $proxyusername = '', $proxypassword = '', $proxyauthtype = 1,
-                                      $keepalive = false, $key = '', $keypass = '')
+                                      $keepalive = false, $key = '', $keypass = '', $sslversion = 0)
     {
         $r = $this->sendPayloadCURL($msg, $server, $port, $timeout, $username,
             $password, $authtype, $cert, $certpass, $cacert, $cacertdir, $proxyhost, $proxyport,
-            $proxyusername, $proxypassword, $proxyauthtype, 'https', $keepalive, $key, $keypass);
+            $proxyusername, $proxypassword, $proxyauthtype, 'https', $keepalive, $key, $keypass, $sslversion);
 
         return $r;
     }
@@ -579,7 +591,7 @@ class Client
     private function sendPayloadCURL($msg, $server, $port, $timeout = 0, $username = '',
                                      $password = '', $authtype = 1, $cert = '', $certpass = '', $cacert = '', $cacertdir = '',
                                      $proxyhost = '', $proxyport = 0, $proxyusername = '', $proxypassword = '', $proxyauthtype = 1, $method = 'https',
-                                     $keepalive = false, $key = '', $keypass = '')
+                                     $keepalive = false, $key = '', $keypass = '', $sslversion = 0)
     {
         if (!function_exists('curl_init')) {
             $this->errstr = 'CURL unavailable on this install';
@@ -727,6 +739,8 @@ class Client
             }
             // whether to verify cert's common name (CN); 0 for no, 1 to verify that it exists, and 2 to verify that it matches the hostname used
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->verifyhost);
+            // allow usage of different SSL versions
+            curl_setopt($curl, CURLOPT_SSLVERSION, $sslversion);
         }
 
         // proxy info

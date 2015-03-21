@@ -12,6 +12,7 @@
  * @param string  NOPROXY
  * @param bool    HTTPSIGNOREPEER
  * @param int     HTTPSVERIFYHOST
+ * @param int     SSLVERSION
  *
  * @copyright (C) 2007-2015 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
@@ -29,6 +30,7 @@ class argParser
             'HTTPSURI' => '/sw/xmlrpc/demo/server/server.php',
             'HTTPSIGNOREPEER' => false,
             'HTTPSVERIFYHOST' => 2,
+            'SSLVERSION' => 0,
             'PROXYSERVER' => null,
             'NOPROXY' => false,
             'LOCALPATH' => __DIR__,
@@ -74,6 +76,9 @@ class argParser
         }
         if (isset($HTTPSVERIFYHOST)) {
             $args['HTTPSVERIFYHOST'] = (int)$HTTPSVERIFYHOST;
+        }
+        if (isset($SSLVERSION)) {
+            $args['SSLVERSION'] = (int)$SSLVERSION;
         }
         if (isset($PROXY)) {
             $arr = explode(':', $PROXY);

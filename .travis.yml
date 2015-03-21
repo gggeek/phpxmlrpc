@@ -27,11 +27,12 @@ before_script:
 
 script:
   # to have code coverage: --coverage-clover=coverage.clover
-  phpunit tests LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php PROXY=localhost:8080 HTTPSVERIFYHOST=0 HTTPSIGNOREPEER=1
+  phpunit tests LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php PROXY=localhost:8080 HTTPSVERIFYHOST=0 SSLVERSION=3
 
 after_failure:
   - cat apache_error.log
   - cat apache_access.log
+  - php -i
 
 after_script:
 #  # upload code-coverage to Scrutinizer
