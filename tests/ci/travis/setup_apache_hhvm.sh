@@ -4,7 +4,6 @@
 # @see https://github.com/travis-ci/travis-ci.github.com/blob/master/docs/user/languages/php.md#apache--php
 
 sudo a2enmod rewrite actions fastcgi alias ssl
-sudo a2ensite default-ssl
 
 # start HHVM
 hhvm -m daemon -vServer.Type=fastcgi -vServer.Port=9000 -vServer.FixPathInfo=true
