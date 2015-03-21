@@ -23,7 +23,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         // (but only if not called from subclass objects / multitests)
         if (function_exists('debug_backtrace') && strtolower(get_called_class()) == 'localhosttests') {
             global $failed_tests;
-            $trace = debug_backtrace();
+            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
             for ($i = 0; $i < count($trace); $i++) {
                 if (strpos($trace[$i]['function'], 'test') === 0) {
                     self::$failed_tests[$trace[$i]['function']] = true;

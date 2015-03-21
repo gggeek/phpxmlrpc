@@ -10,8 +10,10 @@
  * @param string  HTTPSSURI
  * @param string  PROXY
  * @param string  NOPROXY
+ * @param bool    HTTPSIGNOREPEER
+ * @param int     HTTPSVERIFYHOST
  *
- * @copyright (C) 2007-20014 G. Giunta
+ * @copyright (C) 2007-2015 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  **/
 class argParser
@@ -26,6 +28,7 @@ class argParser
             'HTTPSSERVER' => 'gggeek.ssl.altervista.org',
             'HTTPSURI' => '/sw/xmlrpc/demo/server/server.php',
             'HTTPSIGNOREPEER' => false,
+            'HTTPSVERIFYHOST' => 2,
             'PROXYSERVER' => null,
             'NOPROXY' => false,
             'LOCALPATH' => __DIR__,
@@ -68,6 +71,9 @@ class argParser
         }
         if (isset($HTTPSIGNOREPEER)) {
             $args['HTTPSIGNOREPEER'] = (bool)$HTTPSIGNOREPEER;
+        }
+        if (isset($HTTPSVERIFYHOST)) {
+            $args['HTTPSVERIFYHOST'] = (int)$HTTPSVERIFYHOST;
         }
         if (isset($PROXY)) {
             $arr = explode(':', $PROXY);
