@@ -3,7 +3,8 @@
 # enable php-fpm
 # @see https://github.com/travis-ci/travis-ci.github.com/blob/master/docs/user/languages/php.md#apache--php
 
-sudo a2enmod rewrite actions fastcgi alias
+sudo a2enmod rewrite actions fastcgi alias ssl
+sudo a2ensite default-ssl
 
 # enable php-fpm
 sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
