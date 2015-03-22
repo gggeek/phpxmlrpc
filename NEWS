@@ -19,7 +19,8 @@ even though we strongly urge you to use more recent versions.
 * improved: all php code is now formatted according to the PSR-2 standard
 
 * improved: this release is now tested using Travis ( https://travis-ci.org/ ).
-  Tests are executed using all php versions from 5.3 to 7.0 nightly, plus HHVM
+  Tests are executed using all php versions from 5.3 to 7.0 nightly, plus HHVM; code-coverage information
+  is generated using php 5.6 and uploaded to both Code Coverage and Scrutinizer online services
 
 * improved: no need to call anymore $client->setSSLVerifyHost(2) to silence a curl warning when using https
   with recent curl builds
