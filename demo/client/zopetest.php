@@ -1,26 +1,28 @@
 <html>
-<head><title>xmlrpc</title></head>
+<head><title>xmlrpc - Zope test demo</title></head>
 <body>
 <h1>Zope test demo</h1>
 
 <h3>The code demonstrates usage of basic authentication to connect to the server</h3>
 <?php
-include "xmlrpc.inc";
 
-$f = new xmlrpcmsg('document_src', array());
-$c = new xmlrpc_client("/index_html", "pingu.heddley.com", 9080);
-$c->setCredentials("username", "password");
-$c->setDebug(2);
-$r = $c->send($f);
-if (!$r->faultCode()) {
-    $v = $r->value();
-    print "I received:" . htmlspecialchars($v->scalarval()) . "<br/>";
+include_once __DIR__ . "/../../src/Autoloader.php";
+PhpXmlRpc\Autoloader::register();
+
+$req = new PhpXmlRpc\Request('document_src', array());
+$client = new PhpXmlRpc\Client("pingu.heddley.com:9080/index_html");
+$client->setCredentials("username", "password");
+$client->setDebug(2);
+$resp = $client->send($req);
+if (!$resp->faultCode()) {
+    $value = $resp->value();
+    print "I received:" . htmlspecialchars($value->scalarval()) . "<br/>";
     print "<hr/>I got this value back<br/>pre>" .
-        htmlentities($r->serialize()) . "</pre>\n";
+        htmlentities($resp->serialize()) . "</pre>\n";
 } else {
     print "An error occurred: ";
-    print "Code: " . htmlspecialchars($r->faultCode())
-        . " Reason: '" . ($r->faultString()) . "'<br/>";
+    print "Code: " . htmlspecialchars($resp->faultCode())
+        . " Reason: '" . ($resp->faultString()) . "'<br/>";
 }
 ?>
 </body>

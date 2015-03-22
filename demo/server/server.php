@@ -43,7 +43,7 @@ class xmlrpc_server_methods_container
     public function phpwarninggenerator($m)
     {
         $a = $b; // this triggers a warning in E_ALL mode, since $b is undefined
-        return new xmlrpcresp(new xmlrpcval(1, 'boolean'));
+        return new PhpXmlRpc\Response(new PhpXmlRpc\Value(1, 'boolean'));
     }
 
     /**
@@ -108,11 +108,11 @@ function findstate($m)
 
     // if we generated an error, create an error return response
     if ($err) {
-        return new xmlrpcresp(0, $xmlrpcerruser, $err);
+        return new PhpXmlRpc\Response(0, $xmlrpcerruser, $err);
     } else {
         // otherwise, we create the right response
         // with the state name
-        return new xmlrpcresp(new xmlrpcval($sname));
+        return new PhpXmlRpc\Response(new PhpXmlRpc\Value($sname));
     }
 }
 
@@ -141,7 +141,7 @@ $findstate3_sig = wrap_php_function(array('xmlrpc_server_methods_container', 'fi
 
 $findstate5_sig = wrap_php_function('xmlrpc_server_methods_container::findstate');
 
-$obj = new xmlrpc_server_methods_container();
+$obj = new PhpXmlRpc\Server_methods_container();
 $findstate4_sig = wrap_php_function(array($obj, 'findstate'));
 
 $addtwo_sig = array(array($xmlrpcInt, $xmlrpcInt, $xmlrpcInt));
@@ -151,7 +151,7 @@ function addtwo($m)
     $s = $m->getParam(0);
     $t = $m->getParam(1);
 
-    return new xmlrpcresp(new xmlrpcval($s->scalarval() + $t->scalarval(), "int"));
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value($s->scalarval() + $t->scalarval(), "int"));
 }
 
 $addtwodouble_sig = array(array($xmlrpcDouble, $xmlrpcDouble, $xmlrpcDouble));
@@ -161,7 +161,7 @@ function addtwodouble($m)
     $s = $m->getParam(0);
     $t = $m->getParam(1);
 
-    return new xmlrpcresp(new xmlrpcval($s->scalarval() + $t->scalarval(), "double"));
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value($s->scalarval() + $t->scalarval(), "double"));
 }
 
 $stringecho_sig = array(array($xmlrpcString, $xmlrpcString));
@@ -172,7 +172,7 @@ function stringecho($m)
     $s = $m->getParam(0);
     $v = $s->scalarval();
 
-    return new xmlrpcresp(new xmlrpcval($s->scalarval()));
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value($s->scalarval()));
 }
 
 $echoback_sig = array(array($xmlrpcString, $xmlrpcString));
@@ -185,7 +185,7 @@ function echoback($m)
     // $m is an incoming message
     $s = "I got the following message:\n" . $m->serialize();
 
-    return new xmlrpcresp(new xmlrpcval($s));
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value($s));
 }
 
 $echosixtyfour_sig = array(array($xmlrpcString, $xmlrpcBase64));
@@ -197,7 +197,7 @@ function echosixtyfour($m)
     // is working as expected
     $incoming = $m->getParam(0);
 
-    return new xmlrpcresp(new xmlrpcval($incoming->scalarval(), "string"));
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value($incoming->scalarval(), "string"));
 }
 
 $bitflipper_sig = array(array($xmlrpcArray, $xmlrpcArray));
@@ -208,7 +208,7 @@ function bitflipper($m)
 
     $v = $m->getParam(0);
     $sz = $v->arraysize();
-    $rv = new xmlrpcval(array(), $xmlrpcArray);
+    $rv = new PhpXmlRpc\Value(array(), $xmlrpcArray);
 
     for ($j = 0; $j < $sz; $j++) {
         $b = $v->arraymem($j);
@@ -219,7 +219,7 @@ function bitflipper($m)
         }
     }
 
-    return new xmlrpcresp($rv);
+    return new PhpXmlRpc\Response($rv);
 }
 
 // Sorting demo
@@ -269,7 +269,7 @@ function agesorter($m)
     // error string for [if|when] things go wrong
     $err = "";
     // create the output value
-    $v = new xmlrpcval();
+    $v = new PhpXmlRpc\Value();
     $agar = array();
 
     if (isset($sno) && $sno->kindOf() == "array") {
@@ -297,8 +297,8 @@ function agesorter($m)
         $outAr = array();
         while (list($key, $val) = each($agesorter_arr)) {
             // recreate each struct element
-            $outAr[] = new xmlrpcval(array("name" => new xmlrpcval($key),
-                "age" => new xmlrpcval($val, "int"),), "struct");
+            $outAr[] = new PhpXmlRpc\Value(array("name" => new PhpXmlRpc\Value($key),
+                "age" => new PhpXmlRpc\Value($val, "int"),), "struct");
         }
         // add this array to the output value
         $v->addArray($outAr);
@@ -307,9 +307,9 @@ function agesorter($m)
     }
 
     if ($err) {
-        return new xmlrpcresp(0, $xmlrpcerruser, $err);
+        return new PhpXmlRpc\Response(0, $xmlrpcerruser, $err);
     } else {
-        return new xmlrpcresp($v);
+        return new PhpXmlRpc\Response($v);
     }
 }
 
@@ -378,9 +378,9 @@ function mail_send($m)
     }
 
     if ($err) {
-        return new xmlrpcresp(0, $xmlrpcerruser, $err);
+        return new PhpXmlRpc\Response(0, $xmlrpcerruser, $err);
     } else {
-        return new xmlrpcresp(new xmlrpcval("true", $xmlrpcBoolean));
+        return new PhpXmlRpc\Response(new PhpXmlRpc\Value("true", $xmlrpcBoolean));
     }
 }
 
@@ -390,7 +390,7 @@ function getallheaders_xmlrpc($m)
 {
     global $xmlrpcerruser;
     if (function_exists('getallheaders')) {
-        return new xmlrpcresp(php_xmlrpc_encode(getallheaders()));
+        return new PhpXmlRpc\Response(php_xmlrpc_encode(getallheaders()));
     } else {
         $headers = array();
         // IIS: poor man's version of getallheaders
@@ -401,7 +401,7 @@ function getallheaders_xmlrpc($m)
             }
         }
 
-        return new xmlrpcresp(php_xmlrpc_encode($headers));
+        return new PhpXmlRpc\Response(php_xmlrpc_encode($headers));
     }
 }
 
@@ -415,14 +415,14 @@ function setcookies($m)
         setcookie($name, @$cookiedesc['value'], @$cookiedesc['expires'], @$cookiedesc['path'], @$cookiedesc['domain'], @$cookiedesc['secure']);
     }
 
-    return new xmlrpcresp(new xmlrpcval(1, 'int'));
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value(1, 'int'));
 }
 
 $getcookies_sig = array(array($xmlrpcStruct));
 $getcookies_doc = 'Sends to client a response containing all http cookies as received in the request (as struct)';
 function getcookies($m)
 {
-    return new xmlrpcresp(php_xmlrpc_encode($_COOKIE));
+    return new PhpXmlRpc\Response(php_xmlrpc_encode($_COOKIE));
 }
 
 $v1_arrayOfStructs_sig = array(array($xmlrpcInt, $xmlrpcArray));
@@ -441,7 +441,7 @@ function v1_arrayOfStructs($m)
         }
     }
 
-    return new xmlrpcresp(new xmlrpcval($numcurly, "int"));
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value($numcurly, "int"));
 }
 
 $v1_easyStruct_sig = array(array($xmlrpcInt, $xmlrpcStruct));
@@ -454,7 +454,7 @@ function v1_easyStruct($m)
     $curly = $sno->structmem("curly");
     $num = $moe->scalarval() + $larry->scalarval() + $curly->scalarval();
 
-    return new xmlrpcresp(new xmlrpcval($num, "int"));
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value($num, "int"));
 }
 
 $v1_echoStruct_sig = array(array($xmlrpcStruct, $xmlrpcStruct));
@@ -463,7 +463,7 @@ function v1_echoStruct($m)
 {
     $sno = $m->getParam(0);
 
-    return new xmlrpcresp($sno);
+    return new PhpXmlRpc\Response($sno);
 }
 
 $v1_manyTypes_sig = array(array(
@@ -474,7 +474,7 @@ $v1_manyTypes_sig = array(array(
 $v1_manyTypes_doc = 'This handler takes six parameters, and returns an array containing all the parameters.';
 function v1_manyTypes($m)
 {
-    return new xmlrpcresp(new xmlrpcval(array(
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value(array(
         $m->getParam(0),
         $m->getParam(1),
         $m->getParam(2),
@@ -494,7 +494,7 @@ function v1_moderateSizeArrayCheck($m)
     $first = $ar->arraymem(0);
     $last = $ar->arraymem($sz - 1);
 
-    return new xmlrpcresp(new xmlrpcval($first->scalarval() .
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value($first->scalarval() .
         $last->scalarval(), "string"));
 }
 
@@ -505,10 +505,10 @@ function v1_simpleStructReturn($m)
     $sno = $m->getParam(0);
     $v = $sno->scalarval();
 
-    return new xmlrpcresp(new xmlrpcval(array(
-        "times10" => new xmlrpcval($v * 10, "int"),
-        "times100" => new xmlrpcval($v * 100, "int"),
-        "times1000" => new xmlrpcval($v * 1000, "int"),),
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value(array(
+        "times10" => new PhpXmlRpc\Value($v * 10, "int"),
+        "times100" => new PhpXmlRpc\Value($v * 100, "int"),
+        "times1000" => new PhpXmlRpc\Value($v * 1000, "int"),),
         "struct"
     ));
 }
@@ -526,7 +526,7 @@ function v1_nestedStruct($m)
     $larry = $fools->structmem("larry");
     $moe = $fools->structmem("moe");
 
-    return new xmlrpcresp(new xmlrpcval($curly->scalarval() + $larry->scalarval() + $moe->scalarval(), "int"));
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value($curly->scalarval() + $larry->scalarval() + $moe->scalarval(), "int"));
 }
 
 $v1_countTheEntities_sig = array(array($xmlrpcStruct, $xmlrpcString));
@@ -563,12 +563,12 @@ function v1_countTheEntities($m)
         }
     }
 
-    return new xmlrpcresp(new xmlrpcval(array(
-        "ctLeftAngleBrackets" => new xmlrpcval($lt, "int"),
-        "ctRightAngleBrackets" => new xmlrpcval($gt, "int"),
-        "ctAmpersands" => new xmlrpcval($amp, "int"),
-        "ctApostrophes" => new xmlrpcval($ap, "int"),
-        "ctQuotes" => new xmlrpcval($qu, "int"),),
+    return new PhpXmlRpc\Response(new PhpXmlRpc\Value(array(
+        "ctLeftAngleBrackets" => new PhpXmlRpc\Value($lt, "int"),
+        "ctRightAngleBrackets" => new PhpXmlRpc\Value($gt, "int"),
+        "ctAmpersands" => new PhpXmlRpc\Value($amp, "int"),
+        "ctApostrophes" => new PhpXmlRpc\Value($ap, "int"),
+        "ctQuotes" => new PhpXmlRpc\Value($qu, "int"),),
         "struct"
     ));
 }
@@ -613,7 +613,7 @@ function i_echoParam($m)
 {
     $s = $m->getParam(0);
 
-    return new xmlrpcresp($s);
+    return new PhpXmlRpc\Response($s);
 }
 
 function i_echoString($m)
@@ -684,7 +684,7 @@ function i_whichToolkit($m)
         "toolkitOperatingSystem" => isset($SERVER_SOFTWARE) ? $SERVER_SOFTWARE : $_SERVER['SERVER_SOFTWARE'],
     );
 
-    return new xmlrpcresp(php_xmlrpc_encode($ret));
+    return new PhpXmlRpc\Response(php_xmlrpc_encode($ret));
 }
 
 $o = new xmlrpc_server_methods_container();
@@ -874,7 +874,7 @@ if ($findstate5_sig) {
     $a['examples.php4.getStateName'] = $findstate5_sig;
 }
 
-$s = new xmlrpc_server($a, false);
+$s = new PhpXmlRpc\Server($a, false);
 $s->setdebug(3);
 $s->compress_response = true;
 

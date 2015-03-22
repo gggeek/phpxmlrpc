@@ -6,43 +6,43 @@ include_once __DIR__ . "/../vendor/autoload.php";
 
 include_once __DIR__ . "/../lib/xmlrpc.inc";
 
-$f = new xmlrpcmsg('examples.getStateName');
+$f = new PhpXmlRpc\Request('examples.getStateName');
 
 print "<h3>Testing value serialization</h3>\n";
 
-$v = new xmlrpcval(23, "int");
+$v = new PhpXmlRpc\Value(23, "int");
 print "<PRE>" . htmlentities($v->serialize()) . "</PRE>";
-$v = new xmlrpcval("What are you saying? >> << &&");
+$v = new PhpXmlRpc\Value("What are you saying? >> << &&");
 print "<PRE>" . htmlentities($v->serialize()) . "</PRE>";
 
-$v = new xmlrpcval(array(
-    new xmlrpcval("ABCDEFHIJ"),
-    new xmlrpcval(1234, 'int'),
-    new xmlrpcval(1, 'boolean'),),
+$v = new PhpXmlRpc\Value(array(
+    new PhpXmlRpc\Value("ABCDEFHIJ"),
+    new PhpXmlRpc\Value(1234, 'int'),
+    new PhpXmlRpc\Value(1, 'boolean'),),
     "array"
 );
 
 print "<PRE>" . htmlentities($v->serialize()) . "</PRE>";
 
-$v = new xmlrpcval(
+$v = new PhpXmlRpc\Value(
     array(
-        "thearray" => new xmlrpcval(
+        "thearray" => new PhpXmlRpc\Value(
             array(
-                new xmlrpcval("ABCDEFHIJ"),
-                new xmlrpcval(1234, 'int'),
-                new xmlrpcval(1, 'boolean'),
-                new xmlrpcval(0, 'boolean'),
-                new xmlrpcval(true, 'boolean'),
-                new xmlrpcval(false, 'boolean'),
+                new PhpXmlRpc\Value("ABCDEFHIJ"),
+                new PhpXmlRpc\Value(1234, 'int'),
+                new PhpXmlRpc\Value(1, 'boolean'),
+                new PhpXmlRpc\Value(0, 'boolean'),
+                new PhpXmlRpc\Value(true, 'boolean'),
+                new PhpXmlRpc\Value(false, 'boolean'),
             ),
             "array"
         ),
-        "theint" => new xmlrpcval(23, 'int'),
-        "thestring" => new xmlrpcval("foobarwhizz"),
-        "thestruct" => new xmlrpcval(
+        "theint" => new PhpXmlRpc\Value(23, 'int'),
+        "thestring" => new PhpXmlRpc\Value("foobarwhizz"),
+        "thestruct" => new PhpXmlRpc\Value(
             array(
-                "one" => new xmlrpcval(1, 'int'),
-                "two" => new xmlrpcval(2, 'int'),
+                "one" => new PhpXmlRpc\Value(1, 'int'),
+                "two" => new PhpXmlRpc\Value(2, 'int'),
             ),
             "struct"
         ),
@@ -52,11 +52,11 @@ $v = new xmlrpcval(
 
 print "<PRE>" . htmlentities($v->serialize()) . "</PRE>";
 
-$w = new xmlrpcval(array($v, new xmlrpcval("That was the struct!")), "array");
+$w = new PhpXmlRpc\Value(array($v, new PhpXmlRpc\Value("That was the struct!")), "array");
 
 print "<PRE>" . htmlentities($w->serialize()) . "</PRE>";
 
-$w = new xmlrpcval("Mary had a little lamb,
+$w = new PhpXmlRpc\Value("Mary had a little lamb,
 Whose fleece was white as snow,
 And everywhere that Mary went
 the lamb was sure to go.
@@ -70,7 +70,7 @@ print "<PRE>" . htmlentities($w->serialize()) . "</PRE>";
 print "<PRE>Value of base64 string is: '" . $w->scalarval() . "'</PRE>";
 
 $f->method('');
-$f->addParam(new xmlrpcval("41", "int"));
+$f->addParam(new PhpXmlRpc\Value("41", "int"));
 
 print "<h3>Testing request serialization</h3>\n";
 $op = $f->serialize();

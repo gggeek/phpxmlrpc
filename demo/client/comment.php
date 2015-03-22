@@ -1,7 +1,9 @@
 <?php
-include "xmlrpc.inc";
 
-$mydir = "/demo";
+include_once __DIR__ . "/../../src/Autoloader.php";
+PhpXmlRpc\Autoloader::register();
+
+$mydir = "demo/";
 
 // define some utility functions
 function bomb()
@@ -12,8 +14,8 @@ function bomb()
 
 function dispatch($client, $method, $args)
 {
-    $msg = new xmlrpcmsg($method, $args);
-    $resp = $client->send($msg);
+    $req = new PhpXmlRpc\Request($method, $args);
+    $resp = $client->send($req);
     if (!$resp) {
         print "<p>IO error: " . $client->errstr . "</p>";
         bomb();
@@ -24,12 +26,12 @@ function dispatch($client, $method, $args)
         bomb();
     }
 
-    return php_xmlrpc_decode($resp->value());
+    $encoder = new PhpXmlRpc\Encoder();
+    return $encoder->decode($resp->value());
 }
 
 // create client for discussion server
-$dclient = new xmlrpc_client("${mydir}/discuss.php",
-    "xmlrpc.usefulinc.com", 80);
+$dclient = new PhpXmlRpc\Client("http://xmlrpc.usefulinc.com/${mydir}discuss.php");
 
 // check if we're posting a comment, and send it if so
 @$storyid = $_POST["storyid"];
@@ -38,9 +40,9 @@ if ($storyid) {
     //    print "Returning to " . $HTTP_POST_VARS["returnto"];
 
     $res = dispatch($dclient, "discuss.addComment",
-        array(new xmlrpcval($storyid),
-            new xmlrpcval(stripslashes(@$_POST["name"])),
-            new xmlrpcval(stripslashes(@$_POST["commenttext"])),));
+        array(new PhpXmlRpc\Value($storyid),
+            new PhpXmlRpc\Value(stripslashes(@$_POST["name"])),
+            new PhpXmlRpc\Value(stripslashes(@$_POST["commenttext"])),));
 
     // send the browser back to the originating page
     Header("Location: ${mydir}/comment.php?catid=" .
@@ -65,8 +67,7 @@ if (@$_GET["oc"] == $catid) {
     $chanid = 0;
 }
 
-$client = new xmlrpc_client("/meerkat/xml-rpc/server.php",
-    "www.oreillynet.com", 80);
+$client = new PhpXmlRpc\Client("http://www.oreillynet.com/meerkat/xml-rpc/server.php");
 
 if (@$_GET["comment"] &&
     (!@$_GET["cdone"])
@@ -98,17 +99,17 @@ if (@$_GET["comment"] &&
     $categories = dispatch($client, "meerkat.getCategories", array());
     if ($catid) {
         $sources = dispatch($client, "meerkat.getChannelsByCategory",
-            array(new xmlrpcval($catid, "int")));
+            array(new PhpXmlRpc\Value($catid, "int")));
     }
     if ($chanid) {
         $stories = dispatch($client, "meerkat.getItems",
-            array(new xmlrpcval(
+            array(new PhpXmlRpc\Value(
                 array(
-                    "channel" => new xmlrpcval($chanid, "int"),
-                    "ids" => new xmlrpcval(1, "int"),
-                    "descriptions" => new xmlrpcval(200, "int"),
-                    "num_items" => new xmlrpcval(5, "int"),
-                    "dates" => new xmlrpcval(0, "int"),
+                    "channel" => new PhpXmlRpc\Value($chanid, "int"),
+                    "ids" => new PhpXmlRpc\Value(1, "int"),
+                    "descriptions" => new PhpXmlRpc\Value(200, "int"),
+                    "num_items" => new PhpXmlRpc\Value(5, "int"),
+                    "dates" => new PhpXmlRpc\Value(0, "int"),
                 ), "struct")));
     }
     ?>
@@ -178,7 +179,7 @@ if (@$_GET["comment"] &&
                 print "</tr>\n";
                 // now look for existing comments
                 $res = dispatch($dclient, "discuss.getComments",
-                    array(new xmlrpcval($v['id'])));
+                    array(new PhpXmlRpc\Value($v['id'])));
                 if (sizeof($res) > 0) {
                     print "<tr><td bgcolor=\"#dddddd\"><p><b><i>" .
                         "Comments on this story:</i></b></p>";

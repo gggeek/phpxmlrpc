@@ -6,6 +6,9 @@
  * @license code licensed under the BSD License: see file license.txt
  */
 
+include_once __DIR__ . "/../../src/Autoloader.php";
+PhpXmlRpc\Autoloader::register();
+
 /**
  * Takes a client object, a remote method name, and a variable numbers of
  * php values, and calls the method with the supplied parameters. The
@@ -43,11 +46,12 @@ function xmlrpccall_simple()
             return false;
         }
 
-        $xmlrpcval_array = array();
+        $valueArray = array();
+        $encoder = new PhpXmlRpc\Encoder();
         foreach ($varargs as $parameter) {
-            $xmlrpcval_array[] = php_xmlrpc_encode($parameter);
+            $valueArray[] = $encoder->encode($parameter);
         }
 
-        return $client->send(new xmlrpcmsg($remote_function_name, $xmlrpcval_array));
+        return $client->send(new PhpXmlRpc\Request($remote_function_name, $valueArray));
     }
 }

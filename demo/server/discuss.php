@@ -42,11 +42,11 @@ function addcomment($m)
     }
     // if we generated an error, create an error return response
     if ($err) {
-        return new xmlrpcresp(0, $xmlrpcerruser, $err);
+        return new PhpXmlRpc\Response(0, $xmlrpcerruser, $err);
     } else {
         // otherwise, we create the right response
         // with the state name
-        return new xmlrpcresp(new xmlrpcval($count, "int"));
+        return new PhpXmlRpc\Response(new PhpXmlRpc\Value($count, "int"));
     }
 }
 
@@ -80,15 +80,15 @@ function getcomments($m)
     }
     // if we generated an error, create an error return response
     if ($err) {
-        return new xmlrpcresp(0, $xmlrpcerruser, $err);
+        return new PhpXmlRpc\Response(0, $xmlrpcerruser, $err);
     } else {
         // otherwise, we create the right response
         // with the state name
-        return new xmlrpcresp(php_xmlrpc_encode($ra));
+        return new PhpXmlRpc\Response(php_xmlrpc_encode($ra));
     }
 }
 
-$s = new xmlrpc_server(array(
+$s = new PhpXmlRpc\Server(array(
     "discuss.addComment" => array(
         "function" => "addcomment",
         "signature" => $addcomment_sig,

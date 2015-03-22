@@ -25,7 +25,7 @@ function forward_request($m)
     // create client
     $timeout = 0;
     $url = php_xmlrpc_decode($m->getParam(0));
-    $c = new xmlrpc_client($url);
+    $c = new PhpXmlRpc\Client($url);
     if ($m->getNumParams() > 3) {
         // we have to set some options onto the client.
         // Note that if we do not untaint the received values, warnings might be generated...
@@ -53,12 +53,12 @@ function forward_request($m)
     }
 
     // build call for remote server
-    /// @todo find a weay to forward client info (such as IP) to server, either
+    /// @todo find a way to forward client info (such as IP) to server, either
     /// - as xml comments in the payload, or
     /// - using std http header conventions, such as X-forwarded-for...
     $method = php_xmlrpc_decode($m->getParam(1));
     $pars = $m->getParam(2);
-    $m = new xmlrpcmsg($method);
+    $m = new PhpXmlRpc\Request($method);
     for ($i = 0; $i < $pars->arraySize(); $i++) {
         $m->addParam($pars->arraymem($i));
     }
@@ -70,7 +70,7 @@ function forward_request($m)
 }
 
 // run the server
-$server = new xmlrpc_server(
+$server = new PhpXmlRpc\Server(
     array(
         'xmlrpcproxy.call' => array(
             'function' => 'forward_request',

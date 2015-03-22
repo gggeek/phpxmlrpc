@@ -1,11 +1,14 @@
 <html>
-<head><title>xmlrpc</title></head>
+<head><title>xmlrpc - Introspect demo</title></head>
 <body>
 <h1>Introspect demo</h1>
 <h2>Query server for available methods and their description</h2>
 <h3>The code demonstrates usage of multicall and introspection methods</h3>
 <?php
-include "xmlrpc.inc";
+
+include_once __DIR__ . "/../../src/Autoloader.php";
+PhpXmlRpc\Autoloader::register();
+
 function display_error($r)
 {
     print "An error occurred: ";
@@ -13,27 +16,27 @@ function display_error($r)
         . " Reason: '" . $r->faultString() . "'<br/>";
 }
 // 'new style' client constructor
-$c = new xmlrpc_client("http://phpxmlrpc.sourceforge.net/server.php");
-print "<h3>methods available at http://" . $c->server . $c->path . "</h3>\n";
-$m = new xmlrpcmsg('system.listMethods');
-$r = &$c->send($m);
-if ($r->faultCode()) {
-    display_error($r);
+$client = new PhpXmlRpc\Client("http://phpxmlrpc.sourceforge.net/server.php");
+print "<h3>methods available at http://" . $client->server . $client->path . "</h3>\n";
+$req = new PhpXmlRpc\Request('system.listMethods');
+$resp = $client->send($req);
+if ($resp->faultCode()) {
+    display_error($resp);
 } else {
-    $v = $r->value();
+    $v = $resp->value();
     for ($i = 0; $i < $v->arraysize(); $i++) {
         $mname = $v->arraymem($i);
         print "<h4>" . $mname->scalarval() . "</h4>\n";
         // build messages first, add params later
-        $m1 = new xmlrpcmsg('system.methodHelp');
-        $m2 = new xmlrpcmsg('system.methodSignature');
-        $val = new xmlrpcval($mname->scalarval(), "string");
+        $m1 = new PhpXmlRpc\Request('system.methodHelp');
+        $m2 = new PhpXmlRpc\Request('system.methodSignature');
+        $val = new PhpXmlRpc\Value($mname->scalarval(), "string");
         $m1->addParam($val);
         $m2->addParam($val);
         // send multiple messages in one pass.
         // If server does not support multicall, client will fall back to 2 separate calls
         $ms = array($m1, $m2);
-        $rs = &$c->send($ms);
+        $rs = $client->send($ms);
         if ($rs[0]->faultCode()) {
             display_error($rs[0]);
         } else {
