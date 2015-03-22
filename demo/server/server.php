@@ -17,6 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST' && isset($_GET['showSource'])) {
 
 include_once __DIR__ . "/../../vendor/autoload.php";
 
+// out-of-band information: let the client manipulate the server operations.
+// we do this to help the testsuite script: do not reproduce in production!
+if (isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) && extension_loaded('xdebug')) {
+    $GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'] = '/tmp/phpxmlrpc_coverage';
+    if (!is_dir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'])) {
+        mkdir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY']);
+    }
+
+    include_once __DIR__ . "/../../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumCommon/prepend.php";
+}
+
 include_once __DIR__ . "/../../lib/xmlrpc.inc";
 include_once __DIR__ . "/../../lib/xmlrpcs.inc";
 include_once __DIR__ . "/../../lib/xmlrpc_wrappers.inc";
@@ -36,7 +47,7 @@ class xmlrpc_server_methods_container
     }
 
     /**
-     * Method used to testcatching of exceptions in the server.
+     * Method used to test catching of exceptions in the server.
      */
     public function exceptiongenerator($m)
     {
@@ -877,3 +888,9 @@ if (isset($_GET['EXCEPTION_HANDLING'])) {
 }
 $s->service();
 // that should do all we need!
+
+// out-of-band information: let the client manipulate the server operations.
+// we do this to help the testsuite script: do not reproduce in production!
+if (isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) && extension_loaded('xdebug')) {
+    include_once __DIR__ . "/../../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumCommon/append.php";
+}

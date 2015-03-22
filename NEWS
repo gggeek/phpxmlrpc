@@ -19,13 +19,20 @@ even though we strongly urge you to use more recent versions.
 * improved: all php code is now formatted according to the PSR-2 standard
 
 * improved: this release is now tested using Travis ( https://travis-ci.org/ ).
+  Tests are executed using all php versions from 5.3 to 7.0 nightly, plus HHVM
 
 * improved: no need to call anymore $client->setSSLVerifyHost(2) to silence a curl warning when using https
   with recent curl builds
 
 * improved: phpunit is now installed via composer, not bundled anymore
 
-* improved: debug messages are not html-escaped when executing from the command line
+* improved: when phpunit is used to generate code-coverage data, the code executed server-side is accounted for
+
+* improved: debug messages are not html-escaped any more when executing from the command line
+
+* improved: a specific option allow users to decide the version of SSL to use for https calls.
+  This is useful f.e. for the testing suite, when the server target of calls has no proper ssl certificate,
+  and the cURL extension has been compiled with GnuTLS (such as Travis)
 
 
 XML-RPC for PHP version 3.0.0 - 2014/6/15

@@ -8,21 +8,25 @@ include_once __DIR__ . '/parse_args.php';
 class LocalhostTest extends PHPUnit_Framework_TestCase
 {
     /** @var xmlrpc_client $client */
-    public $client = null;
-    public $method = 'http';
-    public $timeout = 10;
-    public $request_compression = null;
-    public $accepted_compression = '';
-    public $args = array();
+    protected $client = null;
+    protected $method = 'http';
+    protected $timeout = 10;
+    protected $request_compression = null;
+    protected $accepted_compression = '';
+    protected $args = array();
 
     protected static $failed_tests = array();
 
+    protected $testId;
+    /** @var boolean $collectCodeCoverageInformation */
+    protected $collectCodeCoverageInformation;
+    protected $coverageScriptUrl;
+
     public static function fail($message = '')
     {
-        // save in global var that this particular test has failed
+        // save in a static var that this particular test has failed
         // (but only if not called from subclass objects / multitests)
         if (function_exists('debug_backtrace') && strtolower(get_called_class()) == 'localhosttests') {
-            global $failed_tests;
             $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
             for ($i = 0; $i < count($trace); $i++) {
                 if (strpos($trace[$i]['function'], 'test') === 0) {
@@ -36,8 +40,41 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @todo be smarter with setup, do not use global variables anymore
+     * Reimplemented to allow us to collect code coverage info from the target server.
+     * Code taken from PHPUnit_Extensions_Selenium2TestCase
+     *
+     * @param PHPUnit_Framework_TestResult $result
+     * @return PHPUnit_Framework_TestResult
+     * @throws Exception
      */
+    public function run(PHPUnit_Framework_TestResult $result = NULL)
+    {
+        $this->testId = get_class($this) . '__' . $this->getName();
+
+        if ($result === NULL) {
+            $result = $this->createResult();
+        }
+
+        $this->collectCodeCoverageInformation = $result->getCollectCodeCoverageInformation();
+
+        parent::run($result);
+
+        if ($this->collectCodeCoverageInformation) {
+            $coverage = new PHPUnit_Extensions_SeleniumCommon_RemoteCoverage(
+                $this->coverageScriptUrl,
+                $this->testId
+            );
+            $result->getCodeCoverage()->append(
+                $coverage->get(), $this
+            );
+        }
+
+        // do not call this before to give the time to the Listeners to run
+        //$this->getStrategy()->endOfTest($this->session);
+
+        return $result;
+    }
+
     public function setUp()
     {
         $this->args = argParser::getArgs();
@@ -53,10 +90,16 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         }
         $this->client->request_compression = $this->request_compression;
         $this->client->accepted_compression = $this->accepted_compression;
+
+        $this->coverageScriptUrl = 'http://' . $this->args['LOCALSERVER'] . '/' . str_replace( '/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['URI'] );
     }
 
-    public function send($msg, $errrorcode = 0, $return_response = false)
+    protected function send($msg, $errrorcode = 0, $return_response = false)
     {
+        if ($this->collectCodeCoverageInformation) {
+            $this->client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);
+        }
+
         $r = $this->client->send($msg, $this->timeout, $this->method);
         // for multicall, return directly array of responses
         if (is_array($r)) {
@@ -574,6 +617,12 @@ And turned it into nylon';
         if (!$r->faultCode()) {
             $v = $r->value();
             $v = php_xmlrpc_decode($v);
+
+            // take care for the extra cookie used for coverage collection
+            if (isset($v['PHPUNIT_SELENIUM_TEST_ID'])) {
+                unset($v['PHPUNIT_SELENIUM_TEST_ID']);
+            }
+
             // on IIS and Apache getallheaders returns something slightly different...
             $this->assertEquals($v, $cookies);
         }
