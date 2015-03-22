@@ -327,13 +327,13 @@ class Client
     /**
      * Send an xmlrpc request.
      *
-     * @param mixed $msg The request object, or an array of requests for using multicall, or the complete xml representation of a request
+     * @param Request|Request[]|string $msg The Request object, or an array of requests for using multicall, or the complete xml representation of a request
      * @param integer $timeout Connection timeout, in seconds, If unspecified, a platform specific timeout will apply
      * @param string $method if left unspecified, the http protocol chosen during creation of the object will be used
      *
      * @return Response
      */
-    public function & send($msg, $timeout = 0, $method = '')
+    public function send($msg, $timeout = 0, $method = '')
     {
         // if user does not specify http protocol, use native method of this client
         // (i.e. method set during call to constructor)
