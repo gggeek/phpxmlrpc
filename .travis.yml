@@ -44,4 +44,4 @@ after_script:
   - if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
   - if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
   # Upload code-coverage CodeClimate
-  - if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then CODECLIMATE_REPO_TOKEN=7fa6ee01e345090e059e5e42f3bfbcc8692feb8340396382dd76390a3019ac13 ./vendor/bin/test-reporter; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then CODECLIMATE_REPO_TOKEN=7fa6ee01e345090e059e5e42f3bfbcc8692feb8340396382dd76390a3019ac13 ./vendor/bin/test-reporter --coverage-report=coverage.clover; fi
