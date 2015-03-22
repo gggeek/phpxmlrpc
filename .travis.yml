@@ -31,7 +31,7 @@ before_script:
 script:
   # Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
   # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below
-  phpunit tests --coverage-clover=coverage.clover LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php PROXY=localhost:8080 HTTPSVERIFYHOST=0 HTTPSIGNOREPEER=1 SSLVERSION=3
+  phpunit --coverage-clover=coverage.clover tests LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php PROXY=localhost:8080 HTTPSVERIFYHOST=0 HTTPSIGNOREPEER=1 SSLVERSION=3
 
 after_failure:
   # Save as much info as we can to help developers
