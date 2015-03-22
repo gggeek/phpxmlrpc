@@ -19,7 +19,7 @@ class Request
 
     /**
      * @param string $methodName the name of the method to invoke
-     * @param array $params array of parameters to be passed to the method (xmlrpcval objects)
+     * @param Value[] $params array of parameters to be passed to the method (Value objects)
      */
     public function __construct($methodName, $params = array())
     {
@@ -74,7 +74,7 @@ class Request
     /**
      * Gets/sets the xmlrpc method to be invoked.
      *
-     * @param string $meth the method to be set (leave empty not to set it)
+     * @param string $methodName the method to be set (leave empty not to set it)
      *
      * @return string the method that will be invoked
      */
@@ -104,7 +104,7 @@ class Request
     /**
      * Add a parameter to the list of parameters to be used upon method invocation.
      *
-     * @param Value $par
+     * @param Value $param
      *
      * @return boolean false on failure
      */
@@ -133,7 +133,7 @@ class Request
     }
 
     /**
-     * Returns the number of parameters in the messge.
+     * Returns the number of parameters in the message.
      *
      * @return integer the number of parameters currently set
      */
@@ -143,7 +143,7 @@ class Request
     }
 
     /**
-     * Given an open file handle, read all data available and parse it as axmlrpc response.
+     * Given an open file handle, read all data available and parse it as an xmlrpc response.
      * NB: the file handle is not closed by this function.
      * NNB: might have trouble in rare cases to work on network streams, as we
      *      check for a read of 0 bytes instead of feof($fp).
@@ -297,17 +297,16 @@ class Request
         }
 
         $data = substr($data, $bd);
-
-        /// @todo when in CLI mode, do not html-encode the output
+        
         if ($this->debug && count($this->httpResponse['headers'])) {
-            print "</PRE>\n";
+            $msg = '';
             foreach ($this->httpResponse['headers'] as $header => $value) {
-                print htmlentities("HEADER: $header: $value\n");
+                $msg .= "HEADER: $header: $value\n";
             }
             foreach ($this->httpResponse['cookies'] as $header => $value) {
-                print htmlentities("COOKIE: $header={$value['value']}\n");
+                $msg .= "COOKIE: $header={$value['value']}\n";
             }
-            print "</PRE>\n";
+            $this->debugMessage($msg);
         }
 
         // if CURL was used for the call, http headers have been processed,

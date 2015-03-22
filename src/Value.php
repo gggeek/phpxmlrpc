@@ -154,7 +154,7 @@ class Value
     /**
      * Add an array of xmlrpcval objects to an xmlrpcval.
      *
-     * @param array $vals
+     * @param Value[] $vals
      *
      * @return int 1 or 0 on failure
      *
@@ -182,7 +182,7 @@ class Value
     /**
      * Add an array of named xmlrpcval objects to an xmlrpcval.
      *
-     * @param array $vals
+     * @param Value[] $vals
      *
      * @return int 1 or 0 on failure
      *
@@ -372,7 +372,7 @@ class Value
      *
      * @param string $m the name of the struct member to be looked up
      *
-     * @return xmlrpcval
+     * @return Value
      */
     public function structmem($m)
     {
@@ -467,7 +467,7 @@ class Value
      *
      * @param integer $m the index of the value to be retrieved (zero based)
      *
-     * @return xmlrpcval
+     * @return Value
      */
     public function arraymem($m)
     {
