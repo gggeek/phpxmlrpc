@@ -43,16 +43,6 @@ class Request
         return '</methodCall>';
     }
 
-    /**
-     * Kept the old name even if class was renamed, for compatibility.
-     *
-     * @return string
-     */
-    private function kindOf()
-    {
-        return 'msg';
-    }
-
     public function createPayload($charset_encoding = '')
     {
         if ($charset_encoding != '') {
@@ -297,7 +287,7 @@ class Request
         }
 
         $data = substr($data, $bd);
-        
+
         if ($this->debug && count($this->httpResponse['headers'])) {
             $msg = '';
             foreach ($this->httpResponse['headers'] as $header => $value) {

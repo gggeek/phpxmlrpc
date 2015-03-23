@@ -699,16 +699,6 @@ class Server
         }
     }
 
-    /**
-     * A debugging routine: just echoes back the input packet as a string value
-     * DEPRECATED!
-     */
-    public function echoInput()
-    {
-        $r = new Response(new Value("'Aha said I: '" . file_get_contents('php://input'), 'string'));
-        print $r->serialize();
-    }
-
     /* Functions that implement system.XXX methods of xmlrpc servers */
 
     public function getSystemDispatchMap()

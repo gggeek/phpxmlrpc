@@ -46,6 +46,15 @@ include_once(__DIR__.'/../src/Server.php');
 
 class xmlrpc_server extends PhpXmlRpc\Server
 {
+    /**
+     * A debugging routine: just echoes back the input packet as a string value
+     * @deprecated
+     */
+    public function echoInput()
+    {
+        $r = new Response(new PhpXmlRpc\Value("'Aha said I: '" . file_get_contents('php://input'), 'string'));
+        print $r->serialize();
+    }
 }
 
 /* Expose as global functions the ones which are now class methods */
