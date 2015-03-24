@@ -87,7 +87,7 @@ class Charset
      *
      * @return string
      */
-    public function encode_entities($data, $src_encoding = '', $dest_encoding = '')
+    public function encodeEntities($data, $src_encoding = '', $dest_encoding = '')
     {
         if ($src_encoding == '') {
             // lame, but we know no better...
@@ -218,7 +218,7 @@ class Charset
      *
      * @return bool
      */
-    public function is_valid_charset($encoding, $validList)
+    public function isValidCharset($encoding, $validList)
     {
         if (is_string($validList)) {
             $validList = explode(',', $validList);

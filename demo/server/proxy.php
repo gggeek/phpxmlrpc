@@ -8,28 +8,30 @@
  * @copyright (C) 2006-2015 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  */
-include_once __DIR__ . "/../../vendor/autoload.php";
 
-include_once __DIR__ . "/../../lib/xmlrpc.inc";
-include_once __DIR__ . "/../../lib/xmlrpcs.inc";
+include_once __DIR__ . "/../../src/Autoloader.php";
+PhpXmlRpc\Autoloader::register();
 
 /**
  * Forward an xmlrpc request to another server, and return to client the response received.
  *
- * @param xmlrpcmsg $m (see method docs below for a description of the expected parameters)
+ * @param PhpXmlRpc\Request $req (see method docs below for a description of the expected parameters)
  *
- * @return xmlrpcresp
+ * @return PhpXmlRpc\Response
  */
-function forward_request($m)
+function forward_request($req)
 {
+    $encoder = new \PhpXmlRpc\Encoder();
+
     // create client
     $timeout = 0;
-    $url = php_xmlrpc_decode($m->getParam(0));
-    $c = new PhpXmlRpc\Client($url);
-    if ($m->getNumParams() > 3) {
+    $url = $encoder->decode($req->getParam(0));
+    $client = new PhpXmlRpc\Client($url);
+
+    if ($req->getNumParams() > 3) {
         // we have to set some options onto the client.
         // Note that if we do not untaint the received values, warnings might be generated...
-        $options = php_xmlrpc_decode($m->getParam(3));
+        $options = $encoder->decode($req->getParam(3));
         foreach ($options as $key => $val) {
             switch ($key) {
                 case 'Cookie':
@@ -37,13 +39,13 @@ function forward_request($m)
                 case 'Credentials':
                     break;
                 case 'RequestCompression':
-                    $c->setRequestCompression($val);
+                    $client->setRequestCompression($val);
                     break;
                 case 'SSLVerifyHost':
-                    $c->setSSLVerifyHost($val);
+                    $client->setSSLVerifyHost($val);
                     break;
                 case 'SSLVerifyPeer':
-                    $c->setSSLVerifyPeer($val);
+                    $client->setSSLVerifyPeer($val);
                     break;
                 case 'Timeout':
                     $timeout = (integer)$val;
@@ -56,17 +58,17 @@ function forward_request($m)
     /// @todo find a way to forward client info (such as IP) to server, either
     /// - as xml comments in the payload, or
     /// - using std http header conventions, such as X-forwarded-for...
-    $method = php_xmlrpc_decode($m->getParam(1));
-    $pars = $m->getParam(2);
-    $m = new PhpXmlRpc\Request($method);
+    $reqethod = $encoder->decode($req->getParam(1));
+    $pars = $req->getParam(2);
+    $req = new PhpXmlRpc\Request($reqethod);
     for ($i = 0; $i < $pars->arraySize(); $i++) {
-        $m->addParam($pars->arraymem($i));
+        $req->addParam($pars->arraymem($i));
     }
 
     // add debug info into response we give back to caller
-    xmlrpc_debugmsg("Sending to server $url the payload: " . $m->serialize());
+    PhpXmlRpc\Server::xmlrpc_debugmsg("Sending to server $url the payload: " . $req->serialize());
 
-    return $c->send($m, $timeout);
+    return $client->send($req, $timeout);
 }
 
 // run the server

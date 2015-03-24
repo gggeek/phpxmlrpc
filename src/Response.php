@@ -8,7 +8,7 @@ class Response
 {
     /// @todo: do these need to be public?
     public $val = 0;
-    public $valtyp;
+    public $valType;
     public $errno = 0;
     public $errstr = '';
     public $payload;
@@ -19,25 +19,25 @@ class Response
 
     /**
      * @param mixed $val either an xmlrpcval obj, a php value or the xml serialization of an xmlrpcval (a string)
-     * @param integer $fcode set it to anything but 0 to create an error response
-     * @param string $fstr the error string, in case of an error response
-     * @param string $valtyp either 'xmlrpcvals', 'phpvals' or 'xml'
+     * @param integer $fCode set it to anything but 0 to create an error response
+     * @param string $fString the error string, in case of an error response
+     * @param string $valType either 'xmlrpcvals', 'phpvals' or 'xml'
      *
-     * @todo add check that $val / $fcode / $fstr is of correct type???
+     * @todo add check that $val / $fCode / $fString is of correct type???
      * NB: as of now we do not do it, since it might be either an xmlrpcval or a plain
      * php val, or a complete xml chunk, depending on usage of Client::send() inside which creator is called...
      */
-    public function __construct($val, $fcode = 0, $fstr = '', $valtyp = '')
+    public function __construct($val, $fCode = 0, $fString = '', $valType = '')
     {
-        if ($fcode != 0) {
+        if ($fCode != 0) {
             // error response
-            $this->errno = $fcode;
-            $this->errstr = $fstr;
-            //$this->errstr = htmlspecialchars($fstr); // XXX: encoding probably shouldn't be done here; fix later.
+            $this->errno = $fCode;
+            $this->errstr = $fString;
+            //$this->errstr = htmlspecialchars($fString); // XXX: encoding probably shouldn't be done here; fix later.
         } else {
             // successful response
             $this->val = $val;
-            if ($valtyp == '') {
+            if ($valType == '') {
                 // user did not declare type of response value: try to guess it
                 if (is_object($this->val) && is_a($this->val, 'PhpXmlRpc\Value')) {
                     $this->valtyp = 'xmlrpcvals';
@@ -48,7 +48,7 @@ class Response
                 }
             } else {
                 // user declares type of resp value: believe him
-                $this->valtyp = $valtyp;
+                $this->valtyp = $valType;
             }
         }
     }
@@ -102,14 +102,14 @@ class Response
     /**
      * Returns xml representation of the response. XML prologue not included.
      *
-     * @param string $charset_encoding the charset to be used for serialization. if null, US-ASCII is assumed
+     * @param string $charsetEncoding the charset to be used for serialization. if null, US-ASCII is assumed
      *
      * @return string the xml representation of the response
      */
-    public function serialize($charset_encoding = '')
+    public function serialize($charsetEncoding = '')
     {
-        if ($charset_encoding != '') {
-            $this->content_type = 'text/xml; charset=' . $charset_encoding;
+        if ($charsetEncoding != '') {
+            $this->content_type = 'text/xml; charset=' . $charsetEncoding;
         } else {
             $this->content_type = 'text/xml';
         }
@@ -121,11 +121,10 @@ class Response
         if ($this->errno) {
             // G. Giunta 2005/2/13: let non-ASCII response messages be tolerated by clients
             // by xml-encoding non ascii chars
-            $charsetEncoder =
             $result .= "<fault>\n" .
                 "<value>\n<struct><member><name>faultCode</name>\n<value><int>" . $this->errno .
                 "</int></value>\n</member>\n<member>\n<name>faultString</name>\n<value><string>" .
-                Charset::instance()->encode_entities($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</string></value>\n</member>\n" .
+                Charset::instance()->encodeEntities($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</string></value>\n</member>\n" .
                 "</struct>\n</value>\n</fault>";
         } else {
             if (!is_object($this->val) || !is_a($this->val, 'PhpXmlRpc\Value')) {
@@ -139,7 +138,7 @@ class Response
                 }
             } else {
                 $result .= "<params>\n<param>\n" .
-                    $this->val->serialize($charset_encoding) .
+                    $this->val->serialize($charsetEncoding) .
                     "</param>\n</params>";
             }
         }

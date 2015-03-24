@@ -141,7 +141,7 @@ $findstate3_sig = wrap_php_function(array('xmlrpc_server_methods_container', 'fi
 
 $findstate5_sig = wrap_php_function('xmlrpc_server_methods_container::findstate');
 
-$obj = new PhpXmlRpc\Server_methods_container();
+$obj = new xmlrpc_server_methods_container();
 $findstate4_sig = wrap_php_function(array($obj, 'findstate'));
 
 $addtwo_sig = array(array($xmlrpcInt, $xmlrpcInt, $xmlrpcInt));

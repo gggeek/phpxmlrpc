@@ -143,9 +143,10 @@ class xmlrpc_client extends PhpXmlRpc\Client
 
 /* Expose as global functions the ones which are now class methods */
 
+/// Wrong speling, but we are adamant on backwards compatibility!
 function xmlrpc_encode_entitites($data, $srcEncoding='', $destEncoding='')
 {
-    return PhpXmlRpc\Helper\Charset::instance()->encode_entitites($data, $srcEncoding, $destEncoding);
+    return PhpXmlRpc\Helper\Charset::instance()->encodeEntitites($data, $srcEncoding, $destEncoding);
 }
 
 function iso8601_encode($timeT, $utc=0)
@@ -160,7 +161,7 @@ function iso8601_decode($iDate, $utc=0)
 
 function decode_chunked($buffer)
 {
-    return PhpXmlRpc\Helper\Http::decode_chunked($buffer);
+    return PhpXmlRpc\Helper\Http::decodeChunked($buffer);
 }
 
 function php_xmlrpc_decode($xmlrpcVal, $options=array())

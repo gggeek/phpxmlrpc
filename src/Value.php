@@ -42,8 +42,8 @@ class Value
      */
     public function __construct($val = -1, $type = '')
     {
-        /// @todo: optimization creep - do not call addXX, do it all inline.
-        /// downside: booleans will not be coerced anymore
+        // optimization creep - do not call addXX, do it all inline.
+        // downside: booleans will not be coerced anymore
         if ($val !== -1 || $type != '') {
             // optimization creep: inlined all work done by constructor
             switch ($type) {
@@ -73,7 +73,8 @@ class Value
                 default:
                     error_log("XML-RPC: " . __METHOD__ . ": not a known type ($type)");
             }
-            /*if($type=='')
+            /* was:
+            if($type=='')
             {
                 $type='string';
             }
@@ -107,7 +108,7 @@ class Value
             $typeof = static::$xmlrpcTypes[$type];
         }
 
-        if ($typeof != 1) {
+        if ($typeof !== 1) {
             error_log("XML-RPC: " . __METHOD__ . ": not a scalar type ($type)");
 
             return 0;
@@ -135,10 +136,6 @@ class Value
                 return 0;
             case 2:
                 // we're adding a scalar value to an array here
-                //$ar=$this->me['array'];
-                //$ar[]=new Value($val, $type);
-                //$this->me['array']=$ar;
-                // Faster (?) avoid all the costly array-copy-by-val done here...
                 $this->me['array'][] = new Value($val, $type);
 
                 return 1;
@@ -249,7 +246,7 @@ class Value
                     case static::$xmlrpcString:
                         // G. Giunta 2005/2/13: do NOT use htmlentities, since
                         // it will produce named html entities, which are invalid xml
-                        $rs .= "<${typ}>" . Charset::instance()->encode_entities($val, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</${typ}>";
+                        $rs .= "<${typ}>" . Charset::instance()->encodeEntities($val, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</${typ}>";
                         break;
                     case static::$xmlrpcInt:
                     case static::$xmlrpcI4:
@@ -297,7 +294,7 @@ class Value
                 }
                 $charsetEncoder = Charset::instance();
                 foreach ($val as $key2 => $val2) {
-                    $rs .= '<member><name>' . $charsetEncoder->encode_entities($key2, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</name>\n";
+                    $rs .= '<member><name>' . $charsetEncoder->encodeEntities($key2, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</name>\n";
                     //$rs.=$this->serializeval($val2);
                     $rs .= $val2->serialize($charset_encoding);
                     $rs .= "</member>\n";
