@@ -105,6 +105,8 @@ class Response
      * @param string $charsetEncoding the charset to be used for serialization. if null, US-ASCII is assumed
      *
      * @return string the xml representation of the response
+     *
+     * @throws \Exception
      */
     public function serialize($charsetEncoding = '')
     {
@@ -134,7 +136,7 @@ class Response
                         "</param>\n</params>";
                 } else {
                     /// @todo try to build something serializable?
-                    die('cannot serialize xmlrpc response objects whose content is native php values');
+                    throw new \Exception('cannot serialize xmlrpc response objects whose content is native php values');
                 }
             } else {
                 $result .= "<params>\n<param>\n" .
