@@ -18,7 +18,7 @@ $client = new PhpXmlRpc\Client("http://phpxmlrpc.sourceforge.net/server.php");
 $client->return_type = 'phpvals'; // let client give us back php values instead of xmlrpcvals
 $resp = $client->send(new PhpXmlRpc\Request('system.listMethods'));
 if ($resp->faultCode()) {
-    echo "<p>Server methods list could not be retrieved: error '" . htmlspecialchars($r->faultString()) . "'</p>\n";
+    echo "<p>Server methods list could not be retrieved: error {$resp->faultCode()} '" . htmlspecialchars($resp->faultString()) . "'</p>\n";
 } else {
     $testCase = '';
     $wrapper = new PhpXmlRpc\Wrapper();

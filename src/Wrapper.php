@@ -147,6 +147,7 @@ class Wrapper
     {
         $buildit = isset($extra_options['return_source']) ? !($extra_options['return_source']) : true;
         $prefix = isset($extra_options['prefix']) ? $extra_options['prefix'] : 'xmlrpc';
+        $namespace = '\\PhpXmlRpc\\';
         $encode_php_objects = isset($extra_options['encode_php_objs']) ? (bool)$extra_options['encode_php_objs'] : false;
         $decode_php_objects = isset($extra_options['decode_php_objs']) ? (bool)$extra_options['decode_php_objs'] : false;
         $catch_warnings = isset($extra_options['suppress_warnings']) && $extra_options['suppress_warnings'] ? '@' : '';
@@ -294,7 +295,8 @@ class Wrapper
             }
 
             // start  building of PHP code to be eval'd
-            $innercode = '';
+
+            $innercode = "\$encoder = new {$namespace}Encoder();\n";
             $i = 0;
             $parsvariations = array();
             $pars = array();
@@ -312,9 +314,9 @@ class Wrapper
                 }
                 $innercode .= "\$p$i = \$msg->getParam($i);\n";
                 if ($decode_php_objects) {
-                    $innercode .= "if (\$p{$i}->kindOf() == 'scalar') \$p$i = \$p{$i}->scalarval(); else \$p$i = php_{$prefix}_decode(\$p$i, array('decode_php_objs'));\n";
+                    $innercode .= "if (\$p{$i}->kindOf() == 'scalar') \$p$i = \$p{$i}->scalarval(); else \$p$i = \$encoder->decode(\$p$i, array('decode_php_objs'));\n";
                 } else {
-                    $innercode .= "if (\$p{$i}->kindOf() == 'scalar') \$p$i = \$p{$i}->scalarval(); else \$p$i = php_{$prefix}_decode(\$p$i);\n";
+                    $innercode .= "if (\$p{$i}->kindOf() == 'scalar') \$p$i = \$p{$i}->scalarval(); else \$p$i = \$encoder->decode(\$p$i);\n";
                 }
 
                 $pars[] = "\$p$i";
@@ -342,7 +344,7 @@ class Wrapper
                 // add to code the check for min params number
                 // NB: this check needs to be done BEFORE decoding param values
                 $innercode = "\$paramcount = \$msg->getNumParams();\n" .
-                    "if (\$paramcount < $minpars) return new {$prefix}resp(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . "');\n" . $innercode;
+                    "if (\$paramcount < $minpars) return new {$namespace}Response(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . "');\n" . $innercode;
             } else {
                 $innercode = "\$paramcount = \$msg->getNumParams();\n" . $innercode;
             }
@@ -374,16 +376,16 @@ class Wrapper
                 $psigs[] = $psig;
             }
             $innercode .= "\$np = true;\n";
-            $innercode .= "if (\$np) return new {$prefix}resp(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . "'); else {\n";
+            $innercode .= "if (\$np) return new {$namespace}Response(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . "'); else {\n";
             //$innercode .= "if (\$_xmlrpcs_error_occurred) return new Response(0, $GLOBALS['xmlrpcerr']user, \$_xmlrpcs_error_occurred); else\n";
-            $innercode .= "if (is_a(\$retval, '{$prefix}resp')) return \$retval; else\n";
+            $innercode .= "if (is_a(\$retval, '{$namespace}Response')) return \$retval; else\n";
             if ($returns == Value::$xmlrpcDateTime || $returns == Value::$xmlrpcBase64) {
-                $innercode .= "return new {$prefix}resp(new {$prefix}val(\$retval, '$returns'));";
+                $innercode .= "return new {$namespace}Response(new {$namespace}Value(\$retval, '$returns'));";
             } else {
                 if ($encode_php_objects) {
-                    $innercode .= "return new {$prefix}resp(php_{$prefix}_encode(\$retval, array('encode_php_objs')));\n";
+                    $innercode .= "return new {$namespace}Response(\$encoder->encode(\$retval, array('encode_php_objs')));\n";
                 } else {
-                    $innercode .= "return new {$prefix}resp(php_{$prefix}_encode(\$retval));\n";
+                    $innercode .= "return new {$namespace}Response(\$encoder->encode(\$retval));\n";
                 }
             }
             // shall we exclude functions returning by ref?
@@ -442,7 +444,7 @@ class Wrapper
                     if (($func->isStatic && ($methodtype == 'all' || $methodtype == 'static' || ($methodtype == 'auto' && is_string($classname)))) ||
                         (!$func->isStatic && ($methodtype == 'all' || $methodtype == 'nonstatic' || ($methodtype == 'auto' && is_object($classname))))
                     ) {
-                        $methodwrap = wrap_php_function(array($classname, $mname), '', $extra_options);
+                        $methodwrap = $this->wrap_php_function(array($classname, $mname), '', $extra_options);
                         if ($methodwrap) {
                             $result[$methodwrap['function']] = $methodwrap['function'];
                         }
@@ -515,6 +517,7 @@ class Wrapper
         $simple_client_copy = isset($extra_options['simple_client_copy']) ? (int)($extra_options['simple_client_copy']) : 0;
         $buildit = isset($extra_options['return_source']) ? !($extra_options['return_source']) : true;
         $prefix = isset($extra_options['prefix']) ? $extra_options['prefix'] : 'xmlrpc';
+        $namespace = '\\PhpXmlRpc\\';
         if (isset($extra_options['return_on_fault'])) {
             $decode_fault = true;
             $fault_response = $extra_options['return_on_fault'];
@@ -524,9 +527,9 @@ class Wrapper
         }
         $debug = isset($extra_options['debug']) ? ($extra_options['debug']) : 0;
 
-        $msgclass = $prefix . 'msg';
-        $valclass = $prefix . 'val';
-        $decodefunc = 'php_' . $prefix . '_decode';
+        $msgclass = $namespace . 'Request';
+        $valclass = $namespace . 'Value';
+        $decodefunc = 'new ' . $namespace . 'Encoder()->decode';
 
         $msg = new $msgclass('system.methodSignature');
         $msg->addparam(new $valclass($methodname));
@@ -578,8 +581,7 @@ class Wrapper
                 $results = $this->build_remote_method_wrapper_code($client, $methodname,
                     $xmlrpcfuncname, $msig, $mdesc, $timeout, $protocol, $simple_client_copy,
                     $prefix, $decode_php_objects, $encode_php_objects, $decode_fault,
-                    $fault_response);
-
+                    $fault_response, $namespace);
                 //print_r($code);
                 if ($buildit) {
                     $allOK = 0;
@@ -624,10 +626,11 @@ class Wrapper
         $verbatim_client_copy = isset($extra_options['simple_client_copy']) ? !($extra_options['simple_client_copy']) : true;
         $buildit = isset($extra_options['return_source']) ? !($extra_options['return_source']) : true;
         $prefix = isset($extra_options['prefix']) ? $extra_options['prefix'] : 'xmlrpc';
+        $namespace = '\\PhpXmlRpc\\';
 
-        $msgclass = $prefix . 'msg';
+        $msgclass = $namespace . 'Request';
         //$valclass = $prefix.'val';
-        $decodefunc = 'php_' . $prefix . '_decode';
+        $decodefunc = 'new ' . $namespace . 'Encoder()->decode';
 
         $msg = new $msgclass('system.listMethods');
         $response = $client->send($msg, $timeout, $protocol);
@@ -658,9 +661,9 @@ class Wrapper
 
                 /// @todo add function setdebug() to new class, to enable/disable debugging
                 $source = "class $xmlrpcclassname\n{\nvar \$client;\n\n";
-                $source .= "function $xmlrpcclassname()\n{\n";
-                $source .= $this->build_client_wrapper_code($client, $verbatim_client_copy, $prefix);
-                $source .= "\$this->client =& \$client;\n}\n\n";
+                $source .= "function __construct()\n{\n";
+                $source .= $this->build_client_wrapper_code($client, $verbatim_client_copy, $prefix, $namespace);
+                $source .= "\$this->client = \$client;\n}\n\n";
                 $opts = array('simple_client_copy' => 2, 'return_source' => true,
                     'timeout' => $timeout, 'protocol' => $protocol,
                     'encode_php_objs' => $encode_php_objects, 'prefix' => $prefix,
@@ -671,7 +674,7 @@ class Wrapper
                     if ($methodfilter == '' || preg_match($methodfilter, $mname)) {
                         $opts['new_function_name'] = preg_replace(array('/\./', '/[^a-zA-Z0-9_\x7f-\xff]/'),
                             array('_', ''), $mname);
-                        $methodwrap = wrap_xmlrpc_method($client, $mname, $opts);
+                        $methodwrap = $this->wrap_xmlrpc_method($client, $mname, $opts);
                         if ($methodwrap) {
                             if (!$buildit) {
                                 $source .= $methodwrap['docstring'];
@@ -712,12 +715,12 @@ class Wrapper
     protected function build_remote_method_wrapper_code($client, $methodname, $xmlrpcfuncname,
                                                         $msig, $mdesc = '', $timeout = 0, $protocol = '', $client_copy_mode = 0, $prefix = 'xmlrpc',
                                                         $decode_php_objects = false, $encode_php_objects = false, $decode_fault = false,
-                                                        $fault_response = '')
+                                                        $fault_response = '', $namespace = '\\PhpXmlRpc\\')
     {
         $code = "function $xmlrpcfuncname (";
         if ($client_copy_mode < 2) {
             // client copy mode 0 or 1 == partial / full client copy in emitted code
-            $innercode = $this->build_client_wrapper_code($client, $client_copy_mode, $prefix);
+            $innercode = $this->build_client_wrapper_code($client, $client_copy_mode, $prefix, $namespace);
             $innercode .= "\$client->setDebug(\$debug);\n";
             $this_ = '';
         } else {
@@ -725,7 +728,7 @@ class Wrapper
             $innercode = '';
             $this_ = 'this->';
         }
-        $innercode .= "\$msg = new {$prefix}msg('$methodname');\n";
+        $innercode .= "\$msg = new {$namespace}Request('$methodname');\n";
 
         if ($mdesc != '') {
             // take care that PHP comment is not terminated unwillingly by method description
@@ -735,6 +738,7 @@ class Wrapper
         }
 
         // param parsing
+        $innercode .= "\$encoder = new {$namespace}Encoder();\n";
         $plist = array();
         $pcount = count($msig);
         for ($i = 1; $i < $pcount; $i++) {
@@ -744,12 +748,12 @@ class Wrapper
                 $ptype == 'string' || $ptype == 'dateTime.iso8601' || $ptype == 'base64' || $ptype == 'null'
             ) {
                 // only build directly xmlrpcvals when type is known and scalar
-                $innercode .= "\$p$i = new {$prefix}val(\$p$i, '$ptype');\n";
+                $innercode .= "\$p$i = new {$namespace}Value(\$p$i, '$ptype');\n";
             } else {
                 if ($encode_php_objects) {
-                    $innercode .= "\$p$i = php_{$prefix}_encode(\$p$i, array('encode_php_objs'));\n";
+                    $innercode .= "\$p$i = \$encoder->encode(\$p$i, array('encode_php_objs'));\n";
                 } else {
-                    $innercode .= "\$p$i = php_{$prefix}_encode(\$p$i);\n";
+                    $innercode .= "\$p$i = \$encoder->encode(\$p$i);\n";
                 }
             }
             $innercode .= "\$msg->addparam(\$p$i);\n";
@@ -760,7 +764,7 @@ class Wrapper
             $mdesc .= "* @param int \$debug when 1 (or 2) will enable debugging of the underlying {$prefix} call (defaults to 0)\n";
         }
         $plist = implode(', ', $plist);
-        $mdesc .= '* @return ' . $this->xmlrpc_2_php_type($msig[0]) . " (or an {$prefix}resp obj instance if call fails)\n*/\n";
+        $mdesc .= '* @return ' . $this->xmlrpc_2_php_type($msig[0]) . " (or an {$namespace}Response obj instance if call fails)\n*/\n";
 
         $innercode .= "\$res = \${$this_}client->send(\$msg, $timeout, '$protocol');\n";
         if ($decode_fault) {
@@ -773,9 +777,9 @@ class Wrapper
             $respcode = '$res';
         }
         if ($decode_php_objects) {
-            $innercode .= "if (\$res->faultcode()) return $respcode; else return php_{$prefix}_decode(\$res->value(), array('decode_php_objs'));";
+            $innercode .= "if (\$res->faultcode()) return $respcode; else return \$encoder->decode(\$res->value(), array('decode_php_objs'));";
         } else {
-            $innercode .= "if (\$res->faultcode()) return $respcode; else return php_{$prefix}_decode(\$res->value());";
+            $innercode .= "if (\$res->faultcode()) return $respcode; else return \$encoder->decode(\$res->value());";
         }
 
         $code = $code . $plist . ") {\n" . $innercode . "\n}\n";
@@ -788,9 +792,9 @@ class Wrapper
      * Take care that no full checking of input parameters is done to ensure that
      * valid php code is emitted.
      */
-    protected function build_client_wrapper_code($client, $verbatim_client_copy, $prefix = 'xmlrpc')
+    protected function build_client_wrapper_code($client, $verbatim_client_copy, $prefix = 'xmlrpc', $namespace = '\\PhpXmlRpc\\' )
     {
-        $code = "\$client = new {$prefix}_client('" . str_replace("'", "\'", $client->path) .
+        $code = "\$client = new {$namespace}Client('" . str_replace("'", "\'", $client->path) .
             "', '" . str_replace("'", "\'", $client->server) . "', $client->port);\n";
 
         // copy all client fields to the client that will be generated runtime
