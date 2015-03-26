@@ -529,7 +529,7 @@ class Wrapper
 
         $msgclass = $namespace . 'Request';
         $valclass = $namespace . 'Value';
-        $decodefunc = 'new ' . $namespace . 'Encoder()->decode';
+        $decoderClass = $namespace . 'Encoder';
 
         $msg = new $msgclass('system.methodSignature');
         $msg->addparam(new $valclass($methodname));
@@ -542,7 +542,8 @@ class Wrapper
         } else {
             $msig = $response->value();
             if ($client->return_type != 'phpvals') {
-                $msig = $decodefunc($msig);
+                $decoder = new $decoderClass();
+                $msig = $decoder->decode($msig);
             }
             if (!is_array($msig) || count($msig) <= $signum) {
                 error_log('XML-RPC: could not retrieve method signature nr.' . $signum . ' from remote server for method ' . $methodname);
@@ -630,7 +631,7 @@ class Wrapper
 
         $msgclass = $namespace . 'Request';
         //$valclass = $prefix.'val';
-        $decodefunc = 'new ' . $namespace . 'Encoder()->decode';
+        $decoderClass = $namespace . 'Encoder';
 
         $msg = new $msgclass('system.listMethods');
         $response = $client->send($msg, $timeout, $protocol);
@@ -641,7 +642,8 @@ class Wrapper
         } else {
             $mlist = $response->value();
             if ($client->return_type != 'phpvals') {
-                $mlist = $decodefunc($mlist);
+                $decoder = new $decoderClass();
+                $mlist = $decoder->decode($mlist);
             }
             if (!is_array($mlist) || !count($mlist)) {
                 error_log('XML-RPC: could not retrieve meaningful method list from remote server');
