@@ -5,16 +5,19 @@ namespace PhpXmlRpc;
 class Client
 {
     /// @todo: do these need to be public?
-    public $path;
+    public $method = 'http';
     public $server;
     public $port = 0;
-    public $method = 'http';
+    public $path;
+
     public $errno;
     public $errstr;
     public $debug = 0;
+
     public $username = '';
     public $password = '';
     public $authtype = 1;
+
     public $cert = '';
     public $certpass = '';
     public $cacert = '';
@@ -24,14 +27,17 @@ class Client
     public $verifypeer = true;
     public $verifyhost = 2;
     public $sslversion = 0; // corresponds to CURL_SSLVERSION_DEFAULT
-    public $no_multicall = false;
+
     public $proxy = '';
     public $proxyport = 0;
     public $proxy_user = '';
     public $proxy_pass = '';
     public $proxy_authtype = 1;
+
     public $cookies = array();
     public $extracurlopts = array();
+
+    public $no_multicall = false;
 
     /**
      * List of http compression methods accepted by the client for responses.

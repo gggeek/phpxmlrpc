@@ -19,11 +19,11 @@ function highlight($file)
         if ($code[strlen($code) - 1] == "\n") {
             $code = substr($code, 0, -1);
         }
-//var_dump($code);
+
         $code = str_replace(array('&gt;', '&lt;'), array('>', '<'), $code);
         $code = highlight_string('<?php ' . $code, true);
         $code = str_replace('<span style="color: #0000BB">&lt;?php&nbsp;<br />', '<span style="color: #0000BB">', $code);
-//echo($code);
+
         $out = $out . substr($content, $last, $start + strlen($starttag) - $last) . $code . $endtag;
         $last = $end + strlen($endtag);
     }
