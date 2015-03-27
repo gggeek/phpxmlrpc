@@ -11,7 +11,8 @@
     "require-dev": {
         "phpunit/phpunit": ">=4.0.0",
         "phpunit/phpunit-selenium": "*",
-        "codeclimate/php-test-reporter": "dev-master"
+        "codeclimate/php-test-reporter": "dev-master",
+        "ext-curl": "*"
     },
     "suggest": {
         "ext-curl": "Needed for HTTPS and HTTP 1.1 support, NTLM Auth etc...",

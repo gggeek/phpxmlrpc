@@ -14,6 +14,13 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($u->scalarval(), $v->scalarval());
     }
 
+    public function testMinusOneInt()
+    {
+        $v = new xmlrpcval(-1);
+        $u = new xmlrpcval(-1, 'string');
+        $this->assertEquals($u->scalarval(), $v->scalarval());
+    }
+
     public function testUnicodeInMemberName()
     {
         $str = "G" . chr(252) . "nter, El" . chr(232) . "ne";
@@ -403,19 +410,19 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
     {
         $s = new xmlrpcmsg('dummy');
         $f = "HTTP/1.1 200 OK\r\nContent-type: text/xml; charset=UTF-8\r\n\r\n" . '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
-<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . utf8_encode('àüèàüè') . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
+<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . utf8_encode('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½') . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
         $r = $s->parseResponse($f, false, 'phpvals');
         $v = $r->value();
         $v = $v['content'];
-        $this->assertEquals("àüèàüè", $v);
+        $this->assertEquals("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", $v);
         $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
-<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . utf8_encode('àüèàüè') . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
+<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . utf8_encode('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½') . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
         $r = $s->parseResponse($f, false, 'phpvals');
         $v = $r->value();
         $v = $v['content'];
-        $this->assertEquals("àüèàüè", $v);
+        $this->assertEquals("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", $v);
     }
 
     public function testUTF8IntString()
