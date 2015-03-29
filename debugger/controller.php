@@ -18,8 +18,8 @@ if ($action == '') {
 }
 
 // relative path to the visual xmlrpc editing dialog
-$editorpath = '../../javascript/debugger/';
-$editorlibs = '../../javascript/lib/';
+$editorpath = '../../phpjsrpc/debugger/';
+$editorlibs = '../../phpjsrpc/lib/';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -224,15 +224,12 @@ $editorlibs = '../../javascript/lib/';
         echo ' document.forms[2].submit();';
     } ?>">
 <h1>XMLRPC
-    <form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio"
-                                                                      onclick="switchtransport(0);"/></form>
+    <form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);"/></form>
     /
-    <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio"
-                                                                       onclick="switchtransport(1);"/></form>
-    JSONRPC Debugger (based on the <a href="http://phpxmlrpc.sourceforge.net">PHP-XMLRPC</a> library)
+    <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>
+    JSONRPC Debugger (based on the <a href="http://gggeek.github.io/phpxmlrpc/">PHP-XMLRPC</a> library)
 </h1>
-<form name="frmaction" method="get" action="action.php" target="frmaction" onSubmit="switchFormMethod();"
-    >
+<form name="frmaction" method="get" action="action.php" target="frmaction" onSubmit="switchFormMethod();">
 
     <table id="serverblock">
         <tr>
@@ -250,19 +247,10 @@ $editorlibs = '../../javascript/lib/';
     <table id="actionblock">
         <tr>
             <td><h2>Action</h2></td>
-            <td>List available methods<input type="radio" name="action" value="list"<?php if ($action == 'list') {
-                    echo ' checked="checked"';
-                } ?> onclick="switchaction();"/></td>
-            <td>Describe method<input type="radio" name="action" value="describe"<?php if ($action == 'describe') {
-                    echo ' checked="checked"';
-                } ?> onclick="switchaction();"/></td>
-            <td>Execute method<input type="radio" name="action" value="execute"<?php if ($action == 'execute') {
-                    echo ' checked="checked"';
-                } ?> onclick="switchaction();"/></td>
-            <td>Generate stub for method call<input type="radio" name="action"
-                                                    value="wrap"<?php if ($action == 'wrap') {
-                    echo ' checked="checked"';
-                } ?> onclick="switchaction();"/></td>
+            <td>List available methods<input type="radio" name="action" value="list"<?php if ($action == 'list') { echo ' checked="checked"'; } ?> onclick="switchaction();"/></td>
+            <td>Describe method<input type="radio" name="action" value="describe"<?php if ($action == 'describe') { echo ' checked="checked"'; } ?> onclick="switchaction();"/></td>
+            <td>Execute method<input type="radio" name="action" value="execute"<?php if ($action == 'execute') { echo ' checked="checked"'; } ?> onclick="switchaction();"/></td>
+            <td>Generate stub for method call<input type="radio" name="action" value="wrap"<?php if ($action == 'wrap') { echo ' checked="checked"'; } ?> onclick="switchaction();"/></td>
         </tr>
     </table>
     <input type="hidden" name="methodsig" value="<?php echo htmlspecialchars($methodsig); ?>"/>
@@ -273,13 +261,10 @@ $editorlibs = '../../javascript/lib/';
             <td class="labelcell">Name:</td>
             <td><input type="text" name="method" value="<?php echo htmlspecialchars($method); ?>"/></td>
             <td class="labelcell">Payload:<br/>
-
                 <div id="methodpayloadbtn"></div>
             </td>
-            <td><textarea id="methodpayload" name="methodpayload" rows="1"
-                          cols="40"><?php echo htmlspecialchars($payload); ?></textarea></td>
-            <td class="labelcell" id="idcell">Msg id: <input type="text" name="id" size="3"
-                                                             value="<?php echo htmlspecialchars($id); ?>"/></td>
+            <td><textarea id="methodpayload" name="methodpayload" rows="1" cols="40"><?php echo htmlspecialchars($payload); ?></textarea></td>
+            <td class="labelcell" id="idcell">Msg id: <input type="text" name="id" size="3" value="<?php echo htmlspecialchars($id); ?>"/></td>
             <td><input type="hidden" name="wstype" value="<?php echo $wstype; ?>"/>
                 <input type="submit" value="Execute" onclick="return verifyserver();"/></td>
         </tr>
@@ -290,38 +275,18 @@ $editorlibs = '../../javascript/lib/';
             <td><h2>Client options</h2></td>
             <td class="labelcell">Show debug info:</td>
             <td><select name="debug">
-                    <option value="0"<?php if ($debug == 0) {
-                        echo ' selected="selected"';
-                    } ?>>No
-                    </option>
-                    <option value="1"<?php if ($debug == 1) {
-                        echo ' selected="selected"';
-                    } ?>>Yes
-                    </option>
-                    <option value="2"<?php if ($debug == 2) {
-                        echo ' selected="selected"';
-                    } ?>>More
-                    </option>
+                    <option value="0"<?php if ($debug == 0) { echo ' selected="selected"'; } ?>>No</option>
+                    <option value="1"<?php if ($debug == 1) { echo ' selected="selected"'; } ?>>Yes</option>
+                    <option value="2"<?php if ($debug == 2) { echo ' selected="selected"'; } ?>>More</option>
                 </select>
             </td>
             <td class="labelcell">Timeout:</td>
-            <td><input type="text" name="timeout" size="3" value="<?php if ($timeout > 0) {
-                    echo $timeout;
-                } ?>"/></td>
+            <td><input type="text" name="timeout" size="3" value="<?php if ($timeout > 0) { echo $timeout; } ?>"/></td>
             <td class="labelcell">Protocol:</td>
             <td><select name="protocol" onchange="switchssl(); switchauth(); swicthcainfo();">
-                    <option value="0"<?php if ($protocol == 0) {
-                        echo ' selected="selected"';
-                    } ?>>HTTP 1.0
-                    </option>
-                    <option value="1"<?php if ($protocol == 1) {
-                        echo ' selected="selected"';
-                    } ?>>HTTP 1.1
-                    </option>
-                    <option value="2"<?php if ($protocol == 2) {
-                        echo ' selected="selected"';
-                    } ?>>HTTPS
-                    </option>
+                    <option value="0"<?php if ($protocol == 0) { echo ' selected="selected"'; } ?>>HTTP 1.0</option>
+                    <option value="1"<?php if ($protocol == 1) { echo ' selected="selected"'; } ?>>HTTP 1.1</option>
+                    <option value="2"<?php if ($protocol == 2) { echo ' selected="selected"'; } ?>>HTTPS</option>
                 </select></td>
         </tr>
         <tr>
@@ -332,18 +297,9 @@ $editorlibs = '../../javascript/lib/';
             <td><input type="password" name="password" value="<?php echo htmlspecialchars($password); ?>"/></td>
             <td class="labelcell">Type</td>
             <td><select name="authtype">
-                    <option value="1"<?php if ($authtype == 1) {
-                        echo ' selected="selected"';
-                    } ?>>Basic
-                    </option>
-                    <option value="2"<?php if ($authtype == 2) {
-                        echo ' selected="selected"';
-                    } ?>>Digest
-                    </option>
-                    <option value="8"<?php if ($authtype == 8) {
-                        echo ' selected="selected"';
-                    } ?>>NTLM
-                    </option>
+                    <option value="1"<?php if ($authtype == 1) { echo ' selected="selected"'; } ?>>Basic</option>
+                    <option value="2"<?php if ($authtype == 2) { echo ' selected="selected"'; } ?>>Digest</option>
+                    <option value="8"<?php if ($authtype == 8) { echo ' selected="selected"'; } ?>>NTLM</option>
                 </select></td>
             <td></td>
         </tr>
@@ -351,23 +307,12 @@ $editorlibs = '../../javascript/lib/';
             <td class="labelcell">SSL:</td>
             <td class="labelcell">Verify Host's CN:</td>
             <td><select name="verifyhost">
-                    <option value="0"<?php if ($verifyhost == 0) {
-                        echo ' selected="selected"';
-                    } ?>>No
-                    </option>
-                    <option value="1"<?php if ($verifyhost == 1) {
-                        echo ' selected="selected"';
-                    } ?>>Check CN existance
-                    </option>
-                    <option value="2"<?php if ($verifyhost == 2) {
-                        echo ' selected="selected"';
-                    } ?>>Check CN match
-                    </option>
+                    <option value="0"<?php if ($verifyhost == 0) { echo ' selected="selected"'; } ?>>No</option>
+                    <option value="1"<?php if ($verifyhost == 1) { echo ' selected="selected"'; } ?>>Check CN existence</option>
+                    <option value="2"<?php if ($verifyhost == 2) { echo ' selected="selected"'; } ?>>Check CN match</option>
                 </select></td>
             <td class="labelcell">Verify Cert:</td>
-            <td><input type="checkbox" value="1" name="verifypeer" onclick="swicthcainfo();"<?php if ($verifypeer) {
-                    echo ' checked="checked"';
-                } ?> /></td>
+            <td><input type="checkbox" value="1" name="verifypeer" onclick="swicthcainfo();"<?php if ($verifypeer) { echo ' checked="checked"'; } ?> /></td>
             <td class="labelcell">CA Cert file:</td>
             <td><input type="text" name="cainfo" value="<?php echo htmlspecialchars($cainfo); ?>"/></td>
         </tr>
@@ -384,44 +329,22 @@ $editorlibs = '../../javascript/lib/';
             <td class="labelcell">COMPRESSION:</td>
             <td class="labelcell">Request:</td>
             <td><select name="requestcompression">
-                    <option value="0"<?php if ($requestcompression == 0) {
-                        echo ' selected="selected"';
-                    } ?>>None
-                    </option>
-                    <option value="1"<?php if ($requestcompression == 1) {
-                        echo ' selected="selected"';
-                    } ?>>Gzip
-                    </option>
-                    <option value="2"<?php if ($requestcompression == 2) {
-                        echo ' selected="selected"';
-                    } ?>>Deflate
-                    </option>
+                    <option value="0"<?php if ($requestcompression == 0) { echo ' selected="selected"'; } ?>>None </option>
+                    <option value="1"<?php if ($requestcompression == 1) { echo ' selected="selected"'; } ?>>Gzip</option>
+                    <option value="2"<?php if ($requestcompression == 2) { echo ' selected="selected"'; } ?>>Deflate</option>
                 </select></td>
             <td class="labelcell">Response:</td>
             <td><select name="responsecompression">
-                    <option value="0"<?php if ($responsecompression == 0) {
-                        echo ' selected="selected"';
-                    } ?>>None
-                    </option>
-                    <option value="1"<?php if ($responsecompression == 1) {
-                        echo ' selected="selected"';
-                    } ?>>Gzip
-                    </option>
-                    <option value="2"<?php if ($responsecompression == 2) {
-                        echo ' selected="selected"';
-                    } ?>>Deflate
-                    </option>
-                    <option value="3"<?php if ($responsecompression == 3) {
-                        echo ' selected="selected"';
-                    } ?>>Any
-                    </option>
+                    <option value="0"<?php if ($responsecompression == 0) { echo ' selected="selected"'; } ?>>None</option>
+                    <option value="1"<?php if ($responsecompression == 1) { echo ' selected="selected"'; } ?>>Gzip</option>
+                    <option value="2"<?php if ($responsecompression == 2) { echo ' selected="selected"'; } ?>>Deflate</option>
+                    <option value="3"<?php if ($responsecompression == 3) { echo ' selected="selected"'; } ?>>Any</option>
                 </select></td>
             <td></td>
         </tr>
         <tr>
             <td class="labelcell">COOKIES:</td>
-            <td colspan="4" class="labelcell"><input type="text" name="clientcookies" size="80"
-                                                     value="<?php echo htmlspecialchars($clientcookies); ?>"/></td>
+            <td colspan="4" class="labelcell"><input type="text" name="clientcookies" size="80" value="<?php echo htmlspecialchars($clientcookies); ?>"/></td>
             <td colspan="2">Format: 'cookie1=value1, cookie2=value2'</td>
         </tr>
     </table>

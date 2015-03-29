@@ -714,7 +714,7 @@ class Wrapper
      * valid php code is emitted.
      * Note: real spaghetti code follows...
      */
-    protected function build_remote_method_wrapper_code($client, $methodname, $xmlrpcfuncname,
+    public function build_remote_method_wrapper_code($client, $methodname, $xmlrpcfuncname,
                                                         $msig, $mdesc = '', $timeout = 0, $protocol = '', $client_copy_mode = 0, $prefix = 'xmlrpc',
                                                         $decode_php_objects = false, $encode_php_objects = false, $decode_fault = false,
                                                         $fault_response = '', $namespace = '\\PhpXmlRpc\\')

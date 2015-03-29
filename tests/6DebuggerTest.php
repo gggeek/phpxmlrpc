@@ -2,7 +2,7 @@
 
 include_once __DIR__ . '/parse_args.php';
 
-class DemoFilesTest extends PHPUnit_Framework_TestCase
+class DebuggerTest extends PHPUnit_Framework_TestCase
 {
     public $args = array();
 
@@ -45,7 +45,7 @@ class DemoFilesTest extends PHPUnit_Framework_TestCase
     {
         $this->args = argParser::getArgs();
 
-        $this->baseUrl = $this->args['LOCALSERVER'] . str_replace( '/demo/server/server.php', '/demo/', $this->args['URI'] );
+        $this->baseUrl = $this->args['LOCALSERVER'] . str_replace( '/demo/server/server.php', '/debugger/', $this->args['URI'] );
 
         $this->coverageScriptUrl = 'http://' . $this->args['LOCALSERVER'] . '/' . str_replace( '/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['URI'] );
     }
@@ -83,76 +83,20 @@ class DemoFilesTest extends PHPUnit_Framework_TestCase
         return $page;
     }
 
-    public function testAgeSort()
+    public function testController()
     {
-        $page = $this->request('client/agesort.php');
+        $page = $this->request('controller.php');
     }
 
-    public function testClient()
+    /**
+     * @todo test:
+     * - list methods
+     * - describe a method
+     * - execute a method
+     * - wrap a method
+     */
+    public function testAction()
     {
-        $page = $this->request('client/client.php');
-
-        // we could test many more calls to the client demo, but the upstream server is gone anyway...
-
-        $page = $this->request('client/client.php', 'POST', array('stateno' => '1'));
-    }
-
-    public function testComment()
-    {
-        $page = $this->request('client/comment.php');
-        $page = $this->request('client/client.php', 'POST', array('storyid' => '1'));
-    }
-
-    public function testIntrospect()
-    {
-        $page = $this->request('client/introspect.php');
-    }
-
-    public function testMail()
-    {
-        $page = $this->request('client/mail.php');
-        $page = $this->request('client/client.php', 'POST', array(
-            'server' => '',
-            "mailto" => '',
-            "mailsub" => '',
-            "mailmsg" => '',
-            "mailfrom" => '',
-            "mailcc" => '',
-            "mailbcc" => '',
-        ));
-    }
-
-    public function testSimpleCall()
-    {
-        $page = $this->request('client/simple_call.php');
-    }
-
-    public function testWhich()
-    {
-        $page = $this->request('client/which.php');
-    }
-
-    public function testWrap()
-    {
-        $page = $this->request('client/wrap.php');
-    }
-
-    public function testZopeTest()
-    {
-        $page = $this->request('client/zopetest.php');
-    }
-
-    public function testDiscussServer()
-    {
-        $page = $this->request('server/discuss.php');
-        $this->assertContains('<name>faultCode</name>', $page);
-        $this->assertContains('<int>105</int>', $page);
-    }
-
-    public function testProxyServer()
-    {
-        $page = $this->request('server/proxy.php');
-        $this->assertContains('<name>faultCode</name>', $page);
-        $this->assertContains('<int>105</int>', $page);
+        $page = $this->request('action.php');
     }
 }

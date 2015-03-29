@@ -91,31 +91,33 @@
 include __DIR__ . '/common.php';
 if ($action) {
 
+    include_once __DIR__ . "/../src/Autoloader.php";
+    PhpXmlRpc\Autoloader::register();
+
     // make sure the script waits long enough for the call to complete...
     if ($timeout) {
         set_time_limit($timeout + 10);
     }
 
-    include 'xmlrpc.inc';
     if ($wstype == 1) {
         @include 'jsonrpc.inc';
         if (!class_exists('jsonrpc_client')) {
             die('Error: to debug the jsonrpc protocol the jsonrpc.inc file is needed');
         }
-        $clientclass = 'jsonrpc_client';
-        $msgclass = 'jsonrpcmsg';
-        $protoname = 'JSONRPC';
+        $clientClass = 'PhpJsRpc\client';
+        $requestClass = 'PhpJsRpc\request';
+        $protoName = 'JSONRPC';
     } else {
-        $clientclass = 'xmlrpc_client';
-        $msgclass = 'xmlrpcmsg';
-        $protoname = 'XMLRPC';
+        $clientClass = 'PhpXmlRpc\client';
+        $requestClass = 'PhpXmlRpc\Request';
+        $protoName = 'XMLRPC';
     }
 
     if ($port != "") {
-        $client = new $clientclass($path, $host, $port);
+        $client = new $clientClass($path, $host, $port);
         $server = "$host:$port$path";
     } else {
-        $client = new $clientclass($path, $host);
+        $client = new $clientClass($path, $host);
         $server = "$host$path";
     }
     if ($protocol == 2) {
@@ -189,30 +191,24 @@ if ($action) {
 
     $msg = array();
     switch ($action) {
-
-        case 'wrap':
-            @include 'xmlrpc_wrappers.inc';
-            if (!function_exists('build_remote_method_wrapper_code')) {
-                die('Error: to enable creation of method stubs the xmlrpc_wrappers.inc file is needed');
-            }
         // fall thru intentionally
         case 'describe':
         case 'wrap':
-            $msg[0] = new $msgclass('system.methodHelp', array(), $id);
-            $msg[0]->addparam(new xmlrpcval($method));
-            $msg[1] = new $msgclass('system.methodSignature', array(), $id + 1);
-            $msg[1]->addparam(new xmlrpcval($method));
+            $msg[0] = new $requestClass('system.methodHelp', array(), $id);
+            $msg[0]->addparam(new PhpXmlRpc\Value($method));
+            $msg[1] = new $requestClass('system.methodSignature', array(), $id + 1);
+            $msg[1]->addparam(new PhpXmlRpc\Value($method));
             $actionname = 'Description of method "' . $method . '"';
             break;
         case 'list':
-            $msg[0] = new $msgclass('system.listMethods', array(), $id);
+            $msg[0] = new $requestClass('system.listMethods', array(), $id);
             $actionname = 'List of available methods';
             break;
         case 'execute':
             if (!payload_is_safe($payload)) {
                 die("Tsk tsk tsk, please stop it or I will have to call in the cops!");
             }
-            $msg[0] = new $msgclass($method, array(), $id);
+            $msg[0] = new $requestClass($method, array(), $id);
             // hack! build xml payload by hand
             if ($wstype == 1) {
                 $msg[0]->payload = "{\n" .
@@ -256,7 +252,7 @@ if ($action) {
     $time = (float)$mtime[0] + (float)$mtime[1];
     foreach ($msg as $message) {
         // catch errors: for older xmlrpc libs, send does not return by ref
-        @$response = &$client->send($message, $timeout, $httpprotocol);
+        @$response = $client->send($message, $timeout, $httpprotocol);
         $resp[] = $response;
         if (!$response || $response->faultCode()) {
             break;
@@ -272,14 +268,14 @@ if ($action) {
         if ($response->faultCode()) {
             // call failed! echo out error msg!
             //echo '<h2>'.htmlspecialchars($actionname).' on server '.htmlspecialchars($server).'</h2>';
-            echo "<h3>$protoname call FAILED!</h3>\n";
+            echo "<h3>$protoName call FAILED!</h3>\n";
             echo "<p>Fault code: [" . htmlspecialchars($response->faultCode()) .
                 "] Reason: '" . htmlspecialchars($response->faultString()) . "'</p>\n";
             echo(strftime("%d/%b/%Y:%H:%M:%S\n"));
         } else {
             // call succeeded: parse results
             //echo '<h2>'.htmlspecialchars($actionname).' on server '.htmlspecialchars($server).'</h2>';
-            printf("<h3>%s call(s) OK (%.2f secs.)</h3>\n", $protoname, $time);
+            printf("<h3>%s call(s) OK (%.2f secs.)</h3>\n", $protoName, $time);
             echo(strftime("%d/%b/%Y:%H:%M:%S\n"));
 
             switch ($action) {
@@ -324,7 +320,7 @@ if ($action) {
                                 "<input type=\"submit\" value=\"Describe\" /></form></td>");
                             //echo("</tr>\n");
 
-                            // generate lo scheletro per il method payload per eventuali test
+                            // generate the skeleton for method payload per possible tests
                             //$methodpayload="<methodCall>\n<methodName>".$rec->scalarval()."</methodName>\n<params>\n<param><value></value></param>\n</params>\n</methodCall>";
 
                             /*echo ("<form action=\"{$_SERVER['PHP_SELF']}\" method=\"get\"><td>".
@@ -388,7 +384,7 @@ if ($action) {
                                 echo 'Unknown';
                             }
                             echo '</td>';
-                            //bottone per testare questo metodo
+                            // button to test this method
                             //$payload="<methodCall>\n<methodName>$method</methodName>\n<params>\n$payload</params>\n</methodCall>";
                             echo "<td$class><form action=\"controller.php\" target=\"frmcontroller\" method=\"get\">" .
                                 "<input type=\"hidden\" name=\"host\" value=\"" . htmlspecialchars($host) . "\" />" .
@@ -462,7 +458,8 @@ if ($action) {
                         echo "Error: signature unknown\n";
                     } else {
                         $mdesc = $r1->scalarval();
-                        $msig = php_xmlrpc_decode($r2);
+                        $encoder = new PhpXmlRpc\Encoder();
+                        $msig = $encoder->decode($r2);
                         $msig = $msig[$methodsig];
                         $proto = $protocol == 2 ? 'https' : $protocol == 1 ? 'http11' : '';
                         if ($proxy == '' && $username == '' && !$requestcompression && !$responsecompression &&
@@ -478,7 +475,8 @@ if ($action) {
                             $prefix = 'xmlrpc';
                         }
                         //$code = wrap_xmlrpc_method($client, $method, $methodsig, 0, $proto, '', $opts);
-                        $code = build_remote_method_wrapper_code($client, $method, str_replace('.', '_', $prefix . '_' . $method), $msig, $mdesc, $timeout, $proto, $opts, $prefix);
+                        $wrapper = new PhpXmlRpc\Wrapper();
+                        $code = $wrapper->build_remote_method_wrapper_code($client, $method, str_replace('.', '_', $prefix . '_' . $method), $msig, $mdesc, $timeout, $proto, $opts, $prefix);
                         //if ($code)
                         //{
                         echo "<div id=\"phpcode\">\n";
