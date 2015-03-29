@@ -11,13 +11,18 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
     {
         $v = new xmlrpcval('-1');
         $u = new xmlrpcval('-1', 'string');
+        $t = new xmlrpcval(-1, 'string');
         $this->assertEquals($u->scalarval(), $v->scalarval());
+        $this->assertEquals($t->scalarval(), $v->scalarval());
     }
 
+    /**
+     * This looks funny, and we might call it a bug. But we strive for 100 backwards compat...
+     */
     public function testMinusOneInt()
     {
         $v = new xmlrpcval(-1);
-        $u = new xmlrpcval(-1, 'string');
+        $u = new xmlrpcval();
         $this->assertEquals($u->scalarval(), $v->scalarval());
     }
 

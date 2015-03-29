@@ -502,7 +502,7 @@ if ($action) {
     // no action taken yet: give some instructions on debugger usage
     ?>
 
-    <h3>Instructions on usage of the debugger:</h3>
+    <h3>Instructions on usage of the debugger</h3>
     <ol>
         <li>Run a 'list available methods' action against desired server</li>
         <li>If list of methods appears, click on 'describe method' for desired method</li>
@@ -516,13 +516,13 @@ if ($action) {
     }
     ?>
 
-    <h3>Example:</h3>
+    <h3>Example</h3>
     <p>
         Server Address: phpxmlrpc.sourceforge.net<br/>
         Path: /server.php
     </p>
 
-    <h3>Notice:</h3>
+    <h3>Notice</h3>
     <p>all usernames and passwords entered on the above form will be written to the web server logs of this server. Use
         with care.</p>
 
