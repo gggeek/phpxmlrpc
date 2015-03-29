@@ -23,16 +23,16 @@ class Http
 
         // read chunk-size, chunk-extension (if any) and crlf
         // get the position of the linebreak
-        $chunkend = strpos($buffer, "\r\n") + 2;
-        $temp = substr($buffer, 0, $chunkend);
-        $chunk_size = hexdec(trim($temp));
-        $chunkstart = $chunkend;
-        while ($chunk_size > 0) {
-            $chunkend = strpos($buffer, "\r\n", $chunkstart + $chunk_size);
+        $chunkEnd = strpos($buffer, "\r\n") + 2;
+        $temp = substr($buffer, 0, $chunkEnd);
+        $chunkSize = hexdec(trim($temp));
+        $chunkStart = $chunkEnd;
+        while ($chunkSize > 0) {
+            $chunkEnd = strpos($buffer, "\r\n", $chunkStart + $chunkSize);
 
             // just in case we got a broken connection
-            if ($chunkend == false) {
-                $chunk = substr($buffer, $chunkstart);
+            if ($chunkEnd == false) {
+                $chunk = substr($buffer, $chunkStart);
                 // append chunk-data to entity-body
                 $new .= $chunk;
                 $length += strlen($chunk);
@@ -40,21 +40,21 @@ class Http
             }
 
             // read chunk-data and crlf
-            $chunk = substr($buffer, $chunkstart, $chunkend - $chunkstart);
+            $chunk = substr($buffer, $chunkStart, $chunkEnd - $chunkStart);
             // append chunk-data to entity-body
             $new .= $chunk;
             // length := length + chunk-size
             $length += strlen($chunk);
             // read chunk-size and crlf
-            $chunkstart = $chunkend + 2;
+            $chunkStart = $chunkEnd + 2;
 
-            $chunkend = strpos($buffer, "\r\n", $chunkstart) + 2;
-            if ($chunkend == false) {
+            $chunkEnd = strpos($buffer, "\r\n", $chunkStart) + 2;
+            if ($chunkEnd == false) {
                 break; //just in case we got a broken connection
             }
-            $temp = substr($buffer, $chunkstart, $chunkend - $chunkstart);
-            $chunk_size = hexdec(trim($temp));
-            $chunkstart = $chunkend;
+            $temp = substr($buffer, $chunkStart, $chunkEnd - $chunkStart);
+            $chunkSize = hexdec(trim($temp));
+            $chunkStart = $chunkEnd;
         }
 
         return $new;
@@ -138,13 +138,13 @@ class Http
             // take care of multi-line headers and cookies
             $arr = explode(':', $line, 2);
             if (count($arr) > 1) {
-                $header_name = strtolower(trim($arr[0]));
+                $headerName = strtolower(trim($arr[0]));
                 /// @todo some other headers (the ones that allow a CSV list of values)
                 /// do allow many values to be passed using multiple header lines.
-                /// We should add content to $xmlrpc->_xh['headers'][$header_name]
+                /// We should add content to $xmlrpc->_xh['headers'][$headerName]
                 /// instead of replacing it for those...
-                if ($header_name == 'set-cookie' || $header_name == 'set-cookie2') {
-                    if ($header_name == 'set-cookie2') {
+                if ($headerName == 'set-cookie' || $headerName == 'set-cookie2') {
+                    if ($headerName == 'set-cookie2') {
                         // version 2 cookies:
                         // there could be many cookies on one line, comma separated
                         $cookies = explode(',', $arr[1]);
@@ -154,10 +154,10 @@ class Http
                     foreach ($cookies as $cookie) {
                         // glue together all received cookies, using a comma to separate them
                         // (same as php does with getallheaders())
-                        if (isset($httpResponse['headers'][$header_name])) {
-                            $httpResponse['headers'][$header_name] .= ', ' . trim($cookie);
+                        if (isset($httpResponse['headers'][$headerName])) {
+                            $httpResponse['headers'][$headerName] .= ', ' . trim($cookie);
                         } else {
-                            $httpResponse['headers'][$header_name] = trim($cookie);
+                            $httpResponse['headers'][$headerName] = trim($cookie);
                         }
                         // parse cookie attributes, in case user wants to correctly honour them
                         // feature creep: only allow rfc-compliant cookie attributes?
@@ -180,11 +180,11 @@ class Http
                         }
                     }
                 } else {
-                    $httpResponse['headers'][$header_name] = trim($arr[1]);
+                    $httpResponse['headers'][$headerName] = trim($arr[1]);
                 }
-            } elseif (isset($header_name)) {
+            } elseif (isset($headerName)) {
                 /// @todo version1 cookies might span multiple lines, thus breaking the parsing above
-                $httpResponse['headers'][$header_name] .= ' ' . trim($line);
+                $httpResponse['headers'][$headerName] .= ' ' . trim($line);
             }
         }
 

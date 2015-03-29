@@ -61,7 +61,7 @@ class XMLParser
     /**
      * xml parser handler function for opening element tags.
      */
-    public function xmlrpc_se($parser, $name, $attrs, $accept_single_vals = false)
+    public function xmlrpc_se($parser, $name, $attrs, $acceptSingleVals = false)
     {
         // if invalid xmlrpc already detected, skip all processing
         if ($this->_xh['isf'] < 2) {
@@ -71,7 +71,7 @@ class XMLParser
             ///       there is only a single top level element in xml anyway
             if (count($this->_xh['stack']) == 0) {
                 if ($name != 'METHODRESPONSE' && $name != 'METHODCALL' && (
-                        $name != 'VALUE' && !$accept_single_vals)
+                        $name != 'VALUE' && !$acceptSingleVals)
                 ) {
                     $this->_xh['isf'] = 2;
                     $this->_xh['isf_reason'] = 'missing top level xmlrpc element';
@@ -126,15 +126,15 @@ class XMLParser
                         return;
                     }
                     // create an empty array to hold child values, and push it onto appropriate stack
-                    $cur_val = array();
-                    $cur_val['values'] = array();
-                    $cur_val['type'] = $name;
+                    $curVal = array();
+                    $curVal['values'] = array();
+                    $curVal['type'] = $name;
                     // check for out-of-band information to rebuild php objs
                     // and in case it is found, save it
                     if (@isset($attrs['PHP_CLASS'])) {
-                        $cur_val['php_class'] = $attrs['PHP_CLASS'];
+                        $curVal['php_class'] = $attrs['PHP_CLASS'];
                     }
-                    $this->_xh['valuestack'][] = $cur_val;
+                    $this->_xh['valuestack'][] = $curVal;
                     $this->_xh['vt'] = 'data'; // be prepared for a data element next
                     break;
                 case 'DATA':
@@ -209,14 +209,14 @@ class XMLParser
     /**
      * xml parser handler function for close element tags.
      */
-    public function xmlrpc_ee($parser, $name, $rebuild_xmlrpcvals = true)
+    public function xmlrpc_ee($parser, $name, $rebuildXmlrpcvals = true)
     {
         if ($this->_xh['isf'] < 2) {
             // push this element name from stack
             // NB: if XML validates, correct opening/closing is guaranteed and
-            // we do not have to check for $name == $curr_elem.
+            // we do not have to check for $name == $currElem.
             // we also checked for proper nesting at start of elements...
-            $curr_elem = array_pop($this->_xh['stack']);
+            $currElem = array_pop($this->_xh['stack']);
 
             switch ($name) {
                 case 'VALUE':
@@ -226,7 +226,7 @@ class XMLParser
                         $this->_xh['vt'] = Value::$xmlrpcString;
                     }
 
-                    if ($rebuild_xmlrpcvals) {
+                    if ($rebuildXmlrpcvals) {
                         // build the xmlrpc val out of the data received, and substitute it
                         $temp = new Value($this->_xh['value'], $this->_xh['vt']);
                         // in case we got info about underlying php class, save it
@@ -342,11 +342,11 @@ class XMLParser
                 case 'STRUCT':
                 case 'ARRAY':
                     // fetch out of stack array of values, and promote it to current value
-                    $curr_val = array_pop($this->_xh['valuestack']);
-                    $this->_xh['value'] = $curr_val['values'];
+                    $currVal = array_pop($this->_xh['valuestack']);
+                    $this->_xh['value'] = $currVal['values'];
                     $this->_xh['vt'] = strtolower($name);
-                    if (isset($curr_val['php_class'])) {
-                        $this->_xh['php_class'] = $curr_val['php_class'];
+                    if (isset($currVal['php_class'])) {
+                        $this->_xh['php_class'] = $currVal['php_class'];
                     }
                     break;
                 case 'PARAM':

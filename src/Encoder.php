@@ -125,7 +125,7 @@ class Encoder
      *
      * @author Dan Libby (dan@libby.com)
      *
-     * @param mixed $php_val the value to be converted into an xmlrpc value object
+     * @param mixed $phpVal the value to be converted into an xmlrpc value object
      * @param array $options can include 'encode_php_objs', 'auto_dates', 'null_extension' or 'extension_api'
      *
      * @return \PhpXmlrpc\Value
