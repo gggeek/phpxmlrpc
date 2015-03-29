@@ -513,16 +513,16 @@ class Wrapper
         $encodePhpObjects = isset($extraOptions['encode_php_objs']) ? (bool)$extraOptions['encode_php_objs'] : false;
         $decodePhpObjects = isset($extraOptions['decode_php_objs']) ? (bool)$extraOptions['decode_php_objs'] : false;
         // it seems like the meaning of 'simple_client_copy' here is swapped wrt client_copy_mode later on...
-        $simple_client_copy = isset($extraOptions['simple_client_copy']) ? (int)($extraOptions['simple_client_copy']) : 0;
+        $simpleClientCopy = isset($extraOptions['simple_client_copy']) ? (int)($extraOptions['simple_client_copy']) : 0;
         $buildIt = isset($extraOptions['return_source']) ? !($extraOptions['return_source']) : true;
         $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : 'xmlrpc';
         $namespace = '\\PhpXmlRpc\\';
         if (isset($extraOptions['return_on_fault'])) {
-            $decode_fault = true;
-            $fault_response = $extraOptions['return_on_fault'];
+            $decodeFault = true;
+            $faultResponse = $extraOptions['return_on_fault'];
         } else {
-            $decode_fault = false;
-            $fault_response = '';
+            $decodeFault = false;
+            $faultResponse = '';
         }
         $debug = isset($extraOptions['debug']) ? ($extraOptions['debug']) : 0;
 
@@ -579,9 +579,9 @@ class Wrapper
                 }
 
                 $results = $this->build_remote_method_wrapper_code($client, $methodName,
-                    $xmlrpcFuncName, $msig, $mdesc, $timeout, $protocol, $simple_client_copy,
-                    $prefix, $decodePhpObjects, $encodePhpObjects, $decode_fault,
-                    $fault_response, $namespace);
+                    $xmlrpcFuncName, $msig, $mdesc, $timeout, $protocol, $simpleClientCopy,
+                    $prefix, $decodePhpObjects, $encodePhpObjects, $decodeFault,
+                    $faultResponse, $namespace);
                 //print_r($code);
                 if ($buildIt) {
                     $allOK = 0;
@@ -714,14 +714,14 @@ class Wrapper
      * Note: real spaghetti code follows...
      */
     public function build_remote_method_wrapper_code($client, $methodName, $xmlrpcFuncName,
-                                                        $msig, $mdesc = '', $timeout = 0, $protocol = '', $client_copy_mode = 0, $prefix = 'xmlrpc',
-                                                        $decodePhpObjects = false, $encodePhpObjects = false, $decode_fault = false,
-                                                        $fault_response = '', $namespace = '\\PhpXmlRpc\\')
+                                                        $msig, $mdesc = '', $timeout = 0, $protocol = '', $clientCopyMode = 0, $prefix = 'xmlrpc',
+                                                        $decodePhpObjects = false, $encodePhpObjects = false, $decdoeFault = false,
+                                                        $faultResponse = '', $namespace = '\\PhpXmlRpc\\')
     {
         $code = "function $xmlrpcFuncName (";
-        if ($client_copy_mode < 2) {
+        if ($clientCopyMode < 2) {
             // client copy mode 0 or 1 == partial / full client copy in emitted code
-            $innerCode = $this->build_client_wrapper_code($client, $client_copy_mode, $prefix, $namespace);
+            $innerCode = $this->build_client_wrapper_code($client, $clientCopyMode, $prefix, $namespace);
             $innerCode .= "\$client->setDebug(\$debug);\n";
             $this_ = '';
         } else {
@@ -760,7 +760,7 @@ class Wrapper
             $innerCode .= "\$msg->addparam(\$p$i);\n";
             $mdesc .= '* @param ' . $this->xmlrpc_2_php_type($ptype) . " \$p$i\n";
         }
-        if ($client_copy_mode < 2) {
+        if ($clientCopyMode < 2) {
             $plist[] = '$debug=0';
             $mdesc .= "* @param int \$debug when 1 (or 2) will enable debugging of the underlying {$prefix} call (defaults to 0)\n";
         }
@@ -768,11 +768,11 @@ class Wrapper
         $mdesc .= '* @return ' . $this->xmlrpc_2_php_type($msig[0]) . " (or an {$namespace}Response obj instance if call fails)\n*/\n";
 
         $innerCode .= "\$res = \${$this_}client->send(\$msg, $timeout, '$protocol');\n";
-        if ($decode_fault) {
-            if (is_string($fault_response) && ((strpos($fault_response, '%faultCode%') !== false) || (strpos($fault_response, '%faultString%') !== false))) {
-                $respCode = "str_replace(array('%faultCode%', '%faultString%'), array(\$res->faultCode(), \$res->faultString()), '" . str_replace("'", "''", $fault_response) . "')";
+        if ($decdoeFault) {
+            if (is_string($faultResponse) && ((strpos($faultResponse, '%faultCode%') !== false) || (strpos($faultResponse, '%faultString%') !== false))) {
+                $respCode = "str_replace(array('%faultCode%', '%faultString%'), array(\$res->faultCode(), \$res->faultString()), '" . str_replace("'", "''", $faultResponse) . "')";
             } else {
-                $respCode = var_export($fault_response, true);
+                $respCode = var_export($faultResponse, true);
             }
         } else {
             $respCode = '$res';

@@ -228,7 +228,7 @@ class Value
         }
     }
 
-    protected function serializedata($typ, $val, $charset_encoding = '')
+    protected function serializedata($typ, $val, $charsetEncoding = '')
     {
         $rs = '';
 
@@ -248,7 +248,7 @@ class Value
                     case static::$xmlrpcString:
                         // G. Giunta 2005/2/13: do NOT use htmlentities, since
                         // it will produce named html entities, which are invalid xml
-                        $rs .= "<${typ}>" . Charset::instance()->encodeEntities($val, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</${typ}>";
+                        $rs .= "<${typ}>" . Charset::instance()->encodeEntities($val, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</${typ}>";
                         break;
                     case static::$xmlrpcInt:
                     case static::$xmlrpcI4:
@@ -296,9 +296,9 @@ class Value
                 }
                 $charsetEncoder = Charset::instance();
                 foreach ($val as $key2 => $val2) {
-                    $rs .= '<member><name>' . $charsetEncoder->encodeEntities($key2, PhpXmlRpc::$xmlrpc_internalencoding, $charset_encoding) . "</name>\n";
+                    $rs .= '<member><name>' . $charsetEncoder->encodeEntities($key2, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</name>\n";
                     //$rs.=$this->serializeval($val2);
-                    $rs .= $val2->serialize($charset_encoding);
+                    $rs .= $val2->serialize($charsetEncoding);
                     $rs .= "</member>\n";
                 }
                 $rs .= '</struct>';
@@ -308,7 +308,7 @@ class Value
                 $rs .= "<array>\n<data>\n";
                 foreach ($val as $element) {
                     //$rs.=$this->serializeval($val[$i]);
-                    $rs .= $element->serialize($charset_encoding);
+                    $rs .= $element->serialize($charsetEncoding);
                 }
                 $rs .= "</data>\n</array>";
                 break;

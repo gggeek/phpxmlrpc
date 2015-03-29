@@ -342,7 +342,7 @@ class Server
      *
      * @return mixed null on success or a Response
      */
-    protected function parseRequestHeaders(&$data, &$reqEncoding, &$respEncoding, &$resp_compression)
+    protected function parseRequestHeaders(&$data, &$reqEncoding, &$respEncoding, &$respCompression)
     {
         // check if $_SERVER is populated: it might have been disabled via ini file
         // (this is true even when in CLI mode)
@@ -360,22 +360,22 @@ class Server
         }
 
         if (isset($_SERVER['HTTP_CONTENT_ENCODING'])) {
-            $content_encoding = str_replace('x-', '', $_SERVER['HTTP_CONTENT_ENCODING']);
+            $contentEncoding = str_replace('x-', '', $_SERVER['HTTP_CONTENT_ENCODING']);
         } else {
-            $content_encoding = '';
+            $contentEncoding = '';
         }
 
         // check if request body has been compressed and decompress it
-        if ($content_encoding != '' && strlen($data)) {
-            if ($content_encoding == 'deflate' || $content_encoding == 'gzip') {
+        if ($contentEncoding != '' && strlen($data)) {
+            if ($contentEncoding == 'deflate' || $contentEncoding == 'gzip') {
                 // if decoding works, use it. else assume data wasn't gzencoded
-                if (function_exists('gzinflate') && in_array($content_encoding, $this->accepted_compression)) {
-                    if ($content_encoding == 'deflate' && $degzdata = @gzuncompress($data)) {
+                if (function_exists('gzinflate') && in_array($contentEncoding, $this->accepted_compression)) {
+                    if ($contentEncoding == 'deflate' && $degzdata = @gzuncompress($data)) {
                         $data = $degzdata;
                         if ($this->debug > 1) {
                             $this->debugmsg("\n+++INFLATED REQUEST+++[" . strlen($data) . " chars]+++\n" . $data . "\n+++END+++");
                         }
-                    } elseif ($content_encoding == 'gzip' && $degzdata = @gzinflate(substr($data, 10))) {
+                    } elseif ($contentEncoding == 'gzip' && $degzdata = @gzinflate(substr($data, 10))) {
                         $data = $degzdata;
                         if ($this->debug > 1) {
                             $this->debugmsg("+++INFLATED REQUEST+++[" . strlen($data) . " chars]+++\n" . $data . "\n+++END+++");
@@ -402,11 +402,11 @@ class Server
                 // here we should check if we can match the client-requested encoding
                 // with the encodings we know we can generate.
                 /// @todo we should parse q=0.x preferences instead of getting first charset specified...
-                $client_accepted_charsets = explode(',', strtoupper($_SERVER['HTTP_ACCEPT_CHARSET']));
+                $clientAcceptedCharsets = explode(',', strtoupper($_SERVER['HTTP_ACCEPT_CHARSET']));
                 // Give preference to internal encoding
-                $known_charsets = array(PhpXmlRpc::$xmlrpc_internalencoding, 'UTF-8', 'ISO-8859-1', 'US-ASCII');
-                foreach ($known_charsets as $charset) {
-                    foreach ($client_accepted_charsets as $accepted) {
+                $knownCharsets = array(PhpXmlRpc::$xmlrpc_internalencoding, 'UTF-8', 'ISO-8859-1', 'US-ASCII');
+                foreach ($knownCharsets as $charset) {
+                    foreach ($clientAcceptedCharsets as $accepted) {
                         if (strpos($accepted, $charset) === 0) {
                             $respEncoding = $charset;
                             break;
@@ -422,9 +422,9 @@ class Server
         }
 
         if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
-            $resp_compression = $_SERVER['HTTP_ACCEPT_ENCODING'];
+            $respCompression = $_SERVER['HTTP_ACCEPT_ENCODING'];
         } else {
-            $resp_compression = '';
+            $respCompression = '';
         }
 
         // 'guestimate' request encoding
