@@ -18,13 +18,13 @@ class Response
     public $raw_data = '';
 
     /**
-     * @param mixed $val either an xmlrpcval obj, a php value or the xml serialization of an xmlrpcval (a string)
+     * @param mixed $val either an xmlrpc value obj, a php value or the xml serialization of an xmlrpc value (a string)
      * @param integer $fCode set it to anything but 0 to create an error response
      * @param string $fString the error string, in case of an error response
      * @param string $valType either 'xmlrpcvals', 'phpvals' or 'xml'
      *
      * @todo add check that $val / $fCode / $fString is of correct type???
-     * NB: as of now we do not do it, since it might be either an xmlrpcval or a plain
+     * NB: as of now we do not do it, since it might be either an xmlrpc value or a plain
      * php val, or a complete xml chunk, depending on usage of Client::send() inside which creator is called...
      */
     public function __construct($val, $fCode = 0, $fString = '', $valType = '')
@@ -76,7 +76,7 @@ class Response
     /**
      * Returns the value received by the server.
      *
-     * @return mixed the xmlrpcval object returned by the server. Might be an xml string or php value if the response has been created by specially configured Client objects
+     * @return mixed the xmlrpc value object returned by the server. Might be an xml string or php value if the response has been created by specially configured Client objects
      */
     public function value()
     {

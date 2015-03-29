@@ -18,8 +18,8 @@ class XMLParser
     //   valuestack - array used for parsing arrays and structs
     //   lv - used to indicate "looking for a value": implements
     //        the logic to allow values with no types to be strings
-    //   isf - used to indicate a parsing fault (2) or xmlrpcresp fault (1)
-    //   isf_reason - used for storing xmlrpcresp fault string
+    //   isf - used to indicate a parsing fault (2) or xmlrpc response fault (1)
+    //   isf_reason - used for storing xmlrpc response fault string
     //   method - used to store method name
     //   params - used to store parameters in method calls
     //   pt - used to store the type of each received parameter. Useful if parameters are automatically decoded to php values

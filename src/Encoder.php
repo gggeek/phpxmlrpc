@@ -7,7 +7,7 @@ use PhpXmlRpc\Helper\XMLParser;
 class Encoder
 {
     /**
-     * Takes an xmlrpc value in PHP xmlrpcval object format and translates it into native PHP types.
+     * Takes an xmlrpc value in object format and translates it into native PHP types.
      *
      * Works with xmlrpc requests objects as input, too.
      *
@@ -53,7 +53,7 @@ class Encoder
                 }
                 if (in_array('dates_as_objects', $options) && $xmlrpc_val->scalartyp() == 'dateTime.iso8601') {
                     // we return a Datetime object instead of a string
-                    // since now the constructor of xmlrpcval accepts safely strings, ints and datetimes,
+                    // since now the constructor of xmlrpc value accepts safely strings, ints and datetimes,
                     // we cater to all 3 cases here
                     $out = $xmlrpc_val->scalarval();
                     if (is_string($out)) {
@@ -82,7 +82,7 @@ class Encoder
                 $xmlrpc_val->structreset();
                 // If user said so, try to rebuild php objects for specific struct vals.
                 /// @todo should we raise a warning for class not found?
-                // shall we check for proper subclass of xmlrpcval instead of
+                // shall we check for proper subclass of xmlrpc value instead of
                 // presence of _php_class to detect what we can do?
                 if (in_array('decode_php_objs', $options) && $xmlrpc_val->_php_class != ''
                     && class_exists($xmlrpc_val->_php_class)
@@ -114,7 +114,7 @@ class Encoder
 
     /**
      * Takes native php types and encodes them into xmlrpc PHP object format.
-     * It will not re-encode xmlrpcval objects.
+     * It will not re-encode xmlrpc value objects.
      *
      * Feature creep -- could support more types via optional type argument
      * (string => datetime support has been added, ??? => base64 not yet)
@@ -125,7 +125,7 @@ class Encoder
      *
      * @author Dan Libby (dan@libby.com)
      *
-     * @param mixed $php_val the value to be converted into an xmlrpcval object
+     * @param mixed $php_val the value to be converted into an xmlrpc value object
      * @param array $options can include 'encode_php_objs', 'auto_dates', 'null_extension' or 'extension_api'
      *
      * @return \PhpXmlrpc\Value
@@ -188,7 +188,7 @@ class Encoder
                     }
                     $xmlrpc_val = new Value($arr, Value::$xmlrpcStruct);
                     if (in_array('encode_php_objs', $options)) {
-                        // let's save original class name into xmlrpcval:
+                        // let's save original class name into xmlrpc value:
                         // might be useful later on...
                         $xmlrpc_val->_php_class = get_class($php_val);
                     }

@@ -288,7 +288,7 @@ class Server
     /**
      * Verify type and number of parameters received against a list of known signatures.
      *
-     * @param array $in array of either xmlrpcval objects or xmlrpc type definitions
+     * @param array $in array of either xmlrpc value objects or xmlrpc type definitions
      * @param array $sig array of known signatures to match against
      *
      * @return array
@@ -514,7 +514,7 @@ class Server
             xml_parser_free($parser);
             // small layering violation in favor of speed and memory usage:
             // we should allow the 'execute' method handle this, but in the
-            // most common scenario (xmlrpcvals type server with some methods
+            // most common scenario (xmlrpc values type server with some methods
             // registered as phpvals) that would mean a useless encode+decode pass
             if ($this->functions_parameters_type != 'xmlrpcvals' || (isset($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type']) && ($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type'] == 'phpvals'))) {
                 if ($this->debug > 1) {
@@ -788,7 +788,7 @@ class Server
 
     public static function _xmlrpcs_methodSignature($server, $m)
     {
-        // let accept as parameter both an xmlrpcval or string
+        // let accept as parameter both an xmlrpc value or string
         if (is_object($m)) {
             $methName = $m->getParam(0);
             $methName = $methName->scalarval();
@@ -825,7 +825,7 @@ class Server
 
     public static function _xmlrpcs_methodHelp($server, $m)
     {
-        // let accept as parameter both an xmlrpcval or string
+        // let accept as parameter both an xmlrpc value or string
         if (is_object($m)) {
             $methName = $m->getParam(0);
             $methName = $methName->scalarval();

@@ -892,7 +892,7 @@ class Client
 
     /**
      * Attempt to boxcar $msgs via system.multicall.
-     * Returns either an array of xmlrpcreponses, an xmlrpc error response
+     * Returns either an array of xmlrpc reponses, an xmlrpc error response
      * or false (when received response does not respect valid multicall syntax).
      */
     private function _try_multicall($msgs, $timeout, $method)

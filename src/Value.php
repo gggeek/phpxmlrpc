@@ -37,6 +37,8 @@ class Value
     public $_php_class = null;
 
     /**
+     * Build an xmlrpc value
+     *
      * @param mixed $val
      * @param string $type any valid xmlrpc type name (lowercase). If null, 'string' is assumed
      */
@@ -94,7 +96,7 @@ class Value
     }
 
     /**
-     * Add a single php value to an (unitialized) xmlrpcval.
+     * Add a single php value to an (unitialized) xmlrpc value.
      *
      * @param mixed $val
      * @param string $type
@@ -149,13 +151,13 @@ class Value
     }
 
     /**
-     * Add an array of xmlrpcval objects to an xmlrpcval.
+     * Add an array of xmlrpc values objects to an xmlrpc value.
      *
      * @param Value[] $vals
      *
      * @return int 1 or 0 on failure
      *
-     * @todo add some checking for $vals to be an array of xmlrpcvals?
+     * @todo add some checking for $vals to be an array of xmlrpc values?
      */
     public function addArray($vals)
     {
@@ -177,7 +179,7 @@ class Value
     }
 
     /**
-     * Add an array of named xmlrpcval objects to an xmlrpcval.
+     * Add an array of named xmlrpc value objects to an xmlrpc value.
      *
      * @param Value[] $vals
      *
@@ -281,7 +283,7 @@ class Value
                         break;
                     default:
                         // no standard type value should arrive here, but provide a possibility
-                        // for xmlrpcvals of unknown type...
+                        // for xmlrpc values of unknown type...
                         $rs .= "<${typ}>${val}</${typ}>";
                 }
                 break;
@@ -326,7 +328,7 @@ class Value
      */
     public function serialize($charset_encoding = '')
     {
-        // add check? slower, but helps to avoid recursion in serializing broken xmlrpcvals...
+        // add check? slower, but helps to avoid recursion in serializing broken xmlrpc values...
         //if (is_object($o) && (get_class($o) == 'xmlrpcval' || is_subclass_of($o, 'xmlrpcval')))
         //{
         reset($this->me);
@@ -338,7 +340,7 @@ class Value
 
     /**
      * Checks whether a struct member with a given name is present.
-     * Works only on xmlrpcvals of type struct.
+     * Works only on xmlrpc values of type struct.
      *
      * @param string $m the name of the struct member to be looked up
      *
@@ -350,7 +352,7 @@ class Value
     }
 
     /**
-     * Returns the value of a given struct member (an xmlrpcval object in itself).
+     * Returns the value of a given struct member (an xmlrpc value object in itself).
      * Will raise a php warning if struct member of given name does not exist.
      *
      * @param string $m the name of the struct member to be looked up
@@ -363,7 +365,7 @@ class Value
     }
 
     /**
-     * Reset internal pointer for xmlrpcvals of type struct.
+     * Reset internal pointer for xmlrpc values of type struct.
      */
     public function structreset()
     {
@@ -371,9 +373,9 @@ class Value
     }
 
     /**
-     * Return next member element for xmlrpcvals of type struct.
+     * Return next member element for xmlrpc values of type struct.
      *
-     * @return xmlrpcval
+     * @return Value
      */
     public function structeach()
     {
@@ -381,7 +383,7 @@ class Value
     }
 
     /**
-     * Returns the value of a scalar xmlrpcval.
+     * Returns the value of a scalar xmlrpc value.
      *
      * @return mixed
      */
@@ -394,7 +396,7 @@ class Value
     }
 
     /**
-     * Returns the type of the xmlrpcval.
+     * Returns the type of the xmlrpc value.
      * For integers, 'int' is always returned in place of 'i4'.
      *
      * @return string
@@ -411,7 +413,7 @@ class Value
     }
 
     /**
-     * Returns the m-th member of an xmlrpcval of struct type.
+     * Returns the m-th member of an xmlrpc value of struct type.
      *
      * @param integer $m the index of the value to be retrieved (zero based)
      *
@@ -423,7 +425,7 @@ class Value
     }
 
     /**
-     * Returns the number of members in an xmlrpcval of array type.
+     * Returns the number of members in an xmlrpc value of array type.
      *
      * @return integer
      */
@@ -433,7 +435,7 @@ class Value
     }
 
     /**
-     * Returns the number of members in an xmlrpcval of struct type.
+     * Returns the number of members in an xmlrpc value of struct type.
      *
      * @return integer
      */

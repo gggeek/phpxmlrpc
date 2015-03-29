@@ -96,7 +96,7 @@ class Wrapper
 
     /**
      * Given a user-defined PHP function, create a PHP 'wrapper' function that can
-     * be exposed as xmlrpc method from an xmlrpc_server object and called from remote
+     * be exposed as xmlrpc method from an xmlrpc server object and called from remote
      * clients (as well as its corresponding signature info).
      *
      * Since php is a typeless language, to infer types of input and output parameters,
@@ -417,7 +417,7 @@ class Wrapper
 
     /**
      * Given a user-defined PHP class or php object, map its methods onto a list of
-     * PHP 'wrapper' functions that can be exposed as xmlrpc methods from an xmlrpc_server
+     * PHP 'wrapper' functions that can be exposed as xmlrpc methods from an xmlrpc server
      * object and called from remote clients (as well as their corresponding signature info).
      *
      * @param mixed $classname the name of the class whose methods are to be exposed as xmlrpc methods, or an object instance of that class
@@ -749,7 +749,7 @@ class Wrapper
             if ($ptype == 'i4' || $ptype == 'int' || $ptype == 'boolean' || $ptype == 'double' ||
                 $ptype == 'string' || $ptype == 'dateTime.iso8601' || $ptype == 'base64' || $ptype == 'null'
             ) {
-                // only build directly xmlrpcvals when type is known and scalar
+                // only build directly xmlrpc values when type is known and scalar
                 $innercode .= "\$p$i = new {$namespace}Value(\$p$i, '$ptype');\n";
             } else {
                 if ($encode_php_objects) {
