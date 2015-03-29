@@ -75,6 +75,7 @@ class DemoFilesTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotFalse($page);
         $this->assertNotContains('Fatal error', $page);
+        $this->assertNotContains('Notice:', $page);
 
         return $page;
     }
