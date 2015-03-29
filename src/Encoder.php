@@ -23,39 +23,39 @@ class Encoder
      *
      * @author Dan Libby (dan@libby.com)
      *
-     * @param Value|Request $xmlrpc_val
+     * @param Value|Request $xmlrpcVal
      * @param array $options if 'decode_php_objs' is set in the options array, xmlrpc structs can be decoded into php objects; if 'dates_as_objects' is set xmlrpc datetimes are decoded as php DateTime objects (standard is
      *
      * @return mixed
      */
-    public function decode($xmlrpc_val, $options = array())
+    public function decode($xmlrpcVal, $options = array())
     {
-        switch ($xmlrpc_val->kindOf()) {
+        switch ($xmlrpcVal->kindOf()) {
             case 'scalar':
                 if (in_array('extension_api', $options)) {
-                    reset($xmlrpc_val->me);
-                    list($typ, $val) = each($xmlrpc_val->me);
+                    reset($xmlrpcVal->me);
+                    list($typ, $val) = each($xmlrpcVal->me);
                     switch ($typ) {
                         case 'dateTime.iso8601':
-                            $xmlrpc_val->scalar = $val;
-                            $xmlrpc_val->type = 'datetime';
-                            $xmlrpc_val->timestamp = \PhpXmlRpc\Helper\Date::iso8601_decode($val);
+                            $xmlrpcVal->scalar = $val;
+                            $xmlrpcVal->type = 'datetime';
+                            $xmlrpcVal->timestamp = \PhpXmlRpc\Helper\Date::iso8601_decode($val);
 
-                            return $xmlrpc_val;
+                            return $xmlrpcVal;
                         case 'base64':
-                            $xmlrpc_val->scalar = $val;
-                            $xmlrpc_val->type = $typ;
+                            $xmlrpcVal->scalar = $val;
+                            $xmlrpcVal->type = $typ;
 
-                            return $xmlrpc_val;
+                            return $xmlrpcVal;
                         default:
-                            return $xmlrpc_val->scalarval();
+                            return $xmlrpcVal->scalarval();
                     }
                 }
-                if (in_array('dates_as_objects', $options) && $xmlrpc_val->scalartyp() == 'dateTime.iso8601') {
+                if (in_array('dates_as_objects', $options) && $xmlrpcVal->scalartyp() == 'dateTime.iso8601') {
                     // we return a Datetime object instead of a string
                     // since now the constructor of xmlrpc value accepts safely strings, ints and datetimes,
                     // we cater to all 3 cases here
-                    $out = $xmlrpc_val->scalarval();
+                    $out = $xmlrpcVal->scalarval();
                     if (is_string($out)) {
                         $out = strtotime($out);
                     }
@@ -69,43 +69,43 @@ class Encoder
                     }
                 }
 
-                return $xmlrpc_val->scalarval();
+                return $xmlrpcVal->scalarval();
             case 'array':
-                $size = $xmlrpc_val->arraysize();
+                $size = $xmlrpcVal->arraysize();
                 $arr = array();
                 for ($i = 0; $i < $size; $i++) {
-                    $arr[] = $this->decode($xmlrpc_val->arraymem($i), $options);
+                    $arr[] = $this->decode($xmlrpcVal->arraymem($i), $options);
                 }
 
                 return $arr;
             case 'struct':
-                $xmlrpc_val->structreset();
+                $xmlrpcVal->structreset();
                 // If user said so, try to rebuild php objects for specific struct vals.
                 /// @todo should we raise a warning for class not found?
                 // shall we check for proper subclass of xmlrpc value instead of
                 // presence of _php_class to detect what we can do?
-                if (in_array('decode_php_objs', $options) && $xmlrpc_val->_php_class != ''
-                    && class_exists($xmlrpc_val->_php_class)
+                if (in_array('decode_php_objs', $options) && $xmlrpcVal->_php_class != ''
+                    && class_exists($xmlrpcVal->_php_class)
                 ) {
-                    $obj = @new $xmlrpc_val->_php_class();
-                    while (list($key, $value) = $xmlrpc_val->structeach()) {
+                    $obj = @new $xmlrpcVal->_php_class();
+                    while (list($key, $value) = $xmlrpcVal->structeach()) {
                         $obj->$key = $this->decode($value, $options);
                     }
 
                     return $obj;
                 } else {
                     $arr = array();
-                    while (list($key, $value) = $xmlrpc_val->structeach()) {
+                    while (list($key, $value) = $xmlrpcVal->structeach()) {
                         $arr[$key] = $this->decode($value, $options);
                     }
 
                     return $arr;
                 }
             case 'msg':
-                $paramcount = $xmlrpc_val->getNumParams();
+                $paramCount = $xmlrpcVal->getNumParams();
                 $arr = array();
-                for ($i = 0; $i < $paramcount; $i++) {
-                    $arr[] = $this->decode($xmlrpc_val->getParam($i));
+                for ($i = 0; $i < $paramCount; $i++) {
+                    $arr[] = $this->decode($xmlrpcVal->getParam($i));
                 }
 
                 return $arr;
@@ -130,39 +130,39 @@ class Encoder
      *
      * @return \PhpXmlrpc\Value
      */
-    public function encode($php_val, $options = array())
+    public function encode($phpVal, $options = array())
     {
-        $type = gettype($php_val);
+        $type = gettype($phpVal);
         switch ($type) {
             case 'string':
-                if (in_array('auto_dates', $options) && preg_match('/^[0-9]{8}T[0-9]{2}:[0-9]{2}:[0-9]{2}$/', $php_val)) {
-                    $xmlrpc_val = new Value($php_val, Value::$xmlrpcDateTime);
+                if (in_array('auto_dates', $options) && preg_match('/^[0-9]{8}T[0-9]{2}:[0-9]{2}:[0-9]{2}$/', $phpVal)) {
+                    $xmlrpcVal = new Value($phpVal, Value::$xmlrpcDateTime);
                 } else {
-                    $xmlrpc_val = new Value($php_val, Value::$xmlrpcString);
+                    $xmlrpcVal = new Value($phpVal, Value::$xmlrpcString);
                 }
                 break;
             case 'integer':
-                $xmlrpc_val = new Value($php_val, Value::$xmlrpcInt);
+                $xmlrpcVal = new Value($phpVal, Value::$xmlrpcInt);
                 break;
             case 'double':
-                $xmlrpc_val = new Value($php_val, Value::$xmlrpcDouble);
+                $xmlrpcVal = new Value($phpVal, Value::$xmlrpcDouble);
                 break;
             // <G_Giunta_2001-02-29>
             // Add support for encoding/decoding of booleans, since they are supported in PHP
             case 'boolean':
-                $xmlrpc_val = new Value($php_val, Value::$xmlrpcBoolean);
+                $xmlrpcVal = new Value($phpVal, Value::$xmlrpcBoolean);
                 break;
             // </G_Giunta_2001-02-29>
             case 'array':
                 // PHP arrays can be encoded to either xmlrpc structs or arrays,
                 // depending on wheter they are hashes or plain 0..n integer indexed
                 // A shorter one-liner would be
-                // $tmp = array_diff(array_keys($php_val), range(0, count($php_val)-1));
+                // $tmp = array_diff(array_keys($phpVal), range(0, count($phpVal)-1));
                 // but execution time skyrockets!
                 $j = 0;
                 $arr = array();
                 $ko = false;
-                foreach ($php_val as $key => $val) {
+                foreach ($phpVal as $key => $val) {
                     $arr[$key] = $this->encode($val, $options);
                     if (!$ko && $key !== $j) {
                         $ko = true;
@@ -170,67 +170,67 @@ class Encoder
                     $j++;
                 }
                 if ($ko) {
-                    $xmlrpc_val = new Value($arr, Value::$xmlrpcStruct);
+                    $xmlrpcVal = new Value($arr, Value::$xmlrpcStruct);
                 } else {
-                    $xmlrpc_val = new Value($arr, Value::$xmlrpcArray);
+                    $xmlrpcVal = new Value($arr, Value::$xmlrpcArray);
                 }
                 break;
             case 'object':
-                if (is_a($php_val, 'PhpXmlRpc\Value')) {
-                    $xmlrpc_val = $php_val;
-                } elseif (is_a($php_val, 'DateTime')) {
-                    $xmlrpc_val = new Value($php_val->format('Ymd\TH:i:s'), Value::$xmlrpcStruct);
+                if (is_a($phpVal, 'PhpXmlRpc\Value')) {
+                    $xmlrpcVal = $phpVal;
+                } elseif (is_a($phpVal, 'DateTime')) {
+                    $xmlrpcVal = new Value($phpVal->format('Ymd\TH:i:s'), Value::$xmlrpcStruct);
                 } else {
                     $arr = array();
-                    reset($php_val);
-                    while (list($k, $v) = each($php_val)) {
+                    reset($phpVal);
+                    while (list($k, $v) = each($phpVal)) {
                         $arr[$k] = $this->encode($v, $options);
                     }
-                    $xmlrpc_val = new Value($arr, Value::$xmlrpcStruct);
+                    $xmlrpcVal = new Value($arr, Value::$xmlrpcStruct);
                     if (in_array('encode_php_objs', $options)) {
                         // let's save original class name into xmlrpc value:
                         // might be useful later on...
-                        $xmlrpc_val->_php_class = get_class($php_val);
+                        $xmlrpcVal->_php_class = get_class($phpVal);
                     }
                 }
                 break;
             case 'NULL':
                 if (in_array('extension_api', $options)) {
-                    $xmlrpc_val = new Value('', Value::$xmlrpcString);
+                    $xmlrpcVal = new Value('', Value::$xmlrpcString);
                 } elseif (in_array('null_extension', $options)) {
-                    $xmlrpc_val = new Value('', Value::$xmlrpcNull);
+                    $xmlrpcVal = new Value('', Value::$xmlrpcNull);
                 } else {
-                    $xmlrpc_val = new Value();
+                    $xmlrpcVal = new Value();
                 }
                 break;
             case 'resource':
                 if (in_array('extension_api', $options)) {
-                    $xmlrpc_val = new Value((int)$php_val, Value::$xmlrpcInt);
+                    $xmlrpcVal = new Value((int)$phpVal, Value::$xmlrpcInt);
                 } else {
-                    $xmlrpc_val = new Value();
+                    $xmlrpcVal = new Value();
                 }
             // catch "user function", "unknown type"
             default:
                 // giancarlo pinerolo <ping@alt.it>
                 // it has to return
                 // an empty object in case, not a boolean.
-                $xmlrpc_val = new Value();
+                $xmlrpcVal = new Value();
                 break;
         }
 
-        return $xmlrpc_val;
+        return $xmlrpcVal;
     }
 
     /**
      * Convert the xml representation of a method response, method request or single
      * xmlrpc value into the appropriate object (a.k.a. deserialize).
      *
-     * @param string $xml_val
+     * @param string $xmlVal
      * @param array $options
      *
      * @return mixed false on error, or an instance of either Value, Request or Response
      */
-    public function decode_xml($xml_val, $options = array())
+    public function decode_xml($xmlVal, $options = array())
     {
 
         /// @todo 'guestimate' encoding
@@ -250,7 +250,7 @@ class Encoder
         xml_set_element_handler($parser, 'xmlrpc_se_any', 'xmlrpc_ee');
         xml_set_character_data_handler($parser, 'xmlrpc_cd');
         xml_set_default_handler($parser, 'xmlrpc_dh');
-        if (!xml_parse($parser, $xml_val, 1)) {
+        if (!xml_parse($parser, $xmlVal, 1)) {
             $errstr = sprintf('XML error: %s at line %d, column %d',
                 xml_error_string(xml_get_error_code($parser)),
                 xml_get_current_line_number($parser), xml_get_current_column_number($parser));
@@ -300,14 +300,14 @@ class Encoder
      * we SHOULD assume it is strictly US-ASCII. But we try to be more tolerant of unconforming (legacy?) clients/servers,
      * which will be most probably using UTF-8 anyway...
      *
-     * @param string $httpheader the http Content-type header
-     * @param string $xmlchunk xml content buffer
-     * @param string $encoding_prefs comma separated list of character encodings to be used as default (when mb extension is enabled)
+     * @param string $httpHeader the http Content-type header
+     * @param string $xmlChunk xml content buffer
+     * @param string $encodingPrefs comma separated list of character encodings to be used as default (when mb extension is enabled)
      * @return string
      *
      * @todo explore usage of mb_http_input(): does it detect http headers + post data? if so, use it instead of hand-detection!!!
      */
-    public static function guess_encoding($httpheader = '', $xmlchunk = '', $encoding_prefs = null)
+    public static function guess_encoding($httpHeader = '', $xmlChunk = '', $encodingPrefs = null)
     {
         // discussion: see http://www.yale.edu/pclt/encoding/
         // 1 - test if encoding is specified in HTTP HEADERS
@@ -325,7 +325,7 @@ class Encoder
 
         /// @todo this test will pass if ANY header has charset specification, not only Content-Type. Fix it?
         $matches = array();
-        if (preg_match('/;\s*charset\s*=([^;]+)/i', $httpheader, $matches)) {
+        if (preg_match('/;\s*charset\s*=([^;]+)/i', $httpHeader, $matches)) {
             return strtoupper(trim($matches[1], " \t\""));
         }
 
@@ -336,11 +336,11 @@ class Encoder
         //     in the xml declaration, and verify if they match.
         /// @todo implement check as described above?
         /// @todo implement check for first bytes of string even without a BOM? (It sure looks harder than for cases WITH a BOM)
-        if (preg_match('/^(\x00\x00\xFE\xFF|\xFF\xFE\x00\x00|\x00\x00\xFF\xFE|\xFE\xFF\x00\x00)/', $xmlchunk)) {
+        if (preg_match('/^(\x00\x00\xFE\xFF|\xFF\xFE\x00\x00|\x00\x00\xFF\xFE|\xFE\xFF\x00\x00)/', $xmlChunk)) {
             return 'UCS-4';
-        } elseif (preg_match('/^(\xFE\xFF|\xFF\xFE)/', $xmlchunk)) {
+        } elseif (preg_match('/^(\xFE\xFF|\xFF\xFE)/', $xmlChunk)) {
             return 'UTF-16';
-        } elseif (preg_match('/^(\xEF\xBB\xBF)/', $xmlchunk)) {
+        } elseif (preg_match('/^(\xEF\xBB\xBF)/', $xmlChunk)) {
             return 'UTF-8';
         }
 
@@ -350,17 +350,17 @@ class Encoder
         // EQ:            SPACE?=SPACE? === [ \x9\xD\xA]*=[ \x9\xD\xA]*
         if (preg_match('/^<\?xml\s+version\s*=\s*' . "((?:\"[a-zA-Z0-9_.:-]+\")|(?:'[a-zA-Z0-9_.:-]+'))" .
             '\s+encoding\s*=\s*' . "((?:\"[A-Za-z][A-Za-z0-9._-]*\")|(?:'[A-Za-z][A-Za-z0-9._-]*'))/",
-            $xmlchunk, $matches)) {
+            $xmlChunk, $matches)) {
             return strtoupper(substr($matches[2], 1, -1));
         }
 
         // 4 - if mbstring is available, let it do the guesswork
         // NB: we favour finding an encoding that is compatible with what we can process
         if (extension_loaded('mbstring')) {
-            if ($encoding_prefs) {
-                $enc = mb_detect_encoding($xmlchunk, $encoding_prefs);
+            if ($encodingPrefs) {
+                $enc = mb_detect_encoding($xmlChunk, $encodingPrefs);
             } else {
-                $enc = mb_detect_encoding($xmlchunk);
+                $enc = mb_detect_encoding($xmlChunk);
             }
             // NB: mb_detect likes to call it ascii, xml parser likes to call it US_ASCII...
             // IANA also likes better US-ASCII, so go with it

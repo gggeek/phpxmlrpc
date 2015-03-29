@@ -105,12 +105,12 @@ class Value
      */
     public function addScalar($val, $type = 'string')
     {
-        $typeof = null;
+        $typeOf = null;
         if (isset(static::$xmlrpcTypes[$type])) {
-            $typeof = static::$xmlrpcTypes[$type];
+            $typeOf = static::$xmlrpcTypes[$type];
         }
 
-        if ($typeof !== 1) {
+        if ($typeOf !== 1) {
             error_log("XML-RPC: " . __METHOD__ . ": not a scalar type ($type)");
 
             return 0;
@@ -144,7 +144,7 @@ class Value
             default:
                 // a scalar, so set the value and remember we're scalar
                 $this->me[$type] = $val;
-                $this->mytype = $typeof;
+                $this->mytype = $typeOf;
 
                 return 1;
         }
@@ -153,22 +153,22 @@ class Value
     /**
      * Add an array of xmlrpc values objects to an xmlrpc value.
      *
-     * @param Value[] $vals
+     * @param Value[] $values
      *
      * @return int 1 or 0 on failure
      *
-     * @todo add some checking for $vals to be an array of xmlrpc values?
+     * @todo add some checking for $values to be an array of xmlrpc values?
      */
-    public function addArray($vals)
+    public function addArray($values)
     {
         if ($this->mytype == 0) {
             $this->mytype = static::$xmlrpcTypes['array'];
-            $this->me['array'] = $vals;
+            $this->me['array'] = $values;
 
             return 1;
         } elseif ($this->mytype == 2) {
             // we're adding to an array here
-            $this->me['array'] = array_merge($this->me['array'], $vals);
+            $this->me['array'] = array_merge($this->me['array'], $values);
 
             return 1;
         } else {
@@ -181,22 +181,22 @@ class Value
     /**
      * Add an array of named xmlrpc value objects to an xmlrpc value.
      *
-     * @param Value[] $vals
+     * @param Value[] $values
      *
      * @return int 1 or 0 on failure
      *
-     * @todo add some checking for $vals to be an array?
+     * @todo add some checking for $values to be an array?
      */
-    public function addStruct($vals)
+    public function addStruct($values)
     {
         if ($this->mytype == 0) {
             $this->mytype = static::$xmlrpcTypes['struct'];
-            $this->me['struct'] = $vals;
+            $this->me['struct'] = $values;
 
             return 1;
         } elseif ($this->mytype == 3) {
             // we're adding to a struct here
-            $this->me['struct'] = array_merge($this->me['struct'], $vals);
+            $this->me['struct'] = array_merge($this->me['struct'], $values);
 
             return 1;
         } else {
@@ -322,11 +322,11 @@ class Value
     /**
      * Returns xml representation of the value. XML prologue not included.
      *
-     * @param string $charset_encoding the charset to be used for serialization. if null, US-ASCII is assumed
+     * @param string $charsetEncoding the charset to be used for serialization. if null, US-ASCII is assumed
      *
      * @return string
      */
-    public function serialize($charset_encoding = '')
+    public function serialize($charsetEncoding = '')
     {
         // add check? slower, but helps to avoid recursion in serializing broken xmlrpc values...
         //if (is_object($o) && (get_class($o) == 'xmlrpcval' || is_subclass_of($o, 'xmlrpcval')))
@@ -334,7 +334,7 @@ class Value
         reset($this->me);
         list($typ, $val) = each($this->me);
 
-        return '<value>' . $this->serializedata($typ, $val, $charset_encoding) . "</value>\n";
+        return '<value>' . $this->serializedata($typ, $val, $charsetEncoding) . "</value>\n";
         //}
     }
 
@@ -342,26 +342,26 @@ class Value
      * Checks whether a struct member with a given name is present.
      * Works only on xmlrpc values of type struct.
      *
-     * @param string $m the name of the struct member to be looked up
+     * @param string $key the name of the struct member to be looked up
      *
      * @return boolean
      */
-    public function structmemexists($m)
+    public function structmemexists($key)
     {
-        return array_key_exists($m, $this->me['struct']);
+        return array_key_exists($key, $this->me['struct']);
     }
 
     /**
      * Returns the value of a given struct member (an xmlrpc value object in itself).
      * Will raise a php warning if struct member of given name does not exist.
      *
-     * @param string $m the name of the struct member to be looked up
+     * @param string $key the name of the struct member to be looked up
      *
      * @return Value
      */
-    public function structmem($m)
+    public function structmem($key)
     {
-        return $this->me['struct'][$m];
+        return $this->me['struct'][$key];
     }
 
     /**
@@ -415,13 +415,13 @@ class Value
     /**
      * Returns the m-th member of an xmlrpc value of struct type.
      *
-     * @param integer $m the index of the value to be retrieved (zero based)
+     * @param integer $key the index of the value to be retrieved (zero based)
      *
      * @return Value
      */
-    public function arraymem($m)
+    public function arraymem($key)
     {
-        return $this->me['array'][$m];
+        return $this->me['array'][$key];
     }
 
     /**

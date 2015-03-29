@@ -29,10 +29,10 @@ class Request
         }
     }
 
-    public function xml_header($charset_encoding = '')
+    public function xml_header($charsetEncoding = '')
     {
-        if ($charset_encoding != '') {
-            return "<?xml version=\"1.0\" encoding=\"$charset_encoding\" ?" . ">\n<methodCall>\n";
+        if ($charsetEncoding != '') {
+            return "<?xml version=\"1.0\" encoding=\"$charsetEncoding\" ?" . ">\n<methodCall>\n";
         } else {
             return "<?xml version=\"1.0\"?" . ">\n<methodCall>\n";
         }
@@ -43,18 +43,18 @@ class Request
         return '</methodCall>';
     }
 
-    public function createPayload($charset_encoding = '')
+    public function createPayload($charsetEncoding = '')
     {
-        if ($charset_encoding != '') {
-            $this->content_type = 'text/xml; charset=' . $charset_encoding;
+        if ($charsetEncoding != '') {
+            $this->content_type = 'text/xml; charset=' . $charsetEncoding;
         } else {
             $this->content_type = 'text/xml';
         }
-        $this->payload = $this->xml_header($charset_encoding);
+        $this->payload = $this->xml_header($charsetEncoding);
         $this->payload .= '<methodName>' . $this->methodname . "</methodName>\n";
         $this->payload .= "<params>\n";
         foreach ($this->params as $p) {
-            $this->payload .= "<param>\n" . $p->serialize($charset_encoding) .
+            $this->payload .= "<param>\n" . $p->serialize($charsetEncoding) .
                 "</param>\n";
         }
         $this->payload .= "</params>\n";
@@ -80,13 +80,13 @@ class Request
     /**
      * Returns xml representation of the message. XML prologue included.
      *
-     * @param string $charset_encoding
+     * @param string $charsetEncoding
      *
      * @return string the xml representation of the message, xml prologue included
      */
-    public function serialize($charset_encoding = '')
+    public function serialize($charsetEncoding = '')
     {
-        $this->createPayload($charset_encoding);
+        $this->createPayload($charsetEncoding);
 
         return $this->payload;
     }
@@ -160,12 +160,12 @@ class Request
      * Parse the xmlrpc response contained in the string $data and return a Response object.
      *
      * @param string $data the xmlrpc response, eventually including http headers
-     * @param bool $headers_processed when true prevents parsing HTTP headers for interpretation of content-encoding and consequent decoding
-     * @param string $return_type decides return type, i.e. content of response->value(). Either 'xmlrpcvals', 'xml' or 'phpvals'
+     * @param bool $headersProcessed when true prevents parsing HTTP headers for interpretation of content-encoding and consequent decoding
+     * @param string $returnType decides return type, i.e. content of response->value(). Either 'xmlrpcvals', 'xml' or 'phpvals'
      *
      * @return Response
      */
-    public function parseResponse($data = '', $headers_processed = false, $return_type = 'xmlrpcvals')
+    public function parseResponse($data = '', $headersProcessed = false, $returnType = 'xmlrpcvals')
     {
         if ($this->debug) {
             // by maHo, replaced htmlspecialchars with htmlentities
@@ -183,7 +183,7 @@ class Request
         if (substr($data, 0, 4) == 'HTTP') {
             $httpParser = new Http();
             try {
-                $this->httpResponse = $httpParser->parseResponseHeaders($data, $headers_processed, $this->debug);
+                $this->httpResponse = $httpParser->parseResponseHeaders($data, $headersProcessed, $this->debug);
             } catch(\Exception $e) {
                 $r = new Response(0, $e->getCode(), $e->getMessage());
                 // failed processing of HTTP response headers
@@ -217,7 +217,7 @@ class Request
         }
 
         // if user wants back raw xml, give it to him
-        if ($return_type == 'xml') {
+        if ($returnType == 'xml') {
             $r = new Response($data, 0, '', 'xml');
             $r->hdrs = $this->httpResponse['headers'];
             $r->_cookies = $this->httpResponse['cookies'];
@@ -256,7 +256,7 @@ class Request
         $xmlRpcParser = new XMLParser();
         xml_set_object($parser, $xmlRpcParser);
 
-        if ($return_type == 'phpvals') {
+        if ($returnType == 'phpvals') {
             xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_fast');
         } else {
             xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee');
@@ -269,17 +269,17 @@ class Request
         if (!xml_parse($parser, $data, count($data))) {
             // thanks to Peter Kocks <peter.kocks@baygate.com>
             if ((xml_get_current_line_number($parser)) == 1) {
-                $errstr = 'XML error at line 1, check URL';
+                $errStr = 'XML error at line 1, check URL';
             } else {
-                $errstr = sprintf('XML error: %s at line %d, column %d',
+                $errStr = sprintf('XML error: %s at line %d, column %d',
                     xml_error_string(xml_get_error_code($parser)),
                     xml_get_current_line_number($parser), xml_get_current_column_number($parser));
             }
-            error_log($errstr);
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'], PhpXmlRpc::$xmlrpcstr['invalid_return'] . ' (' . $errstr . ')');
+            error_log($errStr);
+            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'], PhpXmlRpc::$xmlrpcstr['invalid_return'] . ' (' . $errStr . ')');
             xml_parser_free($parser);
             if ($this->debug) {
-                print $errstr;
+                print $errStr;
             }
             $r->hdrs = $this->httpResponse['headers'];
             $r->_cookies = $this->httpResponse['cookies'];
@@ -299,7 +299,7 @@ class Request
         }
         // third error check: parsing of the response has somehow gone boink.
         // NB: shall we omit this check, since we trust the parsing code?
-        elseif ($return_type == 'xmlrpcvals' && !is_object($xmlRpcParser->_xh['value'])) {
+        elseif ($returnType == 'xmlrpcvals' && !is_object($xmlRpcParser->_xh['value'])) {
             // something odd has happened
             // and it's time to generate a client side error
             // indicating something odd went on
@@ -318,24 +318,24 @@ class Request
             if ($xmlRpcParser->_xh['isf']) {
                 /// @todo we should test here if server sent an int and a string,
                 /// and/or coerce them into such...
-                if ($return_type == 'xmlrpcvals') {
-                    $errno_v = $v->structmem('faultCode');
-                    $errstr_v = $v->structmem('faultString');
-                    $errno = $errno_v->scalarval();
-                    $errstr = $errstr_v->scalarval();
+                if ($returnType == 'xmlrpcvals') {
+                    $errNo_v = $v->structmem('faultCode');
+                    $errStr_v = $v->structmem('faultString');
+                    $errNo = $errNo_v->scalarval();
+                    $errStr = $errStr_v->scalarval();
                 } else {
-                    $errno = $v['faultCode'];
-                    $errstr = $v['faultString'];
+                    $errNo = $v['faultCode'];
+                    $errStr = $v['faultString'];
                 }
 
-                if ($errno == 0) {
+                if ($errNo == 0) {
                     // FAULT returned, errno needs to reflect that
-                    $errno = -1;
+                    $errNo = -1;
                 }
 
-                $r = new Response(0, $errno, $errstr);
+                $r = new Response(0, $errNo, $errStr);
             } else {
-                $r = new Response($v, 0, '', $return_type);
+                $r = new Response($v, 0, '', $returnType);
             }
         }
 
@@ -350,6 +350,7 @@ class Request
      * Echoes a debug message, taking care of escaping it when not in console mode
      *
      * @param string $message
+     * @param bool $encodeEntities when false, escapes using htmlspecialchars instead of htmlentities
      */
     protected function debugMessage($message, $encodeEntities = true)
     {
