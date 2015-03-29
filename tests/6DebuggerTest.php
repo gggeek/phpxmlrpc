@@ -83,6 +83,11 @@ class DebuggerTest extends PHPUnit_Framework_TestCase
         return $page;
     }
 
+    public function testIndex()
+    {
+        $page = $this->request('index.php');
+    }
+
     public function testController()
     {
         $page = $this->request('controller.php');
