@@ -29,7 +29,7 @@ class Autoloader
             return;
         }
 
-        if (is_file($file = __DIR__ . str_replace('PhpXmlRpc\\', '/', $class).'.php')) {
+        if (is_file($file = __DIR__ . str_replace(array('PhpXmlRpc\\', '\\'), '/', $class).'.php')) {
             require $file;
         }
     }
