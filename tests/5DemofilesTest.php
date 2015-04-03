@@ -146,13 +146,13 @@ class DemoFilesTest extends PHPUnit_Framework_TestCase
     {
         $page = $this->request('server/discuss.php');
         $this->assertContains('<name>faultCode</name>', $page);
-        $this->assertContains('<int>105</int>', $page);
+        $this->assertRegexp('#<int>10(5|3)</int>#', $page);
     }
 
     public function testProxyServer()
     {
         $page = $this->request('server/proxy.php');
         $this->assertContains('<name>faultCode</name>', $page);
-        $this->assertContains('<int>105</int>', $page);
+        $this->assertRegexp('#<int>10(5|3)</int>#', $page);
     }
 }
