@@ -237,4 +237,25 @@ class Charset
             return false;
         }
     }
+
+    /**
+     * Used only for backwards compatibility
+     * @deprecated
+     *
+     * @param string $charset
+     *
+     * @return array
+     *
+     * @throws \Exception for unknown/unsupported charsets
+     */
+    public function getEntities($charset)
+    {
+        switch ($charset)
+        {
+            case 'iso88591':
+                return $this->xml_iso88591_Entities;
+            default:
+                throw new \Exception('Unsupported charset: ' . $charset);
+        }
+    }
 }

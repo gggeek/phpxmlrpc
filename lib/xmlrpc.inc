@@ -36,7 +36,7 @@
 
 /******************************************************************************
  *
- *** DEPRECATED ***
+ * *** DEPRECATED ***
  *
  * This file is only used to insure backwards compatibility
  * with the API of the library <= rev. 3
@@ -55,8 +55,25 @@ include_once(__DIR__.'/../src/Helper/Charset.php');
 include_once(__DIR__.'/../src/Helper/Http.php');
 include_once(__DIR__.'/../src/Helper/XMLParser.php');
 
+
 /* Expose the global variables which used to be defined */
 PhpXmlRpc\PhpXmlRpc::exportGlobals();
+
+/* some stuff deprecated enough that we do not want to put it in the new lib version */
+
+/// @deprecated
+$GLOBALS['xmlEntities'] = array(
+    'amp'  => '&',
+    'quot' => '"',
+    'lt'   => '<',
+    'gt'   => '>',
+    'apos' => "'"
+);
+
+// formulate backslashes for escaping regexp
+// Not in use anymore since 2.0. Shall we remove it?
+/// @deprecated
+$GLOBALS['xmlrpc_backslash'] = chr(92).chr(92);
 
 /* Expose with the old names the classes which have been namespaced */
 

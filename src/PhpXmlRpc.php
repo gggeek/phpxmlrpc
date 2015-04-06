@@ -95,10 +95,25 @@ class PhpXmlRpc
             $GLOBALS[$name] = $value;
         }
 
+        // NB: all the variables exported into the global namespace below here do NOT guarantee 100%
+        // compatibility, as they are NOT reimported back during calls to importGlobals()
+        
         $reflection = new \ReflectionClass('PhpXmlRpc\Value');
         foreach ($reflection->getStaticProperties() as $name => $value) {
             $GLOBALS[$name] = $value;
         }
+
+        $parser = new Helper\XMLParser();
+        $reflection = new \ReflectionClass('PhpXmlRpc\Helper\XMLParser');
+        foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $name => $value) {
+            if (in_array($value->getName(), array('xmlrpc_valid_parents')))
+            {
+                $GLOBALS[$value->getName()] = $value->getValue($parser);
+            }
+        }
+
+        $charset = Helper\Charset::instance();
+        $GLOBALS['xml_iso88591_Entities'] = $charset->getEntities('iso88591');
     }
 
     /**

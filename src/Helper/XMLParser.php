@@ -439,4 +439,5 @@ class XMLParser
 
         return true;
     }
+
 }
