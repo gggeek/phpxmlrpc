@@ -4,8 +4,10 @@ Requirements
 ------------
 
 The following requirements should be met prior to using 'XMLRPC for PHP':
-. PHP 5.3.0 or later
-. the php "curl" extension is needed if you wish to use SSL or HTTP 1.1 to
+
+* PHP 5.3.0 or later
+
+* the php "curl" extension is needed if you wish to use SSL or HTTP 1.1 to
   communicate with remote servers
 
 The php "xmlrpc" native extension is not required, but if it is installed,
@@ -57,7 +59,8 @@ Installation of the library is quite easy:
         application (it can be inside the web server root or not).
 
     2. configure your app autoloading mechanism so that all classes in the PhpXmlRpc namespace are loaded
-        from that location (any PSR-4 compliant autoloader can do that)
+        from that location: any PSR-4 compliant autoloader can do that, if you don't have any there is one
+        available in src/Autoloader.php
 
     3. Write your code.
 

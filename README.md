@@ -8,7 +8,7 @@ A php library for building xml-rpc clients and servers.
 
 Installation
 ------------
-Installation instructions are in the INSTALL file.
+Installation instructions are in the [INSTALL.md](INSTALL.md) file.
 
 Docs
 ----
