@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common parameter parsing for benchmarks and tests scripts.
+ * Common parameter parsing for benchmark and tests scripts.
  *
  * @param integer DEBUG
  * @param string  LOCALSERVER
