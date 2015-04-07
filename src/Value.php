@@ -31,7 +31,7 @@ class Value
         "null" => 1,
     );
 
-    /// @todo: does these need to be public?
+    /// @todo: do these need to be public?
     public $me = array();
     public $mytype = 0;
     public $_php_class = null;

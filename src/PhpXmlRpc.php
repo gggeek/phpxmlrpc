@@ -97,7 +97,7 @@ class PhpXmlRpc
 
         // NB: all the variables exported into the global namespace below here do NOT guarantee 100%
         // compatibility, as they are NOT reimported back during calls to importGlobals()
-        
+
         $reflection = new \ReflectionClass('PhpXmlRpc\Value');
         foreach ($reflection->getStaticProperties() as $name => $value) {
             $GLOBALS[$name] = $value;
