@@ -24,8 +24,12 @@ if (get_magic_quotes_gpc()) {
     $_GET = array_map('stripslashes_deep', $_GET);
 }
 
+$preferredEncodings = 'UTF-8, ASCII, ISO-8859-1, UTF-7, EUC-JP, SJIS, eucJP-win, SJIS-win, JIS, ISO-2022-JP';
+$inputcharset = mb_detect_encoding(urldecode($_SERVER['REQUEST_URI']), $preferredEncodings);
 if (isset($_GET['usepost']) && $_GET['usepost'] === 'true') {
     $_GET = $_POST;
+    /// @todo detect encoding, eg from from http headers?
+    // mb_detect_encoding(urldecode($_SERVER['...']), $preferredEncodings);
 }
 
 // recover input parameters

@@ -38,6 +38,8 @@ PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
 
 * improved: the testsuite has basic checks for the debugger and demo files
 
+* fixed: the debugger would fail sending a request with ISO-8859-1 payload
+
 
 XML-RPC for PHP version 3.0.0 - 2014/6/15
 

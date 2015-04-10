@@ -226,7 +226,7 @@ if ($action) {
                     }
                 }
             } else {
-                $msg[0]->payload = $msg[0]->xml_header() .
+                $msg[0]->payload = $msg[0]->xml_header($inputcharset) .
                     '<methodName>' . $method . "</methodName>\n<params>" .
                     $payload .
                     "</params>\n" . $msg[0]->xml_footer();
@@ -248,8 +248,7 @@ if ($action) {
         echo '<div class="dbginfo"><h2>Debug info:</h2>';
     }  /// @todo use ob_start instead
     $resp = array();
-    $mtime = explode(' ', microtime());
-    $time = (float)$mtime[0] + (float)$mtime[1];
+    $time = microtime(true);
     foreach ($msg as $message) {
         // catch errors: for older xmlrpc libs, send does not return by ref
         @$response = $client->send($message, $timeout, $httpprotocol);
@@ -258,8 +257,7 @@ if ($action) {
             break;
         }
     }
-    $mtime = explode(' ', microtime());
-    $time = (float)$mtime[0] + (float)$mtime[1] - $time;
+    $time = microtime(true) - $time;
     if ($debug) {
         echo "</div>\n";
     }
