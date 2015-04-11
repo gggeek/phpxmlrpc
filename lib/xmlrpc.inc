@@ -201,6 +201,7 @@ function php_xmlrpc_decode_xml($xmlVal, $options=array())
 
 function guess_encoding($httpHeader='', $xmlChunk='', $encodingPrefs=null)
 {
+    return PhpXmlRpc\Helper\XMLParser::guessEncoding($httpHeader, $xmlChunk, $encodingPrefs);
 }
 
 function is_valid_charset($encoding, $validList)

@@ -227,19 +227,30 @@ class Request
         }
 
         // try to 'guestimate' the character encoding of the received response
-        $respEncoding = Encoder::guess_encoding(@$this->httpResponse['headers']['content-type'], $data);
+        $respEncoding = XMLParser::guessEncoding(@$this->httpResponse['headers']['content-type'], $data);
 
-        // if response charset encoding is not known / supported, try to use
-        // the default encoding and parse the xml anyway, but log a warning...
-        if (!in_array($respEncoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
-            // the following code might be better for mb_string enabled installs, but
+        if ($respEncoding != '') {
+
+            // Since parsing will fail if charset is not specified in the xml prologue,
+            // the encoding is not UTF8 and there are non-ascii chars in the text, we try to work round that...
+            // The following code might be better for mb_string enabled installs, but
             // makes the lib about 200% slower...
-            //if (!is_valid_charset($respEncoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
-
-            error_log('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of received response: ' . $respEncoding);
-            $respEncoding = PhpXmlRpc::$xmlrpc_defencoding;
+            //if (!is_valid_charset($respEncoding, array('UTF-8')))
+            if (!in_array($respEncoding, array('UTF-8', 'US-ASCII')) && !XMLParser::hasEncoding($data)) {
+                if ($respEncoding == 'ISO-8859-1') {
+                    $data = utf8_encode($data);
+                }
+                else {
+                    if (extension_loaded('mbstring')) {
+                        $data = mb_convert_encoding($data, 'UTF-8', $respEncoding);
+                    } else {
+                        error_log('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of received response: ' . $respEncoding);
+                    }
+                }
+            }
         }
-        $parser = xml_parser_create($respEncoding);
+
+        $parser = xml_parser_create();
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
         // G. Giunta 2005/02/13: PHP internally uses ISO-8859-1, so we have to tell
         // the xml parser to give us back data in the expected charset.
