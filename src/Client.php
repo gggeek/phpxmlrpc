@@ -360,7 +360,7 @@ class Client
             $req = $n;
         }
 
-        // where msg is a Request
+        // where req is a Request
         $req->debug = $this->debug;
 
         if ($method == 'https') {

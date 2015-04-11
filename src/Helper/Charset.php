@@ -258,4 +258,5 @@ class Charset
                 throw new \Exception('Unsupported charset: ' . $charset);
         }
     }
+
 }

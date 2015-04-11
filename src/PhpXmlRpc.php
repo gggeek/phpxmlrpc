@@ -66,7 +66,7 @@ class PhpXmlRpc
     // The encoding used internally by PHP.
     // String values received as xml will be converted to this, and php strings will be converted to xml
     // as if having been coded with this
-    public static $xmlrpc_internalencoding = "ISO-8859-1"; // TODO: maybe this would be better as UTF-8, or atleast configurable?
+    public static $xmlrpc_internalencoding = "ISO-8859-1"; // TODO: maybe this would be better as UTF-8, or at least configurable?
 
     public static $xmlrpcName = "XML-RPC for PHP";
     public static $xmlrpcVersion = "4.0.0.beta";
