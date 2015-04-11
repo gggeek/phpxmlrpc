@@ -150,6 +150,19 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testLatin1String()
+    {
+        $sendstring =
+            "last but not least weird names: G" . chr(252) . "nter, El" . chr(232) . "ne, and an xml comment closing tag: -->";
+        $f = '<?xml version="1.0" encoding="iso-8859-1"?><methodCall><methodName>examples.stringecho</methodName><params><param><value>'.
+            $sendstring.
+            '</value></param></params></methodCall>';
+        $v = $this->send($f);
+        if ($v) {
+            $this->assertEquals($sendstring, $v->scalarval());
+        }
+    }
+
     public function testAddingDoubles()
     {
         // note that rounding errors mean we
