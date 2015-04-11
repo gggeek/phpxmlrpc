@@ -239,8 +239,7 @@ class Request
             if (!in_array($respEncoding, array('UTF-8', 'US-ASCII')) && !XMLParser::hasEncoding($data)) {
                 if ($respEncoding == 'ISO-8859-1') {
                     $data = utf8_encode($data);
-                }
-                else {
+                } else {
                     if (extension_loaded('mbstring')) {
                         $data = mb_convert_encoding($data, 'UTF-8', $respEncoding);
                     } else {
@@ -370,8 +369,7 @@ class Request
                 print "<PRE>\n".htmlentities($message)."\n</PRE>";
             else
                 print "<PRE>\n".htmlspecialchars($message)."\n</PRE>";
-        }
-        else {
+        } else {
             print "\n$message\n";
         }
     }

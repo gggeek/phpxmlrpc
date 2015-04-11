@@ -107,8 +107,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         }
         if (is_array($errrorcode)) {
             $this->assertContains($r->faultCode(), $errrorcode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
-        }
-        else {
+        } else {
             $this->assertEquals($r->faultCode(), $errrorcode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
         }
         if (!$r->faultCode()) {

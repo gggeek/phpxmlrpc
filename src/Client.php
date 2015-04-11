@@ -1081,8 +1081,7 @@ class Client
     {
         if (PHP_SAPI != 'cli') {
             print "<PRE>\n".htmlentities($message)."\n</PRE>";
-        }
-        else {
+        } else {
             print "\n$message\n";
         }
         // let the client see this now in case http times out...
