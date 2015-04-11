@@ -38,7 +38,13 @@ PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
 
 * improved: the testsuite has basic checks for the debugger and demo files
 
-* fixed: the debugger would fail sending a request with ISO-8859-1 payload
+* fixed: the debugger would fail sending a request with ISO-8859-1 payload (it missed the character set declaration)
+
+* fixed: the server would fail to decode a request with ISO-8859-1 payload and character set declaration in the xml prologue only
+
+* fixed: the client would fail to decode a response with ISO-8859-1 payload and character set declaration in the xml prologue only
+
+* fixed: the function decode_xml() would not decode an xml with character set declaration in the xml prologue
 
 
 XML-RPC for PHP version 3.0.0 - 2014/6/15
