@@ -4,6 +4,7 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Helper\Logger;
 
 class Request
 {
@@ -168,8 +169,7 @@ class Request
     public function parseResponse($data = '', $headersProcessed = false, $returnType = 'xmlrpcvals')
     {
         if ($this->debug) {
-            // by maHo, replaced htmlspecialchars with htmlentities
-            $this->debugMessage("---GOT---\n$data\n---END---");
+            Logger::debugMessage("---GOT---\n$data\n---END---");
         }
 
         $this->httpResponse = array('raw_data' => $data, 'headers' => array(), 'cookies' => array());
@@ -194,16 +194,6 @@ class Request
             }
         }
 
-        if ($this->debug) {
-            $start = strpos($data, '<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
-            if ($start) {
-                $start += strlen('<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
-                $end = strpos($data, '-->', $start);
-                $comments = substr($data, $start, $end - $start);
-                $this->debugMessage("---SERVER DEBUG INFO (DECODED) ---\n\t" . str_replace("\n", "\n\t", base64_decode($comments))) . "\n---END---\n</PRE>";
-            }
-        }
-
         // be tolerant of extra whitespace in response body
         $data = trim($data);
 
@@ -216,6 +206,20 @@ class Request
             $data = substr($data, 0, $pos + 17);
         }
 
+        // try to 'guestimate' the character encoding of the received response
+        $respEncoding = XMLParser::guessEncoding(@$this->httpResponse['headers']['content-type'], $data);
+
+        if ($this->debug) {
+            $start = strpos($data, '<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
+            if ($start) {
+                $start += strlen('<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
+                $end = strpos($data, '-->', $start);
+                $comments = substr($data, $start, $end - $start);
+                Logger::debugMessage("---SERVER DEBUG INFO (DECODED) ---\n\t" .
+                    str_replace("\n", "\n\t", base64_decode($comments)) . "\n---END---", $respEncoding);
+            }
+        }
+
         // if user wants back raw xml, give it to him
         if ($returnType == 'xml') {
             $r = new Response($data, 0, '', 'xml');
@@ -225,9 +229,6 @@ class Request
 
             return $r;
         }
-
-        // try to 'guestimate' the character encoding of the received response
-        $respEncoding = XMLParser::guessEncoding(@$this->httpResponse['headers']['content-type'], $data);
 
         if ($respEncoding != '') {
 
@@ -317,8 +318,8 @@ class Request
                 PhpXmlRpc::$xmlrpcstr['invalid_return']);
         } else {
             if ($this->debug) {
-                $this->debugMessage(
-                    "---PARSED---\n".var_export($xmlRpcParser->_xh['value'], true)."\n---END---", false
+                Logger::debugMessage(
+                    "---PARSED---\n".var_export($xmlRpcParser->_xh['value'], true)."\n---END---"
                 );
             }
 
@@ -326,8 +327,7 @@ class Request
             $v = &$xmlRpcParser->_xh['value'];
 
             if ($xmlRpcParser->_xh['isf']) {
-                /// @todo we should test here if server sent an int and a string,
-                /// and/or coerce them into such...
+                /// @todo we should test here if server sent an int and a string, and/or coerce them into such...
                 if ($returnType == 'xmlrpcvals') {
                     $errNo_v = $v->structmem('faultCode');
                     $errStr_v = $v->structmem('faultString');
@@ -354,23 +354,5 @@ class Request
         $r->raw_data = $this->httpResponse['raw_data'];
 
         return $r;
-    }
-
-    /**
-     * Echoes a debug message, taking care of escaping it when not in console mode
-     *
-     * @param string $message
-     * @param bool $encodeEntities when false, escapes using htmlspecialchars instead of htmlentities
-     */
-    protected function debugMessage($message, $encodeEntities = true)
-    {
-        if (PHP_SAPI != 'cli') {
-            if ($encodeEntities)
-                print "<PRE>\n".htmlentities($message)."\n</PRE>";
-            else
-                print "<PRE>\n".htmlspecialchars($message)."\n</PRE>";
-        } else {
-            print "\n$message\n";
-        }
     }
 }

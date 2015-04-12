@@ -2,6 +2,8 @@
 
 namespace PhpXmlRpc;
 
+use PhpXmlRpc\Helper\Logger;
+
 class Client
 {
     /// @todo: do these need to be public?
@@ -551,7 +553,7 @@ class Client
             $payload;
 
         if ($this->debug > 1) {
-            $this->debugMessage("---SENDING---\n$op\n---END---");
+            Logger::debugMessage("---SENDING---\n$op\n---END---");
         }
 
         if ($timeout > 0) {
@@ -707,9 +709,7 @@ class Client
         }
 
         if ($this->debug > 1) {
-            $this->debugMessage("---SENDING---\n$payload\n---END---");
-            // let the client see this now in case http times out...
-            flush();
+            Logger::debugMessage("---SENDING---\n$payload\n---END---");
         }
 
         if (!$keepAlive || !$this->xmlrpc_curl_handle) {
@@ -848,7 +848,7 @@ class Client
                 $message .= $name . ': ' . $val . "\n";
             }
             $message .= "---END---";
-            $this->debugMessage($message);
+            Logger::debugMessage($message);
         }
 
         if (!$result) {
@@ -987,7 +987,7 @@ class Client
         if ($this->return_type == 'xml') {
             return $rets;
         } elseif ($this->return_type == 'phpvals') {
-            ///@todo test this code branch...
+            /// @todo test this code branch...
             $rets = $result->value();
             if (!is_array($rets)) {
                 return false;       // bad return type from system.multicall
@@ -1070,21 +1070,5 @@ class Client
 
             return $response;
         }
-    }
-
-    /**
-     * Echoes a debug message, taking care of escaping it when not in console mode
-     *
-     * @param string $message
-     */
-    protected function debugMessage($message)
-    {
-        if (PHP_SAPI != 'cli') {
-            print "<PRE>\n".htmlentities($message)."\n</PRE>";
-        } else {
-            print "\n$message\n";
-        }
-        // let the client see this now in case http times out...
-        flush();
     }
 }

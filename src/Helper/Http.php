@@ -3,6 +3,7 @@
 namespace PhpXmlRpc\Helper;
 
 use PhpXmlRpc\PhpXmlRpc;
+use PhpXmlRpc\Helper\Logger;
 
 class Http
 {
@@ -198,7 +199,7 @@ class Http
             foreach ($httpResponse['cookies'] as $header => $value) {
                 $msg .= "COOKIE: $header={$value['value']}\n";
             }
-            $this->debugMessage($msg);
+            Logger::debugMessage($msg);
         }
 
         // if CURL was used for the call, http headers have been processed,
@@ -222,12 +223,12 @@ class Http
                         if ($httpResponse['headers']['content-encoding'] == 'deflate' && $degzdata = @gzuncompress($data)) {
                             $data = $degzdata;
                             if ($debug) {
-                                $this->debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
+                                Logger::debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
                             }
                         } elseif ($httpResponse['headers']['content-encoding'] == 'gzip' && $degzdata = @gzinflate(substr($data, 10))) {
                             $data = $degzdata;
                             if ($debug) {
-                                $this->debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
+                                Logger::debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
                             }
                         } else {
                             error_log('XML-RPC: ' . __METHOD__ . ': errors occurred when trying to decode the deflated data received from server');
@@ -242,19 +243,5 @@ class Http
         } // end of 'if needed, de-chunk, re-inflate response'
 
         return $httpResponse;
-    }
-
-    /**
-     * Echoes a debug message, taking care of escaping it when not in console mode
-     *
-     * @param string $message
-     */
-    protected function debugMessage($message)
-    {
-        if (PHP_SAPI != 'cli') {
-            print "<PRE>\n".htmlentities($message)."\n</PRE>";
-        } else {
-            print "\n$message\n";
-        }
     }
 }
