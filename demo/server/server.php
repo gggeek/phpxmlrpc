@@ -42,7 +42,7 @@ class xmlrpc_server_methods_container
      */
     public function phpwarninggenerator($m)
     {
-        $a = $b; // this triggers a warning in E_ALL mode, since $b is undefined
+        $a = $undefinedVariable; // this triggers a warning in E_ALL mode, since $undefinedVariable is undefined
         return new PhpXmlRpc\Response(new PhpXmlRpc\Value(1, 'boolean'));
     }
 
