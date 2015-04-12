@@ -363,7 +363,7 @@ class Client
         }
 
         // where req is a Request
-        $req->debug = $this->debug;
+        $req->setDebug($this->debug);
 
         if ($method == 'https') {
             $r = $this->sendPayloadHTTPS(

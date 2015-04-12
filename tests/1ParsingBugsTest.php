@@ -7,6 +7,22 @@ include_once __DIR__ . '/../lib/xmlrpcs.inc';
 
 class ParsingBugsTests extends PHPUnit_Framework_TestCase
 {
+    public $args = array();
+
+    public function setUp()
+    {
+        $this->args = argParser::getArgs();
+    }
+
+    protected function newMsg($methodName, $params = array())
+    {
+        $msg = new xmlrpcmsg($methodName, $params);
+        if ($this->args['DEBUG']) {
+            $msg->setDebug($this->args['DEBUG']);
+        }
+        return $msg;
+    }
+
     public function testMinusOneString()
     {
         $v = new xmlrpcval('-1');
@@ -32,7 +48,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $v = array($str => new xmlrpcval(1));
         $r = new xmlrpcresp(new xmlrpcval($v, 'struct'));
         $r = $r->serialize();
-        $m = new xmlrpcmsg('dummy');
+        $m = $this->newMsg('dummy');
         $r = $m->parseResponse($r);
         $v = $r->value();
         $this->assertEquals($v->structmemexists($str), true);
@@ -62,7 +78,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
 </value>
 </fault>
 </methodResponse>');
-        $m = new xmlrpcmsg('dummy');
+        $m = $this->newMsg('dummy');
         $r = $m->parseResponse($response);
         $v = $r->faultString();
         $this->assertEquals(chr(224) . chr(252) . chr(232) . chr(224) . chr(252) . chr(232), $v);
@@ -70,7 +86,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
 
     public function testValidNumbers()
     {
-        $m = new xmlrpcmsg('dummy');
+        $m = $this->newMsg('dummy');
         $fp =
             '<?xml version="1.0"?>
 <methodResponse>
@@ -193,8 +209,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
 
     public function testBrokenResponses()
     {
-        $m = new xmlrpcmsg('dummy');
-        //$m->debug = 1;
+        $m = $this->newMsg('dummy');
         // omitting the 'params' tag: no more tolerated by the lib...
         $f = '<?xml version="1.0"?>
 <methodResponse>
@@ -226,7 +241,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
 
     public function testBuggyHttp()
     {
-        $s = new xmlrpcmsg('dummy');
+        $s = $this->newMsg('dummy');
         $f = 'HTTP/1.1 100 Welcome to the jungle
 
 HTTP/1.0 200 OK
@@ -253,7 +268,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 
     public function testStringBug()
     {
-        $s = new xmlrpcmsg('dummy');
+        $s = $this->newMsg('dummy');
         $f = '<?xml version="1.0"?>
 <!-- $Id -->
 <!-- found by 2z69xks7bpy001@sneakemail.com, amongst others
@@ -289,7 +304,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 
     public function testWhiteSpace()
     {
-        $s = new xmlrpcmsg('dummy');
+        $s = $this->newMsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
 <member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>hello world. 2 newlines follow
 
@@ -304,7 +319,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 
     public function testDoubleDataInArrayTag()
     {
-        $s = new xmlrpcmsg('dummy');
+        $s = $this->newMsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value><array>
 <data></data>
 <data></data>
@@ -325,7 +340,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 
     public function testDoubleStuffInValueTag()
     {
-        $s = new xmlrpcmsg('dummy');
+        $s = $this->newMsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value>
 <string>hello world</string>
 <array><data></data></array>
@@ -354,7 +369,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 
     public function testAutodecodeResponse()
     {
-        $s = new xmlrpcmsg('dummy');
+        $s = $this->newMsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
 <member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>hello world. 2 newlines follow
 
@@ -369,7 +384,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 
     public function testNoDecodeResponse()
     {
-        $s = new xmlrpcmsg('dummy');
+        $s = $this->newMsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
 <member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>hello world. 2 newlines follow
 
@@ -415,7 +430,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
     {
         $string = chr(224) . chr(252) . chr(232);
 
-        $s = new xmlrpcmsg('dummy');
+        $s = $this->newMsg('dummy');
         $f = "HTTP/1.1 200 OK\r\nContent-type: text/xml; charset=UTF-8\r\n\r\n" . '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
 <member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . utf8_encode($string) . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
@@ -442,7 +457,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
     {
         $string = chr(224) . chr(252) . chr(232);
 
-        $s = new xmlrpcmsg('dummy');
+        $s = $this->newMsg('dummy');
         $f = "HTTP/1.1 200 OK\r\nContent-type: text/xml; charset=ISO-8859-1\r\n\r\n" . '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
 <member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . $string . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
@@ -494,7 +509,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $v = new xmlrpcval('hello', 'null');
         $r = new xmlrpcresp($v);
         $s = $r->serialize();
-        $m = new xmlrpcmsg('dummy');
+        $m = $this->newMsg('dummy');
         $r = $m->parseresponse($s);
         $this->assertequals(2, $r->faultCode());
         // enable reception of nil values

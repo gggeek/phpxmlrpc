@@ -317,7 +317,7 @@ class Request
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'],
                 PhpXmlRpc::$xmlrpcstr['invalid_return']);
         } else {
-            if ($this->debug) {
+            if ($this->debug > 1) {
                 Logger::instance()->debugMessage(
                     "---PARSED---\n".var_export($xmlRpcParser->_xh['value'], true)."\n---END---"
                 );
@@ -354,5 +354,15 @@ class Request
         $r->raw_data = $this->httpResponse['raw_data'];
 
         return $r;
+    }
+
+    /**
+     * Enables/disables the echoing to screen of the xmlrpc responses received.
+     *
+     * @param integer $in values 0, 1, 2 are supported
+     */
+    public function setDebug($in)
+    {
+        $this->debug = $in;
     }
 }
