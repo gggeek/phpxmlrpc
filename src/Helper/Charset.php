@@ -110,7 +110,7 @@ class Charset
             case 'US-ASCII_':
             case 'US-ASCII_ISO-8859-1':
             case 'UTF-8_UTF-8':
-                //case 'CP1252_CP1252':
+            //case 'CP1252_CP1252':
                 $escapedData = str_replace(array('&', '"', "'", '<', '>'), array('&amp;', '&quot;', '&apos;', '&lt;', '&gt;'), $data);
                 break;
             case 'UTF-8_':

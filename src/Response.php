@@ -33,7 +33,6 @@ class Response
             // error response
             $this->errno = $fCode;
             $this->errstr = $fString;
-            //$this->errstr = htmlspecialchars($fString); // XXX: encoding probably shouldn't be done here; fix later.
         } else {
             // successful response
             $this->val = $val;
