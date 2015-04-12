@@ -169,7 +169,7 @@ class Request
     public function parseResponse($data = '', $headersProcessed = false, $returnType = 'xmlrpcvals')
     {
         if ($this->debug) {
-            Logger::debugMessage("---GOT---\n$data\n---END---");
+            Logger::instance()->debugMessage("---GOT---\n$data\n---END---");
         }
 
         $this->httpResponse = array('raw_data' => $data, 'headers' => array(), 'cookies' => array());
@@ -215,7 +215,7 @@ class Request
                 $start += strlen('<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
                 $end = strpos($data, '-->', $start);
                 $comments = substr($data, $start, $end - $start);
-                Logger::debugMessage("---SERVER DEBUG INFO (DECODED) ---\n\t" .
+                Logger::instance()->debugMessage("---SERVER DEBUG INFO (DECODED) ---\n\t" .
                     str_replace("\n", "\n\t", base64_decode($comments)) . "\n---END---", $respEncoding);
             }
         }
@@ -318,7 +318,7 @@ class Request
                 PhpXmlRpc::$xmlrpcstr['invalid_return']);
         } else {
             if ($this->debug) {
-                Logger::debugMessage(
+                Logger::instance()->debugMessage(
                     "---PARSED---\n".var_export($xmlRpcParser->_xh['value'], true)."\n---END---"
                 );
             }

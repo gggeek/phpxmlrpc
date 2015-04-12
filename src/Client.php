@@ -553,7 +553,7 @@ class Client
             $payload;
 
         if ($this->debug > 1) {
-            Logger::debugMessage("---SENDING---\n$op\n---END---");
+            Logger::instance()->debugMessage("---SENDING---\n$op\n---END---");
         }
 
         if ($timeout > 0) {
@@ -709,7 +709,7 @@ class Client
         }
 
         if ($this->debug > 1) {
-            Logger::debugMessage("---SENDING---\n$payload\n---END---");
+            Logger::instance()->debugMessage("---SENDING---\n$payload\n---END---");
         }
 
         if (!$keepAlive || !$this->xmlrpc_curl_handle) {
@@ -848,7 +848,7 @@ class Client
                 $message .= $name . ': ' . $val . "\n";
             }
             $message .= "---END---";
-            Logger::debugMessage($message);
+            Logger::instance()->debugMessage($message);
         }
 
         if (!$result) {

@@ -11,6 +11,22 @@ namespace PhpXmlRpc\Helper;
 
 class Logger
 {
+    protected static $instance = null;
+
+    /**
+     * This class is singleton, so that later we can move to DI patterns.
+     *
+     * @return Charset
+     */
+    public static function instance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
     /**
      * Echoes a debug message, taking care of escaping it when not in console mode.
      * NB: if the encoding of the message is not known or wrong, and we are working in web mode, there is no guarantee
@@ -19,7 +35,7 @@ class Logger
      * @param string $message
      * @param string $encoding
      */
-    public static function debugMessage($message, $encoding=null)
+    public function debugMessage($message, $encoding=null)
     {
         if (PHP_SAPI != 'cli') {
             $flags = ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE;

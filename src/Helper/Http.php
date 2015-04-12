@@ -3,14 +3,12 @@
 namespace PhpXmlRpc\Helper;
 
 use PhpXmlRpc\PhpXmlRpc;
-use PhpXmlRpc\Helper\Logger;
 
 class Http
 {
     /**
-     * Decode a string that is encoded w/ "chunked" transfer encoding
-     * as defined in rfc2068 par. 19.4.6
-     * code shamelessly stolen from nusoap library by Dietrich Ayala.
+     * Decode a string that is encoded with "chunked" transfer encoding as defined in rfc2068 par. 19.4.6
+     * Code shamelessly stolen from nusoap library by Dietrich Ayala.
      *
      * @param string $buffer the string to be decoded
      *
@@ -199,7 +197,7 @@ class Http
             foreach ($httpResponse['cookies'] as $header => $value) {
                 $msg .= "COOKIE: $header={$value['value']}\n";
             }
-            Logger::debugMessage($msg);
+            Logger::instance()->debugMessage($msg);
         }
 
         // if CURL was used for the call, http headers have been processed,
@@ -223,12 +221,12 @@ class Http
                         if ($httpResponse['headers']['content-encoding'] == 'deflate' && $degzdata = @gzuncompress($data)) {
                             $data = $degzdata;
                             if ($debug) {
-                                Logger::debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
+                                Logger::instance()->debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
                             }
                         } elseif ($httpResponse['headers']['content-encoding'] == 'gzip' && $degzdata = @gzinflate(substr($data, 10))) {
                             $data = $degzdata;
                             if ($debug) {
-                                Logger::debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
+                                Logger::instance()->debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
                             }
                         } else {
                             error_log('XML-RPC: ' . __METHOD__ . ': errors occurred when trying to decode the deflated data received from server');
