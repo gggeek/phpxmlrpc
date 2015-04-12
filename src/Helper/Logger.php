@@ -16,7 +16,7 @@ class Logger
     /**
      * This class is singleton, so that later we can move to DI patterns.
      *
-     * @return Charset
+     * @return Logger
      */
     public static function instance()
     {
