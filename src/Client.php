@@ -726,6 +726,7 @@ class Client
 
         if ($this->debug) {
             curl_setopt($curl, CURLOPT_VERBOSE, 1);
+            /// @todo allow callers to redirect curlopt_stderr to some stream which can be buffered
         }
         curl_setopt($curl, CURLOPT_USERAGENT, $this->user_agent);
         // required for XMLRPC: post the data

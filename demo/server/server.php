@@ -731,7 +731,6 @@ $a = array(
     ),
     "examples.generatePHPWarning" => array(
         "function" => array($o, "phpwarninggenerator"),
-        //'function' => 'xmlrpc_server_methods_container::phpwarninggenerator'
     ),
     "examples.raiseException" => array(
         "function" => array($o, "exceptiongenerator"),
