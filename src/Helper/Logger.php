@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gg
- * Date: 12/04/2015
- * Time: 12:11
- */
 
 namespace PhpXmlRpc\Helper;
-
 
 class Logger
 {
