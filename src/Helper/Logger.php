@@ -37,6 +37,11 @@ class Logger
      */
     public function debugMessage($message, $encoding=null)
     {
+        // US-ASCII is a warning for PHP and a fatal for HHVM
+        if ($encoding == 'US-ASCII') {
+            $encoding = 'UTF-8';
+        }
+
         if (PHP_SAPI != 'cli') {
             $flags = ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE;
             if ($encoding != null) {
