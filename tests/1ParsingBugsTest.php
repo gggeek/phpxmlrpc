@@ -451,7 +451,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $v = $v['content'];
         $this->assertEquals($string, $v);
 
-        $f = '<?xml version="1.0" encoding="utf-8"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
+        $f = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
 <member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . utf8_encode($string) . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
         $r = $s->parseResponse($f, false, 'phpvals');
@@ -478,7 +478,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $v = $v['content'];
         $this->assertEquals($string, $v);
 
-        $f = '<?xml version="1.0" encoding="iso-8859-1"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
+        $f = '<?xml version="1.0" encoding="ISO-8859-1"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
 <member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . $string . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
         $r = $s->parseResponse($f, false, 'phpvals');

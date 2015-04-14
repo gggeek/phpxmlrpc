@@ -167,7 +167,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
     {
         $sendstring =
             "last but not least weird names: G" . chr(252) . "nter, El" . chr(232) . "ne";
-        $f = '<?xml version="1.0" encoding="iso-8859-1"?><methodCall><methodName>examples.stringecho</methodName><params><param><value>'.
+        $f = '<?xml version="1.0" encoding="ISO-8859-1"?><methodCall><methodName>examples.stringecho</methodName><params><param><value>'.
             $sendstring.
             '</value></param></params></methodCall>';
         $v = $this->send($f);

@@ -54,7 +54,7 @@ class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
 
     public function testSimpleCall()
     {
-        $page = $this->request('client/simple_call.php');
+        $page = $this->request('client/simple_call.php', 'GET', null, true);
     }
 
     public function testWhich()

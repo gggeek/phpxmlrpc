@@ -41,7 +41,7 @@ abstract class PhpXmlRpc_LocalFileTestCase extends PHPUnit_Framework_TestCase
         return $result;
     }
 
-    protected function request($file, $method = 'GET', $payload = '')
+    protected function request($file, $method = 'GET', $payload = '', $emptyPageOk = false)
     {
         $url = $this->baseUrl . $file;
 
@@ -68,6 +68,9 @@ abstract class PhpXmlRpc_LocalFileTestCase extends PHPUnit_Framework_TestCase
         curl_close($ch);
 
         $this->assertNotFalse($page);
+        if (!$emptyPageOk) {
+            $this->assertNotEquals('', $page);
+        }
         $this->assertNotContains('Fatal error', $page);
         $this->assertNotContains('Notice:', $page);
 
