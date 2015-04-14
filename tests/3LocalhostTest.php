@@ -85,13 +85,27 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         } else {
             $this->client = new xmlrpc_client($this->args['URI'], $this->args['LOCALSERVER']);
         }
-        if ($this->args['DEBUG']) {
-            $this->client->setDebug($this->args['DEBUG']);
-        }
+
+        $this->client->setDebug($this->args['DEBUG']);
         $this->client->request_compression = $this->request_compression;
         $this->client->accepted_compression = $this->accepted_compression;
 
         $this->coverageScriptUrl = 'http://' . $this->args['LOCALSERVER'] . '/' . str_replace( '/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['URI'] );
+
+        if ($this->args['DEBUG'] == 1)
+            ob_start();
+    }
+
+    protected function tearDown()
+    {
+        if ($this->args['DEBUG'] != 1)
+            return;
+        $out = ob_get_clean();
+        $status = $this->getStatus();
+        if ($status == PHPUnit_Runner_BaseTestRunner::STATUS_ERROR
+            || $status == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+            echo $out;
+        }
     }
 
     protected function send($msg, $errrorcode = 0, $return_response = false)

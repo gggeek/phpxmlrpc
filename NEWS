@@ -49,7 +49,10 @@ PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
 * improved: echo all debug messages even when there are characters in them which php deems in a wrong encoding
   (this is visible e.g. in the debugger)
 
-* improved: at debug level 1, the rebuilt php objects are not dumped to screen (server-side already did that)
+* changed: debug info handling
+    - at debug level 1, the rebuilt php objects are not dumped to screen (server-side already did that)
+    - at debug level 1, curl communication info are not dumped to screen
+    - at debug level 1, the tests echo payloads of failures; at debug level 2 all payloads
 
 
 XML-RPC for PHP version 3.0.0 - 2014/6/15

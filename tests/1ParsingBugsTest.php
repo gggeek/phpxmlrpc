@@ -9,17 +9,29 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
 {
     public $args = array();
 
-    public function setUp()
+    protected function setUp()
     {
         $this->args = argParser::getArgs();
+        if ($this->args['DEBUG'] == 1)
+            ob_start();
+    }
+
+    protected function tearDown()
+    {
+        if ($this->args['DEBUG'] != 1)
+            return;
+        $out = ob_get_clean();
+        $status = $this->getStatus();
+        if ($status == PHPUnit_Runner_BaseTestRunner::STATUS_ERROR
+            || $status == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+            echo $out;
+        }
     }
 
     protected function newMsg($methodName, $params = array())
     {
         $msg = new xmlrpcmsg($methodName, $params);
-        if ($this->args['DEBUG']) {
-            $msg->setDebug($this->args['DEBUG']);
-        }
+        $msg->setDebug($this->args['DEBUG']);
         return $msg;
     }
 

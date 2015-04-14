@@ -722,10 +722,10 @@ class Client
         }
 
         // results into variable
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-        if ($this->debug) {
-            curl_setopt($curl, CURLOPT_VERBOSE, 1);
+        if ($this->debug > 1) {
+            curl_setopt($curl, CURLOPT_VERBOSE, true);
             /// @todo allow callers to redirect curlopt_stderr to some stream which can be buffered
         }
         curl_setopt($curl, CURLOPT_USERAGENT, $this->user_agent);

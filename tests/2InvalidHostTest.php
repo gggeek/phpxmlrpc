@@ -15,8 +15,21 @@ class InvalidHostTest extends PHPUnit_Framework_TestCase
         $this->args = argParser::getArgs();
 
         $this->client = new xmlrpc_client('/NOTEXIST.php', $this->args['LOCALSERVER'], 80);
-        if ($this->args['DEBUG']) {
-            $this->client->setDebug($this->args['DEBUG']);
+        $this->client->setDebug($this->args['DEBUG']);
+
+        if ($this->args['DEBUG'] == 1)
+            ob_start();
+    }
+
+    protected function tearDown()
+    {
+        if ($this->args['DEBUG'] != 1)
+            return;
+        $out = ob_get_clean();
+        $status = $this->getStatus();
+        if ($status == PHPUnit_Runner_BaseTestRunner::STATUS_ERROR
+            || $status == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+            echo $out;
         }
     }
 
