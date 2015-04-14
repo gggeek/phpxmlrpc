@@ -104,11 +104,11 @@ if ($action) {
         if (!class_exists('jsonrpc_client')) {
             die('Error: to debug the jsonrpc protocol the jsonrpc.inc file is needed');
         }
-        $clientClass = 'PhpJsRpc\client';
-        $requestClass = 'PhpJsRpc\request';
+        $clientClass = 'PhpJsRpc\Client';
+        $requestClass = 'PhpJsRpc\Request';
         $protoName = 'JSONRPC';
     } else {
-        $clientClass = 'PhpXmlRpc\client';
+        $clientClass = 'PhpXmlRpc\Client';
         $requestClass = 'PhpXmlRpc\Request';
         $protoName = 'XMLRPC';
     }
