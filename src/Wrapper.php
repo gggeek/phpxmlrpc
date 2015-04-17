@@ -274,7 +274,7 @@ class Wrapper
                         // syntax: @return type desc
                         //$returns = preg_split('/\s+/', $doc);
                         if (preg_match('/@return\s+(\S+)\s+(.+)/', $doc, $matches)) {
-                            $returns = php_2_xmlrpc_type($matches[1]);
+                            $returns = $this->php_2_xmlrpc_type($matches[1]);
                             if (isset($matches[2])) {
                                 $returnsDocs = $matches[2];
                             }

@@ -930,8 +930,9 @@ class Server
         // base64 or datetime values, but they will be listed as strings here...
         $numParams = count($call['params']);
         $pt = array();
+        $wrapper = new Wrapper();
         foreach ($call['params'] as $val) {
-            $pt[] = php_2_xmlrpc_type(gettype($val));
+            $pt[] = $wrapper->php_2_xmlrpc_type(gettype($val));
         }
 
         $result = $server->execute($call['methodName'], $call['params'], $pt);
