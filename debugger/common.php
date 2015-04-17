@@ -28,8 +28,8 @@ $preferredEncodings = 'UTF-8, ASCII, ISO-8859-1, UTF-7, EUC-JP, SJIS, eucJP-win,
 $inputcharset = mb_detect_encoding(urldecode($_SERVER['REQUEST_URI']), $preferredEncodings);
 if (isset($_GET['usepost']) && $_GET['usepost'] === 'true') {
     $_GET = $_POST;
-    /// @todo detect encoding, eg from from http headers?
-    // mb_detect_encoding(urldecode($_SERVER['...']), $preferredEncodings);
+    /// @bug this is not a perfect detection method - it will fail if eg. a latin1 character is in the method name
+    $inputcharset = mb_detect_encoding(urldecode(isset($_GET['methodpayload'])) ? $_GET['methodpayload'] : '', $preferredEncodings);
 }
 
 // recover input parameters
