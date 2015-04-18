@@ -86,6 +86,7 @@ in an alphabetic order.';
 function findState($m)
 {
     global $stateNames;
+
     $err = "";
     // get the first param
     $sno = $m->getParam(0);
@@ -122,6 +123,7 @@ function findState($m)
 function inner_findstate($stateNo)
 {
     global $stateNames;
+
     if (isset($stateNames[$stateNo - 1])) {
         return $stateNames[$stateNo - 1];
     } else {
@@ -166,10 +168,7 @@ $stringecho_doc = 'Accepts a string parameter, returns the string.';
 function stringEcho($m)
 {
     // just sends back a string
-    $s = $m->getParam(0);
-    $v = $s->scalarval();
-
-    return new PhpXmlRpc\Response(new Value($s->scalarval()));
+    return new PhpXmlRpc\Response(new Value($m->getParam(0)->scalarval()));
 }
 
 $echoback_sig = array(array(Value::$xmlrpcString, Value::$xmlrpcString));
@@ -186,9 +185,8 @@ $echosixtyfour_sig = array(array(Value::$xmlrpcString, Value::$xmlrpcBase64));
 $echosixtyfour_doc = 'Accepts a base64 parameter and returns it decoded as a string';
 function echoSixtyFour($m)
 {
-    // accepts an encoded value, but sends it back
-    // as a normal string. this is to test base64 encoding
-    // is working as expected
+    // Accepts an encoded value, but sends it back as a normal string.
+    // This is to test that base64 encoding is working as expected
     $incoming = $m->getParam(0);
 
     return new PhpXmlRpc\Response(new Value($incoming->scalarval(), "string"));
@@ -306,7 +304,6 @@ $mailsend_sig = array(array(
     Value::$xmlrpcString, Value::$xmlrpcString, Value::$xmlrpcString,
     Value::$xmlrpcString, Value::$xmlrpcString,
 ));
-
 $mailsend_doc = 'mail.send(recipient, subject, text, sender, cc, bcc, mimetype)<br/>
 recipient, cc, and bcc are strings, comma-separated lists of email addresses, as described above.<br/>
 subject is a string, the subject of the message.<br/>
@@ -719,12 +716,25 @@ $signatures = array(
         "docstring" => $bitflipper_doc,
     ),
     // signature omitted on purpose
-    "examples.generatePHPWarning" => array(
+    "tests.generatePHPWarning" => array(
         "function" => array($object, "phpWarningGenerator"),
     ),
     // signature omitted on purpose
-    "examples.raiseException" => array(
+    "tests.raiseException" => array(
         "function" => array($object, "exceptionGenerator"),
+    ),
+    /*
+    // Greek word 'kosme'. NB: NOT a valid ISO8859 string!
+    // We can only register this when setting internal encoding to UTF-8, or it will break system.listMethods
+    "tests.utf8methodname." . 'κόσμε' => array(
+        "function" => "stringEcho",
+        "signature" => $stringecho_sig,
+        "docstring" => $stringecho_doc,
+    ),*/
+    "tests.iso88591methodname." . chr(224) . chr(252) . chr(232) => array(
+        "function" => "stringEcho",
+        "signature" => $stringecho_sig,
+        "docstring" => $stringecho_doc,
     ),
     "examples.getallheaders" => array(
         "function" => 'getallheaders_xmlrpc',

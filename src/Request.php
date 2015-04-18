@@ -2,9 +2,10 @@
 
 namespace PhpXmlRpc;
 
+use PhpXmlRpc\Helper\Charset;
 use PhpXmlRpc\Helper\Http;
-use PhpXmlRpc\Helper\XMLParser;
 use PhpXmlRpc\Helper\Logger;
+use PhpXmlRpc\Helper\XMLParser;
 
 class Request
 {
@@ -52,7 +53,7 @@ class Request
             $this->content_type = 'text/xml';
         }
         $this->payload = $this->xml_header($charsetEncoding);
-        $this->payload .= '<methodName>' . $this->methodname . "</methodName>\n";
+        $this->payload .= '<methodName>' . Charset::instance()->encodeEntities($this->methodname, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</methodName>\n";
         $this->payload .= "<params>\n";
         foreach ($this->params as $p) {
             $this->payload .= "<param>\n" . $p->serialize($charsetEncoding) .

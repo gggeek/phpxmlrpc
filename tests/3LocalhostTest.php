@@ -108,7 +108,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    protected function send($msg, $errrorcode = 0, $return_response = false)
+    protected function send($msg, $errorCode = 0, $returnResponse = false)
     {
         if ($this->collectCodeCoverageInformation) {
             $this->client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);
@@ -119,13 +119,13 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         if (is_array($r)) {
             return $r;
         }
-        if (is_array($errrorcode)) {
-            $this->assertContains($r->faultCode(), $errrorcode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
+        if (is_array($errorCode)) {
+            $this->assertContains($r->faultCode(), $errorCode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
         } else {
-            $this->assertEquals($r->faultCode(), $errrorcode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
+            $this->assertEquals($r->faultCode(), $errorCode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
         }
         if (!$r->faultCode()) {
-            if ($return_response) {
+            if ($returnResponse) {
                 return $r;
             } else {
                 return $r->value();
@@ -137,7 +137,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
 
     public function testString()
     {
-        $sendstring = "here are 3 \"entities\": < > & " .
+        $sendString = "here are 3 \"entities\": < > & " .
             "and here's a dollar sign: \$pretendvarname and a backslash too: " . chr(92) .
             " - isn't that great? \\\"hackery\\\" at it's best " .
             " also don't want to miss out on \$item[0]. " .
@@ -147,34 +147,56 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
             "and then LFCR" . chr(10) . chr(13) .
             "last but not least weird names: G" . chr(252) . "nter, El" . chr(232) . "ne, and an xml comment closing tag: -->";
         $f = new xmlrpcmsg('examples.stringecho', array(
-            new xmlrpcval($sendstring, 'string'),
+            new xmlrpcval($sendString, 'string'),
         ));
         $v = $this->send($f);
         if ($v) {
             // when sending/receiving non-US-ASCII encoded strings, XML says cr-lf can be normalized.
             // so we relax our tests...
-            $l1 = strlen($sendstring);
+            $l1 = strlen($sendString);
             $l2 = strlen($v->scalarval());
             if ($l1 == $l2) {
-                $this->assertEquals($sendstring, $v->scalarval());
+                $this->assertEquals($sendString, $v->scalarval());
             } else {
-                $this->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"), $sendstring), $v->scalarval());
+                $this->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"), $sendString), $v->scalarval());
             }
         }
     }
 
     public function testLatin1String()
     {
-        $sendstring =
+        $sendString =
             "last but not least weird names: G" . chr(252) . "nter, El" . chr(232) . "ne";
         $f = '<?xml version="1.0" encoding="ISO-8859-1"?><methodCall><methodName>examples.stringecho</methodName><params><param><value>'.
-            $sendstring.
+            $sendString.
             '</value></param></params></methodCall>';
         $v = $this->send($f);
         if ($v) {
-            $this->assertEquals($sendstring, $v->scalarval());
+            $this->assertEquals($sendString, $v->scalarval());
         }
     }
+
+    public function testLatin1Method()
+    {
+        $f = new xmlrpcmsg("tests.iso88591methodname." . chr(224) . chr(252) . chr(232), array(
+            new xmlrpcval('hello')
+        ));
+        $v = $this->send($f);
+        if ($v) {
+            $this->assertEquals('hello', $v->scalarval());
+        }
+    }
+
+    /*public function testUtf8Method()
+    {
+        $f = new xmlrpcmsg("tests.utf8methodname." . 'κόσμε', array(
+            new xmlrpcval('hello')
+        ));
+        $v = $this->send($f);
+        if ($v) {
+            $this->assertEquals('hello', $v->scalarval());
+        }
+    }*/
 
     public function testAddingDoubles()
     {
@@ -250,7 +272,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
 
     public function testBase64()
     {
-        $sendstring = 'Mary had a little lamb,
+        $sendString = 'Mary had a little lamb,
 Whose fleece was white as snow,
 And everywhere that Mary went
 the lamb was sure to go.
@@ -260,14 +282,14 @@ She tied it to a pylon
 Ten thousand volts went down its back
 And turned it into nylon';
         $f = new xmlrpcmsg('examples.decode64', array(
-            new xmlrpcval($sendstring, 'base64'),
+            new xmlrpcval($sendString, 'base64'),
         ));
         $v = $this->send($f);
         if ($v) {
-            if (strlen($sendstring) == strlen($v->scalarval())) {
-                $this->assertEquals($sendstring, $v->scalarval());
+            if (strlen($sendString) == strlen($v->scalarval())) {
+                $this->assertEquals($sendString, $v->scalarval());
             } else {
-                $this->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"), $sendstring), $v->scalarval());
+                $this->assertEquals(str_replace(array("\r\n", "\r"), array("\n", "\n"), $sendString), $v->scalarval());
             }
         }
     }
@@ -290,9 +312,9 @@ And turned it into nylon';
 
     public function testCountEntities()
     {
-        $sendstring = "h'fd>onc>>l>>rw&bpu>q>e<v&gxs<ytjzkami<";
+        $sendString = "h'fd>onc>>l>>rw&bpu>q>e<v&gxs<ytjzkami<";
         $f = new xmlrpcmsg('validator1.countTheEntities', array(
-            new xmlrpcval($sendstring, 'string'),
+            new xmlrpcval($sendString, 'string'),
         ));
         $v = $this->send($f);
         if ($v) {
@@ -491,7 +513,7 @@ And turned it into nylon';
 
     public function testCatchWarnings()
     {
-        $f = new xmlrpcmsg('examples.generatePHPWarning', array(
+        $f = new xmlrpcmsg('tests.generatePHPWarning', array(
             new xmlrpcval('whatever', 'string'),
         ));
         $v = $this->send($f);
@@ -502,7 +524,7 @@ And turned it into nylon';
 
     public function testCatchExceptions()
     {
-        $f = new xmlrpcmsg('examples.raiseException', array(
+        $f = new xmlrpcmsg('tests.raiseException', array(
             new xmlrpcval('whatever', 'string'),
         ));
         $v = $this->send($f, $GLOBALS['xmlrpcerr']['server_error']);
