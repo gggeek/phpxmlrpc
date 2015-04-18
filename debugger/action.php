@@ -196,7 +196,7 @@ td form {margin: 0;}
             }
         }
         else
-          $msg[0]->payload = $msg[0]->xml_header() .
+          $msg[0]->payload = $msg[0]->xml_header($inputcharset) .
             '<methodName>' . $method . "</methodName>\n<params>" .
             $payload .
             "</params>\n" . $msg[0]->xml_footer();
