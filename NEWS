@@ -1,4 +1,11 @@
-XML-RPC for PHP version 3.0.1 - 201X/Y/Z
+XML-RPC for PHP version 3.0.1 - 2015/4/18
+
+This release corrects all bugs that have been reported and successfully reproduced since
+version 3.0.0:
+
+* the library does not decode correctly LATIN-1 requests/responses if the character set is only set in the xml prolog
+* the client can not call remote methods which use LATIN-1 or UTF8 characters in their names
+* the debugger sends incorrect requests when the payload includes LATIN-1 characters
 
 Taking baby steps to modern-world php, this release is now tested using Travis ( https://travis-ci.org/ ).
 
@@ -42,7 +49,7 @@ the library is still considered to be production quality.
 
 XML-RPC for PHP version 2.2.2 - 2009/03/16
 
-This release corrects all bugs that have been reported and sucesfully reproduced since
+This release corrects all bugs that have been reported and successfully reproduced since
 version 2.2.1.
 Regardless of the intimidating message about dropping PHP 4 support, it still does
 support that ancient, broken and insecure platform.
@@ -61,7 +68,7 @@ support that ancient, broken and insecure platform.
 
 XML-RPC for PHP version 2.2.1 - 2008/03/06
 
-This release corrects all bugs that have been reported and sucesfully reproduced.
+This release corrects all bugs that have been reported and successfully reproduced.
 It is the last release of the library that will support PHP 4.
 
 * fixed: work around bug in php 5.2.2 which broke support of HTTP_RAW_POST_DATA
@@ -152,7 +159,7 @@ CHANGELOG IN DETAIL:
 * documentation for single parameters of exposed methods can be added to the dispatch map
   (and turned into html docs in conjunction with a future release of the extras package)
 * full response payload is saved into xmlrpcresp object for further debugging
-* stricter parsing of incmoing xmlrpc messages: two more invalid cases are now detected
+* stricter parsing of incoming xmlrpc messages: two more invalid cases are now detected
   (double data element inside array and struct/array after scalar inside value element)
 * debugger can now generate code that wraps a remote method into php function (works for jsonrpc, too)
 * debugger has better support for being activated via a single GET call (for integration into other tools?)
@@ -247,7 +254,7 @@ HTTPS support:
    $xmlrpc_internalencoding was set to UTF-8
  * fixed bug in xmlrpc_server::echoInput() (and marked method as deprecated)
  * correctly set cookies/http headers into xmlrpcresp objects even when the
-   sned() method call fails for some reason
+   send() method call fails for some reason
  * added a benchmark file in the testsuite directory
 
 A couple of (private/protected) methods have been refactored, as well as a

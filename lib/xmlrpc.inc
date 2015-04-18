@@ -225,7 +225,7 @@
 
 	// set to TRUE to enable encoding of php NULL values to <EX:NIL/> instead of <NIL/>
 	$GLOBALS['xmlrpc_null_apache_encoding']=false;
-    $GLOBALS['xmlrpc_null_apache_encoding_ns']='http://ws.apache.org/xmlrpc/namespaces/extensions';
+	$GLOBALS['xmlrpc_null_apache_encoding_ns']='http://ws.apache.org/xmlrpc/namespaces/extensions';
 
 	// used to store state during parsing
 	// quick explanation of components:
@@ -1622,12 +1622,12 @@
 					curl_setopt($curl, CURLOPT_SSLKEYPASSWD, $keypass);
 				}
 
-                // Upgrade transparently to more stringent check for versions of php which do not support otherwise.
-                // Doing it in constructor would be cleaner; doing it here saves us a couple of function calls
-                if($this->verifyhost == 1 && $info = curl_version() && version_compare($info['version'], '7.28.1') >= 0)
-                {
-                    $this->verifyhost = 2;
-                }
+				// Upgrade transparently to more stringent check for versions of php which do not support otherwise.
+				// Doing it in constructor would be cleaner; doing it here saves us a couple of function calls
+				if($this->verifyhost == 1 && $info = curl_version() && version_compare($info['version'], '7.28.1') >= 0)
+				{
+					$this->verifyhost = 2;
+				}
 				// whether to verify cert's common name (CN); 0 for no, 1 to verify that it exists, and 2 to verify that it matches the hostname used
 				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->verifyhost);
 			}
@@ -1707,12 +1707,12 @@
 					curl_close($curl);
 				}
 				$resp =& $msg->parseResponse($result, true, $this->return_type);
-                // if we got back a 302, we can not reuse the curl handle for later calls
-                if($resp->faultCode() == $GLOBALS['xmlrpcerr']['http_error'] && $keepalive)
-                {
-                    curl_close($curl);
-                    $this->xmlrpc_curl_handle = null;
-                }
+				// if we got back a 302, we can not reuse the curl handle for later calls
+				if($resp->faultCode() == $GLOBALS['xmlrpcerr']['http_error'] && $keepalive)
+				{
+					curl_close($curl);
+					$this->xmlrpc_curl_handle = null;
+				}
 			}
 			return $resp;
 		}
@@ -2599,17 +2599,24 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			$GLOBALS['_xh']['isf_reason']='';
 			$GLOBALS['_xh']['rt']=''; // 'methodcall or 'methodresponse'
 
-			// if response charset encoding is not known / supported, try to use
-			// the default encoding and parse the xml anyway, but log a warning...
-			if (!in_array($resp_encoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
-			// the following code might be better for mb_string enabled installs, but
+			// Since parsing will fail if charset is not specified in the xml prologue,
+			// the encoding is not UTF8 and there are non-ascii chars in the text, we try to work round that...
+			// The following code might be better for mb_string enabled installs, but
 			// makes the lib about 200% slower...
-			//if (!is_valid_charset($resp_encoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
-			{
-				error_log('XML-RPC: '.__METHOD__.': invalid charset encoding of received response: '.$resp_encoding);
-				$resp_encoding = $GLOBALS['xmlrpc_defencoding'];
+			//if (!is_valid_charset($resp_encoding, array('UTF-8')))
+			if (!in_array($resp_encoding, array('UTF-8', 'US-ASCII')) && !has_encoding($data)) {
+				if ($resp_encoding == 'ISO-8859-1') {
+					$data = utf8_encode($data);
+				} else {
+					if (extension_loaded('mbstring')) {
+						$data = mb_convert_encoding($data, 'UTF-8', $resp_encoding);
+					} else {
+						error_log('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of received request: ' . $resp_encoding);
+					}
+				}
 			}
-			$parser = xml_parser_create($resp_encoding);
+
+			$parser = xml_parser_create();
 			xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
 			// G. Giunta 2005/02/13: PHP internally uses ISO-8859-1, so we have to tell
 			// the xml parser to give us back data in the expected charset.
@@ -3566,8 +3573,28 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		$GLOBALS['_xh']['isf_reason'] = '';
 		$GLOBALS['_xh']['method'] = false;
 		$GLOBALS['_xh']['rt'] = '';
-		/// @todo 'guestimate' encoding
-		$parser = xml_parser_create();
+
+		// 'guestimate' encoding
+		$val_encoding = guess_encoding('', $xml_val);
+
+		// Since parsing will fail if charset is not specified in the xml prologue,
+		// the encoding is not UTF8 and there are non-ascii chars in the text, we try to work round that...
+		// The following code might be better for mb_string enabled installs, but
+		// makes the lib about 200% slower...
+		//if (!is_valid_charset($val_encoding, array('UTF-8')))
+		if (!in_array($val_encoding, array('UTF-8', 'US-ASCII')) && !has_encoding($xml_val)) {
+			if ($val_encoding == 'ISO-8859-1') {
+				$xml_val = utf8_encode($xml_val);
+			} else {
+				if (extension_loaded('mbstring')) {
+					$xml_val = mb_convert_encoding($xml_val, 'UTF-8', $val_encoding);
+				} else {
+					error_log('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of received request: ' . $val_encoding);
+				}
+			}
+		}
+
+        $parser = xml_parser_create();
 		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
 		// What if internal encoding is not in one of the 3 allowed?
 		// we use the broadest one, ie. utf8!
@@ -3777,6 +3804,43 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			// BUT we have to be backward compatible with the lib, which always used UTF-8 as default...
 			return $GLOBALS['xmlrpc_defencoding'];
 		}
+	}
+
+	/**
+	 * Helper function: checks if an xml chunk as a charset declaration (BOM or in the xml declaration)
+	 *
+	 * @param string $xmlChunk
+	 * @return bool
+	 */
+	function has_encoding($xmlChunk)
+	{
+		// scan the first bytes of the data for a UTF-16 (or other) BOM pattern
+		//	 (source: http://www.w3.org/TR/2000/REC-xml-20001006)
+		if (preg_match('/^(\x00\x00\xFE\xFF|\xFF\xFE\x00\x00|\x00\x00\xFF\xFE|\xFE\xFF\x00\x00)/', $xmlChunk))
+		{
+			return true;
+		}
+		elseif (preg_match('/^(\xFE\xFF|\xFF\xFE)/', $xmlChunk))
+		{
+			return true;
+		}
+		elseif (preg_match('/^(\xEF\xBB\xBF)/', $xmlChunk))
+		{
+			return true;
+		}
+
+		// test if encoding is specified in the xml declaration
+		// Details:
+		// SPACE:		 (#x20 | #x9 | #xD | #xA)+ === [ \x9\xD\xA]+
+		// EQ:			SPACE?=SPACE? === [ \x9\xD\xA]*=[ \x9\xD\xA]*
+		if (preg_match('/^<\?xml\s+version\s*=\s*' . "((?:\"[a-zA-Z0-9_.:-]+\")|(?:'[a-zA-Z0-9_.:-]+'))" .
+			'\s+encoding\s*=\s*' . "((?:\"[A-Za-z][A-Za-z0-9._-]*\")|(?:'[A-Za-z][A-Za-z0-9._-]*'))/",
+			$xmlChunk, $matches))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

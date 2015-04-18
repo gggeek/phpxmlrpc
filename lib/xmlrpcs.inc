@@ -928,26 +928,28 @@
 			$GLOBALS['_xh']['rt']='';
 
 			// decompose incoming XML into request structure
+
 			if ($req_encoding != '')
 			{
-				if (!in_array($req_encoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
-				// the following code might be better for mb_string enabled installs, but
-				// makes the lib about 200% slower...
-				//if (!is_valid_charset($req_encoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')))
-				{
-					error_log('XML-RPC: '.__METHOD__.': invalid charset encoding of received request: '.$req_encoding);
-					$req_encoding = $GLOBALS['xmlrpc_defencoding'];
-				}
-				/// @BUG this will fail on PHP 5 if charset is not specified in the xml prologue,
-				// the encoding is not UTF8 and there are non-ascii chars in the text...
-				/// @todo use an empty string for php 5 ???
-				$parser = xml_parser_create($req_encoding);
-			}
-			else
-			{
-				$parser = xml_parser_create();
+                // Since parsing will fail if charset is not specified in the xml prologue,
+                // the encoding is not UTF8 and there are non-ascii chars in the text, we try to work round that...
+                // The following code might be better for mb_string enabled installs, but
+                // makes the lib about 200% slower...
+                //if (!is_valid_charset($req_encoding, array('UTF-8')))
+                if (!in_array($req_encoding, array('UTF-8', 'US-ASCII')) && !has_encoding($data)) {
+                    if ($req_encoding == 'ISO-8859-1') {
+                        $data = utf8_encode($data);
+                    } else {
+                        if (extension_loaded('mbstring')) {
+                            $data = mb_convert_encoding($data, 'UTF-8', $req_encoding);
+                        } else {
+                            error_log('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of received request: ' . $req_encoding);
+                        }
+                    }
+                }
 			}
 
+			$parser = xml_parser_create();
 			xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
 			// G. Giunta 2005/02/13: PHP internally uses ISO-8859-1, so we have to tell
 			// the xml parser to give us back data in the expected charset
