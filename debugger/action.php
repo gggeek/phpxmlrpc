@@ -208,7 +208,7 @@ td form {margin: 0;}
 
     // Before calling execute, echo out brief description of action taken + date and time ???
     // this gives good user feedback for long-running methods...
-    echo '<h2>'.htmlspecialchars($actionname).' on server '.htmlspecialchars($server)." ...</h2>\n";
+    echo '<h2>'.htmlspecialchars($actionname, ENT_COMPAT, $inputcharset).' on server '.htmlspecialchars($server, ENT_COMPAT, $inputcharset)." ...</h2>\n";
     flush();
 
     $response = null;
@@ -237,16 +237,16 @@ td form {margin: 0;}
     if ($response->faultCode())
     {
       // call failed! echo out error msg!
-      //echo '<h2>'.htmlspecialchars($actionname).' on server '.htmlspecialchars($server).'</h2>';
+      //echo '<h2>'.htmlspecialchars($actionname, ENT_COMPAT, $inputcharset).' on server '.htmlspecialchars($server, ENT_COMPAT, $inputcharset).'</h2>';
       echo "<h3>$protoname call FAILED!</h3>\n";
-      echo "<p>Fault code: [" . htmlspecialchars($response->faultCode()) .
-        "] Reason: '" . htmlspecialchars($response->faultString()) . "'</p>\n";
+      echo "<p>Fault code: [" . htmlspecialchars($response->faultCode(), ENT_COMPAT, $GLOBALS['xmlrpc_internalencoding']) .
+        "] Reason: '" . htmlspecialchars($response->faultString(), ENT_COMPAT, $GLOBALS['xmlrpc_internalencoding']) . "'</p>\n";
       echo (strftime("%d/%b/%Y:%H:%M:%S\n"));
     }
     else
     {
       // call succeeded: parse results
-      //echo '<h2>'.htmlspecialchars($actionname).' on server '.htmlspecialchars($server).'</h2>';
+      //echo '<h2>'.htmlspecialchars($actionname, ENT_COMPAT, $inputcharset).' on server '.htmlspecialchars($server, ENT_COMPAT, $inputcharset).'</h2>';
       printf ("<h3>%s call(s) OK (%.2f secs.)</h3>\n", $protoname, $time);
       echo (strftime("%d/%b/%Y:%H:%M:%S\n"));
 
@@ -264,26 +264,26 @@ td form {margin: 0;}
           {
             $rec = $v->arraymem($i);
             if ($i%2) $class=' class="oddrow"'; else $class = ' class="evenrow"';
-            echo ("<tr><td$class>".htmlspecialchars($rec->scalarval())."</td><td$class><form action=\"controller.php\" method=\"get\" target=\"frmcontroller\">".
-              "<input type=\"hidden\" name=\"host\" value=\"".htmlspecialchars($host)."\" />".
-              "<input type=\"hidden\" name=\"port\" value=\"".htmlspecialchars($port)."\" />".
-              "<input type=\"hidden\" name=\"path\" value=\"".htmlspecialchars($path)."\" />".
-              "<input type=\"hidden\" name=\"id\" value=\"".htmlspecialchars($id)."\" />".
+            echo ("<tr><td$class>".htmlspecialchars($rec->scalarval(), ENT_COMPAT, $GLOBALS['xmlrpc_internalencoding'])."</td><td$class><form action=\"controller.php\" method=\"get\" target=\"frmcontroller\">".
+              "<input type=\"hidden\" name=\"host\" value=\"".htmlspecialchars($host, ENT_COMPAT, $inputcharset)."\" />".
+              "<input type=\"hidden\" name=\"port\" value=\"".htmlspecialchars($port, ENT_COMPAT, $inputcharset)."\" />".
+              "<input type=\"hidden\" name=\"path\" value=\"".htmlspecialchars($path, ENT_COMPAT, $inputcharset)."\" />".
+              "<input type=\"hidden\" name=\"id\" value=\"".htmlspecialchars($id, ENT_COMPAT, $inputcharset)."\" />".
               "<input type=\"hidden\" name=\"debug\" value=\"$debug\" />".
-              "<input type=\"hidden\" name=\"username\" value=\"".htmlspecialchars($username)."\" />".
-              "<input type=\"hidden\" name=\"password\" value=\"".htmlspecialchars($password)."\" />".
+              "<input type=\"hidden\" name=\"username\" value=\"".htmlspecialchars($username, ENT_COMPAT, $inputcharset)."\" />".
+              "<input type=\"hidden\" name=\"password\" value=\"".htmlspecialchars($password, ENT_COMPAT, $inputcharset)."\" />".
               "<input type=\"hidden\" name=\"authtype\" value=\"$authtype\" />".
               "<input type=\"hidden\" name=\"verifyhost\" value=\"$verifyhost\" />".
               "<input type=\"hidden\" name=\"verifypeer\" value=\"$verifypeer\" />".
-              "<input type=\"hidden\" name=\"cainfo\" value=\"".htmlspecialchars($cainfo)."\" />".
-              "<input type=\"hidden\" name=\"proxy\" value=\"".htmlspecialchars($proxy)."\" />".
-              "<input type=\"hidden\" name=\"proxyuser\" value=\"".htmlspecialchars($proxyuser)."\" />".
-              "<input type=\"hidden\" name=\"proxypwd\" value=\"".htmlspecialchars($proxypwd)."\" />".
+              "<input type=\"hidden\" name=\"cainfo\" value=\"".htmlspecialchars($cainfo, ENT_COMPAT, $inputcharset)."\" />".
+              "<input type=\"hidden\" name=\"proxy\" value=\"".htmlspecialchars($proxy, ENT_COMPAT, $inputcharset)."\" />".
+              "<input type=\"hidden\" name=\"proxyuser\" value=\"".htmlspecialchars($proxyuser, ENT_COMPAT, $inputcharset)."\" />".
+              "<input type=\"hidden\" name=\"proxypwd\" value=\"".htmlspecialchars($proxypwd, ENT_COMPAT, $inputcharset)."\" />".
               "<input type=\"hidden\" name=\"responsecompression\" value=\"$responsecompression\" />".
               "<input type=\"hidden\" name=\"requestcompression\" value=\"$requestcompression\" />".
-              "<input type=\"hidden\" name=\"clientcookies\" value=\"".htmlspecialchars($clientcookies)."\" />".
+              "<input type=\"hidden\" name=\"clientcookies\" value=\"".htmlspecialchars($clientcookies, ENT_COMPAT, $inputcharset)."\" />".
               "<input type=\"hidden\" name=\"protocol\" value=\"$protocol\" />".
-              "<input type=\"hidden\" name=\"timeout\" value=\"".htmlspecialchars($timeout)."\" />".
+              "<input type=\"hidden\" name=\"timeout\" value=\"".htmlspecialchars($timeout, ENT_COMPAT, $inputcharset)."\" />".
               "<input type=\"hidden\" name=\"method\" value=\"".$rec->scalarval()."\" />".
               "<input type=\"hidden\" name=\"wstype\" value=\"$wstype\" />".
               "<input type=\"hidden\" name=\"action\" value=\"describe\" />".
@@ -314,8 +314,8 @@ td form {margin: 0;}
         $r2 = $resp[1]->value();
 
         echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
-        echo "<thead>\n<tr><th>Method</th><th>".htmlspecialchars($method)."</th><th>&nbsp;</th><th>&nbsp;</th></tr>\n</thead>\n<tbody>\n";
-        $desc = htmlspecialchars($r1->scalarval());
+        echo "<thead>\n<tr><th>Method</th><th>".htmlspecialchars($method, ENT_COMPAT, $inputcharset)."</th><th>&nbsp;</th><th>&nbsp;</th></tr>\n</thead>\n<tbody>\n";
+        $desc = htmlspecialchars($r1->scalarval(), ENT_COMPAT, $GLOBALS['xmlrpc_internalencoding']);
         if ($desc == "")
           $desc = "-";
         echo "<tr><td class=\"evenrow\">Description</td><td colspan=\"3\" class=\"evenrow\">$desc</td></tr>\n";
@@ -333,7 +333,7 @@ td form {margin: 0;}
             if ($x->kindOf()=="array")
             {
               $ret = $x->arraymem(0);
-              echo "<code>OUT:&nbsp;" . htmlspecialchars($ret->scalarval()) . "<br />IN: (";
+              echo "<code>OUT:&nbsp;" . htmlspecialchars($ret->scalarval(), ENT_COMPAT, $GLOBALS['xmlrpc_internalencoding']) . "<br />IN: (";
               if ($x->arraysize() > 1)
               {
                 for($k = 1; $k < $x->arraysize(); $k++)
@@ -342,7 +342,7 @@ td form {margin: 0;}
                   echo $y->scalarval();
                   if ($wstype != 1)
                   {
-                    $payload = $payload . '<param><value><'.htmlspecialchars($y->scalarval()).'></'.htmlspecialchars($y->scalarval())."></value></param>\n";
+                    $payload = $payload . '<param><value><'.htmlspecialchars($y->scalarval(), ENT_COMPAT, $GLOBALS['xmlrpc_internalencoding']).'></'.htmlspecialchars($y->scalarval(), ENT_COMPAT, $GLOBALS['xmlrpc_internalencoding'])."></value></param>\n";
                   }
                   $alt_payload .= $y->scalarval();
                   if ($k < $x->arraysize()-1)
@@ -362,28 +362,28 @@ td form {margin: 0;}
             //bottone per testare questo metodo
             //$payload="<methodCall>\n<methodName>$method</methodName>\n<params>\n$payload</params>\n</methodCall>";
             echo "<td$class><form action=\"controller.php\" target=\"frmcontroller\" method=\"get\">".
-            "<input type=\"hidden\" name=\"host\" value=\"".htmlspecialchars($host)."\" />".
-            "<input type=\"hidden\" name=\"port\" value=\"".htmlspecialchars($port)."\" />".
-            "<input type=\"hidden\" name=\"path\" value=\"".htmlspecialchars($path)."\" />".
-            "<input type=\"hidden\" name=\"id\" value=\"".htmlspecialchars($id)."\" />".
+            "<input type=\"hidden\" name=\"host\" value=\"".htmlspecialchars($host, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"port\" value=\"".htmlspecialchars($port, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"path\" value=\"".htmlspecialchars($path, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"id\" value=\"".htmlspecialchars($id, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"debug\" value=\"$debug\" />".
-            "<input type=\"hidden\" name=\"username\" value=\"".htmlspecialchars($username)."\" />".
-            "<input type=\"hidden\" name=\"password\" value=\"".htmlspecialchars($password)."\" />".
+            "<input type=\"hidden\" name=\"username\" value=\"".htmlspecialchars($username, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"password\" value=\"".htmlspecialchars($password, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"authtype\" value=\"$authtype\" />".
             "<input type=\"hidden\" name=\"verifyhost\" value=\"$verifyhost\" />".
             "<input type=\"hidden\" name=\"verifypeer\" value=\"$verifypeer\" />".
-            "<input type=\"hidden\" name=\"cainfo\" value=\"".htmlspecialchars($cainfo)."\" />".
-            "<input type=\"hidden\" name=\"proxy\" value=\"".htmlspecialchars($proxy)."\" />".
-            "<input type=\"hidden\" name=\"proxyuser\" value=\"".htmlspecialchars($proxyuser)."\" />".
-            "<input type=\"hidden\" name=\"proxypwd\" value=\"".htmlspecialchars($proxypwd)."\" />".
+            "<input type=\"hidden\" name=\"cainfo\" value=\"".htmlspecialchars($cainfo, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"proxy\" value=\"".htmlspecialchars($proxy, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"proxyuser\" value=\"".htmlspecialchars($proxyuser, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"proxypwd\" value=\"".htmlspecialchars($proxypwd, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"responsecompression\" value=\"$responsecompression\" />".
             "<input type=\"hidden\" name=\"requestcompression\" value=\"$requestcompression\" />".
-            "<input type=\"hidden\" name=\"clientcookies\" value=\"".htmlspecialchars($clientcookies)."\" />".
+            "<input type=\"hidden\" name=\"clientcookies\" value=\"".htmlspecialchars($clientcookies, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"protocol\" value=\"$protocol\" />".
-            "<input type=\"hidden\" name=\"timeout\" value=\"".htmlspecialchars($timeout)."\" />".
-            "<input type=\"hidden\" name=\"method\" value=\"".htmlspecialchars($method)."\" />".
-            "<input type=\"hidden\" name=\"methodpayload\" value=\"".htmlspecialchars($payload)."\" />".
-            "<input type=\"hidden\" name=\"altmethodpayload\" value=\"".htmlspecialchars($alt_payload)."\" />".
+            "<input type=\"hidden\" name=\"timeout\" value=\"".htmlspecialchars($timeout, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"method\" value=\"".htmlspecialchars($method, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"methodpayload\" value=\"".htmlspecialchars($payload, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"altmethodpayload\" value=\"".htmlspecialchars($alt_payload, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"wstype\" value=\"$wstype\" />".
             "<input type=\"hidden\" name=\"action\" value=\"execute\" />";
             if ($wstype != 1)
@@ -391,29 +391,29 @@ td form {margin: 0;}
             echo "</form></td>\n";
 
             echo "<td$class><form action=\"controller.php\" target=\"frmcontroller\" method=\"get\">".
-            "<input type=\"hidden\" name=\"host\" value=\"".htmlspecialchars($host)."\" />".
-            "<input type=\"hidden\" name=\"port\" value=\"".htmlspecialchars($port)."\" />".
-            "<input type=\"hidden\" name=\"path\" value=\"".htmlspecialchars($path)."\" />".
-            "<input type=\"hidden\" name=\"id\" value=\"".htmlspecialchars($id)."\" />".
+            "<input type=\"hidden\" name=\"host\" value=\"".htmlspecialchars($host, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"port\" value=\"".htmlspecialchars($port, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"path\" value=\"".htmlspecialchars($path, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"id\" value=\"".htmlspecialchars($id, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"debug\" value=\"$debug\" />".
-            "<input type=\"hidden\" name=\"username\" value=\"".htmlspecialchars($username)."\" />".
-            "<input type=\"hidden\" name=\"password\" value=\"".htmlspecialchars($password)."\" />".
+            "<input type=\"hidden\" name=\"username\" value=\"".htmlspecialchars($username, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"password\" value=\"".htmlspecialchars($password, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"authtype\" value=\"$authtype\" />".
             "<input type=\"hidden\" name=\"verifyhost\" value=\"$verifyhost\" />".
             "<input type=\"hidden\" name=\"verifypeer\" value=\"$verifypeer\" />".
-            "<input type=\"hidden\" name=\"cainfo\" value=\"".htmlspecialchars($cainfo)."\" />".
-            "<input type=\"hidden\" name=\"proxy\" value=\"".htmlspecialchars($proxy)."\" />".
-            "<input type=\"hidden\" name=\"proxyuser\" value=\"".htmlspecialchars($proxyuser)."\" />".
-            "<input type=\"hidden\" name=\"proxypwd\" value=\"".htmlspecialchars($proxypwd)."\" />".
+            "<input type=\"hidden\" name=\"cainfo\" value=\"".htmlspecialchars($cainfo, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"proxy\" value=\"".htmlspecialchars($proxy, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"proxyuser\" value=\"".htmlspecialchars($proxyuser, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"proxypwd\" value=\"".htmlspecialchars($proxypwd, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"responsecompression\" value=\"$responsecompression\" />".
             "<input type=\"hidden\" name=\"requestcompression\" value=\"$requestcompression\" />".
-            "<input type=\"hidden\" name=\"clientcookies\" value=\"".htmlspecialchars($clientcookies)."\" />".
+            "<input type=\"hidden\" name=\"clientcookies\" value=\"".htmlspecialchars($clientcookies, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"protocol\" value=\"$protocol\" />".
-            "<input type=\"hidden\" name=\"timeout\" value=\"".htmlspecialchars($timeout)."\" />".
-            "<input type=\"hidden\" name=\"method\" value=\"".htmlspecialchars($method)."\" />".
+            "<input type=\"hidden\" name=\"timeout\" value=\"".htmlspecialchars($timeout, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"method\" value=\"".htmlspecialchars($method, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"methodsig\" value=\"".$i."\" />".
-            "<input type=\"hidden\" name=\"methodpayload\" value=\"".htmlspecialchars($payload)."\" />".
-            "<input type=\"hidden\" name=\"altmethodpayload\" value=\"".htmlspecialchars($alt_payload)."\" />".
+            "<input type=\"hidden\" name=\"methodpayload\" value=\"".htmlspecialchars($payload, ENT_COMPAT, $inputcharset)."\" />".
+            "<input type=\"hidden\" name=\"altmethodpayload\" value=\"".htmlspecialchars($alt_payload, ENT_COMPAT, $inputcharset)."\" />".
             "<input type=\"hidden\" name=\"wstype\" value=\"$wstype\" />".
             "<input type=\"hidden\" name=\"run\" value=\"now\" />".
             "<input type=\"hidden\" name=\"action\" value=\"wrap\" />".
@@ -470,7 +470,7 @@ td form {margin: 0;}
           break;
 
         case 'execute':
-          echo '<div id="response"><h2>Response:</h2>'.htmlspecialchars($response->serialize()).'</div>';
+          echo '<div id="response"><h2>Response:</h2>'.htmlspecialchars($response->serialize(), ENT_COMPAT, $GLOBALS['xmlrpc_internalencoding']).'</div>';
           break;
 
         default: // give a warning
@@ -507,6 +507,7 @@ Path: /server.php
 
 <h3>Changelog</h3>
 <ul>
+<li>2015-04-19: fixed errors with LATIN-1 payloads and method names</li>
 <li>2007-02-20: add visual editor for method payload; allow strings, bools as jsonrpc msg id</li>
 <li>2006-06-26: support building php code stub for calling remote methods</li>
 <li>2006-05-25: better support for long running queries; check for no-curl installs</li>
