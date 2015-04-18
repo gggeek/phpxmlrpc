@@ -2176,7 +2176,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			else
 				$this->content_type = 'text/xml';
 			$this->payload=$this->xml_header($charset_encoding);
-			$this->payload.='<methodName>' . $this->methodname . "</methodName>\n";
+			$this->payload.='<methodName>' . xmlrpc_encode_entitites($this->methodname, $GLOBALS['xmlrpc_internalencoding'], $charset_encoding) . "</methodName>\n";
 			$this->payload.="<params>\n";
 			for($i=0; $i<count($this->params); $i++)
 			{
