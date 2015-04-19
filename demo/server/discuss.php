@@ -11,13 +11,13 @@ is the item ID, the second the name of the commenter, and the third
 is the comment itself. Returns the number of comments against that
 ID.';
 
-function addComment($m)
+function addComment($req)
 {
     $err = "";
     // since validation has already been carried out for us,
     // we know we got exactly 3 string values
     $encoder = new PhpXmlRpc\Encoder();
-    $n = $encoder->decode($m);
+    $n = $encoder->decode($req);
     $msgID = $n[0];
     $name = $n[1];
     $comment = $n[2];
@@ -44,7 +44,6 @@ function addComment($m)
         return new PhpXmlRpc\Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
     } else {
         // otherwise, we create the right response
-        // with the state name
         return new PhpXmlRpc\Response(new PhpXmlRpc\Value($count, "int"));
     }
 }
@@ -55,11 +54,12 @@ $getComments_doc = 'Returns an array of comments for a given ID, which
 is the sole argument. Each array item is a struct containing name
 and comment text.';
 
-function getComments($m)
+function getComments($req)
 {
     $err = "";
     $ra = array();
-    $msgID = php_xmlrpc_decode($m->getParam(0));
+    $encoder = new PhpXmlRpc\Encoder();
+    $msgID = $encoder->decode($req->getParam(0));
     $dbh = dba_open("/tmp/comments.db", "r", "db2");
     if ($dbh) {
         $countID = "${msgID}_count";
@@ -81,13 +81,11 @@ function getComments($m)
         return new PhpXmlRpc\Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
     } else {
         // otherwise, we create the right response
-        // with the state name
-        $encoder = new PhpXmlRpc\Encoder();
         return new PhpXmlRpc\Response($encoder->encode($ra));
     }
 }
 
-$s = new PhpXmlRpc\Server(array(
+$srv = new PhpXmlRpc\Server(array(
     "discuss.addComment" => array(
         "function" => "addComment",
         "signature" => $addComment_sig,
