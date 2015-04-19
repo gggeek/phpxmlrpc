@@ -8,6 +8,9 @@
  * @todo use ob_start to catch debug info and echo it AFTER method call results?
  * @todo be smarter in creating client stub for proxy/auth cases: only set appropriate property of client obj
  **/
+
+header('Content-Type: text/html; charset=utf-8');
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -529,6 +532,7 @@ if ($action) {
 
     <h3>Changelog</h3>
     <ul>
+        <li>2015-04-19: fix problems with LATIN-1 characters in payload</li>
         <li>2007-02-20: add visual editor for method payload; allow strings, bools as jsonrpc msg id</li>
         <li>2006-06-26: support building php code stub for calling remote methods</li>
         <li>2006-05-25: better support for long running queries; check for no-curl installs</li>

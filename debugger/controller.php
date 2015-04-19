@@ -13,7 +13,7 @@
  **/
 
 // make sure we set the correct charset type for output, so that we can display all characters
-//header('Content-Type: text/html; charset=utf-8');
+header('Content-Type: text/html; charset=utf-8');
 
 include __DIR__ . '/common.php';
 if ($action == '') {
