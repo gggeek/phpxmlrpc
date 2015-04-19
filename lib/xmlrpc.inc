@@ -138,16 +138,6 @@ class xmlrpcval extends PhpXmlRpc\Value
 
 class xmlrpcmsg extends PhpXmlRpc\Request
 {
-    /**
-     * Kept the old name even if Request class was renamed, for compatibility.
-     * @deprecated
-     *
-     * @return string
-     */
-    public function kindOf()
-    {
-        return 'msg';
-    }
 }
 
 class xmlrpcresp extends PhpXmlRpc\Response

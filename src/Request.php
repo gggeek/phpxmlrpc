@@ -358,6 +358,16 @@ class Request
     }
 
     /**
+     * Kept the old name even if Request class was renamed, for compatibility.
+     *
+     * @return string
+     */
+    public function kindOf()
+    {
+        return 'msg';
+    }
+
+    /**
      * Enables/disables the echoing to screen of the xmlrpc responses received.
      *
      * @param integer $in values 0, 1, 2 are supported
