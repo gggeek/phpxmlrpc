@@ -148,7 +148,8 @@ You can use the debugger to e.g. query the SF demo server, or debug your own per
 For security related issues feel free to contact <a href="http://sourceforge.net/sendmessage.php?touser=114789">ggiunta at users.sourceforge.net</a>
 
 <h2><a name="roadmap">Roadmap</a></h2>
-<p>A list of things that might make it into the next release (version 4.0):</p>
+<p>A list of things that might make it into the next release (version 4.0).</p>
+<p>See also the list of issues in <a href="https://github.com/gggeek/phpxmlrpc/issues">Github</a></p>
 <table cellspacing="0" cellpadding="0">
 <tr><th>Description</th><th>Status (SVN) - updated 2009/07/26</th></tr>
 
@@ -160,11 +161,11 @@ For security related issues feel free to contact <a href="http://sourceforge.net
 <tr><td class="odd">Implement some benchmarks to measure e.g. speed differences of keep-alives vs. plain connections, or native php serialization vs. php_xmlrpc_encode</td><td>Initial code released, with a limited set of tests. Tests to be augmented...</td></tr>
 <tr><td>Complete Javadoc documentation of code</td><td>(Almost ?) Complete...</td></tr>-->
 
-<tr><td class="odd">Update documentation for all features found in version 2</td><td>Slowly progressing...</td></tr>
+<tr><td class="odd">Update documentation for all features added since version 2</td><td>Slowly progressing...</td></tr>
 
 <tr><td>Add the possibility to choose formatting of the xml messages</td><td>Similar to what the php native xmlrpc extension does</td></tr>
 <!--<tr><td>Add functionality to automatically have methods exposed to client-side javascript (ie. coder writes one php page with both server side and client side code)</td><td>See php-o-lait for a nice example</td></tr>-->
-<tr><td class="odd">Fix warnings emitted when running with PHP 5 in STRICT mode</td><td>This will be done in version 3.0, abandoning php 4 compat...</td></tr>
+<tr><td class="odd">Fix warnings emitted when running with PHP 5 in STRICT mode</td><td>Might have already been done in version 3.0, abandoning php 4 compat...</td></tr>
 <!--<tr><td class="odd">Complete support for the JSON-RPC protocol</td><td>Initial release of json-rpc added to the EXTRAS package. Progressing...</td></tr>-->
 <tr><td>Expand automatic php function to xmlrpc method wrapper to take advantage of exception handling and return xmlrpc error responses</td><td></td></tr>
 <tr><td class="odd">Expand automatic stub generator for automatically converting php functions to xmlrpc methods for PHP &lt;= 5.0.2</td><td>look at AMFPHP code on how to do it.<br/>Many enhancements in version 2.1<br/>Now that the server can automatically register php functions there is less need for it...</td></tr>
