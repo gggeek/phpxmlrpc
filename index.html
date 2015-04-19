@@ -30,7 +30,7 @@ It is designed for ease of use, flexibility and completeness. High speed and red
 </p>
 <p>Note that this is not the same library as <a href="http://pear.php.net/package/XML_RPC/">the one</a> that is part of PEAR. They both share a common ancestry, since the PEAR version is a branch of the original phpxmlrpc library, now independently maintained.<br/>
 This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> which can be compiled as a php extension and has been bundled with php since version 4.1.0, either.</p>
-<p>PHPXMLRPC or derivative versions are or have been used in many open source projects, including <a href="http://www.ampache.org/">Ampache</a>, <a href="http://xaraya.org/">Xaraya</a>, <a href="http://www.drupal.org/">Drupal</a> (only up to releases 4.6.2 and 4.5.4), <a href="http://www.postnuke.com/">PostNuke</a>, <a href="http://b2evolution.net/">b2evolution</a>, <a href="http://nucleuscms.org/">nucleus cms</a>, <a href="http://www.phpmyfaq.de/">phpmyfaq</a>, <a href="http://www.phppgads.com/">phpPgAds</a>, <a href="http://www.phpgroupware.org/">phpgroupware</a>, <a href="http://www.egroupware.org/">egroupware</a>, <a href="http://tikiwiki.org">TikiWiki</a>, <a href="http://civicspacelabs.org/home/">Civicspace</a> (old release only), <a href="http://mailwatch.sourceforge.net/">MailWatch for MailScanner</a>, <a href="http://wikisophia.org/wiki/Wikitex">WikiTeX</a> and <a href="http://openautonomy.com/">OpenAutonomy</a>.</p>
+<p>PHPXMLRPC or derivative versions are or have been used in many open source projects, including <a href="http://www.ampache.org/">Ampache</a>, <a href="http://xaraya.info/">Xaraya</a>, <a href="http://www.drupal.org/">Drupal</a> (only up to releases 4.6.2 and 4.5.4), <a href="http://www.postnuke.com/">PostNuke</a>, <a href="http://b2evolution.net/">b2evolution</a>, <a href="http://nucleuscms.org/">nucleus cms</a>, <a href="http://www.phpmyfaq.de/">phpmyfaq</a>, <a href="http://www.phppgads.com/">phpPgAds</a>, <a href="http://en.wikipedia.org/wiki/PhpGroupWare">phpgroupware</a>, <a href="http://www.egroupware.org/">egroupware</a>, <a href="http://tikiwiki.org">TikiWiki</a>, Civicspace (old release only), <a href="http://mailwatch.sourceforge.net/">MailWatch for MailScanner</a>, <a href="http://wikisophia.org/wiki/Wikitex">WikiTeX</a> and <a href="http://openautonomy.com/">OpenAutonomy</a>.</p>
 <p>XML-RPC for PHP was originally developed by Edd Dumbill of <a href="http://usefulinc.com/">Useful Information Company</a>. As of the 1.0 stable release, the project was opened to wider involvement and moved to SourceForge. It is hosted on GitHub since December 2013.</p>
 
 <h2><a name="features">Features</a></h2>
@@ -50,25 +50,35 @@ This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> wh
 
 <h2><a name="download">Requirements</a></h2>
 <ul>
-<li>PHP 5.0 or later; 5.0.3 or later recommended to have all functionality enabled</li>
+<li>PHP 5.1.0 or later; 5.4 or later recommended</li>
 <li>the php "curl" extension is needed if you wish to use SSL or HTTP 1.1 to communicate with remote servers</li>
 <li>The php "xmlrpc" native extension is not required, but if it is installed, there will be no interference with the operation of this library.</li>
 </ul>
 
 <h2><a name="download">Download</a></h2>
-<p>The latest stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/3.0.0-beta"><span class="evidence">3.0.0beta</span></a> released on September 5, 2009</p>
+<p>The latest stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/3.0.1"><span class="evidence">3.0.1</span></a> released on April 19, 2015</p>
 <p>The previous stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/2.2.2"><span class="evidence">2.2.2</span></a> released on March 16, 2009</p>
 <p class="news">
 <b>Note:</b> there is a known bug in PHP version 5.2.2 that prevents the php-xmlrpc server from working. If you are experiencing this problem please upgrade your php install or use library version 2.2.1 or later.
 </p>
 <p class="news">
-<b>Note:</b> all users are encouraged to upgrade to release 1.2 or later, since known exploits exist for earlier versions.<br/>
+<b>Note:</b> all users are encouraged to use at least release 1.2 or later of the library, since known exploits exist for earlier versions.<br/>
 All use of eval as a potential remote code execution exploit has been removed in release 1.2.<br/>
 More info on the vulnerabilities can be found <a href="#security">at the bottom of the page</a>.
 </p>
 
 <h2><a name="news">News</a></h2>
 <ul>
+
+<li>
+    19th of April, 2015<br/>
+    Released lib version 3.0.1.<br/>
+</li>
+
+<li>
+    15th of June, 2014<br/>
+    Released lib version 3.0.0.<br/>
+</li>
 
 <li>
     15th of December, 2013<br/>
@@ -110,7 +120,7 @@ Updated the online documentation to match release 2.2 (with better formatting th
 
 <h2><a name="interest">Documentation</a></h2>
 <ul>
-<li>Documentation for version 2, in <a href="doc-2/">HTML</a> or <a href="doc-2/xmlrpc_php.pdf">PDF</a> format (note: the PDF version is not always up to date).<br/>
+<li>Documentation for version 3, in <a href="doc-2/">HTML</a> or <a href="doc-2/xmlrpc_php.pdf">PDF</a> format (note: the PDF version is not always up to date).<br/>
 For the adventurous there is even an <a href="doc-2/xmlrpc_php.xml">xml+css</a> version (note: better viewing results obtained by Firefox and Opera users)</li>
 <li><a href="doc-1.1/">Documentation for version 1.2.1</a></li>
 <li><a href="doc/">Documentation for version 1.0.99 (older)</a></li>
@@ -138,7 +148,7 @@ You can use the debugger to e.g. query the SF demo server, or debug your own per
 For security related issues feel free to contact <a href="http://sourceforge.net/sendmessage.php?touser=114789">ggiunta at users.sourceforge.net</a>
 
 <h2><a name="roadmap">Roadmap</a></h2>
-<p>A list of things that might make it into the next release (version 3.0 ?):</p>
+<p>A list of things that might make it into the next release (version 4.0):</p>
 <table cellspacing="0" cellpadding="0">
 <tr><th>Description</th><th>Status (SVN) - updated 2009/07/26</th></tr>
 
@@ -162,7 +172,7 @@ For security related issues feel free to contact <a href="http://sourceforge.net
 <tr><td class="odd">Improve support for "version 1" cookies</td><td></td></tr>
 <!--<tr><td>Implement some responses for system.getcapabilities</td><td>Present in CVS. Is there any defined standard for those?</td></tr>-->
 <tr><td>Add a possibility to use <a href="http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php">standard error messages</a> instead of the native error codes</td><td></td></tr>
-<tr><td class="odd">PEAR compatibility: add synonims for functions existing with different names in the PEAR version of the lib</td><td></td></tr>
+<tr><td class="odd">PEAR compatibility: add synonyms for functions existing with different names in the PEAR version of the lib</td><td></td></tr>
 <tr><td>Add support for the <a href="http://xmlrpc-epi.sourceforge.net/specs/rfc.system.describeMethods.php">system.describeMethods</a> xmlrpc extension</td><td></td></tr>
 <!--<tr><td>Support the <a href="http://www.ontosys.com/xml-rpc/extensions.php">&lt;/nil&gt;</a> extension to the xmlrpc standard</td><td>It is now in CVS...</td></tr>-->
 <tr><td class="odd">Add to the debugger the capability to launch a complete set of validator1 tests</td><td></td></tr>
@@ -404,7 +414,7 @@ if/else removed, such that there is zero chance for this type of exploit.
 <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fgggeek.github.io%2Fhphpxmlrpc%2F"><img
         src="http://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
         alt="Valid XHTML 1.0!" /></a><br/>
-Page last updated: 2014/1/18
+Page last updated: 2015/4/19
 
 </div>
 </body>
