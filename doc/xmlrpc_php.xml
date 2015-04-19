@@ -8,10 +8,10 @@ PHP-XMLRPC User manual
 <book lang="en">
   <title>XML-RPC for PHP</title>
 
-  <subtitle>version 3.0.0</subtitle>
+  <subtitle>version 3.0.1</subtitle>
 
   <bookinfo>
-    <date>June 15, 2014</date>
+    <date>April 19, 2015</date>
 
     <authorgroup>
       <author>
@@ -211,6 +211,25 @@ PHP-XMLRPC User manual
     chapter in the manual. To find a more detailed description of new
     functions and methods please take a look at the source code of the
     library, which is quite thoroughly commented in javadoc-like form.</para>
+
+      <sect1>
+          <title>3.0.1</title>
+
+          <para><itemizedlist>
+              <listitem>
+                  <para>fixed: the library does not decode correctly LATIN-1 requests/responses if the character set is not set in the xml prolog</para>
+              </listitem>
+
+              <listitem>
+                  <para>fixed: the debugger sends incorrect requests when the payload includes LATIN-1 characters</para>
+              </listitem>
+
+              <listitem>
+                  <para>fixed: the client can not call remote methods which use LATIN-1 or UTF8 characters in their names</para>
+              </listitem>
+
+          </itemizedlist></para>
+      </sect1>
 
     <sect1>
       <title>3.0.0</title>
