@@ -2,23 +2,22 @@
 
 include_once __DIR__ . "/../../vendor/autoload.php";
 
-include_once __DIR__ . "/../../lib/xmlrpc.inc";
-include_once __DIR__ . "/../../lib/xmlrpcs.inc";
+use PhpXmlRpc\Value;
 
-$addcomment_sig = array(array($xmlrpcInt, $xmlrpcString, $xmlrpcString, $xmlrpcString));
+$addComment_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcString, Value::$xmlrpcString, Value::$xmlrpcString));
 
-$addcomment_doc = 'Adds a comment to an item. The first parameter
+$addComment_doc = 'Adds a comment to an item. The first parameter
 is the item ID, the second the name of the commenter, and the third
 is the comment itself. Returns the number of comments against that
 ID.';
 
-function addcomment($m)
+function addComment($m)
 {
-    global $xmlrpcerruser;
     $err = "";
     // since validation has already been carried out for us,
     // we know we got exactly 3 string values
-    $n = php_xmlrpc_decode($m);
+    $encoder = new PhpXmlRpc\Encoder();
+    $n = $encoder->decode($m);
     $msgID = $n[0];
     $name = $n[1];
     $comment = $n[2];
@@ -42,7 +41,7 @@ function addcomment($m)
     }
     // if we generated an error, create an error return response
     if ($err) {
-        return new PhpXmlRpc\Response(0, $xmlrpcerruser, $err);
+        return new PhpXmlRpc\Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
     } else {
         // otherwise, we create the right response
         // with the state name
@@ -50,15 +49,14 @@ function addcomment($m)
     }
 }
 
-$getcomments_sig = array(array($xmlrpcArray, $xmlrpcString));
+$getComments_sig = array(array(Value::$xmlrpcArray, Value::$xmlrpcString));
 
-$getcomments_doc = 'Returns an array of comments for a given ID, which
+$getComments_doc = 'Returns an array of comments for a given ID, which
 is the sole argument. Each array item is a struct containing name
 and comment text.';
 
-function getcomments($m)
+function getComments($m)
 {
-    global $xmlrpcerruser;
     $err = "";
     $ra = array();
     $msgID = php_xmlrpc_decode($m->getParam(0));
@@ -80,23 +78,24 @@ function getcomments($m)
     }
     // if we generated an error, create an error return response
     if ($err) {
-        return new PhpXmlRpc\Response(0, $xmlrpcerruser, $err);
+        return new PhpXmlRpc\Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
     } else {
         // otherwise, we create the right response
         // with the state name
-        return new PhpXmlRpc\Response(php_xmlrpc_encode($ra));
+        $encoder = new PhpXmlRpc\Encoder();
+        return new PhpXmlRpc\Response($encoder->encode($ra));
     }
 }
 
 $s = new PhpXmlRpc\Server(array(
     "discuss.addComment" => array(
-        "function" => "addcomment",
-        "signature" => $addcomment_sig,
-        "docstring" => $addcomment_doc,
+        "function" => "addComment",
+        "signature" => $addComment_sig,
+        "docstring" => $addComment_doc,
     ),
     "discuss.getComments" => array(
-        "function" => "getcomments",
-        "signature" => $getcomments_sig,
-        "docstring" => $getcomments_doc,
+        "function" => "getComments",
+        "signature" => $getComments_sig,
+        "docstring" => $getComments_doc,
     ),
 ));
