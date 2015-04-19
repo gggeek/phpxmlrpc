@@ -208,7 +208,7 @@
 	$GLOBALS['xmlrpc_internalencoding']='ISO-8859-1';
 
 	$GLOBALS['xmlrpcName']='XML-RPC for PHP';
-	$GLOBALS['xmlrpcVersion']='3.0.0';
+	$GLOBALS['xmlrpcVersion']='3.0.1';
 
 	// let user errors start at 800
 	$GLOBALS['xmlrpcerruser']=800;
