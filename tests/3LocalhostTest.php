@@ -122,7 +122,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         if (is_array($errorCode)) {
             $this->assertContains($r->faultCode(), $errorCode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
         } else {
-            $this->assertEquals($r->faultCode(), $errorCode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
+            $this->assertEquals($errorCode, $r->faultCode(), 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
         }
         if (!$r->faultCode()) {
             if ($returnResponse) {
@@ -176,7 +176,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testLatin1Method()
+    /*public function testLatin1Method()
     {
         $f = new xmlrpcmsg("tests.iso88591methodname." . chr(224) . chr(252) . chr(232), array(
             new xmlrpcval('hello')
@@ -185,10 +185,11 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         if ($v) {
             $this->assertEquals('hello', $v->scalarval());
         }
-    }
+    }*/
 
-    /*public function testUtf8Method()
+    public function testUtf8Method()
     {
+        PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'UTF-8';
         $f = new xmlrpcmsg("tests.utf8methodname." . 'κόσμε', array(
             new xmlrpcval('hello')
         ));
@@ -196,7 +197,8 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         if ($v) {
             $this->assertEquals('hello', $v->scalarval());
         }
-    }*/
+        PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
+    }
 
     public function testAddingDoubles()
     {
@@ -247,9 +249,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
                 new xmlrpcval(true, 'boolean'),
                 new xmlrpcval(false, 'boolean'),
                 new xmlrpcval(1, 'boolean'),
-                new xmlrpcval(0, 'boolean'),
-                //new xmlrpcval('true', 'boolean'),
-                //new xmlrpcval('false', 'boolean')
+                new xmlrpcval(0, 'boolean')
             ),
                 'array'
             ),));
@@ -518,7 +518,7 @@ And turned it into nylon';
         ));
         $v = $this->send($f);
         if ($v) {
-            $this->assertEquals($v->scalarval(), true);
+            $this->assertEquals(true, $v->scalarval());
         }
     }
 
@@ -547,7 +547,6 @@ And turned it into nylon';
         $f = new xmlrpcmsg('system.MethodHelp');
         $f->payload = "<?xml version=\"1.0\"?><methodCall><methodName>validator1.echoStructTest</methodName><params><param><value><struct><member><name>','')); echo('gotcha!'); die(); //</name></member></struct></value></param></params></methodCall>";
         $v = $this->send($f);
-        //$v = $r->faultCode();
         if ($v) {
             $this->assertEquals(0, $v->structsize());
         }
@@ -661,7 +660,7 @@ And turned it into nylon';
             $cookies[$cookie] = (string)$cookies[$cookie];
         }
         $r = $this->client->send($f, $this->timeout, $this->method);
-        $this->assertEquals($r->faultCode(), 0, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
+        $this->assertEquals(0, $r->faultCode(), 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
         if (!$r->faultCode()) {
             $v = $r->value();
             $v = php_xmlrpc_decode($v);
@@ -672,7 +671,7 @@ And turned it into nylon';
             }
 
             // on IIS and Apache getallheaders returns something slightly different...
-            $this->assertEquals($v, $cookies);
+            $this->assertEquals($cookies, $v);
         }
     }
 
@@ -683,9 +682,8 @@ And turned it into nylon';
         ));
         $v1 = $this->send($f);
         $v2 = $this->send($f);
-        //$v = $r->faultCode();
         if ($v1 && $v2) {
-            $this->assertEquals($v2, $v1);
+            $this->assertEquals($v1, $v2);
         }
     }
 }

@@ -40,8 +40,8 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $v = new xmlrpcval('-1');
         $u = new xmlrpcval('-1', 'string');
         $t = new xmlrpcval(-1, 'string');
-        $this->assertEquals($u->scalarval(), $v->scalarval());
-        $this->assertEquals($t->scalarval(), $v->scalarval());
+        $this->assertEquals($v->scalarval(), $u->scalarval());
+        $this->assertEquals($v->scalarval(), $t->scalarval());
     }
 
     /**
@@ -49,8 +49,8 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
      */
     public function testMinusOneInt()
     {
-        $v = new xmlrpcval(-1);
         $u = new xmlrpcval();
+        $v = new xmlrpcval(-1);
         $this->assertEquals($u->scalarval(), $v->scalarval());
     }
 
@@ -63,7 +63,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $m = $this->newMsg('dummy');
         $r = $m->parseResponse($r);
         $v = $r->value();
-        $this->assertEquals($v->structmemexists($str), true);
+        $this->assertEquals(true, $v->structmemexists($str));
     }
 
     public function testUnicodeInErrorString()

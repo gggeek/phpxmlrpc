@@ -723,19 +723,18 @@ $signatures = array(
     "tests.raiseException" => array(
         "function" => array($object, "exceptionGenerator"),
     ),
-    /*
     // Greek word 'kosme'. NB: NOT a valid ISO8859 string!
-    // We can only register this when setting internal encoding to UTF-8, or it will break system.listMethods
+    // NB: we can only register this when setting internal encoding to UTF-8, or it will break system.listMethods
     "tests.utf8methodname." . 'κόσμε' => array(
         "function" => "stringEcho",
         "signature" => $stringecho_sig,
         "docstring" => $stringecho_doc,
-    ),*/
-    "tests.iso88591methodname." . chr(224) . chr(252) . chr(232) => array(
+    ),
+    /*"tests.iso88591methodname." . chr(224) . chr(252) . chr(232) => array(
         "function" => "stringEcho",
         "signature" => $stringecho_sig,
         "docstring" => $stringecho_doc,
-    ),
+    ),*/
     "examples.getallheaders" => array(
         "function" => 'getallheaders_xmlrpc',
         "signature" => $getallheaders_sig,

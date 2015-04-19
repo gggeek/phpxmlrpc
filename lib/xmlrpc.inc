@@ -50,13 +50,15 @@ include_once(__DIR__.'/../src/Request.php');
 include_once(__DIR__.'/../src/Response.php');
 include_once(__DIR__.'/../src/Client.php');
 include_once(__DIR__.'/../src/Encoder.php');
-include_once(__DIR__.'/../src/Helper/Date.php');
 include_once(__DIR__.'/../src/Helper/Charset.php');
+include_once(__DIR__.'/../src/Helper/Date.php');
 include_once(__DIR__.'/../src/Helper/Http.php');
+include_once(__DIR__.'/../src/Helper/Logger.php');
 include_once(__DIR__.'/../src/Helper/XMLParser.php');
 
 
 /* Expose the global variables which used to be defined */
+PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1'; // old default
 PhpXmlRpc\PhpXmlRpc::exportGlobals();
 
 /* some stuff deprecated enough that we do not want to put it in the new lib version */
@@ -192,6 +194,11 @@ function php_xmlrpc_decode_xml($xmlVal, $options=array())
 function guess_encoding($httpHeader='', $xmlChunk='', $encodingPrefs=null)
 {
     return PhpXmlRpc\Helper\XMLParser::guessEncoding($httpHeader, $xmlChunk, $encodingPrefs);
+}
+
+function has_encoding($xmlChunk)
+{
+    return PhpXmlRpc\Helper\XMLParser::hasEncoding($xmlChunk);
 }
 
 function is_valid_charset($encoding, $validList)

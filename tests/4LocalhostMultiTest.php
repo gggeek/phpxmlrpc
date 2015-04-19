@@ -15,9 +15,10 @@ class LocalhostMultiTest extends LocalhostTest
      */
     function _runtests()
     {
+        $unsafeMethods = array('testHttps', 'testCatchExceptions', 'testUtf8Method');
         foreach(get_class_methods('LocalhostTest') as $method)
         {
-            if(strpos($method, 'test') === 0 && $method != 'testHttps' && $method != 'testCatchExceptions')
+            if(strpos($method, 'test') === 0 && !in_array($method, $unsafeMethods))
             {
                 if (!isset(self::$failed_tests[$method]))
                     $this->$method();
