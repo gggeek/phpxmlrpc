@@ -15,7 +15,8 @@
         "ext-curl": "*",
         "ext-mbstring": "*",
         "indeyets/pake": "~1.99",
-        "phpdocumentor/phpdocumentor": "2.*"
+        "phpdocumentor/phpdocumentor": "2.*",
+        "docbook/docbook-xsl": "~1.78"
     },
     "suggest": {
         "ext-curl": "Needed for HTTPS and HTTP 1.1 support, NTLM Auth etc...",
@@ -24,5 +25,18 @@
     },
     "autoload": {
         "psr-4": {"PhpXmlRpc\\": "src/"}
-    }
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "docbook/docbook-xsl",
+                "version": "1.78.1",
+                "dist": {
+                    "url": "http://sourceforge.net/projects/docbook/files/docbook-xsl/1.78.1/docbook-xsl-1.78.1.zip/download",
+                    "type": "zip"
+                }
+            }
+        }
+    ]
 }
