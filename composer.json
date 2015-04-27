@@ -14,7 +14,8 @@
         "codeclimate/php-test-reporter": "dev-master",
         "ext-curl": "*",
         "ext-mbstring": "*",
-        "indeyets/pake": "~1.99"
+        "indeyets/pake": "~1.99",
+        "phpdocumentor/phpdocumentor": "2.*"
     },
     "suggest": {
         "ext-curl": "Needed for HTTPS and HTTP 1.1 support, NTLM Auth etc...",

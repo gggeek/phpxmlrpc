@@ -62,6 +62,8 @@ PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
     - at debug level 1, curl communication info are not dumped to screen
     - at debug level 1, the tests echo payloads of failures; at debug level 2 all payloads
 
+* improved: makefiles have been replaced with a php_based pakefile
+
 
 XML-RPC for PHP version 3.0.0 - 2014/6/15
 
