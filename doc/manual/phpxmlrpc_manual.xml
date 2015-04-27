@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="docbook-css/driver.css" type="text/css"?>
+<?xml-stylesheet href="css-docbook/driver.css" type="text/css"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <!--
@@ -1166,7 +1166,7 @@ PHP-XMLRPC User manual
     <sect1 id="jellyfish" xreflabel="The Jellyfish Book">
       <title>The Jellyfish Book</title>
 
-      <para><graphic align="right" depth="190" fileref="progxmlrpc.s.gif"
+      <para><graphic align="right" depth="190" fileref="images/progxmlrpc.s.gif"
       format="GIF" width="145" />Together with Simon St.Laurent and Joe
       Johnston, Edd Dumbill wrote a book on XML-RPC for O'Reilly and
       Associates on XML-RPC. It features a rather fetching jellyfish on the
@@ -4218,7 +4218,7 @@ else
     <para>The interface should be self-explicative enough to need little
     documentation.</para>
 
-    <para><graphic align="center" fileref="debugger.gif"
+    <para><graphic align="center" fileref="images/debugger.gif"
     format="GIF" /></para>
 
     <para>The most useful feature of the debugger is without doubt the "Show

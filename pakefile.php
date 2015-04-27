@@ -21,9 +21,15 @@ class Builder
         'fop' => 'fop',
         'php' => 'php'
     );
+    protected static $options = array(
+        'repo' => 'https://github.com/gggeek/phpxmlrpc',
+        'branch' => 'php53'
+    );
 
     public static function libVersion()
     {
+        if (self::$libVersion == null)
+            throw new \Exception('Missing library version argument');
         return self::$libVersion;
     }
 
@@ -52,17 +58,12 @@ class Builder
         );
     }
 
-    public static function sourceRepo()
-    {
-        return 'https://github.com/gggeek/phpxmlrpc';
-    }
-
     /// @todo move git branch to be a named option?
     public static function getOpts($args=array(), $cliOpts=array())
     {
-        if (count($args) < 1)
-            throw new \Exception('Missing library version argument');
-        self::$libVersion = $args[0];
+        if (count($args) > 0)
+        //    throw new \Exception('Missing library version argument');
+            self::$libVersion = $args[0];
         if (count($args) > 1)
             self::$sourceBranch = $args[1];
 
@@ -72,12 +73,23 @@ class Builder
             }
         }
 
+        foreach (self::$options as $name => $value) {
+            if (isset($cliOpts[$name])) {
+                self::$options[$name] = $cliOpts[$name];
+            }
+        }
+
         //pake_echo('---'.self::$libVersion.'---');
     }
 
     public static function tool($name)
     {
         return self::$tools[$name];
+    }
+
+    public static function option($name)
+    {
+        return self::$options[$name];
     }
 
     /**
@@ -170,11 +182,15 @@ function run_default($task=null, $args=array(), $cliOpts=array())
     echo "Syntax: pake {\$pake-options} \$task \$lib-version [\$git-tag] {\$task-options}\n";
     echo "\n";
     echo "  Run 'pake help' to list all pake options\n";
-    echo "  Run 'pake -T' to list all available tasks\n";
+    echo "  Run 'pake -T' to list available tasks\n";
+    echo "  Run 'pake -P' to list all available tasks (including hidden ones) and their dependencies\n";
+    echo "\n";
     echo "  Task options:\n";
-    echo "      --php=\$php";
-    echo "      --fop=\$fop";
-    echo "      --zip=\$zip";
+    echo "      --repo=REPO      URL of the source repository to clone. defaults to the github repo.\n";
+    echo "      --branch=BRANCH  The git branch to build from.\n";
+    echo "      --php=PHP        Location of the php command-line interpreter\n";
+    echo "      --fop=FOP        Location of the fop command-line tool\n";
+    echo "      --zip=ZIP        Location of the zip tool\n";
 }
 
 function run_getopts($task=null, $args=array(), $cliOpts=array())
@@ -189,13 +205,12 @@ function run_init($task=null, $args=array(), $cliOpts=array())
 {
     // download the current version into the workspace
     $targetDir = Builder::workspaceDir();
-    $targetBranch = 'php53';
 
     // check if workspace exists and is not already set to the correct repo
     if (is_dir($targetDir) && pakeGit::isRepository($targetDir)) {
         $repo = new pakeGit($targetDir);
         $remotes = $repo->remotes();
-        if (trim($remotes['origin']['fetch']) != Builder::sourceRepo()) {
+        if (trim($remotes['origin']['fetch']) != Builder::option('repo')) {
             throw new Exception("Directory '$targetDir' exists and is not linked to correct git repo");
         }
 
@@ -203,10 +218,10 @@ function run_init($task=null, $args=array(), $cliOpts=array())
         $repo->pull();
     } else {
         pake_mkdirs(dirname($targetDir));
-        $repo = pakeGit::clone_repository(Builder::sourceRepo(), Builder::workspaceDir());
+        $repo = pakeGit::clone_repository(Builder::option('repo'), Builder::workspaceDir());
     }
 
-    $repo->checkout($targetBranch);
+    $repo->checkout(Builder::option('branch'));
 }
 
 /**
@@ -220,8 +235,10 @@ function run_build($task=null, $args=array(), $cliOpts=array())
 
 function run_clean_doc()
 {
-    pake_remove_dir(Builder::workspaceDir().'/doc/out');
-    pake_remove_dir(Builder::workspaceDir().'/doc/javadoc-out');
+    //pake_remove_dir(Builder::workspaceDir().'/doc/out');
+    pake_remove_dir(Builder::workspaceDir().'/doc/api');
+    $finder = pakeFinder::type('file')->name('*.html');
+    pake_remove($finder, Builder::workspaceDir().'/doc/manual');
 }
 
 /**
@@ -233,7 +250,7 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
 
     // API docs from phpdoc comments using phpdocumentor
     $cmd = Builder::tool('php');
-    pake_sh("$cmd vendor/phpdocumentor/phpdocumentor/bin/phpdoc run -d ".Builder::workspaceDir().'/src'." -t ".Builder::workspaceDir().'/doc/javadoc-out --title PHP-XMLRPC');
+    pake_sh("$cmd vendor/phpdocumentor/phpdocumentor/bin/phpdoc run -d ".Builder::workspaceDir().'/src'." -t ".Builder::workspaceDir().'/doc/api --title PHP-XMLRPC');
 
     # Jade cmd yet to be rebuilt, starting from xml file and putting output in ./out dir, e.g.
     #	jade -t xml -d custom.dsl xmlrpc_php.xml
@@ -250,13 +267,13 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
     #	-Dxslthl.config=file:///c:/htdocs/xmlrpc_cvs/docbook-xsl/highlighting/xslthl-config.xml \
     #	com.icl.saxon.StyleSheet -o xmlrpc_php.fo.xml xmlrpc_php.xml custom.fo.xsl use.extensions=1
 
-    pake_mkdirs($docDir.'/out');
+    //pake_mkdirs($docDir.'/out');
 
     // HTML files from docbook
 
-    Builder::applyXslt($docDir.'/xmlrpc_php.xml', $docDir.'/custom.xsl', $docDir.'/out/');
+    Builder::applyXslt($docDir.'/manual/phpxmlrpc_manual.xml', $docDir.'/build/custom.xsl', $docDir.'/manual');
     // post process html files to highlight php code samples
-    foreach(pakeFinder::type('file')->name('*.html')->in($docDir) as $file)
+    foreach(pakeFinder::type('file')->name('*.html')->in($docDir.'/manual') as $file)
     {
         file_put_contents($file, Builder::highlightPhpInHtml(file_get_contents($file)));
     }
@@ -264,10 +281,10 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
     // PDF file from docbook
 
     // convert to fo and then to pdf using apache fop
-    Builder::applyXslt($docDir.'/xmlrpc_php.xml', $docDir.'/custom.fo.xsl', $docDir.'/xmlrpc_php.fo.xml');
+    Builder::applyXslt($docDir.'/manual/phpxmlrpc_manual.xml', $docDir.'/build/custom.fo.xsl', $docDir.'/manual/phpxmlrpc_manual.fo.xml');
     $cmd = Builder::tool('fop');
-    pake_sh("$cmd $docDir/xmlrpc_php.fo.xml $docDir/xmlrpc_php.pdf");
-    unlink($docDir.'/xmlrpc_php.fo.xml');
+    pake_sh("$cmd $docDir/phpxmlrpc_manual.fo.xml $docDir/phpxmlrpc_manual.pdf");
+    unlink($docDir.'/manual/phpxmlrpc_manual.fo.xml');
 }
 
 function run_clean_dist()
@@ -312,8 +329,13 @@ function run_dist($task=null, $args=array(), $cliOpts=array())
     chdir($cwd);
 }
 
+function run_clean_workspace($task=null, $args=array(), $cliOpts=array())
+{
+    pake_remove_dir(Builder::workspaceDir());
+}
+
 /**
- * Cleans up the build directory
+ * Cleans up the whole build directory
  * @todo 'make clean' usually just removes the results of the build, distclean removes all but sources
  */
 function run_clean($task=null, $args=array(), $cliOpts=array())
@@ -331,6 +353,7 @@ pake_task('build', 'getopts', 'init', 'doc');
 pake_task('dist', 'getopts', 'init', 'build', 'clean-dist');
 pake_task('clean-doc', 'getopts');
 pake_task('clean-dist', 'getopts');
+pake_task('clean-workspace', 'getopts');
 pake_task('clean', 'getopts');
 
 }

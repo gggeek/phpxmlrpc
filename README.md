@@ -8,8 +8,9 @@ Installation instructions are in the [INSTALL.md](INSTALL.md) file.
 
 Docs
 ----
-The manual, in HTML and pdf versions, can be found in the doc/ directory.
-Use of this software is subject to the terms in doc/index.html
+The manual can be found in the doc/manual directory, in HTML and PDF versions for release tarballs and Docbook always.
+
+Use of this software is subject to the terms in the [license.txt](license.txt) file
 
 SSL-certificate
 ---------------
