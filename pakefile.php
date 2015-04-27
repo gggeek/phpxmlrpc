@@ -283,7 +283,7 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
     // convert to fo and then to pdf using apache fop
     Builder::applyXslt($docDir.'/manual/phpxmlrpc_manual.xml', $docDir.'/build/custom.fo.xsl', $docDir.'/manual/phpxmlrpc_manual.fo.xml');
     $cmd = Builder::tool('fop');
-    pake_sh("$cmd $docDir/phpxmlrpc_manual.fo.xml $docDir/phpxmlrpc_manual.pdf");
+    pake_sh("$cmd $docDir/manual/phpxmlrpc_manual.fo.xml $docDir/manual/phpxmlrpc_manual.pdf");
     unlink($docDir.'/manual/phpxmlrpc_manual.fo.xml');
 }
 

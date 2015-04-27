@@ -12,7 +12,7 @@
 
 
 <!-- import base stylesheet -->
-<xsl:import href="../../../../vendor/docbook/docbook-xsl/fo/docbook.xsl"/>
+<xsl:import href="../../../../../../vendor/docbook/docbook-xsl/fo/docbook.xsl"/>
 
 
 <!-- customization vars -->

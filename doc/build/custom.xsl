@@ -15,7 +15,7 @@
 
 
 <!-- import base stylesheet -->
-<xsl:import href="../../vendor/docbook/docbook-xsl/xhtml/chunk.xsl"/>
+<xsl:import href="../../../../vendor/docbook/docbook-xsl/xhtml/chunk.xsl"/>
 
 
 <!-- customization vars -->
