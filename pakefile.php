@@ -6,6 +6,7 @@
  * @copyright (c) 2015 G. Giunta
  *
  * @todo allow user to specify release number and tag/branch to use
+ * @todo !important allow user to specify location of docbook xslt instead of the one installed via composer
  */
 
 namespace PhpXmlRpc {
