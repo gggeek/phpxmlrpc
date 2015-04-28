@@ -4,12 +4,18 @@ A php library for building xml-rpc clients and servers.
 
 Installation
 ------------
-Installation instructions are in the [INSTALL.md](INSTALL.md) file.
+The recommended way to install this library is using Composer.
 
-Docs
-----
-The manual can be found in the doc/manual directory, in HTML and PDF versions for release tarballs and Docbook always.
+Detailed installation instructions are in the [INSTALL.md](INSTALL.md) file, along with system requirements listing.
 
+Documentation
+-------------
+The user manual can be found in the doc/manual directory, in Asciidoc format: [phpxmlrpc_manual.adoc](doc/manual/phpxmlrpc_manual.adoc)
+
+Release tarballs also contain the HTML and PDF versions, as well as an automatically generated API documentation.
+
+License
+-------
 Use of this software is subject to the terms in the [license.txt](license.txt) file
 
 SSL-certificate
@@ -17,9 +23,9 @@ SSL-certificate
 The passphrase for the rsakey.pem certificate is 'test'.
 
 
+[![License](https://poser.pugx.org/phpxmlrpc/phpxmlrpc/license)](https://packagist.org/packages/phpxmlrpc/phpxmlrpc)
 [![Latest Stable Version](https://poser.pugx.org/phpxmlrpc/phpxmlrpc/v/stable)](https://packagist.org/packages/phpxmlrpc/phpxmlrpc)
 [![Total Downloads](https://poser.pugx.org/phpxmlrpc/phpxmlrpc/downloads)](https://packagist.org/packages/phpxmlrpc/phpxmlrpc)
-[![License](https://poser.pugx.org/phpxmlrpc/phpxmlrpc/license)](https://packagist.org/packages/phpxmlrpc/phpxmlrpc)
 
 [![Build Status](https://travis-ci.org/gggeek/phpxmlrpc.svg?branch=php53)](https://travis-ci.org/gggeek/phpxmlrpc)
 [![Test Coverage](https://codeclimate.com/github/gggeek/phpxmlrpc/badges/coverage.svg)](https://codeclimate.com/github/gggeek/phpxmlrpc)
