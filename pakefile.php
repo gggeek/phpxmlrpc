@@ -5,7 +5,6 @@
  *
  * @copyright (c) 2015 G. Giunta
  *
- * @todo allow user to specify release number and tag/branch to use
  * @todo !important allow user to specify location of docbook xslt instead of the one installed via composer
  */
 
@@ -15,11 +14,11 @@ class Builder
 {
     protected static $buildDir = 'build';
     protected static $libVersion;
-    protected static $sourceBranch = 'master';
     protected static $tools = array(
-        'zip' => 'zip',
+        'asciidoctor' => 'asciidoctor',
         'fop' => 'fop',
-        'php' => 'php'
+        'php' => 'php',
+        'zip' => 'zip',
     );
     protected static $options = array(
         'repo' => 'https://github.com/gggeek/phpxmlrpc',
@@ -58,14 +57,11 @@ class Builder
         );
     }
 
-    /// @todo move git branch to be a named option?
     public static function getOpts($args=array(), $cliOpts=array())
     {
         if (count($args) > 0)
         //    throw new \Exception('Missing library version argument');
             self::$libVersion = $args[0];
-        if (count($args) > 1)
-            self::$sourceBranch = $args[1];
 
         foreach (self::$tools as $name => $binary) {
             if (isset($cliOpts[$name])) {
@@ -186,10 +182,11 @@ function run_default($task=null, $args=array(), $cliOpts=array())
     echo "  Run 'pake -P' to list all available tasks (including hidden ones) and their dependencies\n";
     echo "\n";
     echo "  Task options:\n";
-    echo "      --repo=REPO      URL of the source repository to clone. defaults to the github repo.\n";
+    echo "      --repo=REPO      URL of the source repository to clone. Defaults to the github repo.\n";
     echo "      --branch=BRANCH  The git branch to build from.\n";
+    echo "      --asciidoctor=ASCIIDOCTOR Location of the asciidoctor command-line tool\n";
+    echo "      --fop=FOP        Location of the apache fop command-line tool\n";
     echo "      --php=PHP        Location of the php command-line interpreter\n";
-    echo "      --fop=FOP        Location of the fop command-line tool\n";
     echo "      --zip=ZIP        Location of the zip tool\n";
 }
 
@@ -235,9 +232,10 @@ function run_build($task=null, $args=array(), $cliOpts=array())
 
 function run_clean_doc()
 {
-    //pake_remove_dir(Builder::workspaceDir().'/doc/out');
     pake_remove_dir(Builder::workspaceDir().'/doc/api');
     $finder = pakeFinder::type('file')->name('*.html');
+    pake_remove($finder, Builder::workspaceDir().'/doc/manual');
+    $finder = pakeFinder::type('file')->name('*.xml');
     pake_remove($finder, Builder::workspaceDir().'/doc/manual');
 }
 
@@ -248,11 +246,26 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
 {
     $docDir = Builder::workspaceDir().'/doc';
 
-    // API docs from phpdoc comments using phpdocumentor
+    // API docs
+
+    // from phpdoc comments using phpdocumentor
     $cmd = Builder::tool('php');
     pake_sh("$cmd vendor/phpdocumentor/phpdocumentor/bin/phpdoc run -d ".Builder::workspaceDir().'/src'." -t ".Builder::workspaceDir().'/doc/api --title PHP-XMLRPC');
 
-    # Jade cmd yet to be rebuilt, starting from xml file and putting output in ./out dir, e.g.
+    // User Manual
+
+    // html (single file) from asciidoc
+    $cmd = Builder::tool('asciidoctor');
+    pake_sh("$cmd -d book $docDir/manual/phpxmlrpc_manual.adoc");
+
+    // then docbook from asciidoc
+    /// @todo create phpxmlrpc_manual.xml with the good version number
+    /// @todo create phpxmlrpc_manual.xml with the date set to the one of last commit (or today?)
+    pake_sh("$cmd -d book  -b docbook $docDir/manual/phpxmlrpc_manual.adoc");
+
+    # Other tools for docbook...
+    #
+    # jade cmd yet to be rebuilt, starting from xml file and putting output in ./out dir, e.g.
     #	jade -t xml -d custom.dsl xmlrpc_php.xml
     #
     # convertdoc command for xmlmind xxe editor
@@ -267,16 +280,13 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
     #	-Dxslthl.config=file:///c:/htdocs/xmlrpc_cvs/docbook-xsl/highlighting/xslthl-config.xml \
     #	com.icl.saxon.StyleSheet -o xmlrpc_php.fo.xml xmlrpc_php.xml custom.fo.xsl use.extensions=1
 
-    //pake_mkdirs($docDir.'/out');
-
-    // HTML files from docbook
-
-    Builder::applyXslt($docDir.'/manual/phpxmlrpc_manual.xml', $docDir.'/build/custom.xsl', $docDir.'/manual');
+    // HTML (multiple files) from docbook - discontinued, as we use the nicer-looking html gotten from asciidoc
+    /*Builder::applyXslt($docDir.'/manual/phpxmlrpc_manual.xml', $docDir.'/build/custom.xsl', $docDir.'/manual');
     // post process html files to highlight php code samples
     foreach(pakeFinder::type('file')->name('*.html')->in($docDir.'/manual') as $file)
     {
         file_put_contents($file, Builder::highlightPhpInHtml(file_get_contents($file)));
-    }
+    }*/
 
     // PDF file from docbook
 
@@ -284,6 +294,9 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
     Builder::applyXslt($docDir.'/manual/phpxmlrpc_manual.xml', $docDir.'/build/custom.fo.xsl', $docDir.'/manual/phpxmlrpc_manual.fo.xml');
     $cmd = Builder::tool('fop');
     pake_sh("$cmd $docDir/manual/phpxmlrpc_manual.fo.xml $docDir/manual/phpxmlrpc_manual.pdf");
+
+    // cleanup
+    unlink($docDir.'/manual/phpxmlrpc_manual.xml');
     unlink($docDir.'/manual/phpxmlrpc_manual.fo.xml');
 }
 
