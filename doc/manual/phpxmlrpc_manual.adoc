@@ -3,6 +3,8 @@
 :keywords: xml, rpc, xmlrpc, webservices, http
 :toc: left
 :imagesdir: images
+:source-highlighter: highlightjs
+
 
 [preface]
 == Introduction
