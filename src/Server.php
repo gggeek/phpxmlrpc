@@ -11,59 +11,62 @@ class Server
      * Array defining php functions exposed as xmlrpc methods by this server.
      */
     protected $dmap = array();
-    /*
-    * Defines how functions in dmap will be invoked: either using an xmlrpc msg object
-    * or plain php values.
-    * valid strings are 'xmlrpcvals', 'phpvals' or 'epivals'
-    */
+    /**
+     * Defines how functions in dmap will be invoked: either using an xmlrpc msg object
+     * or plain php values.
+     * valid strings are 'xmlrpcvals', 'phpvals' or 'epivals'
+     */
     public $functions_parameters_type = 'xmlrpcvals';
-    /*
-    * Option used for fine-tuning the encoding the php values returned from
-    * functions registered in the dispatch map when the functions_parameters_types
-    * member is set to 'phpvals'
-    * @see php_xmlrpc_encode for a list of values
-    */
+    /**
+     * Option used for fine-tuning the encoding the php values returned from
+     * functions registered in the dispatch map when the functions_parameters_types
+     * member is set to 'phpvals'
+     * @see php_xmlrpc_encode for a list of values
+     */
     public $phpvals_encoding_options = array('auto_dates');
-    /// controls whether the server is going to echo debugging messages back to the client as comments in response body. valid values: 0,1,2,3
+    /**
+     * Controls whether the server is going to echo debugging messages back to the client as comments in response body.
+     * Valid values: 0,1,2,3
+     */
     public $debug = 1;
-    /*
-    * Controls behaviour of server when invoked user function throws an exception:
-    * 0 = catch it and return an 'internal error' xmlrpc response (default)
-    * 1 = catch it and return an xmlrpc response with the error corresponding to the exception
-    * 2 = allow the exception to float to the upper layers
-    */
+    /**
+     * Controls behaviour of server when invoked user function throws an exception:
+     * 0 = catch it and return an 'internal error' xmlrpc response (default)
+     * 1 = catch it and return an xmlrpc response with the error corresponding to the exception
+     * 2 = allow the exception to float to the upper layers
+     */
     public $exception_handling = 0;
-    /*
-    * When set to true, it will enable HTTP compression of the response, in case
-    * the client has declared its support for compression in the request.
-    */
+    /**
+     * When set to true, it will enable HTTP compression of the response, in case
+     * the client has declared its support for compression in the request.
+     */
     public $compress_response = false;
-    /*
-    * List of http compression methods accepted by the server for requests.
-    * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib
-    */
+    /**
+     * List of http compression methods accepted by the server for requests.
+     * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib
+     */
     public $accepted_compression = array();
     /// shall we serve calls to system.* methods?
     public $allow_system_funcs = true;
     /// list of charset encodings natively accepted for requests
     public $accepted_charset_encodings = array();
-    /*
-    * charset encoding to be used for response.
-    * NB: if we can, we will convert the generated response from internal_encoding to the intended one.
-    * can be: a supported xml encoding (only UTF-8 and ISO-8859-1 at present, unless mbstring is enabled),
-    * null (leave unspecified in response, convert output stream to US_ASCII),
-    * 'default' (use xmlrpc library default as specified in xmlrpc.inc, convert output stream if needed),
-    * or 'auto' (use client-specified charset encoding or same as request if request headers do not specify it (unless request is US-ASCII: then use library default anyway).
-    * NB: pretty dangerous if you accept every charset and do not have mbstring enabled)
-    */
+    /**
+     * charset encoding to be used for response.
+     * NB: if we can, we will convert the generated response from internal_encoding to the intended one.
+     * Can be: a supported xml encoding (only UTF-8 and ISO-8859-1 at present, unless mbstring is enabled),
+     * null (leave unspecified in response, convert output stream to US_ASCII),
+     * 'default' (use xmlrpc library default as specified in xmlrpc.inc, convert output stream if needed),
+     * or 'auto' (use client-specified charset encoding or same as request if request headers do not specify it (unless request is US-ASCII: then use library default anyway).
+     * NB: pretty dangerous if you accept every charset and do not have mbstring enabled)
+     */
     public $response_charset_encoding = '';
     /**
      * Storage for internal debug info.
      */
     protected $debug_info = '';
-    /*
-    * Extra data passed at runtime to method handling functions. Used only by EPI layer
-    */
+    /**
+     * Extra data passed at runtime to method handling functions. Used only by EPI layer
+     */
     public $user_data = null;
 
     protected static $_xmlrpc_debuginfo = '';
@@ -541,6 +544,8 @@ class Server
      * @param array $paramTypes array with xmlrpc types of method parameters (if m is method name only)
      *
      * @return Response
+     *
+     * @throws \Exception in case the executed method does throw an exception (and depending on )
      */
     protected function execute($m, $params = null, $paramTypes = null)
     {

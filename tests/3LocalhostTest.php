@@ -601,6 +601,15 @@ And turned it into nylon';
         }
     }
 
+    public function testClosure()
+    {
+        $f = new xmlrpcmsg('examples.php5.getStateName', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+    }
+
     public function testGetCookies()
     {
         // let server set to us some cookies we tell it
