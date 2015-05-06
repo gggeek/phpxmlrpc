@@ -105,7 +105,7 @@ class Encoder
                 $paramCount = $xmlrpcVal->getNumParams();
                 $arr = array();
                 for ($i = 0; $i < $paramCount; $i++) {
-                    $arr[] = $this->decode($xmlrpcVal->getParam($i));
+                    $arr[] = $this->decode($xmlrpcVal->getParam($i), $options);
                 }
 
                 return $arr;

@@ -143,10 +143,30 @@ $findstate2_sig = $wrapper->wrap_php_function('inner_findstate');
 
 $findstate3_sig = $wrapper->wrap_php_function(array('xmlrpcServerMethodsContainer', 'findState'));
 
-$findstate5_sig = $wrapper->wrap_php_function('xmlrpcServerMethodsContainer::findState');
-
 $obj = new xmlrpcServerMethodsContainer();
 $findstate4_sig = $wrapper->wrap_php_function(array($obj, 'findstate'));
+
+$findstate5_sig = $wrapper->wrap_php_function('xmlrpcServerMethodsContainer::findState', '', array('return_source' => true));
+eval($findstate5_sig['source']);
+
+$findstate6_sig = $wrapper->wrap_php_function('inner_findstate', '', array('return_source' => true));
+eval($findstate6_sig['source']);
+
+$findstate7_sig = $wrapper->wrap_php_function(array('xmlrpcServerMethodsContainer', 'findState'), '', array('return_source' => true));
+eval($findstate7_sig['source']);
+
+$obj = new xmlrpcServerMethodsContainer();
+$findstate8_sig = $wrapper->wrap_php_function(array($obj, 'findstate'), '', array('return_source' => true));
+eval($findstate8_sig['source']);
+
+$findstate9_sig = $wrapper->wrap_php_function('xmlrpcServerMethodsContainer::findState', '', array('return_source' => true));
+eval($findstate9_sig['source']);
+
+$findstate10_sig = array(
+    "function" => $findStateClosure,
+    "signature" => $findstate_sig,
+    "docstring" => $findstate_doc,
+);
 
 $addtwo_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcInt, Value::$xmlrpcInt));
 $addtwo_doc = 'Add two integers together and return the result';
@@ -860,28 +880,17 @@ $signatures = array(
         "signature" => $i_whichToolkit_sig,
         "docstring" => $i_whichToolkit_doc,
     ),
-);
 
-if ($findstate2_sig) {
-    $signatures['examples.php.getStateName'] = $findstate2_sig;
-}
+    'tests.getStateName.2' => $findstate2_sig,
+    'tests.getStateName.3' => $findstate3_sig,
+    'tests.getStateName.4' => $findstate4_sig,
+    'tests.getStateName.5' => $findstate5_sig,
+    'tests.getStateName.6' => $findstate6_sig,
+    'tests.getStateName.7' => $findstate7_sig,
+    'tests.getStateName.8' => $findstate8_sig,
+    'tests.getStateName.9' => $findstate9_sig,
+    'tests.getStateName.10' => $findstate10_sig,
 
-if ($findstate3_sig) {
-    $signatures['examples.php2.getStateName'] = $findstate3_sig;
-}
-
-if ($findstate4_sig) {
-    $signatures['examples.php3.getStateName'] = $findstate4_sig;
-}
-
-if ($findstate5_sig) {
-    $signatures['examples.php4.getStateName'] = $findstate5_sig;
-}
-
-$signatures['examples.php5.getStateName'] = array(
-    "function" => $findStateClosure,
-    "signature" => $findstate_sig,
-    "docstring" => $findstate_doc,
 );
 
 $s = new PhpXmlRpc\Server($signatures, false);

@@ -554,35 +554,80 @@ And turned it into nylon';
 
     public function testAutoRegisteredFunction()
     {
-        $f = new xmlrpcmsg('examples.php.getStateName', array(
+        $f = new xmlrpcmsg('tests.getStateName.2', array(
             new xmlrpcval(23, 'int'),
         ));
         $v = $this->send($f);
-        if ($v) {
-            $this->assertEquals('Michigan', $v->scalarval());
-        } else {
-            $this->fail('Note: server can only auto register functions if running with PHP 5.0.3 and up');
-        }
+        $this->assertEquals('Michigan', $v->scalarval());
+    }
+
+    public function testAutoRegisteredFunction2()
+    {
+        $f = new xmlrpcmsg('tests.getStateName.6', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
     }
 
     public function testAutoRegisteredClass()
     {
-        $f = new xmlrpcmsg('examples.php2.getStateName', array(
+        $f = new xmlrpcmsg('tests.getStateName.3', array(
             new xmlrpcval(23, 'int'),
         ));
         $v = $this->send($f);
-        if ($v) {
-            $this->assertEquals('Michigan', $v->scalarval());
-            $f = new xmlrpcmsg('examples.php3.getStateName', array(
-                new xmlrpcval(23, 'int'),
-            ));
-            $v = $this->send($f);
-            if ($v) {
-                $this->assertEquals('Michigan', $v->scalarval());
-            }
-        } else {
-            $this->fail('Note: server can only auto register class methods if running with PHP 5.0.3 and up');
-        }
+        $this->assertEquals('Michigan', $v->scalarval());
+
+        $f = new xmlrpcmsg('tests.getStateName.4', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+
+        $f = new xmlrpcmsg('tests.getStateName.5', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+
+        $f = new xmlrpcmsg('tests.getStateName.7', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+
+        $f = new xmlrpcmsg('tests.getStateName.8', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+
+        $f = new xmlrpcmsg('tests.getStateName.9', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+    }
+
+    public function testAutoRegisteredClass2()
+    {
+        $f = new xmlrpcmsg('tests.getStateName.7', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+
+        $f = new xmlrpcmsg('tests.getStateName.8', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+
+        $f = new xmlrpcmsg('tests.getStateName.9', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
     }
 
     public function testAutoRegisteredMethod()
@@ -603,7 +648,7 @@ And turned it into nylon';
 
     public function testClosure()
     {
-        $f = new xmlrpcmsg('examples.php5.getStateName', array(
+        $f = new xmlrpcmsg('tests.getStateName.10', array(
             new xmlrpcval(23, 'int'),
         ));
         $v = $this->send($f);

@@ -520,16 +520,16 @@ class Server
                 $r = $this->execute($xmlRpcParser->_xh['method'], $xmlRpcParser->_xh['params'], $xmlRpcParser->_xh['pt']);
             } else {
                 // build a Request object with data parsed from xml
-                $m = new Request($xmlRpcParser->_xh['method']);
+                $req = new Request($xmlRpcParser->_xh['method']);
                 // now add parameters in
                 for ($i = 0; $i < count($xmlRpcParser->_xh['params']); $i++) {
-                    $m->addParam($xmlRpcParser->_xh['params'][$i]);
+                    $req->addParam($xmlRpcParser->_xh['params'][$i]);
                 }
 
                 if ($this->debug > 1) {
-                    $this->debugmsg("\n+++PARSED+++\n" . var_export($m, true) . "\n+++END+++");
+                    $this->debugmsg("\n+++PARSED+++\n" . var_export($req, true) . "\n+++END+++");
                 }
-                $r = $this->execute($m);
+                $r = $this->execute($req);
             }
         }
 
@@ -539,7 +539,7 @@ class Server
     /**
      * Execute a method invoked by the client, checking parameters used.
      *
-     * @param mixed $m either a Request obj or a method name
+     * @param mixed $req either a Request obj or a method name
      * @param array $params array with method parameters as php types (if m is method name only)
      * @param array $paramTypes array with xmlrpc types of method parameters (if m is method name only)
      *
@@ -547,12 +547,12 @@ class Server
      *
      * @throws \Exception in case the executed method does throw an exception (and depending on )
      */
-    protected function execute($m, $params = null, $paramTypes = null)
+    protected function execute($req, $params = null, $paramTypes = null)
     {
-        if (is_object($m)) {
-            $methName = $m->method();
+        if (is_object($req)) {
+            $methName = $req->method();
         } else {
-            $methName = $m;
+            $methName = $req;
         }
         $sysCall = $this->allow_system_funcs && (strpos($methName, "system.") === 0);
         $dmap = $sysCall ? $this->getSystemDispatchMap() : $this->dmap;
@@ -567,8 +567,8 @@ class Server
         // Check signature
         if (isset($dmap[$methName]['signature'])) {
             $sig = $dmap[$methName]['signature'];
-            if (is_object($m)) {
-                list($ok, $errStr) = $this->verifySignature($m, $sig);
+            if (is_object($req)) {
+                list($ok, $errStr) = $this->verifySignature($req, $sig);
             } else {
                 list($ok, $errStr) = $this->verifySignature($paramTypes, $sig);
             }
@@ -577,7 +577,7 @@ class Server
                 return new Response(
                     0,
                     PhpXmlRpc::$xmlrpcerr['incorrect_params'],
-                    PhpXmlRpc::$xmlrpcstr['incorrect_params'] . ": ${errstr}"
+                    PhpXmlRpc::$xmlrpcstr['incorrect_params'] . ": ${errStr}"
                 );
             }
         }
@@ -587,9 +587,22 @@ class Server
         if (is_string($func) && strpos($func, '::')) {
             $func = explode('::', $func);
         }
+
+        if (is_array($func)) {
+            if (is_object($func[0])) {
+                $funcName = get_class($func[0]) . '->' . $func[1];
+            } else {
+                $funcName = implode('::', $func);
+            }
+        } else if ($func instanceof \Closure) {
+            $funcName = 'Closure';
+        } else {
+            $funcName = $func;
+        }
+
         // verify that function to be invoked is in fact callable
         if (!is_callable($func)) {
-            error_log("XML-RPC: " . __METHOD__ . ": function $func registered as method handler is not callable");
+            error_log("XML-RPC: " . __METHOD__ . ": function '$funcName' registered as method handler is not callable");
 
             return new Response(
                 0,
@@ -605,14 +618,14 @@ class Server
         }
         try {
             // Allow mixed-convention servers
-            if (is_object($m)) {
+            if (is_object($req)) {
                 if ($sysCall) {
-                    $r = call_user_func($func, $this, $m);
+                    $r = call_user_func($func, $this, $req);
                 } else {
-                    $r = call_user_func($func, $m);
+                    $r = call_user_func($func, $req);
                 }
                 if (!is_a($r, 'PhpXmlRpc\Response')) {
-                    error_log("XML-RPC: " . __METHOD__ . ": function $func registered as method handler does not return an xmlrpc response object");
+                    error_log("XML-RPC: " . __METHOD__ . ": function '$funcName' registered as method handler does not return an xmlrpc response object but a " . gettype($r));
                     if (is_a($r, 'PhpXmlRpc\Value')) {
                         $r = new Response($r);
                     } else {
@@ -738,7 +751,7 @@ class Server
         );
     }
 
-    public static function _xmlrpcs_getCapabilities($server, $m = null)
+    public static function _xmlrpcs_getCapabilities($server, $req = null)
     {
         $outAr = array(
             // xmlrpc spec: always supported
@@ -770,7 +783,7 @@ class Server
         return new Response(new Value($outAr, 'struct'));
     }
 
-    public static function _xmlrpcs_listMethods($server, $m = null) // if called in plain php values mode, second param is missing
+    public static function _xmlrpcs_listMethods($server, $req = null) // if called in plain php values mode, second param is missing
     {
         $outAr = array();
         foreach ($server->dmap as $key => $val) {
@@ -785,14 +798,14 @@ class Server
         return new Response(new Value($outAr, 'array'));
     }
 
-    public static function _xmlrpcs_methodSignature($server, $m)
+    public static function _xmlrpcs_methodSignature($server, $req)
     {
         // let accept as parameter both an xmlrpc value or string
-        if (is_object($m)) {
-            $methName = $m->getParam(0);
+        if (is_object($req)) {
+            $methName = $req->getParam(0);
             $methName = $methName->scalarval();
         } else {
-            $methName = $m;
+            $methName = $req;
         }
         if (strpos($methName, "system.") === 0) {
             $dmap = $server->getSystemDispatchMap();
@@ -822,14 +835,14 @@ class Server
         return $r;
     }
 
-    public static function _xmlrpcs_methodHelp($server, $m)
+    public static function _xmlrpcs_methodHelp($server, $req)
     {
         // let accept as parameter both an xmlrpc value or string
-        if (is_object($m)) {
-            $methName = $m->getParam(0);
+        if (is_object($req)) {
+            $methName = $req->getParam(0);
             $methName = $methName->scalarval();
         } else {
-            $methName = $m;
+            $methName = $req;
         }
         if (strpos($methName, "system.") === 0) {
             $dmap = $server->getSystemDispatchMap();
@@ -949,21 +962,21 @@ class Server
         return new Value(array($result->value()), 'array');
     }
 
-    public static function _xmlrpcs_multicall($server, $m)
+    public static function _xmlrpcs_multicall($server, $req)
     {
         $result = array();
         // let accept a plain list of php parameters, beside a single xmlrpc msg object
-        if (is_object($m)) {
-            $calls = $m->getParam(0);
+        if (is_object($req)) {
+            $calls = $req->getParam(0);
             $numCalls = $calls->arraysize();
             for ($i = 0; $i < $numCalls; $i++) {
                 $call = $calls->arraymem($i);
                 $result[$i] = static::_xmlrpcs_multicall_do_call($server, $call);
             }
         } else {
-            $numCalls = count($m);
+            $numCalls = count($req);
             for ($i = 0; $i < $numCalls; $i++) {
-                $result[$i] = static::_xmlrpcs_multicall_do_call_phpvals($server, $m[$i]);
+                $result[$i] = static::_xmlrpcs_multicall_do_call_phpvals($server, $req[$i]);
             }
         }
 
@@ -1004,7 +1017,7 @@ class Server
                     // the following works both with static class methods and plain object methods as error handler
                     call_user_func_array($GLOBALS['_xmlrpcs_prev_ehandler'], array($errCode, $errString, $filename, $lineNo, $context));
                 } else {
-                    $GLOBALS['_xmlrpcs_prev_ehandler']($errCode, $errString, $filename, $lineno, $context);
+                    $GLOBALS['_xmlrpcs_prev_ehandler']($errCode, $errString, $filename, $lineNo, $context);
                 }
             }
         }
