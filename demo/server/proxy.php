@@ -15,6 +15,8 @@ PhpXmlRpc\Autoloader::register();
 /**
  * Forward an xmlrpc request to another server, and return to client the response received.
  *
+ * DO NOT RUN AS IS IN PRODUCTION - this is an open relay !!!
+ *
  * @param PhpXmlRpc\Request $req (see method docs below for a description of the expected parameters)
  *
  * @return PhpXmlRpc\Response
@@ -58,9 +60,9 @@ function forward_request($req)
     /// @todo find a way to forward client info (such as IP) to server, either
     /// - as xml comments in the payload, or
     /// - using std http header conventions, such as X-forwarded-for...
-    $reqethod = $encoder->decode($req->getParam(1));
+    $reqMethod = $encoder->decode($req->getParam(1));
     $pars = $req->getParam(2);
-    $req = new PhpXmlRpc\Request($reqethod);
+    $req = new PhpXmlRpc\Request($reqMethod);
     for ($i = 0; $i < $pars->arraySize(); $i++) {
         $req->addParam($pars->arraymem($i));
     }
