@@ -10,9 +10,7 @@ if (isset($_GET['showSource']) && $_GET['showSource']) {
 <body>
 <h1>Mail demo</h1>
 
-<p>This form enables you to send mail via an XML-RPC server. For public use
-    only the "Userland" server will work (see <a href="http://www.xmlrpc.com/discuss/msgReader$598">Dave Winer's
-        message</a>).
+<p>This form enables you to send mail via an XML-RPC server.
     When you press <kbd>Send</kbd> this page will reload, showing you the XML-RPC request sent to the host server, the
     XML-RPC response received and the internal evaluation done by the PHP implementation.</p>
 
@@ -25,12 +23,8 @@ if (isset($_GET['showSource']) && $_GET['showSource']) {
 include_once __DIR__ . "/../../src/Autoloader.php";
 PhpXmlRpc\Autoloader::register();
 
-if (isset($_POST["server"]) && $_POST["server"]) {
-    if ($_POST["server"] == "Userland") {
-        $server = "http://206.204.24.2/RPC2";
-    } else {
-        $server = "http://pingu.heddley.com/xmlrpc/server.php";
-    }
+if (isset($_POST["mailto"]) && $_POST["mailto"]) {
+    $server = "http://phpxmlrpc.sourceforge.net/server.php";
     $req = new PhpXmlRpc\Request('mail.send', array(
         new PhpXmlRpc\Value($_POST["mailto"]),
         new PhpXmlRpc\Value($_POST["mailsub"]),
@@ -57,11 +51,6 @@ if (isset($_POST["server"]) && $_POST["server"]) {
 }
 ?>
 <form method="POST">
-    Server <select name="server">
-        <option value="Userland">Userland</option>
-        <option value="UsefulInc">UsefulInc private server</option>
-    </select>
-    <hr/>
     From <input size="60" name="mailfrom" value=""/><br/>
     <hr/>
     To <input size="60" name="mailto" value=""/><br/>

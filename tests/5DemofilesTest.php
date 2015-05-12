@@ -18,19 +18,10 @@ class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
         $page = $this->request('client/agesort.php');
     }
 
-    public function testClient()
+    public function testGetStateName()
     {
-        $page = $this->request('client/client.php');
-
-        // we could test many more calls to the client demo, but the upstream server is gone anyway...
-
-        $page = $this->request('client/client.php', 'POST', array('stateno' => '1'));
-    }
-
-    public function testComment()
-    {
-        $page = $this->request('client/comment.php');
-        $page = $this->request('client/client.php', 'POST', array('storyid' => '1'));
+        $page = $this->request('client/getstatename.php');
+        $page = $this->request('client/getstatename.php', 'POST', array('stateno' => '1'));
     }
 
     public function testIntrospect()
@@ -41,8 +32,7 @@ class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
     public function testMail()
     {
         $page = $this->request('client/mail.php');
-        $page = $this->request('client/client.php', 'POST', array(
-            'server' => '',
+        $page = $this->request('client/mail.php', 'POST', array(
             "mailto" => '',
             "mailsub" => '',
             "mailmsg" => '',
@@ -52,9 +42,9 @@ class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
         ));
     }
 
-    public function testSimpleCall()
+    public function testProxy()
     {
-        $page = $this->request('client/simple_call.php', 'GET', null, true);
+        $page = $this->request('client/proxy.php', 'GET', null, true);
     }
 
     public function testWhich()
@@ -65,11 +55,6 @@ class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
     public function testWrap()
     {
         $page = $this->request('client/wrap.php');
-    }
-
-    public function testZopeTest()
-    {
-        $page = $this->request('client/zopetest.php');
     }
 
     public function testDiscussServer()

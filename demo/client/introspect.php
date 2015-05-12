@@ -15,26 +15,31 @@ function display_error($r)
     print "Code: " . $r->faultCode()
         . " Reason: '" . $r->faultString() . "'<br/>";
 }
-// 'new style' client constructor
+
 $client = new PhpXmlRpc\Client("http://phpxmlrpc.sourceforge.net/server.php");
+
+// First off, let's retrieve the list of methods available on the remote server
 print "<h3>methods available at http://" . $client->server . $client->path . "</h3>\n";
 $req = new PhpXmlRpc\Request('system.listMethods');
 $resp = $client->send($req);
+
 if ($resp->faultCode()) {
     display_error($resp);
 } else {
     $v = $resp->value();
+
+    // Then, retrieve the signature and help text of each available method
     for ($i = 0; $i < $v->arraysize(); $i++) {
-        $mname = $v->arraymem($i);
-        print "<h4>" . $mname->scalarval() . "</h4>\n";
+        $methodName = $v->arraymem($i);
+        print "<h4>" . $methodName->scalarval() . "</h4>\n";
         // build messages first, add params later
         $m1 = new PhpXmlRpc\Request('system.methodHelp');
         $m2 = new PhpXmlRpc\Request('system.methodSignature');
-        $val = new PhpXmlRpc\Value($mname->scalarval(), "string");
+        $val = new PhpXmlRpc\Value($methodName->scalarval(), "string");
         $m1->addParam($val);
         $m2->addParam($val);
-        // send multiple messages in one pass.
-        // If server does not support multicall, client will fall back to 2 separate calls
+        // Send multiple requests in one http call.
+        // If server does not support multicall, client will automatically fall back to 2 separate calls
         $ms = array($m1, $m2);
         $rs = $client->send($ms);
         if ($rs[0]->faultCode()) {
@@ -52,13 +57,14 @@ if ($resp->faultCode()) {
             display_error($rs[1]);
         } else {
             print "<h4>Signature</h4><p>\n";
+            // note: using PhpXmlRpc\Encoder::decode() here would lead to cleaner code
             $val = $rs[1]->value();
             if ($val->kindOf() == "array") {
                 for ($j = 0; $j < $val->arraysize(); $j++) {
                     $x = $val->arraymem($j);
                     $ret = $x->arraymem(0);
                     print "<code>" . $ret->scalarval() . " "
-                        . $mname->scalarval() . "(";
+                        . $methodName->scalarval() . "(";
                     if ($x->arraysize() > 1) {
                         for ($k = 1; $k < $x->arraysize(); $k++) {
                             $y = $x->arraymem($k);

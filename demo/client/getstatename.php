@@ -5,7 +5,7 @@
 
 <h2>Send a U.S. state number to the server and get back the state name</h2>
 
-<h3>The code demonstrates usage of the php_xmlrpc_encode function</h3>
+<h3>The code demonstrates usage of automatic encoding/decoding of php variables into xmlrpc values</h3>
 <?php
 
 include_once __DIR__ . "/../../src/Autoloader.php";
@@ -24,9 +24,7 @@ if (isset($_POST["stateno"]) && $_POST["stateno"] != "") {
     if (!$r->faultCode()) {
         $v = $r->value();
         print "<br/>State number <b>" . $stateNo . "</b> is <b>"
-            . htmlspecialchars($v->scalarval()) . "</b><br/>";
-        // print "<HR>I got this value back<BR><PRE>" .
-        //  htmlentities($r->serialize()). "</PRE><HR>\n";
+            . htmlspecialchars($encoder->decode($v)) . "</b><br/>";
     } else {
         print "An error occurred: ";
         print "Code: " . htmlspecialchars($r->faultCode())
@@ -36,7 +34,7 @@ if (isset($_POST["stateno"]) && $_POST["stateno"] != "") {
     $stateNo = "";
 }
 
-print "<form action=\"client.php\" method=\"POST\">
+print "<form action=\"getstatename.php\" method=\"POST\">
 <input name=\"stateno\" value=\"" . $stateNo . "\"><input type=\"submit\" value=\"go\" name=\"submit\"></form>
 <p>Enter a state number to query its name</p>";
 

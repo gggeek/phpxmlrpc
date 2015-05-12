@@ -5,9 +5,10 @@
 
 <h2>Wrap methods exposed by server into php functions</h2>
 
-<h3>The code demonstrates usage of the most automagic client usage possible:<br/>
+<h3>The code demonstrates usage of some the most automagic client usage possible:<br/>
     1) client that returns php values instead of xmlrpc value objects<br/>
-    2) wrapping of remote methods into php functions
+    2) wrapping of remote methods into php functions<br/>
+    See also proxy.php for an alternative take
 </h3>
 <?php
 
@@ -24,7 +25,7 @@ if ($resp->faultCode()) {
     $wrapper = new PhpXmlRpc\Wrapper();
     echo "<p>Server methods list retrieved, now wrapping it up...</p>\n<ul>\n";
     foreach ($resp->value() as $methodName) {
-        // $r->value is an array of strings
+        // $resp->value is an array of strings
 
         // do not wrap remote server system methods
         if (strpos($methodName, 'system.') !== 0) {
@@ -42,7 +43,7 @@ if ($resp->faultCode()) {
     echo "</ul>\n";
     if ($testCase) {
         echo "Now testing function $testCase: remote method to convert U.S. state number into state name";
-        $stateNum = 25;
+        $stateNum = rand(1, 51);
         $stateName = $testCase($stateNum, 2);
         echo "State number $stateNum is " . htmlspecialchars($stateName);
     }
