@@ -893,6 +893,11 @@ $signatures = array(
 
 );
 
+$wrapper = new \PhpXmlRpc\Wrapper();
+$c = new xmlrpcServerMethodsContainer;
+$moreSignatures = $wrapper->wrap_php_class($c, array('prefix' => 'tests.', 'method_type' => 'all'));
+$signatures = array_merge($signatures, $moreSignatures);
+
 $s = new PhpXmlRpc\Server($signatures, false);
 $s->setdebug(3);
 $s->compress_response = true;

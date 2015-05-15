@@ -570,7 +570,7 @@ And turned it into nylon';
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
-    public function testAutoRegisteredClass()
+    public function testAutoRegisteredMethods()
     {
         $f = new xmlrpcmsg('tests.getStateName.3', array(
             new xmlrpcval(23, 'int'),
@@ -609,7 +609,7 @@ And turned it into nylon';
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
-    public function testAutoRegisteredClass2()
+    public function testAutoRegisteredMethods2()
     {
         $f = new xmlrpcmsg('tests.getStateName.7', array(
             new xmlrpcval(23, 'int'),
@@ -630,7 +630,25 @@ And turned it into nylon';
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
-    public function testAutoRegisteredMethod()
+    public function testAutoRegisteredClosure()
+    {
+        $f = new xmlrpcmsg('tests.getStateName.10', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+    }
+
+    public function testAutoRegisteredClass()
+    {
+        $f = new xmlrpcmsg('tests.xmlrpcServerMethodsContainer.findState', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+    }
+
+    public function testWrappedMethod()
     {
         // make a 'deep client copy' as the original one might have many properties set
         $func = wrap_xmlrpc_method($this->client, 'examples.getStateName', array('simple_client_copy' => 1));
@@ -646,13 +664,21 @@ And turned it into nylon';
         }
     }
 
-    public function testClosure()
+    public function testWrappedClass()
     {
-        $f = new xmlrpcmsg('tests.getStateName.10', array(
-            new xmlrpcval(23, 'int'),
-        ));
-        $v = $this->send($f);
-        $this->assertEquals('Michigan', $v->scalarval());
+        // make a 'deep client copy' as the original one might have many properties set
+        $class = wrap_xmlrpc_server($this->client, array('simple_client_copy' => 1));
+        if ($class == '') {
+            $this->fail('Registration of remote server failed');
+        } else {
+            $obj = new $class();
+            $v = $obj->examples_getStateName(23);
+            // work around bug in current version of phpunit
+            if (is_object($v)) {
+                $v = var_export($v, true);
+            }
+            $this->assertEquals('Michigan', $v);
+        }
     }
 
     public function testGetCookies()
