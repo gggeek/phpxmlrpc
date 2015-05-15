@@ -286,7 +286,7 @@ if ($action) {
                     if ($v->kindOf() == "array") {
                         $max = $v->arraysize();
                         echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
-                        echo "<thead>\n<tr><th>Method</th><th>Description</th></tr>\n</thead>\n<tbody>\n";
+                        echo "<thead>\n<tr><th>Method ($max)</th><th>Description</th></tr>\n</thead>\n<tbody>\n";
                         for ($i = 0; $i < $max; $i++) {
                             $rec = $v->arraymem($i);
                             if ($i % 2) {
