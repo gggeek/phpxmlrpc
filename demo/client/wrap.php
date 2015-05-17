@@ -21,31 +21,31 @@ $resp = $client->send(new PhpXmlRpc\Request('system.listMethods'));
 if ($resp->faultCode()) {
     echo "<p>Server methods list could not be retrieved: error {$resp->faultCode()} '" . htmlspecialchars($resp->faultString()) . "'</p>\n";
 } else {
-    $testCase = '';
-    $wrapper = new PhpXmlRpc\Wrapper();
     echo "<p>Server methods list retrieved, now wrapping it up...</p>\n<ul>\n";
+    flush();
+
+    $callable = false;
+    $wrapper = new PhpXmlRpc\Wrapper();
     foreach ($resp->value() as $methodName) {
         // $resp->value is an array of strings
-
-        // do not wrap remote server system methods
-        if (strpos($methodName, 'system.') !== 0) {
-            $funcName = $wrapper->wrap_xmlrpc_method($client, $methodName);
-            if ($funcName) {
-                echo "<li>Remote server method " . htmlspecialchars($methodName) . " wrapped into php function " . $funcName . "</li>\n";
+        if ($methodName == 'examples.getStateName') {
+            $callable = $wrapper->wrap_xmlrpc_method($client, $methodName);
+            if ($callable) {
+                echo "<li>Remote server method " . htmlspecialchars($methodName) . " wrapped into php function</li>\n";
             } else {
                 echo "<li>Remote server method " . htmlspecialchars($methodName) . " could not be wrapped!</li>\n";
             }
-            if ($methodName == 'examples.getStateName') {
-                $testCase = $funcName;
-            }
+            break;
         }
     }
     echo "</ul>\n";
-    if ($testCase) {
-        echo "Now testing function $testCase: remote method to convert U.S. state number into state name";
+    flush();
+
+    if ($callable) {
+        echo "Now testing function for remote method to convert U.S. state number into state name";
         $stateNum = rand(1, 51);
-        $stateName = $testCase($stateNum, 2);
-        echo "State number $stateNum is " . htmlspecialchars($stateName);
+        // the 2nd parameter gets added to the closure - it is teh debug level to be used for the client
+        $stateName = $callable($stateNum, 2);
     }
 }
 ?>

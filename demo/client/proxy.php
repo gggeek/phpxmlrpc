@@ -3,7 +3,7 @@
 <body>
 <h1>proxy demo</h1>
 <h2>Query server using a 'proxy' object</h2>
-<h3>The code demonstrates usage for the terminally lazy</h3>
+<h3>The code demonstrates usage for the terminally lazy. For a more complete proxy, look at at the Wrapper class</h3>
 <?php
 
 include_once __DIR__ . "/../../src/Autoloader.php";
@@ -20,6 +20,8 @@ class PhpXmlRpcProxy
     }
 
     /**
+     * Translates any method call to an xmlrpc call.
+     *
      * @author Toth Istvan
      *
      * @param string $name remote function name. Will be prefixed
