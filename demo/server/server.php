@@ -168,6 +168,11 @@ $findstate10_sig = array(
     "docstring" => $findstate_doc,
 );
 
+$c = new xmlrpcServerMethodsContainer;
+$moreSignatures = $wrapper->wrap_php_class($c, array('prefix' => 'tests.', 'method_type' => 'all'));
+var_dump($moreSignatures);
+die();
+
 $addtwo_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcInt, Value::$xmlrpcInt));
 $addtwo_doc = 'Add two integers together and return the result';
 function addTwo($req)
@@ -893,9 +898,6 @@ $signatures = array(
 
 );
 
-$wrapper = new \PhpXmlRpc\Wrapper();
-$c = new xmlrpcServerMethodsContainer;
-$moreSignatures = $wrapper->wrap_php_class($c, array('prefix' => 'tests.', 'method_type' => 'all'));
 $signatures = array_merge($signatures, $moreSignatures);
 
 $s = new PhpXmlRpc\Server($signatures, false);
