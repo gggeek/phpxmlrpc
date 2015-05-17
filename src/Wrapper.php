@@ -707,14 +707,14 @@ class Wrapper
         }
         $debug = isset($extraOptions['debug']) ? ($extraOptions['debug']) : 0;
 
-        $msgClass = $namespace . 'Request';
+        $reqClass = $namespace . 'Request';
         $valClass = $namespace . 'Value';
         $decoderClass = $namespace . 'Encoder';
 
-        $msg = new $msgClass('system.methodSignature');
-        $msg->addparam(new $valClass($methodName));
+        $req = new $reqClass('system.methodSignature');
+        $req->addparam(new $valClass($methodName));
         $client->setDebug($debug);
-        $response = $client->send($msg, $timeout, $protocol);
+        $response = $client->send($req, $timeout, $protocol);
         if ($response->faultCode()) {
             error_log('XML-RPC: could not retrieve method signature from remote server for method ' . $methodName);
 
@@ -748,9 +748,9 @@ class Wrapper
                 // if in 'offline' mode, get method description too.
                 // in online mode, favour speed of operation
                 if (!$buildIt) {
-                    $msg = new $msgClass('system.methodHelp');
-                    $msg->addparam(new $valClass($methodName));
-                    $response = $client->send($msg, $timeout, $protocol);
+                    $req = new $reqClass('system.methodHelp');
+                    $req->addparam(new $valClass($methodName));
+                    $response = $client->send($req, $timeout, $protocol);
                     if (!$response->faultCode()) {
                         $mDesc = $response->value();
                         if ($client->return_type != 'phpvals') {
@@ -820,12 +820,12 @@ class Wrapper
         $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : 'xmlrpc';
         $namespace = '\\PhpXmlRpc\\';
 
-        $msgClass = $namespace . 'Request';
+        $reqClass = $namespace . 'Request';
         //$valClass = $prefix.'val';
         $decoderClass = $namespace . 'Encoder';
 
-        $msg = new $msgClass('system.listMethods');
-        $response = $client->send($msg, $timeout, $protocol);
+        $req = new $reqClass('system.listMethods');
+        $response = $client->send($req, $timeout, $protocol);
         if ($response->faultCode()) {
             error_log('XML-RPC: could not retrieve method list from remote server');
 

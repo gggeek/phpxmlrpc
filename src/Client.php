@@ -352,7 +352,7 @@ class Client
         }
 
         if (is_array($req)) {
-            // $msg is an array of Requests
+            // $req is an array of Requests
             $r = $this->multicall($req, $timeout, $method);
 
             return $r;
@@ -634,7 +634,7 @@ class Client
      * Requires curl to be built into PHP
      * NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!
      *
-     * @param Request $msg
+     * @param Request $req
      * @param string $server
      * @param int $port
      * @param int $timeout
@@ -657,7 +657,7 @@ class Client
      * @param int $sslVersion
      * @return Response
      */
-    protected function sendPayloadCURL($msg, $server, $port, $timeout = 0, $username = '',
+    protected function sendPayloadCURL($req, $server, $port, $timeout = 0, $username = '',
                                      $password = '', $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '',
                                      $proxyHost = '', $proxyPort = 0, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'https',
                                      $keepAlive = false, $key = '', $keyPass = '', $sslVersion = 0)
@@ -684,12 +684,12 @@ class Client
         }
 
         // Only create the payload if it was not created previously
-        if (empty($msg->payload)) {
-            $msg->createPayload($this->request_charset_encoding);
+        if (empty($req->payload)) {
+            $req->createPayload($this->request_charset_encoding);
         }
 
         // Deflate request body and set appropriate request headers
-        $payload = $msg->payload;
+        $payload = $req->payload;
         if (function_exists('gzdeflate') && ($this->request_compression == 'gzip' || $this->request_compression == 'deflate')) {
             if ($this->request_compression == 'gzip') {
                 $a = @gzencode($payload);
@@ -750,7 +750,7 @@ class Client
             }
         }
         // extra headers
-        $headers = array('Content-Type: ' . $msg->content_type, 'Accept-Charset: ' . implode(',', $this->accepted_charset_encodings));
+        $headers = array('Content-Type: ' . $req->content_type, 'Accept-Charset: ' . implode(',', $this->accepted_charset_encodings));
         // if no keepalive is wanted, let the server know it in advance
         if (!$keepAlive) {
             $headers[] = 'Connection: close';
@@ -865,7 +865,7 @@ class Client
             if (!$keepAlive) {
                 curl_close($curl);
             }
-            $resp = $msg->parseResponse($result, true, $this->return_type);
+            $resp = $req->parseResponse($result, true, $this->return_type);
             // if we got back a 302, we can not reuse the curl handle for later calls
             if ($resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error'] && $keepAlive) {
                 curl_close($curl);

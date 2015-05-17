@@ -12,16 +12,16 @@ class Server
      */
     protected $dmap = array();
     /**
-     * Defines how functions in dmap will be invoked: either using an xmlrpc msg object
+     * Defines how functions in dmap will be invoked: either using an xmlrpc request object
      * or plain php values.
-     * valid strings are 'xmlrpcvals', 'phpvals' or 'epivals'
+     * Valid strings are 'xmlrpcvals', 'phpvals' or 'epivals'
      */
     public $functions_parameters_type = 'xmlrpcvals';
     /**
      * Option used for fine-tuning the encoding the php values returned from
      * functions registered in the dispatch map when the functions_parameters_types
      * member is set to 'phpvals'
-     * @see php_xmlrpc_encode for a list of values
+     * @see Encoder::encode for a list of values
      */
     public $phpvals_encoding_options = array('auto_dates');
     /**
@@ -30,7 +30,7 @@ class Server
      */
     public $debug = 1;
     /**
-     * Controls behaviour of server when invoked user function throws an exception:
+     * Controls behaviour of server when the invoked user function throws an exception:
      * 0 = catch it and return an 'internal error' xmlrpc response (default)
      * 1 = catch it and return an xmlrpc response with the error corresponding to the exception
      * 2 = allow the exception to float to the upper layers
@@ -39,16 +39,20 @@ class Server
     /**
      * When set to true, it will enable HTTP compression of the response, in case
      * the client has declared its support for compression in the request.
+     * Set at constructor time.
      */
     public $compress_response = false;
     /**
-     * List of http compression methods accepted by the server for requests.
+     * List of http compression methods accepted by the server for requests. Set at constructor time.
      * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib
      */
     public $accepted_compression = array();
     /// shall we serve calls to system.* methods?
     public $allow_system_funcs = true;
-    /// list of charset encodings natively accepted for requests
+    /**
+     * List of charset encodings natively accepted for requests.
+     *  Set at constructor time.
+     */
     public $accepted_charset_encodings = array();
     /**
      * charset encoding to be used for response.
@@ -75,7 +79,7 @@ class Server
 
     /**
      * @param array $dispatchMap the dispatch map with definition of exposed services
-     * @param boolean $servicenow set to false to prevent the server from running upon construction
+     * @param boolean $serviceNow set to false to prevent the server from running upon construction
      */
     public function __construct($dispatchMap = null, $serviceNow = true)
     {
@@ -89,15 +93,12 @@ class Server
         // by default the xml parser can support these 3 charset encodings
         $this->accepted_charset_encodings = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
 
-        // dispMap is a dispatch array of methods
-        // mapped to function names and signatures
-        // if a method
-        // doesn't appear in the map then an unknown
-        // method error is generated
+        // dispMap is a dispatch array of methods mapped to function names and signatures.
+        // If a method doesn't appear in the map then an unknown method error is generated
         /* milosch - changed to make passing dispMap optional.
-            * instead, you can use the class add_to_map() function
-            * to add functions manually (borrowed from SOAPX4)
-            */
+        * instead, you can use the class add_to_map() function
+        * to add functions manually (borrowed from SOAPX4)
+        */
         if ($dispatchMap) {
             $this->dmap = $dispatchMap;
             if ($serviceNow) {
@@ -291,12 +292,12 @@ class Server
     /**
      * Verify type and number of parameters received against a list of known signatures.
      *
-     * @param array $in array of either xmlrpc value objects or xmlrpc type definitions
-     * @param array $sig array of known signatures to match against
+     * @param array|Request $in array of either xmlrpc value objects or xmlrpc type definitions
+     * @param array $sigs array of known signatures to match against
      *
      * @return array
      */
-    protected function verifySignature($in, $sig)
+    protected function verifySignature($in, $sigs)
     {
         // check each possible signature in turn
         if (is_object($in)) {
@@ -304,8 +305,8 @@ class Server
         } else {
             $numParams = count($in);
         }
-        foreach ($sig as $cursig) {
-            if (count($cursig) == $numParams + 1) {
+        foreach ($sigs as $curSig) {
+            if (count($curSig) == $numParams + 1) {
                 $itsOK = 1;
                 for ($n = 0; $n < $numParams; $n++) {
                     if (is_object($in)) {
@@ -320,10 +321,10 @@ class Server
                     }
 
                     // param index is $n+1, as first member of sig is return type
-                    if ($pt != $cursig[$n + 1] && $cursig[$n + 1] != Value::$xmlrpcValue) {
+                    if ($pt != $curSig[$n + 1] && $curSig[$n + 1] != Value::$xmlrpcValue) {
                         $itsOK = 0;
                         $pno = $n + 1;
-                        $wanted = $cursig[$n + 1];
+                        $wanted = $curSig[$n + 1];
                         $got = $pt;
                         break;
                     }
@@ -816,11 +817,11 @@ class Server
             if (isset($dmap[$methName]['signature'])) {
                 $sigs = array();
                 foreach ($dmap[$methName]['signature'] as $inSig) {
-                    $cursig = array();
+                    $curSig = array();
                     foreach ($inSig as $sig) {
-                        $cursig[] = new Value($sig, 'string');
+                        $curSig[] = new Value($sig, 'string');
                     }
-                    $sigs[] = new Value($cursig, 'array');
+                    $sigs[] = new Value($curSig, 'array');
                 }
                 $r = new Response(new Value($sigs, 'array'));
             } else {
@@ -903,9 +904,9 @@ class Server
         }
         $numParams = $params->arraysize();
 
-        $msg = new Request($methName->scalarval());
+        $req = new Request($methName->scalarval());
         for ($i = 0; $i < $numParams; $i++) {
-            if (!$msg->addParam($params->arraymem($i))) {
+            if (!$req->addParam($params->arraymem($i))) {
                 $i++;
 
                 return static::_xmlrpcs_multicall_error(new Response(0,
@@ -914,7 +915,7 @@ class Server
             }
         }
 
-        $result = $server->execute($msg);
+        $result = $server->execute($req);
 
         if ($result->faultCode() != 0) {
             return static::_xmlrpcs_multicall_error($result); // Method returned fault.
