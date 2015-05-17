@@ -170,8 +170,6 @@ $findstate10_sig = array(
 
 $c = new xmlrpcServerMethodsContainer;
 $moreSignatures = $wrapper->wrap_php_class($c, array('prefix' => 'tests.', 'method_type' => 'all'));
-var_dump($moreSignatures);
-die();
 
 $addtwo_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcInt, Value::$xmlrpcInt));
 $addtwo_doc = 'Add two integers together and return the result';
