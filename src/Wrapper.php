@@ -156,7 +156,7 @@ class Wrapper
         }
         if (is_array($callable)) {
             if (count($callable) < 2 || (!is_string($callable[0]) && !is_object($callable[0]))) {
-                error_log('XML-RPC: syntax for function to be wrapped is wrong');
+                error_log('XML-RPC: ' . __METHOD__ . ': syntax for function to be wrapped is wrong');
                 return false;
             }
             if (is_string($callable[0])) {
@@ -166,6 +166,12 @@ class Wrapper
             }
             $exists = method_exists($callable[0], $callable[1]);
         } else if ($callable instanceof \Closure) {
+            // we do not support creating code which wraps closures, as php does not allow to serialize them
+            if (!$buildIt) {
+                error_log('XML-RPC: ' . __METHOD__ . ': a closure can not be wrapped in generated source code');
+                return false;
+            }
+
             $plainFuncName = 'Closure';
             $exists = true;
         }
@@ -175,7 +181,7 @@ class Wrapper
         }
 
         if (!$exists) {
-            error_log('XML-RPC: function to be wrapped is not defined: ' . $plainFuncName);
+            error_log('XML-RPC: ' . __METHOD__ . ': function to be wrapped is not defined: ' . $plainFuncName);
             return false;
         }
 
@@ -222,23 +228,23 @@ class Wrapper
         if (is_array($callable)) {
             $func = new \ReflectionMethod($callable[0], $callable[1]);
             if ($func->isPrivate()) {
-                error_log('XML-RPC: method to be wrapped is private: ' . $plainFuncName);
+                error_log('XML-RPC: ' . __METHOD__ . ': method to be wrapped is private: ' . $plainFuncName);
                 return false;
             }
             if ($func->isProtected()) {
-                error_log('XML-RPC: method to be wrapped is protected: ' . $plainFuncName);
+                error_log('XML-RPC: ' . __METHOD__ . ': method to be wrapped is protected: ' . $plainFuncName);
                 return false;
             }
             if ($func->isConstructor()) {
-                error_log('XML-RPC: method to be wrapped is the constructor: ' . $plainFuncName);
+                error_log('XML-RPC: ' . __METHOD__ . ': method to be wrapped is the constructor: ' . $plainFuncName);
                 return false;
             }
             if ($func->isDestructor()) {
-                error_log('XML-RPC: method to be wrapped is the destructor: ' . $plainFuncName);
+                error_log('XML-RPC: ' . __METHOD__ . ': method to be wrapped is the destructor: ' . $plainFuncName);
                 return false;
             }
             if ($func->isAbstract()) {
-                error_log('XML-RPC: method to be wrapped is abstract: ' . $plainFuncName);
+                error_log('XML-RPC: ' . __METHOD__ . ': method to be wrapped is abstract: ' . $plainFuncName);
                 return false;
             }
             /// @todo add more checks for static vs. nonstatic?
@@ -248,7 +254,7 @@ class Wrapper
         if ($func->isInternal()) {
             // Note: from PHP 5.1.0 onward, we will possibly be able to use invokeargs
             // instead of getparameters to fully reflect internal php functions ?
-            error_log('XML-RPC: function to be wrapped is internal: ' . $plainFuncName);
+            error_log('XML-RPC: ' . __METHOD__ . ': function to be wrapped is internal: ' . $plainFuncName);
             return false;
         }
 
@@ -724,7 +730,7 @@ class Wrapper
         $client->setDebug($debug);
         $response = $client->send($req, $timeout, $protocol);
         if ($response->faultCode()) {
-            error_log('XML-RPC: could not retrieve method signature from remote server for method ' . $methodName);
+            error_log('XML-RPC: ' . __METHOD__ . ': could not retrieve method signature from remote server for method ' . $methodName);
             return false;
         }
 
@@ -735,7 +741,7 @@ class Wrapper
         }
 
         if (!is_array($mSig) || count($mSig) <= $sigNum) {
-            error_log('XML-RPC: could not retrieve method signature nr.' . $sigNum . ' from remote server for method ' . $methodName);
+            error_log('XML-RPC: ' . __METHOD__ . ': could not retrieve method signature nr.' . $sigNum . ' from remote server for method ' . $methodName);
             return false;
         }
 
@@ -992,7 +998,7 @@ class Wrapper
         $req = new $reqClass('system.listMethods');
         $response = $client->send($req, $timeout, $protocol);
         if ($response->faultCode()) {
-            error_log('XML-RPC: could not retrieve method list from remote server');
+            error_log('XML-RPC: ' . __METHOD__ . ': could not retrieve method list from remote server');
 
             return false;
         } else {
@@ -1002,7 +1008,7 @@ class Wrapper
                 $mList = $decoder->decode($mList);
             }
             if (!is_array($mList) || !count($mList)) {
-                error_log('XML-RPC: could not retrieve meaningful method list from remote server');
+                error_log('XML-RPC: ' . __METHOD__ . ': could not retrieve meaningful method list from remote server');
 
                 return false;
             } else {
@@ -1044,7 +1050,7 @@ class Wrapper
                             }
                             $source .= $methodWrap['source'] . "\n";
                         } else {
-                            error_log('XML-RPC: will not create class method to wrap remote method ' . $mName);
+                            error_log('XML-RPC: ' . __METHOD__ . ': will not create class method to wrap remote method ' . $mName);
                         }
                     }
                 }
@@ -1055,7 +1061,7 @@ class Wrapper
                     if ($allOK) {
                         return $xmlrpcClassName;
                     } else {
-                        error_log('XML-RPC: could not create class ' . $xmlrpcClassName . ' to wrap remote server ' . $client->server);
+                        error_log('XML-RPC: ' . __METHOD__ . ': could not create class ' . $xmlrpcClassName . ' to wrap remote server ' . $client->server);
                         return false;
                     }
                 } else {
