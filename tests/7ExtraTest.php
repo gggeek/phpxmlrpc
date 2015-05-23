@@ -2,9 +2,11 @@
 
 include_once __DIR__ . '/LocalFileTestCase.php';
 
+/**
+ * Tests for php files in the 'extras' directory
+ */
 class ExtraTest extends PhpXmlRpc_LocalFileTestCase
 {
-
     public function setUp()
     {
         $this->args = argParser::getArgs();

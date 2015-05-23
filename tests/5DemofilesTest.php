@@ -2,6 +2,9 @@
 
 include_once __DIR__ . '/LocalFileTestCase.php';
 
+/**
+ * Tests for php files in the 'demo' directory
+ */
 class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
 {
     public function setUp()

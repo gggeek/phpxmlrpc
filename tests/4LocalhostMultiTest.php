@@ -7,6 +7,10 @@ include_once __DIR__ . '/parse_args.php';
 
 include_once __DIR__ . '/3LocalhostTest.php';
 
+/**
+ * Tests which stress http features of the library.
+ * Each of these tests iterates over (almost) all of the 'localhost' tests
+ */
 class LocalhostMultiTest extends LocalhostTest
 {
     /**
@@ -34,7 +38,7 @@ class LocalhostMultiTest extends LocalhostTest
     {
         if(!function_exists('gzdeflate'))
         {
-            $this->fail('Zlib missing: cannot test deflate functionality');
+            $this->markTestSkipped('Zlib missing: cannot test deflate functionality');
             return;
         }
         $this->client->accepted_compression = array('deflate');
@@ -46,7 +50,7 @@ class LocalhostMultiTest extends LocalhostTest
     {
         if(!function_exists('gzdeflate'))
         {
-            $this->fail('Zlib missing: cannot test gzip functionality');
+            $this->markTestSkipped('Zlib missing: cannot test gzip functionality');
             return;
         }
         $this->client->accepted_compression = array('gzip');
@@ -58,7 +62,7 @@ class LocalhostMultiTest extends LocalhostTest
     {
         if(!function_exists('curl_init'))
         {
-            $this->fail('CURL missing: cannot test http 1.1');
+            $this->markTestSkipped('CURL missing: cannot test http 1.1');
             return;
         }
         $this->method = 'http11';
@@ -74,14 +78,14 @@ class LocalhostMultiTest extends LocalhostTest
             $this->_runtests();
         }
         else
-            $this->fail('PROXY definition missing: cannot test proxy');
+            $this->markTestSkipped('PROXY definition missing: cannot test proxy');
     }
 
     function testHttp11()
     {
         if(!function_exists('curl_init'))
         {
-            $this->fail('CURL missing: cannot test http 1.1');
+            $this->markTestSkipped('CURL missing: cannot test http 1.1');
             return;
         }
         $this->method = 'http11'; // not an error the double assignment!
@@ -96,7 +100,7 @@ class LocalhostMultiTest extends LocalhostTest
     {
         if(!function_exists('curl_init'))
         {
-            $this->fail('CURL missing: cannot test http 1.1');
+            $this->markTestSkipped('CURL missing: cannot test http 1.1');
             return;
         }
         $this->method = 'http11'; // not an error the double assignment!
@@ -111,7 +115,7 @@ class LocalhostMultiTest extends LocalhostTest
     {
         if(!function_exists('curl_init'))
         {
-            $this->fail('CURL missing: cannot test http 1.1');
+            $this->markTestSkipped('CURL missing: cannot test http 1.1');
             return;
         }
         $this->method = 'http11'; // not an error the double assignment!
@@ -126,12 +130,12 @@ class LocalhostMultiTest extends LocalhostTest
     {
         if(!function_exists('curl_init'))
         {
-            $this->fail('CURL missing: cannot test http 1.1 w. proxy');
+            $this->markTestSkipped('CURL missing: cannot test http 1.1 w. proxy');
             return;
         }
         else if ($this->args['PROXYSERVER'] == '')
         {
-            $this->fail('PROXY definition missing: cannot test proxy w. http 1.1');
+            $this->markTestSkipped('PROXY definition missing: cannot test proxy w. http 1.1');
             return;
         }
         $this->method = 'http11'; // not an error the double assignment!
@@ -147,7 +151,7 @@ class LocalhostMultiTest extends LocalhostTest
     {
         if(!function_exists('curl_init'))
         {
-            $this->fail('CURL missing: cannot test https functionality');
+            $this->markTestSkipped('CURL missing: cannot test https functionality');
             return;
         }
         $this->client->server = $this->args['HTTPSSERVER'];
@@ -164,12 +168,12 @@ class LocalhostMultiTest extends LocalhostTest
     {
         if(!function_exists('curl_init'))
         {
-            $this->fail('CURL missing: cannot test https functionality');
+            $this->markTestSkipped('CURL missing: cannot test https functionality');
             return;
         }
         else if ($this->args['PROXYSERVER'] == '')
         {
-            $this->fail('PROXY definition missing: cannot test proxy w. http 1.1');
+            $this->markTestSkipped('PROXY definition missing: cannot test proxy w. http 1.1');
             return;
         }
         $this->client->server = $this->args['HTTPSSERVER'];

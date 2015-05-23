@@ -5,6 +5,10 @@ include_once __DIR__ . '/../lib/xmlrpc_wrappers.inc';
 
 include_once __DIR__ . '/parse_args.php';
 
+/**
+ * Tests which involve interaction between the client and the server.
+ * They are run against the server found in demo/server.php
+ */
 class LocalhostTest extends PHPUnit_Framework_TestCase
 {
     /** @var xmlrpc_client $client */
@@ -651,10 +655,28 @@ And turned it into nylon';
     public function testWrappedMethod()
     {
         // make a 'deep client copy' as the original one might have many properties set
-        $func = wrap_xmlrpc_method($this->client, 'examples.getStateName', array('simple_client_copy' => 1));
-        if ($func == '') {
+        $func = wrap_xmlrpc_method($this->client, 'examples.getStateName', array('simple_client_copy' => 0));
+        if ($func == false) {
             $this->fail('Registration of examples.getStateName failed');
         } else {
+            $v = $func(23);
+            // work around bug in current version of phpunit
+            if (is_object($v)) {
+                $v = var_export($v, true);
+            }
+            $this->assertEquals('Michigan', $v);
+        }
+    }
+
+    public function testWrappedMethodAsSource()
+    {
+        // make a 'deep client copy' as the original one might have many properties set
+        $func = wrap_xmlrpc_method($this->client, 'examples.getStateName', array('simple_client_copy' => 0, 'return_source' => true));
+        if ($func == false) {
+            $this->fail('Registration of examples.getStateName failed');
+        } else {
+            eval($func['source']);
+            $func = $func['function'];
             $v = $func(23);
             // work around bug in current version of phpunit
             if (is_object($v)) {
@@ -667,7 +689,7 @@ And turned it into nylon';
     public function testWrappedClass()
     {
         // make a 'deep client copy' as the original one might have many properties set
-        $class = wrap_xmlrpc_server($this->client, array('simple_client_copy' => 1));
+        $class = wrap_xmlrpc_server($this->client, array('simple_client_copy' => 0));
         if ($class == '') {
             $this->fail('Registration of remote server failed');
         } else {

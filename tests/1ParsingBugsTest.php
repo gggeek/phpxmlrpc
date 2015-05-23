@@ -5,6 +5,9 @@
 include_once __DIR__ . '/../lib/xmlrpc.inc';
 include_once __DIR__ . '/../lib/xmlrpcs.inc';
 
+/**
+ * Tests involving parsing of xml and handling of xmlrpc values
+ */
 class ParsingBugsTests extends PHPUnit_Framework_TestCase
 {
     public $args = array();

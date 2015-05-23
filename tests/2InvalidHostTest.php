@@ -4,6 +4,9 @@ include_once __DIR__ . '/../lib/xmlrpc.inc';
 
 include_once __DIR__ . '/parse_args.php';
 
+/**
+ * Tests involving requests sent to non-existing servers
+ */
 class InvalidHostTest extends PHPUnit_Framework_TestCase
 {
     /** @var xmlrpc_client $client */
