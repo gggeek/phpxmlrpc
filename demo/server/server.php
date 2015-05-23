@@ -132,11 +132,6 @@ function inner_findstate($stateNo)
     }
 }
 
-$findStateClosure = function ($req)
-{
-    return findState($req);
-};
-
 $wrapper = new PhpXmlRpc\Wrapper();
 
 $findstate2_sig = $wrapper->wrap_php_function('inner_findstate');
@@ -163,10 +158,12 @@ $findstate9_sig = $wrapper->wrap_php_function('xmlrpcServerMethodsContainer::fin
 eval($findstate9_sig['source']);
 
 $findstate10_sig = array(
-    "function" => $findStateClosure,
+    "function" => function ($req) { return findState($req); },
     "signature" => $findstate_sig,
     "docstring" => $findstate_doc,
 );
+
+$findstate11_sig = $wrapper->wrap_php_function(function ($stateNo) { return inner_findstate($stateNo); });
 
 $c = new xmlrpcServerMethodsContainer;
 $moreSignatures = $wrapper->wrap_php_class($c, array('prefix' => 'tests.', 'method_type' => 'all'));
@@ -893,7 +890,7 @@ $signatures = array(
     'tests.getStateName.8' => $findstate8_sig,
     'tests.getStateName.9' => $findstate9_sig,
     'tests.getStateName.10' => $findstate10_sig,
-
+    'tests.getStateName.11' => $findstate11_sig,
 );
 
 $signatures = array_merge($signatures, $moreSignatures);

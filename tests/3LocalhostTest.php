@@ -556,7 +556,7 @@ And turned it into nylon';
         }
     }
 
-    public function testAutoRegisteredFunction()
+    public function testServerWrappedFunction()
     {
         $f = new xmlrpcmsg('tests.getStateName.2', array(
             new xmlrpcval(23, 'int'),
@@ -565,7 +565,7 @@ And turned it into nylon';
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
-    public function testAutoRegisteredFunction2()
+    public function testServerWrappedFunctionAsSource()
     {
         $f = new xmlrpcmsg('tests.getStateName.6', array(
             new xmlrpcval(23, 'int'),
@@ -574,7 +574,7 @@ And turned it into nylon';
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
-    public function testAutoRegisteredMethods()
+    public function testServerWrappedObjectMethods()
     {
         $f = new xmlrpcmsg('tests.getStateName.3', array(
             new xmlrpcval(23, 'int'),
@@ -613,7 +613,7 @@ And turned it into nylon';
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
-    public function testAutoRegisteredMethods2()
+    public function testServerWrappedObjectMethodsAsSource()
     {
         $f = new xmlrpcmsg('tests.getStateName.7', array(
             new xmlrpcval(23, 'int'),
@@ -634,7 +634,7 @@ And turned it into nylon';
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
-    public function testAutoRegisteredClosure()
+    public function testServerClosure()
     {
         $f = new xmlrpcmsg('tests.getStateName.10', array(
             new xmlrpcval(23, 'int'),
@@ -643,7 +643,16 @@ And turned it into nylon';
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
-    public function testAutoRegisteredClass()
+    public function testServerWrappedClosure()
+    {
+        $f = new xmlrpcmsg('tests.getStateName.11', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        $this->assertEquals('Michigan', $v->scalarval());
+    }
+
+    public function testServerWrappedClass()
     {
         $f = new xmlrpcmsg('tests.xmlrpcServerMethodsContainer.findState', array(
             new xmlrpcval(23, 'int'),
