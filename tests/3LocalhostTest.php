@@ -533,7 +533,7 @@ And turned it into nylon';
         ));
         $v = $this->send($f, $GLOBALS['xmlrpcerr']['server_error']);
         $this->client->path = $this->args['URI'] . '?EXCEPTION_HANDLING=1';
-        $v = $this->send($f, 1);
+        $v = $this->send($f, 1); // the error code of the expected exception
         $this->client->path = $this->args['URI'] . '?EXCEPTION_HANDLING=2';
         // depending on whether display_errors is ON or OFF on the server, we will get back a different error here,
         // as php will generate an http status code of either 200 or 500...
@@ -563,6 +563,12 @@ And turned it into nylon';
         ));
         $v = $this->send($f);
         $this->assertEquals('Michigan', $v->scalarval());
+
+        // this generates an exception in the function which was wrapped, which is by default wrapped in a known error response
+        $f = new xmlrpcmsg('tests.getStateName.2', array(
+            new xmlrpcval(0, 'int'),
+        ));
+        $v = $this->send($f, $GLOBALS['xmlrpcerr']['server_error']);
     }
 
     public function testServerWrappedFunctionAsSource()
@@ -572,6 +578,12 @@ And turned it into nylon';
         ));
         $v = $this->send($f);
         $this->assertEquals('Michigan', $v->scalarval());
+
+        // this generates an exception in the function which was wrapped, which is by default wrapped in a known error response
+        $f = new xmlrpcmsg('tests.getStateName.6', array(
+            new xmlrpcval(0, 'int'),
+        ));
+        $v = $this->send($f, $GLOBALS['xmlrpcerr']['server_error']);
     }
 
     public function testServerWrappedObjectMethods()
@@ -698,7 +710,8 @@ And turned it into nylon';
     public function testWrappedClass()
     {
         // make a 'deep client copy' as the original one might have many properties set
-        $class = wrap_xmlrpc_server($this->client, array('simple_client_copy' => 0));
+        // also for speed only wrap one method of the whole server
+        $class = wrap_xmlrpc_server($this->client, array('simple_client_copy' => 0, 'method_filter' => '/examples\.getStateName/' ));
         if ($class == '') {
             $this->fail('Registration of remote server failed');
         } else {

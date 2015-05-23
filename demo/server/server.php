@@ -53,10 +53,12 @@ class xmlrpcServerMethodsContainer
     }
 
     /**
-    * A PHP version of the state-number server. Send me an integer and i'll sell you a state
-    * @param integer $num
-    * @return string
-    */
+     * A PHP version of the state-number server. Send me an integer and i'll sell you a state.
+     *
+     * @param integer $num
+     * @return string
+     * @throws Exception
+     */
     public static function findState($num)
     {
         return inner_findstate($num);
@@ -114,11 +116,13 @@ function findState($req)
 
 /**
  * Inner code of the state-number server.
- * Used to test auto-registration of PHP functions as xmlrpc methods.
+ * Used to test wrapping of PHP functions into xmlrpc methods.
  *
  * @param integer $stateNo the state number
  *
  * @return string the name of the state (or error description)
+ *
+ * @throws Exception if state is not found
  */
 function inner_findstate($stateNo)
 {
@@ -128,7 +132,7 @@ function inner_findstate($stateNo)
         return $stateNames[$stateNo - 1];
     } else {
         // not, there so complain
-        return "I don't have a state for the index '" . $stateNo . "'";
+        throw new Exception("I don't have a state for the index '" . $stateNo . "'", PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser);
     }
 }
 

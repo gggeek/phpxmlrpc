@@ -966,7 +966,7 @@ class Wrapper
      *
      * @param Client $client the client obj all set to query the desired server
      * @param array $extraOptions list of options for wrapped code. See the ones from wrap_xmlrpc_method plus
-     *              - string method_filter
+     *              - string method_filter      regular expression
      *              - string new_class_name
      *              - string prefix
      *              - bool   simple_client_copy set it to true to avoid copying all properties of $client into the copy made in the new class
