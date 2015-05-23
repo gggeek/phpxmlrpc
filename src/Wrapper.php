@@ -18,6 +18,9 @@ namespace PhpXmlRpc;
  */
 class Wrapper
 {
+    /// used to hold a reference to object instances whose methods get wrapped by wrap_php_function(), in 'create source' mode
+    public static $objHolder = array();
+
     /**
      * Given a string defining a php type or phpxmlrpc type (loosely defined: strings
      * accepted come from javadoc blocks), return corresponding phpxmlrpc type.
@@ -541,10 +544,10 @@ class Wrapper
 
         $innerCode .= "\$np = false;\n";
         // since we are building source code for later use, if we are given an object instance,
-        // we go out of our way and store a pointer to it in a global var...
+        // we go out of our way and store a pointer to it in a static class var var...
         if (is_array($callable) && is_object($callable[0])) {
-            $GLOBALS['xmlrpcWPFObjHolder'][$newFuncName] = &$callable[0];
-            $innerCode .= "\$obj =& \$GLOBALS['xmlrpcWPFObjHolder']['$newFuncName'];\n";
+            self::$objHolder[$newFuncName] = $callable[0];
+            $innerCode .= "\$obj = PhpXmlRpc\\Wrapper::\$objHolder['$newFuncName'];\n";
             $realFuncName = '$obj->' . $callable[1];
         } else {
             $realFuncName = $plainFuncName;
@@ -777,6 +780,8 @@ class Wrapper
      * @param array $extraOptions
      * @param string $mSig
      * @return callable
+     *
+     * @todo should we allow usage of parameter simple_client_copy to mean 'do not clone' in this case?
      */
     protected function buildWrapMethodClosure($client, $methodName, array $extraOptions, $mSig)
     {
