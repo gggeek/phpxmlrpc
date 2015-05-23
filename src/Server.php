@@ -75,7 +75,7 @@ class Server
 
     protected static $_xmlrpc_debuginfo = '';
     protected static $_xmlrpcs_occurred_errors = '';
-    public static $_xmlrpcs_prev_ehandler = '';
+    protected static $_xmlrpcs_prev_ehandler = '';
 
     /**
      * @param array $dispatchMap the dispatch map with definition of exposed services
@@ -615,7 +615,7 @@ class Server
         // If debug level is 3, we should catch all errors generated during
         // processing of user function, and log them as part of response
         if ($this->debug > 2) {
-            $GLOBALS['_xmlrpcs_prev_ehandler'] = set_error_handler(array('\PhpXmlRpc\Server', '_xmlrpcs_errorHandler'));
+            self::$_xmlrpcs_prev_ehandler = set_error_handler(array('\PhpXmlRpc\Server', '_xmlrpcs_errorHandler'));
         }
         try {
             // Allow mixed-convention servers
@@ -683,8 +683,8 @@ class Server
         if ($this->debug > 2) {
             // note: restore the error handler we found before calling the
             // user func, even if it has been changed inside the func itself
-            if ($GLOBALS['_xmlrpcs_prev_ehandler']) {
-                set_error_handler($GLOBALS['_xmlrpcs_prev_ehandler']);
+            if (self::$_xmlrpcs_prev_ehandler) {
+                set_error_handler(self::$_xmlrpcs_prev_ehandler);
             } else {
                 restore_error_handler();
             }
@@ -1005,7 +1005,7 @@ class Server
         }
         // Try to avoid as much as possible disruption to the previous error handling
         // mechanism in place
-        if ($GLOBALS['_xmlrpcs_prev_ehandler'] == '') {
+        if (self::$_xmlrpcs_prev_ehandler == '') {
             // The previous error handler was the default: all we should do is log error
             // to the default error log (if level high enough)
             if (ini_get('log_errors') && (intval(ini_get('error_reporting')) & $errCode)) {
@@ -1013,12 +1013,13 @@ class Server
             }
         } else {
             // Pass control on to previous error handler, trying to avoid loops...
-            if ($GLOBALS['_xmlrpcs_prev_ehandler'] != array('\PhpXmlRpc\Server', '_xmlrpcs_errorHandler')) {
-                if (is_array($GLOBALS['_xmlrpcs_prev_ehandler'])) {
+            if (self::$_xmlrpcs_prev_ehandler != array('\PhpXmlRpc\Server', '_xmlrpcs_errorHandler')) {
+                if (is_array(self::$_xmlrpcs_prev_ehandler)) {
                     // the following works both with static class methods and plain object methods as error handler
-                    call_user_func_array($GLOBALS['_xmlrpcs_prev_ehandler'], array($errCode, $errString, $filename, $lineNo, $context));
+                    call_user_func_array(self::$_xmlrpcs_prev_ehandler, array($errCode, $errString, $filename, $lineNo, $context));
                 } else {
-                    $GLOBALS['_xmlrpcs_prev_ehandler']($errCode, $errString, $filename, $lineNo, $context);
+                    $method = self::$_xmlrpcs_prev_ehandler;
+                    $method($errCode, $errString, $filename, $lineNo, $context);
                 }
             }
         }
