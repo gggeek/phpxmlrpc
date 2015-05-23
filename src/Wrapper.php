@@ -146,6 +146,7 @@ class Wrapper
      * @todo what to do when the PHP function returns NULL? We are currently returning an empty string value...
      * @todo add an option to suppress php warnings in invocation of user function, similar to server debug level 3?
      * @todo add a verbatim_object_copy parameter to allow avoiding usage the same obj instance?
+     * @todo add an option to allow generated function to skip validation of number of parameters, as that is done by the server anyway
      */
     public function wrap_php_function($callable, $newFuncName = '', $extraOptions = array())
     {
@@ -193,14 +194,11 @@ class Wrapper
         $funcSigs = $this->buildMethodSignatures($funcDesc);
 
         if ($buildIt) {
-            $callable = $this->buildWrapFunctionClosure($callable, $extraOptions, null, null);
+            $callable = $this->buildWrapFunctionClosure($callable, $extraOptions, $plainFuncName, $funcDesc);
         } else {
             $newFuncName = $this->newFunctionName($callable, $newFuncName, $extraOptions);
             $code = $this->buildWrapFunctionSource($callable, $newFuncName, $extraOptions, $plainFuncName, $funcDesc);
         }
-
-        /// @todo examine if $paramDocs matches $parsVariations and build array for
-        /// usage as method signature, plus put together a nice string for docs
 
         $ret = array(
             'function' => $callable,
@@ -410,6 +408,22 @@ class Wrapper
             $responseClass = $nameSpace.'Response';
             $valueClass = $nameSpace.'Value';
 
+            // validate number of parameters received
+            // this should be optional really, as we assume the server does the validation
+            $minPars = count($funcDesc['params']);
+            $maxPars = $minPars;
+            foreach ($funcDesc['params'] as $i => $param) {
+                if ($param['isoptional']) {
+                    // this particular parameter is optional. We assume later ones are as well
+                    $minPars = $i;
+                    break;
+                }
+            }
+            $numPars = $req->getNumParams();
+            if ($numPars < $minPars || $numPars > $maxPars) {
+                return new $responseClass(0, 3, 'Incorrect parameters passed to method');
+            }
+
             $encoder = new $encoderClass();
             $options = array();
             if (isset($extraOptions['decode_php_objs']) && $extraOptions['decode_php_objs']) {
@@ -485,6 +499,8 @@ class Wrapper
      * @param string $plainFuncName
      * @param array $funcDesc
      * @return array
+     *
+     * @todo add a nice phpdoc block in the generated source
      */
     protected function buildWrapFunctionSource($callable, $newFuncName, $extraOptions, $plainFuncName, $funcDesc)
     {
@@ -494,37 +510,19 @@ class Wrapper
         $decodePhpObjects = isset($extraOptions['decode_php_objs']) ? (bool)$extraOptions['decode_php_objs'] : false;
         $catchWarnings = isset($extraOptions['suppress_warnings']) && $extraOptions['suppress_warnings'] ? '@' : '';
 
-        // build body of new function
-
-        $innerCode = "\$encoder = new {$namespace}Encoder();\n";
         $i = 0;
         $parsVariations = array();
         $pars = array();
         $pNum = count($funcDesc['params']);
         foreach ($funcDesc['params'] as $param) {
-            /*$name = strtolower($funcDesc['params'][$i]['name']);
-            if (!isset($funcDesc['paramDocs'][$name])) {
-                // no param found in phpdoc info matching param definition!
-                $funcDesc['paramDocs'][$name]['type'] = 'mixed';
-            }*/
 
             if ($param['isoptional']) {
                 // this particular parameter is optional. save as valid previous list of parameters
-                $innerCode .= "if (\$paramcount > $i) {\n";
                 $parsVariations[] = $pars;
             }
-            $innerCode .= "\$p$i = \$req->getParam($i);\n";
-            if ($decodePhpObjects) {
-                $innerCode .= "if (\$p{$i}->kindOf() == 'scalar') \$p$i = \$p{$i}->scalarval(); else \$p$i = \$encoder->decode(\$p$i, array('decode_php_objs'));\n";
-            } else {
-                $innerCode .= "if (\$p{$i}->kindOf() == 'scalar') \$p$i = \$p{$i}->scalarval(); else \$p$i = \$encoder->decode(\$p$i);\n";
-            }
 
-            $pars[] = "\$p$i";
+            $pars[] = "\$p[$i]";
             $i++;
-            if ($param['isoptional']) {
-                $innerCode .= "}\n";
-            }
             if ($i == $pNum) {
                 // last allowed parameters combination
                 $parsVariations[] = $pars;
@@ -535,20 +533,24 @@ class Wrapper
             // only known good synopsis = no parameters
             $parsVariations[] = array();
             $minPars = 0;
+            $maxPars = 0;
         } else {
             $minPars = count($parsVariations[0]);
+            $maxPars = count($parsVariations[count($parsVariations)-1]);
         }
 
-        if ($minPars) {
-            // add to code the check for min params number
-            // NB: this check needs to be done BEFORE decoding param values
-            $innerCode = "\$paramcount = \$req->getNumParams();\n" .
-                "if (\$paramcount < $minPars) return new {$namespace}Response(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcstr['incorrect_params'] . "');\n" . $innerCode;
+        // build body of new function
+
+        $innerCode = "\$paramCount = \$req->getNumParams();\n";
+        $innerCode .= "if (\$paramCount < $minPars || \$paramCount > $maxPars) return new {$namespace}Response(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcstr['incorrect_params'] . "');\n";
+
+        $innerCode .= "\$encoder = new {$namespace}Encoder();\n";
+        if ($decodePhpObjects) {
+            $innerCode .= "\$p = \$encoder->decode(\$req, array('decode_php_objs'));\n";
         } else {
-            $innerCode = "\$paramcount = \$req->getNumParams();\n" . $innerCode;
+            $innerCode .= "\$p = \$encoder->decode(\$req);\n";
         }
 
-        $innerCode .= "\$np = false;\n";
         // since we are building source code for later use, if we are given an object instance,
         // we go out of our way and store a pointer to it in a static class var var...
         if (is_array($callable) && is_object($callable[0])) {
@@ -558,12 +560,11 @@ class Wrapper
         } else {
             $realFuncName = $plainFuncName;
         }
-        foreach ($parsVariations as $pars) {
-            $innerCode .= "if (\$paramcount == " . count($pars) . ") \$retval = {$catchWarnings}$realFuncName(" . implode(',', $pars) . "); else\n";
+        foreach ($parsVariations as $i => $pars) {
+            $innerCode .= "if (\$paramCount == " . count($pars) . ") \$retval = {$catchWarnings}$realFuncName(" . implode(',', $pars) . ");\n";
+            if ($i < (count($parsVariations) - 1))
+                $innerCode .= "else\n";
         }
-        $innerCode .= "\$np = true;\n";
-        $innerCode .= "if (\$np) return new {$namespace}Response(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcstr['incorrect_params'] . "'); else {\n";
-        //$innerCode .= "if (\$_xmlrpcs_error_occurred) return new Response(0, $GLOBALS['xmlrpcerr']user, \$_xmlrpcs_error_occurred); else\n";
         $innerCode .= "if (is_a(\$retval, '{$namespace}Response')) return \$retval; else\n";
         if ($funcDesc['returns'] == Value::$xmlrpcDateTime || $funcDesc['returns'] == Value::$xmlrpcBase64) {
             $innerCode .= "return new {$namespace}Response(new {$namespace}Value(\$retval, '{$funcDesc['returns']}'));";
@@ -578,7 +579,7 @@ class Wrapper
         // if($func->returnsReference())
         //     return false;
 
-        $code = "function $newFuncName(\$req) {\n" . $innerCode . "}\n}";
+        $code = "function $newFuncName(\$req) {\n" . $innerCode . "\n}";
 
         return $code;
     }
