@@ -569,6 +569,14 @@ And turned it into nylon';
             new xmlrpcval(0, 'int'),
         ));
         $v = $this->send($f, $GLOBALS['xmlrpcerr']['server_error']);
+
+        // check if the generated function dispatch map is fine, by checking if the server registered it
+        $f = new xmlrpcmsg('system.methodSignature', array(
+            new xmlrpcval('tests.getStateName.2'),
+        ));
+        $v = $this->send($f);
+        $encoder = new \PhpXmlRpc\Encoder();
+        $this->assertEquals(array(array('string', 'int')), $encoder->decode($v));
     }
 
     public function testServerWrappedFunctionAsSource()
