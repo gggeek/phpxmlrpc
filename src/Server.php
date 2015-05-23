@@ -390,7 +390,6 @@ class Server
                         return $r;
                     }
                 } else {
-                    //error_log('The server sent deflated data. Your php install must have the Zlib extension compiled in to support this.');
                     $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_cannot_decompress'], PhpXmlRpc::$xmlrpcstr['server_cannot_decompress']);
 
                     return $r;

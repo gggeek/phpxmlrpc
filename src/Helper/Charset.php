@@ -203,7 +203,7 @@ class Charset
             */
             default:
                 $escapedData = '';
-                error_log("Converting from $srcEncoding to $destEncoding: not supported...");
+                error_log('XML-RPC: ' . __METHOD__ . ": Converting from $srcEncoding to $destEncoding: not supported...");
         }
 
         return $escapedData;
