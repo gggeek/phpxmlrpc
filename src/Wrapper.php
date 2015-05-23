@@ -308,8 +308,8 @@ class Wrapper
         return array(
             'desc' => $desc,
             'docs' => $docs,
-            'params' => $params,
-            'paramDocs' => $paramDocs,
+            'params' => $params, // array, positionally indexed
+            'paramDocs' => $paramDocs, // array, indexed by name
             'returns' => $returns,
             'returnsDocs' =>$returnsDocs,
         );
@@ -496,11 +496,11 @@ class Wrapper
         $pars = array();
         $pNum = count($funcDesc['params']);
         foreach ($funcDesc['params'] as $param) {
-            if (isset($funcDesc['paramDocs'][$i]['name']) && $funcDesc['paramDocs'][$i]['name'] &&
-                strtolower($funcDesc['paramDocs'][$i]['name']) != strtolower($param['name'])) {
-                // param name from phpdoc info does not match param definition!
-                $funcDesc['paramDocs'][$i]['type'] = 'mixed';
-            }
+            /*$name = strtolower($funcDesc['params'][$i]['name']);
+            if (!isset($funcDesc['paramDocs'][$name])) {
+                // no param found in phpdoc info matching param definition!
+                $funcDesc['paramDocs'][$name]['type'] = 'mixed';
+            }*/
 
             if ($param['isoptional']) {
                 // this particular parameter is optional. save as valid previous list of parameters
