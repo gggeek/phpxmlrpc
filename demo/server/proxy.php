@@ -80,7 +80,7 @@ $server = new PhpXmlRpc\Server(
             'function' => 'forward_request',
             'signature' => array(
                 array('mixed', 'string', 'string', 'array'),
-                array('mixed', 'string', 'string', 'array', 'stuct'),
+                array('mixed', 'string', 'string', 'array', 'struct'),
             ),
             'docstring' => 'forwards xmlrpc calls to remote servers. Returns remote method\'s response. Accepts params: remote server url (might include basic auth credentials), method name, array of params, and (optionally) a struct containing call options',
         ),
