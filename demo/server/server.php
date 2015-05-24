@@ -54,6 +54,7 @@ class xmlrpcServerMethodsContainer
 
     /**
      * A PHP version of the state-number server. Send me an integer and i'll sell you a state.
+     * Used to test wrapping of PHP methods into xmlrpc methods.
      *
      * @param integer $num
      * @return string
@@ -62,6 +63,17 @@ class xmlrpcServerMethodsContainer
     public static function findState($num)
     {
         return inner_findstate($num);
+    }
+
+    /**
+     * Returns an instance of stdClass.
+     * Used to test wrapping of PHP objects with class preservation
+     */
+    public function returnObject()
+    {
+        $obj = new stdClass();
+        $obj->hello = 'world';
+        return $obj;
     }
 }
 
@@ -171,6 +183,8 @@ $findstate11_sig = $wrapper->wrap_php_function(function ($stateNo) { return inne
 
 $c = new xmlrpcServerMethodsContainer;
 $moreSignatures = $wrapper->wrap_php_class($c, array('prefix' => 'tests.', 'method_type' => 'all'));
+
+$returnObj_sig =  $wrapper->wrap_php_function(array($c, 'returnObject'), '', array('encode_php_objs' => true));
 
 $addtwo_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcInt, Value::$xmlrpcInt));
 $addtwo_doc = 'Add two integers together and return the result';
@@ -326,8 +340,7 @@ function ageSorter($req)
     }
 }
 
-// signature and instructions, place these in the dispatch
-// map
+// signature and instructions, place these in the dispatch map
 $mailsend_sig = array(array(
     Value::$xmlrpcBoolean, Value::$xmlrpcString, Value::$xmlrpcString,
     Value::$xmlrpcString, Value::$xmlrpcString, Value::$xmlrpcString,
@@ -895,6 +908,8 @@ $signatures = array(
     'tests.getStateName.9' => $findstate9_sig,
     'tests.getStateName.10' => $findstate10_sig,
     'tests.getStateName.11' => $findstate11_sig,
+
+    'tests.returnPhpObject' => $returnObj_sig,
 );
 
 $signatures = array_merge($signatures, $moreSignatures);

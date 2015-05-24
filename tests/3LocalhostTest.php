@@ -689,10 +689,10 @@ And turned it into nylon';
             $this->fail('Registration of examples.getStateName failed');
         } else {
             $v = $func(23);
-            // work around bug in current version of phpunit
-            if (is_object($v)) {
+            // work around bug in current (or old?) version of phpunit when reporting the error
+            /*if (is_object($v)) {
                 $v = var_export($v, true);
-            }
+            }*/
             $this->assertEquals('Michigan', $v);
         }
     }
@@ -707,10 +707,10 @@ And turned it into nylon';
             eval($func['source']);
             $func = $func['function'];
             $v = $func(23);
-            // work around bug in current version of phpunit
-            if (is_object($v)) {
+            // work around bug in current (or old?) version of phpunit when reporting the error
+            /*if (is_object($v)) {
                 $v = var_export($v, true);
-            }
+            }*/
             $this->assertEquals('Michigan', $v);
         }
     }
@@ -725,11 +725,26 @@ And turned it into nylon';
         } else {
             $obj = new $class();
             $v = $obj->examples_getStateName(23);
-            // work around bug in current version of phpunit
-            if (is_object($v)) {
+            // work around bug in current (or old?) version of phpunit when reporting the error
+            /*if (is_object($v)) {
                 $v = var_export($v, true);
-            }
+            }*/
             $this->assertEquals('Michigan', $v);
+        }
+    }
+
+    public function testTransferOfObjectViaWrapping()
+    {
+        // make a 'deep client copy' as the original one might have many properties set
+        $func = wrap_xmlrpc_method($this->client, 'tests.returnPhpObject', array('simple_client_copy' => true,
+            'decode_php_objs' => true));
+        if ($func == false) {
+            $this->fail('Registration of tests.returnPhpObject failed');
+        } else {
+            $v = $func();
+            $obj = new stdClass();
+            $obj->hello = 'world';
+            $this->assertEquals($obj, $v);
         }
     }
 
