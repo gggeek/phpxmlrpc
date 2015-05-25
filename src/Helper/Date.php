@@ -22,7 +22,7 @@ class Date
      *
      * @return string
      */
-    public static function iso8601_encode($timet, $utc = 0)
+    public static function iso8601Encode($timet, $utc = 0)
     {
         if (!$utc) {
             $t = strftime("%Y%m%dT%H:%M:%S", $timet);
@@ -47,7 +47,7 @@ class Date
      *
      * @return int (datetime)
      */
-    public static function iso8601_decode($idate, $utc = 0)
+    public static function iso8601Decode($idate, $utc = 0)
     {
         $t = 0;
         if (preg_match('/([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})/', $idate, $regs)) {

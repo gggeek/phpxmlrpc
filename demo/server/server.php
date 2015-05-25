@@ -150,27 +150,27 @@ function inner_findstate($stateNo)
 
 $wrapper = new PhpXmlRpc\Wrapper();
 
-$findstate2_sig = $wrapper->wrap_php_function('inner_findstate');
+$findstate2_sig = $wrapper->wrapPhpFunction('inner_findstate');
 
-$findstate3_sig = $wrapper->wrap_php_function(array('xmlrpcServerMethodsContainer', 'findState'));
+$findstate3_sig = $wrapper->wrapPhpFunction(array('xmlrpcServerMethodsContainer', 'findState'));
 
 $obj = new xmlrpcServerMethodsContainer();
-$findstate4_sig = $wrapper->wrap_php_function(array($obj, 'findstate'));
+$findstate4_sig = $wrapper->wrapPhpFunction(array($obj, 'findstate'));
 
-$findstate5_sig = $wrapper->wrap_php_function('xmlrpcServerMethodsContainer::findState', '', array('return_source' => true));
+$findstate5_sig = $wrapper->wrapPhpFunction('xmlrpcServerMethodsContainer::findState', '', array('return_source' => true));
 eval($findstate5_sig['source']);
 
-$findstate6_sig = $wrapper->wrap_php_function('inner_findstate', '', array('return_source' => true));
+$findstate6_sig = $wrapper->wrapPhpFunction('inner_findstate', '', array('return_source' => true));
 eval($findstate6_sig['source']);
 
-$findstate7_sig = $wrapper->wrap_php_function(array('xmlrpcServerMethodsContainer', 'findState'), '', array('return_source' => true));
+$findstate7_sig = $wrapper->wrapPhpFunction(array('xmlrpcServerMethodsContainer', 'findState'), '', array('return_source' => true));
 eval($findstate7_sig['source']);
 
 $obj = new xmlrpcServerMethodsContainer();
-$findstate8_sig = $wrapper->wrap_php_function(array($obj, 'findstate'), '', array('return_source' => true));
+$findstate8_sig = $wrapper->wrapPhpFunction(array($obj, 'findstate'), '', array('return_source' => true));
 eval($findstate8_sig['source']);
 
-$findstate9_sig = $wrapper->wrap_php_function('xmlrpcServerMethodsContainer::findState', '', array('return_source' => true));
+$findstate9_sig = $wrapper->wrapPhpFunction('xmlrpcServerMethodsContainer::findState', '', array('return_source' => true));
 eval($findstate9_sig['source']);
 
 $findstate10_sig = array(
@@ -179,12 +179,12 @@ $findstate10_sig = array(
     "docstring" => $findstate_doc,
 );
 
-$findstate11_sig = $wrapper->wrap_php_function(function ($stateNo) { return inner_findstate($stateNo); });
+$findstate11_sig = $wrapper->wrapPhpFunction(function ($stateNo) { return inner_findstate($stateNo); });
 
 $c = new xmlrpcServerMethodsContainer;
-$moreSignatures = $wrapper->wrap_php_class($c, array('prefix' => 'tests.', 'method_type' => 'all'));
+$moreSignatures = $wrapper->wrapPhpClass($c, array('prefix' => 'tests.', 'method_type' => 'all'));
 
-$returnObj_sig =  $wrapper->wrap_php_function(array($c, 'returnObject'), '', array('encode_php_objs' => true));
+$returnObj_sig =  $wrapper->wrapPhpFunction(array($c, 'returnObject'), '', array('encode_php_objs' => true));
 
 $addtwo_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcInt, Value::$xmlrpcInt));
 $addtwo_doc = 'Add two integers together and return the result';

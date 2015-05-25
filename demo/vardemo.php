@@ -78,13 +78,13 @@ print "<PRE>" . htmlentities($op) . "</PRE>";
 print "<h3>Testing ISO date format</h3><pre>\n";
 
 $t = time();
-$date = PhpXmlRpc\Helper\Date::iso8601_encode($t);
+$date = PhpXmlRpc\Helper\Date::iso8601Encode($t);
 print "Now is $t --> $date\n";
-print "Or in UTC, that is " . PhpXmlRpc\Helper\Date::iso8601_encode($t, 1) . "\n";
-$tb = PhpXmlRpc\Helper\Date::iso8601_decode($date);
+print "Or in UTC, that is " . PhpXmlRpc\Helper\Date::iso8601Encode($t, 1) . "\n";
+$tb = PhpXmlRpc\Helper\Date::iso8601Decode($date);
 print "That is to say $date --> $tb\n";
-print "Which comes out at " . PhpXmlRpc\Helper\Date::iso8601_encode($tb) . "\n";
-print "Which was the time in UTC at " . PhpXmlRpc\Helper\Date::iso8601_decode($date, 1) . "\n";
+print "Which comes out at " . PhpXmlRpc\Helper\Date::iso8601Encode($tb) . "\n";
+print "Which was the time in UTC at " . PhpXmlRpc\Helper\Date::iso8601Eecode($date, 1) . "\n";
 
 print "</pre>\n";
 

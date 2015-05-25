@@ -1,6 +1,6 @@
 = XML-RPC for PHP
 :revision: 4.0.0
-:keywords: xml, rpc, xmlrpc, webservices, http
+:keywords: xmlrpc, ,xml, rpc, webservices, http
 :toc: left
 :imagesdir: images
 :source-highlighter: highlightjs
@@ -8,6 +8,9 @@
 
 [preface]
 == Introduction
+
+NB: THIS MANUAL HAS NOT YET BEEN UPDATED TO REFLECT ALL THE CHANGES WHICH HAVE MADE IN VERSION 4.
+DO NOT USE FOR NOW.
 
 XML-RPC is a format devised by link:$$http://www.userland.com/$$[Userland Software] for achieving
     remote procedure call via XML using HTTP as the transport. XML-RPC has its

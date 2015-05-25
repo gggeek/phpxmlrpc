@@ -18,7 +18,7 @@ namespace PhpXmlRpc;
  */
 class Wrapper
 {
-    /// used to hold a reference to object instances whose methods get wrapped by wrap_php_function(), in 'create source' mode
+    /// used to hold a reference to object instances whose methods get wrapped by wrapPhpFunction(), in 'create source' mode
     public static $objHolder = array();
 
     /**
@@ -34,7 +34,7 @@ class Wrapper
      *
      * @return string
      */
-    public function php_2_xmlrpc_type($phpType)
+    public function php2XmlrpcType($phpType)
     {
         switch (strtolower($phpType)) {
             case 'string':
@@ -76,7 +76,7 @@ class Wrapper
      *
      * @return string
      */
-    public function xmlrpc_2_php_type($xmlrpcType)
+    public function xmlrpc2PhpType($xmlrpcType)
     {
         switch (strtolower($xmlrpcType)) {
             case 'base64':
@@ -128,7 +128,7 @@ class Wrapper
      * php functions (ie. functions not expecting a single Request obj as parameter)
      * is by making use of the functions_parameters_type class member.
      *
-     * @param string|array $callable the name of the PHP user function to be exposed as xmlrpc method; array($obj, 'methodname') and array('class', 'methodname') are ok too
+     * @param callable $callable the PHP user function to be exposed as xmlrpc method/ a closure, function name, array($obj, 'methodname') or array('class', 'methodname') are ok
      * @param string $newFuncName (optional) name for function to be created. Used only when return_source in $extraOptions is true
      * @param array $extraOptions (optional) array of options for conversion. valid values include:
      *                            - bool return_source     when true, php code w. function definition will be returned, instead of a closure
@@ -148,7 +148,7 @@ class Wrapper
      * @todo add a verbatim_object_copy parameter to allow avoiding usage the same obj instance?
      * @todo add an option to allow generated function to skip validation of number of parameters, as that is done by the server anyway
      */
-    public function wrap_php_function($callable, $newFuncName = '', $extraOptions = array())
+    public function wrapPhpFunction($callable, $newFuncName = '', $extraOptions = array())
     {
         $buildIt = isset($extraOptions['return_source']) ? !($extraOptions['return_source']) : true;
 
@@ -367,12 +367,12 @@ class Wrapper
         $sigsDocs = array();
         foreach ($parsVariations as $pars) {
             // build a signature
-            $sig = array($this->php_2_xmlrpc_type($funcDesc['returns']));
+            $sig = array($this->php2XmlrpcType($funcDesc['returns']));
             $pSig = array($funcDesc['returnsDocs']);
             for ($i = 0; $i < count($pars); $i++) {
                 $name = strtolower($funcDesc['params'][$i]['name']);
                 if (isset($funcDesc['paramDocs'][$name]['type'])) {
-                    $sig[] = $this->php_2_xmlrpc_type($funcDesc['paramDocs'][$name]['type']);
+                    $sig[] = $this->php2XmlrpcType($funcDesc['paramDocs'][$name]['type']);
                 } else {
                     $sig[] = Value::$xmlrpcValue;
                 }
@@ -589,15 +589,15 @@ class Wrapper
      * PHP 'wrapper' functions that can be exposed as xmlrpc methods from an xmlrpc server
      * object and called from remote clients (as well as their corresponding signature info).
      *
-     * @param mixed $className the name of the class whose methods are to be exposed as xmlrpc methods, or an object instance of that class
-     * @param array $extraOptions see the docs for wrap_php_method for basic options, plus
+     * @param string|object $className the name of the class whose methods are to be exposed as xmlrpc methods, or an object instance of that class
+     * @param array $extraOptions see the docs for wrapPhpMethod for basic options, plus
      *                            - string method_type    'static', 'nonstatic', 'all' and 'auto' (default); the latter will switch between static and non-static depending on whether $className is a class name or object instance
      *                            - string method_filter  a regexp used to filter methods to wrap based on their names
      *                            - string prefix         used for the names of the xmlrpc methods created
      *
      * @return array|false false on failure
      */
-    public function wrap_php_class($className, $extraOptions = array())
+    public function wrapPhpClass($className, $extraOptions = array())
     {
         $methodFilter = isset($extraOptions['method_filter']) ? $extraOptions['method_filter'] : '';
         $methodType = isset($extraOptions['method_type']) ? $extraOptions['method_type'] : 'auto';
@@ -612,7 +612,7 @@ class Wrapper
                     if (($func->isStatic() && ($methodType == 'all' || $methodType == 'static' || ($methodType == 'auto' && is_string($className)))) ||
                         (!$func->isStatic() && ($methodType == 'all' || $methodType == 'nonstatic' || ($methodType == 'auto' && is_object($className))))
                     ) {
-                        $methodWrap = $this->wrap_php_function(array($className, $mName), '', $extraOptions);
+                        $methodWrap = $this->wrapPhpFunction(array($className, $mName), '', $extraOptions);
                         if ($methodWrap) {
                             if (is_object($className)) {
                                 $realClassName = get_class($className);
@@ -674,7 +674,7 @@ class Wrapper
      *
      * @return \closure|array|false false on failure, closure by default and array for return_source = true
      */
-    public function wrap_xmlrpc_method($client, $methodName, $extraOptions = array())
+    public function wrapXmlrpcMethod($client, $methodName, $extraOptions = array())
     {
         $newFuncName = isset($extraOptions['new_function_name']) ? $extraOptions['new_function_name'] : '';
 
@@ -873,6 +873,15 @@ class Wrapper
         return $function;
     }
 
+    /**
+     * @param Client $client
+     * @param string $methodName
+     * @param array $extraOptions
+     * @param string $newFuncName
+     * @param array $mSig
+     * @param string $mDesc
+     * @return array
+     */
     protected function buildWrapMethodSource($client, $methodName, array $extraOptions, $newFuncName, $mSig, $mDesc='')
     {
         $timeout = isset($extraOptions['timeout']) ? (int)$extraOptions['timeout'] : 0;
@@ -895,7 +904,7 @@ class Wrapper
         if ($clientCopyMode < 2) {
             // client copy mode 0 or 1 == full / partial client copy in emitted code
             $verbatimClientCopy = !$clientCopyMode;
-            $innerCode = $this->build_client_wrapper_code($client, $verbatimClientCopy, $prefix, $namespace);
+            $innerCode = $this->buildClientWrapperCode($client, $verbatimClientCopy, $prefix, $namespace);
             $innerCode .= "\$client->setDebug(\$debug);\n";
             $this_ = '';
         } else {
@@ -932,14 +941,14 @@ class Wrapper
                 }
             }
             $innerCode .= "\$req->addparam(\$p$i);\n";
-            $mDesc .= '* @param ' . $this->xmlrpc_2_php_type($pType) . " \$p$i\n";
+            $mDesc .= '* @param ' . $this->xmlrpc2PhpType($pType) . " \$p$i\n";
         }
         if ($clientCopyMode < 2) {
             $plist[] = '$debug=0';
             $mDesc .= "* @param int \$debug when 1 (or 2) will enable debugging of the underlying {$prefix} call (defaults to 0)\n";
         }
         $plist = implode(', ', $plist);
-        $mDesc .= '* @return ' . $this->xmlrpc_2_php_type($mSig[0]) . " (or an {$namespace}Response obj instance if call fails)\n*/\n";
+        $mDesc .= '* @return ' . $this->xmlrpc2PhpType($mSig[0]) . " (or an {$namespace}Response obj instance if call fails)\n*/\n";
 
         $innerCode .= "\$res = \${$this_}client->send(\$req, $timeout, '$protocol');\n";
         if ($decodeFault) {
@@ -963,16 +972,16 @@ class Wrapper
     }
 
     /**
-     * Similar to wrap_xmlrpc_method, but will generate a php class that wraps
+     * Similar to wrapXmlrpcMethod, but will generate a php class that wraps
      * all xmlrpc methods exposed by the remote server as own methods.
-     * For more details see wrap_xmlrpc_method.
+     * For more details see wrapXmlrpcMethod.
      *
      * For a slimmer alternative, see the code in demo/client/proxy.php
      *
-     * Note that unlike wrap_xmlrpc_method, we always have to generate php code here. It seems that php 7 will have anon classes...
+     * Note that unlike wrapXmlrpcMethod, we always have to generate php code here. It seems that php 7 will have anon classes...
      *
      * @param Client $client the client obj all set to query the desired server
-     * @param array $extraOptions list of options for wrapped code. See the ones from wrap_xmlrpc_method plus
+     * @param array $extraOptions list of options for wrapped code. See the ones from wrapXmlrpcMethod plus
      *              - string method_filter      regular expression
      *              - string new_class_name
      *              - string prefix
@@ -980,7 +989,7 @@ class Wrapper
      *
      * @return mixed false on error, the name of the created class if all ok or an array with code, class name and comments (if the appropriatevoption is set in extra_options)
      */
-    public function wrap_xmlrpc_server($client, $extraOptions = array())
+    public function wrapXmlrpcServer($client, $extraOptions = array())
     {
         $methodFilter = isset($extraOptions['method_filter']) ? $extraOptions['method_filter'] : '';
         $timeout = isset($extraOptions['timeout']) ? (int)$extraOptions['timeout'] : 0;
@@ -1027,7 +1036,7 @@ class Wrapper
                 /// @todo add function setdebug() to new class, to enable/disable debugging
                 $source = "class $xmlrpcClassName\n{\npublic \$client;\n\n";
                 $source .= "function __construct()\n{\n";
-                $source .= $this->build_client_wrapper_code($client, $verbatimClientCopy, $prefix, $namespace);
+                $source .= $this->buildClientWrapperCode($client, $verbatimClientCopy, $prefix, $namespace);
                 $source .= "\$this->client = \$client;\n}\n\n";
                 $opts = array(
                     'return_source' => true,
@@ -1044,7 +1053,7 @@ class Wrapper
                         // note: this will fail if server exposes 2 methods called f.e. do.something and do_something
                         $opts['new_function_name'] = preg_replace(array('/\./', '/[^a-zA-Z0-9_\x7f-\xff]/'),
                             array('_', ''), $mName);
-                        $methodWrap = $this->wrap_xmlrpc_method($client, $mName, $opts);
+                        $methodWrap = $this->wrapXmlrpcMethod($client, $mName, $opts);
                         if ($methodWrap) {
                             if (!$buildIt) {
                                 $source .= $methodWrap['docstring'];
@@ -1083,7 +1092,7 @@ class Wrapper
      *
      * @return string
      */
-    protected function build_client_wrapper_code($client, $verbatimClientCopy, $prefix = 'xmlrpc', $namespace = '\\PhpXmlRpc\\' )
+    protected function buildClientWrapperCode($client, $verbatimClientCopy, $prefix = 'xmlrpc', $namespace = '\\PhpXmlRpc\\' )
     {
         $code = "\$client = new {$namespace}Client('" . str_replace("'", "\'", $client->path) .
             "', '" . str_replace("'", "\'", $client->server) . "', $client->port);\n";

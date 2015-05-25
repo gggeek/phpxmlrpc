@@ -160,12 +160,12 @@ function xmlrpc_encode_entitites($data, $srcEncoding='', $destEncoding='')
 
 function iso8601_encode($timeT, $utc=0)
 {
-    return PhpXmlRpc\Helper\Date::iso8601_encode($timeT, $utc);
+    return PhpXmlRpc\Helper\Date::iso8601Encode($timeT, $utc);
 }
 
 function iso8601_decode($iDate, $utc=0)
 {
-    return PhpXmlRpc\Helper\Date::iso8601_decode($iDate, $utc);
+    return PhpXmlRpc\Helper\Date::iso8601Decode($iDate, $utc);
 }
 
 function decode_chunked($buffer)
@@ -188,7 +188,7 @@ function php_xmlrpc_encode($phpVal, $options=array())
 function php_xmlrpc_decode_xml($xmlVal, $options=array())
 {
     $encoder = new PhpXmlRpc\Encoder();
-    return $encoder->decode_xml($xmlVal, $options);
+    return $encoder->decodeXml($xmlVal, $options);
 }
 
 function guess_encoding($httpHeader='', $xmlChunk='', $encodingPrefs=null)
@@ -203,5 +203,5 @@ function has_encoding($xmlChunk)
 
 function is_valid_charset($encoding, $validList)
 {
-    return PhpXmlRpc\Helper\Charset::instance()->is_valid_charset($encoding, $validList);
+    return PhpXmlRpc\Helper\Charset::instance()->isValidCharset($encoding, $validList);
 }

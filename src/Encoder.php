@@ -39,7 +39,7 @@ class Encoder
                         case 'dateTime.iso8601':
                             $xmlrpcVal->scalar = $val;
                             $xmlrpcVal->type = 'datetime';
-                            $xmlrpcVal->timestamp = \PhpXmlRpc\Helper\Date::iso8601_decode($val);
+                            $xmlrpcVal->timestamp = \PhpXmlRpc\Helper\Date::iso8601Decode($val);
 
                             return $xmlrpcVal;
                         case 'base64':
@@ -230,7 +230,7 @@ class Encoder
      *
      * @return mixed false on error, or an instance of either Value, Request or Response
      */
-    public function decode_xml($xmlVal, $options = array())
+    public function decodeXml($xmlVal, $options = array())
     {
         // 'guestimate' encoding
         $valEncoding = XMLParser::guessEncoding('', $xmlVal);

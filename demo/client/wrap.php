@@ -29,7 +29,7 @@ if ($resp->faultCode()) {
     foreach ($resp->value() as $methodName) {
         // $resp->value is an array of strings
         if ($methodName == 'examples.getStateName') {
-            $callable = $wrapper->wrap_xmlrpc_method($client, $methodName);
+            $callable = $wrapper->wrapXmlrpcMethod($client, $methodName);
             if ($callable) {
                 echo "<li>Remote server method " . htmlspecialchars($methodName) . " wrapped into php function</li>\n";
             } else {
