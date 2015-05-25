@@ -14,6 +14,10 @@ The user manual can be found in the doc/manual directory, in Asciidoc format: [p
 
 Release tarballs also contain the HTML and PDF versions, as well as an automatically generated API documentation.
 
+Upgrading
+---------
+If you are upgrading from version 3 or earlier, please read the docs in [doc/api_changes_v4.md](doc/api_changes_v4.md)
+
 License
 -------
 Use of this software is subject to the terms in the [license.txt](license.txt) file

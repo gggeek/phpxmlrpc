@@ -1,4 +1,5 @@
 XMLRPC for PHP
+==============
 
 Requirements
 ------------
@@ -79,7 +80,9 @@ Installation of the library is quite easy:
         as leaving it open to access means that any visitor can trigger execution of php code such as
         the built-in debugger.
 
+Tips
+----
 
-Please note that usage of the 'make' command for installation of the library is
-not recommended, as it will generally involve editing of the makefile for a
-successful run.
+Please note that usage of the 'pake' command is not required for installation of the library.
+At this moment it is only useful to build the html and pdf versions of the documentation, and the tarballs
+for distribution of the library.
