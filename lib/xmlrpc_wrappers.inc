@@ -2,7 +2,7 @@
 
 /******************************************************************************
  *
- *** DEPRECATED ***
+ * *** DEPRECATED ***
  *
  * This file is only used to insure backwards compatibility
  * with the API of the library <= rev. 3
@@ -119,7 +119,7 @@ function build_remote_method_wrapper_code($client, $methodName, $xmlrpcFuncName,
     $code = "function $xmlrpcFuncName (";
     if ($clientCopyMode < 2) {
         // client copy mode 0 or 1 == partial / full client copy in emitted code
-        $innerCode = $this->build_client_wrapper_code($client, $clientCopyMode, $prefix, $namespace);
+        $innerCode = build_client_wrapper_code($client, $clientCopyMode, $prefix, $namespace);
         $innerCode .= "\$client->setDebug(\$debug);\n";
         $this_ = '';
     } else {
@@ -184,4 +184,31 @@ function build_remote_method_wrapper_code($client, $methodName, $xmlrpcFuncName,
     $code = $code . $plist . ") {\n" . $innerCode . "\n}\n";
 
     return array('source' => $code, 'docstring' => $mDesc);
+}
+
+/**
+ * @deprecated
+ */
+function build_client_wrapper_code($client, $verbatim_client_copy, $prefix='xmlrpc')
+{
+    $code = "\$client = new {$prefix}_client('".str_replace("'", "\'", $client->path).
+        "', '" . str_replace("'", "\'", $client->server) . "', $client->port);\n";
+
+    // copy all client fields to the client that will be generated runtime
+    // (this provides for future expansion or subclassing of client obj)
+    if ($verbatim_client_copy)
+    {
+        foreach($client as $fld => $val)
+        {
+            if($fld != 'debug' && $fld != 'return_type')
+            {
+                $val = var_export($val, true);
+                $code .= "\$client->$fld = $val;\n";
+            }
+        }
+    }
+    // only make sure that client always returns the correct data type
+    $code .= "\$client->return_type = '{$prefix}vals';\n";
+    //$code .= "\$client->setDebug(\$debug);\n";
+    return $code;
 }

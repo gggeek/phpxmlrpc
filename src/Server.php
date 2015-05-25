@@ -702,6 +702,10 @@ class Server
         $this->debug_info .= $string . "\n";
     }
 
+    /**
+     * @param string $charsetEncoding
+     * @return string
+     */
     protected function xml_header($charsetEncoding = '')
     {
         if ($charsetEncoding != '') {
@@ -713,6 +717,9 @@ class Server
 
     /* Functions that implement system.XXX methods of xmlrpc servers */
 
+    /**
+     * @return array
+     */
     public function getSystemDispatchMap()
     {
         return array(
@@ -751,36 +758,45 @@ class Server
         );
     }
 
-    public static function _xmlrpcs_getCapabilities($server, $req = null)
+    /**
+     * @return array
+     */
+    public function getCapabilities()
     {
         $outAr = array(
             // xmlrpc spec: always supported
-            'xmlrpc' => new Value(array(
-                'specUrl' => new Value('http://www.xmlrpc.com/spec', 'string'),
-                'specVersion' => new Value(1, 'int'),
-            ), 'struct'),
+            'xmlrpc' => array(
+                'specUrl' => 'http://www.xmlrpc.com/spec',
+                'specVersion' => 1
+            ),
             // if we support system.xxx functions, we always support multicall, too...
             // Note that, as of 2006/09/17, the following URL does not respond anymore
-            'system.multicall' => new Value(array(
-                'specUrl' => new Value('http://www.xmlrpc.com/discuss/msgReader$1208', 'string'),
-                'specVersion' => new Value(1, 'int'),
-            ), 'struct'),
+            'system.multicall' => array(
+                'specUrl' => 'http://www.xmlrpc.com/discuss/msgReader$1208',
+                'specVersion' => 1
+            ),
             // introspection: version 2! we support 'mixed', too
-            'introspection' => new Value(array(
-                'specUrl' => new Value('http://phpxmlrpc.sourceforge.net/doc-2/ch10.html', 'string'),
-                'specVersion' => new Value(2, 'int'),
-            ), 'struct'),
+            'introspection' => array(
+                'specUrl' => 'http://phpxmlrpc.sourceforge.net/doc-2/ch10.html',
+                'specVersion' => 2,
+            ),
         );
 
         // NIL extension
         if (PhpXmlRpc::$xmlrpc_null_extension) {
-            $outAr['nil'] = new Value(array(
-                'specUrl' => new Value('http://www.ontosys.com/xml-rpc/extensions.php', 'string'),
-                'specVersion' => new Value(1, 'int'),
-            ), 'struct');
+            $outAr['nil'] = array(
+                'specUrl' => 'http://www.ontosys.com/xml-rpc/extensions.php',
+                'specVersion' => 1
+            );
         }
 
-        return new Response(new Value($outAr, 'struct'));
+        return $outAr;
+    }
+
+    public static function _xmlrpcs_getCapabilities($server, $req = null)
+    {
+        $encoder = new Encoder();
+        return new Response($encoder->encode($server->getCapabilities()));
     }
 
     public static function _xmlrpcs_listMethods($server, $req = null) // if called in plain php values mode, second param is missing
