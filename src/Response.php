@@ -75,7 +75,7 @@ class Response
     /**
      * Returns the value received by the server.
      *
-     * @return mixed the xmlrpc value object returned by the server. Might be an xml string or php value if the response has been created by specially configured Client objects
+     * @return Value|string|mixed the xmlrpc value object returned by the server. Might be an xml string or php value if the response has been created by specially configured Client objects
      */
     public function value()
     {

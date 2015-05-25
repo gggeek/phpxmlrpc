@@ -341,7 +341,7 @@ class Client
      * @param integer $timeout Connection timeout, in seconds, If unspecified, a platform specific timeout will apply
      * @param string $method if left unspecified, the http protocol chosen during creation of the object will be used
      *
-     * @return Response
+     * @return Response|Response[]
      */
     public function send($req, $timeout = 0, $method = '')
     {

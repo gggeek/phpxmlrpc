@@ -966,7 +966,7 @@ class Server
         $pt = array();
         $wrapper = new Wrapper();
         foreach ($call['params'] as $val) {
-            $pt[] = $wrapper->php_2_xmlrpc_type(gettype($val));
+            $pt[] = $wrapper->php2XmlrpcType(gettype($val));
         }
 
         $result = $server->execute($call['methodName'], $call['params'], $pt);

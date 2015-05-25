@@ -45,7 +45,7 @@ class PhpXmlRpcProxy
         $resp = $this->client->send(new PhpXmlRpc\Request($this->prefix.$name, $valueArray));
 
         if ($resp->faultCode()) {
-            throw new Exception($resp->faultMessage(), $resp->faultCode);
+            throw new Exception($resp->faultString(), $resp->faultCode());
         } else {
             return $resp->value();
         }

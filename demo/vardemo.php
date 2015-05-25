@@ -84,7 +84,7 @@ print "Or in UTC, that is " . PhpXmlRpc\Helper\Date::iso8601Encode($t, 1) . "\n"
 $tb = PhpXmlRpc\Helper\Date::iso8601Decode($date);
 print "That is to say $date --> $tb\n";
 print "Which comes out at " . PhpXmlRpc\Helper\Date::iso8601Encode($tb) . "\n";
-print "Which was the time in UTC at " . PhpXmlRpc\Helper\Date::iso8601Eecode($date, 1) . "\n";
+print "Which was the time in UTC at " . PhpXmlRpc\Helper\Date::iso8601Encode($date, 1) . "\n";
 
 print "</pre>\n";
 
