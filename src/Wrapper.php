@@ -280,10 +280,10 @@ class Wrapper
                     $desc .= $doc;
                 } elseif (strpos($doc, '@param') === 0) {
                     // syntax: @param type $name [desc]
-                    if (preg_match('/@param\s+(\S+)\s+(\$\S+)\s+(.+)?/', $doc, $matches)) {
+                    if (preg_match('/@param\s+(\S+)\s+(\$\S+)\s*(.+)?/', $doc, $matches)) {
                         $name = strtolower(trim($matches[2]));
                         //$paramDocs[$name]['name'] = trim($matches[2]);
-                        $paramDocs[$name]['doc'] = $matches[3];
+                        $paramDocs[$name]['doc'] = isset($matches[3]) ? $matches[3] : '';
                         $paramDocs[$name]['type'] = $matches[1];
                     }
                     $i++;

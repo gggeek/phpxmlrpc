@@ -60,7 +60,8 @@ PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
 * fixed: the debugger would fail sending a request with ISO-8859-1 payload (it missed the character set declaration).
   It would have a hard time coping with ISO-8859-1 in other fields, such as e.g. the remote method name
 
-* fixed: the debugger would generate a bad payload via the 'load method synopsis' button for signatures containing NULLs
+* fixed: the debugger would generate a bad payload via the 'load method synopsis' button for signatures containing NULL
+  or undefined parameters
 
 * fixed: the debugger would generate a bad payload via the 'load method synopsis' button for methods with multiple
   signatures
