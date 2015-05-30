@@ -490,7 +490,6 @@ if ($action) {
                         } else {
                             $prefix = 'xmlrpc';
                         }
-                        //$code = wrap_xmlrpc_method($client, $method, $methodsig, 0, $proto, '', $opts);
                         $wrapper = new PhpXmlRpc\Wrapper();
                         $code = $wrapper->buildWrapMethodSource($client, $method, array('timeout' => $timeout, 'protocol' => $proto, 'simple_client_copy' => $opts, 'prefix' => $prefix), str_replace('.', '_', $prefix . '_' . $method), $msig, $mdesc);
                         //if ($code)
@@ -544,6 +543,7 @@ if ($action) {
 
     <h3>Changelog</h3>
     <ul>
+        <li>2015-05-30: fix problems with generating method payloads for NIL and Undefined parameters</li>
         <li>2015-04-19: fix problems with LATIN-1 characters in payload</li>
         <li>2007-02-20: add visual editor for method payload; allow strings, bools as jsonrpc msg id</li>
         <li>2006-06-26: support building php code stub for calling remote methods</li>
