@@ -179,7 +179,9 @@ class Server
      * @param string $data the request body. If null, the http POST request will be examined
      * @param bool $returnPayload When true, return the response but do not echo it or any http header
      *
-     * @return Response the response object (usually not used by caller...)
+     * @return Response|string the response object (usually not used by caller...) or its xml serialization
+     *
+     * @throws \Exception in case the executed method does throw an exception (and depending on server configuration)
      */
     public function service($data = null, $returnPayload = false)
     {
@@ -191,13 +193,14 @@ class Server
         // reset internal debug info
         $this->debug_info = '';
 
-        // Echo back what we received, before parsing it
+        // Save what we received, before parsing it
         if ($this->debug > 1) {
             $this->debugmsg("+++GOT+++\n" . $data . "\n+++END+++");
         }
 
         $r = $this->parseRequestHeaders($data, $reqCharset, $respCharset, $respEncoding);
         if (!$r) {
+            // this actually executes the request
             $r = $this->parseRequest($data, $reqCharset);
         }
 
@@ -446,6 +449,8 @@ class Server
      * @param string $reqEncoding (optional) the charset encoding of the xml request
      *
      * @return Response
+     *
+     * @throws \Exception in case the executed method does throw an exception (and depending on server configuration)
      */
     public function parseRequest($data, $reqEncoding = '')
     {
@@ -545,10 +550,13 @@ class Server
      *
      * @return Response
      *
-     * @throws \Exception in case the executed method does throw an exception (and depending on )
+     * @throws \Exception in case the executed method does throw an exception (and depending on server configuration)
      */
     protected function execute($req, $params = null, $paramTypes = null)
     {
+        static::$_xmlrpcs_occurred_errors = '';
+        static::$_xmlrpc_debuginfo = '';
+
         if (is_object($req)) {
             $methName = $req->method();
         } else {
@@ -603,7 +611,6 @@ class Server
         // verify that function to be invoked is in fact callable
         if (!is_callable($func)) {
             error_log("XML-RPC: " . __METHOD__ . ": function '$funcName' registered as method handler is not callable");
-
             return new Response(
                 0,
                 PhpXmlRpc::$xmlrpcerr['server_error'],
@@ -616,6 +623,7 @@ class Server
         if ($this->debug > 2) {
             self::$_xmlrpcs_prev_ehandler = set_error_handler(array('\PhpXmlRpc\Server', '_xmlrpcs_errorHandler'));
         }
+
         try {
             // Allow mixed-convention servers
             if (is_object($req)) {
