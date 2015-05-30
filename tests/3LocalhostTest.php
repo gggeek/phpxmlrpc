@@ -852,6 +852,15 @@ And turned it into nylon';
         }
     }
 
+    public function testServerComments()
+    {
+        $f = new xmlrpcmsg('tests.xmlrpcServerMethodsContainer.debugMessageGenerator', array(
+            new xmlrpcval('hello world', 'string'),
+        ));
+        $r = $this->send($f, 0, true);
+        $this->assertContains('hello world', $r->raw_data);
+    }
+
     public function testSendTwiceSameMsg()
     {
         $f = new xmlrpcmsg('examples.stringecho', array(
