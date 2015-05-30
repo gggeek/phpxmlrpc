@@ -36,13 +36,13 @@ Existing class methods and members have been preserved; all new method names fol
 
 Conversion table:
 
-| Old class     | New class          |
-| ------------- | ------------------ |
-| xmlrpc_client | PhpXmlRpc\Client   |
-| xmlrpc_server | PhpXmlRpc\Server   |
-| xmlrpcmsg     | PhpXmlRpc\Request  |
-| xmlrpcresp    | PhpXmlRpc\Response |
-| xmlrpcval     | PhpXmlRpc\Value    |
+| Old class     | New class          | Notes                                 |
+| ------------- | ------------------ | ------------------------------------- |
+| xmlrpc_client | PhpXmlRpc\Client   |                                       |
+| xmlrpc_server | PhpXmlRpc\Server   | Removed method: echoInput             |
+| xmlrpcmsg     | PhpXmlRpc\Request  |                                       |
+| xmlrpcresp    | PhpXmlRpc\Response |                                       |
+| xmlrpcval     | PhpXmlRpc\Value    | Removed methods: serializeval, getval |
 
 
 Global variables cleanup
@@ -54,8 +54,8 @@ Conversion table:
 
 | Old variable             | New variable                                | Notes     |
 | ------------------------ | ------------------------------------------- | --------- |
-| _xmlrpcs_capabilities    | NOT AVAILABLE YET                           |           |
 | _xmlrpc_debuginfo        | PhpXmlRpc\Server::$_xmlrpc_debuginfo        | protected |
+| _xmlrpcs_capabilities    | NOT AVAILABLE YET                           |           |
 | _xmlrpcs_dmap            | NOT AVAILABLE YET                           |           |
 | _xmlrpcs_occurred_errors | PhpXmlRpc\Server::$_xmlrpcs_occurred_errors | protected |
 | _xmlrpcs_prev_ehandler   | PhpXmlRpc\Server::$_xmlrpcs_prev_ehandler   | protected |
@@ -67,10 +67,30 @@ Global functions cleanup
 ------------------------
 
 Most functions in the global scope have been moved into classes.
+Some have been slightly changed.
 
-| Old function             | New function                                |
-| ------------------------ | ------------------------------------------- |
-| ...                      |                                             |
+| Old function                     | New function                                | Notes                                                  |
+| -------------------------------- | ------------------------------------------- | ------------------------------------------------------ |
+| build_client_wrapper_code        | none                                        |                                                        |
+| build_remote_method_wrapper_code | PhpXmlRpc\Wrapper::buildWrapMethodSource    | signature changed                                      |
+| decode_chunked                   | PhpXmlRpc\Helper\Http::decodeChunked        |                                                        |
+| guess_encoding                   | PhpXmlRpc\Helper\XMLParser::guessEncoding   |                                                        |
+| has_encoding                     | PhpXmlRpc\Helper\XMLParser::hasEncoding     |                                                        |
+| is_valid_charset                 | PhpXmlRpc\Helper\Charset::isValidCharset    |                                                        |
+| iso8601_decode                   | PhpXmlRpc\Helper\Date::iso8601Decode        |                                                        |
+| iso8601_encode                   | PhpXmlRpc\Helper\Date::iso8601Encode        |                                                        |
+| php_2_xmlrpc_type                | PhpXmlRpc\Wrapper::php2XmlrpcType           |                                                        |
+| php_xmlrpc_decode                | PhpXmlRpc\Encoder::decode                   |                                                        |
+| php_xmlrpc_decode_xml            | PhpXmlRpc\Encoder::decodeXml                |                                                        |
+| php_xmlrpc_encode                | PhpXmlRpc\Encoder::encode                   |                                                        |
+| wrap_php_class                   | PhpXmlRpc\Wrapper::wrapPhpClass             | returns closures instead of function names by default  |
+| wrap_php_function                | PhpXmlRpc\Wrapper::wrapPhpFunction          | returns closures instead of function names by default  |
+| wrap_xmlrpc_method               | PhpXmlRpc\Wrapper::wrapXmrlpcMethod         | returns closures instead of function names by default  |
+| wrap_xmlrpc_server               | PhpXmlRpc\Wrapper::wrapXmrlpcServer         | returns closures instead of function names by default; |
+|                                  |                                             | returns an array ready for usage in dispatch map       |
+| xmlrpc_2_php_type                | PhpXmlRpc\Wrapper::Xmlrpc2phpType           |                                                        |
+| xmlrpc_debugmsg                  | PhpXmlRpc\Server::xmlrpc_debugmsg           |                                                        |
+| xmlrpc_encode_entitites          | PhpXmlRpc\Helper\Charset::encodeEntitites   |                                                        |
 
 
 Character sets and encoding
@@ -118,7 +138,7 @@ the purpose of backwards compatibility (you might notice that they are still in 
 the refactored code now sits in the 'src' directory).
 
 Of course, some minor changes where inevitable, and backwards compatibility can not be guaranteed at 100%.
-Below is the list of all known changes and possible pitfalls.
+Below is the list of all known changes and possible pitfalls when enabling 'compatibility mode'.
 
 ### Default character set used for application data
 
@@ -194,10 +214,6 @@ Below is the list of all known changes and possible pitfalls.
         
         is_a(php_xmlrpc_encode('hello world'), 'xmlrpcval') => false
         is_a(php_xmlrpc_encode('hello world'), 'PhpXmlRpc\Value') => true
-
-### wrapping methods now return closures
-
-might be fixed later?
 
 ### server behaviour can not be changed by setting global variables (the ones starting with _xmlrpcs_ )
 
