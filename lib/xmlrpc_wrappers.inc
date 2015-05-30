@@ -34,7 +34,6 @@ function xmlrpc_2_php_type($xmlrpcType)
     return $wrapper->xmlrpc2PhpType($xmlrpcType);
 }
 
-/// @todo backwards compat: return string instead of callable
 /**
  * @see PhpXmlRpc\Wrapper::wrap_php_function
  * @param callable $funcName
@@ -45,11 +44,21 @@ function xmlrpc_2_php_type($xmlrpcType)
 function wrap_php_function($funcName, $newFuncName='', $extraOptions=array())
 {
     $wrapper = new PhpXmlRpc\Wrapper();
-    return $wrapper->wrapPhpFunction($funcName, $newFuncName, $extraOptions);
+    if (!isset($extraOptions['return_source'])  || $extraOptions['return_source'] == false) {
+        // backwards compat: return string instead of callable
+        $extraOptions['return_source'] = true;
+        $wrapped = $wrapper->wrapPhpFunction($funcName, $newFuncName, $extraOptions);
+        eval($wrapped['source']);
+    } else {
+        $wrapped = $wrapper->wrapPhpFunction($funcName, $newFuncName, $extraOptions);
+    }
+    return $wrapped;
 }
 
-/// @todo backwards compat: return strings instead of callables
 /**
+ * NB: this function returns an array in a format which is unsuitable for direct use in the server dispatch map, unlike
+ * PhpXmlRpc\Wrapper::wrapPhpClass. This behaviour might seem like a bug, but has been kept for backwards compatibility.
+ *
  * @see PhpXmlRpc\Wrapper::wrap_php_class
  * @param string|object $className
  * @param array $extraOptions
@@ -58,10 +67,22 @@ function wrap_php_function($funcName, $newFuncName='', $extraOptions=array())
 function wrap_php_class($className, $extraOptions=array())
 {
     $wrapper = new PhpXmlRpc\Wrapper();
-    return $wrapper->wrapPhpClass($className, $extraOptions);
+    $fix = false;
+    if (!isset($extraOptions['return_source'])  || $extraOptions['return_source'] == false) {
+        // backwards compat: return string instead of callable
+        $extraOptions['return_source'] = true;
+        $fix = true;
+    }
+    $wrapped = $wrapper->wrapPhpClass($className, $extraOptions);
+    foreach($wrapped as $name => $value) {
+        if ($fix) {
+            eval($value['source']);
+        }
+        $wrapped[$name] = $value['function'];
+    }
+    return $wrapped;
 }
 
-/// @todo backwards compat: return string instead of callable
 /**
  * @see PhpXmlRpc\Wrapper::wrapXmlrpcMethod
  * @param xmlrpc_client $client
@@ -86,10 +107,19 @@ function wrap_xmlrpc_method($client, $methodName, $extraOptions=0, $timeout=0, $
     }
 
     $wrapper = new PhpXmlRpc\Wrapper();
-    return $wrapper->wrapXmlrpcMethod($client, $methodName, $extraOptions);
+
+    if (!isset($extraOptions['return_source'])  || $extraOptions['return_source'] == false) {
+        // backwards compat: return string instead of callable
+        $extraOptions['return_source'] = true;
+        $wrapped = $wrapper->wrapXmlrpcMethod($client, $methodName, $extraOptions);
+        eval($wrapped['source']);
+        $wrapped = $wrapped['function'];
+    } else {
+        $wrapped = $wrapper->wrapXmlrpcMethod($client, $methodName, $extraOptions);
+    }
+    return $wrapped;
 }
 
-/// @todo backwards compat: return strings instead of callables
 /**
  * @see PhpXmlRpc\Wrapper::wrap_xmlrpc_server
  * @param xmlrpc_client $client
@@ -102,7 +132,6 @@ function wrap_xmlrpc_server($client, $extraOptions=array())
     return $wrapper->wrapXmlrpcServer($client, $extraOptions);
 }
 
-/// @todo fix dangling usage of $this->
 /**
  * Given the necessary info, build php code that creates a new function to invoke a remote xmlrpc method.
  * Take care that no full checking of input parameters is done to ensure that valid php code is emitted.
