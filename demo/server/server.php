@@ -186,6 +186,23 @@ $moreSignatures = $wrapper->wrapPhpClass($c, array('prefix' => 'tests.', 'method
 
 $returnObj_sig =  $wrapper->wrapPhpFunction(array($c, 'returnObject'), '', array('encode_php_objs' => true));
 
+// used to test signatures with NULL params
+$findstate12_sig = array(
+    array(Value::$xmlrpcString, Value::$xmlrpcInt, Value::$xmlrpcNull),
+    array(Value::$xmlrpcString, Value::$xmlrpcNull, Value::$xmlrpcInt),
+);
+
+function findStateWithNulls($req)
+{
+    $a = $req->getParam(0);
+    $b = $req->getParam(1);
+
+    if ($a->scalartyp() == Value::$xmlrpcNull)
+        return new PhpXmlRpc\Response(new Value(inner_findstate($b->scalarval())));
+    else
+        return new PhpXmlRpc\Response(new Value(inner_findstate($a->scalarval())));
+}
+
 $addtwo_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcInt, Value::$xmlrpcInt));
 $addtwo_doc = 'Add two integers together and return the result';
 function addTwo($req)
@@ -909,10 +926,19 @@ $signatures = array(
     'tests.getStateName.10' => $findstate10_sig,
     'tests.getStateName.11' => $findstate11_sig,
 
+    'tests.getStateName.12' => array(
+        "function" => "findStateWithNulls",
+        "signature" => $findstate12_sig,
+        "docstring" => $findstate_doc,
+    ),
+
     'tests.returnPhpObject' => $returnObj_sig,
 );
 
 $signatures = array_merge($signatures, $moreSignatures);
+
+// enable support for the NULL extension
+PhpXmlRpc\PhpXmlRpc::$xmlrpc_null_extension = true;
 
 $s = new PhpXmlRpc\Server($signatures, false);
 $s->setdebug(3);

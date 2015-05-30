@@ -112,6 +112,12 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @param PhpXmlRpc\Request|array $msg
+     * @param int|array $errorCode
+     * @param bool $returnResponse
+     * @return mixed|\PhpXmlRpc\Response|\PhpXmlRpc\Response[]|\PhpXmlRpc\Value|string|void
+     */
     protected function send($msg, $errorCode = 0, $returnResponse = false)
     {
         if ($this->collectCodeCoverageInformation) {
@@ -544,6 +550,30 @@ And turned it into nylon';
     {
         $f = new xmlrpcmsg('system.listMethods');
         $v = $this->send($f);
+    }
+
+    public function testNullParams()
+    {
+        $f = new xmlrpcmsg('tests.getStateName.12', array(
+            new xmlrpcval('whatever', 'null'),
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($f);
+        if ($v) {
+            $this->assertEquals('Michigan', $v->scalarval());
+        }
+        $f = new xmlrpcmsg('tests.getStateName.12', array(
+            new xmlrpcval(23, 'int'),
+            new xmlrpcval('whatever', 'null'),
+        ));
+        $v = $this->send($f);
+        if ($v) {
+            $this->assertEquals('Michigan', $v->scalarval());
+        }
+        $f = new xmlrpcmsg('tests.getStateName.12', array(
+            new xmlrpcval(23, 'int')
+        ));
+        $v = $this->send($f, array($GLOBALS['xmlrpcerr']['incorrect_params']));
     }
 
     public function testCodeInjectionServerSide()

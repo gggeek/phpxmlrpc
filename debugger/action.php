@@ -350,12 +350,13 @@ if ($action) {
                         $desc = "-";
                     }
                     echo "<tr><td class=\"evenrow\">Description</td><td colspan=\"3\" class=\"evenrow\">$desc</td></tr>\n";
-                    $payload = "";
-                    $alt_payload = "";
+
                     if ($r2->kindOf() != "array") {
                         echo "<tr><td class=\"oddrow\">Signature</td><td class=\"oddrow\">Unknown</td><td class=\"oddrow\">&nbsp;</td></tr>\n";
                     } else {
                         for ($i = 0; $i < $r2->arraysize(); $i++) {
+                            $payload = "";
+                            $alt_payload = "";
                             if ($i + 1 % 2) {
                                 $class = ' class="oddrow"';
                             } else {
@@ -371,9 +372,13 @@ if ($action) {
                                         $y = $x->arraymem($k);
                                         echo htmlspecialchars($y->scalarval(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding);
                                         if ($wstype != 1) {
+                                            $type = $y->scalarval();
+                                            if ($type == 'null') {
+                                                $type = 'nil';
+                                            }
                                             $payload = $payload . '<param><value><' .
-                                                htmlspecialchars($y->scalarval(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) .
-                                                '></' . htmlspecialchars($y->scalarval(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) .
+                                                htmlspecialchars($type, ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) .
+                                                '></' . htmlspecialchars($type, ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) .
                                                 "></value></param>\n";
                                         }
                                         $alt_payload .= $y->scalarval();
