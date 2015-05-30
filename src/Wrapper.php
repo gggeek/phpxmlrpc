@@ -882,7 +882,7 @@ class Wrapper
      * @param string $mDesc
      * @return array
      */
-    protected function buildWrapMethodSource($client, $methodName, array $extraOptions, $newFuncName, $mSig, $mDesc='')
+    public function buildWrapMethodSource($client, $methodName, array $extraOptions, $newFuncName, $mSig, $mDesc='')
     {
         $timeout = isset($extraOptions['timeout']) ? (int)$extraOptions['timeout'] : 0;
         $protocol = isset($extraOptions['protocol']) ? $extraOptions['protocol'] : '';

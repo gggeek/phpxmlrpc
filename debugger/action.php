@@ -481,9 +481,9 @@ if ($action) {
                         if ($proxy == '' && $username == '' && !$requestcompression && !$responsecompression &&
                             $clientcookies == ''
                         ) {
-                            $opts = 0; // simple client copy in stub code
+                            $opts = 1; // simple client copy in stub code
                         } else {
-                            $opts = 1; // complete client copy in stub code
+                            $opts = 0; // complete client copy in stub code
                         }
                         if ($wstype == 1) {
                             $prefix = 'jsonrpc';
@@ -492,7 +492,7 @@ if ($action) {
                         }
                         //$code = wrap_xmlrpc_method($client, $method, $methodsig, 0, $proto, '', $opts);
                         $wrapper = new PhpXmlRpc\Wrapper();
-                        $code = $wrapper->build_remote_method_wrapper_code($client, $method, str_replace('.', '_', $prefix . '_' . $method), $msig, $mdesc, $timeout, $proto, $opts, $prefix);
+                        $code = $wrapper->buildWrapMethodSource($client, $method, array('timeout' => $timeout, 'protocol' => $proto, 'simple_client_copy' => $opts, 'prefix' => $prefix), str_replace('.', '_', $prefix . '_' . $method), $msig, $mdesc);
                         //if ($code)
                         //{
                         echo "<div id=\"phpcode\">\n";
