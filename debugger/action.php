@@ -373,13 +373,20 @@ if ($action) {
                                         echo htmlspecialchars($y->scalarval(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding);
                                         if ($wstype != 1) {
                                             $type = $y->scalarval();
-                                            if ($type == 'null') {
-                                                $type = 'nil';
+                                            $payload .= '<param><value>';
+                                            switch($type) {
+                                                case 'undefined':
+                                                    break;
+                                                case 'null';
+                                                    $type = 'nil';
+                                                    // fall thru intentionally
+                                                default:
+                                                    $payload .= '<' .
+                                                        htmlspecialchars($type, ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) .
+                                                        '></' . htmlspecialchars($type, ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) .
+                                                        '>';
                                             }
-                                            $payload = $payload . '<param><value><' .
-                                                htmlspecialchars($type, ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) .
-                                                '></' . htmlspecialchars($type, ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) .
-                                                "></value></param>\n";
+                                            $payload .= "</value></param>\n";
                                         }
                                         $alt_payload .= $y->scalarval();
                                         if ($k < $x->arraysize() - 1) {
