@@ -5,6 +5,8 @@
 include_once __DIR__ . '/../lib/xmlrpc.inc';
 include_once __DIR__ . '/../lib/xmlrpcs.inc';
 
+include_once __DIR__ . '/parse_args.php';
+
 /**
  * Tests involving parsing of xml and handling of xmlrpc values
  */
