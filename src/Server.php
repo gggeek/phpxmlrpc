@@ -678,6 +678,13 @@ class Server
             // in the called function, we wrap it in a proper error-response
             switch ($this->exception_handling) {
                 case 2:
+                    if ($this->debug > 2) {
+                        if (self::$_xmlrpcs_prev_ehandler) {
+                            set_error_handler(self::$_xmlrpcs_prev_ehandler);
+                        } else {
+                            restore_error_handler();
+                        }
+                    }
                     throw $e;
                     break;
                 case 1:

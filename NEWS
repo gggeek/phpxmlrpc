@@ -47,6 +47,11 @@ PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
 
 * improved: more tests in the test suite
 
+* fixed: the server would not reset the user-set debug messages between subsequent service() calls
+
+* fixed: the server would not reset previous php error handlers when an exception was thrown by user code and
+  exception_handling set to 2
+
 * fixed: the server would fail to decode a request with ISO-8859-1 payload and character set declaration in the xml
   prolog only
 
