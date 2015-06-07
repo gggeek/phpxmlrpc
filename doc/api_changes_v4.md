@@ -45,6 +45,19 @@ Conversion table:
 | xmlrpcval     | PhpXmlRpc\Value    | Removed methods: serializeval, getval |
 
 
+New class methods
+-----------------
+
+In case you had extended the classes of the library and added methods to the subclasses, you might find that your
+implementation clashes with the new one if you implemented:
+
+
+| Class     | Method      | Notes                                  |
+| --------- | ----------- | -------------------------------------- |
+| xmlrpcval | count       | implements interface Countable         |
+| xmlrpcval | getIterator | implements interface IteratorAggregate |
+
+
 Global variables cleanup
 ------------------------
 

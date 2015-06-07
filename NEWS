@@ -25,6 +25,8 @@ PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
 * improved: no need to call anymore $client->setSSLVerifyHost(2) to silence a curl warning when using https
   with recent curl builds
 
+* improved: the xmlrpcval class now supports the interfaces Countable and IteratorAggregate
+
 * improved: a specific option allows users to decide the version of SSL to use for https calls.
   This is useful f.e. for the testing suite, when the server target of calls has no proper ssl certificate,
   and the cURL extension has been compiled with GnuTLS (such as on Travis VMs)

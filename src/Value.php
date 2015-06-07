@@ -4,7 +4,7 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\Charset;
 
-class Value
+class Value implements \Countable, \IteratorAggregate
 {
     public static $xmlrpcI4 = "i4";
     public static $xmlrpcInt = "int";
@@ -37,7 +37,8 @@ class Value
     public $_php_class = null;
 
     /**
-     * Build an xmlrpc value
+     * Build an xmlrpc value.
+     * When no value or type is passed in, the value is left uninitialized, and the value can be added later
      *
      * @param mixed $val
      * @param string $type any valid xmlrpc type name (lowercase). If null, 'string' is assumed
@@ -47,7 +48,6 @@ class Value
         // optimization creep - do not call addXX, do it all inline.
         // downside: booleans will not be coerced anymore
         if ($val !== -1 || $type != '') {
-            // optimization creep: inlined all work done by constructor
             switch ($type) {
                 case '':
                     $this->mytype = 1;
@@ -75,28 +75,11 @@ class Value
                 default:
                     error_log("XML-RPC: " . __METHOD__ . ": not a known type ($type)");
             }
-            /* was:
-            if($type=='')
-            {
-                $type='string';
-            }
-            if(static::$xmlrpcTypes[$type]==1)
-            {
-                $this->addScalar($val,$type);
-            }
-            elseif(static::$xmlrpcTypes[$type]==2)
-            {
-                $this->addArray($val);
-            }
-            elseif(static::$xmlrpcTypes[$type]==3)
-            {
-                $this->addStruct($val);
-            }*/
         }
     }
 
     /**
-     * Add a single php value to an (unitialized) xmlrpc value.
+     * Add a single php value to an (uninitialized) xmlrpc value.
      *
      * @param mixed $val
      * @param string $type
@@ -112,7 +95,6 @@ class Value
 
         if ($typeOf !== 1) {
             error_log("XML-RPC: " . __METHOD__ . ": not a scalar type ($type)");
-
             return 0;
         }
 
@@ -130,11 +112,9 @@ class Value
         switch ($this->mytype) {
             case 1:
                 error_log('XML-RPC: ' . __METHOD__ . ': scalar xmlrpc value can have only one value');
-
                 return 0;
             case 3:
                 error_log('XML-RPC: ' . __METHOD__ . ': cannot add anonymous scalar to struct xmlrpc value');
-
                 return 0;
             case 2:
                 // we're adding a scalar value to an array here
@@ -173,7 +153,6 @@ class Value
             return 1;
         } else {
             error_log('XML-RPC: ' . __METHOD__ . ': already initialized as a [' . $this->kindOf() . ']');
-
             return 0;
         }
     }
@@ -201,13 +180,12 @@ class Value
             return 1;
         } else {
             error_log('XML-RPC: ' . __METHOD__ . ': already initialized as a [' . $this->kindOf() . ']');
-
             return 0;
         }
     }
 
     /**
-     * Returns a string containing "struct", "array" or "scalar" describing the base type of the value.
+     * Returns a string containing "struct", "array", "scalar" or "undef" describing the base type of the value.
      *
      * @return string
      */
@@ -428,6 +406,8 @@ class Value
      * Returns the number of members in an xmlrpc value of array type.
      *
      * @return integer
+     *
+     * @deprecated use count() instead
      */
     public function arraysize()
     {
@@ -438,9 +418,42 @@ class Value
      * Returns the number of members in an xmlrpc value of struct type.
      *
      * @return integer
+     *
+     * @deprecateduse count() instead
      */
     public function structsize()
     {
         return count($this->me['struct']);
+    }
+
+    /**
+     * Returns the number of members in an xmlrpc value:
+     * - 0 for uninitialized values
+     * - 1 for scalars
+     * - the number of elements for structs and arrays
+     *
+     * @return integer
+     */
+    public function count()
+    {
+        switch ($this->mytype) {
+            case 3:
+                count($this->me['struct']);
+            case 2:
+                return count($this->me['array']);
+            case 1:
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
+    /**
+     * Implements the IteratorAggregate interface
+     *
+     * @return ArrayIterator
+     */
+    public function getIterator() {
+        return new \ArrayIterator($this->me);
     }
 }
