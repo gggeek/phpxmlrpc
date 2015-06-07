@@ -300,12 +300,12 @@ class Encoder
 
                 return $r;
             case 'methodcall':
-                $m = new Request($xmlRpcParser->_xh['method']);
+                $req = new Request($xmlRpcParser->_xh['method']);
                 for ($i = 0; $i < count($xmlRpcParser->_xh['params']); $i++) {
-                    $m->addParam($xmlRpcParser->_xh['params'][$i]);
+                    $req->addParam($xmlRpcParser->_xh['params'][$i]);
                 }
 
-                return $m;
+                return $req;
             case 'value':
                 return $xmlRpcParser->_xh['value'];
             default:

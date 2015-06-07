@@ -464,8 +464,8 @@ $setcookies_doc = 'Sends to client a response containing a single \'1\' digit, a
 function setCookies($req)
 {
     $encoder = new PhpXmlRpc\Encoder();
-    $m = $req->getParam(0);
-    while (list($name, $value) = $m->structeach()) {
+    $cookies = $req->getParam(0);
+    while (list($name, $value) = $cookies->structeach()) {
         $cookieDesc = $encoder->decode($value);
         setcookie($name, @$cookieDesc['value'], @$cookieDesc['expires'], @$cookieDesc['path'], @$cookieDesc['domain'], @$cookieDesc['secure']);
     }

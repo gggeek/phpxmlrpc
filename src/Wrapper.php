@@ -822,7 +822,7 @@ class Wrapper
                 $decodeOptions[] = 'decode_php_objs';
             }
 
-            /// @todo check for insufficient nr. of args besides excess ones
+            /// @todo check for insufficient nr. of args besides excess ones? note that 'source' version does not...
 
             // support one extra parameter: debug
             $maxArgs = count($mSig)-1; // 1st element is the return type
@@ -835,7 +835,6 @@ class Wrapper
             $xmlrpcArgs = array();
             foreach($currentArgs as $i => $arg) {
                 if ($i == $maxArgs) {
-                    /// @todo log warning? check what happens with the 'source' version
                     break;
                 }
                 $pType = $mSig[$i+1];

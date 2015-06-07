@@ -38,20 +38,20 @@ class InvalidHostTest extends PHPUnit_Framework_TestCase
 
     public function test404()
     {
-        $f = new xmlrpcmsg('examples.echo', array(
+        $m = new xmlrpcmsg('examples.echo', array(
             new xmlrpcval('hello', 'string'),
         ));
-        $r = $this->client->send($f, 5);
+        $r = $this->client->send($m, 5);
         $this->assertEquals(5, $r->faultCode());
     }
 
     public function testSrvNotFound()
     {
-        $f = new xmlrpcmsg('examples.echo', array(
+        $m = new xmlrpcmsg('examples.echo', array(
             new xmlrpcval('hello', 'string'),
         ));
         $this->client->server .= 'XXX';
-        $r = $this->client->send($f, 5);
+        $r = $this->client->send($m, 5);
         // make sure there's no freaking catchall DNS in effect
         $dnsinfo = dns_get_record($this->client->server);
         if ($dnsinfo) {
@@ -68,13 +68,13 @@ class InvalidHostTest extends PHPUnit_Framework_TestCase
 
             return;
         }
-        $f = new xmlrpcmsg('examples.stringecho', array(
+        $m = new xmlrpcmsg('examples.stringecho', array(
             new xmlrpcval('hello', 'string'),
         ));
         // test 2 calls w. keepalive: 1st time connection ko, second time ok
         $this->client->server .= 'XXX';
         $this->client->keepalive = true;
-        $r = $this->client->send($f, 5, 'http11');
+        $r = $this->client->send($m, 5, 'http11');
         // in case we have a "universal dns resolver" getting in the way, we might get a 302 instead of a 404
         $this->assertTrue($r->faultCode() === 8 || $r->faultCode() == 5);
 
@@ -86,7 +86,7 @@ class InvalidHostTest extends PHPUnit_Framework_TestCase
         $this->client->server = $server[0];
         $this->client->path = $this->args['URI'];
 
-        $r = $this->client->send($f, 5, 'http11');
+        $r = $this->client->send($m, 5, 'http11');
         $this->assertEquals(0, $r->faultCode());
         $ro = $r->value();
         is_object($ro) && $this->assertEquals('hello', $ro->scalarVal());

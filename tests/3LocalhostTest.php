@@ -156,10 +156,10 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
             "a simple LF here" . chr(10) .
             "and then LFCR" . chr(10) . chr(13) .
             "last but not least weird names: G" . chr(252) . "nter, El" . chr(232) . "ne, and an xml comment closing tag: -->";
-        $f = new xmlrpcmsg('examples.stringecho', array(
+        $m = new xmlrpcmsg('examples.stringecho', array(
             new xmlrpcval($sendString, 'string'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         if ($v) {
             // when sending/receiving non-US-ASCII encoded strings, XML says cr-lf can be normalized.
             // so we relax our tests...
@@ -177,10 +177,10 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
     {
         $sendString =
             "last but not least weird names: G" . chr(252) . "nter, El" . chr(232) . "ne";
-        $f = '<?xml version="1.0" encoding="ISO-8859-1"?><methodCall><methodName>examples.stringecho</methodName><params><param><value>'.
+        $x = '<?xml version="1.0" encoding="ISO-8859-1"?><methodCall><methodName>examples.stringecho</methodName><params><param><value>'.
             $sendString.
             '</value></param></params></methodCall>';
-        $v = $this->send($f);
+        $v = $this->send($x);
         if ($v) {
             $this->assertEquals($sendString, $v->scalarval());
         }
@@ -200,10 +200,10 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
     public function testUtf8Method()
     {
         PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'UTF-8';
-        $f = new xmlrpcmsg("tests.utf8methodname." . 'κόσμε', array(
+        $m = new xmlrpcmsg("tests.utf8methodname." . 'κόσμε', array(
             new xmlrpcval('hello')
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         if ($v) {
             $this->assertEquals('hello', $v->scalarval());
         }
@@ -216,11 +216,11 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         // keep precision to sensible levels here ;-)
         $a = 12.13;
         $b = -23.98;
-        $f = new xmlrpcmsg('examples.addtwodouble', array(
+        $m = new xmlrpcmsg('examples.addtwodouble', array(
             new xmlrpcval($a, 'double'),
             new xmlrpcval($b, 'double'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         if ($v) {
             $this->assertEquals($a + $b, $v->scalarval());
         }
@@ -228,11 +228,11 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
 
     public function testAdding()
     {
-        $f = new xmlrpcmsg('examples.addtwo', array(
+        $m = new xmlrpcmsg('examples.addtwo', array(
             new xmlrpcval(12, 'int'),
             new xmlrpcval(-23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         if ($v) {
             $this->assertEquals(12 - 23, $v->scalarval());
         }
@@ -240,11 +240,11 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
 
     public function testInvalidNumber()
     {
-        $f = new xmlrpcmsg('examples.addtwo', array(
+        $m = new xmlrpcmsg('examples.addtwo', array(
             new xmlrpcval('fred', 'int'),
             new xmlrpcval("\"; exec('ls')", 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         /// @todo a fault condition should be generated here
         /// by the server, which we pick up on
         if ($v) {
@@ -254,7 +254,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
 
     public function testBoolean()
     {
-        $f = new xmlrpcmsg('examples.invertBooleans', array(
+        $m = new xmlrpcmsg('examples.invertBooleans', array(
             new xmlrpcval(array(
                 new xmlrpcval(true, 'boolean'),
                 new xmlrpcval(false, 'boolean'),
@@ -264,7 +264,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
                 'array'
             ),));
         $answer = '0101';
-        $v = $this->send($f);
+        $v = $this->send($m);
         if ($v) {
             $sz = $v->arraysize();
             $got = '';
@@ -291,10 +291,10 @@ Mary had a little lamb
 She tied it to a pylon
 Ten thousand volts went down its back
 And turned it into nylon';
-        $f = new xmlrpcmsg('examples.decode64', array(
+        $m = new xmlrpcmsg('examples.decode64', array(
             new xmlrpcval($sendString, 'base64'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         if ($v) {
             if (strlen($sendString) == strlen($v->scalarval())) {
                 $this->assertEquals($sendString, $v->scalarval());
@@ -323,10 +323,10 @@ And turned it into nylon';
     public function testCountEntities()
     {
         $sendString = "h'fd>onc>>l>>rw&bpu>q>e<v&gxs<ytjzkami<";
-        $f = new xmlrpcmsg('validator1.countTheEntities', array(
+        $m = new xmlrpcmsg('validator1.countTheEntities', array(
             new xmlrpcval($sendString, 'string'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         if ($v) {
             $got = '';
             $expected = '37210';
@@ -372,8 +372,8 @@ And turned it into nylon';
             'array'
         );
 
-        $f = new xmlrpcmsg('system.multicall', array($arg));
-        $v = $this->send($f);
+        $m = new xmlrpcmsg('system.multicall', array($arg));
+        $v = $this->send($m);
         if ($v) {
             //$this->assertTrue($r->faultCode() == 0, "fault from system.multicall");
             $this->assertTrue($v->arraysize() == 4, "bad number of return values");
@@ -523,10 +523,10 @@ And turned it into nylon';
 
     public function testCatchWarnings()
     {
-        $f = new xmlrpcmsg('tests.generatePHPWarning', array(
+        $m = new xmlrpcmsg('tests.generatePHPWarning', array(
             new xmlrpcval('whatever', 'string'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         if ($v) {
             $this->assertEquals(true, $v->scalarval());
         }
@@ -534,53 +534,53 @@ And turned it into nylon';
 
     public function testCatchExceptions()
     {
-        $f = new xmlrpcmsg('tests.raiseException', array(
+        $m = new xmlrpcmsg('tests.raiseException', array(
             new xmlrpcval('whatever', 'string'),
         ));
-        $v = $this->send($f, $GLOBALS['xmlrpcerr']['server_error']);
+        $v = $this->send($m, $GLOBALS['xmlrpcerr']['server_error']);
         $this->client->path = $this->args['URI'] . '?EXCEPTION_HANDLING=1';
-        $v = $this->send($f, 1); // the error code of the expected exception
+        $v = $this->send($m, 1); // the error code of the expected exception
         $this->client->path = $this->args['URI'] . '?EXCEPTION_HANDLING=2';
         // depending on whether display_errors is ON or OFF on the server, we will get back a different error here,
         // as php will generate an http status code of either 200 or 500...
-        $v = $this->send($f, array($GLOBALS['xmlrpcerr']['invalid_return'], $GLOBALS['xmlrpcerr']['http_error']));
+        $v = $this->send($m, array($GLOBALS['xmlrpcerr']['invalid_return'], $GLOBALS['xmlrpcerr']['http_error']));
     }
 
     public function testZeroParams()
     {
-        $f = new xmlrpcmsg('system.listMethods');
-        $v = $this->send($f);
+        $m = new xmlrpcmsg('system.listMethods');
+        $v = $this->send($m);
     }
 
     public function testNullParams()
     {
-        $f = new xmlrpcmsg('tests.getStateName.12', array(
+        $m = new xmlrpcmsg('tests.getStateName.12', array(
             new xmlrpcval('whatever', 'null'),
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         if ($v) {
             $this->assertEquals('Michigan', $v->scalarval());
         }
-        $f = new xmlrpcmsg('tests.getStateName.12', array(
+        $m = new xmlrpcmsg('tests.getStateName.12', array(
             new xmlrpcval(23, 'int'),
             new xmlrpcval('whatever', 'null'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         if ($v) {
             $this->assertEquals('Michigan', $v->scalarval());
         }
-        $f = new xmlrpcmsg('tests.getStateName.12', array(
+        $m = new xmlrpcmsg('tests.getStateName.12', array(
             new xmlrpcval(23, 'int')
         ));
-        $v = $this->send($f, array($GLOBALS['xmlrpcerr']['incorrect_params']));
+        $v = $this->send($m, array($GLOBALS['xmlrpcerr']['incorrect_params']));
     }
 
     public function testCodeInjectionServerSide()
     {
-        $f = new xmlrpcmsg('system.MethodHelp');
-        $f->payload = "<?xml version=\"1.0\"?><methodCall><methodName>validator1.echoStructTest</methodName><params><param><value><struct><member><name>','')); echo('gotcha!'); die(); //</name></member></struct></value></param></params></methodCall>";
-        $v = $this->send($f);
+        $m = new xmlrpcmsg('system.MethodHelp');
+        $m->payload = "<?xml version=\"1.0\"?><methodCall><methodName>validator1.echoStructTest</methodName><params><param><value><struct><member><name>','')); echo('gotcha!'); die(); //</name></member></struct></value></param></params></methodCall>";
+        $v = $this->send($m);
         if ($v) {
             $this->assertEquals(0, $v->structsize());
         }
@@ -588,126 +588,126 @@ And turned it into nylon';
 
     public function testServerWrappedFunction()
     {
-        $f = new xmlrpcmsg('tests.getStateName.2', array(
+        $m = new xmlrpcmsg('tests.getStateName.2', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
 
         // this generates an exception in the function which was wrapped, which is by default wrapped in a known error response
-        $f = new xmlrpcmsg('tests.getStateName.2', array(
+        $m = new xmlrpcmsg('tests.getStateName.2', array(
             new xmlrpcval(0, 'int'),
         ));
-        $v = $this->send($f, $GLOBALS['xmlrpcerr']['server_error']);
+        $v = $this->send($m, $GLOBALS['xmlrpcerr']['server_error']);
 
         // check if the generated function dispatch map is fine, by checking if the server registered it
-        $f = new xmlrpcmsg('system.methodSignature', array(
+        $m = new xmlrpcmsg('system.methodSignature', array(
             new xmlrpcval('tests.getStateName.2'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $encoder = new \PhpXmlRpc\Encoder();
         $this->assertEquals(array(array('string', 'int')), $encoder->decode($v));
     }
 
     public function testServerWrappedFunctionAsSource()
     {
-        $f = new xmlrpcmsg('tests.getStateName.6', array(
+        $m = new xmlrpcmsg('tests.getStateName.6', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
 
         // this generates an exception in the function which was wrapped, which is by default wrapped in a known error response
-        $f = new xmlrpcmsg('tests.getStateName.6', array(
+        $m = new xmlrpcmsg('tests.getStateName.6', array(
             new xmlrpcval(0, 'int'),
         ));
-        $v = $this->send($f, $GLOBALS['xmlrpcerr']['server_error']);
+        $v = $this->send($m, $GLOBALS['xmlrpcerr']['server_error']);
     }
 
     public function testServerWrappedObjectMethods()
     {
-        $f = new xmlrpcmsg('tests.getStateName.3', array(
+        $m = new xmlrpcmsg('tests.getStateName.3', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
 
-        $f = new xmlrpcmsg('tests.getStateName.4', array(
+        $m = new xmlrpcmsg('tests.getStateName.4', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
 
-        $f = new xmlrpcmsg('tests.getStateName.5', array(
+        $m = new xmlrpcmsg('tests.getStateName.5', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
 
-        $f = new xmlrpcmsg('tests.getStateName.7', array(
+        $m = new xmlrpcmsg('tests.getStateName.7', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
 
-        $f = new xmlrpcmsg('tests.getStateName.8', array(
+        $m = new xmlrpcmsg('tests.getStateName.8', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
 
-        $f = new xmlrpcmsg('tests.getStateName.9', array(
+        $m = new xmlrpcmsg('tests.getStateName.9', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
     public function testServerWrappedObjectMethodsAsSource()
     {
-        $f = new xmlrpcmsg('tests.getStateName.7', array(
+        $m = new xmlrpcmsg('tests.getStateName.7', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
 
-        $f = new xmlrpcmsg('tests.getStateName.8', array(
+        $m = new xmlrpcmsg('tests.getStateName.8', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
 
-        $f = new xmlrpcmsg('tests.getStateName.9', array(
+        $m = new xmlrpcmsg('tests.getStateName.9', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
     public function testServerClosure()
     {
-        $f = new xmlrpcmsg('tests.getStateName.10', array(
+        $m = new xmlrpcmsg('tests.getStateName.10', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
     public function testServerWrappedClosure()
     {
-        $f = new xmlrpcmsg('tests.getStateName.11', array(
+        $m = new xmlrpcmsg('tests.getStateName.11', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
     public function testServerWrappedClass()
     {
-        $f = new xmlrpcmsg('tests.xmlrpcServerMethodsContainer.findState', array(
+        $m = new xmlrpcmsg('tests.xmlrpcServerMethodsContainer.findState', array(
             new xmlrpcval(23, 'int'),
         ));
-        $v = $this->send($f);
+        $v = $this->send($m);
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
@@ -789,8 +789,8 @@ And turned it into nylon';
             'c5' => array('value' => 'c5', 'expires' => time() + 60 * 60 * 24 * 30, 'path' => '/', 'domain' => 'localhost'),
         );
         $cookiesval = php_xmlrpc_encode($cookies);
-        $f = new xmlrpcmsg('examples.setcookies', array($cookiesval));
-        $r = $this->send($f, 0, true);
+        $m = new xmlrpcmsg('examples.setcookies', array($cookiesval));
+        $r = $this->send($m, 0, true);
         if ($r) {
             $v = $r->value();
             $this->assertEquals(1, $v->scalarval());
@@ -831,12 +831,12 @@ And turned it into nylon';
             'c2' => '2 3',
             'c3' => '!@#$%^&*()_+|}{":?><,./\';[]\\=-',
         );
-        $f = new xmlrpcmsg('examples.getcookies', array());
+        $m = new xmlrpcmsg('examples.getcookies', array());
         foreach ($cookies as $cookie => $val) {
             $this->client->setCookie($cookie, $val);
             $cookies[$cookie] = (string)$cookies[$cookie];
         }
-        $r = $this->client->send($f, $this->timeout, $this->method);
+        $r = $this->client->send($m, $this->timeout, $this->method);
         $this->assertEquals(0, $r->faultCode(), 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
         if (!$r->faultCode()) {
             $v = $r->value();
@@ -854,20 +854,20 @@ And turned it into nylon';
 
     public function testServerComments()
     {
-        $f = new xmlrpcmsg('tests.xmlrpcServerMethodsContainer.debugMessageGenerator', array(
+        $m = new xmlrpcmsg('tests.xmlrpcServerMethodsContainer.debugMessageGenerator', array(
             new xmlrpcval('hello world', 'string'),
         ));
-        $r = $this->send($f, 0, true);
+        $r = $this->send($m, 0, true);
         $this->assertContains('hello world', $r->raw_data);
     }
 
     public function testSendTwiceSameMsg()
     {
-        $f = new xmlrpcmsg('examples.stringecho', array(
+        $m = new xmlrpcmsg('examples.stringecho', array(
             new xmlrpcval('hello world', 'string'),
         ));
-        $v1 = $this->send($f);
-        $v2 = $this->send($f);
+        $v1 = $this->send($m);
+        $v2 = $this->send($m);
         if ($v1 && $v2) {
             $this->assertEquals($v1, $v2);
         }
