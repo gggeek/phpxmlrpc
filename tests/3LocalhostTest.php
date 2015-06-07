@@ -186,6 +186,31 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testExoticCharsetsRequests()
+    {
+        // note that we should disable this call also when mbstring is missing server-side
+        if (!function_exists('mb_convert_encoding')) {
+            $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
+            return;
+        }
+        $sendString = 'κόσμε'; // Greek word 'kosme'. NB: NOT a valid ISO8859 string!
+        $str = '<?xml version="1.0"?>
+<methodCall>
+    <methodName>examples.stringecho</methodName>
+    <params>
+        <param>
+        <value><string>'.$sendString.'</string></value>
+        </param>
+    </params>
+</methodCall>';
+
+        // these calls will have no charset declaration in either http headers or xml prolog
+        $v = $this->send(mb_convert_encoding($str, 'UCS-4'));
+        $this->assertEquals($sendString, $v->scalarval());
+        $v = $this->send(mb_convert_encoding($str, 'UTF-16'));
+        $this->assertEquals($sendString, $v->scalarval());
+    }
+
     /*public function testLatin1Method()
     {
         $f = new xmlrpcmsg("tests.iso88591methodname." . chr(224) . chr(252) . chr(232), array(
