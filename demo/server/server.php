@@ -269,11 +269,9 @@ $bitflipper_doc = 'Accepts an array of booleans, and returns them inverted';
 function bitFlipper($req)
 {
     $v = $req->getParam(0);
-    $sz = $v->arraysize();
     $rv = new Value(array(), Value::$xmlrpcArray);
 
-    for ($j = 0; $j < $sz; $j++) {
-        $b = $v->arraymem($j);
+    foreach ($v as $b) {
         if ($b->scalarval()) {
             $rv->addScalar(false, "boolean");
         } else {
@@ -333,10 +331,9 @@ function ageSorter($req)
     $v = new Value();
     $agar = array();
 
-    $max = $sno->arraysize();
+    $max = $sno->count();
     PhpXmlRpc\Server::xmlrpc_debugmsg("Found $max array elements");
-    for ($i = 0; $i < $max; $i++) {
-        $rec = $sno->arraymem($i);
+    foreach ($sno as $rec) {
         if ($rec->kindOf() != "struct") {
             $err = "Found non-struct in array at element $i";
             break;
@@ -465,7 +462,7 @@ function setCookies($req)
 {
     $encoder = new PhpXmlRpc\Encoder();
     $cookies = $req->getParam(0);
-    while (list($name, $value) = $cookies->structeach()) {
+    foreach ($cookies as $name => $value) {
         $cookieDesc = $encoder->decode($value);
         setcookie($name, @$cookieDesc['value'], @$cookieDesc['expires'], @$cookieDesc['path'], @$cookieDesc['domain'], @$cookieDesc['secure']);
     }
@@ -487,10 +484,8 @@ function v1_arrayOfStructs($req)
 {
     $sno = $req->getParam(0);
     $numCurly = 0;
-    for ($i = 0; $i < $sno->arraysize(); $i++) {
-        $str = $sno->arraymem($i);
-        $str->structreset();
-        while (list($key, $val) = $str->structeach()) {
+    foreach ($sno as $str) {
+        foreach ($str as $key => $val) {
             if ($key == "curly") {
                 $numCurly += $val->scalarval();
             }
@@ -546,7 +541,7 @@ $v1_moderateSizeArrayCheck_doc = 'This handler takes a single parameter, which i
 function v1_moderateSizeArrayCheck($req)
 {
     $ar = $req->getParam(0);
-    $sz = $ar->arraysize();
+    $sz = $ar->count();
     $first = $ar->arraymem(0);
     $last = $ar->arraymem($sz - 1);
 

@@ -71,7 +71,7 @@ class Encoder
 
                 return $xmlrpcVal->scalarval();
             case 'array':
-                $size = $xmlrpcVal->arraysize();
+                $size = $xmlrpcVal->count();
                 $arr = array();
                 for ($i = 0; $i < $size; $i++) {
                     $arr[] = $this->decode($xmlrpcVal->arraymem($i), $options);
@@ -79,7 +79,6 @@ class Encoder
 
                 return $arr;
             case 'struct':
-                $xmlrpcVal->structreset();
                 // If user said so, try to rebuild php objects for specific struct vals.
                 /// @todo should we raise a warning for class not found?
                 // shall we check for proper subclass of xmlrpc value instead of
@@ -88,14 +87,14 @@ class Encoder
                     && class_exists($xmlrpcVal->_php_class)
                 ) {
                     $obj = @new $xmlrpcVal->_php_class();
-                    while (list($key, $value) = $xmlrpcVal->structeach()) {
+                    foreach ($xmlrpcVal as $key => $value) {
                         $obj->$key = $this->decode($value, $options);
                     }
 
                     return $obj;
                 } else {
                     $arr = array();
-                    while (list($key, $value) = $xmlrpcVal->structeach()) {
+                    foreach ($xmlrpcVal as $key => $value) {
                         $arr[$key] = $this->decode($value, $options);
                     }
 

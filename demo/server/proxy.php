@@ -63,8 +63,8 @@ function forward_request($req)
     $reqMethod = $encoder->decode($req->getParam(1));
     $pars = $req->getParam(2);
     $req = new PhpXmlRpc\Request($reqMethod);
-    for ($i = 0; $i < $pars->arraySize(); $i++) {
-        $req->addParam($pars->arraymem($i));
+    foreach ($pars as $par) {
+        $req->addParam($par);
     }
 
     // add debug info into response we give back to caller

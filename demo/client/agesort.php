@@ -49,9 +49,7 @@ $resp = $client->send($req);
 if (!$resp->faultCode()) {
     print "The server gave me these results:<pre>";
     $value = $resp->value();
-    $max = $value->arraysize();
-    for ($i = 0; $i < $max; $i++) {
-        $struct = $value->arraymem($i);
+    foreach ($value as $struct) {
         $name = $struct->structmem("name");
         $age = $struct->structmem("age");
         print htmlspecialchars($name->scalarval()) . ", " . htmlspecialchars($age->scalarval()) . "\n";

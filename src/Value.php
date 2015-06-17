@@ -344,6 +344,7 @@ class Value implements \Countable, \IteratorAggregate
 
     /**
      * Reset internal pointer for xmlrpc values of type struct.
+     * @deprecated iterate directly over the object using foreach instead
      */
     public function structreset()
     {
@@ -354,6 +355,8 @@ class Value implements \Countable, \IteratorAggregate
      * Return next member element for xmlrpc values of type struct.
      *
      * @return Value
+     *
+     * @deprecated iterate directly over the object using foreach instead
      */
     public function structeach()
     {
@@ -419,7 +422,7 @@ class Value implements \Countable, \IteratorAggregate
      *
      * @return integer
      *
-     * @deprecateduse count() instead
+     * @deprecated use count() instead
      */
     public function structsize()
     {
@@ -454,6 +457,16 @@ class Value implements \Countable, \IteratorAggregate
      * @return ArrayIterator
      */
     public function getIterator() {
-        return new \ArrayIterator($this->me);
+        switch ($this->mytype) {
+            case 3:
+                return new \ArrayIterator($this->me['struct']);
+            case 2:
+                return new \ArrayIterator($this->me['array']);
+            case 1:
+                return new \ArrayIterator($this->me);
+            default:
+                return new \ArrayIterator();
+        }
+        return new \ArrayIterator();
     }
 }

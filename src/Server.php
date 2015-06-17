@@ -932,7 +932,7 @@ class Server
         if ($params->kindOf() != 'array') {
             return static::_xmlrpcs_multicall_error('notarray');
         }
-        $numParams = $params->arraysize();
+        $numParams = $params->count();
 
         $req = new Request($methName->scalarval());
         for ($i = 0; $i < $numParams; $i++) {
@@ -999,7 +999,7 @@ class Server
         // let accept a plain list of php parameters, beside a single xmlrpc msg object
         if (is_object($req)) {
             $calls = $req->getParam(0);
-            $numCalls = $calls->arraysize();
+            $numCalls = $calls->count();
             for ($i = 0; $i < $numCalls; $i++) {
                 $call = $calls->arraymem($i);
                 $result[$i] = static::_xmlrpcs_multicall_do_call($server, $call);

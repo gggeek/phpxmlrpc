@@ -29,8 +29,7 @@ if ($resp->faultCode()) {
     $v = $resp->value();
 
     // Then, retrieve the signature and help text of each available method
-    for ($i = 0; $i < $v->arraysize(); $i++) {
-        $methodName = $v->arraymem($i);
+    foreach ($v as $methodName) {
         print "<h4>" . $methodName->scalarval() . "</h4>\n";
         // build messages first, add params later
         $m1 = new PhpXmlRpc\Request('system.methodHelp');
@@ -60,16 +59,15 @@ if ($resp->faultCode()) {
             // note: using PhpXmlRpc\Encoder::decode() here would lead to cleaner code
             $val = $rs[1]->value();
             if ($val->kindOf() == "array") {
-                for ($j = 0; $j < $val->arraysize(); $j++) {
-                    $x = $val->arraymem($j);
+                foreach ($val as $x) {
                     $ret = $x->arraymem(0);
                     print "<code>" . $ret->scalarval() . " "
                         . $methodName->scalarval() . "(";
-                    if ($x->arraysize() > 1) {
-                        for ($k = 1; $k < $x->arraysize(); $k++) {
+                    if ($x->count() > 1) {
+                        for ($k = 1; $k < $x->count(); $k++) {
                             $y = $x->arraymem($k);
                             print $y->scalarval();
-                            if ($k < $x->arraysize() - 1) {
+                            if ($k < $x->count() - 1) {
                                 print ", ";
                             }
                         }

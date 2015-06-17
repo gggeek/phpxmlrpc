@@ -1037,7 +1037,7 @@ class Client
             if ($rets->kindOf() != 'array') {
                 return false;       // bad return type from system.multicall
             }
-            $numRets = $rets->arraysize();
+            $numRets = $rets->count();
             if ($numRets != count($reqs)) {
                 return false;       // wrong number of return values.
             }
@@ -1047,7 +1047,7 @@ class Client
                 $val = $rets->arraymem($i);
                 switch ($val->kindOf()) {
                     case 'array':
-                        if ($val->arraysize() != 1) {
+                        if ($val->count() != 1) {
                             return false;       // Bad value
                         }
                         // Normal return value

@@ -284,7 +284,7 @@ if ($action) {
 
                     $v = $response->value();
                     if ($v->kindOf() == "array") {
-                        $max = $v->arraysize();
+                        $max = $v->count();
                         echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
                         echo "<thead>\n<tr><th>Method ($max)</th><th>Description</th></tr>\n</thead>\n<tbody>\n";
                         for ($i = 0; $i < $max; $i++) {
@@ -367,7 +367,7 @@ if ($action) {
                             if ($x->kindOf() == "array") {
                                 $ret = $x->arraymem(0);
                                 echo "<code>OUT:&nbsp;" . htmlspecialchars($ret->scalarval(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) . "<br />IN: (";
-                                if ($x->arraysize() > 1) {
+                                if ($x->count() > 1) {
                                     for ($k = 1; $k < $x->arraysize(); $k++) {
                                         $y = $x->arraymem($k);
                                         echo htmlspecialchars($y->scalarval(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding);
@@ -389,7 +389,7 @@ if ($action) {
                                             $payload .= "</value></param>\n";
                                         }
                                         $alt_payload .= $y->scalarval();
-                                        if ($k < $x->arraysize() - 1) {
+                                        if ($k < $x->count() - 1) {
                                             $alt_payload .= ';';
                                             echo ", ";
                                         }
@@ -470,7 +470,7 @@ if ($action) {
                 case 'wrap':
                     $r1 = $resp[0]->value();
                     $r2 = $resp[1]->value();
-                    if ($r2->kindOf() != "array" || $r2->arraysize() <= $methodsig) {
+                    if ($r2->kindOf() != "array" || $r2->count() <= $methodsig) {
                         echo "Error: signature unknown\n";
                     } else {
                         $mdesc = $r1->scalarval();
