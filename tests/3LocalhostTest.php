@@ -194,7 +194,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
             return;
         }
         $sendString = 'κόσμε'; // Greek word 'kosme'. NB: NOT a valid ISO8859 string!
-        $str = '<?xml version="1.0"?>
+        $str = '<?xml version="1.0" encoding="_ENC_"?>
 <methodCall>
     <methodName>examples.stringecho</methodName>
     <params>
@@ -204,10 +204,9 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
     </params>
 </methodCall>';
 
-        // these calls will have no charset declaration in either http headers or xml prolog
-        $v = $this->send(mb_convert_encoding($str, 'UCS-4', 'UTF-8'));
+        $v = $this->send(mb_convert_encoding(str_replace('_ENC_', 'UCS-4', $str), 'UCS-4', 'UTF-8'));
         $this->assertEquals($sendString, $v->scalarval());
-        $v = $this->send(mb_convert_encoding($str, 'UTF-16', 'UTF-8'));
+        $v = $this->send(mb_convert_encoding(str_replace('_ENC_', 'UTF-16', $str), 'UTF-16', 'UTF-8'));
         $this->assertEquals($sendString, $v->scalarval());
     }
 
