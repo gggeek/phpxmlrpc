@@ -205,9 +205,9 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
 </methodCall>';
 
         // these calls will have no charset declaration in either http headers or xml prolog
-        $v = $this->send(mb_convert_encoding($str, 'UCS-4'));
+        $v = $this->send(mb_convert_encoding($str, 'UCS-4', 'UTF-8'));
         $this->assertEquals($sendString, $v->scalarval());
-        $v = $this->send(mb_convert_encoding($str, 'UTF-16'));
+        $v = $this->send(mb_convert_encoding($str, 'UTF-16', 'UTF-8'));
         $this->assertEquals($sendString, $v->scalarval());
     }
 
