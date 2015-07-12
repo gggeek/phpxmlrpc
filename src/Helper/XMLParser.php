@@ -446,6 +446,11 @@ class XMLParser
      * NB: according to the spec (RFC 3023), if text/xml content-type is received over HTTP without a content-type,
      * we SHOULD assume it is strictly US-ASCII. But we try to be more tolerant of non conforming (legacy?) clients/servers,
      * which will be most probably using UTF-8 anyway...
+     * In order of importance checks:
+     * 1. http headers
+     * 2. BOM
+     * 3. XML declaration
+     * 4. guesses using mb_detect_encoding()
      *
      * @param string $httpHeader the http Content-type header
      * @param string $xmlChunk xml content buffer

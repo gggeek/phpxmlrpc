@@ -42,8 +42,8 @@ after_failure:
   # Save as much info as we can to help developers
   - cat apache_error.log
   - cat apache_access.log
-  - cat /var/log/hhvm/error.log
-  - if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then php -i; fi
+  #- cat /var/log/hhvm/error.log
+  #- if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then php -i; fi
 
 after_script:
   # Upload code-coverage to Scrutinizer
