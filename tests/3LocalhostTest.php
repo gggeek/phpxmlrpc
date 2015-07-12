@@ -241,6 +241,31 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
     }
 
+    public function testExoticCharsetsRequests3()
+    {
+        // note that we should disable this call also when mbstring is missing server-side
+        if (!function_exists('mb_convert_encoding')) {
+            $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
+            return;
+        }
+        $sendString = utf8_decode('élève');
+        $str = '<?xml version="1.0"?>
+<methodCall>
+    <methodName>examples.stringecho</methodName>
+    <params>
+        <param>
+        <value><string>'.$sendString.'</string></value>
+        </param>
+    </params>
+</methodCall>';
+
+        // no encoding declaration either in the http header or xml prolog, let mb_detect_encoding
+        // (used on the server side) sort it out
+        $this->client->path = $this->args['URI'].'?DETECT_ENCODINGS[]=ISO-8859-1&DETECT_ENCODINGS[]=UTF-8';
+        $v = $this->send($str);
+        $this->assertEquals($sendString, $v->scalarval());
+    }
+
     /*public function testLatin1Method()
     {
         $f = new xmlrpcmsg("tests.iso88591methodname." . chr(224) . chr(252) . chr(232), array(
