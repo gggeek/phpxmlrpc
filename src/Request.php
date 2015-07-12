@@ -330,8 +330,6 @@ class Request
             if ($xmlRpcParser->_xh['isf']) {
                 /// @todo we should test here if server sent an int and a string, and/or coerce them into such...
                 if ($returnType == 'xmlrpcvals') {
-                    //$errNo_v = $v->structmem('faultCode');
-                    //$errStr_v = $v->structmem('faultString');
                     $errNo_v = $v['faultCode'];
                     $errStr_v = $v['faultString'];
                     $errNo = $errNo_v->scalarval();

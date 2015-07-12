@@ -287,9 +287,7 @@ if ($action) {
                         $max = $v->count();
                         echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
                         echo "<thead>\n<tr><th>Method ($max)</th><th>Description</th></tr>\n</thead>\n<tbody>\n";
-                        //for ($i = 0; $i < $max; $i++) {
                         foreach($v as $i => $rec) {
-                            //$rec = $v->arraymem($i);
                             if ($i % 2) {
                                 $class = ' class="oddrow"';
                             } else {
@@ -355,7 +353,6 @@ if ($action) {
                     if ($r2->kindOf() != "array") {
                         echo "<tr><td class=\"oddrow\">Signature</td><td class=\"oddrow\">Unknown</td><td class=\"oddrow\">&nbsp;</td></tr>\n";
                     } else {
-                        //for ($i = 0; $i < $r2->arraysize(); $i++) {
                         foreach($r2 as $i => $x) {
                             $payload = "";
                             $alt_payload = "";
@@ -365,16 +362,12 @@ if ($action) {
                                 $class = ' class="evenrow"';
                             }
                             echo "<tr><td$class>Signature&nbsp;" . ($i + 1) . "</td><td$class>";
-                            //$x = $r2->arraymem($i);
                             if ($x->kindOf() == "array") {
-                                //$ret = $x->arraymem(0);
                                 $ret = $x[0];
                                 echo "<code>OUT:&nbsp;" . htmlspecialchars($ret->scalarval(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) . "<br />IN: (";
                                 if ($x->count() > 1) {
                                     foreach($x as $k => $y) {
                                         if ($k == 0) continue;
-                                    //for ($k = 1; $k < $x->arraysize(); $k++) {
-                                        //$y = $x->arraymem($k);
                                         echo htmlspecialchars($y->scalarval(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding);
                                         if ($wstype != 1) {
                                             $type = $y->scalarval();

@@ -50,9 +50,7 @@ if (!$resp->faultCode()) {
     print "The server gave me these results:<pre>";
     $value = $resp->value();
     foreach ($value as $struct) {
-        //$name = $struct->structmem("name");
         $name = $struct["name"];
-        //$age = $struct->structmem("age");
         $age = $struct["age"];
         print htmlspecialchars($name->scalarval()) . ", " . htmlspecialchars($age->scalarval()) . "\n";
     }

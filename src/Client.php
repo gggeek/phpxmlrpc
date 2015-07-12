@@ -1059,25 +1059,20 @@ class Client
             }
 
             $response = array();
-            //for ($i = 0; $i < $numRets; $i++) {
             foreach($rets as $val) {
-                //$val = $rets->arraymem($i);
                 switch ($val->kindOf()) {
                     case 'array':
                         if ($val->count() != 1) {
                             return false;       // Bad value
                         }
                         // Normal return value
-                        //$response[] = new Response($val->arraymem(0));
                         $response[] = new Response($val[0]);
                         break;
                     case 'struct':
-                        //$code = $val->structmem('faultCode');
                         $code = $val['faultCode'];
                         if ($code->kindOf() != 'scalar' || $code->scalartyp() != 'int') {
                             return false;
                         }
-                        //$str = $val->structmem('faultString');
                         $str = $val['faultString'];
                         if ($str->kindOf() != 'scalar' || $str->scalartyp() != 'string') {
                             return false;

@@ -915,7 +915,6 @@ class Server
         if ($call->kindOf() != 'struct') {
             return static::_xmlrpcs_multicall_error('notstruct');
         }
-        //$methName = $call->structmem('methodName');
         $methName = @$call['methodName'];
         if (!$methName) {
             return static::_xmlrpcs_multicall_error('nomethod');
@@ -927,7 +926,6 @@ class Server
             return static::_xmlrpcs_multicall_error('recursion');
         }
 
-        //$params = @$call->structmem('params');
         $params = @$call['params'];
         if (!$params) {
             return static::_xmlrpcs_multicall_error('noparams');
@@ -935,12 +933,9 @@ class Server
         if ($params->kindOf() != 'array') {
             return static::_xmlrpcs_multicall_error('notarray');
         }
-        //$numParams = $params->count();
 
         $req = new Request($methName->scalarval());
-        //for ($i = 0; $i < $numParams; $i++) {
         foreach($params as $i => $param) {
-            //if (!$req->addParam($params->arraymem($i))) {
             if (!$req->addParam($param)) {
                 $i++; // for error message, we count params from 1
                 return static::_xmlrpcs_multicall_error(new Response(0,
@@ -1003,10 +998,7 @@ class Server
         // let accept a plain list of php parameters, beside a single xmlrpc msg object
         if (is_object($req)) {
             $calls = $req->getParam(0);
-            //$numCalls = $calls->count();
-            //for ($i = 0; $i < $numCalls; $i++) {
             foreach($calls as $call) {
-                //$call = $calls->arraymem($i);
                 $result[] = static::_xmlrpcs_multicall_do_call($server, $call);
             }
         } else {

@@ -43,7 +43,7 @@ class xmlrpcServerMethodsContainer
     public function phpWarningGenerator($req)
     {
         $a = $undefinedVariable; // this triggers a warning in E_ALL mode, since $undefinedVariable is undefined
-        return new PhpXmlRpc\Response(new Value(1, 'boolean'));
+        return new PhpXmlRpc\Response(new Value(1, Value::$xmlrpcBoolean));
     }
 
     /**
@@ -222,7 +222,7 @@ function addTwo($req)
     $s = $req->getParam(0);
     $t = $req->getParam(1);
 
-    return new PhpXmlRpc\Response(new Value($s->scalarval() + $t->scalarval(), "int"));
+    return new PhpXmlRpc\Response(new Value($s->scalarval() + $t->scalarval(), Value::$xmlrpcInt));
 }
 
 $addtwodouble_sig = array(array(Value::$xmlrpcDouble, Value::$xmlrpcDouble, Value::$xmlrpcDouble));
@@ -232,7 +232,7 @@ function addTwoDouble($req)
     $s = $req->getParam(0);
     $t = $req->getParam(1);
 
-    return new PhpXmlRpc\Response(new Value($s->scalarval() + $t->scalarval(), "double"));
+    return new PhpXmlRpc\Response(new Value($s->scalarval() + $t->scalarval(), Value::$xmlrpcDouble));
 }
 
 $stringecho_sig = array(array(Value::$xmlrpcString, Value::$xmlrpcString));
@@ -261,7 +261,7 @@ function echoSixtyFour($req)
     // This is to test that base64 encoding is working as expected
     $incoming = $req->getParam(0);
 
-    return new PhpXmlRpc\Response(new Value($incoming->scalarval(), "string"));
+    return new PhpXmlRpc\Response(new Value($incoming->scalarval(), Value::$xmlrpcString));
 }
 
 $bitflipper_sig = array(array(Value::$xmlrpcArray, Value::$xmlrpcArray));
@@ -273,9 +273,9 @@ function bitFlipper($req)
 
     foreach ($v as $b) {
         if ($b->scalarval()) {
-            $rv->addScalar(false, "boolean");
+            $rv[] = new Value(false, Value::$xmlrpcBoolean);
         } else {
-            $rv->addScalar(true, "boolean");
+            $rv[] = new Value(true, Value::$xmlrpcBoolean);
         }
     }
 
@@ -327,37 +327,40 @@ function ageSorter($req)
     $sno = $req->getParam(0);
     // error string for [if|when] things go wrong
     $err = "";
-    // create the output value
-    $v = new Value();
     $agar = array();
 
     $max = $sno->count();
     PhpXmlRpc\Server::xmlrpc_debugmsg("Found $max array elements");
-    foreach ($sno as $rec) {
+    foreach ($sno as $i => $rec) {
         if ($rec->kindOf() != "struct") {
             $err = "Found non-struct in array at element $i";
             break;
         }
         // extract name and age from struct
-        $n = $rec->structmem("name");
-        $a = $rec->structmem("age");
+        $n = $rec["name"];
+        $a = $rec["age"];
         // $n and $a are xmlrpcvals,
         // so get the scalarval from them
         $agar[$n->scalarval()] = $a->scalarval();
     }
 
+    // create the output value
+    $v = new Value(array(), Value::$xmlrpcArray);
+
     $agesorter_arr = $agar;
     // hack, must make global as uksort() won't
     // allow us to pass any other auxiliary information
     uksort($agesorter_arr, 'agesorter_compare');
-    $outAr = array();
     while (list($key, $val) = each($agesorter_arr)) {
         // recreate each struct element
-        $outAr[] = new Value(array("name" => new Value($key),
-            "age" => new Value($val, "int"),), "struct");
+        $v[] = new Value(
+            array(
+                "name" => new Value($key),
+                "age" => new Value($val, "int")
+            ),
+            Value::$xmlrpcStruct
+        );
     }
-    // add this array to the output value
-    $v->addArray($outAr);
 
     if ($err) {
         return new PhpXmlRpc\Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
@@ -430,7 +433,7 @@ function mailSend($req)
     if ($err) {
         return new PhpXmlRpc\Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
     } else {
-        return new PhpXmlRpc\Response(new Value("true", Value::$xmlrpcBoolean));
+        return new PhpXmlRpc\Response(new Value(true, Value::$xmlrpcBoolean));
     }
 }
 
@@ -467,7 +470,7 @@ function setCookies($req)
         setcookie($name, @$cookieDesc['value'], @$cookieDesc['expires'], @$cookieDesc['path'], @$cookieDesc['domain'], @$cookieDesc['secure']);
     }
 
-    return new PhpXmlRpc\Response(new Value(1, 'int'));
+    return new PhpXmlRpc\Response(new Value(1, Value::$xmlrpcInt));
 }
 
 $getcookies_sig = array(array(Value::$xmlrpcStruct));
@@ -492,7 +495,7 @@ function v1_arrayOfStructs($req)
         }
     }
 
-    return new PhpXmlRpc\Response(new Value($numCurly, "int"));
+    return new PhpXmlRpc\Response(new Value($numCurly, Value::$xmlrpcInt));
 }
 
 $v1_easyStruct_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcStruct));
@@ -500,12 +503,12 @@ $v1_easyStruct_doc = 'This handler takes a single parameter, a struct, containin
 function v1_easyStruct($req)
 {
     $sno = $req->getParam(0);
-    $moe = $sno->structmem("moe");
-    $larry = $sno->structmem("larry");
-    $curly = $sno->structmem("curly");
+    $moe = $sno["moe"];
+    $larry = $sno["larry"];
+    $curly = $sno["curly"];
     $num = $moe->scalarval() + $larry->scalarval() + $curly->scalarval();
 
-    return new PhpXmlRpc\Response(new Value($num, "int"));
+    return new PhpXmlRpc\Response(new Value($num, Value::$xmlrpcInt));
 }
 
 $v1_echoStruct_sig = array(array(Value::$xmlrpcStruct, Value::$xmlrpcStruct));
@@ -525,14 +528,16 @@ $v1_manyTypes_sig = array(array(
 $v1_manyTypes_doc = 'This handler takes six parameters, and returns an array containing all the parameters.';
 function v1_manyTypes($req)
 {
-    return new PhpXmlRpc\Response(new Value(array(
-        $req->getParam(0),
-        $req->getParam(1),
-        $req->getParam(2),
-        $req->getParam(3),
-        $req->getParam(4),
-        $req->getParam(5),),
-        "array"
+    return new PhpXmlRpc\Response(new Value(
+        array(
+            $req->getParam(0),
+            $req->getParam(1),
+            $req->getParam(2),
+            $req->getParam(3),
+            $req->getParam(4),
+            $req->getParam(5)
+        ),
+        Value::$xmlrpcArray
     ));
 }
 
@@ -542,13 +547,11 @@ function v1_moderateSizeArrayCheck($req)
 {
     $ar = $req->getParam(0);
     $sz = $ar->count();
-    //$first = $ar->arraymem(0);
     $first = $ar[0];
-    //$last = $ar->arraymem($sz - 1);
     $last = $ar[$sz - 1];
 
     return new PhpXmlRpc\Response(new Value($first->scalarval() .
-        $last->scalarval(), "string"));
+        $last->scalarval(), Value::$xmlrpcString));
 }
 
 $v1_simpleStructReturn_sig = array(array(Value::$xmlrpcStruct, Value::$xmlrpcInt));
@@ -558,11 +561,13 @@ function v1_simpleStructReturn($req)
     $sno = $req->getParam(0);
     $v = $sno->scalarval();
 
-    return new PhpXmlRpc\Response(new Value(array(
-        "times10" => new Value($v * 10, "int"),
-        "times100" => new Value($v * 100, "int"),
-        "times1000" => new Value($v * 1000, "int"),),
-        "struct"
+    return new PhpXmlRpc\Response(new Value(
+        array(
+            "times10" => new Value($v * 10, Value::$xmlrpcInt),
+            "times100" => new Value($v * 100, Value::$xmlrpcInt),
+            "times1000" => new Value($v * 1000, Value::$xmlrpcInt)
+        ),
+        Value::$xmlrpcStruct
     ));
 }
 
@@ -572,14 +577,14 @@ function v1_nestedStruct($req)
 {
     $sno = $req->getParam(0);
 
-    $twoK = $sno->structmem("2000");
-    $april = $twoK->structmem("04");
-    $fools = $april->structmem("01");
-    $curly = $fools->structmem("curly");
-    $larry = $fools->structmem("larry");
-    $moe = $fools->structmem("moe");
+    $twoK = $sno["2000"];
+    $april = $twoK["04"];
+    $fools = $april["01"];
+    $curly = $fools["curly"];
+    $larry = $fools["larry"];
+    $moe = $fools["moe"];
 
-    return new PhpXmlRpc\Response(new Value($curly->scalarval() + $larry->scalarval() + $moe->scalarval(), "int"));
+    return new PhpXmlRpc\Response(new Value($curly->scalarval() + $larry->scalarval() + $moe->scalarval(), Value::$xmlrpcInt));
 }
 
 $v1_countTheEntities_sig = array(array(Value::$xmlrpcStruct, Value::$xmlrpcString));
@@ -616,13 +621,15 @@ function v1_countTheEntities($req)
         }
     }
 
-    return new PhpXmlRpc\Response(new Value(array(
-        "ctLeftAngleBrackets" => new Value($lt, "int"),
-        "ctRightAngleBrackets" => new Value($gt, "int"),
-        "ctAmpersands" => new Value($amp, "int"),
-        "ctApostrophes" => new Value($ap, "int"),
-        "ctQuotes" => new Value($qu, "int"),),
-        "struct"
+    return new PhpXmlRpc\Response(new Value(
+        array(
+            "ctLeftAngleBrackets" => new Value($lt, Value::$xmlrpcInt),
+            "ctRightAngleBrackets" => new Value($gt, Value::$xmlrpcInt),
+            "ctAmpersands" => new Value($amp, Value::$xmlrpcInt),
+            "ctApostrophes" => new Value($ap, Value::$xmlrpcInt),
+            "ctQuotes" => new Value($qu, Value::$xmlrpcInt)
+        ),
+        Value::$xmlrpcStruct
     ));
 }
 
