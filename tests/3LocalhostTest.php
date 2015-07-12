@@ -204,10 +204,15 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
     </params>
 </methodCall>';
 
+        PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'UTF-8';
+        // we have to set the encoding declaration either in the http header or xml prolog, as mb_detect_encoding
+        // (used on the server side) will fail recognizing these 2
         $v = $this->send(mb_convert_encoding(str_replace('_ENC_', 'UCS-4', $str), 'UCS-4', 'UTF-8'));
         $this->assertEquals($sendString, $v->scalarval());
         $v = $this->send(mb_convert_encoding(str_replace('_ENC_', 'UTF-16', $str), 'UTF-16', 'UTF-8'));
         $this->assertEquals($sendString, $v->scalarval());
+        PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
+
     }
 
     /*public function testLatin1Method()
