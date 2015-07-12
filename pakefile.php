@@ -78,11 +78,19 @@ class Builder
         //pake_echo('---'.self::$libVersion.'---');
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     public static function tool($name)
     {
         return self::$tools[$name];
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     public static function option($name)
     {
         return self::$options[$name];

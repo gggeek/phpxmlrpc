@@ -347,7 +347,7 @@ class Server
     /**
      * Parse http headers received along with xmlrpc request. If needed, inflate request.
      *
-     * @return mixed null on success or a Response
+     * @return mixed Response|null on success or an error Response
      */
     protected function parseRequestHeaders(&$data, &$reqEncoding, &$respEncoding, &$respCompression)
     {

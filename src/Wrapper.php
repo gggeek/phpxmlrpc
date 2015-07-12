@@ -175,8 +175,7 @@ class Wrapper
 
             $plainFuncName = 'Closure';
             $exists = true;
-        }
-        else {
+        } else {
             $plainFuncName = $callable;
             $exists = function_exists($callable);
         }
@@ -397,7 +396,7 @@ class Wrapper
      * @param array $extraOptions
      * @param string $plainFuncName
      * @param string $funcDesc
-     * @return callable
+     * @return \Closure
      */
     protected function buildWrapFunctionClosure($callable, $extraOptions, $plainFuncName, $funcDesc)
     {
@@ -498,7 +497,7 @@ class Wrapper
      * @param array $extraOptions
      * @param string $plainFuncName
      * @param array $funcDesc
-     * @return array
+     * @return string
      *
      * @todo add a nice phpdoc block in the generated source
      */
@@ -786,7 +785,7 @@ class Wrapper
      * @param string $methodName
      * @param array $extraOptions
      * @param string $mSig
-     * @return callable
+     * @return \Closure
      *
      * @todo should we allow usage of parameter simple_client_copy to mean 'do not clone' in this case?
      */
