@@ -956,6 +956,9 @@ $s->compress_response = true;
 if (isset($_GET['RESPONSE_ENCODING'])) {
     $s->response_charset_encoding = $_GET['RESPONSE_ENCODING'];
 }
+if (isset($_GET['DETECT_ENCODINGS'])) {
+    PhpXmlRpc\PhpXmlRpc::$xmlrpc_detectencodings = $_GET['DETECT_ENCODINGS'];
+}
 if (isset($_GET['EXCEPTION_HANDLING'])) {
     $s->exception_handling = $_GET['EXCEPTION_HANDLING'];
 }

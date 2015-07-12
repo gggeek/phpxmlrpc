@@ -454,8 +454,10 @@ class XMLParser
      *
      * @param string $httpHeader the http Content-type header
      * @param string $xmlChunk xml content buffer
-     * @param string $encodingPrefs comma separated list of character encodings to be used as default (when mb extension is enabled)
-     * @return string
+     * @param string $encodingPrefs comma separated list of character encodings to be used as default (when mb extension is enabled).
+     *                              This can also be set globally using PhpXmlRpc::$xmlrpc_detectencodings
+     * @return string the encoding determined. Null if it can't be determined and mbstring is enabled,
+     *                PhpXmlRpc::$xmlrpc_defencoding if it can't be determined and mbstring is not enabled
      *
      * @todo explore usage of mb_http_input(): does it detect http headers + post data? if so, use it instead of hand-detection!!!
      */
@@ -464,10 +466,10 @@ class XMLParser
         // discussion: see http://www.yale.edu/pclt/encoding/
         // 1 - test if encoding is specified in HTTP HEADERS
 
-        //Details:
+        // Details:
         // LWS:           (\13\10)?( |\t)+
         // token:         (any char but excluded stuff)+
-        // quoted string: " (any char but double quotes and cointrol chars)* "
+        // quoted string: " (any char but double quotes and control chars)* "
         // header:        Content-type = ...; charset=value(; ...)*
         //   where value is of type token, no LWS allowed between 'charset' and value
         // Note: we do not check for invalid chars in VALUE:
@@ -507,8 +509,10 @@ class XMLParser
         }
 
         // 4 - if mbstring is available, let it do the guesswork
-        // NB: we favour finding an encoding that is compatible with what we can process
         if (extension_loaded('mbstring')) {
+            if ($encodingPrefs == null && PhpXmlRpc::$xmlrpc_detectencodings != null) {
+                $encodingPrefs = PhpXmlRpc::$xmlrpc_detectencodings;
+            }
             if ($encodingPrefs) {
                 $enc = mb_detect_encoding($xmlChunk, $encodingPrefs);
             } else {

@@ -60,8 +60,14 @@ class PhpXmlRpc
 
     // The charset encoding used by the server for received requests and
     // by the client for received responses when received charset cannot be determined
-    // or is not supported
+    // and mbstring extension is not enabled
     public static $xmlrpc_defencoding = "UTF-8";
+
+    // The list of encodings used by the server for requests and by the client for responses
+    // to detect the charset of the received payload when
+    // - the charset cannot be determined by looking at http headers, xml declaration or BOM
+    // - mbstring extension is enabled
+    public static $xmlrpc_detectencodings = array();
 
     // The encoding used internally by PHP.
     // String values received as xml will be converted to this, and php strings will be converted to xml
