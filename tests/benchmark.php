@@ -86,7 +86,7 @@ if ($is_web) {
     }
 }
 
-// test 'old style' data encoding vs. 'automatic style' encoding
+// test 'manual style' data encoding vs. 'automatic style' encoding
 begin_test('Data encoding (large array)', 'manual encoding');
 for ($i = 0; $i < $num_tests; $i++) {
     $vals = array();
@@ -145,12 +145,32 @@ for ($i = 0; $i < $num_tests; $i++) {
     $response = $dummy->ParseResponse($in, true);
     $value = $response->value();
     $result = array();
-    for ($k = 0; $k < $value->arraysize(); $k++) {
+    foreach($value as $val1) {
+        $out = array();
+        foreach($val1 as $name => $val) {
+            $out[$name] = array();
+            foreach($val as $data) {
+                $out[$name][] = $data->scalarval();
+            }
+        }
+        $result[] = $out;
+    }
+}
+end_test('Data decoding (large array)', 'manual decoding', $result);
+
+begin_test('Data decoding (large array)', 'manual decoding deprecated');
+for ($i = 0; $i < $num_tests; $i++) {
+    $response = $dummy->ParseResponse($in, true);
+    $value = $response->value();
+    $result = array();
+    $l = $value->arraysize();
+    for ($k = 0; $k < $l; $k++) {
         $val1 = $value->arraymem($k);
         $out = array();
         while (list($name, $val) = $val1->structeach()) {
             $out[$name] = array();
-            for ($j = 0; $j < $val->arraysize(); $j++) {
+            $m = $val->arraysize();
+            for ($j = 0; $j < $m; $j++) {
                 $data = $val->arraymem($j);
                 $out[$name][] = $data->scalarval();
             }
@@ -158,7 +178,7 @@ for ($i = 0; $i < $num_tests; $i++) {
         $result[] = $out;
     }
 }
-end_test('Data decoding (large array)', 'manual decoding', $result);
+end_test('Data decoding (large array)', 'manual decoding deprecated', $result);
 
 begin_test('Data decoding (large array)', 'automatic decoding');
 for ($i = 0; $i < $num_tests; $i++) {
