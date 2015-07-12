@@ -2,8 +2,21 @@ NB: All recent commits are available online.
 This file will not be updated further.
 See https://github.com/gggeek/phpxmlrpc/commits/master
 
+2014-05-26 - G. Giunta (giunta.gaetano@gmail.com)
 
-2014-02-3 - G. Giunta (giunta.gaetano@gmail.com)
+	* removed bundled phpunit
+	* converted all tabs to spaces in php files and removed closing tags
+
+2014-05-12 - Samu Voutilainen (smar@smar.fi)
+
+	* removed obsolete xml.so open; dl() is deprecated and removed from 5.3.0
+	* removed deprecated xmlEntities
+	* removed deprecated xmlrpc_backslash
+	* converted $GLOBALS to internal class. This makes testing much easier and should be more flexible regarding other projects
+	* changed verifyhost from 1 to 2. This makes modern php versions work properly.
+	* split off each class in its own file
+
+2014-02-03 - G. Giunta (giunta.gaetano@gmail.com)
 
 	* bumped up requirements to php 5.1.0
 
