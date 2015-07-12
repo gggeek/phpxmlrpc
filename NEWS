@@ -1,4 +1,4 @@
-XML-RPC for PHP version 4.0.0 - 2015/Y/Z
+XML-RPC for PHP version 4.0.0 alpha - 2015/Y/Z
 
 This release does away with the past and starts a transition to modern-world php.
 
@@ -19,8 +19,11 @@ PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
   Backward compatibility is maintained via lib/xmlrpc.inc, lib/xmlrpcs.inc and lib/xmlrpc_wrappers.inc.
   For more details, head on to doc/api_changes_v4.md
 
-* changed: the default encoding delivered from the library to your code is now utf8.
-  It can be changed at anytime setting a value to PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding
+* changed: the default character encoding delivered from the library to your code is now utf8.
+  It can be changed at any time setting a value to PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding
+
+* improved: the library now accepts requests/responses sent using other character sets than UTF-8/ISO-8859-1/ASCII.
+  This only works when the mbstring php extension is enabled.
 
 * improved: no need to call anymore $client->setSSLVerifyHost(2) to silence a curl warning when using https
   with recent curl builds
