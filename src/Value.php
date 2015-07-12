@@ -4,7 +4,7 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\Charset;
 
-class Value implements \Countable, \IteratorAggregate
+class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 {
     public static $xmlrpcI4 = "i4";
     public static $xmlrpcInt = "int";
@@ -323,6 +323,8 @@ class Value implements \Countable, \IteratorAggregate
      * @param string $key the name of the struct member to be looked up
      *
      * @return boolean
+     *
+     * @deprecated use array access, e.g. isset($val[$key])
      */
     public function structmemexists($key)
     {
@@ -336,6 +338,8 @@ class Value implements \Countable, \IteratorAggregate
      * @param string $key the name of the struct member to be looked up
      *
      * @return Value
+     *
+     * @deprecated use array access, e.g. $val[$key]
      */
     public function structmem($key)
     {
@@ -399,6 +403,8 @@ class Value implements \Countable, \IteratorAggregate
      * @param integer $key the index of the value to be retrieved (zero based)
      *
      * @return Value
+     *
+     * @deprecated use array access, e.g. $val[$key]
      */
     public function arraymem($key)
     {
@@ -441,7 +447,7 @@ class Value implements \Countable, \IteratorAggregate
     {
         switch ($this->mytype) {
             case 3:
-                count($this->me['struct']);
+                return count($this->me['struct']);
             case 2:
                 return count($this->me['array']);
             case 1:
@@ -468,5 +474,93 @@ class Value implements \Countable, \IteratorAggregate
                 return new \ArrayIterator();
         }
         return new \ArrayIterator();
+    }
+
+
+    public function offsetSet($offset, $value) {
+
+        switch ($this->mytype) {
+            case 3:
+                if (!($value instanceof \PhpXmlRpc\Value)) {
+                    throw new \Exception('It is only possible to add Value objects to an XML-RPC Struct');
+                }
+                if (is_null($offset)) {
+                    // disallow struct members with empty names
+                    throw new \Exception('It is not possible to add anonymous members to an XML-RPC Struct');
+                } else {
+                    $this->me['struct'][$offset] = $value;
+                }
+                return;
+            case 2:
+                if (!($value instanceof \PhpXmlRpc\Value)) {
+                    throw new \Exception('It is only possible to add Value objects to an XML-RPC Array');
+                }
+                if (is_null($offset)) {
+                    $this->me['array'][] = $value;
+                } else {
+                    // nb: we are not checking that $offset is above the existing array range...
+                    $this->me['array'][$offset] = $value;
+                }
+                return;
+            case 1:
+// todo: handle i4 vs int
+                reset($this->me);
+                list($type,) = each($this->me);
+                if ($type != $offset) {
+                    throw new \Exception('');
+                }
+                $this->me[$type] = $value;
+                return;
+            default:
+                // it would be nice to allow empty values to be be turned into non-empty ones this way, but we miss info to do so
+                throw new \Exception("XML-RPC Value is of type 'undef' and its value can not be set using array index");
+        }
+    }
+
+    public function offsetExists($offset) {
+        switch ($this->mytype) {
+            case 3:
+                return isset($this->me['struct'][$offset]);
+            case 2:
+                return isset($this->me['array'][$offset]);
+            case 1:
+// todo: handle i4 vs int
+                return $offset == $this->scalartyp();
+            default:
+                return false;
+        }
+    }
+
+    public function offsetUnset($offset) {
+        switch ($this->mytype) {
+            case 3:
+                unset($this->me['struct'][$offset]);
+                return;
+            case 2:
+                unset($this->me['array'][$offset]);
+                return;
+            case 1:
+                // can not remove value from a scalar
+                throw new \Exception("XML-RPC Value is of type 'scalar' and its value can not be unset using array index");
+            default:
+                throw new \Exception("XML-RPC Value is of type 'undef' and its value can not be unset using array index");
+        }
+    }
+
+    public function offsetGet($offset) {
+        switch ($this->mytype) {
+            case 3:
+                return isset($this->me['struct'][$offset]) ? $this->me['struct'][$offset] : null;
+            case 2:
+                return isset($this->me['array'][$offset]) ? $this->me['array'][$offset] : null;
+            case 1:
+// on bad type: null or exception?
+                reset($this->me);
+                list($type, $value) = each($this->me);
+                return $type == $offset ? $value : null;
+            default:
+// return null or exception?
+                throw new \Exception("XML-RPC Value is of type 'undef' and can not be accessed using array index");
+        }
     }
 }

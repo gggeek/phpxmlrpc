@@ -15,6 +15,7 @@ PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
   All php classes have been renamed and moved to separate files.
   Class autoloading can now be done in accord with the PSR-4 standard.
   All global variables and global functions have been removed.
+  Iterating over xmlrpc value objects is now easier thank to support for ArrayAccess and Traversable interfaces.
 
   Backward compatibility is maintained via lib/xmlrpc.inc, lib/xmlrpcs.inc and lib/xmlrpc_wrappers.inc.
   For more details, head on to doc/api_changes_v4.md

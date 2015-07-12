@@ -71,10 +71,12 @@ class Encoder
 
                 return $xmlrpcVal->scalarval();
             case 'array':
-                $size = $xmlrpcVal->count();
+                //$size = $xmlrpcVal->count();
                 $arr = array();
-                for ($i = 0; $i < $size; $i++) {
-                    $arr[] = $this->decode($xmlrpcVal->arraymem($i), $options);
+                //for ($i = 0; $i < $size; $i++) {
+                foreach($xmlrpcVal as $value) {
+                    //$arr[] = $this->decode($xmlrpcVal->arraymem($i), $options);
+                    $arr[] = $this->decode($value, $options);
                 }
 
                 return $arr;
@@ -290,8 +292,10 @@ class Encoder
             case 'methodresponse':
                 $v = &$xmlRpcParser->_xh['value'];
                 if ($xmlRpcParser->_xh['isf'] == 1) {
-                    $vc = $v->structmem('faultCode');
-                    $vs = $v->structmem('faultString');
+                    //$vc = $v->structmem('faultCode');
+                    //$vs = $v->structmem('faultString');
+                    $vc = $v['faultCode'];
+                    $vs = $v['faultString'];
                     $r = new Response(0, $vc->scalarval(), $vs->scalarval());
                 } else {
                     $r = new Response($v);

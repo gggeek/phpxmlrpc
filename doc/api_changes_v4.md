@@ -52,10 +52,14 @@ In case you had extended the classes of the library and added methods to the sub
 implementation clashes with the new one if you implemented:
 
 
-| Class     | Method      | Notes                                   |
-| --------- | ----------- | --------------------------------------- |
-| xmlrpcval | count       | implements interface: Countable         |
-| xmlrpcval | getIterator | implements interface: IteratorAggregate |
+| Class     | Method       | Notes                                   |
+| --------- | ------------ | --------------------------------------- |
+| xmlrpcval | count        | implements interface: Countable         |
+| xmlrpcval | getIterator  | implements interface: IteratorAggregate |
+| xmlrpcval | offsetExists | implements interface: ArrayAccess       |
+| xmlrpcval | offsetGet    | implements interface: ArrayAccess       |
+| xmlrpcval | offsetSet    | implements interface: ArrayAccess       |
+| xmlrpcval | offsetUnset  | implements interface: ArrayAccess       |
 
 
 Global variables cleanup
@@ -111,7 +115,7 @@ Character sets and encoding
 
 The default character set used by the library to deliver data to your app is now UTF8.
 It is also the character set that the library expects data from your app to be in (including method names).
-The value can be changed (to either US-ASCII or ISO-8859-1) by setting teh desired value to
+The value can be changed (to either US-ASCII or ISO-8859-1) by setting the desired value to
     PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding
 
 Usage of closures for wrapping

@@ -422,7 +422,8 @@ class Client
                 $this->proxyport,
                 $this->proxy_user,
                 $this->proxy_pass,
-                $this->proxy_authtype
+                $this->proxy_authtype,
+                $method
             );
         }
 
@@ -442,14 +443,16 @@ class Client
      * @param string $proxyUsername
      * @param string $proxyPassword
      * @param int $proxyAuthType
+     * @param string $method
      * @return Response
      */
     protected function sendPayloadHTTP10($req, $server, $port, $timeout = 0,
                                        $username = '', $password = '', $authType = 1, $proxyHost = '',
-                                       $proxyPort = 0, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1)
+                                       $proxyPort = 0, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1,
+                                       $method='http')
     {
         if ($port == 0) {
-            $port = 80;
+            $port = ( $method === "https" ) ? 443 : 80;
         }
 
         // Only create the payload if it was not created previously
@@ -498,6 +501,7 @@ class Client
             }
             $connectServer = $proxyHost;
             $connectPort = $proxyPort;
+            $transport = "tcp";
             $uri = 'http://' . $server . ':' . $port . $this->path;
             if ($proxyUsername != '') {
                 if ($proxyAuthType != 1) {
@@ -508,6 +512,8 @@ class Client
         } else {
             $connectServer = $server;
             $connectPort = $port;
+            /// @todo if supporting https, we should support all its current options as well: peer name verification etc...
+            $transport = ( $method === "https" ) ? "tls" : "tcp";
             $uri = $this->path;
         }
 
@@ -557,12 +563,12 @@ class Client
         }
 
         if ($timeout > 0) {
-            $fp = @fsockopen($connectServer, $connectPort, $this->errno, $this->errstr, $timeout);
+            $fp = @stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $timeout);
         } else {
-            $fp = @fsockopen($connectServer, $connectPort, $this->errno, $this->errstr);
+            $fp = @stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr);
         }
         if ($fp) {
-            if ($timeout > 0 && function_exists('stream_set_timeout')) {
+            if ($timeout > 0) {
                 stream_set_timeout($fp, $timeout);
             }
         } else {
@@ -1043,26 +1049,30 @@ class Client
             }
 
             $response = array();
-            for ($i = 0; $i < $numRets; $i++) {
-                $val = $rets->arraymem($i);
+            //for ($i = 0; $i < $numRets; $i++) {
+            foreach($rets as $val) {
+                //$val = $rets->arraymem($i);
                 switch ($val->kindOf()) {
                     case 'array':
                         if ($val->count() != 1) {
                             return false;       // Bad value
                         }
                         // Normal return value
-                        $response[$i] = new Response($val->arraymem(0));
+                        //$response[] = new Response($val->arraymem(0));
+                        $response[] = new Response($val[0]);
                         break;
                     case 'struct':
-                        $code = $val->structmem('faultCode');
+                        //$code = $val->structmem('faultCode');
+                        $code = $val['faultCode'];
                         if ($code->kindOf() != 'scalar' || $code->scalartyp() != 'int') {
                             return false;
                         }
-                        $str = $val->structmem('faultString');
+                        //$str = $val->structmem('faultString');
+                        $str = $val['faultString'];
                         if ($str->kindOf() != 'scalar' || $str->scalartyp() != 'string') {
                             return false;
                         }
-                        $response[$i] = new Response(0, $code->scalarval(), $str->scalarval());
+                        $response[] = new Response(0, $code->scalarval(), $str->scalarval());
                         break;
                     default:
                         return false;

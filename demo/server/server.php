@@ -542,8 +542,10 @@ function v1_moderateSizeArrayCheck($req)
 {
     $ar = $req->getParam(0);
     $sz = $ar->count();
-    $first = $ar->arraymem(0);
-    $last = $ar->arraymem($sz - 1);
+    //$first = $ar->arraymem(0);
+    $first = $ar[0];
+    //$last = $ar->arraymem($sz - 1);
+    $last = $ar[$sz - 1];
 
     return new PhpXmlRpc\Response(new Value($first->scalarval() .
         $last->scalarval(), "string"));
