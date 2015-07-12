@@ -51,7 +51,8 @@ class Server
     public $allow_system_funcs = true;
     /**
      * List of charset encodings natively accepted for requests.
-     *  Set at constructor time.
+     * Set at constructor time.
+     * UNUSED so far...
      */
     public $accepted_charset_encodings = array();
     /**

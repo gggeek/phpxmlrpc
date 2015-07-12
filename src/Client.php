@@ -137,6 +137,16 @@ class Client
         // by default the xml parser can support these 3 charset encodings
         $this->accepted_charset_encodings = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
 
+        // Add all charsets which mbstring can handle, but remove junk not found in IANA registry at
+        // in http://www.iana.org/assignments/character-sets/character-sets.xhtml
+        // NB: this is disabled to avoid making all the requests sent huge... mbstring supports more than 80 charsets!
+        /*if (function_exists('mb_list_encodings')) {
+
+            $encodings = array_diff(mb_list_encodings(), array('pass', 'auto', 'wchar', 'BASE64', 'UUENCODE', 'ASCII',
+                'HTML-ENTITIES', 'Quoted-Printable', '7bit','8bit', 'byte2be', 'byte2le', 'byte4be', 'byte4le'));
+            $this->accepted_charset_encodings = array_unique(array_merge($this->accepted_charset_encodings, $encodings));
+        }*/
+
         // initialize user_agent string
         $this->user_agent = PhpXmlRpc::$xmlrpcName . ' ' . PhpXmlRpc::$xmlrpcVersion;
     }
