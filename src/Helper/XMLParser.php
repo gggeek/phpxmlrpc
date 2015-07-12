@@ -318,14 +318,12 @@ class XMLParser
                             $this->_xh['value'] = (int)$this->_xh['ac'];
                         }
                     }
-                    //$this->_xh['ac']=''; // is this necessary?
                     $this->_xh['lv'] = 3; // indicate we've found a value
                     break;
                 case 'NAME':
                     $this->_xh['valuestack'][count($this->_xh['valuestack']) - 1]['name'] = $this->_xh['ac'];
                     break;
                 case 'MEMBER':
-                    //$this->_xh['ac']=''; // is this necessary?
                     // add to array in the stack the last element built,
                     // unless no VALUE was found
                     if ($this->_xh['vt']) {
@@ -336,7 +334,6 @@ class XMLParser
                     }
                     break;
                 case 'DATA':
-                    //$this->_xh['ac']=''; // is this necessary?
                     $this->_xh['vt'] = null; // reset this to check for 2 data elements in a row - even if they're empty
                     break;
                 case 'STRUCT':
@@ -402,18 +399,6 @@ class XMLParser
             // "lookforvalue==3" means that we've found an entire value
             // and should discard any further character data
             if ($this->_xh['lv'] != 3) {
-                // G. Giunta 2006-08-23: useless change of 'lv' from 1 to 2
-                //if($this->_xh['lv']==1)
-                //{
-                // if we've found text and we're just in a <value> then
-                // say we've found a value
-                //$this->_xh['lv']=2;
-                //}
-                // we always initialize the accumulator before starting parsing, anyway...
-                //if(!@isset($this->_xh['ac']))
-                //{
-                //    $this->_xh['ac'] = '';
-                //}
                 $this->_xh['ac'] .= $data;
             }
         }
@@ -428,11 +413,6 @@ class XMLParser
         // skip processing if xml fault already detected
         if ($this->_xh['isf'] < 2) {
             if (substr($data, 0, 1) == '&' && substr($data, -1, 1) == ';') {
-                // G. Giunta 2006-08-25: useless change of 'lv' from 1 to 2
-                //if($this->_xh['lv']==1)
-                //{
-                //    $this->_xh['lv']=2;
-                //}
                 $this->_xh['ac'] .= $data;
             }
         }
