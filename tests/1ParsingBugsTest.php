@@ -554,7 +554,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertequals(2, $r->faultCode());
     }
 
-    public function TestLocale()
+    public function testLocale()
     {
         $locale = setlocale(LC_NUMERIC, 0);
         /// @todo on php 5.3/win setting locale to german does not seem to set decimal separator to comma...
@@ -570,6 +570,33 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
             }
         } else {
             $this->markTestSkipped('did not find a locale which sets decimal separator to comma');
+        }
+    }
+
+    public function testArrayAccess()
+    {
+        $v1 = new xmlrpcval(array(new xmlrpcval('one'), new xmlrpcval('two')), 'array');
+        $this->assertequals(1, count($v1));
+        $out = array('me' => array(), 'mytype' => 2, '_php_class' => null);
+        foreach($v1 as $key => $val)
+        {
+            $expected = each($out);
+            $this->assertequals($expected['key'], $key);
+            if (gettype($expected['value']) == 'array') {
+                $this->assertequals('array', gettype($val));
+            } else {
+                $this->assertequals($expected['value'], $val);
+            }
+        }
+
+        $v2 = new \PhpXmlRpc\Value(array(new \PhpXmlRpc\Value('one'), new \PhpXmlRpc\Value('two')), 'array');
+        $this->assertequals(2, count($v2));
+        $out = array(0 => 'object', 1 => 'object');
+        foreach($v2 as $key => $val)
+        {
+            $expected = each($out);
+            $this->assertequals($expected['key'], $key);
+            $this->assertequals($expected['value'], gettype($val));
         }
     }
 }
