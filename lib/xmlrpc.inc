@@ -136,6 +136,16 @@ class xmlrpcval extends PhpXmlRpc\Value
         return $b;
     }
 
+    /// reset functionality added by parent class: same as it would happen if no interface was declared
+    public function count()
+    {
+        return 1;
+    }
+
+    /// reset functionality added by parent class: same as it would happen if no interface was declared
+    public function getIterator() {
+        return new ArrayIterator($this);
+    }
 }
 
 class xmlrpcmsg extends PhpXmlRpc\Request
