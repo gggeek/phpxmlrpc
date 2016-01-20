@@ -8,18 +8,18 @@ It is not necessary any more to include the files xmlrpc.inc, xmlrpcs.inc and xm
 library classes available.
 
 Instead, it is recommended to rely on class autoloading.
- 
-* If you are using Composer, just install the library by declaring it as dependency for your project in composer.json 
+
+* If you are using Composer, just install the library by declaring it as dependency for your project in composer.json
 
         "require": {
             ...,
             "phpxmlrpc/phpxmlrpc": "~4.0"
         },
-       
+
 * If you do not use Composer, an autoloader for the library can be found in src/Atuloader.php.
   The php example files in the demo/client folder do make use of it.
   Example code to set up the autoloader:
-    
+
         include_once <path to library> . "/src/Autoloader.php";
         PhpXmlRpc\Autoloader::register();
 
@@ -32,7 +32,7 @@ New class naming
 ----------------
 
 All classes have ben renamed, are now properly namespaced and follow the CamelCase naming convention.
-Existing class methods and members have been preserved; all new method names follow camelCase. 
+Existing class methods and members have been preserved; all new method names follow camelCase.
 
 Conversion table:
 
@@ -137,9 +137,9 @@ Other
 * when serialize() is invoked on a response and its payload can not be serialized, an exception is thrown instead of
   ending all execution
 
-* all error messages now mention the class and method which generated name
+* all error messages now mention the class and method which generated them
 
-* all library source code has been moved to the src/ directory 
+* all library source code has been moved to the src/ directory
 
 * all source code has been reformatted according to modern PSR standards
 
@@ -173,7 +173,7 @@ Below is the list of all known changes and possible pitfalls when enabling 'comp
 ### Usage of global variables
 
 * ALL global variables which existed after including xmlrpc.inc in version 3 still do exist after including it in v. 4
- 
+
 * Code which relies on using (as in 'reading') their value will keep working unchanged
 
 * Changing the value of some of those variables does not have any effect anymore on library operation.
@@ -204,9 +204,9 @@ Below is the list of all known changes and possible pitfalls when enabling 'comp
         $GLOBALS['xmlrpc_null_apache_encoding'] = true;
         // new line needed now
         PhpXmlRpc\PhpXmlRpc::importGlobals();
-        
+
     Alternative solution:
-    
+
         include('xmlrpc.inc');
         PhpXmlRpc\PhpXmlRpc::$xmlrpc_null_apache_encoding = true;
 
@@ -228,7 +228,7 @@ Below is the list of all known changes and possible pitfalls when enabling 'comp
   instances will return the new classes.
 
     Example:
-        
+
         is_a(php_xmlrpc_encode('hello world'), 'xmlrpcval') => false
         is_a(php_xmlrpc_encode('hello world'), 'PhpXmlRpc\Value') => true
 

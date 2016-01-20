@@ -10,15 +10,25 @@ Detailed installation instructions are in the [INSTALL.md](INSTALL.md) file, alo
 
 Documentation
 -------------
+
+*NB: the user manual has not been updated yet with all the changes made in version 4. Please consider it unreliable!*
+
+*You are encouraged to look instead the code examples found in the demo/ directory*
+
 The user manual can be found in the doc/manual directory, in Asciidoc format: [phpxmlrpc_manual.adoc](doc/manual/phpxmlrpc_manual.adoc)
 
 Release tarballs also contain the HTML and PDF versions, as well as an automatically generated API documentation.
 
-*NB: the user manual has not been updated yet with all the changes made in version 4. Please consider it unreliable!*
-
 Upgrading
 ---------
-If you are upgrading from version 3 or earlier, please read the docs in [doc/api_changes_v4.md](doc/api_changes_v4.md)
+If you are upgrading from version 3 or earlier you have two options:
+
+1. adapt your code to the new API (all changes needed are described in [doc/api_changes_v4.md](doc/api_changes_v4.md))
+
+2. use instead the *compatibility layer* which is provided. Instructions and pitfalls described in [doc/api_changes_v4.md](doc/api_changes_v4.md##enabling-compatibility-with-legacy-code)
+
+In any case, read carefully the docs in [doc/api_changes_v4.md](doc/api_changes_v4.md) and report back any undocumented
+issue using GitHub.
 
 License
 -------
