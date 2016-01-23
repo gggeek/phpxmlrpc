@@ -2078,13 +2078,13 @@ To ease the transition to the new naming scheme and avoid breaking
       existing implementations, the following scheme has been adopted:
 
 * If EPI-XMLRPC is not active in the current PHP installation,
-            the constant ++$$XMLRPC_EPI_ENABLED$$++ will be set to
-            ++$$'0'$$++
+            the constant `XMLRPC_EPI_ENABLED` will be set to
+            '0'
 
 
 * If EPI-XMLRPC is active in the current PHP installation, the
-            constant ++$$XMLRPC_EPI_ENABLED$$++ will be set to
-            ++$$'1'$$++
+            constant `XMLRPC_EPI_ENABLED` will be set to
+            '1'
 
 
 
@@ -2795,10 +2795,10 @@ __Note:__ this is the last release of the library that will support PHP 4. Futur
     invoked using an unknown xmlrpc type: the error will only be written to php error log. Also
     `new xmlrpcval('true', 'boolean')` is not supported anymore
 
-* The new function php_xmlrpc_decode_xml() will take the xml representation of either an xmlrpc request, response or
+* The new function `php_xmlrpc_decode_xml()` will take the xml representation of either an xmlrpc request, response or
     single value and return the corresponding php-xmlrpc object instance
 
-* A new function wrap_xmlrpc_server()has been added, to wrap all (or some) of the methods exposed by a remote xmlrpc
+* A new function `wrap_xmlrpc_server()` has been added, to wrap all (or some) of the methods exposed by a remote xmlrpc
     server into a php class
 
 * A new file has been added: _verify_compat.php_, to help users diagnose the level of compliance of their php
