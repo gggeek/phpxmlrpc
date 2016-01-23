@@ -53,9 +53,9 @@ Peter Kocks
 
 Daniel Krippner
 
-S. Kuip
+{empty}S. Kuip
 
-A. Lambert
+{empty}A. Lambert
 
 Frederic Lecointre
 
@@ -2590,25 +2590,25 @@ All global variables and global functions have been removed.
 +
 Iterating over xmlrpc value objects is now easier thank to support for ArrayAccess and Traversable interfaces.
 +
-Backward compatibility is maintained via lib/xmlrpc.inc, lib/xmlrpcs.inc and lib/xmlrpc_wrappers.inc.
+Backward compatibility is maintained via _lib/xmlrpc.inc_, _lib/xmlrpcs.inc_ and _lib/xmlrpc_wrappers.inc_.
     For more details, head on to doc/api_changes_v4.md
 
 * changed: the default character encoding delivered from the library to your code is now utf8.
-  It can be changed at any time setting a value to PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding
+  It can be changed at any time setting a value to `PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding`
 
 * improved: the library now accepts requests/responses sent using other character sets than UTF-8/ISO-8859-1/ASCII.
   This only works when the mbstring php extension is enabled.
 
-* improved: no need to call anymore $client->setSSLVerifyHost(2) to silence a curl warning when using https
+* improved: no need to call anymore `$client->setSSLVerifyHost(2)` to silence a curl warning when using https
   with recent curl builds
 
-* improved: the xmlrpcval class now supports the interfaces Countable and IteratorAggregate
+* improved: the xmlrpcval class now supports the interfaces `Countable` and `IteratorAggregate`
 
 * improved: a specific option allows users to decide the version of SSL to use for https calls.
   This is useful f.e. for the testing suite, when the server target of calls has no proper ssl certificate,
   and the cURL extension has been compiled with GnuTLS (such as on Travis VMs)
 
-* improved: the function wrap_php_function() now can be used to wrap closures (it is now a method btw)
+* improved: the function `wrap_php_function()` now can be used to wrap closures (it is now a method btw)
 
 * improved: all wrap_something() functions now return a closure by default instead of a function name
 
@@ -2626,7 +2626,7 @@ Backward compatibility is maintained via lib/xmlrpc.inc, lib/xmlrpcs.inc and lib
 
 * improved: more tests in the test suite
 
-* fixed: the server would not reset the user-set debug messages between subsequent service() calls
+* fixed: the server would not reset the user-set debug messages between subsequent `service()` calls
 
 * fixed: the server would not reset previous php error handlers when an exception was thrown by user code and
   exception_handling set to 2
@@ -2637,7 +2637,7 @@ Backward compatibility is maintained via lib/xmlrpc.inc, lib/xmlrpcs.inc and lib
 * fixed: the client would fail to decode a response with ISO-8859-1 payload and character set declaration in the xml
   prolog only
 
-* fixed: the function decode_xml() would not decode an xml with character set declaration in the xml prolog
+* fixed: the function `decode_xml()` would not decode an xml with character set declaration in the xml prolog
 
 * fixed: the client can now successfully call methods using ISO-8859-1 or UTF-8 characters in their name
 
@@ -2699,7 +2699,7 @@ The "beta" tag is meant to indicate the fact that the refactoring has been more 
 
 * improved: add support for timestamps as parameter for constructor of xmlrpcval
 
-* improved: add option `dates_as_objects` to php_xmlrpc_decode to return dateTime objects for xmlrpc datetimes
+* improved: add option `dates_as_objects` to `php_xmlrpc_decode` to return dateTime objects for xmlrpc datetimes
 
 * improved: add new method `SetCurlOptions` to xmrlpc_client to allow extra flexibility in tweaking http config, such as
     explicitly binding to an ip address
@@ -2781,22 +2781,21 @@ __Note:__ this is the last release of the library that will support PHP 4. Futur
 
 * new: server support for the `system.getCapabilities` xmlrpc extension
 
-* new: <<wrap_xmlrpc_method,wrap_xmlrpc_method()>> accepts two new options: debug and return_on_fault
+* new: `wrap_xmlrpc_method`, `wrap_xmlrpc_method()` accepts two new options: debug and return_on_fault
 
 === 2.1
 
-* The wrap_php_function and wrap_xmlrpc_method functions have been moved out of the base library file __xmlrpc.inc__
-    into a file of their own: __$$xmlrpc_wrappers.php$$__. You will have to include() / require() it in your scripts if
+* The wrap_php_function and wrap_xmlrpc_method functions have been moved out of the base library file _xmlrpc.inc_
+    into a file of their own: _xmlrpc_wrappers.php_. You will have to include() / require() it in your scripts if
     you have been using those functions.
     For increased security, the automatic rebuilding of php object instances out ofreceived xmlrpc structs in
-    wrap_xmlrpc_method() has been disabled (but it can be optionally re-enabled).
-    Both wrap_php_function() and wrap_xmlrpc_method() functions accept many more options to fine tune their behaviour,
+    `wrap_xmlrpc_method()` has been disabled (but it can be optionally re-enabled).
+    Both `wrap_php_function()` and `wrap_xmlrpc_method()` functions accept many more options to fine tune their behaviour,
     including one to return the php code to be saved and later used as standalone php script
 
 * The constructor of xmlrpcval() values has seen some internal changes, and it will not throw a php warning anymore when
     invoked using an unknown xmlrpc type: the error will only be written to php error log. Also
-    ++$$new xmlrpcval('true', 'boolean')$$++
-    is not supported anymore
+    `new xmlrpcval('true', 'boolean')` is not supported anymore
 
 * The new function php_xmlrpc_decode_xml() will take the xml representation of either an xmlrpc request, response or
     single value and return the corresponding php-xmlrpc object instance
@@ -2804,14 +2803,14 @@ __Note:__ this is the last release of the library that will support PHP 4. Futur
 * A new function wrap_xmlrpc_server()has been added, to wrap all (or some) of the methods exposed by a remote xmlrpc
     server into a php class
 
-* A new file has been added: __$$verify_compat.php$$__, to help users diagnose the level of compliance of their php
+* A new file has been added: _verify_compat.php_, to help users diagnose the level of compliance of their php
     installation with the library
 
 * Restored compatibility with php 4.0.5 (for those poor souls still stuck on it)
 
-* Method xmlrpc_server->service() now returns a value: either the response payload or xmlrpcresp object instance
+* Method `xmlrpc_server->service()` now returns a value: either the response payload or xmlrpcresp object instance
 
-* Method xmlrpc_server->add_to_map() now accepts xmlrpc methods with no param definitions
+* Method `xmlrpc_server->add_to_map()` now accepts xmlrpc methods with no param definitions
 
 * Documentation for single parameters of exposed methods can be added to the dispatch map (and turned into html docs in
     conjunction with a future release of the 'extras' package)
@@ -2821,8 +2820,8 @@ __Note:__ this is the last release of the library that will support PHP 4. Futur
 * The debugger can now generate code that wraps a remote method into a php function (works for jsonrpc, too); it also
     has better support for being activated via a single GET call (e.g. for integration into other tools)
 
-* Stricter parsing of incoming xmlrpc messages: two more invalid cases are now detected (double ++data++ element inside
-    ++array++ and ++struct++/++array++ after scalar inside ++value++ element)
+* Stricter parsing of incoming xmlrpc messages: two more invalid cases are now detected (double `data` element inside
+    `array` and `struct`/`array` after scalar inside `value` element)
 
 * More logging of errors in a lot of situations
 
@@ -2856,47 +2855,47 @@ __Note:__ this is the last release of the library that will support PHP 4. Futur
 * let server and client objects serialize calls using a specified character set encoding for the produced xml instead of
     US-ASCII (ISO-8859-1 and UTF-8 supported)
 
-* let php_xmlrpc_decode accept xmlrpcmsg objects as valid input
+* let `php_xmlrpc_decode` accept xmlrpcmsg objects as valid input
 
 * 'class::method' syntax is now accepted in the server dispatch map
 
-* xmlrpc_clent::SetDebug() accepts integer values instead of a boolean value, with debugging level 2 adding to the
+* `xmlrpc_clent::SetDebug()` accepts integer values instead of a boolean value, with debugging level 2 adding to the
     information printed to screen the complete client request
 
 === 2.0 Release candidate 2
 
-* Added a new property of the client object: ++$$xmlrpc_client->return_type$$++, indicating whether calls to the
+* Added a new property of the client object: `xmlrpc_client->return_type`, indicating whether calls to the
     send() method will return xmlrpcresp objects whose value() is an xmlrpcval object, a php value (automatically
     decoded) or the raw xml received from the server.
 
-* Added in the extras dir. two new library files: __jsonrpc.inc__ and __jsonrpcs.inc__ containing new classes that
+* Added in the extras dir. two new library files: _jsonrpc.inc_ and _jsonrpcs.inc_ containing new classes that
     implement support for the json-rpc protocol (alpha quality code)
 
-* Added a new client method: ++setKey($key, $keypass)++ to be used in HTTPS connections
+* Added a new client method: `setKey($key, $keypass)` to be used in HTTPS connections
 
 * Added a new file containing some benchmarks in the testsuite directory
 
 === 2.0 Release candidate 1
 
-* Support for HTTP proxies (new method: ++$$xmlrpc_client::setProxy()$$++)
+* Support for HTTP proxies (new method: `xmlrpc_client::setProxy()`)
 
 * Support HTTP compression of both requests and responses.
     Clients can specify what kind of compression they accept for responses between deflate/gzip/any, and whether to
     compress the requests.
     Servers by default compress responses to clients that explicitly declare support for compression (new methods:
-    ++$$xmlrpc_client::setAcceptedCompression()$$++, ++$$xmlrpc_client::setRequestCompression()$$++).
+    `xmlrpc_client::setAcceptedCompression()`, `xmlrpc_client::setRequestCompression()`).
     Note that the ZLIB php extension needs to be enabled in PHP to support compression.
 
 * Implement HTTP 1.1 connections, but only if CURL is enabled (added an extra parameter to
-    ++$$xmlrpc_client::xmlrpc_client$$++ to set the desired HTTP protocol at creation time and a new supported value for
-    the last parameter of ++$$xmlrpc_client::send$$++, which now can be safely omitted if it has been specified at
+    `xmlrpc_client::xmlrpc_client` to set the desired HTTP protocol at creation time and a new supported value for
+    the last parameter of `xmlrpc_client::send`, which now can be safely omitted if it has been specified at
     creation time).
 +
 With PHP versions greater than 4.3.8 keep-alives are enabled by default for HTTP 1.1 connections. This should yield
     faster execution times when making multiple calls in sequence to the same xml-rpc server from a single client.
 
 * Introduce support for cookies.
-    Cookies to be sent to the server with a request can be set using ++$$xmlrpc_client::setCookie()$$++, while cookies
+    Cookies to be sent to the server with a request can be set using `xmlrpc_client::setCookie()`, while cookies
     received from the server are found in ++xmlrpcresp::cookies()++. It is left to the user to check for validity of
     received cookies and decide whether they apply to successive calls or not.
 
@@ -2910,24 +2909,24 @@ Supported encodings are US-ASCII, UTF-8 and ISO-8859-1.
 
 * Convert xml-rpc boolean values into native php values instead of 0 and 1
 
-* Force the ++$$php_xmlrpc_encode$$++ function to properly encode numerically indexed php arrays into xml-rpc arrays
+* Force the `php_xmlrpc_encode` function to properly encode numerically indexed php arrays into xml-rpc arrays
     (numerically indexed php arrays always start with a key of 0 and increment keys by values of 1)
 
-* Prevent the ++$$php_xmlrpc_encode$$++ function from further re-encoding any objects of class ++xmlrpcval++ that
+* Prevent the `php_xmlrpc_encode` function from further re-encoding any objects of class ++xmlrpcval++ that
     are passed to it. This allows to call the function with arguments consisting of mixed php values / xmlrpcval objects
 
-* Allow a server to NOT respond to system.* method calls (setting the ++$$$server->allow_system_funcs$$++ property).
+* Allow a server to NOT respond to system.* method calls (setting the `$server->allow_system_funcs` property).
 
 * Implement a new xmlrpcval method to determine if a value of type struct has a member of a given name without having to
-    loop trough all members: ++xmlrpcval::structMemExists()++
+    loop trough all members: `xmlrpcval::structMemExists()`
 
-* Expand methods ++xmlrpcval::addArray++, ++addScalar++ and ++addStruct++ allowing extra php values to be added to
+* Expand methods `xmlrpcval::addArray`, `addScalar` and `addStruct` allowing extra php values to be added to
     xmlrpcval objects already formed.
 
-* Let the ++$$xmlrpc_client::send$$++ method accept an XML string for sending instead of an xmlrpcmsg object, to
+* Let the `xmlrpc_client::send` method accept an XML string for sending instead of an xmlrpcmsg object, to
     facilitate debugging and integration with the php native xmlrpc extension
 
-* Extend the ++$$php_xmlrpc_encode$$++ and ++$$php_xmlrpc_decode$$++ functions to allow serialization and rebuilding of
+* Extend the `php_xmlrpc_encode` and `php_xmlrpc_decode` functions to allow serialization and rebuilding of
     PHP objects. To successfully rebuild a serialized object, the object class must be defined in the deserializing end
     of the transfer. Note that object members of type resource will be deserialized as NULL values.
 +
@@ -2935,21 +2934,21 @@ Note that his has been implemented adding a "php_class" attribute to xml represe
     which, strictly speaking, breaks the xml-rpc spec. Other xmlrpc implementations are supposed to ignore such an
     attribute (unless they implement a brain-dead custom xml parser...), so it should be safe enabling it in
     heterogeneous environments. The activation of this feature is done by usage of an option passed as second parameter
-    to both ++$$php_xmlrpc_encode$$++ and ++$$php_xmlrpc_decode$$++.
+    to both `php_xmlrpc_encode` and `php_xmlrpc_decode`.
 
-* Extend the ++$$php_xmlrpc_encode$$++ function to allow automatic serialization of iso8601-conforming php strings as
+* Extend the `php_xmlrpc_encode` function to allow automatic serialization of iso8601-conforming php strings as
     datetime.iso8601 xmlrpcvals, by usage of an optional parameter
 
 * Added an automatic stub code generator for converting xmlrpc methods to php functions and vice-versa.
 +
-This is done via two new functions: ++$$wrap_php_function$$++ and ++$$wrap_xmlrpc_method$$++, and has many caveats,
+This is done via two new functions: `wrap_php_function` and `wrap_xmlrpc_method`, and has many caveats,
     with php being a typeless language and all...
 
 * Allow object methods to be used in server dispatch map
 
 * Added a complete debugger solution, in the __debugger__ folder
 
-* Added configurable server-side debug messages, controlled by the new method ++$$xmlrpc_server::SetDebug()$$++.
+* Added configurable server-side debug messages, controlled by the new method `xmlrpc_server::SetDebug()`.
     At level 0, no debug messages are sent to the client; level 1 is the same as the old behaviour; at level 2 a lot
     more info is echoed back to the client, regarding the received call; at level 3 all warnings raised during server
     processing are trapped (this prevents breaking the xml to be echoed back to the client) and added to the debug info
