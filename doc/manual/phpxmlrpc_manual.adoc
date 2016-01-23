@@ -115,12 +115,12 @@ The library has been designed with goals of flexibility and backward compatibili
 The __minimum supported__ PHP version is 5.3.
 
 If you wish to use HTTPS or HTTP 1.1 to communicate with remote servers, or to use NTLM authentication, you need the
-    "curl" extension compiled into your PHP installation.
+    *curl* extension compiled into your PHP installation.
 
 If you wish to receive XML-RPC requests or responses in any other character set than US-ASCII, ISO-8859-1 or UTF-8, you
-    will need the "mbstring" extension compiled into your PHP installation.
+    will need the *mbstring* extension compiled into your PHP installation.
 
-The "xmlrpc" native extension is not required to be compiled into your PHP installation, but if it is, there will be no
+The *xmlrpc* native extension is not required to be compiled into your PHP installation, but if it is, there will be no
     interference with the operation of this library.
 
 
@@ -2264,8 +2264,6 @@ To be documented...
 [qanda]
 == Frequently Asked Questions
 
-=== Hi
-
 ==== How to send custom XML as payload of a method call::
 
 Unfortunately, at the time the XML-RPC spec was designed, support
@@ -2610,7 +2608,7 @@ Backward compatibility is maintained via _lib/xmlrpc.inc_, _lib/xmlrpcs.inc_ and
 
 * improved: the function `wrap_php_function()` now can be used to wrap closures (it is now a method btw)
 
-* improved: all wrap_something() functions now return a closure by default instead of a function name
+* improved: all _wrap_something()_ functions now return a closure by default instead of a function name
 
 * improved: debug messages are not html-escaped any more when executing from the command line
 
