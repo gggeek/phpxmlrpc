@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>xmlrpcmsg | PHP-XMLRPC</title>
+
+            <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="css/sami.css">
+        <script src="js/jquery-1.11.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/typeahead.min.js"></script>
+        <script src="sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:xmlrpcmsg" data-root-path="">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                <form id="search-form" action="search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">PHP-XMLRPC</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="classes.html">Classes</a></li>
+                                            <li><a href="namespaces.html">Namespaces</a></li>
+                                        <li><a href="interfaces.html">Interfaces</a></li>
+                    <li><a href="traits.html">Traits</a></li>
+                    <li><a href="doc-index.html">Index</a></li>
+                    <li><a href="search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                            <div id="page-content">
+                
+    <div class="page-header">
+        <h1>xmlrpcmsg</h1>
+    </div>
+
+    <p>    class
+    <strong>xmlrpcmsg</strong>        extends <a href="PhpXmlRpc/Request.html"><abbr title="PhpXmlRpc\Request">Request</abbr></a>
+</p>
+
+    
+    
+    
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_payload">
+                                                                                
+    
+                </td>
+                <td>$payload</td>
+                <td class="last">
+</td>
+                <td><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#property_payload"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_methodname">
+                                                                                
+    
+                </td>
+                <td>$methodname</td>
+                <td class="last">
+</td>
+                <td><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#property_methodname"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_params">
+                                                                                
+    
+                </td>
+                <td>$params</td>
+                <td class="last">
+</td>
+                <td><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#property_params"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_debug">
+                                                                                
+    
+                </td>
+                <td>$debug</td>
+                <td class="last">
+</td>
+                <td><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#property_debug"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_content_type">
+                                                                                
+    
+                </td>
+                <td>$content_type</td>
+                <td class="last">
+</td>
+                <td><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#property_content_type"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></td>
+            </tr>
+            </table>
+
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method___construct">__construct</a>(
+    string $methodName, 
+    <a href="PhpXmlRpc/Value.html"><abbr title="PhpXmlRpc\Value">Value</abbr></a>[] $params = array())
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method___construct"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_xml_header">xml_header</a>($charsetEncoding = &#039;&#039;)
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_xml_header"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_xml_footer">xml_footer</a>()
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_xml_footer"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_createPayload">createPayload</a>($charsetEncoding = &#039;&#039;)
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_createPayload"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_method">method</a>(
+    string $methodName = &#039;&#039;)
+                                            <p>Gets/sets the xmlrpc method to be invoked.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_method"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_serialize">serialize</a>(
+    string $charsetEncoding = &#039;&#039;)
+                                            <p>Returns xml representation of the message. XML prologue included.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_serialize"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    boolean
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_addParam">addParam</a>(
+    <a href="PhpXmlRpc/Value.html"><abbr title="PhpXmlRpc\Value">Value</abbr></a> $param)
+                                            <p>Add a parameter to the list of parameters to be used upon method invocation.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_addParam"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    <a href="PhpXmlRpc/Value.html"><abbr title="PhpXmlRpc\Value">Value</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getParam">getParam</a>(
+    integer $i)
+                                            <p>Returns the nth parameter in the request. The index zero-based.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_getParam"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    integer
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getNumParams">getNumParams</a>()
+                                            <p>Returns the number of parameters in the message.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_getNumParams"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    <a href="PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_parseResponseFile">parseResponseFile</a>(
+    resource $fp)
+                                            <p>Given an open file handle, read all data available and parse it as an xmlrpc response.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_parseResponseFile"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    <a href="PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_parseResponse">parseResponse</a>(
+    string $data = &#039;&#039;, 
+    bool $headersProcessed = false, 
+    string $returnType = &#039;xmlrpcvals&#039;)
+                                            <p>Parse the xmlrpc response contained in the string $data and return a Response object.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_parseResponse"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_kindOf">kindOf</a>()
+                                            <p>Kept the old name even if Request class was renamed, for compatibility.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_kindOf"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setDebug">setDebug</a>(
+    integer $in)
+                                            <p>Enables/disables the echoing to screen of the xmlrpc responses received.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;
+    <a href="PhpXmlRpc/Request.html#method_setDebug"><abbr title="PhpXmlRpc\Request">Request</abbr></a></small></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method___construct">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method___construct"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 30</div>
+        <code>                    
+    
+    <strong>__construct</strong>(
+    string $methodName, 
+    <a href="PhpXmlRpc/Value.html"><abbr title="PhpXmlRpc\Value">Value</abbr></a>[] $params = array())</code>
+    </h3>
+    <div class="details">
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$methodName</td>
+                <td>the name of the method to invoke</td>
+            </tr>
+                    <tr>
+                <td>
+    <a href="PhpXmlRpc/Value.html"><abbr title="PhpXmlRpc\Value">Value</abbr></a>[]</td>
+                <td>$params</td>
+                <td>array of parameters to be passed to the method (NB: Value objects, not plain php values)</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_xml_header">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_xml_header"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 38</div>
+        <code>                    
+    
+    <strong>xml_header</strong>($charsetEncoding = &#039;&#039;)</code>
+    </h3>
+    <div class="details">
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td></td>
+                <td>$charsetEncoding</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_xml_footer">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_xml_footer"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 47</div>
+        <code>                    
+    
+    <strong>xml_footer</strong>()</code>
+    </h3>
+    <div class="details">
+                <div class="tags">
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_createPayload">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_createPayload"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 52</div>
+        <code>                    
+    
+    <strong>createPayload</strong>($charsetEncoding = &#039;&#039;)</code>
+    </h3>
+    <div class="details">
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td></td>
+                <td>$charsetEncoding</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_method">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_method"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 78</div>
+        <code>                    
+    string
+    <strong>method</strong>(
+    string $methodName = &#039;&#039;)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Gets/sets the xmlrpc method to be invoked.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$methodName</td>
+                <td>the method to be set (leave empty not to set it)</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    string</td>
+            <td>the method that will be invoked</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_serialize">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_serialize"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 94</div>
+        <code>                    
+    string
+    <strong>serialize</strong>(
+    string $charsetEncoding = &#039;&#039;)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Returns xml representation of the message. XML prologue included.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$charsetEncoding</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    string</td>
+            <td>the xml representation of the message, xml prologue included</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_addParam">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_addParam"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 110</div>
+        <code>                    
+    boolean
+    <strong>addParam</strong>(
+    <a href="PhpXmlRpc/Value.html"><abbr title="PhpXmlRpc\Value">Value</abbr></a> $param)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Add a parameter to the list of parameters to be used upon method invocation.</p>                    <p>Checks that $params is actually a Value object and not a plain php value.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    <a href="PhpXmlRpc/Value.html"><abbr title="PhpXmlRpc\Value">Value</abbr></a></td>
+                <td>$param</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    boolean</td>
+            <td>false on failure</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getParam">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_getParam"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 129</div>
+        <code>                    
+    <a href="PhpXmlRpc/Value.html"><abbr title="PhpXmlRpc\Value">Value</abbr></a>
+    <strong>getParam</strong>(
+    integer $i)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Returns the nth parameter in the request. The index zero-based.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    integer</td>
+                <td>$i</td>
+                <td>the index of the parameter to fetch (zero based)</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    <a href="PhpXmlRpc/Value.html"><abbr title="PhpXmlRpc\Value">Value</abbr></a></td>
+            <td>the i-th parameter</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getNumParams">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_getNumParams"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 139</div>
+        <code>                    
+    integer
+    <strong>getNumParams</strong>()</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Returns the number of parameters in the message.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    integer</td>
+            <td>the number of parameters currently set</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_parseResponseFile">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_parseResponseFile"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 158</div>
+        <code>                    
+    <a href="PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>
+    <strong>parseResponseFile</strong>(
+    resource $fp)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Given an open file handle, read all data available and parse it as an xmlrpc response.</p>                    <p>NB: the file handle is not closed by this function.
+NNB: might have trouble in rare cases to work on network streams, as we check for a read of 0 bytes instead of
+     feof($fp). But since checking for feof(null) returns false, we would risk an infinite loop in that case,
+     because we cannot trust the caller to give us a valid pointer to an open file...</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    resource</td>
+                <td>$fp</td>
+                <td>stream pointer</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    <a href="PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a></td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_parseResponse">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_parseResponse"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 180</div>
+        <code>                    
+    <a href="PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>
+    <strong>parseResponse</strong>(
+    string $data = &#039;&#039;, 
+    bool $headersProcessed = false, 
+    string $returnType = &#039;xmlrpcvals&#039;)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Parse the xmlrpc response contained in the string $data and return a Response object.</p>                    <p>When $this->debug has been set to a value greater than 0, will echo debug messages to screen while decoding.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$data</td>
+                <td>the xmlrpc response, possibly including http headers</td>
+            </tr>
+                    <tr>
+                <td>
+    bool</td>
+                <td>$headersProcessed</td>
+                <td>when true prevents parsing HTTP headers for interpretation of content-encoding and
+                              consequent decoding</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$returnType</td>
+                <td>decides return type, i.e. content of response->value(). Either 'xmlrpcvals', 'xml' or
+                          'phpvals'</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    <a href="PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a></td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_kindOf">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_kindOf"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 375</div>
+        <code>                    
+    string
+    <strong>kindOf</strong>()</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Kept the old name even if Request class was renamed, for compatibility.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    string</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setDebug">
+        <div class="location">in 
+    <a href="PhpXmlRpc/Request.html#method_setDebug"><abbr title="PhpXmlRpc\Request">Request</abbr></a> at line 385</div>
+        <code>                    
+    
+    <strong>setDebug</strong>(
+    integer $in)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Enables/disables the echoing to screen of the xmlrpc responses received.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    integer</td>
+                <td>$in</td>
+                <td>values 0, 1, 2 are supported</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>

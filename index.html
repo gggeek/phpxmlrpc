@@ -37,22 +37,23 @@ This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> wh
 <ul>
 <li>Support for creating both xmlrpc clients and servers</li>
 <li>Fully automated or fully manual, fine-grained encoding and decoding from php values to xmlrpc</li>
-<li>Support for UTF8, Latin-1 and ASCII character encodings</li>
+<li>Support for UTF8, Latin-1 and ASCII character encodings. With the php mbstring extension enabled, even more character sets are supported.</li>
 <li>Support for http compression of both requests and responses, cookies, proxies, basic auth and https, ntlm auth and keepalives with the php cURL extension</li>
 <li>Optional validation of parameter types of incoming xmlrpc request</li>
 <li>Support for system.listMethods, system.methodHelp, system.multicall and system.getCapabilities methods</li>
 <li>Support for the &lt;NIL/&gt; and &lt;EX:NIL/&gt; extensions to xmlrpc</li>
-<li>Possibility to register php function or class methods as webservices, extracting value-added information from phpdoc comments</li>
+<li>Possibility to register existing php function or class methods as webservices, extracting value-added information from phpdoc comments</li>
 <li>A web based visual debugger is included with the library</li>
-<li>Many other cool features are delivered with the 'Extras' package, such as a complete emulation layer of php native xmlrpc calls, an xmlrpc server that generates html documentation of exposed webservices, and a complete jsonrpc library...</li>
-<li>Last but not least, <a href="http://gggeek.github.io/jsxmlrpc/">a version of the library</a> implementing the same API in Javascript is available, allowing to leverage acquired knowledge to easily build ajax/dhtml clients</li>
+<!--<li>Many other cool features are delivered with the 'Extras' package, such as a complete emulation layer of php native xmlrpc calls, an xmlrpc server that generates html documentation of exposed webservices, and a complete jsonrpc library...</li>
+<li>Last but not least, <a href="http://gggeek.github.io/jsxmlrpc/">a version of the library</a> implementing the same API in Javascript is available, allowing to leverage acquired knowledge to easily build ajax/dhtml clients</li>-->
 </ul>
 
-<h2><a name="download">Requirements</a></h2>
+<h2><a name="requirements">Requirements</a></h2>
 <ul>
 <li>PHP 5.3.0 or later; 5.5 or later recommended</li>
 <li>the php "curl" extension is needed if you wish to use SSL or HTTP 1.1 to communicate with remote servers</li>
-<li>The php "xmlrpc" native extension is not required, but if it is installed, there will be no interference with the operation of this library.</li>
+<li>the php "mbstring" extension is needed to allow reception of requests/responses in character sets other than ASCII, LATIN-1, UTF-8</li>
+<li>the php "xmlrpc" native extension is not required, but if it is installed, there will be no interference with the operation of this library.</li>
 </ul>
 
 <h2><a name="download">Download</a></h2>
@@ -64,7 +65,10 @@ This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> wh
 
 <li>
     20th of January, 2016<br/>
-    Released lib version 4.0.0.<br/><br/>
+    Released lib version 4.0.0.<br/>
+    This is the first time - ever - that the API sees major changes, doing away with the past and starts a transition to modern-day php.<br/>
+    Namespaces have been introduced, and the default character set in use if UTF-8; support for mbstring has been added, and much more.<br/>
+    For a complete list of changes, head on to <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.0.0">the announcement</a> on Github<br/><br/>
 </li>
 
 <li>
@@ -82,42 +86,12 @@ This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> wh
     The project moved to GitHub<br/><br/>
 </li>
 
-<li>
-2nd of February, 2013<br/>
-The Online XML-RPC debugger is back online, at the new address <a href="http://gggeek.altervista.org/sw/xmlrpc/debugger/">http://gggeek.altervista.org/sw/xmlrpc/debugger/</a><br/><br/>
-</li>
-
-<li>
-5th of September, 2009<br/>
-Released lib version 3.0.0 beta.<br/>
-This is the first release of the library to only support PHP 5. Some legacy code has been removed, and support for features such as exceptions and dateTime objects introduced.<br/>
-The "beta" tag is meant to indicate the fact that the refactoring has been more widespread than in precedent releases and that more changes are likely to be introduced with time - the library is still considered to be production quality.<br/>
-<br/>
-The "Extras" Package and the <a href="http://gggeek.github.io/jsxmlrpc/">JS-XMLRPC</a> library have also been updated with bugfix releases.<br/><br/>
-</li>
-
-<li>
-17th of March, 2009<br/>
-Released lib version 2.2.2.<br/>
-<b>PLEASE NOTE:</b> pending any security problem, this should be the last release of the library to support PHP version 4.<br/><br/>
-</li>
-
-<li>
-7th of March, 2008<br/>
-Released lib version 2.2.1.<br/><br/>
-</li>
-
-<li>
-4th of July, 2007<br/>
-Updated the online documentation to match release 2.2 (with better formatting than before)<br/><br/>
-</li>
-
 </ul>
 <a href="news.html">Older news...</a>
 
 <h2><a name="interest">Documentation</a></h2>
 <ul>
-<li>A full user manual for version 4 is not yet avaialble; for the moment the code examples will have to do.</li>
+<li>A full user manual for version 4 is not yet available; for the moment the <a href="doc-4/index.html">API docs</a> will have to do.</li>
 <li>Documentation for <b>OLD</b> version 3, in <a href="doc-2/">HTML</a> or <a href="doc-2/xmlrpc_php.pdf">PDF</a> format (note: the PDF version is not always up to date).<br/>
 For the adventurous there is even an <a href="doc-2/xmlrpc_php.xml">xml+css</a> version (note: better viewing results obtained by Firefox and Opera users)</li>
 <li><a href="doc-1.1/">Documentation for version 1.2.1</a></li>
@@ -146,7 +120,7 @@ You can use the debugger to e.g. query the SF demo server, or debug your own per
 For security related issues feel free to contact <a href="http://sourceforge.net/sendmessage.php?touser=114789">ggiunta at users.sourceforge.net</a>
 
 <h2><a name="roadmap">Roadmap</a></h2>
-<p>A slightly outdated list of things that might make it into the next release (version 5.0).</p>
+<p>A (quite outdated) list of things that might make it into the next release (version 5.0).</p>
 <p>See also the list of issues in <a href="https://github.com/gggeek/phpxmlrpc/issues">Github</a></p>
 <table cellspacing="0" cellpadding="0">
 <tr><th>Description</th><th>Status (SVN) - updated 2009/07/26</th></tr>
@@ -413,7 +387,7 @@ if/else removed, such that there is zero chance for this type of exploit.
 <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fgggeek.github.io%2Fhphpxmlrpc%2F"><img
         src="http://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
         alt="Valid XHTML 1.0!" /></a><br/>
-Page last updated: 2016/1/20
+Page last updated: 2016/1/24
 
 </div>
 </body>

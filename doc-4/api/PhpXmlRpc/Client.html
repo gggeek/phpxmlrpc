@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>PhpXmlRpc\Client | PHP-XMLRPC</title>
+
+            <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/sami.css">
+        <script src="../js/jquery-1.11.1.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/typeahead.min.js"></script>
+        <script src="../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:PhpXmlRpc_Client" data-root-path="../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                <form id="search-form" action="../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../index.html">PHP-XMLRPC</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../classes.html">Classes</a></li>
+                                            <li><a href="../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../interfaces.html">Interfaces</a></li>
+                    <li><a href="../traits.html">Traits</a></li>
+                    <li><a href="../doc-index.html">Index</a></li>
+                    <li><a href="../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                                                            <li><a href="../PhpXmlRpc.html">PhpXmlRpc</a></li>
+    
+                <li>Client</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>Client</h1>
+    </div>
+
+    <p>    class
+    <strong>Client</strong>
+</p>
+
+            <div class="description">
+            <p>Used to represent a client of an XML-RPC server.</p>                    </div>
+    
+    
+    
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_method">
+                                                                                
+    
+                </td>
+                <td>$method</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_server">
+                                                                                
+    
+                </td>
+                <td>$server</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_port">
+                                                                                
+    
+                </td>
+                <td>$port</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_path">
+                                                                                
+    
+                </td>
+                <td>$path</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_errno">
+                                                                                
+    
+                </td>
+                <td>$errno</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_errstr">
+                                                                                
+    
+                </td>
+                <td>$errstr</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_debug">
+                                                                                
+    
+                </td>
+                <td>$debug</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_username">
+                                                                                
+    
+                </td>
+                <td>$username</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_password">
+                                                                                
+    
+                </td>
+                <td>$password</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_authtype">
+                                                                                
+    
+                </td>
+                <td>$authtype</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_cert">
+                                                                                
+    
+                </td>
+                <td>$cert</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_certpass">
+                                                                                
+    
+                </td>
+                <td>$certpass</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_cacert">
+                                                                                
+    
+                </td>
+                <td>$cacert</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_cacertdir">
+                                                                                
+    
+                </td>
+                <td>$cacertdir</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_key">
+                                                                                
+    
+                </td>
+                <td>$key</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_keypass">
+                                                                                
+    
+                </td>
+                <td>$keypass</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_verifypeer">
+                                                                                
+    
+                </td>
+                <td>$verifypeer</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_verifyhost">
+                                                                                
+    
+                </td>
+                <td>$verifyhost</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_sslversion">
+                                                                                
+    
+                </td>
+                <td>$sslversion</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_proxy">
+                                                                                
+    
+                </td>
+                <td>$proxy</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_proxyport">
+                                                                                
+    
+                </td>
+                <td>$proxyport</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_proxy_user">
+                                                                                
+    
+                </td>
+                <td>$proxy_user</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_proxy_pass">
+                                                                                
+    
+                </td>
+                <td>$proxy_pass</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_proxy_authtype">
+                                                                                
+    
+                </td>
+                <td>$proxy_authtype</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_cookies">
+                                                                                
+    
+                </td>
+                <td>$cookies</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_extracurlopts">
+                                                                                
+    
+                </td>
+                <td>$extracurlopts</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_no_multicall">
+                                                                                
+    bool
+                </td>
+                <td>$no_multicall</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_accepted_compression">
+                                                                                
+    
+                </td>
+                <td>$accepted_compression</td>
+                <td class="last">List of http compression methods accepted by the client for responses.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_request_compression">
+                                                                                
+    
+                </td>
+                <td>$request_compression</td>
+                <td class="last">Name of compression scheme to be used for sending requests.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_xmlrpc_curl_handle">
+                                                                                
+    
+                </td>
+                <td>$xmlrpc_curl_handle</td>
+                <td class="last">CURL handle: used for keep-alive connections (PHP 4.3.8 up, see:
+http://curl.haxx.se/docs/faq.html#7.3).</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_keepalive">
+                                                                                
+    
+                </td>
+                <td>$keepalive</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_accepted_charset_encodings">
+                                                                                
+    
+                </td>
+                <td>$accepted_charset_encodings</td>
+                <td class="last">
+</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_request_charset_encoding">
+                                                                                
+    
+                </td>
+                <td>$request_charset_encoding</td>
+                <td class="last">The charset encoding that will be used for serializing request sent by the client.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_return_type">
+                                                                                
+    
+                </td>
+                <td>$return_type</td>
+                <td class="last">Decides the content of Response objects returned by calls to send() and multicall().</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_user_agent">
+                                                                                
+    
+                </td>
+                <td>$user_agent</td>
+                <td class="last">Sent to servers in http headers.</td>
+                <td></td>
+            </tr>
+            </table>
+
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method___construct">__construct</a>(
+    string $path, 
+    string $server = &#039;&#039;, 
+    integer $port = &#039;&#039;, 
+    string $method = &#039;&#039;)
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setDebug">setDebug</a>($level)
+                                            <p>Enable/disable the echoing to screen of the xmlrpc responses received. The default is not no output anything.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setCredentials">setCredentials</a>(
+    string $user, 
+    string $password, 
+    integer $authType = 1)
+                                            <p>Sets the username and password for authorizing the client to the server.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setCertificate">setCertificate</a>(
+    string $cert, 
+    string $certPass = &#039;&#039;)
+                                            <p>Set the optional certificate and passphrase used in SSL-enabled communication with a remote server.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setCaCertificate">setCaCertificate</a>(
+    string $caCert, 
+    bool $isDir = false)
+                                            <p>Add a CA certificate to verify server with in SSL-enabled communication when SetSSLVerifypeer has been set to TRUE.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setKey">setKey</a>(
+    string $key, 
+    string $keyPass)
+                                            <p>Set attributes for SSL communication: private SSL key.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setSSLVerifyPeer">setSSLVerifyPeer</a>(
+    bool $i)
+                                            <p>Set attributes for SSL communication: verify the remote host's SSL certificate, and cause the connection to fail
+if the cert verification fails.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setSSLVerifyHost">setSSLVerifyHost</a>(
+    int $i)
+                                            <p>Set attributes for SSL communication: verify the remote host's SSL certificate's common name (CN).</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setSSLVersion">setSSLVersion</a>(
+    int $i)
+                                            <p>Set attributes for SSL communication: SSL version to use. Best left at 0 (default value ): let cURL decide</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setProxy">setProxy</a>(
+    string $proxyHost, 
+    string $proxyPort, 
+    string $proxyUsername = &#039;&#039;, 
+    string $proxyPassword = &#039;&#039;, 
+    int $proxyAuthType = 1)
+                                            <p>Set proxy info.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setAcceptedCompression">setAcceptedCompression</a>(
+    string $compMethod)
+                                            <p>Enables/disables reception of compressed xmlrpc responses.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setRequestCompression">setRequestCompression</a>(
+    string $compMethod)
+                                            <p>Enables/disables http compression of xmlrpc request.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setCookie">setCookie</a>(
+    string $name, 
+    string $value = &#039;&#039;, 
+    string $path = &#039;&#039;, 
+    string $domain = &#039;&#039;, 
+    int $port = null)
+                                            <p>Adds a cookie to list of cookies that will be sent to server with every further request (useful e.g. for keeping
+session info outside of the xml-rpc payload).</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setCurlOptions">setCurlOptions</a>(
+    array $options)
+                                            <p>Directly set cURL options, for extra flexibility (when in cURL mode).</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setUserAgent">setUserAgent</a>(
+    string $agentString)
+                                            <p>Set user-agent string that will be used by this client instance in http headers sent to the server.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    <a href="../PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>|<a href="../PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>[]
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_send">send</a>(
+    <a href="../PhpXmlRpc/Request.html"><abbr title="PhpXmlRpc\Request">Request</abbr></a>|<a href="../PhpXmlRpc/Request.html"><abbr title="PhpXmlRpc\Request">Request</abbr></a>[]|string $req, 
+    integer $timeout, 
+    string $method = &#039;&#039;)
+                                            <p>Send an xmlrpc request to the server.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    <a href="../PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>[]
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_multicall">multicall</a>(
+    <a href="../PhpXmlRpc/Request.html"><abbr title="PhpXmlRpc\Request">Request</abbr></a>[] $reqs, 
+    integer $timeout, 
+    string $method = &#039;&#039;, 
+    boolean $fallback = true)
+                                            <p>Send an array of requests and return an array of responses.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method___construct">
+        <div class="location">at line 125</div>
+        <code>                    
+    
+    <strong>__construct</strong>(
+    string $path, 
+    string $server = &#039;&#039;, 
+    integer $port = &#039;&#039;, 
+    string $method = &#039;&#039;)</code>
+    </h3>
+    <div class="details">
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$path</td>
+                <td>either the PATH part of the xmlrpc server URL, or complete server URL (in which case you
+                    should use and empty string for all other parameters)
+                    e.g. /xmlrpc/server.php
+                    e.g. http://phpxmlrpc.sourceforge.net/server.php
+                    e.g. https://james:bond@secret.service.com:443/xmlrpcserver?agent=007</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$server</td>
+                <td>the server name / ip address</td>
+            </tr>
+                    <tr>
+                <td>
+    integer</td>
+                <td>$port</td>
+                <td>the port the server is listening on, when omitted defaults to 80 or 443 depending on
+                     protocol used</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$method</td>
+                <td>the http protocol variant: defaults to 'http'; 'https' and 'http11' can be used if CURL is
+                      installed. The value set here can be overridden in any call to $this->send().</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setDebug">
+        <div class="location">at line 206</div>
+        <code>                    
+    
+    <strong>setDebug</strong>($level)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Enable/disable the echoing to screen of the xmlrpc responses received. The default is not no output anything.</p>                    <p>The debugging information at level 1 includes the raw data returned from the XML-RPC server it was querying
+(including bot HTTP headers and the full XML payload), and the PHP value the client attempts to create to
+represent the value returned by the server
+At level2, the complete payload of the xmlrpc request is also printed, before being sent t the server.</p>
+
+<p>This option can be very useful when debugging servers as it allows you to see exactly what the client sends and
+the server returns.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td></td>
+                <td>$level</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setCredentials">
+        <div class="location">at line 225</div>
+        <code>                    
+    
+    <strong>setCredentials</strong>(
+    string $user, 
+    string $password, 
+    integer $authType = 1)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Sets the username and password for authorizing the client to the server.</p>                    <p>With the default (HTTP) transport, this information is used for HTTP Basic authorization.
+Note that username and password can also be set using the class constructor.
+With HTTP 1.1 and HTTPS transport, NTLM and Digest authentication protocols are also supported. To enable them use
+the constants CURLAUTH<em>DIGEST and CURLAUTH</em>NTLM as values for the auth type parameter.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$user</td>
+                <td>username</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$password</td>
+                <td>password</td>
+            </tr>
+                    <tr>
+                <td>
+    integer</td>
+                <td>$authType</td>
+                <td>auth type. See curl<em>setopt man page for supported auth types. Defaults to CURLAUTH</em>BASIC
+                         (basic auth). Note that auth types NTLM and Digest will only work if the Curl php
+                         extension is enabled.</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setCertificate">
+        <div class="location">at line 242</div>
+        <code>                    
+    
+    <strong>setCertificate</strong>(
+    string $cert, 
+    string $certPass = &#039;&#039;)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Set the optional certificate and passphrase used in SSL-enabled communication with a remote server.</p>                    <p>Note: to retrieve information about the client certificate on the server side, you will need to look into the
+environment variables which are set up by the webserver. Different webservers will typically set up different
+variables.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$cert</td>
+                <td>the name of a file containing a PEM formatted certificate</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$certPass</td>
+                <td>the password required to use it</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setCaCertificate">
+        <div class="location">at line 256</div>
+        <code>                    
+    
+    <strong>setCaCertificate</strong>(
+    string $caCert, 
+    bool $isDir = false)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Add a CA certificate to verify server with in SSL-enabled communication when SetSSLVerifypeer has been set to TRUE.</p>                    <p>See the php manual page about CURLOPT_CAINFO for more details.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$caCert</td>
+                <td>certificate file name (or dir holding certificates)</td>
+            </tr>
+                    <tr>
+                <td>
+    bool</td>
+                <td>$isDir</td>
+                <td>set to true to indicate cacert is a dir. defaults to false</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setKey">
+        <div class="location">at line 274</div>
+        <code>                    
+    
+    <strong>setKey</strong>(
+    string $key, 
+    string $keyPass)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Set attributes for SSL communication: private SSL key.</p>                    <p>NB: does not work in older php/curl installs.
+Thanks to Daniel Convissor.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$key</td>
+                <td>The name of a file containing a private SSL key</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$keyPass</td>
+                <td>The secret password needed to use the private SSL key</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setSSLVerifyPeer">
+        <div class="location">at line 289</div>
+        <code>                    
+    
+    <strong>setSSLVerifyPeer</strong>(
+    bool $i)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Set attributes for SSL communication: verify the remote host's SSL certificate, and cause the connection to fail
+if the cert verification fails.</p>                    <p>By default, verification is enabled.
+To specify custom SSL certificates to validate the server with, use the setCaCertificate method.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    bool</td>
+                <td>$i</td>
+                <td>enable/disable verification of peer certificate</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setSSLVerifyHost">
+        <div class="location">at line 301</div>
+        <code>                    
+    
+    <strong>setSSLVerifyHost</strong>(
+    int $i)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Set attributes for SSL communication: verify the remote host's SSL certificate's common name (CN).</p>                    <p>Note that support for value 1 has been removed in cURL 7.28.1</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    int</td>
+                <td>$i</td>
+                <td>Set to 1 to only the existence of a CN, not that it matches</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setSSLVersion">
+        <div class="location">at line 311</div>
+        <code>                    
+    
+    <strong>setSSLVersion</strong>(
+    int $i)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Set attributes for SSL communication: SSL version to use. Best left at 0 (default value ): let cURL decide</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    int</td>
+                <td>$i</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setProxy">
+        <div class="location">at line 328</div>
+        <code>                    
+    
+    <strong>setProxy</strong>(
+    string $proxyHost, 
+    string $proxyPort, 
+    string $proxyUsername = &#039;&#039;, 
+    string $proxyPassword = &#039;&#039;, 
+    int $proxyAuthType = 1)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Set proxy info.</p>                    <p>NB: CURL versions before 7.11.10 cannot use a proxy to communicate with https servers.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$proxyHost</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$proxyPort</td>
+                <td>Defaults to 8080 for HTTP and 443 for HTTPS</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$proxyUsername</td>
+                <td>Leave blank if proxy has public access</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$proxyPassword</td>
+                <td>Leave blank if proxy has public access</td>
+            </tr>
+                    <tr>
+                <td>
+    int</td>
+                <td>$proxyAuthType</td>
+                <td>defaults to CURLAUTH<em>BASIC (Basic authentication protocol); set to constant CURLAUTH</em>NTLM
+                          to use NTLM auth with proxy (has effect only when the client uses the HTTP 1.1 protocol)</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setAcceptedCompression">
+        <div class="location">at line 347</div>
+        <code>                    
+    
+    <strong>setAcceptedCompression</strong>(
+    string $compMethod)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Enables/disables reception of compressed xmlrpc responses.</p>                    <p>This requires the "zlib" extension to be enabled in your php install. If it is, by default xmlrpc_client
+instances will enable reception of compressed content.
+Note that enabling reception of compressed responses merely adds some standard http headers to xmlrpc requests.
+It is up to the xmlrpc server to return compressed responses when receiving such requests.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$compMethod</td>
+                <td>either 'gzip', 'deflate', 'any' or ''</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setRequestCompression">
+        <div class="location">at line 367</div>
+        <code>                    
+    
+    <strong>setRequestCompression</strong>(
+    string $compMethod)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Enables/disables http compression of xmlrpc request.</p>                    <p>This requires the "zlib" extension to be enabled in your php install.
+Take care when sending compressed requests: servers might not support them (and automatic fallback to
+uncompressed requests is not yet implemented).</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$compMethod</td>
+                <td>either 'gzip', 'deflate' or ''</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setCookie">
+        <div class="location">at line 391</div>
+        <code>                    
+    
+    <strong>setCookie</strong>(
+    string $name, 
+    string $value = &#039;&#039;, 
+    string $path = &#039;&#039;, 
+    string $domain = &#039;&#039;, 
+    int $port = null)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Adds a cookie to list of cookies that will be sent to server with every further request (useful e.g. for keeping
+session info outside of the xml-rpc payload).</p>                    <p>NB: By default cookies are sent using the 'original/netscape' format, which is also the same as the RFC 2965;
+setting any param but name and value will turn the cookie into a 'version 1' cookie (i.e. RFC 2109 cookie) that
+might not be fully supported by the server. Note that RFC 2109 has currently 'historic' status...</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$name</td>
+                <td>nb: will not be escaped in the request's http headers. Take care not to use CTL chars or
+                    separators!</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$value</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$path</td>
+                <td>leave this empty unless the xml-rpc server only accepts RFC 2109 cookies</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$domain</td>
+                <td>leave this empty unless the xml-rpc server only accepts RFC 2109 cookies</td>
+            </tr>
+                    <tr>
+                <td>
+    int</td>
+                <td>$port</td>
+                <td>leave this empty unless the xml-rpc server only accepts RFC 2109 cookies</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setCurlOptions">
+        <div class="location">at line 411</div>
+        <code>                    
+    
+    <strong>setCurlOptions</strong>(
+    array $options)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Directly set cURL options, for extra flexibility (when in cURL mode).</p>                    <p>It allows eg. to bind client to a specific IP interface / address.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    array</td>
+                <td>$options</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setUserAgent">
+        <div class="location">at line 423</div>
+        <code>                    
+    
+    <strong>setUserAgent</strong>(
+    string $agentString)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Set user-agent string that will be used by this client instance in http headers sent to the server.</p>                    <p>The default user agent string includes the name of this library and the version number.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$agentString</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_send">
+        <div class="location">at line 454</div>
+        <code>                    
+    <a href="../PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>|<a href="../PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>[]
+    <strong>send</strong>(
+    <a href="../PhpXmlRpc/Request.html"><abbr title="PhpXmlRpc\Request">Request</abbr></a>|<a href="../PhpXmlRpc/Request.html"><abbr title="PhpXmlRpc\Request">Request</abbr></a>[]|string $req, 
+    integer $timeout, 
+    string $method = &#039;&#039;)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Send an xmlrpc request to the server.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    <a href="../PhpXmlRpc/Request.html"><abbr title="PhpXmlRpc\Request">Request</abbr></a>|<a href="../PhpXmlRpc/Request.html"><abbr title="PhpXmlRpc\Request">Request</abbr></a>[]|string</td>
+                <td>$req</td>
+                <td>The Request object, or an array of requests for using multicall, or the
+                                     complete xml representation of a request.
+                                     When sending an array of Request objects, the client will try to make use of
+                                     a single 'system.multicall' xml-rpc method call to forward to the server all
+                                     the requests in a single HTTP round trip, unless $this->no_multicall has
+                                     been previously set to TRUE (see the multicall method below), in which case
+                                     many consecutive xmlrpc requests will be sent. The method will return an
+                                     array of Response objects in both cases.
+                                     The third variant allows to build by hand (or any other means) a complete
+                                     xmlrpc request message, and send it to the server. $req should be a string
+                                     containing the complete xml representation of the request. It is e.g. useful
+                                     when, for maximal speed of execution, the request is serialized into a
+                                     string using the native php xmlrpc functions (see http://www.php.net/xmlrpc)</td>
+            </tr>
+                    <tr>
+                <td>
+    integer</td>
+                <td>$timeout</td>
+                <td>Connection timeout, in seconds, If unspecified, a platform specific timeout will apply.
+                        This timeout value is passed to fsockopen(). It is also used for detecting server
+                        timeouts during communication (i.e. if the server does not send anything to the client
+                        for $timeout seconds, the connection will be closed).</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$method</td>
+                <td>valid values are 'http', 'http11' and 'https'. If left unspecified, the http protocol
+                      chosen during creation of the object will be used.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    <a href="../PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>|<a href="../PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>[]</td>
+            <td>Note that the client will always return a Response object, even if the call fails</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_multicall">
+        <div class="location">at line 1014</div>
+        <code>                    
+    <a href="../PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>[]
+    <strong>multicall</strong>(
+    <a href="../PhpXmlRpc/Request.html"><abbr title="PhpXmlRpc\Request">Request</abbr></a>[] $reqs, 
+    integer $timeout, 
+    string $method = &#039;&#039;, 
+    boolean $fallback = true)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Send an array of requests and return an array of responses.</p>                    <p>Unless $this->no<em>multicall has been set to true, it will try first to use one single xmlrpc call to server method
+system.multicall, and revert to sending many successive calls in case of failure.
+This failure is also stored in $this->no</em>multicall for subsequent calls.
+Unfortunately, there is no server error code universally used to denote the fact that multicall is unsupported,
+so there is no way to reliably distinguish between that and a temporary failure.
+If you are sure that server supports multicall and do not want to fallback to using many single calls, set the
+fourth parameter to FALSE.</p>
+
+<p>NB: trying to shoehorn extra functionality into existing syntax has resulted
+in pretty much convoluted code...</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    <a href="../PhpXmlRpc/Request.html"><abbr title="PhpXmlRpc\Request">Request</abbr></a>[]</td>
+                <td>$reqs</td>
+                <td>an array of Request objects</td>
+            </tr>
+                    <tr>
+                <td>
+    integer</td>
+                <td>$timeout</td>
+                <td>connection timeout (in seconds). See the details in the docs for the send() method</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$method</td>
+                <td>the http protocol variant to be used. See the details in the docs for the send() method</td>
+            </tr>
+                    <tr>
+                <td>
+    boolean</td>
+                <td>$fallback</td>
+                <td>fallback When true, upon receiving an error during multicall, multiple single calls will be
+                        attempted</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    <a href="../PhpXmlRpc/Response.html"><abbr title="PhpXmlRpc\Response">Response</abbr></a>[]</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>PhpXmlRpc\Helper\Charset | PHP-XMLRPC</title>
+
+            <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/sami.css">
+        <script src="../../js/jquery-1.11.1.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/typeahead.min.js"></script>
+        <script src="../../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:PhpXmlRpc_Helper_Charset" data-root-path="../../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                <form id="search-form" action="../../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../index.html">PHP-XMLRPC</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../classes.html">Classes</a></li>
+                                            <li><a href="../../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../../interfaces.html">Interfaces</a></li>
+                    <li><a href="../../traits.html">Traits</a></li>
+                    <li><a href="../../doc-index.html">Index</a></li>
+                    <li><a href="../../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                                                            <li><a href="../../PhpXmlRpc.html">PhpXmlRpc</a></li>
+                                        <li><a href="../../PhpXmlRpc/Helper.html">Helper</a></li>
+    
+                <li>Charset</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>Charset</h1>
+    </div>
+
+    <p>    class
+    <strong>Charset</strong>
+</p>
+
+    
+    
+    
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;
+    <a href="../../PhpXmlRpc/Helper/Charset.html"><abbr title="PhpXmlRpc\Helper\Charset">Charset</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_instance">instance</a>()
+                                            <p>This class is singleton for performance reasons.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_encodeEntities">encodeEntities</a>(
+    string $data, 
+    string $srcEncoding = &#039;&#039;, 
+    string $destEncoding = &#039;&#039;)
+                                            <p>Convert a string to the correct XML representation in a target charset.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isValidCharset">isValidCharset</a>(
+    string $encoding, 
+    string|array $validList)
+                                            <p>Checks if a given charset encoding is present in a list of encodings or
+if it is a valid subset of any encoding in the list.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+    array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getEntities">getEntities</a>(
+    string $charset)
+                                            <p>Used only for backwards compatibility</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method_instance">
+        <div class="location">at line 43</div>
+        <code>        static            
+    <a href="../../PhpXmlRpc/Helper/Charset.html"><abbr title="PhpXmlRpc\Helper\Charset">Charset</abbr></a>
+    <strong>instance</strong>()</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>This class is singleton for performance reasons.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    <a href="../../PhpXmlRpc/Helper/Charset.html"><abbr title="PhpXmlRpc\Helper\Charset">Charset</abbr></a></td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_encodeEntities">
+        <div class="location">at line 89</div>
+        <code>                    
+    string
+    <strong>encodeEntities</strong>(
+    string $data, 
+    string $srcEncoding = &#039;&#039;, 
+    string $destEncoding = &#039;&#039;)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Convert a string to the correct XML representation in a target charset.</p>                    <p>To help correct communication of non-ascii chars inside strings, regardless of the charset used when sending
+requests, parsing them, sending responses and parsing responses, an option is to convert all non-ascii chars
+present in the message into their equivalent 'charset entity'. Charset entities enumerated this way are
+independent of the charset encoding used to transmit them, and all XML parsers are bound to understand them.
+Note that in the std case we are not sending a charset encoding mime type along with http headers, so we are
+bound by RFC 3023 to emit strict us-ascii.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$data</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$srcEncoding</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td>
+    string</td>
+                <td>$destEncoding</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    string</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isValidCharset">
+        <div class="location">at line 220</div>
+        <code>                    
+    bool
+    <strong>isValidCharset</strong>(
+    string $encoding, 
+    string|array $validList)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Checks if a given charset encoding is present in a list of encodings or
+if it is a valid subset of any encoding in the list.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$encoding</td>
+                <td>charset to be tested</td>
+            </tr>
+                    <tr>
+                <td>
+    string|array</td>
+                <td>$validList</td>
+                <td>comma separated list of valid charsets (or array of charsets)</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    bool</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getEntities">
+        <div class="location">at line 250</div>
+        <code>                    
+    array
+    <strong>getEntities</strong>(
+    string $charset)</code>
+    </h3>
+    <div class="details">
+                    <div class="method-description">
+                                    <p>Used only for backwards compatibility</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+    string</td>
+                <td>$charset</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>
+    array</td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a target="_blank" href="http://php.net/Exception"><abbr title="Exception">Exception</abbr></a></td>
+                <td>for unknown/unsupported charsets</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>
