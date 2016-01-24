@@ -8,7 +8,7 @@ use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
 
 /**
- * This class provides a representation for a request to an XML-RPC server.
+ * This class provides the representation of a request to an XML-RPC server.
  * A client sends a PhpXmlrpc\Request to a server, and receives back an PhpXmlrpc\Response.
  */
 class Request

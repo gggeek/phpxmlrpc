@@ -8,8 +8,7 @@
 namespace PhpXmlRpc;
 
 /**
- * PHP-XMLRPC "wrapper" class.
- * Generate stubs to transparently access xmlrpc methods as php functions and vice-versa.
+ * PHP-XMLRPC "wrapper" class - generate stubs to transparently access xmlrpc methods as php functions and vice-versa.
  * Note: this class implements the PROXY pattern, but it is not named so to avoid confusion with http proxies.
  *
  * @todo use some better templating system for code generation?

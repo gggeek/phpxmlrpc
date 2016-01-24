@@ -2,6 +2,9 @@
 
 namespace PhpXmlRpc;
 
+/**
+ * Manages global configuration for operation of the library.
+ */
 class PhpXmlRpc
 {
     static public $xmlrpcerr = array(

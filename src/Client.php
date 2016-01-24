@@ -5,7 +5,7 @@ namespace PhpXmlRpc;
 use PhpXmlRpc\Helper\Logger;
 
 /**
- * The basic class used to represent a client of an XML-RPC server.
+ * Used to represent a client of an XML-RPC server.
  */
 class Client
 {

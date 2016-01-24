@@ -5,6 +5,9 @@ namespace PhpXmlRpc;
 use PhpXmlRpc\Helper\XMLParser;
 use PhpXmlRpc\Helper\Charset;
 
+/**
+ * Allows effortless implementation of XML-RPC servers
+ */
 class Server
 {
     /**
@@ -720,7 +723,7 @@ class Server
     }
 
     /**
-     * add a string to the 'internal debug message' (separate from 'user debug message').
+     * Add a string to the 'internal debug message' (separate from 'user debug message').
      *
      * @param string $string
      */

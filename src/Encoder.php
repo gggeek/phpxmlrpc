@@ -4,6 +4,9 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\XMLParser;
 
+/**
+ * A helper class to easily convert between Value objects and php native values
+ */
 class Encoder
 {
     /**

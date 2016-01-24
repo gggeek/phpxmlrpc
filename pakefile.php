@@ -22,7 +22,7 @@ class Builder
     );
     protected static $options = array(
         'repo' => 'https://github.com/gggeek/phpxmlrpc',
-        'branch' => 'php53'
+        'branch' => 'master'
     );
 
     public static function libVersion()

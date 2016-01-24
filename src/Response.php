@@ -5,7 +5,7 @@ namespace PhpXmlRpc;
 use PhpXmlRpc\Helper\Charset;
 
 /**
- * This class is used to contain responses to XML-RPC requests.
+ * This class provides the representation of the response of an XML-RPC server.
  * Server-side, a server method handler will construct a Response and pass it as its return value.
  * An identical Response object will be returned by the result of an invocation of the send() method of the Client class.
  */

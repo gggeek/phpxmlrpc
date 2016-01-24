@@ -5,7 +5,7 @@ namespace PhpXmlRpc;
 use PhpXmlRpc\Helper\Charset;
 
 /**
- * This class enables the creation and encapsulation of values for XML-RPC.
+ * This class enables the creation of values for XML-RPC, by encapsulating plain php values.
  */
 class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 {
