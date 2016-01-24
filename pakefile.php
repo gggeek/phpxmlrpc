@@ -257,8 +257,28 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
     // API docs
 
     // from phpdoc comments using phpdocumentor
+    //$cmd = Builder::tool('php');
+    //pake_sh("$cmd vendor/phpdocumentor/phpdocumentor/bin/phpdoc run -d ".Builder::workspaceDir().'/src'." -t ".Builder::workspaceDir().'/doc/api --title PHP-XMLRPC');
+
+    // from phpdoc comments using Sami
+    $samiConfig = <<<EOT
+<?php
+    \$iterator = Symfony\Component\Finder\Finder::create()
+      ->files()
+      ->exclude('debugger')
+      ->exclude('demo')
+      ->exclude('doc')
+      ->exclude('tests')
+      ->in('./build/workspace');
+    return new Sami\Sami(\$iterator, array(
+        'title' => 'PHP-XMLRPC',
+        'build_dir' => 'build/workspace/doc/api',
+        'cache_dir' => 'build/cache',
+    ));
+EOT;
+    file_put_contents('build/sami_config.php', $samiConfig);
     $cmd = Builder::tool('php');
-    pake_sh("$cmd vendor/phpdocumentor/phpdocumentor/bin/phpdoc run -d ".Builder::workspaceDir().'/src'." -t ".Builder::workspaceDir().'/doc/api --title PHP-XMLRPC');
+    pake_sh("$cmd vendor/sami/sami/sami.php update -vvv build/sami_config.php");
 
     // User Manual
 
@@ -269,7 +289,7 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
     // then docbook from asciidoc
     /// @todo create phpxmlrpc_manual.xml with the good version number
     /// @todo create phpxmlrpc_manual.xml with the date set to the one of last commit (or today?)
-    pake_sh("$cmd -d book  -b docbook $docDir/manual/phpxmlrpc_manual.adoc");
+    pake_sh("$cmd -d book -b docbook $docDir/manual/phpxmlrpc_manual.adoc");
 
     # Other tools for docbook...
     #

@@ -15,7 +15,7 @@
         "ext-curl": "*",
         "ext-mbstring": "*",
         "indeyets/pake": "~1.99",
-        "phpdocumentor/phpdocumentor": "2.*",
+        "sami/sami": "~3.1",
         "docbook/docbook-xsl": "~1.78"
     },
     "suggest": {
