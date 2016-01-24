@@ -1,3 +1,7 @@
 /.idea
 composer.phar
 
+/build
+/tests
+/vendor
+/composer.lock
