@@ -7,6 +7,10 @@ use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
 
+/**
+ * This class provides a representation for a request to an XML-RPC server.
+ * A client sends a PhpXmlrpc\Request to a server, and receives back an PhpXmlrpc\Response.
+ */
 class Request
 {
     /// @todo: do these need to be public?
@@ -21,7 +25,7 @@ class Request
 
     /**
      * @param string $methodName the name of the method to invoke
-     * @param Value[] $params array of parameters to be passed to the method (Value objects)
+     * @param Value[] $params array of parameters to be passed to the method (NB: Value objects, not plain php values)
      */
     public function __construct($methodName, $params = array())
     {
@@ -53,7 +57,8 @@ class Request
             $this->content_type = 'text/xml';
         }
         $this->payload = $this->xml_header($charsetEncoding);
-        $this->payload .= '<methodName>' . Charset::instance()->encodeEntities($this->methodname, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</methodName>\n";
+        $this->payload .= '<methodName>' . Charset::instance()->encodeEntities(
+            $this->methodname, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</methodName>\n";
         $this->payload .= "<params>\n";
         foreach ($this->params as $p) {
             $this->payload .= "<param>\n" . $p->serialize($charsetEncoding) .
@@ -96,6 +101,8 @@ class Request
     /**
      * Add a parameter to the list of parameters to be used upon method invocation.
      *
+     * Checks that $params is actually a Value object and not a plain php value.
+     *
      * @param Value $param
      *
      * @return boolean false on failure
@@ -136,12 +143,11 @@ class Request
 
     /**
      * Given an open file handle, read all data available and parse it as an xmlrpc response.
+     *
      * NB: the file handle is not closed by this function.
-     * NNB: might have trouble in rare cases to work on network streams, as we
-     *      check for a read of 0 bytes instead of feof($fp).
-     *      But since checking for feof(null) returns false, we would risk an
-     *      infinite loop in that case, because we cannot trust the caller
-     *      to give us a valid pointer to an open file...
+     * NNB: might have trouble in rare cases to work on network streams, as we check for a read of 0 bytes instead of
+     *      feof($fp). But since checking for feof(null) returns false, we would risk an infinite loop in that case,
+     *      because we cannot trust the caller to give us a valid pointer to an open file...
      *
      * @param resource $fp stream pointer
      *
@@ -161,9 +167,13 @@ class Request
     /**
      * Parse the xmlrpc response contained in the string $data and return a Response object.
      *
-     * @param string $data the xmlrpc response, eventually including http headers
-     * @param bool $headersProcessed when true prevents parsing HTTP headers for interpretation of content-encoding and consequent decoding
-     * @param string $returnType decides return type, i.e. content of response->value(). Either 'xmlrpcvals', 'xml' or 'phpvals'
+     * When $this->debug has been set to a value greater than 0, will echo debug messages to screen while decoding.
+     *
+     * @param string $data the xmlrpc response, possibly including http headers
+     * @param bool $headersProcessed when true prevents parsing HTTP headers for interpretation of content-encoding and
+     *                               consequent decoding
+     * @param string $returnType decides return type, i.e. content of response->value(). Either 'xmlrpcvals', 'xml' or
+     *                           'phpvals'
      *
      * @return Response
      */

@@ -1,3 +1,11 @@
+XML-RPC for PHP version 4.0.1 - 2016/??/??
+
+* improved: all of the API documentation has been moved out of the manual and into the source code phpdoc comments
+
+* fixed: the 'valtyp' property of Response was not present in all cases; the ValType property had been added by error
+  and has been removed
+
+
 XML-RPC for PHP version 4.0.0 - 2016/1/20
 
 This release does away with the past and starts a transition to modern-world php.

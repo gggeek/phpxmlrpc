@@ -68,15 +68,14 @@ class Charset
     }
 
     /**
-     * Convert a string to the correct XML representation in a target charset
-     * To help correct communication of non-ascii chars inside strings, regardless
-     * of the charset used when sending requests, parsing them, sending responses
-     * and parsing responses, an option is to convert all non-ascii chars present in the message
-     * into their equivalent 'charset entity'. Charset entities enumerated this way
-     * are independent of the charset encoding used to transmit them, and all XML
-     * parsers are bound to understand them.
-     * Note that in the std case we are not sending a charset encoding mime type
-     * along with http headers, so we are bound by RFC 3023 to emit strict us-ascii.
+     * Convert a string to the correct XML representation in a target charset.
+     *
+     * To help correct communication of non-ascii chars inside strings, regardless of the charset used when sending
+     * requests, parsing them, sending responses and parsing responses, an option is to convert all non-ascii chars
+     * present in the message into their equivalent 'charset entity'. Charset entities enumerated this way are
+     * independent of the charset encoding used to transmit them, and all XML parsers are bound to understand them.
+     * Note that in the std case we are not sending a charset encoding mime type along with http headers, so we are
+     * bound by RFC 3023 to emit strict us-ascii.
      *
      * @todo do a bit of basic benchmarking (strtr vs. str_replace)
      * @todo make usage of iconv() or recode_string() or mb_string() where available

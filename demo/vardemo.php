@@ -14,10 +14,12 @@ print "<PRE>" . htmlentities($v->serialize()) . "</PRE>";
 $v = new PhpXmlRpc\Value("What are you saying? >> << &&");
 print "<PRE>" . htmlentities($v->serialize()) . "</PRE>";
 
-$v = new PhpXmlRpc\Value(array(
-    new PhpXmlRpc\Value("ABCDEFHIJ"),
-    new PhpXmlRpc\Value(1234, 'int'),
-    new PhpXmlRpc\Value(1, 'boolean'),),
+$v = new PhpXmlRpc\Value(
+    array(
+        new PhpXmlRpc\Value("ABCDEFHIJ"),
+        new PhpXmlRpc\Value(1234, 'int'),
+        new PhpXmlRpc\Value(1, 'boolean'),
+    ),
     "array"
 );
 

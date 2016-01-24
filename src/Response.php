@@ -4,11 +4,16 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\Charset;
 
+/**
+ * This class is used to contain responses to XML-RPC requests.
+ * Server-side, a server method handler will construct a Response and pass it as its return value.
+ * An identical Response object will be returned by the result of an invocation of the send() method of the Client class.
+ */
 class Response
 {
     /// @todo: do these need to be public?
     public $val = 0;
-    public $valType;
+    public $valtyp;
     public $errno = 0;
     public $errstr = '';
     public $payload;
@@ -18,14 +23,15 @@ class Response
     public $raw_data = '';
 
     /**
-     * @param mixed $val either an xmlrpc value obj, a php value or the xml serialization of an xmlrpc value (a string)
-     * @param integer $fCode set it to anything but 0 to create an error response
+     * @param mixed $val either a Value object, a php value or the xml serialization of an xmlrpc value (a string)
+     * @param integer $fCode set it to anything but 0 to create an error response. In that case, $val is discarded
      * @param string $fString the error string, in case of an error response
-     * @param string $valType either 'xmlrpcvals', 'phpvals' or 'xml'
+     * @param string $valType The type of $val passed in. Either 'xmlrpcvals', 'phpvals' or 'xml'. Leave empty to let
+     *                        the code guess the correct type.
      *
      * @todo add check that $val / $fCode / $fString is of correct type???
-     * NB: as of now we do not do it, since it might be either an xmlrpc value or a plain
-     * php val, or a complete xml chunk, depending on usage of Client::send() inside which creator is called...
+     *       NB: as of now we do not do it, since it might be either an xmlrpc value or a plain php val, or a complete
+     *       xml chunk, depending on usage of Client::send() inside which creator is called...
      */
     public function __construct($val, $fCode = 0, $fString = '', $valType = '')
     {
@@ -73,9 +79,11 @@ class Response
     }
 
     /**
-     * Returns the value received by the server.
+     * Returns the value received by the server. If the Response's faultCode is non-zero then the value returned by this
+     * method should not be used (it may not even be an object).
      *
-     * @return Value|string|mixed the xmlrpc value object returned by the server. Might be an xml string or php value if the response has been created by specially configured Client objects
+     * @return Value|string|mixed the Value object returned by the server. Might be an xml string or plain php value
+     *                            depending on the convention adopted when creating the Response
      */
     public function value()
     {
@@ -84,12 +92,11 @@ class Response
 
     /**
      * Returns an array with the cookies received from the server.
-     * Array has the form: $cookiename => array ('value' => $val, $attr1 => $val1, $attr2 = $val2, ...)
+     * Array has the form: $cookiename => array ('value' => $val, $attr1 => $val1, $attr2 => $val2, ...)
      * with attributes being e.g. 'expires', 'path', domain'.
-     * NB: cookies sent as 'expired' by the server (i.e. with an expiry date in the past)
-     * are still present in the array. It is up to the user-defined code to decide
-     * how to use the received cookies, and whether they have to be sent back with the next
-     * request to the server (using Client::setCookie) or not.
+     * NB: cookies sent as 'expired' by the server (i.e. with an expiry date in the past) are still present in the array.
+     * It is up to the user-defined code to decide how to use the received cookies, and whether they have to be sent back
+     * with the next request to the server (using Client::setCookie) or not.
      *
      * @return array array of cookies received from the server
      */
@@ -101,7 +108,7 @@ class Response
     /**
      * Returns xml representation of the response. XML prologue not included.
      *
-     * @param string $charsetEncoding the charset to be used for serialization. if null, US-ASCII is assumed
+     * @param string $charsetEncoding the charset to be used for serialization. If null, US-ASCII is assumed
      *
      * @return string the xml representation of the response
      *
