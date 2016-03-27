@@ -26,6 +26,9 @@
     "autoload": {
         "psr-4": {"PhpXmlRpc\\": "src/"}
     },
+    "config": {
+        "secure-http": false
+    },
     "repositories": [
         {
             "type": "package",
