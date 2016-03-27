@@ -8,6 +8,7 @@ class Charset
 {
     // tables used for transcoding different charsets into us-ascii xml
     protected $xml_iso88591_Entities = array("in" => array(), "out" => array());
+    protected $xml_iso88591_utf8 = array("in" => array(), "out" => array());
 
     /// @todo add to iso table the characters from cp_1252 range, i.e. 128 to 159?
     /// These will NOT be present in true ISO-8859-1, but will save the unwary
@@ -93,16 +94,19 @@ class Charset
             $srcEncoding = PhpXmlRpc::$xmlrpc_internalencoding;
         }
 
-        switch (strtoupper($srcEncoding . '_' . $destEncoding)) {
+        $conversion = strtoupper($srcEncoding . '_' . $destEncoding);
+        switch ($conversion) {
             case 'ISO-8859-1_':
             case 'ISO-8859-1_US-ASCII':
                 $escapedData = str_replace(array('&', '"', "'", '<', '>'), array('&amp;', '&quot;', '&apos;', '&lt;', '&gt;'), $data);
                 $escapedData = str_replace($this->xml_iso88591_Entities['in'], $this->xml_iso88591_Entities['out'], $escapedData);
                 break;
+
             case 'ISO-8859-1_UTF-8':
                 $escapedData = str_replace(array('&', '"', "'", '<', '>'), array('&amp;', '&quot;', '&apos;', '&lt;', '&gt;'), $data);
                 $escapedData = utf8_encode($escapedData);
                 break;
+
             case 'ISO-8859-1_ISO-8859-1':
             case 'US-ASCII_US-ASCII':
             case 'US-ASCII_UTF-8':
@@ -112,6 +116,7 @@ class Charset
             //case 'CP1252_CP1252':
                 $escapedData = str_replace(array('&', '"', "'", '<', '>'), array('&amp;', '&quot;', '&apos;', '&lt;', '&gt;'), $data);
                 break;
+
             case 'UTF-8_':
             case 'UTF-8_US-ASCII':
             case 'UTF-8_ISO-8859-1':
@@ -123,7 +128,7 @@ class Charset
                 for ($nn = 0; $nn < $ns; $nn++) {
                     $ch = $data[$nn];
                     $ii = ord($ch);
-                    //1 7 0bbbbbbb (127)
+                    // 7 bits: 0bbbbbbb (127)
                     if ($ii < 128) {
                         /// @todo shall we replace this with a (supposedly) faster str_replace?
                         switch ($ii) {
@@ -145,7 +150,7 @@ class Charset
                             default:
                                 $escapedData .= $ch;
                         } // switch
-                    } //2 11 110bbbbb 10bbbbbb (2047)
+                    } // 11 bits: 110bbbbb 10bbbbbb (2047)
                     elseif ($ii >> 5 == 6) {
                         $b1 = ($ii & 31);
                         $ii = ord($data[$nn + 1]);
@@ -154,7 +159,7 @@ class Charset
                         $ent = sprintf('&#%d;', $ii);
                         $escapedData .= $ent;
                         $nn += 1;
-                    } //3 16 1110bbbb 10bbbbbb 10bbbbbb
+                    } // 16 bits: 1110bbbb 10bbbbbb 10bbbbbb
                     elseif ($ii >> 4 == 14) {
                         $b1 = ($ii & 15);
                         $ii = ord($data[$nn + 1]);
@@ -165,7 +170,7 @@ class Charset
                         $ent = sprintf('&#%d;', $ii);
                         $escapedData .= $ent;
                         $nn += 2;
-                    } //4 21 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
+                    } // 21 bits: 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
                     elseif ($ii >> 3 == 30) {
                         $b1 = ($ii & 7);
                         $ii = ord($data[$nn + 1]);
@@ -180,7 +185,13 @@ class Charset
                         $nn += 3;
                     }
                 }
+
+                // when converting to latin-1, do not be so eager with using entities for characters 160-255
+                if ($conversion == 'UTF-8_ISO-8859-1') {
+                    $escapedData = str_replace(array_slice($this->xml_iso88591_Entities['out'], 32), array_slice($this->xml_iso88591_Entities['in'], 32), $escapedData);
+                }
                 break;
+
             /*
             case 'CP1252_':
             case 'CP1252_US-ASCII':
@@ -200,6 +211,7 @@ class Charset
                 $escapedData = str_replace($this->xml_cp1252_Entities['in'], $this->xml_cp1252_Entities['out'], $escapedData);
                 break;
             */
+
             default:
                 $escapedData = '';
                 error_log('XML-RPC: ' . __METHOD__ . ": Converting from $srcEncoding to $destEncoding: not supported...");

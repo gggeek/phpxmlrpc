@@ -83,7 +83,7 @@ class Client
 
     /**
      * The charset encoding that will be used for serializing request sent by the client.
-     *  If defaults to NULL, which means using US-ASCII and encoding all characters outside of the ASCII range using
+     * It defaults to NULL, which means using US-ASCII and encoding all characters outside of the ASCII range using
      * their xml character entity representation (this has the benefit that line end characters will not be mangled in
      * the transfer, a CR-LF will be preserved as well as a singe LF).
      *  Valid values are 'US-ASCII', 'UTF-8' and 'ISO-8859-1'
