@@ -33,7 +33,7 @@
                 "name": "docbook/docbook-xsl",
                 "version": "1.78.1",
                 "dist": {
-                    "url": "http://sourceforge.net/projects/docbook/files/docbook-xsl/1.78.1/docbook-xsl-1.78.1.zip/download",
+                    "url": "https://sourceforge.net/projects/docbook/files/docbook-xsl/1.78.1/docbook-xsl-1.78.1.zip/download",
                     "type": "zip"
                 }
             }
