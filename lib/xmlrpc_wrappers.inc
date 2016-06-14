@@ -172,7 +172,7 @@ function build_remote_method_wrapper_code($client, $methodName, $xmlrpcFuncName,
     for ($i = 1; $i < $pCount; $i++) {
         $plist[] = "\$p$i";
         $pType = $mSig[$i];
-        if ($pType == 'i4' || $pType == 'int' || $pType == 'boolean' || $pType == 'double' ||
+        if ($pType == 'i4' || $pType == 'i8' || $pType == 'int' || $pType == 'boolean' || $pType == 'double' ||
             $pType == 'string' || $pType == 'dateTime.iso8601' || $pType == 'base64' || $pType == 'null'
         ) {
             // only build directly xmlrpc values when type is known and scalar

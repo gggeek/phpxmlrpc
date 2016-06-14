@@ -220,9 +220,9 @@ If you've benefited from the effort that has been put into writing this software
 
 ===== int
 
-The type i4 is accepted as a synonym
+The type i4 and i8 are accepted as a synonym
           for int when creating xmlrpcval objects. The
-          xml parsing code will always convert i4 to
+          xml parsing code will always convert i4 and i8 to
           int: int is regarded
           by this implementation as the canonical name for this type.
 
@@ -890,7 +890,7 @@ $xmlrpcerruser800The minimum value for errors reported by user
         reserved for library usage.
 
 
-==== $xmlrpcI4, $xmlrpcInt, $xmlrpcBoolean, $xmlrpcDouble, $xmlrpcString, $xmlrpcDateTime, $xmlrpcBase64, $xmlrpcArray, $xmlrpcStruct, $xmlrpcValue, $xmlrpcNull
+==== $xmlrpcI4, $xmlrpcI8 $xmlrpcInt, $xmlrpcBoolean, $xmlrpcDouble, $xmlrpcString, $xmlrpcDateTime, $xmlrpcBase64, $xmlrpcArray, $xmlrpcStruct, $xmlrpcValue, $xmlrpcNull
 
 For convenience the strings representing the XML-RPC types have
         been encoded as global variables:
@@ -898,6 +898,7 @@ For convenience the strings representing the XML-RPC types have
 ----
 
 $xmlrpcI4="i4";
+$xmlrpcI8="i8";
 $xmlrpcInt="int";
 $xmlrpcBoolean="boolean";
 $xmlrpcDouble="double";

@@ -10,6 +10,7 @@ use PhpXmlRpc\Helper\Charset;
 class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 {
     public static $xmlrpcI4 = "i4";
+    public static $xmlrpcI8 = "i8";
     public static $xmlrpcInt = "int";
     public static $xmlrpcBoolean = "boolean";
     public static $xmlrpcDouble = "double";
@@ -23,6 +24,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
     public static $xmlrpcTypes = array(
         "i4" => 1,
+        "i8" => 1,
         "int" => 1,
         "boolean" => 1,
         "double" => 1,
@@ -61,6 +63,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                     $this->me['string'] = $val;
                     break;
                 case 'i4':
+                case 'i8':
                 case 'int':
                 case 'double':
                 case 'string':
@@ -93,7 +96,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * Fails if the xmlrpc value is not an array and already initialized.
      *
      * @param mixed $val
-     * @param string $type allowed values: i4, int, boolean, string, double, dateTime.iso8601, base64, null.
+     * @param string $type allowed values: i4, i8, int, boolean, string, double, dateTime.iso8601, base64, null.
      *
      * @return int 1 or 0 on failure
      */
@@ -249,6 +252,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                         break;
                     case static::$xmlrpcInt:
                     case static::$xmlrpcI4:
+                    case static::$xmlrpcI8:
                         $rs .= "<${typ}>" . (int)$val . "</${typ}>";
                         break;
                     case static::$xmlrpcDouble:
@@ -403,7 +407,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Returns the type of the xmlrpc value.
      *
-     * For integers, 'int' is always returned in place of 'i4'.
+     * For integers, 'int' is always returned in place of 'i4' or 'i8'.
      *
      * @return string
      */
@@ -411,7 +415,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         reset($this->me);
         list($a,) = each($this->me);
-        if ($a == static::$xmlrpcI4) {
+        if ($a == static::$xmlrpcI4 || $a == static::$xmlrpcI8) {
             $a = static::$xmlrpcInt;
         }
 
@@ -524,7 +528,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 }
                 return;
             case 1:
-// todo: handle i4 vs int
+// todo: handle i4/i8 vs int
                 reset($this->me);
                 list($type,) = each($this->me);
                 if ($type != $offset) {
@@ -545,7 +549,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
             case 2:
                 return isset($this->me['array'][$offset]);
             case 1:
-// todo: handle i4 vs int
+// todo: handle i4/i8 vs int
                 return $offset == $this->scalartyp();
             default:
                 return false;
