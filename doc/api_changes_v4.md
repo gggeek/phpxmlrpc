@@ -89,25 +89,25 @@ Some have been slightly changed.
 | Old function                     | New function                                | Notes                                                  |
 | -------------------------------- | ------------------------------------------- | ------------------------------------------------------ |
 | build_client_wrapper_code        | none                                        |                                                        |
-| build_remote_method_wrapper_code | PhpXmlRpc\Wrapper::buildWrapMethodSource    | signature changed                                      |
+| build_remote_method_wrapper_code | PhpXmlRpc\Wrapper->buildWrapMethodSource    | signature changed                                      |
 | decode_chunked                   | PhpXmlRpc\Helper\Http::decodeChunked        |                                                        |
 | guess_encoding                   | PhpXmlRpc\Helper\XMLParser::guessEncoding   |                                                        |
 | has_encoding                     | PhpXmlRpc\Helper\XMLParser::hasEncoding     |                                                        |
-| is_valid_charset                 | PhpXmlRpc\Helper\Charset::isValidCharset    |                                                        |
+| is_valid_charset                 | PhpXmlRpc\Helper\Charset->isValidCharset    | this method is not static, you need a Charset obj      |
 | iso8601_decode                   | PhpXmlRpc\Helper\Date::iso8601Decode        |                                                        |
 | iso8601_encode                   | PhpXmlRpc\Helper\Date::iso8601Encode        |                                                        |
-| php_2_xmlrpc_type                | PhpXmlRpc\Wrapper::php2XmlrpcType           |                                                        |
-| php_xmlrpc_decode                | PhpXmlRpc\Encoder::decode                   |                                                        |
-| php_xmlrpc_decode_xml            | PhpXmlRpc\Encoder::decodeXml                |                                                        |
-| php_xmlrpc_encode                | PhpXmlRpc\Encoder::encode                   |                                                        |
-| wrap_php_class                   | PhpXmlRpc\Wrapper::wrapPhpClass             | returns closures instead of function names by default  |
-| wrap_php_function                | PhpXmlRpc\Wrapper::wrapPhpFunction          | returns closures instead of function names by default  |
-| wrap_xmlrpc_method               | PhpXmlRpc\Wrapper::wrapXmrlpcMethod         | returns closures instead of function names by default  |
-| wrap_xmlrpc_server               | PhpXmlRpc\Wrapper::wrapXmrlpcServer         | returns closures instead of function names by default; |
-|                                  |                                             | returns an array ready for usage in dispatch map       |
-| xmlrpc_2_php_type                | PhpXmlRpc\Wrapper::Xmlrpc2phpType           |                                                        |
-| xmlrpc_debugmsg                  | PhpXmlRpc\Server::xmlrpc_debugmsg           |                                                        |
-| xmlrpc_encode_entitites          | PhpXmlRpc\Helper\Charset::encodeEntitites   |                                                        |
+| php_2_xmlrpc_type                | PhpXmlRpc\Wrapper->php2XmlrpcType           | this method is not static, you need a Wrapper obj      |
+| php_xmlrpc_decode                | PhpXmlRpc\Encoder->decode                   | this method is not static, you need an Encoder obj     |
+| php_xmlrpc_decode_xml            | PhpXmlRpc\Encoder->decodeXml                | this method is not static, you need an Encoder obj     |
+| php_xmlrpc_encode                | PhpXmlRpc\Encoder->encode                   | this method is not static, you need an Encoder obj     |
+| wrap_php_class                   | PhpXmlRpc\Wrapper->wrapPhpClass             | returns closures instead of function names by default  |
+| wrap_php_function                | PhpXmlRpc\Wrapper->wrapPhpFunction          | returns closures instead of function names by default  |
+| wrap_xmlrpc_method               | PhpXmlRpc\Wrapper->wrapXmrlpcMethod         | returns closures instead of function names by default  |
+| wrap_xmlrpc_server               | PhpXmlRpc\Wrapper->wrapXmrlpcServer         | returns closures instead of function names by default; |
+|                                  |                                             |   returns an array ready for usage in dispatch map     |
+| xmlrpc_2_php_type                | PhpXmlRpc\Wrapper->Xmlrpc2phpType           | this method is not static, you need a Wrapper obj      |
+| xmlrpc_debugmsg                  | PhpXmlRpc\Server->xmlrpc_debugmsg           |                                                        |
+| xmlrpc_encode_entitites          | PhpXmlRpc\Helper\Charset->encodeEntitities  | this method is not static, you need a Charset obj      |
 
 
 Character sets and encoding
