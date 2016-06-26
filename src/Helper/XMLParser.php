@@ -40,6 +40,7 @@ class XMLParser
         'VALUE' => array('MEMBER', 'DATA', 'PARAM', 'FAULT'),
         'BOOLEAN' => array('VALUE'),
         'I4' => array('VALUE'),
+        'I8' => array('VALUE'),
         'INT' => array('VALUE'),
         'STRING' => array('VALUE'),
         'DOUBLE' => array('VALUE'),
@@ -101,6 +102,7 @@ class XMLParser
                     $this->_xh['php_class'] = null;
                     break;
                 case 'I4':
+                case 'I8':
                 case 'INT':
                 case 'STRING':
                 case 'BOOLEAN':
@@ -259,6 +261,7 @@ class XMLParser
                     break;
                 case 'BOOLEAN':
                 case 'I4':
+                case 'I8':
                 case 'INT':
                 case 'STRING':
                 case 'DOUBLE':
