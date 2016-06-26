@@ -41,6 +41,7 @@ class XMLParser
         'BOOLEAN' => array('VALUE'),
         'I4' => array('VALUE'),
         'I8' => array('VALUE'),
+        'EX:I8' => array('VALUE'),
         'INT' => array('VALUE'),
         'STRING' => array('VALUE'),
         'DOUBLE' => array('VALUE'),
@@ -101,8 +102,17 @@ class XMLParser
                     $this->_xh['lv'] = 1;
                     $this->_xh['php_class'] = null;
                     break;
-                case 'I4':
                 case 'I8':
+                case 'EX:I8':
+                    if (PHP_INT_SIZE === 4) {
+                        /// INVALID ELEMENT: RAISE ISF so that it is later recognized!!!
+                        $this->_xh['isf'] = 2;
+                        $this->_xh['isf_reason'] = "Received i8 element but php is compiled in 32 bit mode";
+
+                        return;
+                    }
+                // fall through voluntarily
+                case 'I4':
                 case 'INT':
                 case 'STRING':
                 case 'BOOLEAN':
@@ -110,7 +120,7 @@ class XMLParser
                 case 'DATETIME.ISO8601':
                 case 'BASE64':
                     if ($this->_xh['vt'] != 'value') {
-                        //two data elements inside a value: an error occurred!
+                        // two data elements inside a value: an error occurred!
                         $this->_xh['isf'] = 2;
                         $this->_xh['isf_reason'] = "$name element following a {$this->_xh['vt']} element inside a single value";
 
@@ -262,6 +272,7 @@ class XMLParser
                 case 'BOOLEAN':
                 case 'I4':
                 case 'I8':
+                case 'EX:I8':
                 case 'INT':
                 case 'STRING':
                 case 'DOUBLE':
@@ -310,7 +321,7 @@ class XMLParser
                             $this->_xh['value'] = (double)$this->_xh['ac'];
                         }
                     } else {
-                        // we have an I4/INT
+                        // we have an I4/I8/INT
                         // we must check that only 0123456789-<space> are characters here
                         if (!preg_match('/^[+-]?[0123456789 \t]+$/', $this->_xh['ac'])) {
                             /// @todo find a better way of throwing an error than this!

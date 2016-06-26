@@ -116,12 +116,16 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
 <value><int>01</int></value>
 </member>
 <member>
-<name>float1</name>
-<value><double>01.10</double></value>
-</member>
-<member>
 <name>integer2</name>
 <value><int>+1</int></value>
+</member>
+<member>
+<name>integer3</name>
+<value><i4>1</i4></value>
+</member>
+<member>
+<name>float1</name>
+<value><double>01.10</double></value>
 </member>
 <member>
 <name>float2</name>
@@ -139,15 +143,49 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $r = $m->parseResponse($fp);
         $v = $r->value();
         $s = $v->structmem('integer1');
-        $t = $v->structmem('float1');
-        $u = $v->structmem('integer2');
-        $w = $v->structmem('float2');
-        $x = $v->structmem('float3');
+        $t = $v->structmem('integer2');
+        $u = $v->structmem('integer3');
+        $x = $v->structmem('float1');
+        $y = $v->structmem('float2');
+        $z = $v->structmem('float3');
         $this->assertEquals(1, $s->scalarval());
-        $this->assertEquals(1.1, $t->scalarval());
+        $this->assertEquals(1, $t->scalarval());
         $this->assertEquals(1, $u->scalarval());
-        $this->assertEquals(1.1, $w->scalarval());
-        $this->assertEquals(-110.0, $x->scalarval());
+
+        $this->assertEquals(1.1, $x->scalarval());
+        $this->assertEquals(1.1, $y->scalarval());
+        $this->assertEquals(-110.0, $z->scalarval());
+    }
+
+    public function testI8()
+    {
+        if (PHP_INT_SIZE == 4 ) {
+            $this->markTestSkipped('did not find a locale which sets decimal separator to comma');
+            return;
+        }
+
+        $m = $this->newMsg('dummy');
+        $fp =
+            '<?xml version="1.0"?>
+<methodResponse>
+<params>
+<param>
+<value>
+<struct>
+<member>
+<name>integer1</name>
+<value><i8>1</i8></value>
+</member>
+</member>
+</struct>
+</value>
+</param>
+</params>
+</methodResponse>';
+        $r = $m->parseResponse($fp);
+        $v = $r->value();
+        $s = $v->structmem('integer1');
+        $this->assertEquals(1, $s->scalarval());
     }
 
     public function testAddScalarToStruct()

@@ -113,7 +113,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         // coerce booleans into correct values
-        // NB: we should either do it for datetimes, integers and doubles, too,
+        // NB: we should either do it for datetimes, integers, i8 and doubles, too,
         // or just plain remove this check, implemented on booleans only...
         if ($type == static::$xmlrpcBoolean) {
             if (strcasecmp($val, 'true') == 0 || $val == 1 || ($val == true && strcasecmp($val, 'false'))) {
@@ -329,14 +329,10 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function serialize($charsetEncoding = '')
     {
-        // add check? slower, but helps to avoid recursion in serializing broken xmlrpc values...
-        //if (is_object($o) && (get_class($o) == 'xmlrpcval' || is_subclass_of($o, 'xmlrpcval')))
-        //{
         reset($this->me);
         list($typ, $val) = each($this->me);
 
         return '<value>' . $this->serializedata($typ, $val, $charsetEncoding) . "</value>\n";
-        //}
     }
 
     /**
@@ -407,7 +403,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Returns the type of the xmlrpc value.
      *
-     * For integers, 'int' is always returned in place of 'i4' or 'i8'.
+     * For integers, 'int' is always returned in place of 'i4'. 'i8' is considered a separate type and returned as such
      *
      * @return string
      */
@@ -415,7 +411,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         reset($this->me);
         list($a,) = each($this->me);
-        if ($a == static::$xmlrpcI4 || $a == static::$xmlrpcI8) {
+        if ($a == static::$xmlrpcI4) {
             $a = static::$xmlrpcInt;
         }
 
@@ -501,7 +497,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         return new \ArrayIterator();
     }
 
-
     public function offsetSet($offset, $value) {
 
         switch ($this->mytype) {
@@ -528,7 +523,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 }
                 return;
             case 1:
-// todo: handle i4/i8 vs int
+// todo: handle i4 vs int
                 reset($this->me);
                 list($type,) = each($this->me);
                 if ($type != $offset) {
@@ -549,7 +544,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
             case 2:
                 return isset($this->me['array'][$offset]);
             case 1:
-// todo: handle i4/i8 vs int
+// todo: handle i4 vs int
                 return $offset == $this->scalartyp();
             default:
                 return false;

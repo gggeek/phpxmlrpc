@@ -1,3 +1,12 @@
+XML-RPC for PHP version 4.1.0 - 2016/6/26
+
+* improved: Added support for receiving <I8> and <EX:I8> integers, sending <I8>
+
+    If php is compiled in 32 bit mode, and an i8 int is received from a 3rd party, and error will be emitted.
+    Integers sent from the library to 3rd parties can be encoded using the i8 tag, but default to using 'int' by default;
+    the developer will have to create values as i8 explicitly if needed.
+    The library does *not* check if an outgoing integer is too big to fit in 4 bytes and convert it to an i8 automatically.
+
 XML-RPC for PHP version 4.0.1 - 2016/3/27
 
 * improved: all of the API documentation has been moved out of the manual and into the source code phpdoc comments
