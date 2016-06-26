@@ -176,7 +176,6 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
 <name>integer1</name>
 <value><i8>1</i8></value>
 </member>
-</member>
 </struct>
 </value>
 </param>
