@@ -335,7 +335,7 @@ class Server
                             $pt = $p->kindOf();
                         }
                     } else {
-                        $pt = $in[$n] == 'i4' ? 'int' : strtolower($in[$n]); // dispatch maps never use i4...
+                        $pt = ($in[$n] == 'i4' || $in[$n] == 'i8') ? 'int' : strtolower($in[$n]); // dispatch maps never use i4...
                     }
 
                     // param index is $n+1, as first member of sig is return type
