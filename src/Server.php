@@ -675,7 +675,8 @@ class Server
                         } else {
                             // functions using EPI api should NOT return resp objects,
                             // so make sure we encode the return type correctly
-                            $r = new Response(php_xmlrpc_encode($r, array('extension_api')));
+                            $encoder = new Encoder();
+                            $r = new Response($encoder->encode($r, array('extension_api')));
                         }
                     } else {
                         $r = call_user_func_array($func, $params);
@@ -685,7 +686,8 @@ class Server
                 if (!is_a($r, '\PhpXmlRpc\Response')) {
                     // what should we assume here about automatic encoding of datetimes
                     // and php classes instances???
-                    $r = new Response(php_xmlrpc_encode($r, $this->phpvals_encoding_options));
+                    $encoder = new Encoder();
+                    $r = new Response($encoder->encode($r, $this->phpvals_encoding_options));
                 }
             }
         } catch (\Exception $e) {
