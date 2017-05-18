@@ -247,11 +247,10 @@ class Request
             // the encoding is not UTF8 and there are non-ascii chars in the text, we try to work round that...
             // The following code might be better for mb_string enabled installs, but
             // makes the lib about 200% slower...
-            //if (!is_valid_charset($respEncoding, array('UTF-8')))
-            if (!in_array($respEncoding, array('UTF-8', 'US-ASCII')) && !XMLParser::hasEncoding($data)) {
+            if (!in_array($respEncoding, array('UTF-8', 'US-ASCII'))) {
                 if ($respEncoding == 'ISO-8859-1') {
                     $data = utf8_encode($data);
-                } else {
+                } elseif (!XMLParser::hasEncoding($data)) {
                     if (extension_loaded('mbstring')) {
                         $data = mb_convert_encoding($data, 'UTF-8', $respEncoding);
                     } else {
