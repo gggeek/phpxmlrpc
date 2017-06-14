@@ -33,6 +33,9 @@ before_script:
   - if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then ./tests/ci/travis/setup_hhvm.sh; ./tests/ci/travis/setup_apache_hhvm.sh; fi
   - ./tests/ci/travis/setup_privoxy.sh
 
+  # output what version of phpunit we got going
+  - vendor/bin/phpunit --version
+
 script:
   # Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
   # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below
