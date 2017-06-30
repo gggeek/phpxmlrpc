@@ -494,14 +494,6 @@
 		var $user_data = null;
 
 		/**
-		* @deprecated
-		*/
-		function xmlrpc_client($dispMap=null, $serviceNow=true)
-		{
-			self::__construct($dispMap, $serviceNow);
-		}
-
-		/**
 		* @param array $dispmap the dispatch map with definition of exposed services
 		* @param boolean $servicenow set to false to prevent the server from running upon construction
 		*/
@@ -535,6 +527,14 @@
 					$this->service();
 				}
 			}
+		}
+
+		/**
+		* @deprecated
+		*/
+		function xmlrpc_client($dispMap=null, $serviceNow=true)
+		{
+			self::__construct($dispMap, $serviceNow);
 		}
 
 		/**

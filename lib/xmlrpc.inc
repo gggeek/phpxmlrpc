@@ -867,14 +867,6 @@
 		var $user_agent;
 
 		/**
-		* @deprecated
-		*/
-		function xmlrpc_client($path, $server='', $port='', $method='')
-		{
-			self::__construct($path, $server, $port, $method);
-		}
-
-		/**
 		* @param string $path either the complete server URL or the PATH part of the xmlrc server URL, e.g. /xmlrpc/server.php
 		* @param string $server the server name / ip address
 		* @param integer $port the port the server is listening on, defaults to 80 or 443 depending on protocol used
@@ -948,6 +940,14 @@
 
 			// initialize user_agent string
 			$this->user_agent = $GLOBALS['xmlrpcName'] . ' ' . $GLOBALS['xmlrpcVersion'];
+		}
+
+		/**
+		* @deprecated
+		*/
+		function xmlrpc_client($path, $server='', $port='', $method='')
+		{
+			self::__construct($path, $server, $port, $method);
 		}
 
 		/**
@@ -1967,14 +1967,6 @@
 		var $raw_data = '';
 
 		/**
-		* @deprecated
-		*/
-		function xmlrpcresp($val, $fcode = 0, $fstr = '', $valtyp='')
-		{
-			self::__construct($val, $fcode, $fstr, $valtyp);
-		}
-
-		/**
 		* @param mixed $val either an xmlrpcval obj, a php value or the xml serialization of an xmlrpcval (a string)
 		* @param integer $fcode set it to anything but 0 to create an error response
 		* @param string $fstr the error string, in case of an error response
@@ -2020,6 +2012,14 @@
 					$this->valtyp = $valtyp;
 				}
 			}
+		}
+
+		/**
+		* @deprecated
+		*/
+		function xmlrpcresp($val, $fcode = 0, $fstr = '', $valtyp='')
+		{
+			self::__construct($val, $fcode, $fstr, $valtyp);
 		}
 
 		/**
@@ -2136,14 +2136,6 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		var $content_type = 'text/xml';
 
 		/**
-		* @deprecated
-		*/
-		function xmlrpcmsg($meth, $pars=0)
-		{
-			self::__construct($meth, $pars);
-		}
-
-		/**
 		* @param string $meth the name of the method to invoke
 		* @param array $pars array of parameters to be passed to the method (xmlrpcval objects)
 		*/
@@ -2157,6 +2149,14 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 					$this->addParam($pars[$i]);
 				}
 			}
+		}
+
+				/**
+		* @deprecated
+		*/
+		function xmlrpcmsg($meth, $pars=0)
+		{
+			self::__construct($meth, $pars);
 		}
 
 		/**
@@ -2776,14 +2776,6 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		var $_php_class=null;
 
 		/**
-		* @deprecated
-		*/
-		function xmlrpcval($val=-1, $type='')
-		{
-			self::__construct($val, $type);
-		}
-
-		/**
 		* @param mixed $val
 		* @param string $type any valid xmlrpc type name (lowercase). If null, 'string' is assumed
 		*/
@@ -2839,6 +2831,14 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 					$this->addStruct($val);
 				}*/
 			}
+		}
+
+		/**
+		* @deprecated
+		*/
+		function xmlrpcval($val=-1, $type='')
+		{
+			self::__construct($val, $type);
 		}
 
 		/**
