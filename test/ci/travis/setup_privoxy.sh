@@ -2,5 +2,5 @@
 
 # configure privoxy
 
-sudo cp -f tests/ci/travis/privoxy /etc/privoxy/config
+sudo cp -f test/ci/travis/privoxy /etc/privoxy/config
 sudo service privoxy restart
