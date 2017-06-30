@@ -867,12 +867,20 @@
 		var $user_agent;
 
 		/**
+		* @deprecated
+		*/
+		function xmlrpc_client($path, $server='', $port='', $method='')
+		{
+			self::__construct($path, $server, $port, $method);
+		}
+
+		/**
 		* @param string $path either the complete server URL or the PATH part of the xmlrc server URL, e.g. /xmlrpc/server.php
 		* @param string $server the server name / ip address
 		* @param integer $port the port the server is listening on, defaults to 80 or 443 depending on protocol used
 		* @param string $method the http protocol variant: defaults to 'http', 'https' and 'http11' can be used if CURL is installed
 		*/
-		function xmlrpc_client($path, $server='', $port='', $method='')
+		function __construct($path, $server='', $port='', $method='')
 		{
 			// allow user to specify all params in $path
 			if($server == '' and $port == '' and $method == '')
@@ -1959,6 +1967,14 @@
 		var $raw_data = '';
 
 		/**
+		* @deprecated
+		*/
+		function xmlrpcresp($val, $fcode = 0, $fstr = '', $valtyp='')
+		{
+			self::__construct($val, $fcode, $fstr, $valtyp);
+		}
+
+		/**
 		* @param mixed $val either an xmlrpcval obj, a php value or the xml serialization of an xmlrpcval (a string)
 		* @param integer $fcode set it to anything but 0 to create an error response
 		* @param string $fstr the error string, in case of an error response
@@ -1968,7 +1984,7 @@
 		* NB: as of now we do not do it, since it might be either an xmlrpcval or a plain
 		* php val, or a complete xml chunk, depending on usage of xmlrpc_client::send() inside which creator is called...
 		*/
-		function xmlrpcresp($val, $fcode = 0, $fstr = '', $valtyp='')
+		function __construct($val, $fcode = 0, $fstr = '', $valtyp='')
 		{
 			if($fcode != 0)
 			{
@@ -2120,10 +2136,18 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		var $content_type = 'text/xml';
 
 		/**
+		* @deprecated
+		*/
+		function xmlrpcmsg($meth, $pars=0)
+		{
+			self::__construct($meth, $pars);
+		}
+
+		/**
 		* @param string $meth the name of the method to invoke
 		* @param array $pars array of parameters to be passed to the method (xmlrpcval objects)
 		*/
-		function xmlrpcmsg($meth, $pars=0)
+		function __construct($meth, $pars=0)
 		{
 			$this->methodname=$meth;
 			if(is_array($pars) && count($pars)>0)
@@ -2415,7 +2439,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 									{
 										if ($tag != 'value')
 										{
-										  $GLOBALS['_xh']['cookies'][$cookiename][$tag] = $val;
+											$GLOBALS['_xh']['cookies'][$cookiename][$tag] = $val;
 										}
 									}
 								}
@@ -2752,10 +2776,18 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		var $_php_class=null;
 
 		/**
+		* @deprecated
+		*/
+		function xmlrpcval($val=-1, $type='')
+		{
+			self::__construct($val, $type);
+		}
+
+		/**
 		* @param mixed $val
 		* @param string $type any valid xmlrpc type name (lowercase). If null, 'string' is assumed
 		*/
-		function xmlrpcval($val=-1, $type='')
+		function __construct($val=-1, $type='')
 		{
 			/// @todo: optimization creep - do not call addXX, do it all inline.
 			/// downside: booleans will not be coerced anymore
@@ -3594,7 +3626,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			}
 		}
 
-        $parser = xml_parser_create();
+		$parser = xml_parser_create();
 		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
 		// What if internal encoding is not in one of the 3 allowed?
 		// we use the broadest one, ie. utf8!
@@ -3831,7 +3863,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 
 		// test if encoding is specified in the xml declaration
 		// Details:
-		// SPACE:		 (#x20 | #x9 | #xD | #xA)+ === [ \x9\xD\xA]+
+		// SPACE:		(#x20 | #x9 | #xD | #xA)+ === [ \x9\xD\xA]+
 		// EQ:			SPACE?=SPACE? === [ \x9\xD\xA]*=[ \x9\xD\xA]*
 		if (preg_match('/^<\?xml\s+version\s*=\s*' . "((?:\"[a-zA-Z0-9_.:-]+\")|(?:'[a-zA-Z0-9_.:-]+'))" .
 			'\s+encoding\s*=\s*' . "((?:\"[A-Za-z][A-Za-z0-9._-]*\")|(?:'[A-Za-z][A-Za-z0-9._-]*'))/",

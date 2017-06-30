@@ -149,32 +149,32 @@
 		$catch_warnings = isset($extra_options['suppress_warnings']) && $extra_options['suppress_warnings'] ? '@' : '';
 
 		$exists = false;
-	    if (is_string($funcname) && strpos($funcname, '::') !== false)
-	    {
-	        $funcname = explode('::', $funcname);
-	    }
-        if(is_array($funcname))
-        {
-            if(count($funcname) < 2 || (!is_string($funcname[0]) && !is_object($funcname[0])))
-            {
-    			error_log('XML-RPC: syntax for function to be wrapped is wrong');
-    			return false;
-            }
-            if(is_string($funcname[0]))
-            {
-                $plainfuncname = implode('::', $funcname);
-            }
-            elseif(is_object($funcname[0]))
-            {
-                $plainfuncname = get_class($funcname[0]) . '->' . $funcname[1];
-            }
-            $exists = method_exists($funcname[0], $funcname[1]);
-        }
-        else
-        {
-            $plainfuncname = $funcname;
-            $exists = function_exists($funcname);
-        }
+		if (is_string($funcname) && strpos($funcname, '::') !== false)
+		{
+			$funcname = explode('::', $funcname);
+		}
+		if(is_array($funcname))
+		{
+			if(count($funcname) < 2 || (!is_string($funcname[0]) && !is_object($funcname[0])))
+			{
+				error_log('XML-RPC: syntax for function to be wrapped is wrong');
+				return false;
+			}
+			if(is_string($funcname[0]))
+			{
+				$plainfuncname = implode('::', $funcname);
+			}
+			elseif(is_object($funcname[0]))
+			{
+				$plainfuncname = get_class($funcname[0]) . '->' . $funcname[1];
+			}
+			$exists = method_exists($funcname[0], $funcname[1]);
+		}
+		else
+		{
+			$plainfuncname = $funcname;
+			$exists = function_exists($funcname);
+		}
 
 		if(!$exists)
 		{
@@ -188,10 +188,10 @@
 			{
 				if(is_array($funcname))
 				{
-    				if(is_string($funcname[0]))
-        				$xmlrpcfuncname = "{$prefix}_".implode('_', $funcname);
-    				else
-    					$xmlrpcfuncname = "{$prefix}_".get_class($funcname[0]) . '_' . $funcname[1];
+					if(is_string($funcname[0]))
+						$xmlrpcfuncname = "{$prefix}_".implode('_', $funcname);
+					else
+						$xmlrpcfuncname = "{$prefix}_".get_class($funcname[0]) . '_' . $funcname[1];
 				}
 				else
 				{
@@ -210,38 +210,38 @@
 			// start to introspect PHP code
 			if(is_array($funcname))
 			{
-    			$func = new ReflectionMethod($funcname[0], $funcname[1]);
-    			if($func->isPrivate())
-    			{
-    				error_log('XML-RPC: method to be wrapped is private: '.$plainfuncname);
-    				return false;
-    			}
-    			if($func->isProtected())
-    			{
-    				error_log('XML-RPC: method to be wrapped is protected: '.$plainfuncname);
-    				return false;
-    			}
-     			if($func->isConstructor())
-    			{
-    				error_log('XML-RPC: method to be wrapped is the constructor: '.$plainfuncname);
-    				return false;
-    			}
-                if($func->isDestructor())
-    			{
-    				error_log('XML-RPC: method to be wrapped is the destructor: '.$plainfuncname);
-    				return false;
-    			}
-    			if($func->isAbstract())
-    			{
-    				error_log('XML-RPC: method to be wrapped is abstract: '.$plainfuncname);
-    				return false;
-    			}
-                /// @todo add more checks for static vs. nonstatic?
-            }
+				$func = new ReflectionMethod($funcname[0], $funcname[1]);
+				if($func->isPrivate())
+				{
+					error_log('XML-RPC: method to be wrapped is private: '.$plainfuncname);
+					return false;
+				}
+				if($func->isProtected())
+				{
+					error_log('XML-RPC: method to be wrapped is protected: '.$plainfuncname);
+					return false;
+				}
+	 			if($func->isConstructor())
+				{
+					error_log('XML-RPC: method to be wrapped is the constructor: '.$plainfuncname);
+					return false;
+				}
+				if($func->isDestructor())
+				{
+					error_log('XML-RPC: method to be wrapped is the destructor: '.$plainfuncname);
+					return false;
+				}
+				if($func->isAbstract())
+				{
+					error_log('XML-RPC: method to be wrapped is abstract: '.$plainfuncname);
+					return false;
+				}
+				/// @todo add more checks for static vs. nonstatic?
+			}
 			else
 			{
-    			$func = new ReflectionFunction($funcname);
-            }
+				$func = new ReflectionFunction($funcname);
+			}
 			if($func->isInternal())
 			{
 				// Note: from PHP 5.1.0 onward, we will possibly be able to use invokeargs
@@ -394,17 +394,17 @@
 
 			$innercode .= "\$np = false;\n";
 			// since there are no closures in php, if we are given an object instance,
-            // we store a pointer to it in a global var...
+			// we store a pointer to it in a global var...
 			if ( is_array($funcname) && is_object($funcname[0]) )
 			{
-			    $GLOBALS['xmlrpcWPFObjHolder'][$xmlrpcfuncname] =& $funcname[0];
-			    $innercode .= "\$obj =& \$GLOBALS['xmlrpcWPFObjHolder']['$xmlrpcfuncname'];\n";
-			    $realfuncname = '$obj->'.$funcname[1];
+				$GLOBALS['xmlrpcWPFObjHolder'][$xmlrpcfuncname] =& $funcname[0];
+				$innercode .= "\$obj =& \$GLOBALS['xmlrpcWPFObjHolder']['$xmlrpcfuncname'];\n";
+				$realfuncname = '$obj->'.$funcname[1];
 			}
 			else
 			{
-    			$realfuncname = $plainfuncname;
-            }
+				$realfuncname = $plainfuncname;
+			}
 			foreach($parsvariations as $pars)
 			{
 				$innercode .= "if (\$paramcount == " . count($pars) . ") \$retval = {$catch_warnings}$realfuncname(" . implode(',', $pars) . "); else\n";
@@ -468,48 +468,48 @@
 		}
 	}
 
-    /**
-    * Given a user-defined PHP class or php object, map its methods onto a list of
+	/**
+	* Given a user-defined PHP class or php object, map its methods onto a list of
 	* PHP 'wrapper' functions that can be exposed as xmlrpc methods from an xmlrpc_server
 	* object and called from remote clients (as well as their corresponding signature info).
 	*
-    * @param mixed $classname the name of the class whose methods are to be exposed as xmlrpc methods, or an object instance of that class
-    * @param array $extra_options see the docs for wrap_php_method for more options
-    *        string method_type 'static', 'nonstatic', 'all' and 'auto' (default); the latter will switch between static and non-static depending on wheter $classname is a class name or object instance
-    * @return array or false on failure
-    *
-    * @todo get_class_methods will return both static and non-static methods.
-    *       we have to differentiate the action, depending on wheter we recived a class name or object
-    */
-    function wrap_php_class($classname, $extra_options=array())
-    {
+	* @param mixed $classname the name of the class whose methods are to be exposed as xmlrpc methods, or an object instance of that class
+	* @param array $extra_options see the docs for wrap_php_method for more options
+	*        string method_type 'static', 'nonstatic', 'all' and 'auto' (default); the latter will switch between static and non-static depending on wheter $classname is a class name or object instance
+	* @return array or false on failure
+	*
+	* @todo get_class_methods will return both static and non-static methods.
+	*       we have to differentiate the action, depending on whether we received a class name or object
+	*/
+	function wrap_php_class($classname, $extra_options=array())
+	{
 		$methodfilter = isset($extra_options['method_filter']) ? $extra_options['method_filter'] : '';
 		$methodtype = isset($extra_options['method_type']) ? $extra_options['method_type'] : 'auto';
 
-        $result = array();
+		$result = array();
 		$mlist = get_class_methods($classname);
 		foreach($mlist as $mname)
 		{
-    		if ($methodfilter == '' || preg_match($methodfilter, $mname))
+			if ($methodfilter == '' || preg_match($methodfilter, $mname))
 			{
-    			// echo $mlist."\n";
-    			$func = new ReflectionMethod($classname, $mname);
-    			if(!$func->isPrivate() && !$func->isProtected() && !$func->isConstructor() && !$func->isDestructor() && !$func->isAbstract())
-    			{
-        			if(($func->isStatic && ($methodtype == 'all' || $methodtype == 'static' || ($methodtype == 'auto' && is_string($classname)))) ||
-            			(!$func->isStatic && ($methodtype == 'all' || $methodtype == 'nonstatic' || ($methodtype == 'auto' && is_object($classname)))))
-            		{
-                        $methodwrap = wrap_php_function(array($classname, $mname), '', $extra_options);
-                        if ( $methodwrap )
-                        {
-                            $result[$methodwrap['function']] = $methodwrap['function'];
-                        }
-                    }
-    			}
+				// echo $mlist."\n";
+				$func = new ReflectionMethod($classname, $mname);
+				if(!$func->isPrivate() && !$func->isProtected() && !$func->isConstructor() && !$func->isDestructor() && !$func->isAbstract())
+				{
+					if(($func->isStatic && ($methodtype == 'all' || $methodtype == 'static' || ($methodtype == 'auto' && is_string($classname)))) ||
+						(!$func->isStatic && ($methodtype == 'all' || $methodtype == 'nonstatic' || ($methodtype == 'auto' && is_object($classname)))))
+					{
+						$methodwrap = wrap_php_function(array($classname, $mname), '', $extra_options);
+						if ( $methodwrap )
+						{
+							$result[$methodwrap['function']] = $methodwrap['function'];
+						}
+					}
+				}
 			}
 		}
-        return $result;
-    }
+		return $result;
+	}
 
 	/**
 	* Given an xmlrpc client and a method name, register a php wrapper function
