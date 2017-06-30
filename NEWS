@@ -1,3 +1,14 @@
+XML-RPC for PHP version 4.2.0 - 2017/6/30
+
+* improved: allow a DateTimeImmutable object also be detected as a date when encoding
+
+
+XML-RPC for PHP version 4.1.1 - 2016/10/1
+
+* fixed: error in server class: undefined function php_xmlrpc_encode (only triggered when not using the compatibility
+    shim with old versions)
+
+
 XML-RPC for PHP version 4.1.0 - 2016/6/26
 
 * improved: Added support for receiving <I8> and <EX:I8> integers, sending <I8>
@@ -6,6 +17,7 @@ XML-RPC for PHP version 4.1.0 - 2016/6/26
     Integers sent from the library to 3rd parties can be encoded using the i8 tag, but default to using 'int' by default;
     the developer will have to create values as i8 explicitly if needed.
     The library does *not* check if an outgoing integer is too big to fit in 4 bytes and convert it to an i8 automatically.
+
 
 XML-RPC for PHP version 4.0.1 - 2016/3/27
 

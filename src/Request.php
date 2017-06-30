@@ -109,7 +109,7 @@ class Request
      */
     public function addParam($param)
     {
-        // add check: do not add to self params which are not xmlrpc values
+        // check: do not add to self params which are not xmlrpc values
         if (is_object($param) && is_a($param, 'PhpXmlRpc\Value')) {
             $this->params[] = $param;
 
