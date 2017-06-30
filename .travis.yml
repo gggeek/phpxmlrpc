@@ -31,3 +31,8 @@ before_script:
 
 script:
   php -d "include_path=.:./lib:./test" test/testsuite.php LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php HTTPSVERIFYHOST=0 HTTPSIGNOREPEER=1 NOPROXY=1
+
+after_failure:
+  # Save as much info as we can to help developers
+  - cat apache_error.log
+  - cat apache_access.log
