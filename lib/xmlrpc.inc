@@ -821,6 +821,7 @@
 		var $keypass='';
 		var $verifypeer=true;
 		var $verifyhost=1;
+		var $sslversion=0; // corresponds to CURL_SSLVERSION_DEFAULT
 		var $no_multicall=false;
 		var $proxy='';
 		var $proxyport=0;
@@ -1040,6 +1041,16 @@
 		}
 
 		/**
+		* Set attributes for SSL communication: SSL version to use. Best left at 0 (default value ): let cURL decide
+		*
+		* @param int $i
+		*/
+		public function setSSLVersion($i)
+		{
+			$this->sslversion = $i;
+		}
+
+		/**
 		* Set proxy info
 		* @param string $proxyhost
 		* @param string $proxyport Defaults to 8080 for HTTP and 443 for HTTPS
@@ -1190,7 +1201,8 @@
 					$this->proxy_authtype,
 					$this->keepalive,
 					$this->key,
-					$this->keypass
+					$this->keypass,
+					$this->sslversion
 				);
 			}
 			elseif($method == 'http11')
@@ -1431,11 +1443,11 @@
 		function &sendPayloadHTTPS($msg, $server, $port, $timeout=0, $username='',
 			$password='', $authtype=1, $cert='',$certpass='', $cacert='', $cacertdir='',
 			$proxyhost='', $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1,
-			$keepalive=false, $key='', $keypass='')
+			$keepalive=false, $key='', $keypass='', $sslVersion = 0)
 		{
 			$r =& $this->sendPayloadCURL($msg, $server, $port, $timeout, $username,
 				$password, $authtype, $cert, $certpass, $cacert, $cacertdir, $proxyhost, $proxyport,
-				$proxyusername, $proxypassword, $proxyauthtype, 'https', $keepalive, $key, $keypass);
+				$proxyusername, $proxypassword, $proxyauthtype, 'https', $keepalive, $key, $keypass, $sslVersion);
 			return $r;
 		}
 
@@ -1448,7 +1460,7 @@
 		function &sendPayloadCURL($msg, $server, $port, $timeout=0, $username='',
 			$password='', $authtype=1, $cert='', $certpass='', $cacert='', $cacertdir='',
 			$proxyhost='', $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1, $method='https',
-			$keepalive=false, $key='', $keypass='')
+			$keepalive=false, $key='', $keypass='', $sslVersion = 0)
 		{
 			if(!function_exists('curl_init'))
 			{
@@ -1638,6 +1650,8 @@
 				}
 				// whether to verify cert's common name (CN); 0 for no, 1 to verify that it exists, and 2 to verify that it matches the hostname used
 				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->verifyhost);
+				// allow usage of different SSL versions
+				curl_setopt($curl, CURLOPT_SSLVERSION, $sslVersion);
 			}
 
 			// proxy info

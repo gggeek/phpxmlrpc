@@ -793,6 +793,7 @@ class LocalHostMultiTests extends LocalhostTests
         $this->client->path = $HTTPSURI;
         $this->client->setSSLVerifyPeer(!$HTTPSIGNOREPEER);
         $this->client->setSSLVerifyHost($HTTPSVERIFYHOST);
+        $this->client->setSSLVersion($SSLVERSION);
         $this->_runtests();
     }
 
@@ -817,6 +818,7 @@ class LocalHostMultiTests extends LocalhostTests
         $this->client->path = $HTTPSURI;
         $this->client->setSSLVerifyPeer(!$HTTPSIGNOREPEER);
         $this->client->setSSLVerifyHost($HTTPSVERIFYHOST);
+        $this->client->setSSLVersion($SSLVERSION);
         $this->_runtests();
     }
 

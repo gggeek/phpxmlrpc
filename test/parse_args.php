@@ -88,6 +88,10 @@
 	{
 		$HTTPSVERIFYHOST = 2;
 	}
+	if(!isset($SSLVERSION))
+	{
+		$SSLVERSION = 0;
+	}
 	if(!isset($PROXY))
 	{
 		$PROXYSERVER = null;

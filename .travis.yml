@@ -30,7 +30,7 @@ before_script:
   - ./test/ci/travis/setup_privoxy.sh
 
 script:
-  php -d "include_path=.:./lib:./test" test/testsuite.php LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php PROXY=localhost:8080 HTTPSVERIFYHOST=0 HTTPSIGNOREPEER=1
+  php -d "include_path=.:./lib:./test" test/testsuite.php LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php PROXY=localhost:8080 HTTPSVERIFYHOST=0 HTTPSIGNOREPEER=1 SSLVERSION=3
 
 after_failure:
   # Save as much info as we can to help developers
