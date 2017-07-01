@@ -33,7 +33,14 @@ if (version_compare(PHP_VERSION,'5.4',"<"))
 }
 else
 {
-    $proc->setSecurityPreferences(XSL_SECPREF_CREATE_DIRECTORY | XSL_SECPREF_WRITE_FILE);
+    if(is_callable(array($proc, 'setSecurityPreferences')))
+    {
+        $proc->setSecurityPreferences(XSL_SECPREF_CREATE_DIRECTORY | XSL_SECPREF_WRITE_FILE);
+    }
+    else
+    {
+        $proc->setSecurityPrefs(XSL_SECPREF_CREATE_DIRECTORY | XSL_SECPREF_WRITE_FILE);
+    }
 }
 $proc->importStyleSheet($xsl); // attach the xsl rules
 
