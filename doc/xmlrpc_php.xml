@@ -8,10 +8,10 @@ PHP-XMLRPC User manual
 <book lang="en">
   <title>XML-RPC for PHP</title>
 
-  <subtitle>version 3.0.1</subtitle>
+  <subtitle>version 3.1.0</subtitle>
 
   <bookinfo>
-    <date>April 19, 2015</date>
+    <date>July 1, 2017</date>
 
     <authorgroup>
       <author>
@@ -211,6 +211,21 @@ PHP-XMLRPC User manual
     chapter in the manual. To find a more detailed description of new
     functions and methods please take a look at the source code of the
     library, which is quite thoroughly commented in javadoc-like form.</para>
+
+      <sect1>
+          <title>3.1.0</title>
+
+          <para><itemizedlist>
+              <listitem>
+                  <para>This release makes the library compatible with php 7 by removing the deprecation warnings</para>
+              </listitem>
+
+              <listitem>
+                  <para>addition of a 'setSSLVersion' method to the client class</para>
+              </listitem>
+
+          </itemizedlist></para>
+      </sect1>
 
       <sect1>
           <title>3.0.1</title>
@@ -2362,6 +2377,21 @@ $client = new xmlrpc_client("/RPC2", "betty.userland.com", 80);
           value. Default value: <constant>TRUE</constant>. To specify custom
           SSL certificates to validate the server with, use the
           <methodname>setCaCertificate</methodname> method.</para>
+        </sect3>
+
+        <sect3>
+          <title>setSSLVersion</title>
+
+          <funcsynopsis>
+            <funcprototype>
+              <funcdef><type>void</type><function>setSSLVersion</function></funcdef>
+
+              <paramdef><type>int</type><parameter>$i</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+
+          <para>This method sets the SSL version to be used when making https calls.
+          See the PHP manual for CURLOPT_SSLVERSION for a description of the allowed values.</para>
         </sect3>
 
         <sect3>
