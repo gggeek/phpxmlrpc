@@ -573,8 +573,15 @@ And turned it into nylon';
             $rcookies = $r->cookies();
             // remove extra cookies which might have been set by proxies
             foreach($rcookies as $c => $v)
+            {
                 if(!in_array($c, array('c2', 'c3', 'c4', 'c5')))
                     unset($rcookies[$c]);
+                // Seems like we get this when using php-fpm and php 5.5+ ...
+                if (isset($rcookies[$c]['Max-Age']))
+                {
+                    unset($rcookies[$c]['Max-Age']);
+                }
+            }
             foreach($cookies as $c => $v)
                 // format for date string in cookies: 'Mon, 31 Oct 2005 13:50:56 GMT'
                 // but PHP versions differ on that, some use 'Mon, 31-Oct-2005 13:50:56 GMT'...
