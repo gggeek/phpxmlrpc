@@ -10,8 +10,8 @@ if [ "$TRAVIS_PHP_VERSION" = "7.1" -a -n "$(ls -A ~/.phpenv/versions/$(phpenv ve
   sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf
 fi
 
-echo "cgi.fix_pathinfo = 1" > ~/.phpenv/versions/$(phpenv version-name)/etc/zzz_testconfig.ini
-echo "always_populate_raw_post_data = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/zzz_testconfig.ini
-echo "include_path = '.:$(pwd)/lib'" >> ~/.phpenv/versions/$(phpenv version-name)/etc/zzz_testconfig.ini
+echo "cgi.fix_pathinfo = 1" > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/zzz_testconfig.ini
+echo "always_populate_raw_post_data = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/zzz_testconfig.ini
+echo "include_path = '.:$(pwd)/lib'" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/zzz_testconfig.ini
 
 ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
