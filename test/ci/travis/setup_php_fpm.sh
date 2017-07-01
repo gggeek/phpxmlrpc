@@ -12,7 +12,7 @@ fi
 
 echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 echo "always_populate_raw_post_data = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-# NB: the following does not seem to work with php 5.3...
+sed -i '/^include_path/d' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 echo "include_path = '.:$(pwd)/lib'" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
