@@ -11,7 +11,7 @@ PHPINCLUDEDIR=/usr/local/lib/php
 # mkdir is a thorny beast under windows: make sure we can not use the cmd version, running eg. "make MKDIR=mkdir.exe"
 MKDIR=mkdir
 
-#find too
+# find too
 FIND=find
 
 
@@ -20,7 +20,7 @@ FIND=find
 # recover version number from code
 # thanks to Firman Pribadi for unix command line help
 #   on unix shells lasts char should be \\2/g )
-export VERSION=$(shell egrep "\$GLOBALS *\[ *'xmlrpcVersion' *\] *= *'" lib/xmlrpc.inc | sed -r s/"(.*= *' *)([0-9a-zA-Z.-]+)(.*)"/\2/g )
+export VERSION=$(shell grep -E "\$GLOBALS *\[ *'xmlrpcVersion' *\] *= *'" lib/xmlrpc.inc | sed -r s/"(.*= *' *)([0-9a-zA-Z.-]+)(.*)"/\2/g )
 
 LIBFILES=lib/xmlrpc.inc lib/xmlrpcs.inc lib/xmlrpc_wrappers.inc
 
