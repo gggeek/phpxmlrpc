@@ -34,7 +34,8 @@
 				$param = explode('=', $param);
 				if(count($param) > 1)
 				{
-					$$param[0]=$param[1];
+					$pname = $param[0];
+					$$pname = $param[1];
 				}
 			}
 		}
