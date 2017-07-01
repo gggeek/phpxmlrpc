@@ -24,7 +24,7 @@ install:
 
 before_script:
   # Disable xdebug. NB: this should NOT be done for hhvm...
-  - if [ $TRAVIS_PHP_VERSION != "hhvm" ]; then phpenv config-rm xdebug.ini; fi
+  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then phpenv config-rm xdebug.ini; fi
 
 
   # Set up Apache and Privoxy instances inside the Travis VM and use them for testing against
@@ -33,6 +33,8 @@ before_script:
   - ./test/ci/travis/setup_privoxy.sh
 
 script:
+  # Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
+  # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below
   php -d "include_path=.:./lib:./test" test/testsuite.php LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php PROXY=localhost:8080 HTTPSVERIFYHOST=0 HTTPSIGNOREPEER=1 SSLVERSION=3
 
 after_failure:
