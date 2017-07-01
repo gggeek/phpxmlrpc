@@ -781,7 +781,7 @@ class LocalHostMultiTests extends LocalhostTests
 
     function testHttps()
     {
-        global $HTTPSSERVER, $HTTPSURI, $HTTPSIGNOREPEER, $HTTPSVERIFYHOST;
+        global $HTTPSSERVER, $HTTPSURI, $HTTPSIGNOREPEER, $HTTPSVERIFYHOST, $SSLVERSION;
         if(!function_exists('curl_init'))
         {
             $this->fail('CURL missing: cannot test https functionality');
@@ -799,7 +799,7 @@ class LocalHostMultiTests extends LocalhostTests
 
     function testHttpsProxy()
     {
-        global $HTTPSSERVER, $HTTPSURI, $HTTPSIGNOREPEER, $HTTPSVERIFYHOST, $PROXYSERVER, $PROXYPORT, $NOPROXY;
+        global $HTTPSSERVER, $HTTPSURI, $HTTPSIGNOREPEER, $HTTPSVERIFYHOST, $SSLVERSION, $PROXYSERVER, $PROXYPORT, $NOPROXY;
         if(!function_exists('curl_init'))
         {
             $this->fail('CURL missing: cannot test https functionality');

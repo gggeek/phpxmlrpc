@@ -1,3 +1,15 @@
+XML-RPC for PHP version 3.1.0 - 2017/7/1
+
+This release makes the library compatible with php 7 by removing the deprecation warnings.
+*NB* moving to version 4 of the library is the recommended option unless you absolutely can not upgrade, as it comes
+with many improvements.
+
+The only other changes are:
+
+* addition of a 'setSSLVersion' method to the client class
+* updates to the test suite
+
+
 XML-RPC for PHP version 3.0.1 - 2015/4/18
 
 This release corrects all bugs that have been reported and successfully reproduced since
