@@ -774,7 +774,7 @@ class LocalHostMultiTests extends LocalhostTests
 
     function testHttps()
     {
-        global $HTTPSSERVER, $HTTPSURI, $HTTPSIGNOREPEER;
+        global $HTTPSSERVER, $HTTPSURI, $HTTPSIGNOREPEER, $HTTPSVERIFYHOST;
         if(!function_exists('curl_init'))
         {
             $this->fail('CURL missing: cannot test https functionality');
@@ -784,15 +784,14 @@ class LocalHostMultiTests extends LocalhostTests
         $this->method = 'https';
         $this->client->method = 'https';
         $this->client->path = $HTTPSURI;
-        $this->client->setSSLVerifyPeer( !$HTTPSIGNOREPEER );
-        // silence warning with newish php versions
-        $this->client->setSSLVerifyHost(2);
+        $this->client->setSSLVerifyPeer(!$HTTPSIGNOREPEER);
+        $this->client->setSSLVerifyHost($HTTPSVERIFYHOST);
         $this->_runtests();
     }
 
     function testHttpsProxy()
     {
-        global $HTTPSSERVER, $HTTPSURI, $PROXYSERVER, $PROXYPORT, $NOPROXY;
+        global $HTTPSSERVER, $HTTPSURI, $HTTPSIGNOREPEER, $HTTPSVERIFYHOST, $PROXYSERVER, $PROXYPORT, $NOPROXY;
         if(!function_exists('curl_init'))
         {
             $this->fail('CURL missing: cannot test https functionality');
@@ -809,6 +808,8 @@ class LocalHostMultiTests extends LocalhostTests
         $this->client->method = 'https';
         $this->client->setProxy($PROXYSERVER, $PROXYPORT);
         $this->client->path = $HTTPSURI;
+        $this->client->setSSLVerifyPeer(!$HTTPSIGNOREPEER);
+        $this->client->setSSLVerifyHost($HTTPSVERIFYHOST);
         $this->_runtests();
     }
 
@@ -888,7 +889,7 @@ class ParsingBugsTests extends PHPUnit_TestCase
         $m=new xmlrpcmsg('dummy');
         $r=$m->parseResponse($response);
         $v=$r->faultString();
-        $this->assertEquals('ï¿½ï¿½ï¿½àüè', $v);
+        $this->assertEquals('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½', $v);
     }
 
     function testValidNumbers()

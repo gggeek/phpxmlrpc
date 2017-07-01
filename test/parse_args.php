@@ -83,6 +83,10 @@
 	{
 		$HTTPSIGNOREPEER = false;
 	}
+	if(!isset($HTTPSVERIFYHOST))
+	{
+		$HTTPSVERIFYHOST = 2;
+	}
 	if(!isset($PROXY))
 	{
 		$PROXYSERVER = null;
