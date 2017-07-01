@@ -36,3 +36,4 @@ after_failure:
   # Save as much info as we can to help developers
   - cat apache_error.log
   - cat apache_access.log
+  - php -i
