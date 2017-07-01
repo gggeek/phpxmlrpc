@@ -876,9 +876,9 @@ class ParsingBugsTests extends PHPUnit_TestCase
         $response = utf8_encode(
 '<?xml version="1.0"?>
 <!-- $Id -->
-<!-- found by G. giunta, covers what happens when lib receives
+<!-- found by G. Giunta, covers what happens when lib receives
   UTF8 chars in response text and comments -->
-<!-- ���&#224;&#252;&#232; -->
+<!-- ' . chr(224) . chr(252) . chr(232) . '&#224;&#252;&#232; -->
 <methodResponse>
 <fault>
 <value>
@@ -889,7 +889,7 @@ class ParsingBugsTests extends PHPUnit_TestCase
 </member>
 <member>
 <name>faultString</name>
-<value><string>���&#224;&#252;&#232;</string></value>
+<value><string>' . chr(224) . chr(252) . chr(232) . '&#224;&#252;&#232;</string></value>
 </member>
 </struct>
 </value>
@@ -898,7 +898,7 @@ class ParsingBugsTests extends PHPUnit_TestCase
         $m=new xmlrpcmsg('dummy');
         $r=$m->parseResponse($response);
         $v=$r->faultString();
-        $this->assertEquals('������', $v);
+        $this->assertEquals(chr(224) . chr(252) . chr(232) . chr(224) . chr(252) . chr(232), $v);
     }
 
     function testValidNumbers()
