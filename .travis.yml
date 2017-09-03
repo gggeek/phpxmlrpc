@@ -1,5 +1,8 @@
 language: php
 
+# the current Travis VMs are based on Ubuntu Trusty. Alas, those do not have php 5.3 available. SO we keep using Precise...
+dist: precise
+
 php:
   - 5.3
   - 5.4
@@ -24,7 +27,7 @@ before_script:
   # Disable xdebug for speed.
   # NB: this should NOT be done for hhvm and php 7.0.
   # Also we use the php 5.6 run to generate code coverage reports, and we need xdebug for that
-  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" -a "$TRAVIS_PHP_VERSION" != "7.0" -a "$TRAVIS_PHP_VERSION" != "5.6" ]; then phpenv config-rm xdebug.ini; fi
+  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" -a "$TRAVIS_PHP_VERSION" != "7.2"  -a "$TRAVIS_PHP_VERSION" != "7.0" -a "$TRAVIS_PHP_VERSION" != "5.6" ]; then phpenv config-rm xdebug.ini; fi
 
   # Set up Apache and Privoxy instances inside the Travis VM and use them for testing against
   - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then ./tests/ci/travis/setup_php_fpm.sh; ./tests/ci/travis/setup_apache.sh; fi
