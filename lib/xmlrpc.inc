@@ -122,7 +122,7 @@ class xmlrpcval extends PhpXmlRpc\Value
         // add support for structures directly encoding php objects
         if (is_object($b)) {
             $t = get_object_vars($b);
-            foreach($t as $id => $cont) { {
+            foreach($t as $id => $cont) {
                 $t[$id] = $cont->scalarval();
             }
             foreach($t as $id => $cont) {
