@@ -92,8 +92,8 @@ class xmlrpcval extends PhpXmlRpc\Value
         //if (is_object($o) && (get_class($o) == 'xmlrpcval' || is_subclass_of($o, 'xmlrpcval')))
         //{
         $ar = $o->me;
-        reset($ar);
-        list($typ, $val) = each($ar);
+        $val = reset($ar);
+        $typ = key($ar);
 
         return '<value>' . $this->serializedata($typ, $val) . "</value>\n";
         //}
@@ -106,16 +106,15 @@ class xmlrpcval extends PhpXmlRpc\Value
     public function getval()
     {
         // UNSTABLE
-        reset($this->me);
-        list($a, $b) = each($this->me);
+        $b = reset($this->me);
+        $a = key($this->me);
         // contributed by I Sofer, 2001-03-24
         // add support for nested arrays to scalarval
         // i've created a new method here, so as to
         // preserve back compatibility
 
         if (is_array($b)) {
-            @reset($b);
-            while (list($id, $cont) = @each($b)) {
+            foreach($b as $id => $cont) {
                 $b[$id] = $cont->scalarval();
             }
         }
@@ -123,12 +122,10 @@ class xmlrpcval extends PhpXmlRpc\Value
         // add support for structures directly encoding php objects
         if (is_object($b)) {
             $t = get_object_vars($b);
-            @reset($t);
-            while (list($id, $cont) = @each($t)) {
+            foreach($t as $id => $cont) { {
                 $t[$id] = $cont->scalarval();
             }
-            @reset($t);
-            while (list($id, $cont) = @each($t)) {
+            foreach($t as $id => $cont) {
                 @$b->$id = $cont;
             }
         }

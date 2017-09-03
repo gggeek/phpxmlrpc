@@ -329,8 +329,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function serialize($charsetEncoding = '')
     {
-        reset($this->me);
-        list($typ, $val) = each($this->me);
+        $val = reset($this->me);
+        $typ = key($this->me);
 
         return '<value>' . $this->serializedata($typ, $val, $charsetEncoding) . "</value>\n";
     }
@@ -394,8 +394,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function scalarval()
     {
-        reset($this->me);
-        list(, $b) = each($this->me);
+        $b = reset($this->me);
 
         return $b;
     }
@@ -410,7 +409,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     public function scalartyp()
     {
         reset($this->me);
-        list($a,) = each($this->me);
+        $a = key($this->me);
         if ($a == static::$xmlrpcI4) {
             $a = static::$xmlrpcInt;
         }
@@ -525,7 +524,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
             case 1:
 // todo: handle i4 vs int
                 reset($this->me);
-                list($type,) = each($this->me);
+                $type = key($this->me);
                 if ($type != $offset) {
                     throw new \Exception('');
                 }
@@ -575,8 +574,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 return isset($this->me['array'][$offset]) ? $this->me['array'][$offset] : null;
             case 1:
 // on bad type: null or exception?
-                reset($this->me);
-                list($type, $value) = each($this->me);
+                $value = reset($this->me);
+                $type = key($this->me);
                 return $type == $offset ? $value : null;
             default:
 // return null or exception?

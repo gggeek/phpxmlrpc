@@ -351,7 +351,7 @@ function ageSorter($req)
     // hack, must make global as uksort() won't
     // allow us to pass any other auxiliary information
     uksort($agesorter_arr, 'agesorter_compare');
-    while (list($key, $val) = each($agesorter_arr)) {
+    foreach($agesorter_arr as $key => $val) {
         // recreate each struct element
         $v[] = new Value(
             array(
