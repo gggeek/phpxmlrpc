@@ -187,7 +187,7 @@ class Client
         }*/
 
         // initialize user_agent string
-        $this->user_agent = PhpXmlRpc::$xmlrpcName . ' ' . PhpXmlRpc::$xmlrpcVersion;
+        $this->user_agent = PhpXmlRpc::$xmlrpcName . '/' . PhpXmlRpc::$xmlrpcVersion;
     }
 
     /**
