@@ -873,6 +873,9 @@ class Client
             $headers[] = $encodingHdr;
         }
 
+        // Fixes the HTTP/1.1 417 Expectation Failed Bug
+        $headers[] = 'Expect:';
+
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         // timeout is borked
         if ($timeout) {
