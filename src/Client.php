@@ -873,7 +873,8 @@ class Client
             $headers[] = $encodingHdr;
         }
 
-        // Fixes the HTTP/1.1 417 Expectation Failed Bug
+        // Fix the HTTP/1.1 417 Expectation Failed Bug (curl by default adds a 'Expect: 100-continue' header when POST
+        // size exceeds 1025 bytes, apparently)
         $headers[] = 'Expect:';
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);

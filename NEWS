@@ -1,3 +1,8 @@
+XML-RPC for PHP version 4.2.2 - 2017/10/15
+
+* fixed: compatibility with Nginx target servers when using client in cURL mode and request body size > 1024 bytes (issue #56)
+
+
 XML-RPC for PHP version 4.2.1 - 2017/9/3
 
 * fixed: compatibility with php 7.2 (issue #55)
