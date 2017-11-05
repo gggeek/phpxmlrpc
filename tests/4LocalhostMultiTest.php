@@ -89,7 +89,8 @@ class LocalhostMultiTest extends LocalhostTest
         $this->client->keepalive = true;
 
         // to successfully test keepalive, we have to reuse the same client for all tests, we can not recreate one on setup/teardown...
-        foreach ($this->getSingleHttpTestMethods() as $method) {
+        foreach ($this->getSingleHttpTestMethods() as $methods) {
+            $method = $methods[0];
             $this->$method;
         }
     }
