@@ -24,7 +24,8 @@ class LocalhostMultiTest extends LocalhostTest
         $unsafeMethods = array('testHttps', 'testCatchExceptions', 'testUtf8Method', 'testServerComments', 'testExoticCharsetsRequests',
             'testExoticCharsetsRequests2', 'testExoticCharsetsRequests3',
             // @todo the following are currently not compatible w Digest Auth (most likely because of client copy) and should be fixed
-            'testcatchWarnings', 'testWrappedMethodAsSource', 'testTransferOfObjectViaWrapping');
+            'testcatchWarnings', 'testWrappedMethodAsSource', 'testTransferOfObjectViaWrapping'
+        );
 
         $methods = array();
         foreach(get_class_methods('LocalhostTest') as $method)
@@ -101,7 +102,7 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function testProxy($method)
     {
-        if (!$this->args['PROXYSERVER'])
+        if ($this->args['PROXYSERVER'] == '')
         {
             $this->markTestSkipped('PROXY definition missing: cannot test proxy');
             return;
@@ -207,6 +208,11 @@ class LocalhostMultiTest extends LocalhostTest
             $this->markTestSkipped('CURL missing: cannot test https functionality');
             return;
         }
+        else if ($this->args['HTTPSSERVER'] == '')
+        {
+            $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https');
+            return;
+        }
 
         $this->client->server = $this->args['HTTPSSERVER'];
         $this->method = 'https';
@@ -227,14 +233,20 @@ class LocalhostMultiTest extends LocalhostTest
     {
         if(!function_exists('curl_init'))
         {
-            $this->markTestSkipped('CURL missing: cannot test https functionality');
+            $this->markTestSkipped('CURL missing: cannot test https w. proxy');
             return;
         }
         else if ($this->args['PROXYSERVER'] == '')
         {
-            $this->markTestSkipped('PROXY definition missing: cannot test proxy w. http 1.1');
+            $this->markTestSkipped('PROXY definition missing: cannot test proxy w. https');
             return;
         }
+        else if ($this->args['HTTPSSERVER'] == '')
+        {
+            $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https w. proxy');
+            return;
+        }
+
         $this->client->server = $this->args['HTTPSSERVER'];
         $this->method = 'https';
         $this->client->method = 'https';

@@ -986,7 +986,7 @@ class Wrapper
      *              - string prefix
      *              - bool   simple_client_copy set it to true to avoid copying all properties of $client into the copy made in the new class
      *
-     * @return mixed false on error, the name of the created class if all ok or an array with code, class name and comments (if the appropriatevoption is set in extra_options)
+     * @return mixed false on error, the name of the created class if all ok or an array with code, class name and comments (if the appropriate option is set in extra_options)
      */
     public function wrapXmlrpcServer($client, $extraOptions = array())
     {

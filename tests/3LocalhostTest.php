@@ -500,6 +500,7 @@ And turned it into nylon';
     {
         // NB: This test will NOT pass if server does not support system.multicall.
 
+        $noMultiCall = $this->client->no_multicall;
         $this->client->no_multicall = false;
 
         $good1 = new xmlrpcmsg('system.methodHelp',
@@ -537,12 +538,15 @@ And turned it into nylon';
         $this->assertTrue($this->client->no_multicall == false,
             "server does not support system.multicall"
         );
+
+        $this->client->no_multicall = $noMultiCall;
     }
 
     public function testClientMulticall2()
     {
         // NB: This test will NOT pass if server does not support system.multicall.
 
+        $noMultiCall = $this->client->no_multicall;
         $this->client->no_multicall = true;
 
         $good1 = new xmlrpcmsg('system.methodHelp',
@@ -574,11 +578,16 @@ And turned it into nylon';
             $val = $r[3]->value();
             $this->assertTrue($val->kindOf() == 'array', "good2 did not return array");
         }
+
+        $this->client->no_multicall = $noMultiCall;
     }
 
     public function testClientMulticall3()
     {
         // NB: This test will NOT pass if server does not support system.multicall.
+
+        $noMultiCall = $this->client->no_multicall;
+        $returnType = $this->client->return_type;
 
         $this->client->return_type = 'phpvals';
         $this->client->no_multicall = false;
@@ -610,7 +619,9 @@ And turned it into nylon';
             $val = $r[3]->value();
             $this->assertTrue(is_array($val), "good2 did not return array");
         }
-        //$this->client->return_type = 'xmlrpcvals';
+
+        $this->client->return_type = $returnType;
+        $this->client->no_multicall = $noMultiCall;
     }
 
     public function testCatchWarnings()
@@ -846,19 +857,23 @@ And turned it into nylon';
             $this->fail('Registration of remote server failed');
         } else {
             $obj = new $class();
-            $v = $obj->examples_getStateName(23);
-            // work around bug in current (or old?) version of phpunit when reporting the error
-            /*if (is_object($v)) {
-                $v = var_export($v, true);
-            }*/
-            $this->assertEquals('Michigan', $v);
+            if (!is_callable(array($obj, 'examples_getStateName'))) {
+                $this->fail('Registration of remote server failed to import method "examples_getStateName"');
+            } else {
+                $v = $obj->examples_getStateName(23);
+                // work around bug in current (or old?) version of phpunit when reporting the error
+                /*if (is_object($v)) {
+                    $v = var_export($v, true);
+                }*/
+                $this->assertEquals('Michigan', $v);
+            }
         }
     }
 
     public function testTransferOfObjectViaWrapping()
     {
         // make a 'deep client copy' as the original one might have many properties set
-        $func = wrap_xmlrpc_method($this->client, 'tests.returnPhpObject', array('simple_client_copy' => true,
+        $func = wrap_xmlrpc_method($this->client, 'tests.returnPhpObject', array('simple_client_copy' => 0,
             'decode_php_objs' => true));
         if ($func == false) {
             $this->fail('Registration of tests.returnPhpObject failed');
