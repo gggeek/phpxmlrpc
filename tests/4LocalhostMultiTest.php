@@ -21,10 +21,9 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function getSingleHttpTestMethods()
     {
-        $unsafeMethods = array('testHttps', 'testCatchExceptions', 'testUtf8Method', 'testServerComments', 'testExoticCharsetsRequests',
-            'testExoticCharsetsRequests2', 'testExoticCharsetsRequests3',
-            // @todo the following are currently not compatible w Digest Auth (most likely because of client copy) and should be fixed
-            'testcatchWarnings', 'testWrappedMethodAsSource', 'testTransferOfObjectViaWrapping'
+        $unsafeMethods = array(
+            'testHttps', 'testCatchExceptions', 'testUtf8Method', 'testServerComments',
+            'testExoticCharsetsRequests', 'testExoticCharsetsRequests2', 'testExoticCharsetsRequests3',
         );
 
         $methods = array();
