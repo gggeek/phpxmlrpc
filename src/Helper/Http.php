@@ -72,7 +72,7 @@ class Http
     {
         $httpResponse = array('raw_data' => $data, 'headers'=> array(), 'cookies' => array());
 
-        // Support "web-proxy-tunelling" connections for https through proxies
+        // Support "web-proxy-tunnelling" connections for https through proxies
         if (preg_match('/^HTTP\/1\.[0-1] 200 Connection established/', $data)) {
             // Look for CR/LF or simple LF as line separator,
             // (even though it is not valid http)
@@ -110,6 +110,15 @@ class Http
             }
             $data = substr($data, $pos);
         }
+
+        // When using Curl to query servers using Digest Auth, we get back a double set of http headers.
+        // We strip out the 1st...
+        if ($headersProcessed && preg_match('/^HTTP\/[0-9.]+ 401 /', $data)) {
+            if (preg_match('/(\r?\n){2}HTTP\/[0-9.]+ 200 /', $data)) {
+                $data = preg_replace('/^HTTP\/[0-9.]+ 401 .+?(?:\r?\n){2}(HTTP\/[0-9.]+ 200 )/s', '$1', $data, 1);
+            }
+        }
+
         if (!preg_match('/^HTTP\/[0-9.]+ 200 /', $data)) {
             $errstr = substr($data, 0, strpos($data, "\n") - 1);
             error_log('XML-RPC: ' . __METHOD__ . ': HTTP error, got response: ' . $errstr);
@@ -131,8 +140,10 @@ class Http
                 $bd = 0;
             }
         }
+
         // be tolerant to line endings, and extra empty lines
         $ar = preg_split("/\r?\n/", trim(substr($data, 0, $pos)));
+
         foreach($ar as $line) {
             // take care of multi-line headers and cookies
             $arr = explode(':', $line, 2);
@@ -203,6 +214,7 @@ class Http
         // if CURL was used for the call, http headers have been processed,
         // and dechunking + reinflating have been carried out
         if (!$headersProcessed) {
+
             // Decode chunked encoding sent by http 1.1 servers
             if (isset($httpResponse['headers']['transfer-encoding']) && $httpResponse['headers']['transfer-encoding'] == 'chunked') {
                 if (!$data = Http::decodeChunked($data)) {

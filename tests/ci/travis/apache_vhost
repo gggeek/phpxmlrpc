@@ -13,6 +13,11 @@
     AllowOverride All
     Order deny,allow
     Allow from all
+
+    # needed for basic auth (PHP_AUTH_USER and PHP_AUTH_PW)
+    RewriteEngine on
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
   </Directory>
 
   # Wire up Apache to use Travis CI's php-fpm.
@@ -39,6 +44,11 @@
     AllowOverride All
     Order deny,allow
     Allow from all
+
+    # needed for basic auth (PHP_AUTH_USER and PHP_AUTH_PW)
+    RewriteEngine on
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
   </Directory>
 
   # Wire up Apache to use Travis CI's php-fpm.

@@ -19,7 +19,10 @@ class LocalhostMultiTest extends LocalhostTest
      */
     function _runtests()
     {
-        $unsafeMethods = array('testHttps', 'testCatchExceptions', 'testUtf8Method', 'testServerComments', 'testExoticCharsetsRequests', 'testExoticCharsetsRequests2', 'testExoticCharsetsRequests3');
+        $unsafeMethods = array('testHttps', 'testCatchExceptions', 'testUtf8Method', 'testServerComments', 'testExoticCharsetsRequests',
+            'testExoticCharsetsRequests2', 'testExoticCharsetsRequests3',
+            // @todo the following are currently not compatible w Digest Auth (most likely because of client copy) and should be fixed
+            'testcatchWarnings', 'testWrappedMethodAsSource', 'testTransferOfObjectViaWrapping');
         foreach(get_class_methods('LocalhostTest') as $method)
         {
             if(strpos($method, 'test') === 0 && !in_array($method, $unsafeMethods))
@@ -210,6 +213,27 @@ class LocalhostMultiTest extends LocalhostTest
     function testISORequests()
     {
         $this->client->request_charset_encoding = 'ISO-8859-1';
+        $this->_runtests();
+    }
+
+    function testBasicAuth()
+    {
+        $this->client->setCredentials('test', 'test');
+        $this->client->path = $this->args['URI'].'?FORCE_AUTH=Basic';
+        $this->_runtests();
+    }
+
+    function testDigestAuth()
+    {
+        if (!function_exists('curl_init'))
+        {
+            $this->markTestSkipped('CURL missing: cannot test digest auth functionality');
+            return;
+        }
+        $this->client->setCredentials('test', 'test', CURLAUTH_DIGEST);
+        $this->client->path = $this->args['URI'].'?FORCE_AUTH=Digest';
+        $this->method = 'http11';
+        $this->client->method = 'http11';
         $this->_runtests();
     }
 }

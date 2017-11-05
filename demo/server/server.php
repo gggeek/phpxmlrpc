@@ -953,15 +953,15 @@ $signatures = array(
 
 $signatures = array_merge($signatures, $moreSignatures);
 
-// enable support for the NULL extension
+// Enable support for the NULL extension
 PhpXmlRpc\PhpXmlRpc::$xmlrpc_null_extension = true;
 
 $s = new PhpXmlRpc\Server($signatures, false);
 $s->setdebug(3);
 $s->compress_response = true;
 
-// out-of-band information: let the client manipulate the server operations.
-// we do this to help the testsuite script: do not reproduce in production!
+// Out-of-band information: let the client manipulate the server operations.
+// We do this to help the testsuite script: do not reproduce in production!
 if (isset($_GET['RESPONSE_ENCODING'])) {
     $s->response_charset_encoding = $_GET['RESPONSE_ENCODING'];
 }
@@ -971,11 +971,30 @@ if (isset($_GET['DETECT_ENCODINGS'])) {
 if (isset($_GET['EXCEPTION_HANDLING'])) {
     $s->exception_handling = $_GET['EXCEPTION_HANDLING'];
 }
-$s->service();
-// that should do all we need!
+if (isset($_GET['FORCE_AUTH'])) {
+    // We implement both  Basic and Digest auth in php to avoid having to set it up in a vhost.
+    // Code taken from php.net
+    // NB: we do NOT check for valid credentials!
+    if ($_GET['FORCE_AUTH'] == 'Basic') {
+        if (!isset($_SERVER['PHP_AUTH_USER']) && !isset($_SERVER['REMOTE_USER']) && !isset($_SERVER['REDIRECT_REMOTE_USER'])) {
+            header('HTTP/1.0 401 Unauthorized');
+            header('WWW-Authenticate: Basic realm="Phpxmlrpc Basic Realm"');
+            die('Text visible if user hits Cancel button');
+        }
+    } elseif ($_GET['FORCE_AUTH'] == 'Digest') {
+        if (empty($_SERVER['PHP_AUTH_DIGEST'])) {
+            header('HTTP/1.1 401 Unauthorized');
+            header('WWW-Authenticate: Digest realm="Phpxmlrpc Digest Realm",qop="auth",nonce="'.uniqid().'",opaque="'.md5('Phpxmlrpc Digest Realm').'"');
+            die('Text visible if user hits Cancel button');
+        }
+    }
+}
 
-// out-of-band information: let the client manipulate the server operations.
-// we do this to help the testsuite script: do not reproduce in production!
+$s->service();
+// That should do all we need!
+
+// Out-of-band information: let the client manipulate the server operations.
+// We do this to help the testsuite script: do not reproduce in production!
 if (isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) && extension_loaded('xdebug')) {
     include_once __DIR__ . "/../../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumCommon/append.php";
 }
