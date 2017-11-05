@@ -31,7 +31,7 @@ class PhpXmlRpcProxy
      *
      * @throws Exception
      */
-    function __call($name, $arguments)
+    public function __call($name, $arguments)
     {
         $encoder = new PhpXmlRpc\Encoder();
         $valueArray = array();

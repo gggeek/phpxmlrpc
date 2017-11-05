@@ -125,7 +125,7 @@ class Client
     public function __construct($path, $server = '', $port = '', $method = '')
     {
         // allow user to specify all params in $path
-        if ($server == '' and $port == '' and $method == '') {
+        if ($server == '' && $port == '' && $method == '') {
             $parts = parse_url($path);
             $server = $parts['host'];
             $path = isset($parts['path']) ? $parts['path'] : '';
