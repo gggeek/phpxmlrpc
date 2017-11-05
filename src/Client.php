@@ -695,7 +695,6 @@ class Client
         } else {
             $connectServer = $server;
             $connectPort = $port;
-            /// @todo if supporting https, we should support all its current options as well: peer name verification etc...
             $transport = ( $method === 'https' ) ? 'tls' : 'tcp';
             $uri = $this->path;
         }
