@@ -22,7 +22,7 @@ class LocalhostMultiTest extends LocalhostTest
     public function getSingleHttpTestMethods()
     {
         $unsafeMethods = array(
-            'testHttps', 'testCatchExceptions', 'testUtf8Method', 'testServerComments',
+            'testCatchExceptions', 'testUtf8Method', 'testServerComments',
             'testExoticCharsetsRequests', 'testExoticCharsetsRequests2', 'testExoticCharsetsRequests3',
         );
 
@@ -135,6 +135,26 @@ class LocalhostMultiTest extends LocalhostTest
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
      */
+    public function testHttp10Curl($method)
+    {
+        if(!function_exists('curl_init'))
+        {
+            $this->markTestSkipped('CURL missing: cannot test http 1.1');
+            return;
+        }
+
+        $this->method = 'http10'; // not an error the double assignment!
+        $this->client->method = 'http10';
+        $this->client->keepalive = false;
+        $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_ALWAYS);
+
+        $this->$method();
+    }
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
     public function testHttp11Gzip($method)
     {
         if(!function_exists('curl_init'))
@@ -220,6 +240,30 @@ class LocalhostMultiTest extends LocalhostTest
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
+
+        $this->$method();
+    }
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
+    public function testHttpsSocket($method)
+    {
+        if ($this->args['HTTPSSERVER'] == '')
+        {
+            $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https');
+            return;
+        }
+
+        $this->client->server = $this->args['HTTPSSERVER'];
+        $this->method = 'https';
+        $this->client->method = 'https';
+        $this->client->path = $this->args['HTTPSURI'];
+        $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
+        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
+        $this->client->setSSLVersion($this->args['SSLVERSION']);
+        $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
 
         $this->$method();
     }

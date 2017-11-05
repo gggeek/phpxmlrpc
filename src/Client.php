@@ -9,6 +9,10 @@ use PhpXmlRpc\Helper\Logger;
  */
 class Client
 {
+    const USE_CURL_NEVER = 0;
+    const USE_CURL_ALWAYS = 1;
+    const USE_CURL_AUTO = 2;
+
     /// @todo: do these need to be public?
     public $method = 'http';
     public $server;
@@ -41,6 +45,7 @@ class Client
 
     public $cookies = array();
     public $extracurlopts = array();
+    public $use_curl = self::USE_CURL_AUTO;
 
     /**
      * @var bool
@@ -69,6 +74,7 @@ class Client
      */
 
     public $request_compression = '';
+
     /**
      * CURL handle: used for keep-alive connections (PHP 4.3.8 up, see:
      * http://curl.haxx.se/docs/faq.html#7.3).
@@ -177,7 +183,7 @@ class Client
         $this->accepted_charset_encodings = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
 
         // Add all charsets which mbstring can handle, but remove junk not found in IANA registry at
-        // in http://www.iana.org/assignments/character-sets/character-sets.xhtml
+        // http://www.iana.org/assignments/character-sets/character-sets.xhtml
         // NB: this is disabled to avoid making all the requests sent huge... mbstring supports more than 80 charsets!
         /*if (function_exists('mb_list_encodings')) {
 
@@ -201,7 +207,7 @@ class Client
      * This option can be very useful when debugging servers as it allows you to see exactly what the client sends and
      * the server returns.
      *
-     * @param integer $in values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
+     * @param integer $level values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
      */
     public function setDebug($level)
     {
@@ -414,6 +420,15 @@ class Client
     }
 
     /**
+     * @param int $useCurlMode self::USE_CURL_ALWAYS, self::USE_CURL_AUTO or self::USE_CURL_NEVER
+     */
+    public function setUseCurl($useCurlMode)
+    {
+        $this->use_curl = $useCurlMode;
+    }
+
+
+    /**
      * Set user-agent string that will be used by this client instance in http headers sent to the server.
      *
      * The default user agent string includes the name of this library and the version number.
@@ -473,8 +488,9 @@ class Client
         $req->setDebug($this->debug);
 
         /// @todo we could be smarter about this and force usage of curl in scenarios where it is both available and
-        ///       needed, such as digest or ntlm auth
-        $useCurl = ($method == 'https' || $method == 'http11');
+        ///       needed, such as digest or ntlm auth. Do not attempt to use it for https if not present
+        $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO &&
+            ($method == 'https' || $method == 'http11'));
 
         if ($useCurl) {
             $r = $this->sendPayloadCURL(
