@@ -776,7 +776,10 @@ class Client
             $connectTimeout = $timeout;
         }
 
-        $fp = @stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $connectTimeout,
+        $this->errno = 0;
+        $this->errstr = '';
+
+        $fp = stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $connectTimeout,
             STREAM_CLIENT_CONNECT, $context);
         if ($fp) {
             if ($timeout > 0) {
@@ -795,10 +798,8 @@ class Client
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
 
             return $r;
-        } else {
-            // reset errno and errstr on successful socket connection
-            $this->errstr = '';
         }
+
         // G. Giunta 2005/10/24: close socket before parsing.
         // should yield slightly better execution times, and make easier recursive calls (e.g. to follow http redirects)
         $ipd = '';
@@ -808,6 +809,7 @@ class Client
             $ipd .= fread($fp, 32768);
         } while (!feof($fp));
         fclose($fp);
+
         $r = $req->parseResponse($ipd, false, $this->return_type);
 
         return $r;
