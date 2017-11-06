@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<phpunit colors="true">
+
+    <!-- code coverage reporting -->
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./</directory>
+            <exclude>
+                <directory>./Resources</directory>
+                <directory>./tests</directory>
+                <directory>./vendor</directory>
+                <file>./pakefile.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <testsuites>
+        <testsuite name="PHPXMLRPC Test Suite">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+
+</phpunit>
