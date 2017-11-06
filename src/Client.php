@@ -766,7 +766,7 @@ class Client
                 $contextOptions['ssl']['local_pk'] = $key;
             }
             $contextOptions['ssl']['verify_peer'] = $this->verifypeer;
-
+            $contextOptions['ssl']['verify_peer_name'] = $this->verifypeer;
         }
         $context = stream_context_create($contextOptions);
 
@@ -779,13 +779,17 @@ class Client
         $this->errno = 0;
         $this->errstr = '';
 
-        $fp = stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $connectTimeout,
+        $fp = @stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $connectTimeout,
             STREAM_CLIENT_CONNECT, $context);
         if ($fp) {
             if ($timeout > 0) {
                 stream_set_timeout($fp, $timeout);
             }
         } else {
+            if ($this->errstr == '') {
+                $err = error_get_last();
+                $this->errstr = $err['message'];
+            }
             $this->errstr = 'Connect error: ' . $this->errstr;
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
 
