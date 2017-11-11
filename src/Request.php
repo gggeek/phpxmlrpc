@@ -298,7 +298,7 @@ class Request
                     xml_get_current_line_number($parser), xml_get_current_column_number($parser));
             }
             error_log($errStr);
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'], PhpXmlRpc::$xmlrpcstr['invalid_return'] . ' (' . $errStr . ')');
+            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'], PhpXmlRpc::$xmlrpcstr['invalid_return'] . ' ' . $errStr);
             xml_parser_free($parser);
             if ($this->debug) {
                 print $errStr;
@@ -380,10 +380,10 @@ class Request
     /**
      * Enables/disables the echoing to screen of the xmlrpc responses received.
      *
-     * @param integer $in values 0, 1, 2 are supported
+     * @param integer $level values 0, 1, 2 are supported
      */
-    public function setDebug($in)
+    public function setDebug($level)
     {
-        $this->debug = $in;
+        $this->debug = $level;
     }
 }
