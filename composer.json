@@ -7,9 +7,10 @@
     "require": {
         "php": ">=5.3.0",
         "ext-xml": "*",
-        "phpxmlrpc/http": "dev-master"
+        "phpxmlrpc/xmlrpc": "dev-master"
     },
     "require-dev": {
+        "phpxmlrpc/debugger": "dev-master",
         "phpunit/phpunit": ">=4.0.0, <6.0.0",
         "phpunit/phpunit-selenium": "*",
         "codeclimate/php-test-reporter": "dev-master",
