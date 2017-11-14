@@ -1,3 +1,9 @@
+XML-RPC for PHP version 5.0.0-beta1 - unreleased
+
+* once more, a major version overhaul!
+
+
+
 XML-RPC for PHP version 4.3.0 - 2017/11/6
 
 * fixed: compatibility with Basic/Digest/NTLM auth when using client in cURL mode (issue #58)
