@@ -136,7 +136,11 @@ class Encoder
         $type = gettype($phpVal);
         switch ($type) {
             case 'string':
-                if (in_array('auto_dates', $options) && preg_match('/^[0-9]{8}T[0-9]{2}:[0-9]{2}:[0-9]{2}$/', $phpVal)) {
+                if (in_array('binary', $options)) {
+                    $xmlrpcVal = new Value($phpVal, Value::$xmlrpcBinary);
+                } elseif (in_array('base64', $options)) {
+                    $xmlrpcVal = new Value($phpVal, Value::$xmlrpcBase64);
+                } elseif (in_array('auto_dates', $options) && preg_match('/^[0-9]{8}T[0-9]{2}:[0-9]{2}:[0-9]{2}$/', $phpVal)) {
                     $xmlrpcVal = new Value($phpVal, Value::$xmlrpcDateTime);
                 } else {
                     $xmlrpcVal = new Value($phpVal, Value::$xmlrpcString);
