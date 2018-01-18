@@ -41,7 +41,7 @@ if (isset($_POST["mailto"]) && $_POST["mailto"]) {
     if (!$resp->faultCode()) {
         print "Mail sent OK<br/>\n";
     } else {
-        print "<fonr color=\"red\">";
+        print "<font color=\"red\">";
         print "Mail send failed<br/>\n";
         print "Fault: ";
         print "Code: " . htmlspecialchars($resp->faultCode()) .
