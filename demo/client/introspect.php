@@ -61,12 +61,12 @@ if ($resp->faultCode()) {
             if ($val->kindOf() == "array") {
                 foreach ($val as $x) {
                     $ret = $x[0];
-                    print "<code>" . $ret->scalarval() . " "
-                        . $methodName->scalarval() . "(";
+                    print "<code>" . htmlspecialchars($ret->scalarval()) . " "
+                        . htmlspecialchars($methodName->scalarval()) . "(";
                     if ($x->count() > 1) {
                         for ($k = 1; $k < $x->count(); $k++) {
                             $y = $x[$k];
-                            print $y->scalarval();
+                            print htmlspecialchars($y->scalarval());
                             if ($k < $x->count() - 1) {
                                 print ", ";
                             }
