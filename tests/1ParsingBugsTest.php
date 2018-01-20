@@ -618,7 +618,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 
         foreach($v1 as $key => $val)
         {
-            $this->assertContains($key, $out);
+            $this->assertArrayHasKey($key, $out);
             $expected = $out[$key];
             if (gettype($expected['value']) == 'array') {
                 $this->assertequals('array', gettype($val));
