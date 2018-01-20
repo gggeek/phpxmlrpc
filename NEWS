@@ -1,3 +1,20 @@
+XML-RPC for PHP version 4.3.1 - 2018/1/20
+
+* fixed: error when using https in non-curl mode
+
+* fixed: compatibility of tests with php 7.2
+
+* fixed: html injection in sample code
+
+* fixed: warnings emitted by the *legacy* server in xmlrpcs.inc
+
+* fixed: encoding of php variables of type 'resource' when using xmlrpc_encode in php-compatibility mode
+
+* fixed: bad html tag in sample code
+
+* improved: text of error messages
+
+
 XML-RPC for PHP version 4.3.0 - 2017/11/6
 
 * fixed: compatibility with Basic/Digest/NTLM auth when using client in cURL mode (issue #58)
