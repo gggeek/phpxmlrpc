@@ -620,10 +620,10 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         {
             $this->assertArrayHasKey($key, $out);
             $expected = $out[$key];
-            if (gettype($expected['value']) == 'array') {
+            if (gettype($expected) == 'array') {
                 $this->assertequals('array', gettype($val));
             } else {
-                $this->assertequals($expected['value'], $val);
+                $this->assertequals($expected, $val);
             }
         }
 

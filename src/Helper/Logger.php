@@ -36,7 +36,14 @@ class Logger
         }
 
         if (PHP_SAPI != 'cli') {
-            $flags = ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE;
+            $flags = ENT_COMPAT;
+            // avoid warnings on php < 5.4...
+            if (defined('ENT_HTML401')) {
+                $flags =  $flags | ENT_HTML401;
+            }
+            if (defined('ENT_SUBSTITUTE')) {
+                $flags =  $flags | ENT_SUBSTITUTE;
+            }
             if ($encoding != null) {
                 print "<PRE>\n".htmlentities($message, $flags, $encoding)."\n</PRE>";
             } else {
