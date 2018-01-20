@@ -110,7 +110,7 @@ class Wrapper
      * Since php is a typeless language, to infer types of input and output parameters,
      * it relies on parsing the javadoc-style comment block associated with the given
      * function. Usage of xmlrpc native types (such as datetime.dateTime.iso8601 and base64)
-     * in the @param tag is also allowed, if you need the php function to receive/send
+     * in the '@param' tag is also allowed, if you need the php function to receive/send
      * data in that particular format (note that base64 encoding/decoding is transparently
      * carried out by the lib, while datetime vals are passed around as strings)
      *
@@ -396,11 +396,15 @@ class Wrapper
      * @param $callable
      * @param array $extraOptions
      * @param string $plainFuncName
-     * @param string $funcDesc
+     * @param array $funcDesc
      * @return \Closure
      */
     protected function buildWrapFunctionClosure($callable, $extraOptions, $plainFuncName, $funcDesc)
     {
+        /**
+         * @param Request $req
+         * @return mixed
+         */
         $function = function($req) use($callable, $extraOptions, $funcDesc)
         {
             $nameSpace = '\\PhpXmlRpc\\';
@@ -785,7 +789,7 @@ class Wrapper
      * @param Client $client
      * @param string $methodName
      * @param array $extraOptions
-     * @param string $mSig
+     * @param array $mSig
      * @return \Closure
      *
      * @todo should we allow usage of parameter simple_client_copy to mean 'do not clone' in this case?

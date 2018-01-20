@@ -825,12 +825,22 @@ class Server
         return $outAr;
     }
 
+    /**
+     * @param Server $server
+     * @param Request $req
+     * @return Response
+     */
     public static function _xmlrpcs_getCapabilities($server, $req = null)
     {
         $encoder = new Encoder();
         return new Response($encoder->encode($server->getCapabilities()));
     }
 
+    /**
+     * @param Server $server
+     * @param Request $req
+     * @return Response
+     */
     public static function _xmlrpcs_listMethods($server, $req = null) // if called in plain php values mode, second param is missing
     {
         $outAr = array();
@@ -846,6 +856,11 @@ class Server
         return new Response(new Value($outAr, 'array'));
     }
 
+    /**
+     * @param Server $server
+     * @param Request $req
+     * @return Response
+     */
     public static function _xmlrpcs_methodSignature($server, $req)
     {
         // let accept as parameter both an xmlrpc value or string
@@ -883,6 +898,11 @@ class Server
         return $r;
     }
 
+    /**
+     * @param Server $server
+     * @param Request $req
+     * @return Response
+     */
     public static function _xmlrpcs_methodHelp($server, $req)
     {
         // let accept as parameter both an xmlrpc value or string
@@ -926,6 +946,11 @@ class Server
         return new Value($struct, 'struct');
     }
 
+    /**
+     * @param Server $server
+     * @param Value $call
+     * @return Value
+     */
     public static function _xmlrpcs_multicall_do_call($server, $call)
     {
         if ($call->kindOf() != 'struct') {
@@ -969,6 +994,11 @@ class Server
         return new Value(array($result->value()), 'array');
     }
 
+    /**
+     * @param Server $server
+     * @param Value $call
+     * @return Value
+     */
     public static function _xmlrpcs_multicall_do_call_phpvals($server, $call)
     {
         if (!is_array($call)) {
@@ -1008,6 +1038,11 @@ class Server
         return new Value(array($result->value()), 'array');
     }
 
+    /**
+     * @param Server $server
+     * @param Request $req
+     * @return Response
+     */
     public static function _xmlrpcs_multicall($server, $req)
     {
         $result = array();

@@ -296,6 +296,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                     $rs .= "<struct>\n";
                 }
                 $charsetEncoder = Charset::instance();
+                /** @var Value $val2 */
                 foreach ($val as $key2 => $val2) {
                     $rs .= '<member><name>' . $charsetEncoder->encodeEntities($key2, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</name>\n";
                     //$rs.=$this->serializeval($val2);
@@ -307,6 +308,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
             case 2:
                 // array
                 $rs .= "<array>\n<data>\n";
+                /** @var Value $element */
                 foreach ($val as $element) {
                     //$rs.=$this->serializeval($val[$i]);
                     $rs .= $element->serialize($charsetEncoding);
@@ -480,7 +482,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Implements the IteratorAggregate interface
      *
-     * @return ArrayIterator
+     * @return \ArrayIterator
      */
     public function getIterator() {
         switch ($this->mytype) {
@@ -493,7 +495,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
             default:
                 return new \ArrayIterator();
         }
-        return new \ArrayIterator();
     }
 
     public function offsetSet($offset, $value) {

@@ -629,11 +629,13 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $v2 = new \PhpXmlRpc\Value(array(new \PhpXmlRpc\Value('one'), new \PhpXmlRpc\Value('two')), 'array');
         $this->assertequals(2, count($v2));
         $out = array(0 => 'object', 1 => 'object');
+        $i = 0;
         foreach($v2 as $key => $val)
         {
-            $expected = each($out);
+            $expected = $out[$i];
             $this->assertequals($expected['key'], $key);
             $this->assertequals($expected['value'], gettype($val));
+            $i++;
         }
     }
 }

@@ -537,7 +537,6 @@ class Client
                 $this->proxy_pass,
                 $this->proxy_authtype,
                 $method,
-                $this->keepalive,
                 $this->key,
                 $this->keypass,
                 $this->sslversion
@@ -569,7 +568,7 @@ class Client
         $method='http')
     {
         return $this->sendPayloadSocket($req, $server, $port, $timeout, $username, $password, $authType, null, null,
-            null, null, $proxyHost, $proxyPort, $proxyUsername, $proxyPassword, $proxyAuthType);
+            null, null, $proxyHost, $proxyPort, $proxyUsername, $proxyPassword, $proxyAuthType, $method);
     }
 
     /**
@@ -645,6 +644,7 @@ class Client
 
         $payload = $req->payload;
         // Deflate request body and set appropriate request headers
+        $encodingHdr = '';
         if (function_exists('gzdeflate') && ($this->request_compression == 'gzip' || $this->request_compression == 'deflate')) {
             if ($this->request_compression == 'gzip') {
                 $a = @gzencode($payload);
@@ -659,8 +659,6 @@ class Client
                     $encodingHdr = "Content-Encoding: deflate\r\n";
                 }
             }
-        } else {
-            $encodingHdr = '';
         }
 
         // thanks to Grant Rauscher <grant7@firstworld.net> for this
@@ -1260,10 +1258,12 @@ class Client
                         break;
                     case 'struct':
                         $code = $val['faultCode'];
+                        /** @var Value $code */
                         if ($code->kindOf() != 'scalar' || $code->scalartyp() != 'int') {
                             return false;
                         }
                         $str = $val['faultString'];
+                        /** @var Value $str */
                         if ($str->kindOf() != 'scalar' || $str->scalartyp() != 'string') {
                             return false;
                         }

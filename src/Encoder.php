@@ -6,6 +6,7 @@ use PhpXmlRpc\Helper\XMLParser;
 
 /**
  * A helper class to easily convert between Value objects and php native values
+ * @todo implement an interface
  */
 class Encoder
 {
@@ -292,7 +293,9 @@ class Encoder
             case 'methodresponse':
                 $v = &$xmlRpcParser->_xh['value'];
                 if ($xmlRpcParser->_xh['isf'] == 1) {
+                    /** @var Value $vc */
                     $vc = $v['faultCode'];
+                    /** @var Value $vs */
                     $vs = $v['faultString'];
                     $r = new Response(0, $vc->scalarval(), $vs->scalarval());
                 } else {
