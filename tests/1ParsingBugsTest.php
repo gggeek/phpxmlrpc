@@ -614,13 +614,12 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
     {
         $v1 = new xmlrpcval(array(new xmlrpcval('one'), new xmlrpcval('two')), 'array');
         $this->assertequals(1, count($v1));
-        $out = array(array('key' => 'me', 'value' => array()), array('key' => 'mytype', 'value' => 2), array('key' => '_php_class', 'value' => null));
+        $out = array('me' => array(), 'mytype' => 2, '_php_class' => null);
 
-        $i = 0;
         foreach($v1 as $key => $val)
         {
-            $expected = $out[$i];
-            $this->assertequals($expected['key'], $key);
+            $this->assertContains($key, $out);
+            $expected = $out[$key];
             if (gettype($expected['value']) == 'array') {
                 $this->assertequals('array', gettype($val));
             } else {
