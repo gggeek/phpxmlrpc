@@ -3122,8 +3122,8 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			// add check? slower, but helps to avoid recursion in serializing broken xmlrpcvals...
 			//if (is_object($o) && (get_class($o) == 'xmlrpcval' || is_subclass_of($o, 'xmlrpcval')))
 			//{
-				reset($this->me);
-				list($typ, $val) = each($this->me);
+				$val = reset($this->me);
+				$typ = key($this->me);
 				return '<value>' . $this->serializedata($typ, $val, $charset_encoding) . "</value>\n";
 			//}
 		}
@@ -3134,9 +3134,8 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			// add check? slower, but helps to avoid recursion in serializing broken xmlrpcvals...
 			//if (is_object($o) && (get_class($o) == 'xmlrpcval' || is_subclass_of($o, 'xmlrpcval')))
 			//{
-				$ar=$o->me;
-				reset($ar);
-				list($typ, $val) = each($ar);
+				$val = reset($o->me);
+				$typ = key($o->me);
 				return '<value>' . $this->serializedata($typ, $val) . "</value>\n";
 			//}
 		}
