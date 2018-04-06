@@ -23,10 +23,6 @@
 require_once 'PHPUnit/TestCase.php';
 require_once 'PHPUnit/TestSuite.php';
 
-if (!function_exists('is_a')) {
-    require_once 'PHP/Compat/Function/is_a.php';
-}
-
 /**
  * A Decorator for Tests.
  *
@@ -58,7 +54,7 @@ class PHPUnit_TestDecorator {
      * @param  object
      * @access public
      */
-    function PHPUnit_TestDecorator(&$test) {
+    function __construct(&$test) {
         if (is_object($test) &&
             (is_a($test, 'PHPUnit_TestCase') ||
              is_a($test, 'PHPUnit_TestSuite'))) {

@@ -106,7 +106,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert {
      * @param  string
      * @access public
      */
-    function PHPUnit_TestCase($name = FALSE) {
+    function __construct($name = FALSE) {
         if ($name !== FALSE) {
             $this->setName($name);
         }

@@ -23,10 +23,6 @@
 require_once 'PHPUnit/TestFailure.php';
 require_once 'PHPUnit/TestListener.php';
 
-if (!function_exists('is_a')) {
-    require_once 'PHP/Compat/Function/is_a.php';
-}
-
 /**
  * A TestResult collects the results of executing a test case.
  *
