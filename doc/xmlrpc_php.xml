@@ -8,10 +8,10 @@ PHP-XMLRPC User manual
 <book lang="en">
   <title>XML-RPC for PHP</title>
 
-  <subtitle>version 3.1.0</subtitle>
+  <subtitle>version 3.1.1</subtitle>
 
   <bookinfo>
-    <date>July 1, 2017</date>
+    <date>April 7, 2018</date>
 
     <authorgroup>
       <author>
@@ -211,6 +211,17 @@ PHP-XMLRPC User manual
     chapter in the manual. To find a more detailed description of new
     functions and methods please take a look at the source code of the
     library, which is quite thoroughly commented in javadoc-like form.</para>
+
+      <sect1>
+          <title>3.1.1</title>
+
+          <para><itemizedlist>
+              <listitem>
+                  <para>This release makes the library compatible with php 7.2 by removing one warning</para>
+              </listitem>
+
+          </itemizedlist></para>
+      </sect1>
 
       <sect1>
           <title>3.1.0</title>
