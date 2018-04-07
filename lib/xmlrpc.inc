@@ -3230,8 +3230,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		*/
 		function scalarval()
 		{
-			reset($this->me);
-			list(,$b)=each($this->me);
+			$b = reset($this->me);
 			return $b;
 		}
 

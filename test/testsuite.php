@@ -504,7 +504,7 @@ And turned it into nylon';
         }
         else
         {
-            $this->fail('Note: server can only auto register functions if running with PHP 5.0.3 and up');
+            $this->fail();
         }
     }
 
@@ -528,7 +528,7 @@ And turned it into nylon';
         }
         else
         {
-            $this->fail('Note: server can only auto register class methods if running with PHP 5.0.3 and up');
+            $this->fail();
         }
     }
 
