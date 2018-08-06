@@ -1,0 +1,10 @@
+demo/ export-ignore
+doc/ export-ignore
+tests/ export-ignore
+.gitignore export-ignore
+.travis.yml export-ignore
+compatibility-test.php export-ignore
+composer.lock export-ignore
+CONTRIBUTING.md export-ignore
+Makefile export-ignore
+phpunit.xml export-ignore
