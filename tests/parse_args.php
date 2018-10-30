@@ -14,7 +14,7 @@
  * @param int     HTTPSVERIFYHOST
  * @param int     SSLVERSION
  *
- * @copyright (C) 2007-2015 G. Giunta
+ * @copyright (C) 2007-2017 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  **/
 class argParser
