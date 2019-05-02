@@ -287,27 +287,36 @@ class Request
         xml_set_character_data_handler($parser, 'xmlrpc_cd');
         xml_set_default_handler($parser, 'xmlrpc_dh');
 
-        // first error check: xml not well formed
-        if (!xml_parse($parser, $data, 1)) {
-            // thanks to Peter Kocks <peter.kocks@baygate.com>
-            if ((xml_get_current_line_number($parser)) == 1) {
-                $errStr = 'XML error at line 1, check URL';
-            } else {
-                $errStr = sprintf('XML error: %s at line %d, column %d',
-                    xml_error_string(xml_get_error_code($parser)),
-                    xml_get_current_line_number($parser), xml_get_current_column_number($parser));
-            }
-            error_log($errStr);
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'], PhpXmlRpc::$xmlrpcstr['invalid_return'] . ' ' . $errStr);
-            xml_parser_free($parser);
-            if ($this->debug) {
-                print $errStr;
-            }
-            $r->hdrs = $this->httpResponse['headers'];
-            $r->_cookies = $this->httpResponse['cookies'];
-            $r->raw_data = $this->httpResponse['raw_data'];
+        // write xml into a file in order to feed it in chunks to xml_parse
+        $tempXmlFile = tmpfile();
+        $tempXmlFileMetaData = stream_get_meta_data($tempXmlFile);
+        fwrite($tempXmlFile, $data);
 
-            return $r;
+        // open a file handle to the temporary file
+        $xmlFile = fopen($tempXmlFileMetaData['uri'], "r");
+        // first error check: xml not well formed
+        while($xmlChunk = fread($xmlFile, 1024*1024*5)) {
+            if (!xml_parse($parser, $xmlChunk, feof($xmlFile))) {
+                // thanks to Peter Kocks <peter.kocks@baygate.com>
+                if ((xml_get_current_line_number($parser)) == 1) {
+                    $errStr = 'XML error at line 1, check URL';
+                } else {
+                    $errStr = sprintf('XML error: %s at line %d, column %d',
+                        xml_error_string(xml_get_error_code($parser)),
+                        xml_get_current_line_number($parser), xml_get_current_column_number($parser));
+                }
+                error_log($errStr);
+                $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'], PhpXmlRpc::$xmlrpcstr['invalid_return'] . ' ' . $errStr);
+                xml_parser_free($parser);
+                if ($this->debug) {
+                    print $errStr;
+                }
+                $r->hdrs = $this->httpResponse['headers'];
+                $r->_cookies = $this->httpResponse['cookies'];
+                $r->raw_data = $this->httpResponse['raw_data'];
+
+                return $r;
+            }
         }
         xml_parser_free($parser);
         // second error check: xml well formed but not xml-rpc compliant
