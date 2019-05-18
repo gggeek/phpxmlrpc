@@ -6,6 +6,6 @@
 sudo a2enmod rewrite actions fastcgi alias ssl
 
 # configure apache virtual hosts
-sudo cp -f tests/ci/travis/apache_vhost /etc/apache2/sites-available/default
-sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+sudo cp -f tests/ci/travis/apache_vhost /etc/apache2/sites-available/000-default.conf
+sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
 sudo service apache2 restart
