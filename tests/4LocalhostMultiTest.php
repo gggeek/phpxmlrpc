@@ -377,23 +377,4 @@ class LocalhostMultiTest extends LocalhostTest
 
         $this->$method();
     }
-
-    function testBasicAuth()
-    {
-        $this->client->setCredentials('test', 'test');
-        $this->client->path = $this->args['URI'].'?FORCE_AUTH=Basic';
-        $this->_runtests();
-    }
-
-    function testDigestAuth()
-    {
-        if(!function_exists('curl_init'))
-        {
-            $this->markTestSkipped('CURL missing: cannot test digest auth functionality');
-            return;
-        }
-        $this->client->setCredentials('test', 'test', CURLAUTH_DIGEST);
-        $this->client->path = $this->args['URI'].'?FORCE_AUTH=Digest';
-        $this->_runtests();
-    }
 }

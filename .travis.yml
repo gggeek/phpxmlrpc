@@ -1,7 +1,6 @@
 language: php
 
-# the current Travis VMs are based on Ubuntu Trusty. Alas, those do not have php 5.3 available. So we keep using Precise...
-dist: precise
+dist: xenial
 
 php:
   - 5.3
@@ -11,8 +10,7 @@ php:
   - 7.0
   - 7.1
   - 7.2
-  # hhvm is not available any more on Precise images
-  #- hhvm
+  - 7.3
 
 before_install:
   # This is mandatory or the 'apt-get install' calls following will fail
