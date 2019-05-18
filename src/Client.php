@@ -64,7 +64,7 @@ class Client
      * NNB: you can set it to any non-empty array for HTTP11 and HTTPS, since
      * in those cases it will be up to CURL to decide the compression methods
      * it supports. You might check for the presence of 'zlib' in the output of
-     * curl_version() to determine wheter compression is supported or not
+     * curl_version() to determine whether compression is supported or not
      */
     public $accepted_compression = array();
 
