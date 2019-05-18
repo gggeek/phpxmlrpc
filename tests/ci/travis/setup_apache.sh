@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# make sure all files and folders are accisble by Apache
+
+find . -type d -exec chmod 755 {} \;
+#find . -type f -exec chmod 644 {} \;
+
 # set up Apache for php-fpm
 # @see https://github.com/travis-ci/travis-ci.github.com/blob/master/docs/user/languages/php.md#apache--php
 

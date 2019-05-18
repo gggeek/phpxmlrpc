@@ -11,8 +11,8 @@
   <Directory "%TRAVIS_BUILD_DIR%">
     Options FollowSymLinks MultiViews ExecCGI
     AllowOverride All
-    Order deny,allow
-    Allow from all
+
+    Require all granted
 
     # needed for basic auth (PHP_AUTH_USER and PHP_AUTH_PW)
     RewriteEngine on
@@ -42,8 +42,8 @@
   <Directory "%TRAVIS_BUILD_DIR%">
     Options FollowSymLinks MultiViews ExecCGI
     AllowOverride All
-    Order deny,allow
-    Allow from all
+
+    Require all granted
 
     # needed for basic auth (PHP_AUTH_USER and PHP_AUTH_PW)
     RewriteEngine on
