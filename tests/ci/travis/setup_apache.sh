@@ -1,8 +1,7 @@
 #!/bin/sh
 
-# make sure all files and folders are accisble by Apache
-
-sudo find /home -type d -exec chmod 755 {} \;
+# make sure all files and folders are accessible by Apache
+sudo find $(dirname $(pwd)) -type d -exec chmod 755 {} \;
 sudo find . -type f -name "*.php" -exec chmod 644 {} \;
 
 # set up Apache for php-fpm
