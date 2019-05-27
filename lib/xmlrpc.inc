@@ -208,7 +208,7 @@
 	$GLOBALS['xmlrpc_internalencoding']='ISO-8859-1';
 
 	$GLOBALS['xmlrpcName']='XML-RPC for PHP';
-	$GLOBALS['xmlrpcVersion']='3.1.1';
+	$GLOBALS['xmlrpcVersion']='3.1.2';
 
 	// let user errors start at 800
 	$GLOBALS['xmlrpcerruser']=800;
@@ -2165,7 +2165,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			}
 		}
 
-				/**
+		/**
 		* @deprecated
 		*/
 		function xmlrpcmsg($meth, $pars=0)
@@ -2968,7 +2968,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		}
 
 		// poor man's version of print_r ???
-		// DEPRECATED!
+		/// @deprecated
 		function dump($ar)
 		{
 			foreach($ar as $key => $val)
@@ -3128,7 +3128,7 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 			//}
 		}
 
-		// DEPRECATED
+		/// @deprecated
 		function serializeval($o)
 		{
 			// add check? slower, but helps to avoid recursion in serializing broken xmlrpcvals...
@@ -3177,19 +3177,20 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 		* Return next member element for xmlrpcvals of type struct.
 		* @return xmlrpcval
 		* @access public
+		* @deprecated this will be removed in future versions
 		*/
 		function structeach()
 		{
-			return each($this->me['struct']);
+			return @each($this->me['struct']);
 		}
 
-		// DEPRECATED! this code looks like it is very fragile and has not been fixed
+		// this code looks like it is very fragile and has not been fixed
 		// for a long long time. Shall we remove it for 2.0?
+		/// @deprecated
 		function getval()
 		{
 			// UNSTABLE
 			$b = reset($this->me);
-			$a = key($this->me);
 			// contributed by I Sofer, 2001-03-24
 			// add support for nested arrays to scalarval
 			// i've created a new method here, so as to

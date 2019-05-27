@@ -1237,7 +1237,7 @@
 
 		/**
 		* A debugging routine: just echoes back the input packet as a string value
-		* DEPRECATED!
+		* @deprecated
 		*/
 		function echoInput()
 		{

@@ -3,9 +3,6 @@ language: php
 # the current Travis VMs are based on Ubuntu Trusty. Alas, those do not have php 5.3 available. So we keep using Precise...
 dist: precise
 
-# NB: we need to use the Trusty images if we want to test on hhvm
-#dist: trusty
-
 php:
   - 5.3
   - 5.4
@@ -14,8 +11,7 @@ php:
   - 7.0
   - 7.1
   - 7.2
-  # hhvm is not available any more on Precise images
-  #- hhvm
+  - 7.3
 
 before_install:
   # This is mandatory or the 'apt-get install' calls following will fail
@@ -28,13 +24,11 @@ install:
   - composer self-update && composer install
 
 before_script:
-  # Disable xdebug. NB: this should NOT be done for hhvm...
-  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then phpenv config-rm xdebug.ini; fi
-
+  # Disable xdebug
+  - phpenv config-rm xdebug.ini
 
   # Set up Apache and Privoxy instances inside the Travis VM and use them for testing against
-  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then ./test/ci/travis/setup_php_fpm.sh; ./test/ci/travis/setup_apache.sh; fi
-  - if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then ./test/ci/travis/setup_hhvm.sh; ./test/ci/travis/setup_apache_hhvm.sh; fi
+  - ./test/ci/travis/setup_php_fpm.sh; ./test/ci/travis/setup_apache.sh
   - ./test/ci/travis/setup_privoxy.sh
 
 script:
