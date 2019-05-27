@@ -334,8 +334,7 @@ class Request
                 );
             }
 
-            // note that using =& will raise an error if $xmlRpcParser->_xh['st'] does not generate an object.
-            $v = &$xmlRpcParser->_xh['value'];
+            $v = $xmlRpcParser->_xh['value'];
 
             if ($xmlRpcParser->_xh['isf']) {
                 /// @todo we should test here if server sent an int and a string, and/or coerce them into such...

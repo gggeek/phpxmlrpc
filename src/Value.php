@@ -350,6 +350,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function structmemexists($key)
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         return array_key_exists($key, $this->me['struct']);
     }
 
@@ -365,6 +367,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function structmem($key)
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         return $this->me['struct'][$key];
     }
 
@@ -374,6 +378,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function structreset()
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         reset($this->me['struct']);
     }
 
@@ -386,7 +392,9 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function structeach()
     {
-        return each($this->me['struct']);
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
+        return @each($this->me['struct']);
     }
 
     /**
@@ -430,6 +438,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function arraymem($key)
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         return $this->me['array'][$key];
     }
 
@@ -442,6 +452,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function arraysize()
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         return count($this->me['array']);
     }
 
@@ -454,6 +466,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function structsize()
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         return count($this->me['struct']);
     }
 

@@ -214,8 +214,7 @@ class Encoder
             // catch "user function", "unknown type"
             default:
                 // giancarlo pinerolo <ping@alt.it>
-                // it has to return
-                // an empty object in case, not a boolean.
+                // it has to return an empty object in case, not a boolean.
                 $xmlrpcVal = new Value();
                 break;
         }
@@ -226,6 +225,8 @@ class Encoder
     /**
      * Convert the xml representation of a method response, method request or single
      * xmlrpc value into the appropriate object (a.k.a. deserialize).
+     *
+     * Q: is this a good name for this method? It does something quite different from 'decode' after all (returning objects vs returns plain php values)...
      *
      * @param string $xmlVal
      * @param array $options
@@ -291,7 +292,7 @@ class Encoder
         }
         switch ($xmlRpcParser->_xh['rt']) {
             case 'methodresponse':
-                $v = &$xmlRpcParser->_xh['value'];
+                $v = $xmlRpcParser->_xh['value'];
                 if ($xmlRpcParser->_xh['isf'] == 1) {
                     /** @var Value $vc */
                     $vc = $v['faultCode'];

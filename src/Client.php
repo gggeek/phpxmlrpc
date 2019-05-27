@@ -567,6 +567,8 @@ class Client
         $authType = 1, $proxyHost = '', $proxyPort = 0, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1,
         $method='http')
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         return $this->sendPayloadSocket($req, $server, $port, $timeout, $username, $password, $authType, null, null,
             null, null, $proxyHost, $proxyPort, $proxyUsername, $proxyPassword, $proxyAuthType, $method);
     }
@@ -600,6 +602,8 @@ class Client
         $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $keepAlive = false, $key = '', $keyPass = '',
         $sslVersion = 0)
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         return $this->sendPayloadCURL($req, $server, $port, $timeout, $username,
             $password, $authType, $cert, $certPass, $caCert, $caCertDir, $proxyHost, $proxyPort,
             $proxyUsername, $proxyPassword, $proxyAuthType, 'https', $keepAlive, $key, $keyPass, $sslVersion);

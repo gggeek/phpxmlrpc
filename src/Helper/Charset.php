@@ -261,6 +261,8 @@ class Charset
      */
     public function getEntities($charset)
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         switch ($charset)
         {
             case 'iso88591':
