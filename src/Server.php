@@ -474,8 +474,11 @@ class Server
         // decompose incoming XML into request structure
 
         if ($reqEncoding != '') {
-            // Since parsing will fail if charset is not specified in the xml prologue,
-            // the encoding is not UTF8 and there are non-ascii chars in the text, we try to work round that...
+            // Since parsing will fail if
+            // - charset is not specified in the xml prologue,
+            // - the encoding is not UTF8 and
+            // - there are non-ascii chars in the text,
+            // we try to work round that...
             // The following code might be better for mb_string enabled installs, but
             // makes the lib about 200% slower...
             //if (!is_valid_charset($reqEncoding, array('UTF-8')))
