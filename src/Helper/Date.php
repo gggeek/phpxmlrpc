@@ -7,15 +7,13 @@ class Date
     /**
      * Given a timestamp, return the corresponding ISO8601 encoded string.
      *
-     * Really, timezones ought to be supported
-     * but the XML-RPC spec says:
+     * Really, timezones ought to be supported but the XML-RPC spec says:
      *
-     * "Don't assume a timezone. It should be specified by the server in its
-     * documentation what assumptions it makes about timezones."
+     * "Don't assume a timezone. It should be specified by the server in its documentation what assumptions it makes
+     *  about timezones."
      *
-     * These routines always assume localtime unless
-     * $utc is set to 1, in which case UTC is assumed
-     * and an adjustment for locale is made when encoding
+     * These routines always assume localtime unless $utc is set to 1, in which case UTC is assumed and an adjustment
+     * for locale is made when encoding
      *
      * @param int $timet (timestamp)
      * @param int $utc (0 or 1)

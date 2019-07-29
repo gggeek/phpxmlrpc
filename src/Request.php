@@ -245,8 +245,7 @@ class Request
 
             // Since parsing will fail if charset is not specified in the xml prologue,
             // the encoding is not UTF8 and there are non-ascii chars in the text, we try to work round that...
-            // The following code might be better for mb_string enabled installs, but
-            // makes the lib about 200% slower...
+            // The following code might be better for mb_string enabled installs, but makes the lib about 200% slower...
             //if (!is_valid_charset($respEncoding, array('UTF-8')))
             if (!in_array($respEncoding, array('UTF-8', 'US-ASCII')) && !XMLParser::hasEncoding($data)) {
                 if ($respEncoding == 'ISO-8859-1') {
@@ -263,8 +262,8 @@ class Request
 
         // PHP internally might use ISO-8859-1, so we have to tell the xml parser to give us back data in the expected charset.
         // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8
-        // This allows to send data which is native in various charset,
-        // by extending xmlrpc_encode_entities() and setting xmlrpc_internalencoding
+        // This allows to send data which is native in various charset, by extending xmlrpc_encode_entities() and
+        // setting xmlrpc_internalencoding
         if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
             $options = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
         } else {

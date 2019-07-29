@@ -8,11 +8,10 @@ class Charset
 {
     // tables used for transcoding different charsets into us-ascii xml
     protected $xml_iso88591_Entities = array("in" => array(), "out" => array());
-    protected $xml_iso88591_utf8 = array("in" => array(), "out" => array());
 
     /// @todo add to iso table the characters from cp_1252 range, i.e. 128 to 159?
-    /// These will NOT be present in true ISO-8859-1, but will save the unwary
-    /// windows user from sending junk (though no luck when receiving them...)
+    /// These will NOT be present in true ISO-8859-1, but will save the unwary windows user from sending junk
+    ///  (though no luck when receiving them...)
     /*
     protected $xml_cp1252_Entities = array('in' => array(), out' => array(
         '&#x20AC;', '?',        '&#x201A;', '&#x0192;',
@@ -221,8 +220,8 @@ class Charset
     }
 
     /**
-     * Checks if a given charset encoding is present in a list of encodings or
-     * if it is a valid subset of any encoding in the list.
+     * Checks if a given charset encoding is present in a list of encodings or if it is a valid subset of any encoding
+     * in the list.
      *
      * @param string $encoding charset to be tested
      * @param string|array $validList comma separated list of valid charsets (or array of charsets)

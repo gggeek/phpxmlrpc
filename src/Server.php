@@ -142,10 +142,9 @@ class Server
     }
 
     /**
-     * Add a string to the debug info that can be later serialized by the server
-     * as part of the response message.
-     * Note that for best compatibility, the debug string should be encoded using
-     * the PhpXmlRpc::$xmlrpc_internalencoding character set.
+     * Add a string to the debug info that can be later serialized by the server as part of the response message.
+     * Note that for best compatibility, the debug string should be encoded using the PhpXmlRpc::$xmlrpc_internalencoding
+     * character set.
      *
      * @param string $msg
      * @access public
