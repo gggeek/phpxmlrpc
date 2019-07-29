@@ -507,7 +507,7 @@ class Server
         $xmlRpcParser->parse($data, $this->functions_parameters_type, XMLParser::ACCEPT_REQUEST);
         if ($xmlRpcParser->_xh['isf'] > 2) {
             // (BC) we return XML error as a faultCode
-            preg_match('/XML error [0-9]+/', $xmlRpcParser->_xh['isf_reason'], $matches);
+            preg_match('/^XML error ([0-9]+)/', $xmlRpcParser->_xh['isf_reason'], $matches);
             $r = new Response(0,
                 PhpXmlRpc::$xmlrpcerrxml + $matches[1],
                 $xmlRpcParser->_xh['isf_reason']);
