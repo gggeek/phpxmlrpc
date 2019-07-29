@@ -2,6 +2,8 @@ XML-RPC for PHP version 4.4.0 - 2019/7/29
 
 * fixed: allow handling huge xml messages (>=10MB) (issue #71)
 
+* improved: make it easier to overtake the library's usage of `error_log`
+
 
 XML-RPC for PHP version 4.3.2 - 2019/5/27
 
