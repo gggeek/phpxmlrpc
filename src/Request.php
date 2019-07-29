@@ -208,7 +208,7 @@ class Request
         // be tolerant of extra whitespace in response body
         $data = trim($data);
 
-        /// @todo return an error msg if $data=='' ?
+        /// @todo return an error msg if $data == '' ?
 
         // be tolerant of junk after methodResponse (e.g. javascript ads automatically inserted by free hosts)
         // idea from Luca Mariano <luca.mariano@email.it> originally in PEARified version of the lib
