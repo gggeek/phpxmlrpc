@@ -257,32 +257,16 @@ class Encoder
             }
         }
 
-        $parser = xml_parser_create();
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
-        // What if internal encoding is not in one of the 3 allowed?
-        // we use the broadest one, ie. utf8!
+        // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8!
         if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
-            xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, 'UTF-8');
+            $options = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
         } else {
-            xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, PhpXmlRpc::$xmlrpc_internalencoding);
+            $options = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
         }
 
-        $xmlRpcParser = new XMLParser();
-        xml_set_object($parser, $xmlRpcParser);
+        $xmlRpcParser = new XMLParser($options);
+        $xmlRpcParser->parse($xmlVal, XMLParser::RETURN_XMLRPCVALS, XMLParser::ACCEPT_REQUEST | XMLParser::ACCEPT_RESPONSE | XMLParser::ACCEPT_VALUE);
 
-        xml_set_element_handler($parser, 'xmlrpc_se_any', 'xmlrpc_ee');
-        xml_set_character_data_handler($parser, 'xmlrpc_cd');
-        xml_set_default_handler($parser, 'xmlrpc_dh');
-        if (!xml_parse($parser, $xmlVal, 1)) {
-            $errstr = sprintf('XML error: %s at line %d, column %d',
-                xml_error_string(xml_get_error_code($parser)),
-                xml_get_current_line_number($parser), xml_get_current_column_number($parser));
-            error_log($errstr);
-            xml_parser_free($parser);
-
-            return false;
-        }
-        xml_parser_free($parser);
         if ($xmlRpcParser->_xh['isf'] > 1) {
             // test that $xmlrpc->_xh['value'] is an obj, too???
 
@@ -290,6 +274,7 @@ class Encoder
 
             return false;
         }
+
         switch ($xmlRpcParser->_xh['rt']) {
             case 'methodresponse':
                 $v = $xmlRpcParser->_xh['value'];

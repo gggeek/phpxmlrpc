@@ -15,7 +15,7 @@ PhpXmlRpc\Autoloader::register();
 
 $inAr = array("Dave" => 24, "Edd" => 45, "Joe" => 37, "Fred" => 27);
 print "This is the input data:<br/><pre>";
-foreach($inAr as $key => $val) {
+foreach ($inAr as $key => $val) {
     print $key . ", " . $val . "\n";
 }
 print "</pre>";

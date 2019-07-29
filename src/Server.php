@@ -155,6 +155,9 @@ class Server
         static::$_xmlrpc_debuginfo .= $msg . "\n";
     }
 
+    /**
+     * @param string $msg
+     */
     public static function error_occurred($msg)
     {
         static::$_xmlrpcs_occurred_errors .= $msg . "\n";
@@ -453,7 +456,7 @@ class Server
         $reqEncoding = XMLParser::guessEncoding(isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '',
             $data);
 
-        return;
+        return null;
     }
 
     /**
@@ -490,50 +493,38 @@ class Server
             }
         }
 
-        $parser = xml_parser_create();
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
-        // G. Giunta 2005/02/13: PHP internally uses ISO-8859-1, so we have to tell
-        // the xml parser to give us back data in the expected charset
-        // What if internal encoding is not in one of the 3 allowed?
-        // we use the broadest one, ie. utf8
+        // PHP internally might use ISO-8859-1, so we have to tell the xml parser to give us back data in the expected charset.
+        // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8
         // This allows to send data which is native in various charset,
         // by extending xmlrpc_encode_entities() and setting xmlrpc_internalencoding
         if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
-            xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, 'UTF-8');
+            $options = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
         } else {
-            xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, PhpXmlRpc::$xmlrpc_internalencoding);
+            $options = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
         }
 
-        $xmlRpcParser = new XMLParser();
-        xml_set_object($parser, $xmlRpcParser);
-
-        if ($this->functions_parameters_type != 'xmlrpcvals') {
-            xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_fast');
-        } else {
-            xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee');
-        }
-        xml_set_character_data_handler($parser, 'xmlrpc_cd');
-        xml_set_default_handler($parser, 'xmlrpc_dh');
-        if (!xml_parse($parser, $data, 1)) {
-            // return XML error as a faultCode
+        $xmlRpcParser = new XMLParser($options);
+        $xmlRpcParser->parse($data, $this->functions_parameters_type, XMLParser::ACCEPT_REQUEST);
+        if ($xmlRpcParser->_xh['isf'] > 2) {
+            // (BC) we return XML error as a faultCode
+            preg_match('/XML error [0-9]+/', $xmlRpcParser->_xh['isf_reason'], $matches);
             $r = new Response(0,
-                PhpXmlRpc::$xmlrpcerrxml + xml_get_error_code($parser),
-                sprintf('XML error: %s at line %d, column %d',
-                    xml_error_string(xml_get_error_code($parser)),
-                    xml_get_current_line_number($parser), xml_get_current_column_number($parser)));
-            xml_parser_free($parser);
+                PhpXmlRpc::$xmlrpcerrxml + $matches[1],
+                $xmlRpcParser->_xh['isf_reason']);
         } elseif ($xmlRpcParser->_xh['isf']) {
-            xml_parser_free($parser);
             $r = new Response(0,
                 PhpXmlRpc::$xmlrpcerr['invalid_request'],
                 PhpXmlRpc::$xmlrpcstr['invalid_request'] . ' ' . $xmlRpcParser->_xh['isf_reason']);
         } else {
-            xml_parser_free($parser);
             // small layering violation in favor of speed and memory usage:
             // we should allow the 'execute' method handle this, but in the
             // most common scenario (xmlrpc values type server with some methods
             // registered as phpvals) that would mean a useless encode+decode pass
-            if ($this->functions_parameters_type != 'xmlrpcvals' || (isset($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type']) && ($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type'] == 'phpvals'))) {
+            if ($this->functions_parameters_type != 'xmlrpcvals' ||
+                (isset($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type']) &&
+                    ($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type'] == 'phpvals')
+                )
+            ) {
                 if ($this->debug > 1) {
                     $this->debugmsg("\n+++PARSED+++\n" . var_export($xmlRpcParser->_xh['params'], true) . "\n+++END+++");
                 }
@@ -838,10 +829,10 @@ class Server
 
     /**
      * @param Server $server
-     * @param Request $req
+     * @param Request $req if called in plain php values mode, second param is missing
      * @return Response
      */
-    public static function _xmlrpcs_listMethods($server, $req = null) // if called in plain php values mode, second param is missing
+    public static function _xmlrpcs_listMethods($server, $req = null)
     {
         $outAr = array();
         foreach ($server->dmap as $key => $val) {
@@ -1022,7 +1013,6 @@ class Server
 
         // this is a real dirty and simplistic hack, since we might have received a
         // base64 or datetime values, but they will be listed as strings here...
-        $numParams = count($call['params']);
         $pt = array();
         $wrapper = new Wrapper();
         foreach ($call['params'] as $val) {
@@ -1040,7 +1030,7 @@ class Server
 
     /**
      * @param Server $server
-     * @param Request $req
+     * @param Request|array $req
      * @return Response
      */
     public static function _xmlrpcs_multicall($server, $req)

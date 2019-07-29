@@ -28,7 +28,7 @@ class Logger
      * @param string $message
      * @param string $encoding
      */
-    public function debugMessage($message, $encoding=null)
+    public function debugMessage($message, $encoding = null)
     {
         // US-ASCII is a warning for PHP and a fatal for HHVM
         if ($encoding == 'US-ASCII') {

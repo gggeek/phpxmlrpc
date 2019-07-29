@@ -150,18 +150,18 @@ class Request
      *      because we cannot trust the caller to give us a valid pointer to an open file...
      *
      * @param resource $fp stream pointer
+     * @param bool $headersProcessed
+     * @param string $returnType
      *
      * @return Response
-     *
-     * @todo add 2nd & 3rd param to be passed to ParseResponse() ???
      */
-    public function parseResponseFile($fp)
+    public function parseResponseFile($fp, $headersProcessed = false, $returnType = 'xmlrpcvals')
     {
         $ipd = '';
         while ($data = fread($fp, 32768)) {
             $ipd .= $data;
         }
-        return $this->parseResponse($ipd);
+        return $this->parseResponse($ipd, $headersProcessed, $returnType);
     }
 
     /**
@@ -261,57 +261,33 @@ class Request
             }
         }
 
-        $parser = xml_parser_create();
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
-        // G. Giunta 2005/02/13: PHP internally uses ISO-8859-1, so we have to tell
-        // the xml parser to give us back data in the expected charset.
-        // What if internal encoding is not in one of the 3 allowed?
-        // we use the broadest one, ie. utf8
+        // PHP internally might use ISO-8859-1, so we have to tell the xml parser to give us back data in the expected charset.
+        // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8
         // This allows to send data which is native in various charset,
         // by extending xmlrpc_encode_entities() and setting xmlrpc_internalencoding
         if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
-            xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, 'UTF-8');
+            $options = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
         } else {
-            xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, PhpXmlRpc::$xmlrpc_internalencoding);
+            $options = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
         }
 
-        $xmlRpcParser = new XMLParser();
-        xml_set_object($parser, $xmlRpcParser);
-
-        if ($returnType == 'phpvals') {
-            xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_fast');
-        } else {
-            xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee');
-        }
-
-        xml_set_character_data_handler($parser, 'xmlrpc_cd');
-        xml_set_default_handler($parser, 'xmlrpc_dh');
+        $xmlRpcParser = new XMLParser($options);
+        $xmlRpcParser->parse($data, $returnType, XMLParser::ACCEPT_RESPONSE);
 
         // first error check: xml not well formed
-        if (!xml_parse($parser, $data, 1)) {
-            // thanks to Peter Kocks <peter.kocks@baygate.com>
-            if ((xml_get_current_line_number($parser)) == 1) {
-                $errStr = 'XML error at line 1, check URL';
-            } else {
-                $errStr = sprintf('XML error: %s at line %d, column %d',
-                    xml_error_string(xml_get_error_code($parser)),
-                    xml_get_current_line_number($parser), xml_get_current_column_number($parser));
-            }
-            error_log($errStr);
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'], PhpXmlRpc::$xmlrpcstr['invalid_return'] . ' ' . $errStr);
-            xml_parser_free($parser);
-            if ($this->debug) {
-                print $errStr;
-            }
-            $r->hdrs = $this->httpResponse['headers'];
-            $r->_cookies = $this->httpResponse['cookies'];
-            $r->raw_data = $this->httpResponse['raw_data'];
+        if ($xmlRpcParser->_xh['isf'] > 2) {
 
-            return $r;
+            // BC break: in the past for some cases we used the error message: 'XML error at line 1, check URL'
+
+            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'],
+                PhpXmlRpc::$xmlrpcstr['invalid_return'] . ' ' . $xmlRpcParser->_xh['isf_reason']);
+
+            if ($this->debug) {
+                print $xmlRpcParser->_xh['isf_reason'];
+            }
         }
-        xml_parser_free($parser);
         // second error check: xml well formed but not xml-rpc compliant
-        if ($xmlRpcParser->_xh['isf'] > 1) {
+        elseif ($xmlRpcParser->_xh['isf'] == 2) {
             if ($this->debug) {
                 /// @todo echo something for user?
             }
