@@ -639,4 +639,22 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
             $i++;
         }
     }
+
+    function testBigXML()
+    {
+        // nb: make sure that  the serialized xml corresponding to this is > 10MB in size
+        $data = array();
+        for ($i = 0; $i < 500000; $i++ ) {
+            $data[] = 'hello world';
+        }
+
+        $encoder = new \PhpXmlRpc\Encoder();
+        $val = $encoder->encode($data);
+        $req = new \PhpXmlRpc\Request('test', array($val));
+        $xml = $req->serialize();
+        $parser = new \PhpXmlRpc\Helper\XMLParser();
+        $parser->parse($xml);
+
+        $this->assertequals(0, $parser->_xh['isf']);
+    }
 }

@@ -69,23 +69,15 @@ class XMLParser
 
     /** @var array $parsing_options */
     protected $parsing_options = array();
-    /** @var int $accept */
-    protected $accept = 3; // self::ACCEPT_REQUEST | self::ACCEPT_RESPONSE;
-    /** @var int $maxChunkLength */
-    protected $maxChunkLength = 4194304; // 4 MB
+    /** @var int $accept self::ACCEPT_REQUEST | self::ACCEPT_RESPONSE by default */
+    protected $accept = 3;
+    /** @var int $maxChunkLength 4 MB by default. Any value below 10MB should be good */
+    protected $maxChunkLength = 4194304;
 
     /**
      * @param array $options passed to the xml parser
      */
     public function __construct(array $options = array())
-    {
-        $this->parsing_options = $options;
-    }
-
-    /**
-     * @param array $options passed to the xml parser
-     */
-    public function setParsingOptions(array $options)
     {
         $this->parsing_options = $options;
     }
@@ -98,11 +90,34 @@ class XMLParser
      */
     public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3)
     {
+        $this->_xh = array(
+            'ac' => '',
+            'stack' => array(),
+            'valuestack' => array(),
+            'isf' => 0,
+            'isf_reason' => '',
+            'method' => false, // so we can check later if we got a methodname or not
+            'params' => array(),
+            'pt' => array(),
+            'rt' => '',
+        );
+
+        $len = strlen($data);
+
+        // we test for empty documents here to save on resource allocation and simply the chunked-parsing loop below
+        if ($len == 0) {
+            $this->_xh['isf'] = 3;
+            $this->_xh['isf_reason'] = 'XML error 5: empty document';
+            return;
+        }
+
         $parser = xml_parser_create();
 
         foreach ($this->parsing_options as $key => $val) {
             xml_parser_set_option($parser, $key, $val);
         }
+        // always set this, in case someone tries to disable it via options...
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 1);
 
         xml_set_object($parser, $this);
 
@@ -117,19 +132,7 @@ class XMLParser
 
         $this->accept = $accept;
 
-        $this->_xh = array(
-            'ac' => '',
-            'stack' => array(),
-            'valuestack' => array(),
-            'isf' => 0,
-            'isf_reason' => '',
-            'method' => false, // so we can check later if we got a methodname or not
-            'params' => array(),
-            'pt' => array(),
-            'rt' => '',
-        );
-
-        $len = strlen($data);
+        // @see ticket #70 - we have to parse big xml docks in chunks to avoid errors
         for ($offset = 0; $offset < $len; $offset += $this->maxChunkLength) {
             $chunk = substr($data, $offset, $this->maxChunkLength);
             // error handling: xml not well formed
