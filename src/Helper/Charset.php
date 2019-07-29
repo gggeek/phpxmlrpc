@@ -11,7 +11,7 @@ class Charset
 
     /// @todo add to iso table the characters from cp_1252 range, i.e. 128 to 159?
     /// These will NOT be present in true ISO-8859-1, but will save the unwary windows user from sending junk
-    ///  (though no luck when receiving them...)
+    /// (though no luck when receiving them...)
     /*
     protected $xml_cp1252_Entities = array('in' => array(), out' => array(
         '&#x20AC;', '?',        '&#x201A;', '&#x0192;',
@@ -213,7 +213,7 @@ class Charset
 
             default:
                 $escapedData = '';
-                error_log('XML-RPC: ' . __METHOD__ . ": Converting from $srcEncoding to $destEncoding: not supported...");
+                Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ": Converting from $srcEncoding to $destEncoding: not supported...");
         }
 
         return $escapedData;

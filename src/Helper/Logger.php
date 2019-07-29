@@ -56,4 +56,12 @@ class Logger
         // let the user see this now in case there's a time out later...
         flush();
     }
+
+    /**
+     * Writes a message to the error log
+     */
+    public function errorLog($message)
+    {
+        error_log($message);
+    }
 }

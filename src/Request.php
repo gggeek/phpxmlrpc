@@ -186,7 +186,7 @@ class Request
         $this->httpResponse = array('raw_data' => $data, 'headers' => array(), 'cookies' => array());
 
         if ($data == '') {
-            error_log('XML-RPC: ' . __METHOD__ . ': no response received from server.');
+            Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': no response received from server.');
             return new Response(0, PhpXmlRpc::$xmlrpcerr['no_data'], PhpXmlRpc::$xmlrpcstr['no_data']);
         }
 
@@ -254,7 +254,7 @@ class Request
                     if (extension_loaded('mbstring')) {
                         $data = mb_convert_encoding($data, 'UTF-8', $respEncoding);
                     } else {
-                        error_log('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of received response: ' . $respEncoding);
+                        Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of received response: ' . $respEncoding);
                     }
                 }
             }

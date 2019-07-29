@@ -246,7 +246,7 @@ class Encoder
                     if (extension_loaded('mbstring')) {
                         $xmlVal = mb_convert_encoding($xmlVal, 'UTF-8', $valEncoding);
                     } else {
-                        error_log('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of xml text: ' . $valEncoding);
+                        Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of xml text: ' . $valEncoding);
                     }
                 }
             }
@@ -265,7 +265,7 @@ class Encoder
         if ($xmlRpcParser->_xh['isf'] > 1) {
             // test that $xmlrpc->_xh['value'] is an obj, too???
 
-            error_log($xmlRpcParser->_xh['isf_reason']);
+            Logger::instance()->errorLog($xmlRpcParser->_xh['isf_reason']);
 
             return false;
         }

@@ -93,7 +93,7 @@ class Http
                 // maybe we could take them into account, too?
                 $data = substr($data, $bd);
             } else {
-                error_log('XML-RPC: ' . __METHOD__ . ': HTTPS via proxy error, tunnel connection possibly failed');
+                Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': HTTPS via proxy error, tunnel connection possibly failed');
                 throw new \Exception(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (HTTPS via proxy error, tunnel connection possibly failed)', PhpXmlRpc::$xmlrpcerr['http_error']);
             }
         }
@@ -121,7 +121,7 @@ class Http
 
         if (!preg_match('/^HTTP\/[0-9.]+ 200 /', $data)) {
             $errstr = substr($data, 0, strpos($data, "\n") - 1);
-            error_log('XML-RPC: ' . __METHOD__ . ': HTTP error, got response: ' . $errstr);
+            Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': HTTP error, got response: ' . $errstr);
             throw new \Exception(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (' . $errstr . ')', PhpXmlRpc::$xmlrpcerr['http_error']);
         }
 
@@ -218,7 +218,7 @@ class Http
             // Decode chunked encoding sent by http 1.1 servers
             if (isset($httpResponse['headers']['transfer-encoding']) && $httpResponse['headers']['transfer-encoding'] == 'chunked') {
                 if (!$data = Http::decodeChunked($data)) {
-                    error_log('XML-RPC: ' . __METHOD__ . ': errors occurred when trying to rebuild the chunked data received from server');
+                    Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': errors occurred when trying to rebuild the chunked data received from server');
                     throw new \Exception(PhpXmlRpc::$xmlrpcstr['dechunk_fail'], PhpXmlRpc::$xmlrpcerr['dechunk_fail']);
                 }
             }
@@ -241,11 +241,11 @@ class Http
                                 Logger::instance()->debugMessage("---INFLATED RESPONSE---[" . strlen($data) . " chars]---\n$data\n---END---");
                             }
                         } else {
-                            error_log('XML-RPC: ' . __METHOD__ . ': errors occurred when trying to decode the deflated data received from server');
+                            Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': errors occurred when trying to decode the deflated data received from server');
                             throw new \Exception(PhpXmlRpc::$xmlrpcstr['decompress_fail'], PhpXmlRpc::$xmlrpcerr['decompress_fail']);
                         }
                     } else {
-                        error_log('XML-RPC: ' . __METHOD__ . ': the server sent deflated data. Your php install must have the Zlib extension compiled in to support this.');
+                        Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': the server sent deflated data. Your php install must have the Zlib extension compiled in to support this.');
                         throw new \Exception(PhpXmlRpc::$xmlrpcstr['cannot_decompress'], PhpXmlRpc::$xmlrpcerr['cannot_decompress']);
                     }
                 }
