@@ -2,8 +2,9 @@
 
 namespace PhpXmlRpc;
 
-use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\Charset;
+use PhpXmlRpc\Helper\XMLParser;
 
 /**
  * Allows effortless implementation of XML-RPC servers

@@ -3,6 +3,7 @@
 namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\Charset;
+use PhpXmlRpc\Helper\Logger;
 
 /**
  * This class enables the creation of values for XML-RPC, by encapsulating plain php values.

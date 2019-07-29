@@ -2,6 +2,7 @@
 
 namespace PhpXmlRpc;
 
+use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
 
 /**
