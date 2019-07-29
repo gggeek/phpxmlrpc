@@ -3,7 +3,7 @@
  * Makefile for phpxmlrpc library.
  * To be used with the Pake tool: https://github.com/indeyets/pake/wiki
  *
- * @copyright (c) 2015 G. Giunta
+ * @copyright (c) 2015 - 2019 G. Giunta
  *
  * @todo !important allow user to specify location of docbook xslt instead of the one installed via composer
  */

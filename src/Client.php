@@ -806,8 +806,8 @@ class Client
             return $r;
         }
 
-        // G. Giunta 2005/10/24: close socket before parsing.
-        // should yield slightly better execution times, and make easier recursive calls (e.g. to follow http redirects)
+        // Close socket before parsing.
+        // It should yield slightly better execution times, and make easier recursive calls (e.g. to follow http redirects)
         $ipd = '';
         do {
             // shall we check for $data === FALSE?

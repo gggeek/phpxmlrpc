@@ -1,6 +1,7 @@
 language: php
 
-# As of May 2019, Travis is phasing out VMs based on Precise, which means that we can only test on php >= 5.6 going forward...
+# As of May 2019, Travis is deprecating VMs based on Precise, which means that we can only test on php >= 5.6 going forward
+# (nb: this is not necessarily true yet - there are projects that seem to use a different base dist depending on php version...)
 dist: xenial
 
 php:

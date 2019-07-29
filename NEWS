@@ -1,6 +1,6 @@
-XML-RPC for PHP version 4.4.0 - 2019/xx/yy
+XML-RPC for PHP version 4.4.0 - 2019/7/29
 
-* fixed: allow handling huge xml messages (>=10MB)
+* fixed: allow handling huge xml messages (>=10MB) (issue #71)
 
 
 XML-RPC for PHP version 4.3.2 - 2019/5/27

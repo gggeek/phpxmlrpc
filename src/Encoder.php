@@ -149,12 +149,10 @@ class Encoder
             case 'double':
                 $xmlrpcVal = new Value($phpVal, Value::$xmlrpcDouble);
                 break;
-            // <G_Giunta_2001-02-29>
             // Add support for encoding/decoding of booleans, since they are supported in PHP
             case 'boolean':
                 $xmlrpcVal = new Value($phpVal, Value::$xmlrpcBoolean);
                 break;
-            // </G_Giunta_2001-02-29>
             case 'array':
                 // PHP arrays can be encoded to either xmlrpc structs or arrays,
                 // depending on whether they are hashes or plain 0..n integer indexed

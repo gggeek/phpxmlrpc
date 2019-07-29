@@ -76,8 +76,7 @@ class ParsingBugsTests extends PHPUnit_Framework_TestCase
         $response = utf8_encode(
             '<?xml version="1.0"?>
 <!-- $Id -->
-<!-- found by G. giunta, covers what happens when lib receives
-  UTF8 chars in response text and comments -->
+<!-- found by G. Giunta, covers what happens when lib receives UTF8 chars in response text and comments -->
 <!-- ' . chr(224) . chr(252) . chr(232) . '&#224;&#252;&#232; -->
 <methodResponse>
 <fault>

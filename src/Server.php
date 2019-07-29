@@ -235,8 +235,7 @@ class Server
             $payload = $payload . $this->serializeDebug($respCharset);
         }
 
-        // G. Giunta 2006-01-27: do not create response serialization if it has
-        // already happened. Helps building json magic
+        // Do not create response serialization if it has already happened. Helps building json magic
         if (empty($r->payload)) {
             $r->serialize($respCharset);
         }

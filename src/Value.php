@@ -246,8 +246,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                         $rs .= "<${typ}>" . ($val ? '1' : '0') . "</${typ}>";
                         break;
                     case static::$xmlrpcString:
-                        // G. Giunta 2005/2/13: do NOT use htmlentities, since
-                        // it will produce named html entities, which are invalid xml
+                        // Do NOT use htmlentities, since it will produce named html entities, which are invalid xml
                         $rs .= "<${typ}>" . Charset::instance()->encodeEntities($val, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</${typ}>";
                         break;
                     case static::$xmlrpcInt:
