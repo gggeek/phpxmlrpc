@@ -28,7 +28,8 @@ before_script:
   - phpenv config-rm xdebug.ini
 
   # Set up Apache and Privoxy instances inside the Travis VM and use them for testing against
-  - ./test/ci/travis/setup_php_fpm.sh; ./test/ci/travis/setup_apache.sh
+  - ./test/ci/travis/setup_php_fpm.sh;
+  - ./test/ci/travis/setup_apache.sh
   - ./test/ci/travis/setup_privoxy.sh
 
 script:
@@ -41,3 +42,7 @@ after_failure:
   - cat apache_error.log
   - cat apache_access.log
   - php -i
+
+# reduce depth (history) of git checkout
+git:
+    depth: 5
