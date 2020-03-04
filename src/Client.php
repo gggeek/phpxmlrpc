@@ -395,7 +395,7 @@ class Client
      */
     public function setCookie($name, $value = '', $path = '', $domain = '', $port = null)
     {
-        $this->cookies[$name]['value'] = urlencode($value);
+        $this->cookies[$name]['value'] = rawurlencode($value);
         if ($path || $domain || $port) {
             $this->cookies[$name]['path'] = $path;
             $this->cookies[$name]['domain'] = $domain;
