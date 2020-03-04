@@ -1,3 +1,9 @@
+XML-RPC for PHP version 4.4.1 - 2020/3/4
+
+* fixed: `client->setCookie()` bug: values that contain spaces are now properly encoded in a way that get decoded back
+  to spaces on the receiving end if that one is running on php 7.4 (or does RFC-compliant cookie decoding)
+
+
 XML-RPC for PHP version 4.4.0 - 2019/7/29
 
 * fixed: allow handling huge xml messages (>=10MB) (issue #71)
