@@ -1,7 +1,8 @@
 language: php
 
 # As of May 2019, Travis is deprecating VMs based on Precise, which means that we can only test on php >= 5.6 going forward
-# (nb: this is not necessarily true yet - there are projects that seem to use a different base dist depending on php version...)
+# (nb: this is not necessarily true yet - and we can use a different base for each on php version, but we'll have to
+# adapt the apache / env setup scripts to accommodate that...)
 dist: xenial
 
 php:
@@ -13,6 +14,7 @@ php:
   - 7.1
   - 7.2
   - 7.3
+  - 7.4
 
 before_install:
   # This is mandatory or the 'apt-get install' calls following will fail
