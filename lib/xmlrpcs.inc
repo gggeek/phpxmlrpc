@@ -113,11 +113,11 @@
 		}
 		if(strpos($methName, "system.") === 0)
 		{
-			$dmap=$GLOBALS['_xmlrpcs_dmap']; $sysCall=1;
+			$dmap=$GLOBALS['_xmlrpcs_dmap']; //$sysCall=1;
 		}
 		else
 		{
-			$dmap=$server->dmap; $sysCall=0;
+			$dmap=$server->dmap; //$sysCall=0;
 		}
 		if(isset($dmap[$methName]))
 		{
@@ -166,11 +166,11 @@
 		}
 		if(strpos($methName, "system.") === 0)
 		{
-			$dmap=$GLOBALS['_xmlrpcs_dmap']; $sysCall=1;
+			$dmap=$GLOBALS['_xmlrpcs_dmap']; //$sysCall=1;
 		}
 		else
 		{
-			$dmap=$server->dmap; $sysCall=0;
+			$dmap=$server->dmap; //$sysCall=0;
 		}
 		if(isset($dmap[$methName]))
 		{
@@ -293,7 +293,7 @@
 
 		// this is a real dirty and simplistic hack, since we might have received a
 		// base64 or datetime values, but they will be listed as strings here...
-		$numParams = count($call['params']);
+		//$numParams = count($call['params']);
 		$pt = array();
 		foreach($call['params'] as $val)
 			$pt[] = php_2_xmlrpc_type(gettype($val));
@@ -1112,7 +1112,7 @@
 				// Allow mixed-convention servers
 				if (is_object($m))
 				{
-					if($sysCall)
+					if ($sysCall)
 					{
 						$r = call_user_func($func, $this, $m);
 					}

@@ -323,7 +323,6 @@
 				$i++;
 			}
 
-
 			// start  building of PHP code to be eval'd
 			$innercode = '';
 			$i = 0;
