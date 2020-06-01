@@ -13,7 +13,9 @@
         "phpunit/phpunit-selenium": "*",
         "codeclimate/php-test-reporter": "dev-master",
         "ext-curl": "*",
+        "ext-dom": "*",
         "ext-mbstring": "*",
+        "ext-xsl": "*",
         "indeyets/pake": "~1.99",
         "sami/sami": "~3.1",
         "docbook/docbook-xsl": "~1.78"
