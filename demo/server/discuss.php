@@ -85,6 +85,9 @@ function getComments($req)
     }
 }
 
+// NB: take care not to output anything else after this call, as it will mess up the responses and it will be hard to
+// debug. In case you have to do so, at least re-emit a correct Content-Length http header (requires output buffering)
+
 $srv = new PhpXmlRpc\Server(array(
     "discuss.addComment" => array(
         "function" => "addComment",

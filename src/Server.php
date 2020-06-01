@@ -271,8 +271,10 @@ class Server
                 }
             }
 
-            // do not output content-length header if php is compressing output for us:
-            // it will mess up measurements
+            // Do not output content-length header if php is compressing output for us:
+            // it will mess up measurements.
+            // Note that Apache/mod_php will add (and even alter!) the Content-Length header on its own, but only for
+            // responses up to 8000 bytes
             if ($phpNoSelfCompress) {
                 header('Content-Length: ' . (int)strlen($payload));
             }

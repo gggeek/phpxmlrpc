@@ -74,6 +74,8 @@ function forward_request($req)
 }
 
 // run the server
+// NB: take care not to output anything else after this call, as it will mess up the responses and it will be hard to
+// debug. In case you have to do so, at least re-emit a correct Content-Length http header (requires output buffering)
 $server = new PhpXmlRpc\Server(
     array(
         'xmlrpcproxy.call' => array(
