@@ -3,7 +3,7 @@
  * Verify compatibility level of current php install with php-xmlrpc lib.
  *
  * @author Gaetano Giunta
- * @copyright (C) 2006-2019 G. Giunta
+ * @copyright (C) 2006-2020 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  *
  * @todo add a test for php output buffering?
