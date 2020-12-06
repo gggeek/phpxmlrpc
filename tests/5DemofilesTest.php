@@ -7,7 +7,7 @@ include_once __DIR__ . '/LocalFileTestCase.php';
  */
 class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
 {
-    public function setUp()
+    public function set_up()
     {
         $this->args = argParser::getArgs();
 

@@ -2,7 +2,11 @@
 
 include_once __DIR__ . '/parse_args.php';
 
-abstract class PhpXmlRpc_LocalFileTestCase extends PHPUnit_Framework_TestCase
+include_once __DIR__ . '/PolyfillTestCase.php';
+
+use PHPUnit\Framework\TestResult;
+
+abstract class PhpXmlRpc_LocalFileTestCase extends PhpXmlRpc_PolyfillTestCase
 {
     public $args = array();
 
@@ -13,7 +17,7 @@ abstract class PhpXmlRpc_LocalFileTestCase extends PHPUnit_Framework_TestCase
     protected $collectCodeCoverageInformation;
     protected $coverageScriptUrl;
 
-    public function run(PHPUnit_Framework_TestResult $result = NULL)
+    public function _run(TestResult $result = NULL)
     {
         $this->testId = get_class($this) . '__' . $this->getName();
 
@@ -23,7 +27,7 @@ abstract class PhpXmlRpc_LocalFileTestCase extends PHPUnit_Framework_TestCase
 
         $this->collectCodeCoverageInformation = $result->getCollectCodeCoverageInformation();
 
-        parent::run($result);
+        parent::_run($result);
 
         if ($this->collectCodeCoverageInformation) {
             $coverage = new PHPUnit_Extensions_SeleniumCommon_RemoteCoverage(

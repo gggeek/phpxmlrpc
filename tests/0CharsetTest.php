@@ -5,6 +5,8 @@
 
 use PhpXmlRpc\Helper\Charset;
 
+include_once __DIR__ . '/PolyfillTestCase.php';
+
 /**
  * Test conversion between encodings
  *
@@ -13,7 +15,7 @@ use PhpXmlRpc\Helper\Charset;
  *     chcp 28591 (latin1)
  *     chcp 65001 (utf8)
  */
-class CharsetTest extends PHPUnit_Framework_TestCase
+class CharsetTest extends PhpXmlRpc_PolyfillTestCase
 {
     // Consolas font should render these properly
     protected $runes = "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ";
@@ -22,7 +24,7 @@ class CharsetTest extends PHPUnit_Framework_TestCase
     protected $chinese = "我能吞下玻璃而不伤身体。";
     protected $latinString;
 
-    protected function setUp()
+    protected function set_up()
     {
         // construct a latin string with all chars (except control ones)
         $this->latinString = "\n\r\t";

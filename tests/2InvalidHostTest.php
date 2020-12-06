@@ -4,16 +4,18 @@ include_once __DIR__ . '/../lib/xmlrpc.inc';
 
 include_once __DIR__ . '/parse_args.php';
 
+include_once __DIR__ . '/PolyfillTestCase.php';
+
 /**
  * Tests involving requests sent to non-existing servers
  */
-class InvalidHostTest extends PHPUnit_Framework_TestCase
+class InvalidHostTest extends PhpXmlRpc_PolyfillTestCase
 {
     /** @var xmlrpc_client $client */
     public $client = null;
     public $args = array();
 
-    public function setUp()
+    public function set_up()
     {
         $this->args = argParser::getArgs();
 
@@ -24,7 +26,7 @@ class InvalidHostTest extends PHPUnit_Framework_TestCase
             ob_start();
     }
 
-    protected function tearDown()
+    protected function tear_down()
     {
         if ($this->args['DEBUG'] != 1)
             return;

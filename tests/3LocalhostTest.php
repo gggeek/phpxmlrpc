@@ -5,11 +5,15 @@ include_once __DIR__ . '/../lib/xmlrpc_wrappers.inc';
 
 include_once __DIR__ . '/parse_args.php';
 
+include_once __DIR__ . '/PolyfillTestCase.php';
+
+use PHPUnit\Framework\TestResult;
+
 /**
  * Tests which involve interaction between the client and the server.
  * They are run against the server found in demo/server.php
  */
-class LocalhostTest extends PHPUnit_Framework_TestCase
+class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
 {
     /** @var xmlrpc_client $client */
     protected $client = null;
@@ -26,7 +30,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
     protected $collectCodeCoverageInformation;
     protected $coverageScriptUrl;
 
-    public static function fail($message = '')
+    public static function _fail($message = '')
     {
         // save in a static var that this particular test has failed
         // (but only if not called from subclass objects / multitests)
@@ -40,18 +44,18 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        parent::fail($message);
+        parent::_fail($message);
     }
 
     /**
      * Reimplemented to allow us to collect code coverage info from the target server.
      * Code taken from PHPUnit_Extensions_Selenium2TestCase
      *
-     * @param PHPUnit_Framework_TestResult $result
-     * @return PHPUnit_Framework_TestResult
+     * @param TestResult $result
+     * @return TestResult
      * @throws Exception
      */
-    public function run(PHPUnit_Framework_TestResult $result = NULL)
+    public function _run(TestResult $result = NULL)
     {
         $this->testId = get_class($this) . '__' . $this->getName();
 
@@ -61,7 +65,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
 
         $this->collectCodeCoverageInformation = $result->getCollectCodeCoverageInformation();
 
-        parent::run($result);
+        parent::_run($result);
 
         if ($this->collectCodeCoverageInformation) {
             $coverage = new PHPUnit_Extensions_SeleniumCommon_RemoteCoverage(
@@ -79,7 +83,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
         return $result;
     }
 
-    public function setUp()
+    public function set_up()
     {
         $this->args = argParser::getArgs();
 
@@ -100,7 +104,7 @@ class LocalhostTest extends PHPUnit_Framework_TestCase
             ob_start();
     }
 
-    protected function tearDown()
+    protected function tear_down()
     {
         if ($this->args['DEBUG'] != 1)
             return;

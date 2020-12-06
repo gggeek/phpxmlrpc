@@ -7,21 +7,23 @@ include_once __DIR__ . '/../lib/xmlrpcs.inc';
 
 include_once __DIR__ . '/parse_args.php';
 
+include_once __DIR__ . '/PolyfillTestCase.php';
+
 /**
  * Tests involving parsing of xml and handling of xmlrpc values
  */
-class ParsingBugsTests extends PHPUnit_Framework_TestCase
+class ParsingBugsTests extends PhpXmlRpc_PolyfillTestCase
 {
     public $args = array();
 
-    protected function setUp()
+    protected function set_up()
     {
         $this->args = argParser::getArgs();
         if ($this->args['DEBUG'] == 1)
             ob_start();
     }
 
-    protected function tearDown()
+    protected function tear_down()
     {
         if ($this->args['DEBUG'] != 1)
             return;

@@ -5,6 +5,11 @@ language: php
 # adapt the apache / env setup scripts to accommodate that...)
 dist: xenial
 
+
+global:
+    # temp workaround to xdebug 3.0.0 bug
+    - XDEBUG_MODE=coverage
+
 php:
   #- 5.3
   #- 5.4
