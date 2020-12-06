@@ -9,16 +9,15 @@
         "ext-xml": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=4.0.0, <6.0.0",
+        "phpunit/phpunit": "~4.0 || ~5.0",
         "phpunit/phpunit-selenium": "*",
-        "codeclimate/php-test-reporter": "dev-master",
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-mbstring": "*",
         "ext-xsl": "*",
         "indeyets/pake": "~1.99",
-        "sami/sami": "~3.1",
-        "docbook/docbook-xsl": "~1.78"
+        "sami/sami": "~3.3",
+        "docbook/docbook-xsl": "~1.79"
     },
     "suggest": {
         "ext-curl": "Needed for HTTPS and HTTP 1.1 support, NTLM Auth etc...",
@@ -36,9 +35,9 @@
             "type": "package",
             "package": {
                 "name": "docbook/docbook-xsl",
-                "version": "1.78.1",
+                "version": "1.79.1",
                 "dist": {
-                    "url": "https://sourceforge.net/projects/docbook/files/docbook-xsl/1.78.1/docbook-xsl-1.78.1.zip/download",
+                    "url": "https://sourceforge.net/projects/docbook/files/docbook-xsl/1.79.1/docbook-xsl-1.79.1.zip/download",
                     "type": "zip"
                 }
             }
