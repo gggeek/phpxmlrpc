@@ -5,7 +5,7 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 abstract class PhpXmlRpc_PolyfillTestCase extends TestCase
 {
-    public function _run(TestResult $result = null) {
+    public function _run($result = null) {
         return parent::run($result);
     }
 

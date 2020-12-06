@@ -55,7 +55,7 @@ class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
      * @return TestResult
      * @throws Exception
      */
-    public function _run(TestResult $result = NULL)
+    public function _run($result = NULL)
     {
         $this->testId = get_class($this) . '__' . $this->getName();
 

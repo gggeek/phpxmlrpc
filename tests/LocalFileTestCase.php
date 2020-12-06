@@ -17,7 +17,7 @@ abstract class PhpXmlRpc_LocalFileTestCase extends PhpXmlRpc_PolyfillTestCase
     protected $collectCodeCoverageInformation;
     protected $coverageScriptUrl;
 
-    public function _run(TestResult $result = NULL)
+    public function _run($result = NULL)
     {
         $this->testId = get_class($this) . '__' . $this->getName();
 
