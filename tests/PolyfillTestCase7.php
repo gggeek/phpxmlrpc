@@ -1,6 +1,5 @@
 <?php
 
-use PHPUnit\Framework\TestResult;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 abstract class PhpXmlRpc_PolyfillTestCase extends TestCase
@@ -11,7 +10,7 @@ abstract class PhpXmlRpc_PolyfillTestCase extends TestCase
 
     public static function _fail() {}
 
-    public function run(TestResult $result = null) {
+    public function run(PHPUnit_Framework_TestResult $result = null) {
         return $this->_run($result);
     }
 
