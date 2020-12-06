@@ -36,15 +36,11 @@ class argParser
             'LOCALPATH' => __DIR__,
         );
 
-        // check for command line vs web page input params
+        // check for command line (env vars) vs. web page input params
         if (!isset($_SERVER['REQUEST_METHOD'])) {
-            if (isset($argv)) {
-                foreach ($argv as $param) {
-                    $param = explode('=', $param);
-                    if (count($param) > 1) {
-                        $pname = strtoupper(ltrim($param[0], '-'));
-                        $$pname = $param[1];
-                    }
+            foreach($_SERVER as $key => $val) {
+                if (array_key_exists($key, $args)) {
+                    $$key = $val;
                 }
             }
         } else {

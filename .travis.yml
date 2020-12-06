@@ -7,8 +7,6 @@ dist: xenial
 
 env:
     global:
-        # temp workaround to xdebug 3.0.0 bug
-        - XDEBUG_MODE=coverage
         - LOCALSERVER=localhost
         - URI=/demo/server/server.php
         - HTTPSSERVER=localhost
@@ -20,6 +18,8 @@ env:
         - HTTPSIGNOREPEER=1
         - SSLVERSION=0
         - DEBUG=0
+        # temp workaround to xdebug 3.0.0 bug
+        - XDEBUG_MODE=coverage
 
 php:
   #- 5.3
@@ -49,7 +49,7 @@ install:
 
   # Re-enable xdebug for when we need to generate code coverage
   - export COVERAGE_OPTS=""
-  - if [ "$TRAVIS_PHP_VERSION" = "7.3" -a "$XDEBUG_INI" != "" ]; then mv "$XDEBUG_INI.bak" "$XDEBUG_INI" && export COVERAGE_OPTS="--coverage-clover=coverage.clover"; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "7.4" -a "$XDEBUG_INI" != "" ]; then mv "$XDEBUG_INI.bak" "$XDEBUG_INI" && export COVERAGE_OPTS="--coverage-clover=coverage.clover"; fi
 
 before_script:
   # Set up Apache and Privoxy instances inside the Travis VM and use them for testing against
