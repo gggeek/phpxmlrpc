@@ -2,24 +2,24 @@ language: php
 
 # As of May 2019, Travis is deprecating VMs based on Precise, which means that we can only test on php >= 5.6 going forward
 # (nb: this is not necessarily true yet - and we can use a different base for each php version, but we'll have to
-# adapt the apache / env setup scripts to accommodate that...)
+# adapt composer.json plus the apache / env setup scripts to accommodate that...)
 dist: xenial
 
-
-global:
-    # temp workaround to xdebug 3.0.0 bug
-    - XDEBUG_MODE=coverage
-    - LOCALSERVER=localhost
-    - URI=/demo/server/server.php
-    - HTTPSSERVER=localhost
-    - HTTPSURI=/demo/server/server.php
-    - PROXY=localhost:8080
-    # Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
-    # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below
-    - HTTPSVERIFYHOST=0
-    - HTTPSIGNOREPEER=1
-    - SSLVERSION=0
-    - DEBUG=0
+env:
+    global:
+        # temp workaround to xdebug 3.0.0 bug
+        - XDEBUG_MODE=coverage
+        - LOCALSERVER=localhost
+        - URI=/demo/server/server.php
+        - HTTPSSERVER=localhost
+        - HTTPSURI=/demo/server/server.php
+        - PROXY=localhost:8080
+        # Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
+        # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below
+        - HTTPSVERIFYHOST=0
+        - HTTPSIGNOREPEER=1
+        - SSLVERSION=0
+        - DEBUG=0
 
 php:
   #- 5.3
