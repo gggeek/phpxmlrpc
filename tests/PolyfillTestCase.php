@@ -2,8 +2,8 @@
 
 use PHPUnit\Runner\Version as PHPUnit_Version;
 
-if (class_exists('PhpXmlRpc_PolyfillTestCase')) {
-    return;
+if (!class_exists('PHPUnit_Extensions_SeleniumCommon_RemoteCoverage')) {
+    class PHPUnit_Extensions_SeleniumCommon_RemoteCoverage extends PHPUnit\Extensions\SeleniumCommon\RemoteCoverage {}
 }
 
 if (class_exists(PHPUnit_Version::class) === false || version_compare(PHPUnit_Version::id(), '8.0.0', '<')) {
