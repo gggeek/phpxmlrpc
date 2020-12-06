@@ -9,6 +9,17 @@ dist: xenial
 global:
     # temp workaround to xdebug 3.0.0 bug
     - XDEBUG_MODE=coverage
+    - LOCALSERVER=localhost
+    - URI=/demo/server/server.php
+    - HTTPSSERVER=localhost
+    - HTTPSURI=/demo/server/server.php
+    - PROXY=localhost:8080
+    # Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
+    # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below
+    - HTTPSVERIFYHOST=0
+    - HTTPSIGNOREPEER=1
+    - SSLVERSION=0
+    - DEBUG=0
 
 php:
   #- 5.3
@@ -50,9 +61,7 @@ before_script:
   - vendor/bin/phpunit --version
 
 script:
-  # Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
-  # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below
-  vendor/bin/phpunit $COVERAGE_OPTS tests LOCALSERVER=localhost URI=/demo/server/server.php HTTPSSERVER=localhost HTTPSURI=/demo/server/server.php PROXY=localhost:8080 HTTPSVERIFYHOST=0 HTTPSIGNOREPEER=1 SSLVERSION=0 DEBUG=0
+  vendor/bin/phpunit $COVERAGE_OPTS tests
 
 after_failure:
   # Save as much info as we can to help developers
