@@ -18,8 +18,6 @@ env:
         - HTTPSIGNOREPEER=1
         - SSLVERSION=0
         - DEBUG=0
-        # temp workaround to xdebug 3.0.0 bug
-        - XDEBUG_MODE=coverage
 
 php:
   #- 5.3
