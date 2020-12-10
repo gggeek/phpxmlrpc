@@ -103,7 +103,7 @@ class LocalhostMultiTest extends LocalhostTest
     {
         if ($this->args['PROXYSERVER'] == '')
         {
-            $this->markTestSkipped('PROXY definition missing: cannot test proxy');
+            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy');
             return;
         }
 
@@ -204,7 +204,7 @@ class LocalhostMultiTest extends LocalhostTest
         }
         else if ($this->args['PROXYSERVER'] == '')
         {
-            $this->markTestSkipped('PROXY definition missing: cannot test proxy w. http 1.1');
+            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. http 1.1');
             return;
         }
 
@@ -281,7 +281,7 @@ class LocalhostMultiTest extends LocalhostTest
         }
         else if ($this->args['PROXYSERVER'] == '')
         {
-            $this->markTestSkipped('PROXY definition missing: cannot test proxy w. https');
+            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. https');
             return;
         }
         else if ($this->args['HTTPSSERVER'] == '')

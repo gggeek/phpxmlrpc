@@ -63,14 +63,14 @@ class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
     public function testDiscussServer()
     {
         $page = $this->request('server/discuss.php');
-        $this->assertContains('<name>faultCode</name>', $page);
+        $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
     }
 
     public function testProxyServer()
     {
         $page = $this->request('server/proxy.php');
-        $this->assertContains('<name>faultCode</name>', $page);
+        $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
     }
 }

@@ -11,7 +11,7 @@ env:
         - URI=/demo/server/server.php
         - HTTPSSERVER=localhost
         - HTTPSURI=/demo/server/server.php
-        - PROXY=localhost:8080
+        - PROXYSERVER=localhost:8080
         # Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
         # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below
         - HTTPSVERIFYHOST=0

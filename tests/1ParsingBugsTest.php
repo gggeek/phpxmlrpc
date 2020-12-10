@@ -161,7 +161,7 @@ class ParsingBugsTests extends PhpXmlRpc_PolyfillTestCase
     public function testI8()
     {
         if (PHP_INT_SIZE == 4 ) {
-            $this->markTestSkipped('did not find a locale which sets decimal separator to comma');
+            $this->markTestSkipped('Can not test i8 as php is compiled in 32 bit mode');
             return;
         }
 

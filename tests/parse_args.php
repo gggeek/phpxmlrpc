@@ -21,8 +21,6 @@ class argParser
 {
     public static function getArgs()
     {
-        global $argv;
-
         $args = array(
             'DEBUG' => 0,
             'LOCALSERVER' => 'localhost',
@@ -32,7 +30,7 @@ class argParser
             'HTTPSVERIFYHOST' => 2,
             'SSLVERSION' => 0,
             'PROXYSERVER' => null,
-            'NOPROXY' => false,
+            //'NOPROXY' => false,
             'LOCALPATH' => __DIR__,
         );
 
@@ -76,8 +74,8 @@ class argParser
         if (isset($SSLVERSION)) {
             $args['SSLVERSION'] = (int)$SSLVERSION;
         }
-        if (isset($PROXY)) {
-            $arr = explode(':', $PROXY);
+        if (isset($PROXYSERVER)) {
+            $arr = explode(':', $PROXYSERVER);
             $args['PROXYSERVER'] = $arr[0];
             if (count($arr) > 1) {
                 $args['PROXYPORT'] = $arr[1];
@@ -86,9 +84,9 @@ class argParser
             }
         }
         // used to silence testsuite warnings about proxy code not being tested
-        if (isset($NOPROXY)) {
-            $args['NOPROXY'] = true;
-        }
+        //if (isset($NOPROXY)) {
+        //    $args['NOPROXY'] = true;
+        //}
         if (!isset($URI)) {
             // GUESTIMATE the url of local demo server
             // play nice to php 3 and 4-5 in retrieving URL of server.php

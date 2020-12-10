@@ -969,7 +969,7 @@ And turned it into nylon';
             new xmlrpcval('hello world', 'string'),
         ));
         $r = $this->send($m, 0, true);
-        $this->assertContains('hello world', $r->raw_data);
+        $this->assertStringContainsString('hello world', $r->raw_data);
     }
 
     public function testSendTwiceSameMsg()

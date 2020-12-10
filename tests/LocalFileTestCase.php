@@ -75,8 +75,8 @@ abstract class PhpXmlRpc_LocalFileTestCase extends PhpXmlRpc_PolyfillTestCase
         if (!$emptyPageOk) {
             $this->assertNotEquals('', $page);
         }
-        $this->assertNotContains('Fatal error', $page);
-        $this->assertNotContains('Notice:', $page);
+        $this->assertStringNotContainsStringIgnoringCase('Fatal error', $page);
+        $this->assertStringNotContainsStringIgnoringCase('Notice:', $page);
 
         return $page;
     }
