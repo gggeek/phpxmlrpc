@@ -1,3 +1,9 @@
+XML-RPC for PHP version 4.xx - unreleased
+
+* improvements to the test stack: it is now possible to run it via Docker besides Travis; avoid using _any_ external
+  server when running tests
+
+
 XML-RPC for PHP version 4.4.2 - 2020/3/4
 
 * fixed: `client->setCookie()` bug: cookie values that contain spaces are now properly encoded in a way that gets them
