@@ -1,4 +1,4 @@
-<html>
+<?php require_once __DIR__ . "/_bootstrap.php"; ?><html lang="en">
 <head><title>xmlrpc - Getstatename demo</title></head>
 <body>
 <h1>Getstatename demo</h1>
@@ -6,10 +6,9 @@
 <h2>Send a U.S. state number to the server and get back the state name</h2>
 
 <h3>The code demonstrates usage of automatic encoding/decoding of php variables into xmlrpc values</h3>
-<?php
 
-include_once __DIR__ . "/../../src/Autoloader.php";
-PhpXmlRpc\Autoloader::register();
+<p>You can see the source to this page here: <a href="getstatename.php?showSource=1">getstatename.php</a></p>
+<?php
 
 if (isset($_POST["stateno"]) && $_POST["stateno"] != "") {
     $stateNo = (integer)$_POST["stateno"];
@@ -18,13 +17,13 @@ if (isset($_POST["stateno"]) && $_POST["stateno"] != "") {
         array($encoder->encode($stateNo))
     );
     print "Sending the following request:<pre>\n\n" . htmlentities($req->serialize()) . "\n\n</pre>Debug info of server data follows...\n\n";
-    $client = new PhpXmlRpc\Client("http://phpxmlrpc.sourceforge.net/server.php");
+    $client = new PhpXmlRpc\Client(XMLRPCSERVER);
     $client->setDebug(1);
     $r = $client->send($req);
     if (!$r->faultCode()) {
         $v = $r->value();
         print "<br/>State number <b>" . $stateNo . "</b> is <b>"
-            . htmlspecialchars($encoder->decode($v)) . "</b><br/>";
+            . htmlspecialchars($encoder->decode($v)) . "</b><br/><br/>";
     } else {
         print "An error occurred: ";
         print "Code: " . htmlspecialchars($r->faultCode())

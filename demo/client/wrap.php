@@ -1,4 +1,4 @@
-<html>
+<?php require_once __DIR__ . "/_bootstrap.php"; ?><html lang="en">
 <head><title>xmlrpc - Webservice wrappper demo</title></head>
 <body>
 <h1>Webservice wrappper demo</h1>
@@ -10,12 +10,10 @@
     2) wrapping of remote methods into php functions<br/>
     See also proxy.php for an alternative take
 </h3>
+<p>You can see the source to this page here: <a href="wrap.php?showSource=1">wrap.php</a></p>
 <?php
 
-include_once __DIR__ . "/../../src/Autoloader.php";
-PhpXmlRpc\Autoloader::register();
-
-$client = new PhpXmlRpc\Client("http://phpxmlrpc.sourceforge.net/server.php");
+$client = new PhpXmlRpc\Client(XMLRPCSERVER);
 $client->return_type = 'phpvals'; // let client give us back php values instead of xmlrpcvals
 $resp = $client->send(new PhpXmlRpc\Request('system.listMethods'));
 if ($resp->faultCode()) {
@@ -44,8 +42,9 @@ if ($resp->faultCode()) {
     if ($callable) {
         echo "Now testing function for remote method to convert U.S. state number into state name";
         $stateNum = rand(1, 51);
-        // the 2nd parameter gets added to the closure - it is teh debug level to be used for the client
+        // the 2nd parameter gets added to the closure - it is the debug level to be used for the client
         $stateName = $callable($stateNum, 2);
+        echo "State $stateNum is ".htmlspecialchars($stateName);
     }
 }
 ?>

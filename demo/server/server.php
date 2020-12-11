@@ -9,13 +9,7 @@
  * Please do not copy this file verbatim into your production server.
  **/
 
-// give user a chance to see the source for this server instead of running the services
-if ($_SERVER['REQUEST_METHOD'] != 'POST' && isset($_GET['showSource'])) {
-    highlight_file(__FILE__);
-    die();
-}
-
-include_once __DIR__ . "/../../vendor/autoload.php";
+require_once __DIR__ . "/_bootstrap.php";
 
 // out-of-band information: let the client manipulate the server operations.
 // we do this to help the testsuite script: do not reproduce in production!
