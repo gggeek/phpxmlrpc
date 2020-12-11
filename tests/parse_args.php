@@ -4,8 +4,8 @@
  * Common parameter parsing for benchmark and tests scripts.
  *
  * @param integer DEBUG
- * @param string  LOCALSERVER
- * @param string  URI
+ * @param string  HTTPSERVER
+ * @param string  HTTPURI
  * @param string  HTTPSSERVER
  * @param string  HTTPSURI
  * @param bool    HTTPSIGNOREPEER
@@ -18,18 +18,27 @@
  **/
 class argParser
 {
+    /**
+     * @return array
+     */
     public static function getArgs()
     {
+        /// @todo should we prefix all test parameters with TESTS_ ?
         $args = array(
             'DEBUG' => 0,
-            'LOCALSERVER' => 'localhost',
-            'HTTPSSERVER' => 'gggeek.altervista.org',
-            'HTTPSURI' => '/sw/xmlrpc/demo/server/server.php',
+            'HTTPSERVER' => 'localhost',
+            'HTTPURI' => null,
+            // now that we run tests in Docker by default, with a webserver set up for https, let's default to it
+            'HTTPSSERVER' => 'localhost',
+            'HTTPSURI' => null,
+            // example alternative:
+            //'HTTPSSERVER' => 'gggeek.altervista.org',
+            //'HTTPSURI' => '/sw/xmlrpc/demo/server/server.php',
             'HTTPSIGNOREPEER' => false,
             'HTTPSVERIFYHOST' => 2,
             'SSLVERSION' => 0,
             'PROXYSERVER' => null,
-            'LOCALPATH' => __DIR__,
+            //'LOCALPATH' => __DIR__,
         );
 
         // check for command line (env vars) vs. web page input params
@@ -48,30 +57,61 @@ class argParser
         if (isset($DEBUG)) {
             $args['DEBUG'] = intval($DEBUG);
         }
-        if (isset($LOCALSERVER)) {
-            $args['LOCALSERVER'] = $LOCALSERVER;
+
+        if (isset($HTTPSERVER)) {
+            $args['HTTPSERVER'] = $HTTPSERVER;
         } else {
             if (isset($HTTP_HOST)) {
-                $args['LOCALSERVER'] = $HTTP_HOST;
+                $args['HTTPSERVER'] = $HTTP_HOST;
             } elseif (isset($_SERVER['HTTP_HOST'])) {
-                $args['LOCALSERVER'] = $_SERVER['HTTP_HOST'];
+                $args['HTTPSERVER'] = $_SERVER['HTTP_HOST'];
             }
         }
+
+        if (!isset($HTTPURI) || $HTTPURI == '') {
+            // GUESTIMATE the url of local demo server
+            // play nice to php 3 and 4-5 in retrieving URL of server.php
+            /// @todo filter out query string from REQUEST_URI
+            if (isset($REQUEST_URI)) {
+                $HTTPURI = str_replace('/tests/testsuite.php', '/demo/server/server.php', $REQUEST_URI);
+                $HTTPURI = str_replace('/testsuite.php', '/server.php', $HTTPURI);
+                $HTTPURI = str_replace('/tests/benchmark.php', '/demo/server/server.php', $HTTPURI);
+                $HTTPURI = str_replace('/benchmark.php', '/server.php', $HTTPURI);
+            } elseif (isset($_SERVER['PHP_SELF']) && isset($_SERVER['REQUEST_METHOD'])) {
+                $HTTPURI = str_replace('/tests/testsuite.php', '/demo/server/server.php', $_SERVER['PHP_SELF']);
+                $HTTPURI = str_replace('/testsuite.php', '/server.php', $HTTPURI);
+                $HTTPURI = str_replace('/tests/benchmark.php', '/demo/server/server.php', $HTTPURI);
+                $HTTPURI = str_replace('/benchmark.php', '/server.php', $HTTPURI);
+            } else {
+                $HTTPURI = '/demo/server/server.php';
+            }
+        }
+        if ($HTTPURI[0] != '/') {
+            $HTTPURI = '/' . $HTTPURI;
+        }
+        $args['HTTPURI'] = $HTTPURI;
+
         if (isset($HTTPSSERVER)) {
             $args['HTTPSSERVER'] = $HTTPSSERVER;
         }
+
+        /// @todo if $HTTPSURI is unset, and HTTPSSERVER == localhost, use HTTPURI
         if (isset($HTTPSURI)) {
             $args['HTTPSURI'] = $HTTPSURI;
         }
+
         if (isset($HTTPSIGNOREPEER)) {
             $args['HTTPSIGNOREPEER'] = (bool)$HTTPSIGNOREPEER;
         }
+
         if (isset($HTTPSVERIFYHOST)) {
             $args['HTTPSVERIFYHOST'] = (int)$HTTPSVERIFYHOST;
         }
+
         if (isset($SSLVERSION)) {
             $args['SSLVERSION'] = (int)$SSLVERSION;
         }
+
         if (isset($PROXYSERVER)) {
             $arr = explode(':', $PROXYSERVER);
             $args['PROXYSERVER'] = $arr[0];
@@ -81,31 +121,10 @@ class argParser
                 $args['PROXYPORT'] = 8080;
             }
         }
-        if (!isset($URI)) {
-            // GUESTIMATE the url of local demo server
-            // play nice to php 3 and 4-5 in retrieving URL of server.php
-            /// @todo filter out query string from REQUEST_URI
-            if (isset($REQUEST_URI)) {
-                $URI = str_replace('/tests/testsuite.php', '/demo/server/server.php', $REQUEST_URI);
-                $URI = str_replace('/testsuite.php', '/server.php', $URI);
-                $URI = str_replace('/tests/benchmark.php', '/demo/server/server.php', $URI);
-                $URI = str_replace('/benchmark.php', '/server.php', $URI);
-            } elseif (isset($_SERVER['PHP_SELF']) && isset($_SERVER['REQUEST_METHOD'])) {
-                $URI = str_replace('/tests/testsuite.php', '/demo/server/server.php', $_SERVER['PHP_SELF']);
-                $URI = str_replace('/testsuite.php', '/server.php', $URI);
-                $URI = str_replace('/tests/benchmark.php', '/demo/server/server.php', $URI);
-                $URI = str_replace('/benchmark.php', '/server.php', $URI);
-            } else {
-                $URI = '/demo/server/server.php';
-            }
-        }
-        if ($URI[0] != '/') {
-            $URI = '/' . $URI;
-        }
-        $args['URI'] = $URI;
-        if (isset($LOCALPATH)) {
-            $args['LOCALPATH'] = $LOCALPATH;
-        }
+
+        //if (isset($LOCALPATH)) {
+        //    $args['LOCALPATH'] = $LOCALPATH;
+        //}
 
         return $args;
     }

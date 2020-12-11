@@ -7,9 +7,10 @@ configure_php_ini() {
     echo "cgi.fix_pathinfo = 1" >> "${1}"
     echo "always_populate_raw_post_data = -1" >> "${1}"
 
+    # @todo this only disables xdebug for CLI. To do the same for the FPM config as well, should we use instead `phpdismod` ?
     XDEBUG_INI=$(php -i | grep xdebug.ini | grep -v '=>' | head -1)
     if [ "$XDEBUG_INI" != "" ]; then
-        #XDEBUG_INI=${XDEBUG_INI/,/}
+        XDEBUG_INI="$(echo "$XDEBUG_INI" | tr -d ',')"
         mv "$XDEBUG_INI" "$XDEBUG_INI.bak";
     fi
 }
@@ -17,8 +18,8 @@ configure_php_ini() {
 if ! which php >/dev/null; then
 
     # install php
-    PHP_VERSION=$1
-    DEBIAN_VERSION=$(lsb_release -s -c)
+    PHP_VERSION="$1"
+    DEBIAN_VERSION="$(lsb_release -s -c)"
 
     if [ "${PHP_VERSION}" = default ]; then
         if [ "${DEBIAN_VERSION}" = jessie -o "${DEBIAN_VERSION}" = precise -o "${DEBIAN_VERSION}" = trusty ]; then
@@ -36,12 +37,6 @@ if ! which php >/dev/null; then
             php${PHPSUFFIX}-mbstring \
             php${PHPSUFFIX}-xdebug
     else
-        #DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        #    gnupg2 ca-certificates lsb-release apt-transport-https
-        #wget https://packages.sury.org/php/apt.gpg
-        #apt-key add apt.gpg
-        #echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
-
         DEBIAN_FRONTEND=noninteractive apt-get install -y language-pack-en-base software-properties-common
         LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php
         apt-get update

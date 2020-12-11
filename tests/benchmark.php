@@ -206,13 +206,13 @@ if (!$xd) {
     for ($i = 0; $i < 25; $i++) {
         $reqs[] = $req;
     }
-    $server = explode(':', $args['LOCALSERVER']);
+    $server = explode(':', $args['HTTPSERVER']);
     if (count($server) > 1) {
-        $srv = $server[1] . '://' . $server[0] . $args['URI'];
-        $c = new Client($args['URI'], $server[0], $server[1]);
+        $srv = $server[1] . '://' . $server[0] . $args['HTTPURI'];
+        $c = new Client($args['HTTPURI'], $server[0], $server[1]);
     } else {
-        $srv = $args['LOCALSERVER'] . $args['URI'];
-        $c = new Client($args['URI'], $args['LOCALSERVER']);
+        $srv = $args['HTTPSERVER'] . $args['HTTPURI'];
+        $c = new Client($args['HTTPURI'], $args['HTTPSERVER']);
     }
     // do not interfere with http compression
     $c->accepted_compression = array();

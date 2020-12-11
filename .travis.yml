@@ -7,7 +7,7 @@ dist: xenial
 
 env:
     global:
-        - LOCALSERVER=localhost
+        - HTTPSERVER=localhost
         - URI=/demo/server/server.php
         - HTTPSSERVER=localhost
         - HTTPSURI=/demo/server/server.php

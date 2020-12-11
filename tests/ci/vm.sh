@@ -47,8 +47,8 @@ build() {
         -p 80:80 -p 443:443 -p 8080:8080 \
         --name "${CONTAINER_NAME}" \
         --env CONTAINER_USER_UID=$(id -u) --env CONTAINER_USER_GID=$(id -g) --env TESTS_ROOT_DIR=/home/test \
-        --env LOCALSERVER=localhost \
-        --env URI=/demo/server/server.php \
+        --env HTTPSERVER=localhost \
+        --env HTTPURI=/demo/server/server.php \
         --env HTTPSSERVER=localhost \
         --env HTTPSURI=/demo/server/server.php \
         --env PROXYSERVER=localhost:8080 \

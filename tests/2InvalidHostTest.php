@@ -19,7 +19,7 @@ class InvalidHostTest extends PhpXmlRpc_PolyfillTestCase
     {
         $this->args = argParser::getArgs();
 
-        $this->client = new xmlrpc_client('/NOTEXIST.php', $this->args['LOCALSERVER'], 80);
+        $this->client = new xmlrpc_client('/NOTEXIST.php', $this->args['HTTPSERVER'], 80);
         $this->client->setDebug($this->args['DEBUG']);
 
         if ($this->args['DEBUG'] == 1)
@@ -81,12 +81,12 @@ class InvalidHostTest extends PhpXmlRpc_PolyfillTestCase
         $this->assertTrue($r->faultCode() === 8 || $r->faultCode() == 5);
 
         // now test a successful connection
-        $server = explode(':', $this->args['LOCALSERVER']);
+        $server = explode(':', $this->args['HTTPSERVER']);
         if (count($server) > 1) {
             $this->client->port = $server[1];
         }
         $this->client->server = $server[0];
-        $this->client->path = $this->args['URI'];
+        $this->client->path = $this->args['HTTPURI'];
 
         $r = $this->client->send($m, 5, 'http11');
         $this->assertEquals(0, $r->faultCode());

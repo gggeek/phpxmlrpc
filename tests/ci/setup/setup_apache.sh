@@ -24,5 +24,6 @@ if [ -n "${TRAVIS}" ]; then
 else
     echo "export TESTS_ROOT_DIR=/var/www/html" >> /etc/apache2/envvars
 fi
+echo "export HTTPSERVER=localhost" >> /etc/apache2/envvars
 
 service apache2 restart

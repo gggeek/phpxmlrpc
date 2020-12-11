@@ -87,18 +87,18 @@ class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
     {
         $this->args = argParser::getArgs();
 
-        $server = explode(':', $this->args['LOCALSERVER']);
+        $server = explode(':', $this->args['HTTPSERVER']);
         if (count($server) > 1) {
-            $this->client = new xmlrpc_client($this->args['URI'], $server[0], $server[1]);
+            $this->client = new xmlrpc_client($this->args['HTTPURI'], $server[0], $server[1]);
         } else {
-            $this->client = new xmlrpc_client($this->args['URI'], $this->args['LOCALSERVER']);
+            $this->client = new xmlrpc_client($this->args['HTTPURI'], $this->args['HTTPSERVER']);
         }
 
         $this->client->setDebug($this->args['DEBUG']);
         $this->client->request_compression = $this->request_compression;
         $this->client->accepted_compression = $this->accepted_compression;
 
-        $this->coverageScriptUrl = 'http://' . $this->args['LOCALSERVER'] . '/' . str_replace( '/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['URI'] );
+        $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . '/' . str_replace( '/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['HTTPURI'] );
 
         if ($this->args['DEBUG'] == 1)
             ob_start();

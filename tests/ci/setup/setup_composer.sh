@@ -3,6 +3,12 @@
 # Installs Composer (latest version, to avoid relying on old ones bundled with the OS)
 # @todo allow users to lock down to Composer v1 if needed
 
+if dpkg -l composer 2>/dev/null; then
+    apt-get remove -y composer
+fi
+
+### Code below taken from https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
+
 EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 ACTUAL_SIGNATURE="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
@@ -14,7 +20,14 @@ then
     exit 1
 fi
 
-php composer-setup.php --install-dir=/usr/local/bin
+php composer-setup.php --quiet --install-dir=/usr/local/bin
 RESULT=$?
 rm composer-setup.php
+
+###
+
+if [ -f /usr/local/bin/composer.phar -a "$RESULT" = 0 ]; then
+    mv /usr/local/bin/composer.phar /usr/local/bin/composer && chmod 755 /usr/local/bin/composer
+fi
+
 exit $RESULT

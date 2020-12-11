@@ -11,9 +11,9 @@ class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
     {
         $this->args = argParser::getArgs();
 
-        $this->baseUrl = $this->args['LOCALSERVER'] . str_replace( '/demo/server/server.php', '/demo/', $this->args['URI'] );
+        $this->baseUrl = $this->args['HTTPSERVER'] . str_replace( '/demo/server/server.php', '/demo/', $this->args['HTTPURI'] );
 
-        $this->coverageScriptUrl = 'http://' . $this->args['LOCALSERVER'] . '/' . str_replace( '/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['URI'] );
+        $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . '/' . str_replace( '/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['HTTPURI'] );
     }
 
     public function testAgeSort()

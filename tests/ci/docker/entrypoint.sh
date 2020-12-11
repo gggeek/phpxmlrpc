@@ -44,8 +44,9 @@ fi
 
 echo "[$(date)] Fixing apache configuration..."
 
-# @todo set as well APACHE_RUN_USER and/or APACHE_RUN_GROUP ?
 sed -e "s?^export TESTS_ROOT_DIR=.*?export TESTS_ROOT_DIR=${TESTS_ROOT_DIR}?g" --in-place /etc/apache2/envvars
+
+# @todo set as well php-fpm user/group ?
 
 echo "[$(date)] Running Composer..."
 

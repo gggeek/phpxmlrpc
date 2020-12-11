@@ -1,4 +1,6 @@
-# Uses env var: TESTS_ROOT_DIR
+# Uses env vars:
+# HTTPSERVER
+# TESTS_ROOT_DIR
 
 <VirtualHost *:80>
 
@@ -6,6 +8,9 @@
 
   ErrorLog "${TESTS_ROOT_DIR}/apache_error.log"
   CustomLog "${TESTS_ROOT_DIR}/apache_access.log" combined
+
+  # Env vars used by the test code, which we get from the environment
+  SetEnv HTTPSERVER ${HTTPSERVER}
 
   <Directory "${TESTS_ROOT_DIR}">
     Options FollowSymLinks MultiViews
@@ -29,6 +34,9 @@
 
   ErrorLog "${TESTS_ROOT_DIR}/apache_error.log"
   CustomLog "${TESTS_ROOT_DIR}/apache_access.log" combined
+
+  # Env vars used by the test code, which we get from the environment
+  SetEnv HTTPSERVER ${HTTPSERVER}
 
   <Directory "${TESTS_ROOT_DIR}">
     Options FollowSymLinks MultiViews
