@@ -11,13 +11,16 @@ Detailed installation instructions are in the [INSTALL.md](INSTALL.md) file, alo
 Documentation
 -------------
 
-*NB: the user manual has not been updated yet with all the changes made in version 4. Please consider it unreliable!*
-
-*You are encouraged to look instead the code examples found in the demo/ directory*
+See the documentation page at [gggeek.github.io/phpxmlrpc](https://gggeek.github.io/phpxmlrpc) for a list of the
+library main features and all project related information.
 
 The user manual can be found in the doc/manual directory, in Asciidoc format: [phpxmlrpc_manual.adoc](doc/manual/phpxmlrpc_manual.adoc)
 
-Release tarballs also contain the HTML and PDF versions, as well as an automatically generated API documentation.
+Release tarballs also contain HTML and PDF versions of the manual, as well as an automatically generated API documentation.
+
+*NB: the user manual has not been updated yet with all the changes made in version 4. Please consider it unreliable!*
+
+*You are encouraged to look instead the code examples found in the demo/ directory*
 
 Upgrading
 ---------

@@ -11,7 +11,7 @@
  */
 
 // work around magic quotes
-if (get_magic_quotes_gpc()) {
+if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
     function stripslashes_deep($value)
     {
         $value = is_array($value) ?
