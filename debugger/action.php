@@ -199,7 +199,7 @@ if ($action) {
         case 'wrap':
             $msg[0] = new $requestClass('system.methodHelp', array(), $id);
             $msg[0]->addparam(new PhpXmlRpc\Value($method));
-            $msg[1] = new $requestClass('system.methodSignature', array(), $id + 1);
+            $msg[1] = new $requestClass('system.methodSignature', array(), (int)$id + 1);
             $msg[1]->addparam(new PhpXmlRpc\Value($method));
             $actionname = 'Description of method "' . $method . '"';
             break;
@@ -475,7 +475,7 @@ if ($action) {
                         $encoder = new PhpXmlRpc\Encoder();
                         $msig = $encoder->decode($r2);
                         $msig = $msig[$methodsig];
-                        $proto = $protocol == 2 ? 'https' : $protocol == 1 ? 'http11' : '';
+                        $proto = $protocol == 2 ? 'https' : ( $protocol == 1 ? 'http11' : '' );
                         if ($proxy == '' && $username == '' && !$requestcompression && !$responsecompression &&
                             $clientcookies == ''
                         ) {
@@ -541,6 +541,7 @@ if ($action) {
 
     <h3>Changelog</h3>
     <ul>
+        <li>2020-12-11: fix problems with running the debugger on php 8</li>
         <li>2015-05-30: fix problems with generating method payloads for NIL and Undefined parameters</li>
         <li>2015-04-19: fix problems with LATIN-1 characters in payload</li>
         <li>2007-02-20: add visual editor for method payload; allow strings, bools as jsonrpc msg id</li>

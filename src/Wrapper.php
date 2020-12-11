@@ -678,7 +678,7 @@ class Wrapper
      *                            - bool    debug               set it to 1 or 2 to see debug results of querying server for method synopsis
      *                            - int     simple_client_copy  set it to 1 to have a lightweight copy of the $client object made in the generated code (only used when return_source = true)
      *
-     * @return \closure|array|false false on failure, closure by default and array for return_source = true
+     * @return \closure|string[]|false false on failure, closure by default and array for return_source = true
      */
     public function wrapXmlrpcMethod($client, $methodName, $extraOptions = array())
     {
@@ -885,7 +885,7 @@ class Wrapper
      * @param string $newFuncName
      * @param array $mSig
      * @param string $mDesc
-     * @return array
+     * @return string[] keys: source, docstring
      */
     public function buildWrapMethodSource($client, $methodName, array $extraOptions, $newFuncName, $mSig, $mDesc='')
     {
@@ -1106,7 +1106,12 @@ class Wrapper
         // (this provides for future expansion or subclassing of client obj)
         if ($verbatimClientCopy) {
             foreach ($client as $fld => $val) {
-                if ($fld != 'debug' && $fld != 'return_type') {
+                /// @todo in php 8.0, curl handles became objects, but they have no __set_state, thus var_export will
+                ///        fail for xmlrpc_curl_handle. So we disabled copying it.
+                ///        We should examine in depth if this change can have side effects - at first sight if the
+                ///        client's curl handle is not set, all curl options are (re)set on each http call, so there
+                ///        should be no loss of state...
+                if ($fld != 'debug' && $fld != 'return_type' && $fld != 'xmlrpc_curl_handle') {
                     $val = var_export($val, true);
                     $code .= "\$client->$fld = $val;\n";
                 }

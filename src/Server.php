@@ -698,7 +698,6 @@ class Server
                         }
                     }
                     throw $e;
-                    break;
                 case 1:
                     $r = new Response(0, $e->getCode(), $e->getMessage());
                     break;
@@ -914,7 +913,7 @@ class Server
         }
         if (isset($dmap[$methName])) {
             if (isset($dmap[$methName]['docstring'])) {
-                $r = new Response(new Value($dmap[$methName]['docstring']), 'string');
+                $r = new Response(new Value($dmap[$methName]['docstring'], 'string'));
             } else {
                 $r = new Response(new Value('', 'string'));
             }
