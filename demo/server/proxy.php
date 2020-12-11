@@ -9,8 +9,7 @@
  * @license code licensed under the BSD License: see file license.txt
  */
 
-include_once __DIR__ . "/../../src/Autoloader.php";
-PhpXmlRpc\Autoloader::register();
+require_once __DIR__ . "/_bootstrap.php";
 
 /**
  * Forward an xmlrpc request to another server, and return to client the response received.
@@ -58,8 +57,8 @@ function forward_request($req)
 
     // build call for remote server
     /// @todo find a way to forward client info (such as IP) to server, either
-    /// - as xml comments in the payload, or
-    /// - using std http header conventions, such as X-forwarded-for...
+    ///       - as xml comments in the payload, or
+    ///       - using std http header conventions, such as X-forwarded-for...
     $reqMethod = $encoder->decode($req->getParam(1));
     $pars = $req->getParam(2);
     $req = new PhpXmlRpc\Request($reqMethod);

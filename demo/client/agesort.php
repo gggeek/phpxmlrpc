@@ -1,4 +1,4 @@
-<html>
+<?php require_once __DIR__ . "/_bootstrap.php"; ?><html lang="en">
 <head><title>xmlrpc - Agesort demo</title></head>
 <body>
 <h1>Agesort demo</h1>
@@ -7,11 +7,8 @@
 
 <h3>The source code demonstrates basic lib usage, including handling of xmlrpc arrays and structs</h3>
 
-<p></p>
+<p>You can see the source to this page here: <a href="agesort.php?showSource=1">agesort.php</a></p>
 <?php
-
-include_once __DIR__ . "/../../src/Autoloader.php";
-PhpXmlRpc\Autoloader::register();
 
 $inAr = array("Dave" => 24, "Edd" => 45, "Joe" => 37, "Fred" => 27);
 print "This is the input data:<br/><pre>";
@@ -20,7 +17,7 @@ foreach ($inAr as $key => $val) {
 }
 print "</pre>";
 
-// create parameters from the input array: an xmlrpc array of xmlrpc structs
+// Create parameters from the input array: an xmlrpc array of xmlrpc structs
 $p = array();
 foreach ($inAr as $key => $val) {
     $p[] = new PhpXmlRpc\Value(
@@ -36,7 +33,7 @@ print "Encoded into xmlrpc format it looks like this: <pre>\n" . htmlentities($v
 
 // create client and message objects
 $req = new PhpXmlRpc\Request('examples.sortByAge', array($v));
-$client = new PhpXmlRpc\Client("http://phpxmlrpc.sourceforge.net/server.php");
+$client = new PhpXmlRpc\Client(XMLRPCSERVER);
 
 // set maximum debug level, to have the complete communication printed to screen
 $client->setDebug(2);

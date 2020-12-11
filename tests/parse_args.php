@@ -7,12 +7,11 @@
  * @param string  LOCALSERVER
  * @param string  URI
  * @param string  HTTPSSERVER
- * @param string  HTTPSSURI
- * @param string  PROXY
- * @param string  NOPROXY
+ * @param string  HTTPSURI
  * @param bool    HTTPSIGNOREPEER
  * @param int     HTTPSVERIFYHOST
  * @param int     SSLVERSION
+ * @param string  PROXYSERVER
  *
  * @copyright (C) 2007-2020 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
@@ -24,13 +23,12 @@ class argParser
         $args = array(
             'DEBUG' => 0,
             'LOCALSERVER' => 'localhost',
-            'HTTPSSERVER' => 'gggeek.ssl.altervista.org',
+            'HTTPSSERVER' => 'gggeek.altervista.org',
             'HTTPSURI' => '/sw/xmlrpc/demo/server/server.php',
             'HTTPSIGNOREPEER' => false,
             'HTTPSVERIFYHOST' => 2,
             'SSLVERSION' => 0,
             'PROXYSERVER' => null,
-            //'NOPROXY' => false,
             'LOCALPATH' => __DIR__,
         );
 
@@ -83,10 +81,6 @@ class argParser
                 $args['PROXYPORT'] = 8080;
             }
         }
-        // used to silence testsuite warnings about proxy code not being tested
-        //if (isset($NOPROXY)) {
-        //    $args['NOPROXY'] = true;
-        //}
         if (!isset($URI)) {
             // GUESTIMATE the url of local demo server
             // play nice to php 3 and 4-5 in retrieving URL of server.php

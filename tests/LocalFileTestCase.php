@@ -4,8 +4,6 @@ include_once __DIR__ . '/parse_args.php';
 
 include_once __DIR__ . '/PolyfillTestCase.php';
 
-use PHPUnit\Framework\TestResult;
-
 abstract class PhpXmlRpc_LocalFileTestCase extends PhpXmlRpc_PolyfillTestCase
 {
     public $args = array();

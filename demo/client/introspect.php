@@ -1,13 +1,11 @@
-<html>
+<?php require_once __DIR__ . "/_bootstrap.php"; ?><html lang="en">
 <head><title>xmlrpc - Introspect demo</title></head>
 <body>
 <h1>Introspect demo</h1>
 <h2>Query server for available methods and their description</h2>
 <h3>The code demonstrates usage of multicall and introspection methods</h3>
+<p>You can see the source to this page here: <a href="introspect.php?showSource=1">introspect.php</a></p>
 <?php
-
-include_once __DIR__ . "/../../src/Autoloader.php";
-PhpXmlRpc\Autoloader::register();
 
 function display_error($r)
 {
@@ -16,7 +14,7 @@ function display_error($r)
         . " Reason: '" . $r->faultString() . "'<br/>";
 }
 
-$client = new PhpXmlRpc\Client("http://phpxmlrpc.sourceforge.net/server.php");
+$client = new PhpXmlRpc\Client(XMLRPCSERVER);
 
 // First off, let's retrieve the list of methods available on the remote server
 print "<h3>methods available at http://" . $client->server . $client->path . "</h3>\n";
