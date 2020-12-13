@@ -15,7 +15,7 @@ configure_php_ini() {
     fi
 }
 
-if ! which php >/dev/null; then
+if [ -n "$TRAVIS" ]; then
 
     # install php
     PHP_VERSION="$1"
@@ -68,9 +68,8 @@ if ! which php >/dev/null; then
     # configure apache
     a2enconf php${PHPVER}-fpm
     service apache2 restart
-fi
 
-if [ -n "$TRAVIS" ]; then
+else
 
     # php is already installed, via phpenv
 
@@ -99,7 +98,7 @@ if [ -n "$TRAVIS" ]; then
 
     ~/.phpenv/versions/${PHPVER}/sbin/php-fpm
 
-    # @todo configure apache for php-fpm via mod_proxy_fcgi
+    # @todo configure apache for php-fpm via mod_proxy_fcgi...
     a2enconf php${PHPVER}-fpm
     service apache2 restart
 fi

@@ -34,31 +34,17 @@ php:
 before_install:
   # This is mandatory or the 'apt-get install' calls following will fail
   - sudo apt-get update -qq
-  #- sudo apt-get install -y apache2 libapache2-mod-fastcgi
-  #- sudo apt-get install -y privoxy
-  - sudo pwd
-  - sudo ls -la
+  # Just in case there are git misconfigurations: make sure scripts are executable
   - sudo chmod 755 ./tests/ci/setup/*.sh
   - sudo ./tests/ci/setup/setup_apache.sh
   - sudo ./tests/ci/setup/setup_privoxy.sh
   - sudo ./tests/ci/setup/setup_php.sh
 
-  # Disable xdebug for speed (executing composer), but allow us to re-enable it later
-  # @todo move to setup_php
-  #- export XDEBUG_INI=`php -i | grep xdebug.ini | grep home/travis | grep -v '=>' | head -1`
-  #- export XDEBUG_INI=${XDEBUG_INI/,/}
-  #- if [ "$XDEBUG_INI" != "" ]; then mv "$XDEBUG_INI" "$XDEBUG_INI.bak"; fi
-
 install:
   - composer install
 
 before_script:
-  # Set up Apache and Privoxy instances inside the Travis VM and use them for testing against
-  #- sudo ./tests/ci/setup/setup_apache.sh
-  #- sudo ./tests/ci/setup/setup_php.sh
-  #- sudo ./tests/ci/setup/setup_privoxy.sh
-
-  # output what version of phpunit we got going
+  # Output what version of phpunit we got going
   - ./vendor/bin/phpunit --version
 
 script:
