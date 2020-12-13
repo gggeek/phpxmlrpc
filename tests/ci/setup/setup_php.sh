@@ -100,4 +100,6 @@ if [ -n "$TRAVIS" ]; then
     ~/.phpenv/versions/${PHPVER}/sbin/php-fpm
 
     # @todo configure apache for php-fpm via mod_proxy_fcgi
+    a2enconf php${PHPVER}-fpm
+    service apache2 restart
 fi
