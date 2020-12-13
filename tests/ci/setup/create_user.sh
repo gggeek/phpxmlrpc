@@ -1,14 +1,14 @@
 #!/bin/sh
 
 # @todo set up the same user for running tests as on travis (ie. 'travis'), or maybe user 'user' ?
-# @todo make the GID & UID of the user variable
+# @todo make the GID & UID of the user variable (we picked 2000 as it is the one used by default by Travis)
 
 set -e
 
 USERNAME="${1:-test}"
 
-addgroup --gid 1013 "${USERNAME}"
-adduser --system --uid=1013 --gid=1013 --home "/home/${USERNAME}" --shell /bin/bash "${USERNAME}"
+addgroup --gid 2000 "${USERNAME}"
+adduser --system --uid=2000 --gid=2000 --home "/home/${USERNAME}" --shell /bin/bash "${USERNAME}"
 adduser "${USERNAME}" "${USERNAME}"
 
 mkdir -p "/home/${USERNAME}/.ssh"

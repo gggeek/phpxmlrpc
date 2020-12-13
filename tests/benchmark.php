@@ -8,6 +8,8 @@
  *
  * @todo add a test for response ok in call testing
  * @todo add support for --help option to give users the list of supported parameters
+ * @todo make number of test iterations flexible
+ * @todo add https tests
  **/
 
 use PhpXmlRpc\PhpXmlRpc;
@@ -198,12 +200,14 @@ if (function_exists('xmlrpc_decode')) {
 
 if (!$xd) {
 
+    $num_tests = 25;
+
     /// test multicall vs. many calls vs. keep-alives
     $encoder = new Encoder();
     $value = $encoder->encode($data1, array('auto_dates'));
     $req = new Request('interopEchoTests.echoValue', array($value));
     $reqs = array();
-    for ($i = 0; $i < 25; $i++) {
+    for ($i = 0; $i < $num_tests; $i++) {
         $reqs[] = $req;
     }
     $server = explode(':', $args['HTTPSERVER']);
@@ -225,7 +229,7 @@ if (!$xd) {
     }
     begin_test($testName, 'http 10');
     $response = array();
-    for ($i = 0; $i < 25; $i++) {
+    for ($i = 0; $i < $num_tests; $i++) {
         $resp = $c->send($req);
         $response[] = $resp->value();
     }
@@ -234,7 +238,7 @@ if (!$xd) {
     if (function_exists('curl_init')) {
         begin_test($testName, 'http 11 w. keep-alive');
         $response = array();
-        for ($i = 0; $i < 25; $i++) {
+        for ($i = 0; $i < $num_tests; $i++) {
             $resp = $c->send($req, 10, 'http11');
             $response[] = $resp->value();
         }
@@ -243,7 +247,7 @@ if (!$xd) {
         $c->keepalive = false;
         begin_test($testName, 'http 11');
         $response = array();
-        for ($i = 0; $i < 25; $i++) {
+        for ($i = 0; $i < $num_tests; $i++) {
             $resp = $c->send($req, 10, 'http11');
             $response[] = $resp->value();
         }
@@ -263,7 +267,7 @@ if (!$xd) {
 
         begin_test($testName, 'http 10 w. compression');
         $response = array();
-        for ($i = 0; $i < 25; $i++) {
+        for ($i = 0; $i < $num_tests; $i++) {
             $resp = $c->send($req);
             $response[] = $resp->value();
         }
@@ -272,7 +276,7 @@ if (!$xd) {
         if (function_exists('curl_init')) {
             begin_test($testName, 'http 11 w. keep-alive and compression');
             $response = array();
-            for ($i = 0; $i < 25; $i++) {
+            for ($i = 0; $i < $num_tests; $i++) {
                 $resp = $c->send($req, 10, 'http11');
                 $response[] = $resp->value();
             }
@@ -281,7 +285,7 @@ if (!$xd) {
             $c->keepalive = false;
             begin_test($testName, 'http 11 w. compression');
             $response = array();
-            for ($i = 0; $i < 25; $i++) {
+            for ($i = 0; $i < $num_tests; $i++) {
                 $resp = $c->send($req, 10, 'http11');
                 $response[] = $resp->value();
             }

@@ -11,6 +11,10 @@ $coverageFile = realpath(__DIR__ . "/../vendor/phpunit/phpunit-selenium/PHPUnit/
 // has to be the same value as used in server.php
 $GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'] = '/tmp/phpxmlrpc_coverage';
 
+if (!is_dir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'])) {
+    mkdir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY']);
+}
+
 chdir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY']);
 
 include_once $coverageFile;

@@ -36,7 +36,7 @@ function phpxmlrpc_verify_compat($mode = 'client')
             $tests['zlib']['description'] = "The zlib extension is enabled.\n\nYou will be able to receive compressed requests and send compressed responses for the 'HTTP' protocol";
         }
 
-        // test for dispaly of php errors in xml reponse
+        // test for display of php errors in xml response
         if (ini_get('display_errors')) {
             if (intval(ini_get('error_reporting')) && E_NOTICE) {
                 $tests['display_errors']['status'] = 1;
