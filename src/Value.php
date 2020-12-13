@@ -38,8 +38,11 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     );
 
     /// @todo: do these need to be public?
+    /** @var Value[]|mixed */
     public $me = array();
+    /** @var int $mytype */
     public $mytype = 0;
+    /** @var string|null $_php_class */
     public $_php_class = null;
 
     /**
@@ -217,13 +220,10 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         switch ($this->mytype) {
             case 3:
                 return 'struct';
-                break;
             case 2:
                 return 'array';
-                break;
             case 1:
                 return 'scalar';
-                break;
             default:
                 return 'undef';
         }
@@ -387,6 +387,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * Return next member element for xmlrpc values of type struct.
      *
      * @return Value
+     * @throw \Error starting with php 8.0, this function should not be used, as it will always throw
      *
      * @deprecated iterate directly over the object using foreach instead
      */
