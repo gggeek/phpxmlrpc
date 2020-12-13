@@ -38,7 +38,7 @@ before_install:
   - sudo chmod 755 ./tests/ci/setup/*.sh
   - sudo ./tests/ci/setup/setup_apache.sh
   - sudo ./tests/ci/setup/setup_privoxy.sh
-  - sudo ./tests/ci/setup/setup_php_travis.sh
+  - ./tests/ci/setup/setup_php_travis.sh
 
 install:
   - composer install

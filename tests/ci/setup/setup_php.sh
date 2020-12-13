@@ -1,9 +1,10 @@
 #!/bin/sh
 
+# To be kept in sync with setup_php_travis.sh
+
 set -e
 
 configure_php_ini() {
-    # @todo make this idempotent so that it can be run multiple times in a row
     echo "cgi.fix_pathinfo = 1" >> "${1}"
     echo "always_populate_raw_post_data = -1" >> "${1}"
 
