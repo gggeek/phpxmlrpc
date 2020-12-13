@@ -48,7 +48,7 @@ before_script:
   # Output what version of phpunit we got going
   - ./vendor/bin/phpunit --version
   # Enable code coverage for a single version of php
-  - if [ "$TRAVIS_PHP_VERSION" = "7.4" ]; then export PHP_OPTS="-d zend_extension=xdebug.so" && export PHPUNIT_OPTS="--coverage-clover=coverage.clover"; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "7.4" ]; then export PHP_OPTS="-d zend_extension=xdebug.so -d xdebug.mode=coverage" && export PHPUNIT_OPTS="--coverage-clover=coverage.clover"; fi
   - echo "php $PHP_OPTS ./vendor/phpunit/phpunit/phpunit $PHPUNIT_OPTS tests"
 
 script:
