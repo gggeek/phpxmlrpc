@@ -39,6 +39,7 @@ if [ -d ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d ]; then
     if [ "$TRAVIS_PHP_VERSION" = "7.3" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
       cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
     fi
+    # it seems that www.conf exists for php 7.4 and 8.0...
 fi
 
 #cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
@@ -46,6 +47,7 @@ fi
 # Use a unix socket for communication between apache and php-fpm - same as stock Ubuntu does
 sed -i -e "s,listen = 127.0.0.1:9000,listen = /run/php/php-fpm.sock,g" ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
 
+mkdir /run/php
 # @todo run php-fpm as root, and set up 'travis' as user in www.conf, instead ?
 ~/.phpenv/versions/${PHPVER}/sbin/php-fpm
 
