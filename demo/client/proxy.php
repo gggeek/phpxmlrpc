@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . "/_bootstrap.php"; ?><html lang="en">
+<?php require_once __DIR__ . "/_prepend.php"; ?><html lang="en">
 <head><title>xmlrpc - Proxy demo</title></head>
 <body>
 <h1>proxy demo</h1>
@@ -55,3 +55,5 @@ $proxy = new PhpXmlRpcProxy(new \PhpXmlRpc\Client(XMLRPCSERVER));
 $stateName = $proxy->getStateName($stateNo);
 
 echo "State $stateNo is ".htmlspecialchars($stateName);
+
+require_once __DIR__ . "/_append.php";

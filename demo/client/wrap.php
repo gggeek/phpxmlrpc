@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . "/_bootstrap.php"; ?><html lang="en">
+<?php require_once __DIR__ . "/_prepend.php"; ?><html lang="en">
 <head><title>xmlrpc - Webservice wrappper demo</title></head>
 <body>
 <h1>Webservice wrappper demo</h1>
@@ -49,4 +49,4 @@ if ($resp->faultCode()) {
 }
 ?>
 </body>
-</html>
+</html><?php require_once __DIR__ . "/_append.php"; ?>

@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . "/_bootstrap.php"; ?><html lang="en">
+<?php require_once __DIR__ . "/_prepend.php"; ?><html lang="en">
 <head><title>xmlrpc - Mail demo</title></head>
 <body>
 <h1>Mail demo</h1>
@@ -57,4 +57,4 @@ if (isset($_POST["mailto"]) && $_POST["mailto"]) {
     <input type="Submit" value="Send"/>
 </form>
 </body>
-</html>
+</html><?php require_once __DIR__ . "/_append.php"; ?>

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/_bootstrap.php";
+require_once __DIR__ . "/_prepend.php";
 
 use PhpXmlRpc\Value;
 
@@ -100,3 +100,5 @@ $srv = new PhpXmlRpc\Server(array(
         "docstring" => $getComments_doc,
     ),
 ));
+
+require_once __DIR__ . "/_append.php";

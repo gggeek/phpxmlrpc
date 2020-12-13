@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . "/_bootstrap.php"; ?><html lang="en">
+<?php require_once __DIR__ . "/_prepend.php"; ?><html lang="en">
 <head><title>xmlrpc - Getstatename demo</title></head>
 <body>
 <h1>Getstatename demo</h1>
@@ -39,4 +39,4 @@ print "<form action=\"getstatename.php\" method=\"POST\">
 
 ?>
 </body>
-</html>
+</html><?php require_once __DIR__ . "/_append.php"; ?>

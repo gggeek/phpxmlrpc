@@ -9,18 +9,7 @@
  * Please do not copy this file verbatim into your production server.
  **/
 
-require_once __DIR__ . "/_bootstrap.php";
-
-// Out-of-band information: let the client manipulate the server operations.
-// We do this to help the testsuite script: do not reproduce in production!
-if (isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) && extension_loaded('xdebug')) {
-    $GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'] = '/tmp/phpxmlrpc_coverage';
-    if (!is_dir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'])) {
-        mkdir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY']);
-    }
-
-    include_once __DIR__ . "/../../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumCommon/prepend.php";
-}
+require_once __DIR__ . "/_prepend.php";
 
 use PhpXmlRpc\Value;
 
@@ -987,8 +976,4 @@ if (isset($_GET['FORCE_AUTH'])) {
 $s->service();
 // That should do all we need!
 
-// Out-of-band information: let the client manipulate the server operations.
-// We do this to help the testsuite script: do not reproduce in production!
-if (isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) && extension_loaded('xdebug')) {
-    include_once __DIR__ . "/../../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumCommon/append.php";
-}
+require_once __DIR__ . "/_append.php";

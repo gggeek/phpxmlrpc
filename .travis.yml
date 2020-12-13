@@ -72,7 +72,7 @@ after_failure:
 
 after_script:
   # Upload code-coverage to Scrutinizer
-  - if [ -f coverage.clover ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover && echo 'code coverage uploaded to Scrutinizer'; fi
+  - if [ -f coverage.clover ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
   # Upload code-coverage CodeClimate - disabled as it does not support php 8 atm
   #- if [ -f coverage.clover ]; then CODECLIMATE_REPO_TOKEN=7fa6ee01e345090e059e5e42f3bfbcc8692feb8340396382dd76390a3019ac13 ./vendor/bin/test-reporter --coverage-report=coverage.clover; fi
 

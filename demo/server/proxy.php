@@ -9,7 +9,7 @@
  * @license code licensed under the BSD License: see file license.txt
  */
 
-require_once __DIR__ . "/_bootstrap.php";
+require_once __DIR__ . "/_prepend.php";
 
 /**
  * Forward an xmlrpc request to another server, and return to client the response received.
@@ -87,3 +87,5 @@ $server = new PhpXmlRpc\Server(
         ),
     )
 );
+
+require_once __DIR__ . "/_append.php";
