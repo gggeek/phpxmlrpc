@@ -45,7 +45,7 @@ fi
 ~/.phpenv/versions/${PHPVER}/sbin/php-fpm
 
 # configure apache for php-fpm via mod_proxy_fcgi
-sudo cp -f "$SCRIPT_DIR/../config/apache_phpfpm_proxyfcgi" "/etc/apache2/conf-available/conf-enabled/php-${PHPVER}fpm.conf"
-sudo sed -i -e "s,/run/php/php-fpm.sock,/run/php/php${PHPVER}-fpm.sock,g" "/etc/apache2/conf-available/conf-enabled/php-${PHPVER}fpm.conf"
+sudo cp -f "$SCRIPT_DIR/../config/apache_phpfpm_proxyfcgi" "/etc/apache2/conf-available/php-${PHPVER}fpm.conf"
+sudo sed -i -e "s,/run/php/php-fpm.sock,/run/php/php${PHPVER}-fpm.sock,g" "/etc/apache2/conf-available/php-${PHPVER}fpm.conf"
 sudo a2enconf php${PHPVER}-fpm
 sudo service apache2 restart
