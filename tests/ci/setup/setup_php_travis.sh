@@ -41,14 +41,16 @@ if [ -d ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d ]; then
     fi
 fi
 
-cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
-cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
+#cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
+#cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
+# Use a unix socket for communication between apache and php-fpm - same as stock Ubuntu does
+sed -i -e "s,listen = 127.0.0.1:9000,listen = /run/php/php-fpm.sock,g" ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
 
 # @todo run php-fpm as root, and set up 'travis' as user in www.conf, instead ?
 ~/.phpenv/versions/${PHPVER}/sbin/php-fpm
 
 # configure apache for php-fpm via mod_proxy_fcgi
 sudo cp -f "$SCRIPT_DIR/../config/apache_phpfpm_proxyfcgi" "/etc/apache2/conf-available/php${PHPVER}-fpm.conf"
-sudo sed -i -e "s,/run/php/php-fpm.sock,/run/php/php${PHPVER}-fpm.sock,g" "/etc/apache2/conf-available/php${PHPVER}-fpm.conf"
+#sudo sed -i -e "s,/run/php/php-fpm.sock,/run/php/php${PHPVER}-fpm.sock,g" "/etc/apache2/conf-available/php${PHPVER}-fpm.conf"
 sudo a2enconf php${PHPVER}-fpm
 sudo service apache2 restart
