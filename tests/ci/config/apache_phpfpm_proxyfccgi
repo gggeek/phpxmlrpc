@@ -1,6 +1,7 @@
 # @todo check: templatize this, to make it work with any php version
 
 # Redirect to local php-fpm if mod_php is not available
+<IfModule !mod_php8.c>
 <IfModule !mod_php7.c>
 <IfModule proxy_fcgi_module>
     # Enable http authorization headers
@@ -9,7 +10,7 @@
     </IfModule>
 
     <FilesMatch ".+\.ph(ar|p|tml)$">
-        SetHandler "proxy:unix:/run/php/php7.4-fpm.sock|fcgi://localhost"
+        SetHandler "proxy:unix:/run/php/php-fpm.sock|fcgi://localhost"
     </FilesMatch>
     <FilesMatch ".+\.phps$">
         # Deny access to raw php sources by default
@@ -21,5 +22,6 @@
     <FilesMatch "^\.ph(ar|p|ps|tml)$">
         Require all denied
     </FilesMatch>
+</IfModule>
 </IfModule>
 </IfModule>

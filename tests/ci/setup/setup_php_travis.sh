@@ -4,6 +4,8 @@
 
 set -e
 
+SCRIPT_DIR="$(dirname -- "$(readlink -f "$0")")"
+
 configure_php_ini() {
     echo "cgi.fix_pathinfo = 1" >> "${1}"
     echo "always_populate_raw_post_data = -1" >> "${1}"
@@ -42,6 +44,8 @@ fi
 # @todo run php-fpm as root, and set up 'travis' as user in www.conf, instead ?
 ~/.phpenv/versions/${PHPVER}/sbin/php-fpm
 
-# @todo configure apache for php-fpm via mod_proxy_fcgi...
-#sudo a2enconf php${PHPVER}-fpm
-#sudo service apache2 restart
+# configure apache for php-fpm via mod_proxy_fcgi
+sudo cp -f "$SCRIPT_DIR/../config/apache_phpfpm_proxyfcgi" "/etc/apache2/conf-available/conf-enabled/php-${PHPVER}fpm.conf"
+sudo sed -i -e "s,/run/php/php-fpm.sock,/run/php/php${PHPVER}-fpm.sock,g" "/etc/apache2/conf-available/conf-enabled/php-${PHPVER}fpm.conf"
+sudo a2enconf php${PHPVER}-fpm
+sudo service apache2 restart
