@@ -15,90 +15,54 @@ configure_php_ini() {
     fi
 }
 
-if [ "$TRAVIS" != true ]; then
+# install php
+PHP_VERSION="$1"
+DEBIAN_VERSION="$(lsb_release -s -c)"
 
-    # install php
-    PHP_VERSION="$1"
-    DEBIAN_VERSION="$(lsb_release -s -c)"
-
-    if [ "${PHP_VERSION}" = default ]; then
-        if [ "${DEBIAN_VERSION}" = jessie -o "${DEBIAN_VERSION}" = precise -o "${DEBIAN_VERSION}" = trusty ]; then
-            PHPSUFFIX=5
-        else
-            PHPSUFFIX=
-        fi
-        # @todo check for mbstring presence in php5 (jessie) packages
-        DEBIAN_FRONTEND=noninteractive apt-get install -y \
-            php${PHPSUFFIX} \
-            php${PHPSUFFIX}-cli \
-            php${PHPSUFFIX}-dom \
-            php${PHPSUFFIX}-curl \
-            php${PHPSUFFIX}-fpm \
-            php${PHPSUFFIX}-mbstring \
-            php${PHPSUFFIX}-xdebug
+if [ "${PHP_VERSION}" = default ]; then
+    if [ "${DEBIAN_VERSION}" = jessie -o "${DEBIAN_VERSION}" = precise -o "${DEBIAN_VERSION}" = trusty ]; then
+        PHPSUFFIX=5
     else
-        DEBIAN_FRONTEND=noninteractive apt-get install -y language-pack-en-base software-properties-common
-        LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php
-        apt-get update
-
-        DEBIAN_FRONTEND=noninteractive apt-get install -y \
-            php${PHP_VERSION} \
-            php${PHP_VERSION}-cli \
-            php${PHP_VERSION}-dom \
-            php${PHP_VERSION}-curl \
-            php${PHP_VERSION}-fpm \
-            php${PHP_VERSION}-mbstring \
-            php${PHP_VERSION}-xdebug
-
-        update-alternatives --set php /usr/bin/php${PHP_VERSION}
+        PHPSUFFIX=
     fi
-
-    PHPVER=$(php -r 'echo implode(".",array_slice(explode(".",PHP_VERSION),0,2));' 2>/dev/null)
-
-    configure_php_ini /etc/php/${PHPVER}/fpm/php.ini
-
-    # use a nice name for the php-fpm service, so that it does not depend on php version running
-    service "php${PHPVER}-fpm" stop
-    ln -s "/etc/init.d/php${PHPVER}-fpm" /etc/init.d/php-fpm
-
-    # @todo shall we configure php-fpm?
-
-    service php-fpm start
-
-    # configure apache
-    a2enconf php${PHPVER}-fpm
-    service apache2 restart
-
+    # @todo check for mbstring presence in php5 (jessie) packages
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        php${PHPSUFFIX} \
+        php${PHPSUFFIX}-cli \
+        php${PHPSUFFIX}-dom \
+        php${PHPSUFFIX}-curl \
+        php${PHPSUFFIX}-fpm \
+        php${PHPSUFFIX}-mbstring \
+        php${PHPSUFFIX}-xdebug
 else
+    DEBIAN_FRONTEND=noninteractive apt-get install -y language-pack-en-base software-properties-common
+    LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php
+    apt-get update
 
-    # php is already installed, via phpenv
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        php${PHP_VERSION} \
+        php${PHP_VERSION}-cli \
+        php${PHP_VERSION}-dom \
+        php${PHP_VERSION}-curl \
+        php${PHP_VERSION}-fpm \
+        php${PHP_VERSION}-mbstring \
+        php${PHP_VERSION}-xdebug
 
-    PHPVER=$(phpenv version-name)
-
-    configure_php_ini ~/.phpenv/versions/${PHPVER}/etc/php.ini
-
-    # configure php-fpm
-    cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
-
-    # work around travis issue #3385
-    if [ -d ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d ]; then
-        if [ "$TRAVIS_PHP_VERSION" = "7.0" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
-          cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
-        fi
-        if [ "$TRAVIS_PHP_VERSION" = "7.1" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
-          cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
-        fi
-        if [ "$TRAVIS_PHP_VERSION" = "7.2" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
-          cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
-        fi
-        if [ "$TRAVIS_PHP_VERSION" = "7.3" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
-          cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
-        fi
-    fi
-
-    ~/.phpenv/versions/${PHPVER}/sbin/php-fpm
-
-    # @todo configure apache for php-fpm via mod_proxy_fcgi...
-    a2enconf php${PHPVER}-fpm
-    service apache2 restart
+    update-alternatives --set php /usr/bin/php${PHP_VERSION}
 fi
+
+PHPVER=$(php -r 'echo implode(".",array_slice(explode(".",PHP_VERSION),0,2));' 2>/dev/null)
+
+configure_php_ini /etc/php/${PHPVER}/fpm/php.ini
+
+# use a nice name for the php-fpm service, so that it does not depend on php version running
+service "php${PHPVER}-fpm" stop
+ln -s "/etc/init.d/php${PHPVER}-fpm" /etc/init.d/php-fpm
+
+# @todo shall we configure php-fpm?
+
+service php-fpm start
+
+# configure apache
+a2enconf php${PHPVER}-fpm
+service apache2 restart
