@@ -62,6 +62,7 @@ class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
 
     public function testDiscussServer()
     {
+        /// @todo add a couple of proper xmlrpc calls, too
         $page = $this->request('server/discuss.php');
         $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
@@ -69,6 +70,7 @@ class DemoFilesTest extends PhpXmlRpc_LocalFileTestCase
 
     public function testProxyServer()
     {
+        /// @todo add a couple of proper xmlrpc calls, too
         $page = $this->request('server/proxy.php');
         $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
