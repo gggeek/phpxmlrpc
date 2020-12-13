@@ -1,8 +1,9 @@
 #!/bin/sh
 
-set -e
+# Install and configure privoxy
+# Has to be run as admin
 
-# install and configure privoxy
+set -e
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Has to be run as admin
+
 # To be kept in sync with setup_php_travis.sh
 
 set -e

@@ -39,8 +39,9 @@ if [ -d ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d ]; then
     fi
 fi
 
+# @todo run php-fpm as root, and set up 'travis' as user in www.conf, instead ?
 ~/.phpenv/versions/${PHPVER}/sbin/php-fpm
 
 # @todo configure apache for php-fpm via mod_proxy_fcgi...
-sudo a2enconf php${PHPVER}-fpm
-sudo service apache2 restart
+#sudo a2enconf php${PHPVER}-fpm
+#sudo service apache2 restart

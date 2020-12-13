@@ -1,12 +1,12 @@
 #!/bin/sh
 
-set -e
-
+# Install and configure apache2
+# Has to be run as admin
 # @todo make this work across all apache versions (precise to focal)
 
-SCRIPT_DIR="$(dirname -- "$(readlink -f "$0")")"
+set -e
 
-# install and configure apache2
+SCRIPT_DIR="$(dirname -- "$(readlink -f "$0")")"
 
 DEBIAN_FRONTEND=noninteractive apt-get install -y apache2
 
