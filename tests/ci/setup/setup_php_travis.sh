@@ -25,6 +25,8 @@ configure_php_ini ~/.phpenv/versions/${PHPVER}/etc/php.ini
 # configure php-fpm
 cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
 
+cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
+
 # work around travis issue #3385
 if [ -d ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d ]; then
     if [ "$TRAVIS_PHP_VERSION" = "7.0" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
