@@ -15,7 +15,7 @@ configure_php_ini() {
     fi
 }
 
-if [ -n "$TRAVIS" ]; then
+if [ "$TRAVIS" != true ]; then
 
     # install php
     PHP_VERSION="$1"
