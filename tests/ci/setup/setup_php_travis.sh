@@ -27,22 +27,29 @@ cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf.default ~/.phpenv/versions/${PH
 
 # work around travis issue #3385
 if [ -d ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d ]; then
-    # it seems that www.conf exists for php 7.4 and 8.0...
+    # it seems that www.conf does not exist for php 7.0 .. 7.3
     if [ -f ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default -a ! -f ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf ]; then
         cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
     fi
 fi
 
 #cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
-ls -la ~/.phpenv/versions/${PHPVER}/etc/
+#ls -la ~/.phpenv/versions/${PHPVER}/etc/
 #cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
 
 # Use a unix socket for communication between apache and php-fpm - same as Ubuntu does by default
-sed -i -e "s,listen = 127.0.0.1:9000,listen = /run/php/php-fpm.sock,g" ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
+if [ -f ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf ]; then
+    sed -i -e "s,listen = 127.0.0.1:9000,listen = /run/php/php-fpm.sock,g" ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
+else
+    # php 5.6 has all fpm conf in a single file
+    sed -i -e "s,listen = 127.0.0.1:9000,listen = /run/php/php-fpm.sock,g" ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
+    sed -i -e "s,user = nobody,user = travis,g" ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
+    sed -i -e "s,group = nobody,group = travis,g" ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
+fi
 sudo mkdir /run/php
 sudo chown travis:travis /run/php
 
-# @todo run php-fpm as root, and set up 'travis' as user in www.conf, instead ?
+# @todo run php-fpm as root, and (always) set up 'travis' as user in www.conf, instead ?
 ~/.phpenv/versions/${PHPVER}/sbin/php-fpm
 
 # configure apache for php-fpm via mod_proxy_fcgi
