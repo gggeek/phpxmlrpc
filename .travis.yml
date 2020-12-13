@@ -32,7 +32,7 @@ php:
   - 8.0
 
 before_install:
-  # @todo stop useless daemons to save memory: snapd, docker, ...
+  # @todo stop useless daemons to save memory: snapd, dockerd, ...
   # This is mandatory or the 'apt-get install' calls following will fail
   - sudo apt-get update -qq
   # Just in case there are git misconfigurations: make sure scripts are executable
@@ -47,30 +47,30 @@ install:
 before_script:
   # Output what version of phpunit we got going
   - ./vendor/bin/phpunit --version
+  - if [ "$TRAVIS_PHP_VERSION" = "7.4" ]; then export PHP_OPTS="-d zend_extension=xdebug.so" && export PHPUNIT_OPTS="--coverage-clover=coverage.clover"; fi
 
 script:
-  ./vendor/bin/phpunit $COVERAGE_OPTS tests
+  php $PHP_OPTS ./phpunit/phpunit/phpunit $PHPUNIT_OPTS tests
 
 after_failure:
-  # Troubleshoot
-  #- cat /etc/passwd
+  # Troubleshoot test env build problems
   #- ps auxwww
   #- 'sudo find /etc/php | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"'
   #- php -i
-  - ls -la /run/php
-  #- sudo ls -ltr /var/log
+  #- ls -la /run/php
+  #- ls -ltr /var/log
   #- sudo ls -ltr /var/log/apache2
   #- 'sudo find /etc/apache2 | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"'
 
   # Show as much info as we can to help developers
-  - sudo cat /var/log/privoxy.log
+  - sudo cat /var/log/privoxy/*
   - cat apache_error.log
   - cat apache_access.log
   - sudo cat /var/log/php*.log
 
 after_script:
   # Upload code-coverage to Scrutinizer
-  - if [ -f coverage.clover ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+  - if [ -f coverage.clover ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover && echo 'code coverage uploaded to Scrutinizer'; fi
   # Upload code-coverage CodeClimate - disabled as it does not support php 8 atm
   #- if [ -f coverage.clover ]; then CODECLIMATE_REPO_TOKEN=7fa6ee01e345090e059e5e42f3bfbcc8692feb8340396382dd76390a3019ac13 ./vendor/bin/test-reporter --coverage-report=coverage.clover; fi
 

@@ -33,10 +33,6 @@ if [ -d ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d ]; then
     fi
 fi
 
-#cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
-#ls -la ~/.phpenv/versions/${PHPVER}/etc/
-#cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
-
 # Use a unix socket for communication between apache and php-fpm - same as Ubuntu does by default
 if [ -f ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf ]; then
     sed -i -e "s,listen = 127.0.0.1:9000,listen = /run/php/php-fpm.sock,g" ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
