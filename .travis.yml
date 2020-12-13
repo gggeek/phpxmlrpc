@@ -36,6 +36,8 @@ before_install:
   - sudo apt-get update -qq
   #- sudo apt-get install -y apache2 libapache2-mod-fastcgi
   #- sudo apt-get install -y privoxy
+  - sudo pwd
+  - sudo ls -la
   - sudo ./tests/ci/setup/setup_apache.sh
   - sudo ./tests/ci/setup/setup_privoxy.sh
   - sudo ./tests/ci/setup/setup_php.sh
