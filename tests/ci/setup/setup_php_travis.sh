@@ -27,24 +27,29 @@ cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf.default ~/.phpenv/versions/${PH
 
 # work around travis issue #3385
 if [ -d ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d ]; then
-    if [ "$TRAVIS_PHP_VERSION" = "7.0" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
-      cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
-    fi
-    if [ "$TRAVIS_PHP_VERSION" = "7.1" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
-      cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
-    fi
-    if [ "$TRAVIS_PHP_VERSION" = "7.2" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
-      cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
-    fi
-    if [ "$TRAVIS_PHP_VERSION" = "7.3" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
-      cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
-    fi
+    #if [ "$TRAVIS_PHP_VERSION" = "7.0" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
+    #  cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
+    #fi
+    #if [ "$TRAVIS_PHP_VERSION" = "7.1" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
+    #  cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
+    #fi
+    #if [ "$TRAVIS_PHP_VERSION" = "7.2" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
+    #  cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
+    #fi
+    #if [ "$TRAVIS_PHP_VERSION" = "7.3" -a -n "$(ls -A ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d)" ]; then
+    #  cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
+    #fi
     # it seems that www.conf exists for php 7.4 and 8.0...
+    if [ -f ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default -a ! -f ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf ]; then
+        cp ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
+    fi
 fi
 
 #cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.conf
+ls -la ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d
 #cat ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
-# Use a unix socket for communication between apache and php-fpm - same as stock Ubuntu does
+
+# Use a unix socket for communication between apache and php-fpm - same as Ubuntu does by default
 sed -i -e "s,listen = 127.0.0.1:9000,listen = /run/php/php-fpm.sock,g" ~/.phpenv/versions/${PHPVER}/etc/php-fpm.d/www.conf
 
 sudo mkdir /run/php
@@ -54,6 +59,6 @@ sudo chown travis:travis /run/php
 
 # configure apache for php-fpm via mod_proxy_fcgi
 sudo cp -f "$SCRIPT_DIR/../config/apache_phpfpm_proxyfcgi" "/etc/apache2/conf-available/php${PHPVER}-fpm.conf"
-#sudo sed -i -e "s,/run/php/php-fpm.sock,/run/php/php${PHPVER}-fpm.sock,g" "/etc/apache2/conf-available/php${PHPVER}-fpm.conf"
 sudo a2enconf php${PHPVER}-fpm
+sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
 sudo service apache2 restart
