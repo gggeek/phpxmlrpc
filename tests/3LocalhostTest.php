@@ -30,6 +30,9 @@ class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
     protected $collectCodeCoverageInformation;
     protected $coverageScriptUrl;
 
+    /**
+     * @todo instead of overriding run via _fail, implement PHPUnit_Framework_TestListener - IFF there is such an API portable across PHPUnit 5 to 9...
+     */
     public static function _fail($message = '')
     {
         // save in a static var that this particular test has failed
@@ -54,6 +57,8 @@ class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
      * @param TestResult $result
      * @return TestResult
      * @throws Exception
+     *
+     * @todo instead of overriding run via _run, subclass PHPUnit_Extensions_TestDecorator - IFF there is such an API portable across PHPUnit 5 to 9...
      */
     public function _run($result = NULL)
     {

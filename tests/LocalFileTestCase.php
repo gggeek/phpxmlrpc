@@ -15,6 +15,12 @@ abstract class PhpXmlRpc_LocalFileTestCase extends PhpXmlRpc_PolyfillTestCase
     protected $collectCodeCoverageInformation;
     protected $coverageScriptUrl;
 
+    /**
+     * Reimplemented to allow us to collect code coverage info for the target php files executed via an http request.
+     * Code taken from PHPUnit_Extensions_Selenium2TestCase
+     *
+     * @todo instead of overriding run via _run, subclass PHPUnit_Extensions_TestDecorator - IFF there is such an API portable across PHPUnit 5 to 9...
+     */
     public function _run($result = NULL)
     {
         $this->testId = get_class($this) . '__' . $this->getName();
@@ -61,7 +67,7 @@ abstract class PhpXmlRpc_LocalFileTestCase extends PhpXmlRpc_PolyfillTestCase
         }
         if ($this->collectCodeCoverageInformation)
         {
-            curl_setopt($ch, CURLOPT_COOKIE, 'PHPUNIT_SELENIUM_TEST_ID=true');
+            curl_setopt($ch, CURLOPT_COOKIE, 'PHPUNIT_SELENIUM_TEST_ID='.$this->testId);
         }
         if ($this->args['DEBUG'] > 0) {
             curl_setopt($ch, CURLOPT_VERBOSE, 1);

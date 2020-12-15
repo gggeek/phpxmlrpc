@@ -4,18 +4,17 @@
 
 # To be kept in sync with setup_php_travis.sh
 
+# @todo make it optional to disable xdebug ?
+
 set -e
 
 configure_php_ini() {
+    # note: these settings are not required for cli config
     echo "cgi.fix_pathinfo = 1" >> "${1}"
     echo "always_populate_raw_post_data = -1" >> "${1}"
 
-    # @todo this only disables xdebug for CLI. To do the same for the FPM config as well, should we use instead `phpdismod` ?
-    XDEBUG_INI=$(php -i | grep xdebug.ini | grep -v '=>' | head -1)
-    if [ "$XDEBUG_INI" != "" ]; then
-        XDEBUG_INI="$(echo "$XDEBUG_INI" | tr -d ',')"
-        mv "$XDEBUG_INI" "$XDEBUG_INI.bak";
-    fi
+    # we disable xdebug for speed for both cli and web mode
+    phpdismod xdebug
 }
 
 # install php

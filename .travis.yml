@@ -46,13 +46,12 @@ install:
 
 before_script:
   # Output what version of phpunit we got going
-  - ./vendor/bin/phpunit --version
+  #- ./vendor/bin/phpunit --version
   # Enable code coverage for a single version of php
-  - if [ "$TRAVIS_PHP_VERSION" = "7.4" ]; then export PHP_OPTS="-d zend_extension=xdebug.so -d xdebug.mode=coverage" && export PHPUNIT_OPTS="--coverage-clover=coverage.clover"; fi
-  - echo "php $PHP_OPTS ./vendor/phpunit/phpunit/phpunit $PHPUNIT_OPTS tests"
+  - if [ "$TRAVIS_PHP_VERSION" = "7.4" ]; then ./tests/ci/setup/setup_code_coverage.sh enable && export PHPUNIT_OPTS="--coverage-clover=coverage.clover"; fi
 
 script:
-  php $PHP_OPTS ./vendor/phpunit/phpunit/phpunit $PHPUNIT_OPTS tests
+    ./vendor/bin/phpunit -v $PHPUNIT_OPTS tests
 
 after_failure:
   # Troubleshoot test env build problems

@@ -16,7 +16,7 @@ class LocalhostMultiTest extends LocalhostTest
     /**
      * Returns all test methods from the base class, except the ones which failed already
      *
-     * @todo reintroduce skipping of tests which failed when executed individually if test runs happen as separate processes
+     * @todo (re)introduce skipping of tests which failed when executed individually even if test runs happen as separate processes
      * @todo reintroduce skipping of tests within the loop
      */
     public function getSingleHttpTestMethods()
