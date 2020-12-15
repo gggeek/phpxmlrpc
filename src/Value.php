@@ -387,7 +387,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * Return next member element for xmlrpc values of type struct.
      *
      * @return Value
-     * @throw \Error starting with php 8.0, this function should not be used, as it will always throw
+     * @throws \Error starting with php 8.0, this function should not be used, as it will always throw
      *
      * @deprecated iterate directly over the object using foreach instead
      */
