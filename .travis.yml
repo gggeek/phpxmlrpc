@@ -65,8 +65,8 @@ after_failure:
 
   # Show as much info as we can to help developers
   - sudo cat /var/log/privoxy/*
-  - cat apache_error.log
-  - cat apache_access.log
+  - sudo cat /var/log/apache2/error.log
+  - sudo cat /var/log/apache2/other_vhosts_access.log
   - sudo cat /var/log/php*.log
 
 after_script:

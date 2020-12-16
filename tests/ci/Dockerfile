@@ -23,6 +23,7 @@ RUN chmod 755 /root/entrypoint.sh
 
 EXPOSE 80 443 8080
 
-WORKDIR /home/test
+# @todo can we avoid hardcoding this here? We can f.e. get it passed down as ARG...
+WORKDIR /home/docker/build
 
 ENTRYPOINT ["/root/entrypoint.sh"]

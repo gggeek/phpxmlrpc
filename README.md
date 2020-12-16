@@ -33,6 +33,28 @@ If you are upgrading from version 3 or earlier you have two options:
 In any case, read carefully the docs in [doc/api_changes_v4.md](doc/api_changes_v4.md) and report back any undocumented
 issue using GitHub.
 
+Running tests
+-------------
+
+The recommended way to run the library test suite is via the provided Docker containers.
+A handy shell script is available that simplifies usage of Docker.
+
+The full sequence of operations is:
+
+    ./tests/ci/vm.sh build
+    ./tests/ci/vm.sh start
+    ./tests/ci/vm.sh runtests
+    ./tests/ci/vm.sh stop
+
+    # and, once you have finished all testing related work:
+    ./tests/ci/vm.sh cleanup
+
+By default tests are run using php 7.0 in a Container based on Ubuntu 16 Xenial.
+You can change the version of PHP and Ubuntu in use by setting the environment variables PHP_VERSION and UBUNTU_VERSION
+before building the Container.
+
+To generate the code-coverage report, run `./tests/ci/vm.sh runcoverage`
+
 License
 -------
 Use of this software is subject to the terms in the [license.txt](license.txt) file

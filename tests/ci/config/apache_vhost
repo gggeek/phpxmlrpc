@@ -6,8 +6,8 @@
 
   DocumentRoot ${TESTS_ROOT_DIR}
 
-  ErrorLog "${TESTS_ROOT_DIR}/apache_error.log"
-  CustomLog "${TESTS_ROOT_DIR}/apache_access.log" combined
+  #ErrorLog "${TESTS_ROOT_DIR}/apache_error.log"
+  #CustomLog "${TESTS_ROOT_DIR}/apache_access.log" combined
 
   # Env vars used by the test code, which we get from the environment
   SetEnv HTTPSERVER ${HTTPSERVER}
@@ -32,8 +32,8 @@
 
   DocumentRoot ${TESTS_ROOT_DIR}
 
-  ErrorLog "${TESTS_ROOT_DIR}/apache_error.log"
-  CustomLog "${TESTS_ROOT_DIR}/apache_access.log" combined
+  #ErrorLog "${TESTS_ROOT_DIR}/apache_error.log"
+  #CustomLog "${TESTS_ROOT_DIR}/apache_access.log" combined
 
   # Env vars used by the test code, which we get from the environment
   SetEnv HTTPSERVER ${HTTPSERVER}

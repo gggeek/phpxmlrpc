@@ -1,8 +1,6 @@
 #!/bin/sh
 
-# @todo make username flexible
-
-USERNAME=test
+USERNAME="${1:-docker}"
 
 echo "[$(date)] Bootstrapping the Test container..."
 
@@ -41,16 +39,25 @@ if [ $(stat -c '%u' "${CONTAINER_USER_HOME}") != "${CONTAINER_USER_UID}" -o $(st
     chown "${CONTAINER_USER_UID}":"${CONTAINER_USER_GID}" "${CONTAINER_USER_HOME}"
     chown -R "${CONTAINER_USER_UID}":"${CONTAINER_USER_GID}" "${CONTAINER_USER_HOME}"/.*
 fi
+# @todo do the same chmod for ${TESTS_ROOT_DIR}, if it's not within CONTAINER_USER_HOME
 
-echo "[$(date)] Fixing apache configuration..."
+echo "[$(date)] Fixing Apache configuration..."
 
 sed -e "s?^export TESTS_ROOT_DIR=.*?export TESTS_ROOT_DIR=${TESTS_ROOT_DIR}?g" --in-place /etc/apache2/envvars
+sed -e "s?^export APACHE_RUN_USER=.*?export APACHE_RUN_USER=${USERNAME}?g" --in-place /etc/apache2/envvars
+sed -e "s?^export APACHE_RUN_GROUP=.*?export APACHE_RUN_GROUP=${USERNAME}?g" --in-place /etc/apache2/envvars
 
-# @todo set as well php-fpm user/group ?
+echo "[$(date)] Fixing FPM configuration..."
+
+FPMCONF="/etc/php/$(php -r 'echo implode(".",array_slice(explode(".",PHP_VERSION),0,2));' 2>/dev/null)/fpm/pool.d/www.conf"
+sed -e "s?^user =.*?user = ${USERNAME}?g" --in-place "${FPMCONF}"
+sed -e "s?^group =.*?group = ${USERNAME}?g" --in-place "${FPMCONF}"
+sed -e "s?^listen.owner =.*?listen.owner = ${USERNAME}?g" --in-place "${FPMCONF}"
+sed -e "s?^listen.group =.*?listen.group = ${USERNAME}?g" --in-place "${FPMCONF}"
 
 echo "[$(date)] Running Composer..."
 
-sudo test -c "cd /home/test && composer install"
+sudo "${USERNAME}" -c "cd ${TESTS_ROOT_DIR} && composer install"
 
 trap clean_up TERM
 
