@@ -9,6 +9,8 @@ include_once __DIR__ . '/parse_args.php';
 
 include_once __DIR__ . '/PolyfillTestCase.php';
 
+use PHPUnit\Runner\BaseTestRunner;
+
 /**
  * Tests involving parsing of xml and handling of xmlrpc values
  */
@@ -29,8 +31,8 @@ class ParsingBugsTests extends PhpXmlRpc_PolyfillTestCase
             return;
         $out = ob_get_clean();
         $status = $this->getStatus();
-        if ($status == PHPUnit_Runner_BaseTestRunner::STATUS_ERROR
-            || $status == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+        if ($status == BaseTestRunner::STATUS_ERROR
+            || $status == BaseTestRunner::STATUS_FAILURE) {
             echo $out;
         }
     }

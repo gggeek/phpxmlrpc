@@ -7,7 +7,9 @@ include_once __DIR__ . '/parse_args.php';
 
 include_once __DIR__ . '/PolyfillTestCase.php';
 
+use PHPUnit\Extensions\SeleniumCommon\RemoteCoverage;
 use PHPUnit\Framework\TestResult;
+use PHPUnit\Runner\BaseTestRunner;
 
 /**
  * Tests which involve interaction between the client and the server.
@@ -31,7 +33,7 @@ class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
     protected $coverageScriptUrl;
 
     /**
-     * @todo instead of overriding run via _fail, implement PHPUnit_Framework_TestListener - IFF there is such an API portable across PHPUnit 5 to 9...
+     * @todo instead of overriding fail via _fail, implement Yoast\PHPUnitPolyfills\TestListeners\TestListenerDefaultImplementation
      */
     public static function _fail($message = '')
     {
@@ -58,7 +60,7 @@ class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
      * @return TestResult
      * @throws Exception
      *
-     * @todo instead of overriding run via _run, subclass PHPUnit_Extensions_TestDecorator - IFF there is such an API portable across PHPUnit 5 to 9...
+     * @todo instead of overriding run via _run, try to achieve this by implementing Yoast\PHPUnitPolyfills\TestListeners\TestListenerDefaultImplementation
      */
     public function _run($result = NULL)
     {
@@ -73,7 +75,7 @@ class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
         parent::_run($result);
 
         if ($this->collectCodeCoverageInformation) {
-            $coverage = new PHPUnit_Extensions_SeleniumCommon_RemoteCoverage(
+            $coverage = new RemoteCoverage(
                 $this->coverageScriptUrl,
                 $this->testId
             );
@@ -115,8 +117,8 @@ class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
             return;
         $out = ob_get_clean();
         $status = $this->getStatus();
-        if ($status == PHPUnit_Runner_BaseTestRunner::STATUS_ERROR
-            || $status == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+        if ($status == BaseTestRunner::STATUS_ERROR
+            || $status == BaseTestRunner::STATUS_FAILURE) {
             echo $out;
         }
     }

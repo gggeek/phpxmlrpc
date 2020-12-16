@@ -2,10 +2,16 @@
 
 use PHPUnit\Runner\Version as PHPUnit_Version;
 
-/// @todo we should do the opposite - write test code to the 'new' phpunit API, and alias it to the 'old' class name
-///       when old classes are present...
-if (!class_exists('PHPUnit_Extensions_SeleniumCommon_RemoteCoverage')) {
-    class PHPUnit_Extensions_SeleniumCommon_RemoteCoverage extends PHPUnit\Extensions\SeleniumCommon\RemoteCoverage {}
+if ( class_exists( 'PHPUnit_Extensions_SeleniumCommon_RemoteCoverage' ) === true
+    && class_exists( 'PHPUnit\Extensions\SeleniumCommon\RemoteCoverage' ) === false
+) {
+    class_alias( 'PHPUnit_Extensions_SeleniumCommon_RemoteCoverage', 'PHPUnit\Extensions\SeleniumCommon\RemoteCoverage' );
+}
+
+if ( class_exists( 'PHPUnit_Runner_BaseTestRunner' ) === true
+    && class_exists( 'PHPUnit\Runner\BaseTestRunner' ) === false
+) {
+    class_alias( 'PHPUnit_Runner_BaseTestRunner', 'PHPUnit\Runner\BaseTestRunner' );
 }
 
 if (class_exists(PHPUnit_Version::class) === false || version_compare(PHPUnit_Version::id(), '8.0.0', '<')) {
