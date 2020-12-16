@@ -1,4 +1,4 @@
-XML-RPC for PHP version 4.4.3 - unreleased
+XML-RPC for PHP version 4.4.3 - 2020/12/17
 
 * fixed: compatibility with PHP 8.0 (fixes to the debugger, to the server's 'system.methodHelp' method and to the
   PhpXmlRpc\Wrapper class).
@@ -6,7 +6,7 @@ XML-RPC for PHP version 4.4.3 - unreleased
   on PHP 8.0 or later - in that case it will always throw an Error.
 
 * improvements to the test stack: it is now possible to run it via Docker besides Travis; avoid using _any_ external
-  server when running tests; run Travis tests against php 8.0; bump PHPUnit versions in use
+  server when running tests; run Travis tests also on php 8.0; bump PHPUnit versions in use
 
 
 XML-RPC for PHP version 4.4.2 - 2020/3/4
