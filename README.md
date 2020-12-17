@@ -69,5 +69,4 @@ The passphrase for the rsakey.pem certificate is 'test'.
 [![Total Downloads](https://poser.pugx.org/phpxmlrpc/phpxmlrpc/downloads)](https://packagist.org/packages/phpxmlrpc/phpxmlrpc)
 
 [![Build Status](https://travis-ci.com/gggeek/phpxmlrpc.svg)](https://travis-ci.org/gggeek/phpxmlrpc)
-[![Test Coverage](https://codeclimate.com/github/gggeek/phpxmlrpc/badges/coverage.svg)](https://codeclimate.com/github/gggeek/phpxmlrpc)
-[![Code Coverage](https://scrutinizer-ci.com/g/gggeek/phpxmlrpc/badges/coverage.png?b=php53)](https://scrutinizer-ci.com/g/gggeek/phpxmlrpc/?branch=php53)
+[![Code Coverage](https://scrutinizer-ci.com/g/gggeek/phpxmlrpc/badges/coverage.png)](https://scrutinizer-ci.com/g/gggeek/phpxmlrpc/?branch=php53)
