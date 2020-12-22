@@ -10,16 +10,16 @@
 <h1>XML-RPC for PHP</h1>
 <div id="menu">
 <a href="#news">News</a> |
+<a href="#download">Download</a> |
 <a href="#features">Features</a> |
 <a href="#requirements">Requirements</a> |
-<a href="#download">Download</a> |
 <a href="#interest">Documentation</a> |
 <a href="#demoserver">Online demo server</a> |
 <a href="#debugger">Online xmlrpc debugger</a> |
 <a href="#development">Development</a> |
+<a href="#roadmap">Roadmap</a> |
 <a href="#mailinglists">Mailing lists</a> |
 <a href="#contact">Contact</a> |
-<a href="#roadmap">Roadmap</a> |
 <a href="#security">Security</a>
 </div>
 <div id="content">
@@ -29,16 +29,16 @@
 It is designed for ease of use, flexibility and completeness. High speed and reduced memory footprint are not the main goals of the project.
 </p>
 <p>Note that this is not the same library as <a href="http://pear.php.net/package/XML_RPC/">the one</a> that is part of PEAR. They both share a common ancestry, since the PEAR version is a branch of the original phpxmlrpc library, now independently maintained.<br/>
-This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> which can be compiled as a php extension and has been bundled with php since version 4.1.0, either.</p>
+This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> which can be compiled as a php extension and has been bundled with php from version 4.1 up to version 7.4, either.</p>
 <p>PHPXMLRPC or derivative versions are or have been used in many open source projects, including <a href="http://www.ampache.org/">Ampache</a>, <a href="http://xaraya.info/">Xaraya</a>, <a href="http://www.drupal.org/">Drupal</a> (only up to releases 4.6.2 and 4.5.4), <a href="http://www.postnuke.com/">PostNuke</a>, <a href="http://b2evolution.net/">b2evolution</a>, <a href="http://nucleuscms.org/">nucleus cms</a>, <a href="http://www.phpmyfaq.de/">phpmyfaq</a>, <a href="http://www.phppgads.com/">phpPgAds</a>, <a href="http://en.wikipedia.org/wiki/PhpGroupWare">phpgroupware</a>, <a href="http://www.egroupware.org/">egroupware</a>, <a href="http://tikiwiki.org">TikiWiki</a>, Civicspace (old release only), <a href="http://mailwatch.org/">MailWatch for MailScanner</a>, <a href="http://wikisophia.org/wiki/Wikitex">WikiTeX</a> and <a href="http://openautonomy.com/">OpenAutonomy</a>.</p>
 <p>XML-RPC for PHP was originally developed by Edd Dumbill of <a href="http://usefulinc.com/">Useful Information Company</a>. As of the 1.0 stable release, the project was opened to wider involvement and moved to SourceForge. It is hosted on GitHub since December 2013.</p>
 
-<h2><a name="features">Features</a></h2>
+<h2><a name="features">Main Features</a></h2>
 <ul>
 <li>Support for creating both xmlrpc clients and servers</li>
 <li>Fully automated or fully manual, fine-grained encoding and decoding from php values to xmlrpc</li>
 <li>Support for UTF8, Latin-1 and ASCII character encodings. With the php mbstring extension enabled, even more character sets are supported.</li>
-<li>Support for http compression of both requests and responses, cookies, proxies, basic auth and https, ntlm auth and keepalives with the php cURL extension</li>
+<li>Support for http features including compression of both requests and responses, cookies, proxies, basic auth, https, ntlm auth and keepalives with the php cURL extension</li>
 <li>Optional validation of parameter types of incoming xmlrpc request</li>
 <li>Support for system.listMethods, system.methodHelp, system.multicall and system.getCapabilities methods</li>
 <li>Support for the &lt;NIL/&gt; and &lt;EX:NIL/&gt; extensions to xmlrpc</li>
@@ -53,17 +53,24 @@ This is also not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> wh
 <li>PHP 5.3.0 or later; 7.0 or later recommended</li>
 <li>the php "curl" extension is needed if you wish to use SSL or HTTP 1.1 to communicate with remote servers</li>
 <li>the php "mbstring" extension is needed to allow reception of requests/responses in character sets other than ASCII, Latin-1, UTF-8</li>
-<li>the php "xmlrpc" native extension is not required, but if it is installed, there will be no interference with the operation of this library.</li>
+<li>the php "xmlrpc" native extension is not required, but if it is installed, there will be no interference with the operation of this library</li>
 </ul>
 
 <h2><a name="download">Download</a></h2>
-<p>The latest stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.4.1"><span class="evidence">4.4.1</span></a> released on July 29th, 2019
-(<a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.4.1">Release notes</a>)</p>
+<p>The latest stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.4.3"><span class="evidence">4.4.3</span></a> released on Dec. 17th, 2020
+(<a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.4.3">Release notes</a>)</p>
 <p>The previous stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/3.1.2"><span class="evidence">3.1.2</span></a> released on May 27th, 2019
 (<a href="https://github.com/gggeek/phpxmlrpc/releases/tag/3.1.2">Release notes</a>)</p>
 
 <h2><a name="news">News</a></h2>
 <ul>
+
+<li>
+    4th of March, 2020<br/>
+
+    Released lib version 4.4.2.<br/>
+    The release notes are available on <a href="https://github.com/gggeek/phpxmlrpc/releases/">Github</a><br/><br/>
+</li>
 
 <li>
     29th of July, 2019<br/>
@@ -119,65 +126,28 @@ For the adventurous there is even an <a href="doc-2/xmlrpc_php.xml">xml+css</a> 
 </ul>
 
 <h2><a name="demoserver">Online demo server</a></h2>
-<p>A demo server is active at the address <b>http://phpxmlrpc.sourceforge.net/server.php</b>. It exposes functions that can be used for interoperability testing. (the full code for the server is included in the CVS version of the library).<br/>
-You can see the source code here: <a href="http://phpxmlrpc.sourceforge.net/server.php?showSource=TRUE">http://phpxmlrpc.sourceforge.net/server.php</a> (the xmlrpc server will activate on POST requests, and display its API on GET requests), and auto-generated documentation <a href="server.php">here</a></p>
+<p>A demo server is active at the address <b>http://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php</b>. It exposes functions that can be used for interoperability testing (the full code for the server is included in the Git version of the library).<br/>
+<!--You can see the source code here: <a href="http://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php?showSource=TRUE">http://phpxmlrpc.sourceforge.net/server.php</a> (the xmlrpc server will activate on POST requests, and display its API on GET requests), and auto-generated documentation <a href="server.php">here</a></p>-->
 
 <h2><a name="debugger">Online xmlrpc debugger</a></h2>
 <p>A demo xmlrpc debugger application, built on top of this library, is active at the address <a href="http://gggeek.altervista.org/sw/xmlrpc/debugger/">http://gggeek.altervista.org/sw/xmlrpc/debugger/</a>.
-You can use the debugger to e.g. query the SF demo server, or debug your own personal xmlrpc server, if it is accessible on the net.</p>
+You can use the debugger to e.g. query the demo server, or debug your own personal xmlrpc server, if it is accessible on the net.</p>
 
 <h2><a name="development">Development</a></h2>
 <p><a href="https://github.com/gggeek/phpxmlrpc/">GitHub home page</a> (downloads, source code and bug tracker).</p>
 
+<h2><a name="roadmap">Roadmap</a></h2>
+<p>See the list of issues on <a href="https://github.com/gggeek/phpxmlrpc/issues">Github</a></p>
+
 <h2><a name="mailinglists">Mailing lists</a></h2>
 <ul>
-<li><a href="http://lists.gnomehack.com/mailman/listinfo/phpxmlrpc">User's mailing list - very low traffic</a></li>
-<li><a href="http://sourceforge.net/mail/?group_id=34455">Developers' mailing list - discontinued as of December 2013</a></li>
+<li><a href="http://lists.gnomehack.com/mailman/listinfo/phpxmlrpc">User's mailing list</a> - very low traffic</li>
+<li><a href="http://sourceforge.net/mail/?group_id=34455">Developers' mailing list</a> - discontinued as of December 2013</li>
 </ul>
 
 <h2><a name="contact">Contact</a></h2>
 <!-- See the lib's <a href="http://sourceforge.net/projects/phpxmlrpc/">SourceForge home page</a> for the complete list of maintainers, file a bug report, feature request or patch.<br/> -->
 For security related issues feel free to contact <a href="http://sourceforge.net/sendmessage.php?touser=114789">ggiunta at users.sourceforge.net</a>
-
-<h2><a name="roadmap">Roadmap</a></h2>
-<p>A (quite outdated) list of things that might make it into future releases.</p>
-<p>See also the list of issues in <a href="https://github.com/gggeek/phpxmlrpc/issues">Github</a></p>
-<table cellspacing="0" cellpadding="0">
-<tr><th>Description</th><th>Status - updated 2009/07/26</th></tr>
-
-<!--<tr><td>Finish coding a faster xml-rpc decoding path, for when user wants to deal directly with native php types instead of xmlrpcval objects</td><td>OK: client side work finished, by usage of class var return_type. Needs better documentation and lots of testing.<br/>Server side work ok, but there are known limitations with multicall support.</td></tr>
-<tr><td class="odd">Add to server and client the capability to emit xml in a user chosen charset instead of always using US-ASCII</td><td>OK. The server can even honour the accept-charset http header if the client sends it...</td></tr>
-<tr><td>Add to server the ability to display human-readable info about its API</td><td>OK: implented in a subclass of xmlrpc_server, that will be part of a separate package</td></tr>
-<tr><td class="odd">Allow object methods to be used in server dispatch map using the class::method syntax...</td><td>OK</td></tr>
-<tr><td>Fix echoing of client requests inside server-emitted debug messages</td><td>OK: server-generated comments are base64-encoded inside a separate xml comment. If the client has debug enabled, this info is automatically decoded and printed to screen.</td></tr>
-<tr><td class="odd">Implement some benchmarks to measure e.g. speed differences of keep-alives vs. plain connections, or native php serialization vs. php_xmlrpc_encode</td><td>Initial code released, with a limited set of tests. Tests to be augmented...</td></tr>
-<tr><td>Complete Javadoc documentation of code</td><td>(Almost ?) Complete...</td></tr>-->
-
-<tr><td class="odd">Update documentation for all features added since version 2</td><td>Slowly progressing...</td></tr>
-
-<tr><td>Add the possibility to choose formatting of the xml messages</td><td>Similar to what the php native xmlrpc extension does</td></tr>
-<!--<tr><td>Add functionality to automatically have methods exposed to client-side javascript (ie. coder writes one php page with both server side and client side code)</td><td>See php-o-lait for a nice example</td></tr>-->
-<tr><td class="odd">Fix warnings emitted when running with PHP 5 in STRICT mode</td><td>Might have already been done in version 3.0, abandoning php 4 compat...</td></tr>
-<!--<tr><td class="odd">Complete support for the JSON-RPC protocol</td><td>Initial release of json-rpc added to the EXTRAS package. Progressing...</td></tr>-->
-<tr><td>Expand automatic php function to xmlrpc method wrapper to take advantage of exception handling and return xmlrpc error responses</td><td></td></tr>
-<tr><td class="odd">Expand automatic stub generator for automatically converting php functions to xmlrpc methods for PHP &lt;= 5.0.2</td><td>look at AMFPHP code on how to do it.<br/>Many enhancements in version 2.1<br/>Now that the server can automatically register php functions there is less need for it...</td></tr>
-<tr><td>Better support for mbstring when it's enabled</td><td>Should make e.g. charset encoding guessing faster</td></tr>
-<tr><td class="odd">Improve support for "version 1" cookies</td><td></td></tr>
-<!--<tr><td>Implement some responses for system.getcapabilities</td><td>Present in CVS. Is there any defined standard for those?</td></tr>-->
-<tr><td>Add a possibility to use <a href="http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php">standard error messages</a> instead of the native error codes</td><td></td></tr>
-<tr><td class="odd">PEAR compatibility: add synonyms for functions existing with different names in the PEAR version of the lib</td><td></td></tr>
-<tr><td>Add support for the <a href="http://xmlrpc-epi.sourceforge.net/specs/rfc.system.describeMethods.php">system.describeMethods</a> xmlrpc extension</td><td></td></tr>
-<!--<tr><td>Support the <a href="http://www.ontosys.com/xml-rpc/extensions.php">&lt;/nil&gt;</a> extension to the xmlrpc standard</td><td>It is now in CVS...</td></tr>-->
-<tr><td class="odd">Add to the debugger the capability to launch a complete set of validator1 tests</td><td></td></tr>
-<tr><td>Examine usability of WSDL for describing exposed services and translation to/from system.methodSignature and system.describeMethods</td><td>Some problems exist in using an XSD to strictly define xmlrpc. Relax NG is a definitely better alternative, but there is little support in other toolkits for using it in conjunction with a WSDL file...</td></tr>
-<tr><td class="odd">Support http redirects (302)</td><td></td></tr>
-<tr><td>Add to sf.net a small database, so that we can implement a validator page that logs incoming users, such as is present on the xmlrpc.com site</td><td></td></tr>
-<tr><td class="odd">Add to benchmark suite the capability to upload results to sf.net</td><td></td></tr>
-<!--<tr><td>Add to debugger / documenting server some js powered xmlrpc-builder, to let user create requests by point-n-click instead of writing xml</td><td>Initial release in the online debugger on 12/12/2006</td></tr>-->
-<tr><td>Write a php extension that will accelerate the most heavily used functions of the lib</td><td>See how adodb did it for an example</td></tr>
-<tr><td class="odd">Test speed/memory gains using simplexml and relaxng instead of hand parsing of xml</td><td></td></tr>
-</table>
-<!-- <p>See also the TODO file at <a href="http://phpxmlrpc.svn.sourceforge.net/viewvc/phpxmlrpc/trunk/todo.txt">http://phpxmlrpc.svn.sourceforge.net/viewvc/phpxmlrpc/trunk/todo.txt</a></p> -->
 
 <h2><a name="security">Security</a></h2>
 <div class="incident">
@@ -407,7 +377,7 @@ if/else removed, such that there is zero chance for this type of exploit.
 <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fgggeek.github.io%2Fhphpxmlrpc%2F"><img
         src="http://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
         alt="Valid XHTML 1.0!" /></a><br/>
-Page last updated: 2017/7/1
+Page last updated: 2020/12/22
 
 </div>
 </body>
