@@ -1,3 +1,13 @@
+XML-RPC for PHP version 4.5.0 - (unreleased)
+
+* new: it is now possible to control the precision used when serializing DOUBLE values via usage of
+  `PhpXmlRpc::$xmlpc_double_precision`
+
+* improvements to the support of the XMLRPC extension emulation (as provided by the phpxmlrpc/polyfill-xmlrpc package)
+
+* removed obsolete files from the 'extras' directory
+
+
 XML-RPC for PHP version 4.4.3 - 2020/12/17
 
 * fixed: compatibility with PHP 8.0 (fixes to the debugger, to the server's 'system.methodHelp' method and to the

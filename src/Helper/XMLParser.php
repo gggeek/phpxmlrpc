@@ -16,6 +16,7 @@ class XMLParser
     const ACCEPT_REQUEST = 1;
     const ACCEPT_RESPONSE = 2;
     const ACCEPT_VALUE = 4;
+    const ACCEPT_FAULT = 8;
 
     // Used to store state during parsing.
     // Quick explanation of components:
@@ -30,7 +31,7 @@ class XMLParser
     //   method - used to store method name
     //   params - used to store parameters in method calls
     //   pt - used to store the type of each received parameter. Useful if parameters are automatically decoded to php values
-    //   rt  - 'methodcall', 'methodresponse' or 'value'
+    //   rt  - 'methodcall', 'methodresponse', 'value' or 'fault' (the last one used only in EPI emulation mode)
     public $_xh = array(
         'ac' => '',
         'stack' => array(),
@@ -175,7 +176,8 @@ class XMLParser
                 }
                 if (($name == 'METHODCALL' && ($accept & self::ACCEPT_REQUEST)) ||
                     ($name == 'METHODRESPONSE' && ($accept & self::ACCEPT_RESPONSE)) ||
-                    ($name == 'VALUE' && ($accept & self::ACCEPT_VALUE))) {
+                    ($name == 'VALUE' && ($accept & self::ACCEPT_VALUE)) ||
+                    ($name == 'FAULT' && ($accept & self::ACCEPT_FAULT))) {
                     $this->_xh['rt'] = strtolower($name);
                 } else {
                     $this->_xh['isf'] = 2;

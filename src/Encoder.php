@@ -41,16 +41,18 @@ class Encoder
                     $typ = key($xmlrpcVal->me);
                     switch ($typ) {
                         case 'dateTime.iso8601':
-                            $xmlrpcVal->scalar = $val;
-                            $xmlrpcVal->type = 'datetime';
-                            $xmlrpcVal->timestamp = \PhpXmlRpc\Helper\Date::iso8601Decode($val);
-
-                            return $xmlrpcVal;
+                            $xmlrpcVal = array(
+                                'xmlrpc_type' => 'datetime',
+                                'scalar' => $val,
+                                'timestamp' => \PhpXmlRpc\Helper\Date::iso8601Decode($val)
+                            );
+                            return (object)$xmlrpcVal;
                         case 'base64':
-                            $xmlrpcVal->scalar = $val;
-                            $xmlrpcVal->type = $typ;
-
-                            return $xmlrpcVal;
+                            $xmlrpcVal = array(
+                                'xmlrpc_type' => 'base64',
+                                'scalar' => $val
+                            );
+                            return (object)$xmlrpcVal;
                         default:
                             return $xmlrpcVal->scalarval();
                     }
@@ -135,6 +137,7 @@ class Encoder
         $type = gettype($phpVal);
         switch ($type) {
             case 'string':
+                /// @todo should we be stricter in the accepted dates (ie. reject more of invalid days & times)?
                 if (in_array('auto_dates', $options) && preg_match('/^[0-9]{8}T[0-9]{2}:[0-9]{2}:[0-9]{2}$/', $phpVal)) {
                     $xmlrpcVal = new Value($phpVal, Value::$xmlrpcDateTime);
                 } else {
@@ -178,6 +181,23 @@ class Encoder
                     $xmlrpcVal = $phpVal;
                 } elseif (is_a($phpVal, 'DateTimeInterface')) {
                     $xmlrpcVal = new Value($phpVal->format('Ymd\TH:i:s'), Value::$xmlrpcStruct);
+                } elseif (in_array('extension_api', $options) && $phpVal instanceof \stdClass && isset($phpVal->xmlrpc_type)) {
+                    // Handle the 'pre-converted' base64 and datetime values
+                    if (isset($phpVal->scalar)) {
+                        switch ($phpVal->xmlrpc_type) {
+                            case 'base64':
+                                $xmlrpcVal = new Value($phpVal->scalar, Value::$xmlrpcBase64);
+                                break;
+                            case 'datetime':
+                                $xmlrpcVal = new Value($phpVal->scalar, Value::$xmlrpcDateTime);
+                                break;
+                            default:
+                                $xmlrpcVal = new Value();
+                        }
+                    } else {
+                        $xmlrpcVal = new Value();
+                    }
+
                 } else {
                     $arr = array();
                     foreach($phpVal as $k => $v) {
@@ -264,7 +284,7 @@ class Encoder
         }
 
         $xmlRpcParser = new XMLParser($options);
-        $xmlRpcParser->parse($xmlVal, XMLParser::RETURN_XMLRPCVALS, XMLParser::ACCEPT_REQUEST | XMLParser::ACCEPT_RESPONSE | XMLParser::ACCEPT_VALUE);
+        $xmlRpcParser->parse($xmlVal, XMLParser::RETURN_XMLRPCVALS, XMLParser::ACCEPT_REQUEST | XMLParser::ACCEPT_RESPONSE | XMLParser::ACCEPT_VALUE | XMLParser::ACCEPT_FAULT);
 
         if ($xmlRpcParser->_xh['isf'] > 1) {
             // test that $xmlrpc->_xh['value'] is an obj, too???
@@ -297,6 +317,18 @@ class Encoder
                 return $req;
             case 'value':
                 return $xmlRpcParser->_xh['value'];
+            case 'fault':
+                // EPI api emulation
+                $v = $xmlRpcParser->_xh['value'];
+                // use a known error code
+                /** @var Value $vc */
+                $vc = isset($v['faultCode']) ? $v['faultCode']->scalarval() : PhpXmlRpc::$xmlrpcerr['invalid_return'];
+                /** @var Value $vs */
+                $vs = isset($v['faultString']) ? $v['faultString']->scalarval() : '';
+                if (!is_int($vc) || $vc == 0) {
+                    $vc = PhpXmlRpc::$xmlrpcerr['invalid_return'];
+                }
+                return new Response(0, $vc, $vs);
             default:
                 return false;
         }

@@ -78,7 +78,7 @@ class PhpXmlRpc
     public static $xmlrpc_internalencoding = "UTF-8";
 
     public static $xmlrpcName = "XML-RPC for PHP";
-    public static $xmlrpcVersion = "4.4.3";
+    public static $xmlrpcVersion = "4.5-dev";
 
     // let user errors start at 800
     public static $xmlrpcerruser = 800;
@@ -92,6 +92,9 @@ class PhpXmlRpc
     public static $xmlrpc_null_apache_encoding = false;
 
     public static $xmlrpc_null_apache_encoding_ns = "http://ws.apache.org/xmlrpc/namespaces/extensions";
+
+    // number of decimal digits used to serialize Double values
+    public static $xmlpc_double_precision = 128;
 
     /**
      * A function to be used for compatibility with legacy code: it creates all global variables which used to be declared,
