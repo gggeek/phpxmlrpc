@@ -59,10 +59,6 @@ License
 -------
 Use of this software is subject to the terms in the [license.txt](license.txt) file
 
-SSL-certificate
----------------
-The passphrase for the rsakey.pem certificate is 'test'.
-
 
 [![License](https://poser.pugx.org/phpxmlrpc/phpxmlrpc/license)](https://packagist.org/packages/phpxmlrpc/phpxmlrpc)
 [![Latest Stable Version](https://poser.pugx.org/phpxmlrpc/phpxmlrpc/v/stable)](https://packagist.org/packages/phpxmlrpc/phpxmlrpc)
