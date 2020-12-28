@@ -1,5 +1,6 @@
 demo/ export-ignore
 doc/ export-ignore
+extras/ export-ignore
 tests/ export-ignore
 .editorconfig export-ignore
 .gitattributes export-ignore
