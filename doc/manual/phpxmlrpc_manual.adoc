@@ -133,13 +133,7 @@ demo/*:: example code for implementing both xmlrpc client and server functionali
 
 doc/*:: the documentation/ this manual, and the list of API changes between versions 3 and 4
 
-extras/rsakey.pem:: A test certificate key for the SSL support, which can be used to generate dummy certificates. It has
-    the passphrase "test."
-
 extras/test.pl, extras/test.py:: Perl and Python programs to exercise server.php to test that some of the methods work.
-
-extras/workspace.testPhpServer.fttb:: Frontier scripts to exercise the demo server. Thanks to Dave Winer for permission
-    to include these. See link:$$http://www.xmlrpc.com/discuss/msgReader$853$$[Dave's announcement of these.]
 
 lib/*:: a compatibility layer for applications which still rely on version 3 of the API
 
