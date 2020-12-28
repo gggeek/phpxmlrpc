@@ -10,6 +10,8 @@
  * @todo add support for more options, such as ntlm auth to proxy, or request charset encoding
  * @todo parse content of payload textarea to be fed to visual editor
  * @todo add http no-cache headers
+ * @todo if jsonrpc php classes are not available, do not display the JSONRPC option
+ * @todo if js libs are not available, do not try to load them
  **/
 
 // make sure we set the correct charset type for output, so that we can display all characters

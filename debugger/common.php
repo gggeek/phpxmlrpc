@@ -8,6 +8,7 @@
  *
  * @todo switch params for http compression from 0,1,2 to values to be used directly
  * @todo do some more sanitization of received parameters
+ * @todo move parameters away from global namespace
  */
 
 // work around magic quotes
