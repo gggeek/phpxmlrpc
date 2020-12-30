@@ -55,7 +55,7 @@ class EncoderTests extends PhpXmlRpc_PolyfillTestCase
     {
         $r = new DateTime();
         $v = php_xmlrpc_encode($r);
-        $this->assertEquals('dateTime.iso8601', $v->kindof());
+        $this->assertEquals('dateTime.iso8601', $v->scalartyp());
     }
 
     public function testEncodeRecursive()

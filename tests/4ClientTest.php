@@ -56,12 +56,12 @@ class ClientTest extends PhpXmlRpc_PolyfillTestCase
             new xmlrpcval('hello', 'string'),
         ));
         $this->client->server .= 'XXX';
-        $r = $this->client->send($m, 5);
-        // make sure there's no freaking catchall DNS in effect
-        $dnsinfo = dns_get_record($this->client->server);
+        $dnsinfo = @dns_get_record($this->client->server);
         if ($dnsinfo) {
             $this->markTestSkipped('Seems like there is a catchall DNS in effect: host ' . $this->client->server . ' found');
         } else {
+            $r = $this->client->send($m, 5);
+            // make sure there's no freaking catchall DNS in effect
             $this->assertEquals(5, $r->faultCode());
         }
     }
