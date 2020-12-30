@@ -16,6 +16,7 @@ use PhpXmlRpc\Helper\Logger;
  * @todo use some better templating system for code generation?
  * @todo implement method wrapping with preservation of php objs in calls
  * @todo when wrapping methods without obj rebuilding, use return_type = 'phpvals' (faster)
+ * @todo add support for 'epivals' mode
  */
 class Wrapper
 {
@@ -28,12 +29,14 @@ class Wrapper
      * Notes:
      * - for php 'resource' types returns empty string, since resources cannot be serialized;
      * - for php class names returns 'struct', since php objects can be serialized as xmlrpc structs
-     * - for php arrays always return array, even though arrays sometimes serialize as json structs
+     * - for php arrays always return array, even though arrays sometimes serialize as structs...
      * - for 'void' and 'null' returns 'undefined'
      *
      * @param string $phpType
      *
      * @return string
+     *
+     * @todo support notation `something[]` as 'array'
      */
     public function php2XmlrpcType($phpType)
     {
@@ -53,6 +56,7 @@ class Wrapper
             case 'true':
                 return Value::$xmlrpcBoolean;
             case Value::$xmlrpcArray: // 'array':
+            case 'array[]';
                 return Value::$xmlrpcArray;
             case 'object':
             case Value::$xmlrpcStruct: // 'struct'
@@ -63,6 +67,9 @@ class Wrapper
                 return '';
             default:
                 if (class_exists($phpType)) {
+                    if (is_a($phpType, 'DateTimeInterface')) {
+                        return Value::$xmlrpcDateTime;
+                    }
                     return Value::$xmlrpcStruct;
                 } else {
                     // unknown: might be any 'extended' xmlrpc type

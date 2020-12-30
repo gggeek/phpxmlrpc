@@ -180,7 +180,7 @@ class Encoder
                 if (is_a($phpVal, 'PhpXmlRpc\Value')) {
                     $xmlrpcVal = $phpVal;
                 } elseif (is_a($phpVal, 'DateTimeInterface')) {
-                    $xmlrpcVal = new Value($phpVal->format('Ymd\TH:i:s'), Value::$xmlrpcStruct);
+                    $xmlrpcVal = new Value($phpVal->format('Ymd\TH:i:s'), Value::$xmlrpcDateTime);
                 } elseif (in_array('extension_api', $options) && $phpVal instanceof \stdClass && isset($phpVal->xmlrpc_type)) {
                     // Handle the 'pre-converted' base64 and datetime values
                     if (isset($phpVal->scalar)) {
