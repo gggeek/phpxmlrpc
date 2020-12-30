@@ -2,6 +2,9 @@
 
 namespace PhpXmlRpc\Helper;
 
+/**
+ * @todo make constructor private to force users to go through `instance`
+ */
 class Logger
 {
     protected static $instance = null;

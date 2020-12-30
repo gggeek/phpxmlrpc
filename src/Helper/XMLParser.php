@@ -159,6 +159,7 @@ class XMLParser
 
     /**
      * xml parser handler function for opening element tags.
+     * @internal
      * @param resource $parser
      * @param string $name
      * @param $attrs
@@ -335,6 +336,7 @@ class XMLParser
 
     /**
      * xml parser handler function for close element tags.
+     * @internal
      * @param resource $parser
      * @param string $name
      * @param int $rebuildXmlrpcvals >1 for rebuilding xmlrpcvals, 0 for rebuilding php values, -1 for xmlrpc-extension compatibility
@@ -521,6 +523,7 @@ class XMLParser
 
     /**
      * Used in decoding xmlrpc requests/responses without rebuilding xmlrpc Values.
+     * @internal
      * @param resource $parser
      * @param string $name
      */
@@ -531,6 +534,7 @@ class XMLParser
 
     /**
      * Used in decoding xmlrpc requests/responses while building xmlrpc-extension Values (plain php for all but base64 and datetime).
+     * @internal
      * @param resource $parser
      * @param string $name
      */
@@ -541,6 +545,7 @@ class XMLParser
 
     /**
      * xml parser handler function for character data.
+     * @internal
      * @param resource $parser
      * @param string $data
      */
@@ -559,6 +564,7 @@ class XMLParser
     /**
      * xml parser handler function for 'other stuff', ie. not char data or
      * element start/end tag. In fact it only gets called on unknown entities...
+     * @internal
      * @param $parser
      * @param string data
      */

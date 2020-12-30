@@ -15,7 +15,9 @@ class Request
 {
     /// @todo: do these need to be public?
     public $payload;
+    /** @internal */
     public $methodname;
+    /** @internal */
     public $params = array();
     public $debug = 0;
     public $content_type = 'text/xml';
@@ -35,6 +37,11 @@ class Request
         }
     }
 
+    /**
+     * @internal this function will become protected in the future
+     * @param string $charsetEncoding
+     * @return string
+     */
     public function xml_header($charsetEncoding = '')
     {
         if ($charsetEncoding != '') {
@@ -44,11 +51,19 @@ class Request
         }
     }
 
+    /**
+     * @internal this function will become protected in the future
+     * @return string
+     */
     public function xml_footer()
     {
         return '</methodCall>';
     }
 
+    /**
+     * @internal this function will become protected in the future
+     * @param string $charsetEncoding
+     */
     public function createPayload($charsetEncoding = '')
     {
         if ($charsetEncoding != '') {
@@ -176,6 +191,8 @@ class Request
      *                           'phpvals'
      *
      * @return Response
+     *
+     * @todo parsing Responses is not really the responsibility of the Request class. Maybe of the Client...
      */
     public function parseResponse($data = '', $headersProcessed = false, $returnType = 'xmlrpcvals')
     {
@@ -231,7 +248,7 @@ class Request
             }
         }
 
-        // if user wants back raw xml, give it to him
+        // if user wants back raw xml, give it to her
         if ($returnType == 'xml') {
             $r = new Response($data, 0, '', 'xml');
             $r->hdrs = $this->httpResponse['headers'];

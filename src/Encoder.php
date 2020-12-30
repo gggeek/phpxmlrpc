@@ -8,6 +8,7 @@ use PhpXmlRpc\Helper\XMLParser;
 /**
  * A helper class to easily convert between Value objects and php native values
  * @todo implement an interface
+ * @todo add class constants for the options values
  */
 class Encoder
 {
@@ -22,7 +23,7 @@ class Encoder
      * This means that the remote communication end can decide which php code will get executed on your server, leaving
      * the door possibly open to 'php-injection' style of attacks (provided you have some classes defined on your server
      * that might wreak havoc if instances are built outside an appropriate context).
-     * Make sure you trust the remote server/client before eanbling this!
+     * Make sure you trust the remote server/client before enabling this!
      *
      * @author Dan Libby (dan@libby.com)
      *
@@ -278,12 +279,12 @@ class Encoder
 
         // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8!
         if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
-            $options = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
+            $parserOptions = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
         } else {
-            $options = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
+            $parserOptions = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
         }
 
-        $xmlRpcParser = new XMLParser($options);
+        $xmlRpcParser = new XMLParser($parserOptions);
         $xmlRpcParser->parse($xmlVal, XMLParser::RETURN_XMLRPCVALS, XMLParser::ACCEPT_REQUEST | XMLParser::ACCEPT_RESPONSE | XMLParser::ACCEPT_VALUE | XMLParser::ACCEPT_FAULT);
 
         if ($xmlRpcParser->_xh['isf'] > 1) {
@@ -333,5 +334,4 @@ class Encoder
                 return false;
         }
     }
-
 }

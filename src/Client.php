@@ -71,12 +71,12 @@ class Client
      * Name of compression scheme to be used for sending requests.
      * Either null, gzip or deflate.
      */
-
     public $request_compression = '';
 
     /**
      * CURL handle: used for keep-alive connections (PHP 4.3.8 up, see:
      * http://curl.haxx.se/docs/faq.html#7.3).
+     * @internal
      */
     public $xmlrpc_curl_handle = null;
 

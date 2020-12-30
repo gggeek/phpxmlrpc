@@ -12,14 +12,18 @@ use PhpXmlRpc\Helper\Charset;
 class Response
 {
     /// @todo: do these need to be public?
+    /** @internal */
     public $val = 0;
+    /** @internal */
     public $valtyp;
+    /** @internal */
     public $errno = 0;
+    /** @internal */
     public $errstr = '';
     public $payload;
+    public $content_type = 'text/xml';
     public $hdrs = array();
     public $_cookies = array();
-    public $content_type = 'text/xml';
     public $raw_data = '';
 
     /**

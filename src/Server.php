@@ -2,8 +2,8 @@
 
 namespace PhpXmlRpc;
 
-use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\Charset;
+use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
 
 /**
@@ -20,6 +20,7 @@ class Server
      * Defines how functions in dmap will be invoked: either using an xmlrpc request object
      * or plain php values.
      * Valid strings are 'xmlrpcvals', 'phpvals' or 'epivals'
+     * @todo create class constants for these
      */
     public $functions_parameters_type = 'xmlrpcvals';
 

@@ -40,7 +40,10 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     /// @todo: do these need to be public?
     /** @var Value[]|mixed */
     public $me = array();
-    /** @var int $mytype */
+    /**
+     * @var int $mytype
+     * @internal
+     */
     public $mytype = 0;
     /** @var string|null $_php_class */
     public $_php_class = null;
@@ -513,6 +516,12 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
     }
 
+    /**
+     * @internal required to be public to implement an Interface
+     * @param mixed $offset
+     * @param mixed $value
+     * @throws \Exception
+     */
     public function offsetSet($offset, $value)
     {
         switch ($this->mytype) {
@@ -553,6 +562,11 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
     }
 
+    /**
+     * @internal required to be public to implement an Interface
+     * @param mixed $offset
+     * @return bool
+     */
     public function offsetExists($offset)
     {
         switch ($this->mytype) {
@@ -568,6 +582,11 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
     }
 
+    /**
+     * @internal required to be public to implement an Interface
+     * @param mixed $offset
+     * @throws \Exception
+     */
     public function offsetUnset($offset)
     {
         switch ($this->mytype) {
@@ -585,6 +604,12 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
     }
 
+    /**
+     * @internal required to be public to implement an Interface
+     * @param mixed $offset
+     * @return mixed|Value|null
+     * @throws \Exception
+     */
     public function offsetGet($offset)
     {
         switch ($this->mytype) {
