@@ -3,7 +3,7 @@
 namespace PhpXmlRpc\Helper;
 
 /**
- * @todo make constructor private to force users to go through `instance`
+ * @todo make constructor private to force users to go through `instance()`
  */
 class Logger
 {

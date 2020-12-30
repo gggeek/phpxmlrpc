@@ -6,7 +6,7 @@
  * @copyright (c) 2005-2020 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  *
- * @todo add a test for response ok in call testing
+ * @todo add a check for response ok in call testing
  * @todo add support for --help option to give users the list of supported parameters
  * @todo make number of test iterations flexible
  * @todo add https tests

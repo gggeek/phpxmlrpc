@@ -5,10 +5,16 @@ XML-RPC for PHP version 4.5.0 - (unreleased)
 
 * fixed: `Encoder::encode` would not correctly encode DateTime and DateTimeImmutable objects
 
-* improvements to the Wrapper classes in identifying the required arguments types from phpdoc: support 'array[]',
+* improvements to to the Helper\Date class in rejecting invalid date strings
+
+* improvements to the Wrapper class in identifying the required arguments types from phpdoc: support 'array[]',
   'DateTime' and 'DateTimeImmutable'
 
 * improvements to the support of the XMLRPC extension emulation (as provided by the phpxmlrpc/polyfill-xmlrpc package)
+
+* improvements in the inline phpdoc: tagged many methods and class member as for internal usage only
+
+* minor improvements in the debugger to allow easier integration of phpxmlrpc/jsonrpc and friends
 
 * removed obsolete files from the 'extras' directory
 
