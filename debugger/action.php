@@ -92,10 +92,8 @@ header('Content-Type: text/html; charset=utf-8');
 <?php
 
 include __DIR__ . '/common.php';
-if ($action) {
 
-    include_once __DIR__ . "/../src/Autoloader.php";
-    PhpXmlRpc\Autoloader::register();
+if ($action) {
 
     // make sure the script waits long enough for the call to complete...
     if ($timeout) {
@@ -103,16 +101,16 @@ if ($action) {
     }
 
     if ($wstype == 1) {
-        @include 'jsonrpc.inc';
-        if (!class_exists('jsonrpc_client')) {
-            die('Error: to debug the jsonrpc protocol the jsonrpc.inc file is needed');
+        //@include 'jsonrpc.inc';
+        if (!class_exists('\PhpXmlRpc\JsonRpc\Client')) {
+            die('Error: to debug the jsonrpc protocol the phpxmlrpc/jsonrpc package is needed');
         }
-        $clientClass = 'PhpJsRpc\Client';
-        $requestClass = 'PhpJsRpc\Request';
+        $clientClass = '\PhpXmlRpc\JsonRpc\Client';
+        $requestClass = '\PhpXmlRpc\JsonRpc\Request';
         $protoName = 'JSONRPC';
     } else {
-        $clientClass = 'PhpXmlRpc\Client';
-        $requestClass = 'PhpXmlRpc\Request';
+        $clientClass = '\PhpXmlRpc\Client';
+        $requestClass = '\PhpXmlRpc\Request';
         $protoName = 'XMLRPC';
     }
 

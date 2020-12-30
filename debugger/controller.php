@@ -10,11 +10,11 @@
  * @todo add support for more options, such as ntlm auth to proxy, or request charset encoding
  * @todo parse content of payload textarea to be fed to visual editor
  * @todo add http no-cache headers
- * @todo if jsonrpc php classes are not available, do not display the JSONRPC option
+ * @todo if jsonrpc php classes are not available, gray out or hide altogether the JSONRPC option & title
  * @todo if js libs are not available, do not try to load them
  **/
 
-// make sure we set the correct charset type for output, so that we can display all characters
+// Make sure we set the correct charset type for output, so that we can display all characters
 header('Content-Type: text/html; charset=utf-8');
 
 include __DIR__ . '/common.php';
@@ -22,9 +22,10 @@ if ($action == '') {
     $action = 'list';
 }
 
-// relative path to the visual xmlrpc editing dialog
-$editorpath = '../../phpjsrpc/debugger/';
-$editorlibs = '../../phpjsrpc/lib/';
+// Relative path to the visual xmlrpc editing dialog
+// We allow to easily configure this path via defines
+$editorpath = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/debugger/';
+$editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/lib/';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -229,9 +230,9 @@ $editorlibs = '../../phpjsrpc/lib/';
         echo ' document.forms[2].submit();';
     } ?>">
 <h1>XMLRPC
-    <form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);"/></form>
+    <form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);" <?php if (!class_exists('\PhpXmlRpc\Client')) { echo 'disabled="disabled"';} ?>/></form>
     /
-    <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>
+    <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);" <?php if (!class_exists('\PhpXmlRpc\JsonRpc\Client')) { echo 'disabled="disabled"';} ?>/></form>
     JSONRPC Debugger (based on the <a href="http://gggeek.github.io/phpxmlrpc/">PHP-XMLRPC</a> library)
 </h1>
 <form name="frmaction" method="get" action="action.php" target="frmaction" onSubmit="switchFormMethod();">
