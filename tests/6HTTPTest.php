@@ -5,13 +5,13 @@ include_once __DIR__ . '/../lib/xmlrpc_wrappers.inc';
 
 include_once __DIR__ . '/parse_args.php';
 
-include_once __DIR__ . '/3LocalhostTest.php';
+include_once __DIR__ . '/5ServerTest.php';
 
 /**
  * Tests which stress http features of the library.
  * Each of these tests iterates over (almost) all of the 'localhost' tests
  */
-class LocalhostMultiTest extends LocalhostTest
+class HTTPTest extends ServerTest
 {
     /**
      * Returns all test methods from the base class, except the ones which failed already
@@ -27,9 +27,9 @@ class LocalhostMultiTest extends LocalhostTest
         );
 
         $methods = array();
-        foreach(get_class_methods('LocalhostTest') as $method)
+        foreach(get_class_methods('ServerTest') as $method)
         {
-            if(strpos($method, 'test') === 0 && !in_array($method, $unsafeMethods))
+            if (strpos($method, 'test') === 0 && !in_array($method, $unsafeMethods))
             {
                 if (!isset(self::$failed_tests[$method])) {
                     $methods[$method] = array($method);
@@ -46,7 +46,7 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function testDeflate($method)
     {
-        if(!function_exists('gzdeflate'))
+        if (!function_exists('gzdeflate'))
         {
             $this->markTestSkipped('Zlib missing: cannot test deflate functionality');
             return;
@@ -64,7 +64,7 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function testGzip($method)
     {
-        if(!function_exists('gzdeflate'))
+        if (!function_exists('gzdeflate'))
         {
             $this->markTestSkipped('Zlib missing: cannot test gzip functionality');
             return;
@@ -78,7 +78,7 @@ class LocalhostMultiTest extends LocalhostTest
 
     public function testKeepAlives()
     {
-        if(!function_exists('curl_init'))
+        if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1');
             return;
@@ -118,7 +118,7 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function testHttp11($method)
     {
-        if(!function_exists('curl_init'))
+        if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1');
             return;
@@ -137,7 +137,7 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function testHttp10Curl($method)
     {
-        if(!function_exists('curl_init'))
+        if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1');
             return;
@@ -157,7 +157,7 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function testHttp11Gzip($method)
     {
-        if(!function_exists('curl_init'))
+        if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1');
             return;
@@ -177,7 +177,7 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function testHttp11Deflate($method)
     {
-        if(!function_exists('curl_init'))
+        if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1');
             return;
@@ -197,7 +197,7 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function testHttp11Proxy($method)
     {
-        if(!function_exists('curl_init'))
+        if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1 w. proxy');
             return;
@@ -222,7 +222,7 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function testHttps($method)
     {
-        if(!function_exists('curl_init'))
+        if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test https functionality');
             return;
@@ -274,7 +274,7 @@ class LocalhostMultiTest extends LocalhostTest
      */
     public function testHttpsProxy($method)
     {
-        if(!function_exists('curl_init'))
+        if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test https w. proxy');
             return;

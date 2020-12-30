@@ -13,9 +13,10 @@ use PHPUnit\Runner\BaseTestRunner;
 
 /**
  * Tests which involve interaction between the client and the server.
- * They are run against the server found in demo/server.php
+ * They are run against the server found in demo/server.php.
+ * Includes testing of (some of) the Wrapper class
  */
-class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
+class ServerTest extends PhpXmlRpc_PolyfillTestCase
 {
     /** @var xmlrpc_client $client */
     protected $client = null;

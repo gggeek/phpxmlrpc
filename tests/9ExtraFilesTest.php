@@ -6,7 +6,7 @@ include_once __DIR__ . '/LocalFileTestCase.php';
  * Tests for php files in the 'extras' directory
  *
  */
-class ExtraTest extends PhpXmlRpc_LocalFileTestCase
+class ExtraFilesTest extends PhpXmlRpc_LocalFileTestCase
 {
     public function set_up()
     {
