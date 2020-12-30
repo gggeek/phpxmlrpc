@@ -13,6 +13,7 @@ class Http
      * @param string $buffer the string to be decoded
      *
      * @return string
+     * @internal this function will become protected in the future
      */
     public static function decodeChunked($buffer)
     {
@@ -217,7 +218,7 @@ class Http
 
             // Decode chunked encoding sent by http 1.1 servers
             if (isset($httpResponse['headers']['transfer-encoding']) && $httpResponse['headers']['transfer-encoding'] == 'chunked') {
-                if (!$data = Http::decodeChunked($data)) {
+                if (!$data = static::decodeChunked($data)) {
                     Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': errors occurred when trying to rebuild the chunked data received from server');
                     throw new \Exception(PhpXmlRpc::$xmlrpcstr['dechunk_fail'], PhpXmlRpc::$xmlrpcerr['dechunk_fail']);
                 }
