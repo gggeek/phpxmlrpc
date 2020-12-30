@@ -11,6 +11,7 @@ use PhpXmlRpc\Value;
 class XMLParser
 {
     const RETURN_XMLRPCVALS = 'xmlrpcvals';
+    const RETURN_EPIVALS = 'epivals';
     const RETURN_PHP = 'phpvals';
 
     const ACCEPT_REQUEST = 1;
@@ -122,10 +123,15 @@ class XMLParser
 
         xml_set_object($parser, $this);
 
-        if ($returnType == self::RETURN_PHP) {
-            xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_fast');
-        } else {
-            xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee');
+        switch($returnType) {
+            case self::RETURN_PHP:
+                xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_fast');
+                break;
+            case self::RETURN_EPIVALS:
+                xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_epi');
+                break;
+            default:
+                xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee');
         }
 
         xml_set_character_data_handler($parser, 'xmlrpc_cd');
@@ -331,9 +337,9 @@ class XMLParser
      * xml parser handler function for close element tags.
      * @param resource $parser
      * @param string $name
-     * @param bool $rebuildXmlrpcvals
+     * @param int $rebuildXmlrpcvals >1 for rebuilding xmlrpcvals, 0 for rebuilding php values, -1 for xmlrpc-extension compatibility
      */
-    public function xmlrpc_ee($parser, $name, $rebuildXmlrpcvals = true)
+    public function xmlrpc_ee($parser, $name, $rebuildXmlrpcvals = 1)
     {
         if ($this->_xh['isf'] < 2) {
             // push this element name from stack
@@ -350,7 +356,7 @@ class XMLParser
                         $this->_xh['vt'] = Value::$xmlrpcString;
                     }
 
-                    if ($rebuildXmlrpcvals) {
+                    if ($rebuildXmlrpcvals > 0) {
                         // build the xmlrpc val out of the data received, and substitute it
                         $temp = new Value($this->_xh['value'], $this->_xh['vt']);
                         // in case we got info about underlying php class, save it
@@ -358,27 +364,33 @@ class XMLParser
                         if (isset($this->_xh['php_class'])) {
                             $temp->_php_class = $this->_xh['php_class'];
                         }
-                        // check if we are inside an array or struct:
-                        // if value just built is inside an array, let's move it into array on the stack
-                        $vscount = count($this->_xh['valuestack']);
-                        if ($vscount && $this->_xh['valuestack'][$vscount - 1]['type'] == 'ARRAY') {
-                            $this->_xh['valuestack'][$vscount - 1]['values'][] = $temp;
-                        } else {
-                            $this->_xh['value'] = $temp;
+                        $this->_xh['value'] = $temp;
+                    } elseif ($rebuildXmlrpcvals < 0) {
+                        if ($this->_xh['vt'] == Value::$xmlrpcDateTime) {
+                            $this->_xh['value'] = (object)array(
+                                'xmlrpc_type' => 'datetime',
+                                'scalar' => $this->_xh['value'],
+                                'timestamp' => \PhpXmlRpc\Helper\Date::iso8601Decode($this->_xh['value'])
+                            );
+                        } elseif ($this->_xh['vt'] == Value::$xmlrpcBase64) {
+                            $this->_xh['value'] = (object)array(
+                                'xmlrpc_type' => 'base64',
+                                'scalar' => $this->_xh['value']
+                            );
                         }
                     } else {
-                        /// @todo this needs to treat correctly php-serialized objects,
+                        /// @todo this should handle php-serialized objects,
                         /// since std deserializing is done by php_xmlrpc_decode,
                         /// which we will not be calling...
-                        if (isset($this->_xh['php_class'])) {
-                        }
+                        //if (isset($this->_xh['php_class'])) {
+                        //}
+                    }
 
-                        // check if we are inside an array or struct:
-                        // if value just built is inside an array, let's move it into array on the stack
-                        $vscount = count($this->_xh['valuestack']);
-                        if ($vscount && $this->_xh['valuestack'][$vscount - 1]['type'] == 'ARRAY') {
-                            $this->_xh['valuestack'][$vscount - 1]['values'][] = $this->_xh['value'];
-                        }
+                    // check if we are inside an array or struct:
+                    // if value just built is inside an array, let's move it into array on the stack
+                    $vscount = count($this->_xh['valuestack']);
+                    if ($vscount && $this->_xh['valuestack'][$vscount - 1]['type'] == 'ARRAY') {
+                        $this->_xh['valuestack'][$vscount - 1]['values'][] = $this->_xh['value'];
                     }
                     break;
                 case 'BOOLEAN':
@@ -514,7 +526,17 @@ class XMLParser
      */
     public function xmlrpc_ee_fast($parser, $name)
     {
-        $this->xmlrpc_ee($parser, $name, false);
+        $this->xmlrpc_ee($parser, $name, 0);
+    }
+
+    /**
+     * Used in decoding xmlrpc requests/responses while building xmlrpc-extension Values (plain php for all but base64 and datetime).
+     * @param resource $parser
+     * @param string $name
+     */
+    public function xmlrpc_ee_epi($parser, $name)
+    {
+        $this->xmlrpc_ee($parser, $name, -1);
     }
 
     /**

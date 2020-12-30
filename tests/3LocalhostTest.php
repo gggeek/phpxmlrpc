@@ -125,7 +125,7 @@ class LocalhostTest extends PhpXmlRpc_PolyfillTestCase
 
     /**
      * @param PhpXmlRpc\Request|array $msg
-     * @param int|array $errorCode
+     * @param int|array $errorCode expected error codes
      * @param bool $returnResponse
      * @return mixed|\PhpXmlRpc\Response|\PhpXmlRpc\Response[]|\PhpXmlRpc\Value|string|null
      */

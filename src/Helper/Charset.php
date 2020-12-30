@@ -9,9 +9,13 @@ class Charset
     // tables used for transcoding different charsets into us-ascii xml
     protected $xml_iso88591_Entities = array("in" => array(), "out" => array());
 
-    /// @todo add to iso table the characters from cp_1252 range, i.e. 128 to 159?
-    /// These will NOT be present in true ISO-8859-1, but will save the unwary windows user from sending junk
-    /// (though no luck when receiving them...)
+    /// @todo should we add to the latin-1 table the characters from cp_1252 range, i.e. 128 to 159 ?
+    ///       Those will NOT be present in true ISO-8859-1, but will save the unwary windows user from sending junk
+    ///       (though no luck when receiving them...)
+    ///       Note also that, apparently, while 'ISO/IEC 8859-1' has no characters defined for bytes 128 to 159,
+    ///       IANA ISO-8859-1 does have well-defined 'C1' control codes for those - wikipedia's page on latin-1 says:
+    ///       "ISO-8859-1 is the IANA preferred name for this standard when supplemented with the C0 and C1 control codes from ISO/IEC 6429."
+    ///       Check what mbstring/iconv do by default with those?
     /*
     protected $xml_cp1252_Entities = array('in' => array(), out' => array(
         '&#x20AC;', '?',        '&#x201A;', '&#x0192;',
@@ -37,6 +41,7 @@ class Charset
 
     /**
      * This class is singleton for performance reasons.
+     * @todo can't we just make $xml_iso88591_Entities a static variable instead ?
      *
      * @return Charset
      */
@@ -49,6 +54,9 @@ class Charset
         return self::$instance;
     }
 
+    /**
+     * @todo move the creation of the charset tables to be on-demand. This saves memory and time when latin-1 is not used at all
+     */
     private function __construct()
     {
         for ($i = 0; $i < 32; $i++) {
