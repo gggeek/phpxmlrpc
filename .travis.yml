@@ -54,7 +54,7 @@ before_script:
 script:
     - ./vendor/bin/phpunit -v $PHPUNIT_OPTS tests
     - python3 demo/client/python/test.py
-    - perl extras/client/perl/test.pl
+    - perl demo/client/perl/test.pl
 
 after_failure:
   # Troubleshoot test env build problems
