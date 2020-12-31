@@ -52,7 +52,8 @@ before_script:
   - if [ "$TRAVIS_PHP_VERSION" = "7.4" ]; then ./tests/ci/setup/setup_code_coverage.sh enable && export PHPUNIT_OPTS="--coverage-clover=coverage.clover"; fi
 
 script:
-    ./vendor/bin/phpunit -v $PHPUNIT_OPTS tests
+    - ./vendor/bin/phpunit -v $PHPUNIT_OPTS tests
+    - python3 extras/test.py
 
 after_failure:
   # Troubleshoot test env build problems

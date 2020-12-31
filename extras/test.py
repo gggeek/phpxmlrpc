@@ -3,9 +3,9 @@
 
 import xmlrpc.client
 import base64
-import sys
+#import sys
 
-server = xmlrpc.client.ServerProxy("http://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php")
+server = xmlrpc.client.ServerProxy("http://localhost/demo/server/server.php")
 
 try:
     print ("Got '" + server.examples.getStateName(32) + "'")
