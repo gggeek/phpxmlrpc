@@ -33,9 +33,7 @@ try:
     print (r)
 
     # test base 64
-    b = 'Mary had a little lamb She tied it to a pylon'
-    b = base64.b64encode(b.encode('ascii'))
-    r = server.examples.decode64(b)
+    r = server.examples.decode64(b'Mary had a little lamb She tied it to a pylon')
     print (r)
     
 except xmlrpc.client.Fault as err:
