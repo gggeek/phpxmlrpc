@@ -105,7 +105,7 @@ class Http
             // server sent a Continue header without any (valid) content following...
             // give the client a chance to know it
             if (!$pos && !is_int($pos)) {
-                // works fine in php 3, 4 and 5
+                /// @todo this construct works fine in php 3, 4 and 5 - 8; would it not be enough to have !== false now ?
 
                 break;
             }

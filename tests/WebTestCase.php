@@ -6,10 +6,7 @@ include_once __DIR__ . '/PolyfillTestCase.php';
 
 use PHPUnit\Extensions\SeleniumCommon\RemoteCoverage;
 
-/**
- * @todo rename
- */
-abstract class PhpXmlRpc_LocalFileTestCase extends PhpXmlRpc_PolyfillTestCase
+abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_PolyfillTestCase
 {
     public $args = array();
 
@@ -54,9 +51,16 @@ abstract class PhpXmlRpc_LocalFileTestCase extends PhpXmlRpc_PolyfillTestCase
         return $result;
     }
 
-    protected function request($file, $method = 'GET', $payload = '', $emptyPageOk = false)
+    /**
+     * @param string $path
+     * @param string $method
+     * @param string $payload
+     * @param false $emptyPageOk
+     * @return bool|string
+     */
+    protected function request($path, $method = 'GET', $payload = '', $emptyPageOk = false)
     {
-        $url = $this->baseUrl . $file;
+        $url = $this->baseUrl . $path;
 
         $ch = curl_init($url);
         curl_setopt_array($ch, array(

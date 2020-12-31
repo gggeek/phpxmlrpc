@@ -1,8 +1,8 @@
 <?php
 
-include_once __DIR__ . '/LocalFileTestCase.php';
+include_once __DIR__ . '/WebTestCase.php';
 
-class DebuggerTest extends PhpXmlRpc_LocalFileTestCase
+class DebuggerTest extends PhpXmlRpc_WebTestCase
 {
     public function set_up()
     {

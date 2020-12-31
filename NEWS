@@ -16,7 +16,8 @@ XML-RPC for PHP version 4.5.0 - 2020/12/31
 
 * minor improvements in the debugger to allow easier integration of phpxmlrpc/jsonrpc and friends
 
-* removed obsolete files from the 'extras' directory and updated the demo perl and python files
+* removed obsolete files from the 'extras' folder; updated and moved to the 'demo' folders the perl and python
+  client scripts; moved benchmark.php and verify_compat.php to the 'extras' folder
 
 
 XML-RPC for PHP version 4.4.3 - 2020/12/17

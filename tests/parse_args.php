@@ -72,17 +72,18 @@ class argParser
 
         if (!isset($HTTPURI) || $HTTPURI == '') {
             // GUESTIMATE the url of local demo server
-            // play nice to php 3 and 4-5 in retrieving URL of server.php
+            // play nice to php 4 and 5 in retrieving URL of server.php
             /// @todo filter out query string from REQUEST_URI
+            /// @todo review this code...
             if (isset($REQUEST_URI)) {
                 $HTTPURI = str_replace('/tests/testsuite.php', '/demo/server/server.php', $REQUEST_URI);
                 $HTTPURI = str_replace('/testsuite.php', '/server.php', $HTTPURI);
-                $HTTPURI = str_replace('/tests/benchmark.php', '/demo/server/server.php', $HTTPURI);
+                $HTTPURI = str_replace('/extras/benchmark.php', '/demo/server/server.php', $HTTPURI);
                 $HTTPURI = str_replace('/benchmark.php', '/server.php', $HTTPURI);
             } elseif (isset($_SERVER['PHP_SELF']) && isset($_SERVER['REQUEST_METHOD'])) {
                 $HTTPURI = str_replace('/tests/testsuite.php', '/demo/server/server.php', $_SERVER['PHP_SELF']);
                 $HTTPURI = str_replace('/testsuite.php', '/server.php', $HTTPURI);
-                $HTTPURI = str_replace('/tests/benchmark.php', '/demo/server/server.php', $HTTPURI);
+                $HTTPURI = str_replace('/extras/benchmark.php', '/demo/server/server.php', $HTTPURI);
                 $HTTPURI = str_replace('/benchmark.php', '/server.php', $HTTPURI);
             } else {
                 $HTTPURI = '/demo/server/server.php';
