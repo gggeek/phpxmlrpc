@@ -21,7 +21,7 @@ use PhpXmlRpc\Encoder;
 
 include_once __DIR__ . '/../vendor/autoload.php';
 
-include __DIR__ . '/parse_args.php';
+include __DIR__ . '/tests/parse_args.php';
 $args = argParser::getArgs();
 
 function begin_test($test_name, $test_case)
