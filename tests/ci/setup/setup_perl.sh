@@ -7,7 +7,7 @@
 set -e
 
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    apt install libexpat1-dev
+    libexpat1-dev
 
 yes | perl -MCPAN -e 'install XML::Parser'
 yes | perl -MCPAN -e 'install Frontier::Client'

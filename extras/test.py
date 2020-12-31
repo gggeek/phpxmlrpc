@@ -25,7 +25,6 @@ try:
     print (r)
 
     # name/age example. this exercises structs and arrays
-
     a = [ 
             {'name': 'Dave', 'age': 35}, {'name': 'Edd', 'age': 45 },
             {'name': 'Fred', 'age': 23}, {'name': 'Barney', 'age': 36 }
@@ -36,7 +35,6 @@ try:
     # test base 64
     b = 'Mary had a little lamb She tied it to a pylon'
     b = base64.b64encode(b.encode('ascii'))
-    #print(b)
     r = server.examples.decode64(b)
     print (r)
     
@@ -44,4 +42,3 @@ except xmlrpc.client.Fault as err:
     print("A fault occurred")
     print("Fault code: %d" % err.faultCode)
     print("Fault string: %s" % err.faultString)
-

@@ -2,7 +2,7 @@
 
 use Frontier::Client;
 
-my $serverURL='http://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php';
+my $serverURL='http://localhost/demo/server/server.php';
 
 # try the simplest example
 
@@ -15,21 +15,21 @@ print "Got '${resp}'\n";
 
 # now send a mail to nobody in particular
 
-$resp = $client->call("mail.send", (
-    "edd",
-    "Test",
-    "Bonjour. Je m'appelle Gérard. Mañana. ",
-    "freddy",
-    "",
-    "",
-    'text/plain; charset="iso-8859-1"')
-);
-
-if ($resp->value()) {
-    print "Mail sent OK.\n";
-} else {
-    print "Error sending mail.\n";
-}
+#$resp = $client->call("mail.send", (
+#    "edd",
+#    "Test",
+#    "Bonjour. Je m'appelle Gérard. Mañana. ",
+#    "freddy",
+#    "",
+#    "",
+#    'text/plain; charset="iso-8859-1"')
+#);
+#
+#if ($resp->value()) {
+#    print "Mail sent OK.\n";
+#} else {
+#    print "Error sending mail.\n";
+#}
 
 # test echoing of characters works fine
 
