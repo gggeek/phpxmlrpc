@@ -4,6 +4,8 @@
 
 # Has to be run as admin
 
+# @todo test in the VM env: do we need any ubuntu dev packages ?
+
 set -e
 
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
