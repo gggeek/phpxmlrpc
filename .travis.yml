@@ -37,6 +37,7 @@ before_install:
   - sudo apt-get update -qq
   # Just in case there are git misconfigurations: make sure scripts are executable
   - sudo chmod 755 ./tests/ci/setup/*.sh
+  - sudo ./tests/ci/setup/setup_perl.sh
   - sudo ./tests/ci/setup/setup_apache.sh
   - sudo ./tests/ci/setup/setup_privoxy.sh
   - ./tests/ci/setup/setup_php_travis.sh
