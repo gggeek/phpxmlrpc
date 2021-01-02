@@ -88,6 +88,9 @@ $GLOBALS['xmlrpc_backslash'] = chr(92).chr(92);
 
 /* Expose with the old names the classes which have been namespaced */
 
+/**
+ * @todo reinstate access to method serializedata ?
+ */
 class xmlrpcval extends Value
 {
     /**
@@ -155,6 +158,9 @@ class xmlrpcval extends Value
     }
 }
 
+/**
+ * @todo reinstate access to method parseResponseHeaders ?
+ */
 class xmlrpcmsg extends Request
 {
 }
@@ -163,6 +169,9 @@ class xmlrpcresp extends Response
 {
 }
 
+/**
+ * @todo reinstate access to methods sendPayloadHTTP10, sendPayloadHTTPS, sendPayloadCURL, _try_multicall ?
+ */
 class xmlrpc_client extends Client
 {
 }
