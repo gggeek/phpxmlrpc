@@ -1,3 +1,12 @@
+XML-RPC for PHP version 4.xx - unreleased
+
+* improved: made it easier to subclass the Helper\Charset class by allowing `instance` to use late static binding
+
+* fixed: reinstated access to xmlrpc_server->dmap (for users of the v3 API)
+
+* fixed: method `xmlrpc_encode_entitites` (for users of the v3 API)
+
+
 XML-RPC for PHP version 4.5.0 - 2020/12/31
 
 * new: it is now possible to control the precision used when serializing DOUBLE values via usage of
@@ -7,12 +16,20 @@ XML-RPC for PHP version 4.5.0 - 2020/12/31
 
 * improvements to to the Helper\Date class in rejecting invalid date strings
 
-* improvements to the Wrapper class in identifying the required arguments types from phpdoc: support 'array[]',
+* improvements to the Wrapper class in identifying required arguments types from source code phpdoc: support 'array[]',
   'DateTime' and 'DateTimeImmutable'
 
-* improvements to the support of the XMLRPC extension emulation (as provided by the phpxmlrpc/polyfill-xmlrpc package)
+* improvements to the support of the XMLRPC extension emulation (now provided by the phpxmlrpc/polyfill-xmlrpc package)
 
-* improvements in the inline phpdoc: tagged many methods and class member as for internal usage only
+* minor improvements to the Charset helper: it now loads character set conversion  tables on demand, leading to
+  slightly lower memory usage and faster execution time when using UTF8 everywhere.
+  NB: take care if you have subclassed it!
+
+* new method: `Server::isSyscall` - mostly of use to Server subclasses and friend classes such as introspectors
+
+* internal method `XMLParser::xmlrpc_ee` now accepts 3 states for its 3rd parameter instead of a bool
+
+* improvements in the inline phpdoc: tagged many methods and class member as reserved for internal usage only
 
 * minor improvements in the debugger to allow easier integration of phpxmlrpc/jsonrpc and friends
 
