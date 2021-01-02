@@ -19,6 +19,7 @@ use PhpXmlRpc\Client;
 use PhpXmlRpc\Response;
 use PhpXmlRpc\Encoder;
 
+/// @todo allow autoloading when the library is installed as dependency
 include_once __DIR__ . '/../vendor/autoload.php';
 
 include __DIR__ . '/../tests/parse_args.php';
