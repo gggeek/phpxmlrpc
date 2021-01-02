@@ -1,4 +1,4 @@
-XML-RPC for PHP version 4.5.1 - unreleased
+XML-RPC for PHP version 4.5.1 - 2021/1/3
 
 * improved: made it easier to subclass the Helper\Charset class by allowing `instance` to use late static binding
 
