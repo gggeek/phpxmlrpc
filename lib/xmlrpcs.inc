@@ -57,6 +57,32 @@ class xmlrpc_server extends Server
         $r = new PhpXmlRpc\Response(new PhpXmlRpc\Value("'Aha said I: '" . file_get_contents('php://input'), 'string'));
         print $r->serialize();
     }
+
+    /**
+     * Reinstate access to class members which became protected/private
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        switch($name) {
+            case 'dmap':
+                return $this->dmap;
+            default:
+                trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' .
+                    $trace[0]['line'], E_USER_NOTICE);
+                return null;
+        }
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return $name === 'dmap';
+    }
 }
 
 /* Expose as global functions the ones which are now class methods */
