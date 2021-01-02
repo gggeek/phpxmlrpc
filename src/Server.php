@@ -293,7 +293,7 @@ class Server
      * Add a method to the dispatch map.
      *
      * @param string $methodName the name with which the method will be made available
-     * @param string $function the php function that will get invoked
+     * @param callable $function the php function that will get invoked
      * @param array $sig the array of valid method signatures
      * @param string $doc method documentation
      * @param array $sigDoc the array of valid method signatures docs (one string per param, one for return type)
