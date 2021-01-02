@@ -27,6 +27,7 @@ class Charset
             'EUC-JP', 'EUC-', 'EUC-KR', 'EUC-CN',),
     );
 
+    /** @var Charset $instance */
     protected static $instance = null;
 
     /**
@@ -38,7 +39,7 @@ class Charset
     public static function instance()
     {
         if (self::$instance === null) {
-            self::$instance = new self();
+            self::$instance = new static();
         }
 
         return self::$instance;
