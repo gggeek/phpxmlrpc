@@ -3,7 +3,7 @@
  * Benchmarking suite for the PHP-XMLRPC lib.
  *
  * @author Gaetano Giunta
- * @copyright (c) 2005-2020 G. Giunta
+ * @copyright (c) 2005-2021 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  *
  * @todo add a check for response ok in call testing

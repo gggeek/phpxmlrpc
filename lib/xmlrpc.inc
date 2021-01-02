@@ -56,6 +56,11 @@ include_once(__DIR__.'/../src/Helper/Http.php');
 include_once(__DIR__.'/../src/Helper/Logger.php');
 include_once(__DIR__.'/../src/Helper/XMLParser.php');
 
+use PhpXmlRpc\Helper\Charset;
+use PhpXmlRpc\Helper\Date;
+use PhpXmlRpc\Helper\Http;
+use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Encoder;
 
 /* Expose the global variables which used to be defined */
 PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1'; // old default
@@ -162,53 +167,53 @@ class xmlrpc_client extends PhpXmlRpc\Client
 /// Wrong speling, but we are adamant on backwards compatibility!
 function xmlrpc_encode_entitites($data, $srcEncoding='', $destEncoding='')
 {
-    return PhpXmlRpc\Helper\Charset::instance()->encodeEntitites($data, $srcEncoding, $destEncoding);
+    return Charset::instance()->encodeEntities($data, $srcEncoding, $destEncoding);
 }
 
 function iso8601_encode($timeT, $utc=0)
 {
-    return PhpXmlRpc\Helper\Date::iso8601Encode($timeT, $utc);
+    return Date::iso8601Encode($timeT, $utc);
 }
 
 function iso8601_decode($iDate, $utc=0)
 {
-    return PhpXmlRpc\Helper\Date::iso8601Decode($iDate, $utc);
+    return Date::iso8601Decode($iDate, $utc);
 }
 
 function decode_chunked($buffer)
 {
-    return PhpXmlRpc\Helper\Http::decodeChunked($buffer);
+    return Http::decodeChunked($buffer);
 }
 
 function php_xmlrpc_decode($xmlrpcVal, $options=array())
 {
-    $encoder = new PhpXmlRpc\Encoder();
+    $encoder = new Encoder();
     return $encoder->decode($xmlrpcVal, $options);
 }
 
 function php_xmlrpc_encode($phpVal, $options=array())
 {
-    $encoder = new PhpXmlRpc\Encoder();
+    $encoder = new Encoder();
     return $encoder->encode($phpVal, $options);
 }
 
 function php_xmlrpc_decode_xml($xmlVal, $options=array())
 {
-    $encoder = new PhpXmlRpc\Encoder();
+    $encoder = new Encoder();
     return $encoder->decodeXml($xmlVal, $options);
 }
 
 function guess_encoding($httpHeader='', $xmlChunk='', $encodingPrefs=null)
 {
-    return PhpXmlRpc\Helper\XMLParser::guessEncoding($httpHeader, $xmlChunk, $encodingPrefs);
+    return XMLParser::guessEncoding($httpHeader, $xmlChunk, $encodingPrefs);
 }
 
 function has_encoding($xmlChunk)
 {
-    return PhpXmlRpc\Helper\XMLParser::hasEncoding($xmlChunk);
+    return XMLParser::hasEncoding($xmlChunk);
 }
 
 function is_valid_charset($encoding, $validList)
 {
-    return PhpXmlRpc\Helper\Charset::instance()->isValidCharset($encoding, $validList);
+    return Charset::instance()->isValidCharset($encoding, $validList);
 }

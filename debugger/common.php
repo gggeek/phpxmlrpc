@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Gaetano Giunta
- * @copyright (C) 2005-2020 G. Giunta
+ * @copyright (C) 2005-2021 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  *
  * Parses GET/POST variables
