@@ -7,6 +7,7 @@ use PhpXmlRpc\Value;
 
 /**
  * Deals with parsing the XML.
+ * @see http://xmlrpc.com/spec.md
  */
 class XMLParser
 {
