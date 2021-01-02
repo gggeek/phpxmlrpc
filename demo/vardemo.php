@@ -1,8 +1,9 @@
-<html>
+<html lang="en">
 <head><title>xmlrpc</title></head>
 <body>
 <?php
 
+/// @todo allow autoloading when the library is installed as dependency
 include_once __DIR__ . '/../vendor/autoload.php';
 
 $req = new PhpXmlRpc\Request('examples.getStateName');
