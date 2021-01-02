@@ -1,10 +1,12 @@
-XML-RPC for PHP version 4.xx - unreleased
+XML-RPC for PHP version 4.5.1 - unreleased
 
 * improved: made it easier to subclass the Helper\Charset class by allowing `instance` to use late static binding
 
 * fixed: reinstated access to xmlrpc_server->dmap (for users of the v3 API)
 
 * fixed: method `xmlrpc_encode_entitites` (for users of the v3 API)
+
+* improved: split the code of the demo server in multiple files, describing better the purpose of each
 
 
 XML-RPC for PHP version 4.5.0 - 2020/12/31

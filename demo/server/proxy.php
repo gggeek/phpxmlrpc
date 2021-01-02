@@ -3,6 +3,7 @@
  * XMLRPC server acting as proxy for requests to other servers
  * (useful e.g. for ajax-originated calls that can only connect back to
  * the originating server).
+ * For an example of a transparent reverse-proxy, see the ReverseProxy class in package phpxmlrpc/extras
  *
  * @author Gaetano Giunta
  * @copyright (C) 2006-2021 G. Giunta

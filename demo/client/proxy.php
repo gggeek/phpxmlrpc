@@ -51,7 +51,7 @@ class PhpXmlRpcProxy
 }
 
 $stateNo = rand(1, 51);
-$proxy = new PhpXmlRpcProxy(new \PhpXmlRpc\Client(XMLRPCSERVER));
+$proxy = new PhpXmlRpcProxy(new PhpXmlRpc\Client(XMLRPCSERVER));
 $stateName = $proxy->getStateName($stateNo);
 
 echo "State $stateNo is ".htmlspecialchars($stateName);

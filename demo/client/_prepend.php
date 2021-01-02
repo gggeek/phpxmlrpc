@@ -21,7 +21,7 @@ PhpXmlRpc\Autoloader::register();
 if (isset($_SERVER['HTTPSERVER'])) {
     define('XMLRPCSERVER', 'http://'.$_SERVER['HTTPSERVER'].'/demo/server/server.php');
 } else {
-    define('XMLRPCSERVER', 'http://phpxmlrpc.sourceforge.net/server.php');
+    define('XMLRPCSERVER', 'http://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php');
 }
 
 // Out-of-band information: let the client manipulate the page operations.
