@@ -44,23 +44,27 @@
  * If it is included, the library will work without any further autoloading
  *****************************************************************************/
 
-include_once(__DIR__.'/../src/PhpXmlRpc.php');
-include_once(__DIR__.'/../src/Value.php');
-include_once(__DIR__.'/../src/Request.php');
-include_once(__DIR__.'/../src/Response.php');
 include_once(__DIR__.'/../src/Client.php');
 include_once(__DIR__.'/../src/Encoder.php');
+include_once(__DIR__.'/../src/PhpXmlRpc.php');
+include_once(__DIR__.'/../src/Request.php');
+include_once(__DIR__.'/../src/Response.php');
+include_once(__DIR__.'/../src/Value.php');
 include_once(__DIR__.'/../src/Helper/Charset.php');
 include_once(__DIR__.'/../src/Helper/Date.php');
 include_once(__DIR__.'/../src/Helper/Http.php');
 include_once(__DIR__.'/../src/Helper/Logger.php');
 include_once(__DIR__.'/../src/Helper/XMLParser.php');
 
+use PhpXmlRpc\Client;
+use PhpXmlRpc\Encoder;
+use PhpXmlRpc\Request;
+use PhpXmlRpc\Response;
+use PhpXmlRpc\Value;
 use PhpXmlRpc\Helper\Charset;
 use PhpXmlRpc\Helper\Date;
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\XMLParser;
-use PhpXmlRpc\Encoder;
 
 /* Expose the global variables which used to be defined */
 PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1'; // old default
@@ -84,7 +88,7 @@ $GLOBALS['xmlrpc_backslash'] = chr(92).chr(92);
 
 /* Expose with the old names the classes which have been namespaced */
 
-class xmlrpcval extends PhpXmlRpc\Value
+class xmlrpcval extends Value
 {
     /**
      * @deprecated
@@ -145,20 +149,21 @@ class xmlrpcval extends PhpXmlRpc\Value
     }
 
     /// reset functionality added by parent class: same as it would happen if no interface was declared
-    public function getIterator() {
+    public function getIterator()
+    {
         return new ArrayIterator($this);
     }
 }
 
-class xmlrpcmsg extends PhpXmlRpc\Request
+class xmlrpcmsg extends Request
 {
 }
 
-class xmlrpcresp extends PhpXmlRpc\Response
+class xmlrpcresp extends Response
 {
 }
 
-class xmlrpc_client extends PhpXmlRpc\Client
+class xmlrpc_client extends Client
 {
 }
 

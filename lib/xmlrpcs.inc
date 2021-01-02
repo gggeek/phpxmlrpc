@@ -44,7 +44,9 @@
 
 include_once(__DIR__.'/../src/Server.php');
 
-class xmlrpc_server extends PhpXmlRpc\Server
+use PhpXmlRpc\Server;
+
+class xmlrpc_server extends Server
 {
     /**
      * A debugging routine: just echoes back the input packet as a string value
@@ -60,17 +62,17 @@ class xmlrpc_server extends PhpXmlRpc\Server
 /* Expose as global functions the ones which are now class methods */
 
 /**
- * @see PhpXmlRpc\Server::xmlrpc_debugmsg
+ * @see Server::xmlrpc_debugmsg
  * @param string $m
  */
 function xmlrpc_debugmsg($m)
 {
-    PhpXmlRpc\Server::xmlrpc_debugmsg($m);
+    Server::xmlrpc_debugmsg($m);
 }
 
 function _xmlrpcs_getCapabilities($server, $m=null)
 {
-    return PhpXmlRpc\Server::_xmlrpcs_getCapabilities($server, $m);
+    return Server::_xmlrpcs_getCapabilities($server, $m);
 }
 
 $_xmlrpcs_listMethods_sig=array(array(\PhpXmlRpc\Value::$xmlrpcArray));
@@ -78,7 +80,7 @@ $_xmlrpcs_listMethods_doc='This method lists all the methods that the XML-RPC se
 $_xmlrpcs_listMethods_sdoc=array(array('list of method names'));
 function _xmlrpcs_listMethods($server, $m=null) // if called in plain php values mode, second param is missing
 {
-    return PhpXmlRpc\Server::_xmlrpcs_listMethods($server, $m);
+    return Server::_xmlrpcs_listMethods($server, $m);
 }
 
 $_xmlrpcs_methodSignature_sig=array(array(\PhpXmlRpc\Value::$xmlrpcArray, $GLOBALS['xmlrpcString']));
@@ -86,7 +88,7 @@ $_xmlrpcs_methodSignature_doc='Returns an array of known signatures (an array of
 $_xmlrpcs_methodSignature_sdoc=array(array('list of known signatures, each sig being an array of xmlrpc type names', 'name of method to be described'));
 function _xmlrpcs_methodSignature($server, $m)
 {
-    return PhpXmlRpc\Server::_xmlrpcs_methodSignature($server, $m);
+    return Server::_xmlrpcs_methodSignature($server, $m);
 }
 
 $_xmlrpcs_methodHelp_sig=array(array($GLOBALS['xmlrpcString'], $GLOBALS['xmlrpcString']));
@@ -94,22 +96,22 @@ $_xmlrpcs_methodHelp_doc='Returns help text if defined for the method passed, ot
 $_xmlrpcs_methodHelp_sdoc=array(array('method description', 'name of the method to be described'));
 function _xmlrpcs_methodHelp($server, $m)
 {
-    return PhpXmlRpc\Server::_xmlrpcs_methodHelp($server, $m);
+    return Server::_xmlrpcs_methodHelp($server, $m);
 }
 
 function _xmlrpcs_multicall_error($err)
 {
-    return PhpXmlRpc\Server::_xmlrpcs_multicall_error($err);
+    return Server::_xmlrpcs_multicall_error($err);
 }
 
 function _xmlrpcs_multicall_do_call($server, $call)
 {
-    return PhpXmlRpc\Server::_xmlrpcs_multicall_do_call($server, $call);
+    return Server::_xmlrpcs_multicall_do_call($server, $call);
 }
 
 function _xmlrpcs_multicall_do_call_phpvals($server, $call)
 {
-    return PhpXmlRpc\Server::_xmlrpcs_multicall_do_call_phpvals($server, $call);
+    return Server::_xmlrpcs_multicall_do_call_phpvals($server, $call);
 }
 
 $_xmlrpcs_multicall_sig = array(array(\PhpXmlRpc\Value::$xmlrpcArray, \PhpXmlRpc\Value::$xmlrpcArray));
@@ -117,5 +119,5 @@ $_xmlrpcs_multicall_doc = 'Boxcar multiple RPC calls in one request. See http://
 $_xmlrpcs_multicall_sdoc = array(array('list of response structs, where each struct has the usual members', 'list of calls, with each call being represented as a struct, with members "methodname" and "params"'));
 function _xmlrpcs_multicall($server, $m)
 {
-    return PhpXmlRpc\Server::_xmlrpcs_multicall($server, $m);
+    return Server::_xmlrpcs_multicall($server, $m);
 }
