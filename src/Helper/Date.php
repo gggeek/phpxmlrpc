@@ -26,8 +26,7 @@ class Date
             $t = strftime("%Y%m%dT%H:%M:%S", $timet);
         } else {
             if (function_exists('gmstrftime')) {
-                // gmstrftime doesn't exist in some versions
-                // of PHP
+                // gmstrftime doesn't exist in some versions of PHP
                 $t = gmstrftime("%Y%m%dT%H:%M:%S", $timet);
             } else {
                 $t = strftime("%Y%m%dT%H:%M:%S", $timet - date('Z'));
