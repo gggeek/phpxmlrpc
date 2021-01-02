@@ -32,4 +32,10 @@ class ExtraFilesTest extends PhpXmlRpc_WebTestCase
     {
         $page = $this->request('verify_compat.php');
     }
+
+    public function testVarDemo()
+    {
+        $this->baseUrl = str_replace('/extras/', '/demo/', $this->baseUrl);
+        $page = $this->request('vardemo.php');
+    }
 }

@@ -13,10 +13,6 @@
     method)</p>
 <?php
 
-// Use the custom class autoloader. These two lines not needed when the phpxmlrpc library is installed using Composer
-include_once __DIR__ . "/../../src/Autoloader.php";
-PhpXmlRpc\Autoloader::register();
-
 if (isset($_POST["mailto"]) && $_POST["mailto"]) {
     $server = XMLRPCSERVER;
     $req = new PhpXmlRpc\Request('mail.send', array(
