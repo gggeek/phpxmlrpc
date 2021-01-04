@@ -8,6 +8,10 @@ use PhpXmlRpc\Value;
 /**
  * Deals with parsing the XML.
  * @see http://xmlrpc.com/spec.md
+ *
+ * @todo implement an interface to allow for alternative implementations
+ *       - make access to $_xh protected, return more high-level data structures
+ *       - add parseRequest, parseResponse, parseValue methods
  */
 class XMLParser
 {
@@ -20,26 +24,28 @@ class XMLParser
     const ACCEPT_VALUE = 4;
     const ACCEPT_FAULT = 8;
 
-    // Used to store state during parsing.
+    // Used to store state during parsing and to pass parsing results to callers.
     // Quick explanation of components:
     //  private:
-    //   ac - used to accumulate values
-    //   stack - array with genealogy of xml elements names used to validate nesting of xmlrpc elements
-    //   valuestack - array used for parsing arrays and structs
-    //   lv - used to indicate "looking for a value": implements the logic to allow values with no types to be strings
+    //    ac - used to accumulate values
+    //    stack - array with genealogy of xml elements names used to validate nesting of xmlrpc elements
+    //    valuestack - array used for parsing arrays and structs
+    //    lv - used to indicate "looking for a value": implements the logic to allow values with no types to be strings
     //  public:
-    //   isf - used to indicate an xml parsing fault (3), invalid xmlrpc fault (2) or xmlrpc response fault (1)
-    //   isf_reason - used for storing xmlrpc response fault string
-    //   method - used to store method name
-    //   params - used to store parameters in method calls
-    //   pt - used to store the type of each received parameter. Useful if parameters are automatically decoded to php values
-    //   rt  - 'methodcall', 'methodresponse', 'value' or 'fault' (the last one used only in EPI emulation mode)
+    //    isf - used to indicate an xml parsing fault (3), invalid xmlrpc fault (2) or xmlrpc response fault (1)
+    //    isf_reason - used for storing xmlrpc response fault string
+    //    value - used to store the value in responses
+    //    method - used to store method name in requests
+    //    params - used to store parameters in requests
+    //    pt - used to store the type of each received parameter. Useful if parameters are automatically decoded to php values
+    //    rt  - 'methodcall', 'methodresponse', 'value' or 'fault' (the last one used only in EPI emulation mode)
     public $_xh = array(
         'ac' => '',
         'stack' => array(),
         'valuestack' => array(),
         'isf' => 0,
         'isf_reason' => '',
+        'value' => null,
         'method' => false,
         'params' => array(),
         'pt' => array(),
@@ -89,7 +95,6 @@ class XMLParser
      * @param string $data
      * @param string $returnType
      * @param int $accept a bit-combination of self::ACCEPT_REQUEST, self::ACCEPT_RESPONSE, self::ACCEPT_VALUE
-     * @return string
      */
     public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3)
     {
@@ -99,6 +104,7 @@ class XMLParser
             'valuestack' => array(),
             'isf' => 0,
             'isf_reason' => '',
+            'value' => null,
             'method' => false, // so we can check later if we got a methodname or not
             'params' => array(),
             'pt' => array(),
@@ -222,7 +228,7 @@ class XMLParser
 
                         return;
                     }
-                // fall through voluntarily
+                    // fall through voluntarily
                 case 'I4':
                 case 'INT':
                 case 'STRING':
