@@ -4,6 +4,9 @@ namespace PhpXmlRpc\Helper;
 
 use PhpXmlRpc\PhpXmlRpc;
 
+/**
+ * @todo implement an interface
+ */
 class Charset
 {
     // tables used for transcoding different charsets into us-ascii xml
@@ -32,7 +35,7 @@ class Charset
 
     /**
      * This class is singleton for performance reasons.
-     * @todo can't we just make $xml_iso88591_Entities a static variable instead ?
+     * @todo should we just make $xml_iso88591_Entities a static variable instead ?
      *
      * @return Charset
      */
@@ -306,5 +309,4 @@ class Charset
                 throw new \Exception('Unsupported charset: ' . $charset);
         }
     }
-
 }

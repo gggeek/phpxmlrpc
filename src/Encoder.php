@@ -74,15 +74,15 @@ class Encoder
                         return $out;
                     }
                 }
-
                 return $xmlrpcVal->scalarval();
+
             case 'array':
                 $arr = array();
                 foreach($xmlrpcVal as $value) {
                     $arr[] = $this->decode($value, $options);
                 }
-
                 return $arr;
+
             case 'struct':
                 // If user said so, try to rebuild php objects for specific struct vals.
                 /// @todo should we raise a warning for class not found?
@@ -95,24 +95,24 @@ class Encoder
                     foreach ($xmlrpcVal as $key => $value) {
                         $obj->$key = $this->decode($value, $options);
                     }
-
                     return $obj;
                 } else {
                     $arr = array();
                     foreach ($xmlrpcVal as $key => $value) {
                         $arr[$key] = $this->decode($value, $options);
                     }
-
                     return $arr;
                 }
+
             case 'msg':
                 $paramCount = $xmlrpcVal->getNumParams();
                 $arr = array();
                 for ($i = 0; $i < $paramCount; $i++) {
                     $arr[] = $this->decode($xmlrpcVal->getParam($i), $options);
                 }
-
                 return $arr;
+
+            /// @todo throw on unsupported type
         }
     }
 
@@ -131,7 +131,7 @@ class Encoder
      * @param mixed $phpVal the value to be converted into an xmlrpc value object
      * @param array $options can include 'encode_php_objs', 'auto_dates', 'null_extension' or 'extension_api'
      *
-     * @return \PhpXmlrpc\Value
+     * @return Value
      */
     public function encode($phpVal, $options = array())
     {
@@ -243,13 +243,13 @@ class Encoder
      * Convert the xml representation of a method response, method request or single
      * xmlrpc value into the appropriate object (a.k.a. deserialize).
      *
-     * Q: is this a good name for this method? It does something quite different from 'decode' after all
-     * (returning objects vs returns plain php values)...
+     * @todo is this a good name/class for this method? It does something quite different from 'decode' after all
+     *       (returning objects vs returns plain php values)... In fact it belongs rather to a Parser class
      *
      * @param string $xmlVal
      * @param array $options
      *
-     * @return mixed false on error, or an instance of either Value, Request or Response
+     * @return Value|Request|Response|false false on error, or an instance of either Value, Request or Response
      */
     public function decodeXml($xmlVal, $options = array())
     {
@@ -307,17 +307,18 @@ class Encoder
                 } else {
                     $r = new Response($v);
                 }
-
                 return $r;
+
             case 'methodcall':
                 $req = new Request($xmlRpcParser->_xh['method']);
                 for ($i = 0; $i < count($xmlRpcParser->_xh['params']); $i++) {
                     $req->addParam($xmlRpcParser->_xh['params'][$i]);
                 }
-
                 return $req;
+
             case 'value':
                 return $xmlRpcParser->_xh['value'];
+
             case 'fault':
                 // EPI api emulation
                 $v = $xmlRpcParser->_xh['value'];

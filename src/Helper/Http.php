@@ -63,7 +63,7 @@ class Http
     /**
      * Parses HTTP an http response headers and separates them from the body.
      *
-     * @param string $data the http response,headers and body. It will be stripped of headers
+     * @param string $data the http response, headers and body. It will be stripped of headers
      * @param bool $headersProcessed when true, we assume that response inflating and dechunking has been already carried out
      *
      * @return array with keys 'headers' and 'cookies'

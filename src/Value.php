@@ -53,7 +53,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * When no value or type is passed in, the value is left uninitialized, and the value can be added later.
      *
-     * @param mixed $val if passing in an array, all array elements should be PhpXmlRpc\Value themselves
+     * @param Value[]|mixed $val if passing in an array, all array elements should be PhpXmlRpc\Value themselves
      * @param string $type any valid xmlrpc type name (lowercase): i4, int, boolean, string, double, dateTime.iso8601,
      *                     base64, array, struct, null.
      *                     If null, 'string' is assumed.
@@ -232,6 +232,12 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
     }
 
+    /**
+     * @param string typ
+     * @param Value[]|mixed $val
+     * @param string $charsetEncoding
+     * @return string
+     */
     protected function serializedata($typ, $val, $charsetEncoding = '')
     {
         $rs = '';
@@ -501,6 +507,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * Implements the IteratorAggregate interface
      *
      * @return \ArrayIterator
+     * @internal required to be public to implement an Interface
      */
     public function getIterator()
     {

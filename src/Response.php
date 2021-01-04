@@ -27,7 +27,7 @@ class Response
     public $raw_data = '';
 
     /**
-     * @param mixed $val either a Value object, a php value or the xml serialization of an xmlrpc value (a string)
+     * @param Value|string|mixed $val either a Value object, a php value or the xml serialization of an xmlrpc value (a string)
      * @param integer $fCode set it to anything but 0 to create an error response. In that case, $val is discarded
      * @param string $fString the error string, in case of an error response
      * @param string $valType The type of $val passed in. Either 'xmlrpcvals', 'phpvals' or 'xml'. Leave empty to let
@@ -102,7 +102,7 @@ class Response
      * It is up to the user-defined code to decide how to use the received cookies, and whether they have to be sent back
      * with the next request to the server (using Client::setCookie) or not.
      *
-     * @return array array of cookies received from the server
+     * @return array[] array of cookies received from the server
      */
     public function cookies()
     {
