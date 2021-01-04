@@ -17,6 +17,7 @@ use PhpXmlRpc\Helper\Logger;
  * @todo implement method wrapping with preservation of php objs in calls
  * @todo when wrapping methods without obj rebuilding, use return_type = 'phpvals' (faster)
  * @todo add support for 'epivals' mode
+ * @todo allow setting custom namespace for generated wrapping code
  */
 class Wrapper
 {
@@ -960,7 +961,7 @@ class Wrapper
             $mDesc .= "* @param int \$debug when 1 (or 2) will enable debugging of the underlying {$prefix} call (defaults to 0)\n";
         }
         $plist = implode(', ', $plist);
-        $mDesc .= '* @return ' . $this->xmlrpc2PhpType($mSig[0]) . " (or an {$namespace}Response obj instance if call fails)\n*/\n";
+        $mDesc .= '* @return {$namespace}Response|' . $this->xmlrpc2PhpType($mSig[0]) . " (an {$namespace}Response obj instance if call fails)\n*/\n";
 
         $innerCode .= "\$res = \${$this_}client->send(\$req, $timeout, '$protocol');\n";
         if ($decodeFault) {
