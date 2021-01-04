@@ -31,7 +31,7 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-    <title>XMLRPC Debugger</title>
+    <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSONRPC'; else echo 'XMLRPC'; ?> Debugger</title>
     <meta name="robots" content="index,nofollow"/>
     <script type="text/javascript" language="Javascript">
         if (window.name != 'frmcontroller')
