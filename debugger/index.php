@@ -11,7 +11,8 @@ if (isset($_GET['run'])) {
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
 <html lang="en">
 <head>
-    <title>XMLRPC Debugger</title>
+    <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
+    <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSONRPC'; else echo 'XMLRPC'; ?> Debugger</title>
 </head>
 <frameset rows="360,*">
     <frame name="frmcontroller" src="controller.php<?php echo htmlspecialchars($query); ?>" marginwidth="0"
