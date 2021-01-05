@@ -84,7 +84,7 @@ $signatures = array_merge($signatures, $signatures1, $signatures2, $signatures3,
 PhpXmlRpc::$xmlrpc_null_extension = true;
 
 $s = new Server($signatures, false);
-$s->setdebug(3);
+$s->setDebug(3);
 $s->compress_response = true;
 
 // Out-of-band information: let the client manipulate the server operations.

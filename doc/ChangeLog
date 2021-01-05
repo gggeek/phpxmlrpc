@@ -965,7 +965,7 @@ This file will not be updated further.
 
 	* xmlrpc.inc: fixed php_xmlrpc_encode detection of php arrays (again!);
 	removed from wrap_php_function the part about setting a custom error handler
-	(it can be activated using the more general $server->setdebug(3) anyway)
+	(it can be activated using the more general $server->setDebug(3) anyway)
 
 	* xmlrpcs.inc: added to server the capability to trap all processing errors
 	during execution of user functions and add them to debug info inside responses;

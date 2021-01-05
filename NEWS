@@ -4,7 +4,7 @@ XML-RPC for PHP version 4.5.2 - unreleased
 
 * improved: allow usage of 'epivals' for the 'parameters_type' member of methods definitions in the Server dispatch map
 
-* improved: debugger page title when used from the phpjsonrpc library
+* improved: debugger favicon and page title when used from the phpjsonrpc library
 
 
 XML-RPC for PHP version 4.5.1 - 2021/1/3

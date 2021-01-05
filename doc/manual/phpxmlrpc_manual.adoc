@@ -1678,7 +1678,7 @@ The most likely cause is that you are not using the correct URL
 
 To find out what the server is really returning to your client,
       you have to enable the debug mode of the client, using
-      $client->setdebug(1);
+      $client->setDebug(1);
 
 
 ==== How can I save to a file the xml of the xmlrpc responses received from servers?

@@ -60,7 +60,7 @@ function forward_request($req)
     /// @todo find a way to forward client info (such as IP) to server, either
     ///       - as xml comments in the payload, or
     ///       - using std http header conventions, such as X-forwarded-for...
-    $reqMethod = $encoder->decode($req->getParam(1));
+    $reqMethod = $req->getParam(1)->scalarval();
     $pars = $req->getParam(2);
     $req = new PhpXmlRpc\Request($reqMethod);
     foreach ($pars as $par) {
