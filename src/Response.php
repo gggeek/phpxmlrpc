@@ -144,7 +144,7 @@ class Response
                         $this->val .
                         "</param>\n</params>";
                 } else {
-                    /// @todo try to build something serializable?
+                    /// @todo try to build something serializable using the Encoder...
                     throw new \Exception('cannot serialize xmlrpc response objects whose content is native php values');
                 }
             } else {
