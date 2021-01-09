@@ -54,8 +54,17 @@ class Encoder
                                 'scalar' => $val
                             );
                             return (object)$xmlrpcVal;
+                        case 'string':
+                            if (isset($options['extension_api_encoding'])) {
+                                $dval = @iconv('UTF-8', $options['extension_api_encoding'], $val);
+                                if ($dval !== false) {
+                                    return $dval;
+                                }
+                            }
+                            //return $val;
+                            // break through voluntarily
                         default:
-                            return $xmlrpcVal->scalarval();
+                            return $val;
                     }
                 }
                 if (in_array('dates_as_objects', $options) && $xmlrpcVal->scalartyp() == 'dateTime.iso8601') {
@@ -279,6 +288,7 @@ class Encoder
 
         // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8!
         if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
+            /// @todo emit a warning
             $parserOptions = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
         } else {
             $parserOptions = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
