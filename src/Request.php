@@ -283,6 +283,7 @@ class Request
         // This allows to send data which is native in various charset, by extending xmlrpc_encode_entities() and
         // setting xmlrpc_internalencoding
         if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
+            /// @todo emit a warning
             $options = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
         } else {
             $options = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);

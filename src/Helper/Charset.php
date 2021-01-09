@@ -103,16 +103,21 @@ class Charset
 
     /**
      * Convert a string to the correct XML representation in a target charset.
+     * This involves:
+     * - character transformation for all characters which have a different representation in source and dest charsets
+     * - using 'charset entity' representation for all characters which are outside of the target charset
      *
      * To help correct communication of non-ascii chars inside strings, regardless of the charset used when sending
      * requests, parsing them, sending responses and parsing responses, an option is to convert all non-ascii chars
      * present in the message into their equivalent 'charset entity'. Charset entities enumerated this way are
      * independent of the charset encoding used to transmit them, and all XML parsers are bound to understand them.
-     * Note that in the std case we are not sending a charset encoding mime type along with http headers, so we are
-     * bound by RFC 3023 to emit strict us-ascii.
+     *
+     * Note that when not sending a charset encoding mime type along with http headers, we are bound by RFC 3023 to emit
+     * strict us-ascii for 'text/xml' payloads (but we should review RFC 7303, which seems to have changed the rules...)
      *
      * @todo do a bit of basic benchmarking (strtr vs. str_replace)
-     * @todo make usage of iconv() or recode_string() or mb_string() where available
+     * @todo make usage of iconv() or mb_string() where available
+     * @todo support aliases for charset names, eg ASCII, LATIN1, ISO-88591 (see f.e. polyfill-iconv for a list)
      *
      * @param string $data
      * @param string $srcEncoding
