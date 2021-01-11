@@ -168,7 +168,7 @@ class Client
 
         // if ZLIB is enabled, let the client by default accept compressed responses
         if (function_exists('gzinflate') || (
-                function_exists('curl_init') && (($info = curl_version()) &&
+                function_exists('curl_version') && (($info = curl_version()) &&
                     ((is_string($info) && strpos($info, 'zlib') !== null) || isset($info['libz_version'])))
             )
         ) {
@@ -463,6 +463,7 @@ class Client
      *                       chosen during creation of the object will be used.
      *
      * @return Response|Response[] Note that the client will always return a Response object, even if the call fails
+     * @todo allow throwing exceptions instead of returning responses in case of failed calls and/or Fault responses
      */
     public function send($req, $timeout = 0, $method = '')
     {

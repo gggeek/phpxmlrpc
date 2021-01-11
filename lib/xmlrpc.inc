@@ -41,7 +41,11 @@
  * This file is only used to insure backwards compatibility
  * with the API of the library <= rev. 3
  *
- * If it is included, the library will work without any further autoloading
+ * If it is included, the library will work without any further autoloading.
+ *
+ * NB: including this file will also alter the library configuration setting the
+ * expected charset encoding used by the app to ISO-8859-1. Please see the
+ * file api_changes_v4.md for how to change this if required.
  *****************************************************************************/
 
 include_once(__DIR__.'/../src/Client.php');
