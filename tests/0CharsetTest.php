@@ -15,9 +15,9 @@ use PhpXmlRpc\Helper\Charset;
  *     chcp 28591 (latin1)
  *     chcp 65001 (utf8)
  *
- * @todo add tests for conversion: utf8 -> ascii (incl. chars 0-31)
+ * @todo add tests for conversion: utf8 -> ascii (incl. chars 0-31 and 127)
  * @todo add tests for conversion: latin1 -> utf8
- * @todo add tests for conversion: latin1 -> ascii
+ * @todo add tests for conversion: latin1 -> ascii (incl. chars 0-31 and 127)
  */
 class CharsetTest extends PhpXmlRpc_PolyfillTestCase
 {
@@ -26,6 +26,7 @@ class CharsetTest extends PhpXmlRpc_PolyfillTestCase
     protected $greek = "Τὴ γλῶσσα μοῦ ἔδωσαν ἑλληνικὴ";
     protected $russian = "Река неслася; бедный чёлн";
     protected $chinese = "我能吞下玻璃而不伤身体。";
+
     protected $latinString;
 
     /// @todo move to usage of a dataProvider and create the latinString there
