@@ -1,4 +1,4 @@
-XML-RPC for PHP version 4.XX - unreleased
+XML-RPC for PHP version 4.6.0 - unreleased
 
 * improved: when encoding utf8 text into us-ascii xml, use character entity references for characters number 0-31
   (ascii non printable characters), as we were already doing when encoding iso-8859-1 text into us-ascii xml
