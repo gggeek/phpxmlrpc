@@ -15,8 +15,9 @@ use PhpXmlRpc\Helper\Charset;
  *     chcp 28591 (latin1)
  *     chcp 65001 (utf8)
  *
- * @todo add tests for conversion: utf8 -> ascii
+ * @todo add tests for conversion: utf8 -> ascii (incl. chars 0-31)
  * @todo add tests for conversion: latin1 -> utf8
+ * @todo add tests for conversion: latin1 -> ascii
  */
 class CharsetTest extends PhpXmlRpc_PolyfillTestCase
 {
@@ -46,6 +47,15 @@ class CharsetTest extends PhpXmlRpc_PolyfillTestCase
             $data,
             'UTF-8',
             'ISO-8859-1'
+        );
+    }
+
+    protected function utf8ToAscii($data)
+    {
+        return Charset::instance()->encodeEntities(
+            $data,
+            'UTF-8',
+            'US-ASCII'
         );
     }
 

@@ -168,7 +168,14 @@ class Charset
                     $ch = $data[$nn];
                     $ii = ord($ch);
                     // 7 bits: 0bbbbbbb (127)
-                    if ($ii < 128) {
+                    if ($ii < 32) {
+                        if ($conversion == 'UTF-8_' || $conversion == 'UTF-8_US-ASCII') {
+                            $escapedData .= sprintf('&#%d;', $ii);
+                        } else {
+                            $escapedData .= $ch;
+                        }
+                    }
+                    else if ($ii < 128) {
                         /// @todo shall we replace this with a (supposedly) faster str_replace?
                         switch ($ii) {
                             case 34:
@@ -192,35 +199,26 @@ class Charset
                     } // 11 bits: 110bbbbb 10bbbbbb (2047)
                     elseif ($ii >> 5 == 6) {
                         $b1 = ($ii & 31);
-                        $ii = ord($data[$nn + 1]);
-                        $b2 = ($ii & 63);
+                        $b2 = (ord($data[$nn + 1]) & 63);
                         $ii = ($b1 * 64) + $b2;
-                        $ent = sprintf('&#%d;', $ii);
-                        $escapedData .= $ent;
+                        $escapedData .= sprintf('&#%d;', $ii);
                         $nn += 1;
                     } // 16 bits: 1110bbbb 10bbbbbb 10bbbbbb
                     elseif ($ii >> 4 == 14) {
                         $b1 = ($ii & 15);
-                        $ii = ord($data[$nn + 1]);
-                        $b2 = ($ii & 63);
-                        $ii = ord($data[$nn + 2]);
-                        $b3 = ($ii & 63);
+                        $b2 = (ord($data[$nn + 1]) & 63);
+                        $b3 = (ord($data[$nn + 2]) & 63);
                         $ii = ((($b1 * 64) + $b2) * 64) + $b3;
-                        $ent = sprintf('&#%d;', $ii);
-                        $escapedData .= $ent;
+                        $escapedData .= sprintf('&#%d;', $ii);
                         $nn += 2;
                     } // 21 bits: 11110bbb 10bbbbbb 10bbbbbb 10bbbbbb
                     elseif ($ii >> 3 == 30) {
                         $b1 = ($ii & 7);
-                        $ii = ord($data[$nn + 1]);
-                        $b2 = ($ii & 63);
-                        $ii = ord($data[$nn + 2]);
-                        $b3 = ($ii & 63);
-                        $ii = ord($data[$nn + 3]);
-                        $b4 = ($ii & 63);
+                        $b2 = (ord($data[$nn + 1]) & 63);
+                        $b3 = (ord($data[$nn + 2]) & 63);
+                        $b4 = (ord($data[$nn + 3]) & 63);
                         $ii = ((((($b1 * 64) + $b2) * 64) + $b3) * 64) + $b4;
-                        $ent = sprintf('&#%d;', $ii);
-                        $escapedData .= $ent;
+                        $escapedData .= sprintf('&#%d;', $ii);
                         $nn += 3;
                     }
                 }
