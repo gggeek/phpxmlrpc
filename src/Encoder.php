@@ -12,6 +12,35 @@ use PhpXmlRpc\Helper\XMLParser;
  */
 class Encoder
 {
+    protected static $logger;
+    protected static $parser;
+
+    public function getLogger()
+    {
+        if (self::$logger === null) {
+            self::$logger = Logger::instance();
+        }
+        return self::$logger;
+    }
+
+    public static function setLogger($logger)
+    {
+        self::$logger = $logger;
+    }
+
+    public function getParser()
+    {
+        if (self::$parser === null) {
+            self::$parser = new XMLParser();
+        }
+        return self::$parser;
+    }
+
+    public static function setParser($parser)
+    {
+        self::$parser = $parser;
+    }
+
     /**
      * Takes an xmlrpc value in object format and translates it into native PHP types.
      *
@@ -280,7 +309,7 @@ class Encoder
                     if (extension_loaded('mbstring')) {
                         $xmlVal = mb_convert_encoding($xmlVal, 'UTF-8', $valEncoding);
                     } else {
-                        Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of xml text: ' . $valEncoding);
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of xml text: ' . $valEncoding);
                     }
                 }
             }
@@ -294,13 +323,18 @@ class Encoder
             $parserOptions = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
         }
 
-        $xmlRpcParser = new XMLParser($parserOptions);
-        $xmlRpcParser->parse($xmlVal, XMLParser::RETURN_XMLRPCVALS, XMLParser::ACCEPT_REQUEST | XMLParser::ACCEPT_RESPONSE | XMLParser::ACCEPT_VALUE | XMLParser::ACCEPT_FAULT);
+        $xmlRpcParser = $this->getParser();
+        $xmlRpcParser->parse(
+            $xmlVal,
+            XMLParser::RETURN_XMLRPCVALS,
+            XMLParser::ACCEPT_REQUEST | XMLParser::ACCEPT_RESPONSE | XMLParser::ACCEPT_VALUE | XMLParser::ACCEPT_FAULT,
+            $parserOptions
+        );
 
         if ($xmlRpcParser->_xh['isf'] > 1) {
             // test that $xmlrpc->_xh['value'] is an obj, too???
 
-            Logger::instance()->errorLog($xmlRpcParser->_xh['isf_reason']);
+            $this->getLogger()->errorLog($xmlRpcParser->_xh['isf_reason']);
 
             return false;
         }

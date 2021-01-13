@@ -51,6 +51,8 @@ class Charset
      * @param string $tableName
      * @throws \Exception for unsupported $tableName
      * @todo add support for cp1252 as well as latin-2 .. latin-10
+     *       Optimization creep: instead of building all those tables on load, keep them ready-made php files
+     *       which are not even included until needed
      * @todo should we add to the latin-1 table the characters from cp_1252 range, i.e. 128 to 159 ?
      *       Those will NOT be present in true ISO-8859-1, but will save the unwary windows user from sending junk
      *       (though no luck when receiving them...)
@@ -125,6 +127,7 @@ class Charset
      *       but then take those into account as well in other methods, ie.isValidCharset)
      * @todo when converting to ASCII, allow to choose whether to escape the range 0-31,127 (non-print chars) or not
      * @todo allow picking different strategies to deal w. invalid chars? eg. source in latin-1 and chars 128-159
+     * @todo add support for escaping using CDATA sections? (add cdata start and end tokens, replace only ']]>' with ']]]]><![CDATA[>')
      *
      * @param string $data
      * @param string $srcEncoding
@@ -176,6 +179,7 @@ class Charset
                     }
                     else if ($ii < 128) {
                         /// @todo shall we replace this with a (supposedly) faster str_replace?
+                        /// @todo to be 'print safe', should we encode as well character 127 (DEL) ?
                         switch ($ii) {
                             case 34:
                                 $escapedData .= '&quot;';

@@ -97,8 +97,9 @@ class XMLParser
      * @param string $data
      * @param string $returnType
      * @param int $accept a bit-combination of self::ACCEPT_REQUEST, self::ACCEPT_RESPONSE, self::ACCEPT_VALUE
+     * @param array $options
      */
-    public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3)
+    public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3, $options = array())
     {
         $this->_xh = array(
             'ac' => '',
@@ -125,6 +126,9 @@ class XMLParser
         $parser = xml_parser_create();
 
         foreach ($this->parsing_options as $key => $val) {
+            xml_parser_set_option($parser, $key, $val);
+        }
+        foreach ($options as $key => $val) {
             xml_parser_set_option($parser, $key, $val);
         }
         // always set this, in case someone tries to disable it via options...

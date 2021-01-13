@@ -3,6 +3,19 @@ XML-RPC for PHP version 4.6.0 - unreleased
 * improved: when encoding utf8 text into us-ascii xml, use character entity references for characters number 0-31
   (ascii non printable characters), as we were already doing when encoding iso-8859-1 text into us-ascii xml
 
+* new: method `Server::getDispatchMap()`. Useful for non-child classes which want to f.e. introspect the server
+
+* new: increase flexibility in class composition by adopting a Dependency Injection (...ish) pattern:
+  it is now possible to swap out the Logger, XMLParser and Charset classes with similar ones of your own making.
+  Example code:
+      // 1. create an instance of a custom character encoder
+      // $myCharsetEncoder = ...
+      // 2. then use it while serializing a Request:
+      Request::setCharsetEncoder($myCharsetEncoder);
+      $request->serialize($funkyCharset);
+
+* new: method `XMLParser::parse()` acquired a 4th argument
+
 
 XML-RPC for PHP version 4.5.2 - 2021/1/11
 

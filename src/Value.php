@@ -37,6 +37,9 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         "null" => 1,
     );
 
+    protected static $logger;
+    protected static $charsetEncoder;
+
     /// @todo: do these need to be public?
     /** @var Value[]|mixed */
     public $me = array();
@@ -47,6 +50,32 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     public $mytype = 0;
     /** @var string|null $_php_class */
     public $_php_class = null;
+
+    public function getLogger()
+    {
+        if (self::$logger === null) {
+            self::$logger = Logger::instance();
+        }
+        return self::$logger;
+    }
+
+    public static function setLogger($logger)
+    {
+        self::$logger = $logger;
+    }
+
+    public function getCharsetEncoder()
+    {
+        if (self::$charsetEncoder === null) {
+            self::$charsetEncoder = Charset::instance();
+        }
+        return self::$charsetEncoder;
+    }
+
+    public function setCharsetEncoder($charsetEncoder)
+    {
+        self::$charsetEncoder = $charsetEncoder;
+    }
 
     /**
      * Build an xmlrpc value.
@@ -90,7 +119,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                     $this->me['struct'] = $val;
                     break;
                 default:
-                    Logger::instance()->errorLog("XML-RPC: " . __METHOD__ . ": not a known type ($type)");
+                    $this->getLogger()->errorLog("XML-RPC: " . __METHOD__ . ": not a known type ($type)");
             }
         }
     }
@@ -115,7 +144,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         if ($typeOf !== 1) {
-            Logger::instance()->errorLog("XML-RPC: " . __METHOD__ . ": not a scalar type ($type)");
+            $this->getLogger()->errorLog("XML-RPC: " . __METHOD__ . ": not a scalar type ($type)");
             return 0;
         }
 
@@ -132,10 +161,10 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
         switch ($this->mytype) {
             case 1:
-                Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': scalar xmlrpc value can have only one value');
+                $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': scalar xmlrpc value can have only one value');
                 return 0;
             case 3:
-                Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': cannot add anonymous scalar to struct xmlrpc value');
+                $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': cannot add anonymous scalar to struct xmlrpc value');
                 return 0;
             case 2:
                 // we're adding a scalar value to an array here
@@ -177,7 +206,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
             return 1;
         } else {
-            Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': already initialized as a [' . $this->kindOf() . ']');
+            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': already initialized as a [' . $this->kindOf() . ']');
             return 0;
         }
     }
@@ -208,7 +237,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
             return 1;
         } else {
-            Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': already initialized as a [' . $this->kindOf() . ']');
+            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': already initialized as a [' . $this->kindOf() . ']');
             return 0;
         }
     }
@@ -257,7 +286,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                         break;
                     case static::$xmlrpcString:
                         // Do NOT use htmlentities, since it will produce named html entities, which are invalid xml
-                        $rs .= "<${typ}>" . Charset::instance()->encodeEntities($val, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</${typ}>";
+                        $rs .= "<${typ}>" . $this->getCharsetEncoder()->encodeEntities($val, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</${typ}>";
                         break;
                     case static::$xmlrpcInt:
                     case static::$xmlrpcI4:
@@ -304,7 +333,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 } else {
                     $rs .= "<struct>\n";
                 }
-                $charsetEncoder = Charset::instance();
+                $charsetEncoder = $this->getCharsetEncoder();
                 /** @var Value $val2 */
                 foreach ($val as $key2 => $val2) {
                     $rs .= '<member><name>' . $charsetEncoder->encodeEntities($key2, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</name>\n";

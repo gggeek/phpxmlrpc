@@ -11,6 +11,8 @@ use PhpXmlRpc\Helper\Charset;
  */
 class Response
 {
+    protected static $charsetEncoder;
+
     /// @todo: do these need to be public?
     /** @internal */
     public $val = 0;
@@ -25,6 +27,19 @@ class Response
     public $hdrs = array();
     public $_cookies = array();
     public $raw_data = '';
+
+    public function getCharsetEncoder()
+    {
+        if (self::$charsetEncoder === null) {
+            self::$charsetEncoder = Charset::instance();
+        }
+        return self::$charsetEncoder;
+    }
+
+    public function setCharsetEncoder($charsetEncoder)
+    {
+        self::$charsetEncoder = $charsetEncoder;
+    }
 
     /**
      * @param Value|string|mixed $val either a Value object, a php value or the xml serialization of an xmlrpc value (a string)
