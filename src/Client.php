@@ -826,7 +826,7 @@ class Client
         $ipd = '';
         do {
             $info = stream_get_meta_data($fp);
-            
+
             if ($info['timed_out']) {
                 $r = new Response(0, PhpXmlRpc::$xmlrpcerr['timed_out'], PhpXmlRpc::$xmlrpcstr['timed_out']);
 
@@ -1080,7 +1080,7 @@ class Client
             $this->getLogger()->debugMessage($message);
         }
 
-        if (!$result) {
+        if (!$result || curl_errno($curl)) {
             /// @todo we should use a better check here - what if we get back '' or '0'?
 
             $this->errstr = 'no response';

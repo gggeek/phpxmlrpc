@@ -66,6 +66,46 @@ class ClientTest extends PhpXmlRpc_PolyfillTestCase
         }
     }
 
+    public function testTimedOutSendPayloadSocket()
+    {
+        $m = new xmlrpcmsg('examples.timedout');
+        $this->client->server .= 'XXX';
+
+        // now test a successful connection
+        $server = explode(':', $this->args['HTTPSERVER']);
+        if (count($server) > 1) {
+            $this->client->port = $server[1];
+        }
+        $this->client->server = $server[0];
+        $this->client->path = $this->args['HTTPURI'];
+
+        $r = $this->client->send($m, 5);
+        $this->assertEquals(19, $r->faultCode());
+    }
+
+    public function testTimedOutSendPayloadCURL()
+    {
+        if (!function_exists('curl_init')) {
+            $this->markTestSkipped('CURL missing: cannot test curl keepalive errors');
+
+            return;
+        }
+
+        $m = new xmlrpcmsg('examples.timedout');
+        $this->client->server .= 'XXX';
+
+        // now test a successful connection
+        $server = explode(':', $this->args['HTTPSERVER']);
+        if (count($server) > 1) {
+            $this->client->port = $server[1];
+        }
+        $this->client->server = $server[0];
+        $this->client->path = $this->args['HTTPURI'];
+
+        $r = $this->client->send($m, 5, 'http11');
+        $this->assertContains('CURL error: Operation timed out', $r->faultString());
+    }
+
     public function testCurlKAErr()
     {
         if (!function_exists('curl_init')) {
