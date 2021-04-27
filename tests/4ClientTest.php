@@ -69,7 +69,6 @@ class ClientTest extends PhpXmlRpc_PolyfillTestCase
     public function testTimedOutSendPayloadSocket()
     {
         $m = new xmlrpcmsg('examples.timedout');
-        $this->client->server .= 'XXX';
 
         // now test a successful connection
         $server = explode(':', $this->args['HTTPSERVER']);
@@ -92,7 +91,6 @@ class ClientTest extends PhpXmlRpc_PolyfillTestCase
         }
 
         $m = new xmlrpcmsg('examples.timedout');
-        $this->client->server .= 'XXX';
 
         // now test a successful connection
         $server = explode(':', $this->args['HTTPSERVER']);
