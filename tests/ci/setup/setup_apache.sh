@@ -29,4 +29,6 @@ else
 fi
 echo "export HTTPSERVER=localhost" >> /etc/apache2/envvars
 
+ls -la /etc/apache2/mods-enabled
+
 service apache2 restart

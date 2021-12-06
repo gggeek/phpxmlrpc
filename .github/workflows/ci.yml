@@ -41,9 +41,9 @@ jobs:
             #        path: /tmp/composer-cache
             #        key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
             -
-                uses: php-actions/composer@v6
-                # simpler alternative ?
-                #run: 'composer install'
+                # simpler alternative ? Atm, php-actions/composer also fails because of missing php xsl extension!
+                #uses: php-actions/composer@v6
+                run: 'composer install'
             -
                 if: ${{ matrix.php == '7.4' }}
                 run: './tests/ci/setup/setup_code_coverage.sh enable'
