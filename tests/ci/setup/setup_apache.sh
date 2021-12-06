@@ -15,14 +15,14 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y apache2
 
 a2enmod rewrite proxy_fcgi setenvif ssl
 
-# in case mod-php was enabled (this is the case on github's ubuntu with php 5.x at least)
-a2dismod php || true
+# in case mod-php was enabled (this is the case on at least github's ubuntu with php 5.x and shivammathur/setup-php)
+rm /etc/apache2/mods-enabled/php* || true
 
 # configure apache virtual hosts
 
 cp -f "$SCRIPT_DIR/../config/apache_vhost" /etc/apache2/sites-available/000-default.conf
 
-if [ -n "${TRAVIS}" ]; then
+if [ -n "${TRAVIS}" -o -n "${GITHUB_ACTIONS}" ]; then
     echo "export TESTS_ROOT_DIR=$(pwd)" >> /etc/apache2/envvars
 else
     echo "export TESTS_ROOT_DIR=/var/www/html" >> /etc/apache2/envvars
