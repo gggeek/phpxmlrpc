@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
     test:
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.operating-system }}
         env:
             HTTPSERVER: localhost
             URI: /demo/server/server.php
@@ -20,19 +20,25 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: ['8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4', '5.3']
+                operating-system: ['ubuntu-latest'] # @todo add 'windows-latest'
+                # @todo use an older version of phpunit to enable testing on php 5.3 - 5.5
+                php: ['8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6']
         steps:
             -
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
                     extensions: curl, dom, mbstring, xsl
-                    #tools: phpunit
+                    ini_values: 'cgi.fix_pathinfo=1, always_populate_raw_post_data=-1'
+                    #tools: phpunit/phpunit:a_version_compatible_with_php_5.3-5.5
+                    # NB: this disables xdebug completely
+                    coverage: none
             #-
             #    run: 'php -v && env'
             -
                 uses: actions/checkout@v2
             -
+                # @todo add config setup scripts for windows
                 run: 'chmod 755 ./tests/ci/setup/*.sh && sudo ./tests/ci/setup/setup_perl.sh && sudo ./tests/ci/setup/setup_apache.sh && sudo ./tests/ci/setup/setup_privoxy.sh'
             # Avoid downloading composer deps on every workflow. Is this useful for us?
             #-
@@ -48,7 +54,7 @@ jobs:
                 if: ${{ matrix.php == '7.4' }}
                 run: './tests/ci/setup/setup_code_coverage.sh enable'
             -
-                # @todo bring back $PHPUNIT_OPTS
+                # @todo bring back $PHPUNIT_OPTS to trigger code coverage
                 run: './vendor/bin/phpunit -v tests'
             -
                 run: 'python3 demo/client/python/test.py'
@@ -56,4 +62,5 @@ jobs:
                 run: 'perl demo/client/perl/test.pl'
             -
               if: ${{ failure() }}
-              run: 'systemctl status apache2.service; env; php -i; sudo cat /var/log/privoxy/*; sudo cat /var/log/apache2/error.log; sudo cat /var/log/apache2/other_vhosts_access.log; sudo cat /var/log/php*.log'
+              run: 'systemctl status apache2.service; ls -la /etc/apache2/mods-enabled; ls -la /etc/apache2/conf-enabled; sudo cat /var/log/apache2/error.log; sudo cat /var/log/apache2/other_vhosts_access.log'
+              #run: 'env; php -i; sudo cat /var/log/privoxy/*; sudo cat /var/log/php*.log'
