@@ -15,6 +15,9 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y apache2
 
 a2enmod rewrite proxy_fcgi setenvif ssl
 
+# in case mod-php was enabled
+a2dismod php
+
 # configure apache virtual hosts
 
 cp -f "$SCRIPT_DIR/../config/apache_vhost" /etc/apache2/sites-available/000-default.conf

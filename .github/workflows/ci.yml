@@ -26,7 +26,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    extensions: curl
+                    extensions: curl, dom, mbstring, xsl
                     #tools: phpunit
             #-
             #    run: 'php -v && env'
