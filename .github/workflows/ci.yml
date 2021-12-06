@@ -29,7 +29,7 @@ jobs:
                 with:
                     php-version: ${{ matrix.php }}
                     extensions: curl, dom, mbstring, xsl
-                    ini_values: 'cgi.fix_pathinfo=1, always_populate_raw_post_data=-1'
+                    ini-values: 'cgi.fix_pathinfo=1, always_populate_raw_post_data=-1'
                     #tools: phpunit/phpunit:a_version_compatible_with_php_5.3-5.5
                     # NB: this disables xdebug completely
                     coverage: none
