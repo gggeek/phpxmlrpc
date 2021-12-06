@@ -39,7 +39,7 @@ jobs:
                 uses: actions/checkout@v2
             -
                 # @todo add config setup scripts for windows
-                run: 'chmod 755 ./tests/ci/setup/*.sh && sudo ./tests/ci/setup/setup_perl.sh && sudo ./tests/ci/setup/setup_apache.sh && sudo ./tests/ci/setup/setup_privoxy.sh'
+                run: 'chmod 755 ./tests/ci/setup/*.sh && sudo ./tests/ci/setup/setup_perl.sh && sudo ./tests/ci/setup/setup_apache.sh && sudo ./tests/ci/setup/setup_privoxy.sh && sudo ./tests/ci/setup/setup_php_github.sh'
             # Avoid downloading composer deps on every workflow. Is this useful for us?
             #-
             #    uses: actions/cache@v2
@@ -61,6 +61,16 @@ jobs:
             -
                 run: 'perl demo/client/perl/test.pl'
             -
-              if: ${{ failure() }}
-              run: 'systemctl status apache2.service; ls -la /etc/apache2/mods-enabled; ls -la /etc/apache2/conf-enabled; sudo cat /var/log/apache2/error.log; sudo cat /var/log/apache2/other_vhosts_access.log'
-              #run: 'env; php -i; sudo cat /var/log/privoxy/*; sudo cat /var/log/php*.log'
+                if: ${{ failure() }}
+                run: |
+                    systemctl status apache2.service
+                    ls -la /etc/apache2/mods-enabled
+                    ls -la /etc/apache2/conf-enabled
+                    ls -la /etc/apache2/mods-available
+                    ls -la /etc/apache2/conf-available
+                    sudo cat /var/log/apache2/error.log
+                    sudo cat /var/log/apache2/other_vhosts_access.log
+                    #env
+                    #php -i
+                    #sudo cat /var/log/privoxy/*
+                    #sudo cat /var/log/php*.log
