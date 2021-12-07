@@ -1,5 +1,7 @@
 XML-RPC for PHP version 4.6.0 - unreleased
 
+* fixed: compatibility with php 8.1
+
 * improved: when encoding utf8 text into us-ascii xml, use character entity references for characters number 0-31
   (ascii non printable characters), as we were already doing when encoding iso-8859-1 text into us-ascii xml
 
@@ -15,6 +17,8 @@ XML-RPC for PHP version 4.6.0 - unreleased
       $request->serialize($funkyCharset);
 
 * new: method `XMLParser::parse()` acquired a 4th argument
+
+* improved: Continuous Integration is now running on Github Actions instead of Travis
 
 
 XML-RPC for PHP version 4.5.2 - 2021/1/11
