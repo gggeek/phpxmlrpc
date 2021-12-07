@@ -325,7 +325,7 @@ class Client
     }
 
     /**
-     * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value ): let cURL decide
+     * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let cURL decide
      *
      * @param int $i
      */
@@ -785,6 +785,7 @@ class Client
             $contextOptions['ssl']['verify_peer'] = $this->verifypeer;
             $contextOptions['ssl']['verify_peer_name'] = $this->verifypeer;
         }
+
         $context = stream_context_create($contextOptions);
 
         if ($timeout <= 0) {
@@ -807,6 +808,7 @@ class Client
                 $err = error_get_last();
                 $this->errstr = $err['message'];
             }
+
             $this->errstr = 'Connect error: ' . $this->errstr;
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
 
