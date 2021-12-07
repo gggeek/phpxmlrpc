@@ -12,7 +12,8 @@ jobs:
             HTTPSURI: /demo/server/server.php
             PROXYSERVER: localhost:8080
             # Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
-            # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below
+            # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below.
+            # @todo check: is this necessary as well on GHA runners?
             HTTPSVERIFYHOST: 0
             HTTPSIGNOREPEER: 1
             SSLVERSION: 0
@@ -67,14 +68,18 @@ jobs:
             -
                 if: ${{ failure() }}
                 run: |
-                    systemctl status apache2.service
-                    ls -la /etc/apache2/mods-enabled
-                    ls -la /etc/apache2/conf-enabled
-                    ls -la /etc/apache2/mods-available
-                    ls -la /etc/apache2/conf-available
+                    #env
+                    ps auxwww
+                    #php -i
+                    #systemctl status apache2.service
+                    #ls -la /etc/apache2/mods-enabled
+                    #ls -la /etc/apache2/conf-enabled
+                    #ls -la /etc/apache2/mods-available
+                    #ls -la /etc/apache2/conf-available
+                    ls -la /etc/apache2/sites-available/
+                    sudo cat /etc/apache2/envvars
+                    sudo cat /etc/apache2/sites-available/000-default.conf
+                    sudo cat /var/log/privoxy/*
                     sudo cat /var/log/apache2/error.log
                     sudo cat /var/log/apache2/other_vhosts_access.log
-                    #env
-                    #php -i
-                    #sudo cat /var/log/privoxy/*
-                    #sudo cat /var/log/php*.log
+                    sudo cat /var/log/php*.log
