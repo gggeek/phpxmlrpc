@@ -4,6 +4,7 @@
 
 # To be kept in sync with setup_php_travis.sh
 
+# @todo make it optional to install xdebug. It is fe. missing in sury's ppa for Xenial
 # @todo make it optional to disable xdebug ?
 
 set -e
