@@ -10,7 +10,7 @@ ACTION="${1}"
 export PHP_VERSION=${PHP_VERSION:-default}
 # Valid values: precise (12), trusty (14), xenial (16), bionic (18), focal (20)
 # We default to the same version we use on Travis
-export UBUNTU_VERSION=${UBUNTU_VERSION:-xenial}
+export UBUNTU_VERSION=${UBUNTU_VERSION:-bionic}
 
 CONTAINER_USER=docker
 CONTAINER_BUILD_DIR="/home/${CONTAINER_USER}/build"
@@ -43,7 +43,7 @@ Options:
 
 Environment variables: to be set before the 'build' action
     PHP_VERSION       default value: 'default', ie. the stock php version from the Ubuntu version in use. Other possible values: 5.6, 7.0 .. 8.1
-    UBUNTU_VERSION    default value: xenial. Other possible values: bionic, focal
+    UBUNTU_VERSION    default value: bionic. Other possible values: xenial, focal
 "
 }
 

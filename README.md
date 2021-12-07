@@ -49,7 +49,7 @@ The full sequence of operations is:
     # and, once you have finished all testing related work:
     ./tests/ci/vm.sh cleanup
 
-By default tests are run using php 7.0 in a Container based on Ubuntu 16 Xenial.
+By default tests are run using php 7.0 in a Container based on Ubuntu 18 Bionic.
 You can change the version of PHP and Ubuntu in use by setting the environment variables PHP_VERSION and UBUNTU_VERSION
 before building the Container.
 
