@@ -37,8 +37,12 @@ if [ "${PHP_VERSION}" = default ]; then
         php${PHPSUFFIX}-mbstring \
         php${PHPSUFFIX}-xdebug
 else
-    # on GHA runners ubuntu version, php 7.4 and 8.0 seem to be preinstalled. remove them if found
-
+    # on GHA runners ubuntu version, php 7.4 and 8.0 seem to be preinstalled. Remove them if found
+    for PHP_CURRENT in $(dpkg -l | grep -E 'php.+-common' | awk '{print $2}'); do
+        if [ "${PHP_CURRENT}" != "php${PHP_VERSION}-common" ]; then
+            apt-get purge -y "${PHP_CURRENT}"
+        fi
+    done
 
     DEBIAN_FRONTEND=noninteractive apt-get install -y language-pack-en-base software-properties-common
     LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php
