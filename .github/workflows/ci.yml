@@ -21,8 +21,12 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                operating-system: ['ubuntu-latest'] # @todo add 'windows-latest'
-                # @todo use an older version of phpunit to enable testing on php 5.3 - 5.5
+                # @see https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
+                # @todo fix: atm our tests fail when using ubuntu 20 (focal) and php 5.6 - 7.1, when using
+                #       an ssl stream context for connecting to localhost via https
+                operating-system: ['ubuntu-18.04'] # @todo add 'windows-latest'
+                # @todo use an older version of phpunit to enable testing on php 5.3 - 5.5 . Also: we will most likely
+                #       have to resort to using shivammathur/setup-php@v2 instead of sury's ppa to get php installed
                 php: ['8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6']
         steps:
             -
@@ -39,7 +43,7 @@ jobs:
             #        # NB: this disables xdebug completely
             #        coverage: none
             -
-                # @todo add config setup scripts for windows
+                # @todo add env setup scripts for windows
                 run: |
                     chmod 755 ./tests/ci/setup/*.sh
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_perl.sh
@@ -57,9 +61,12 @@ jobs:
                 run: 'composer install'
             -
                 if: ${{ matrix.php == '7.4' }}
-                run: './tests/ci/setup/setup_code_coverage.sh enable'
+                run: |
+                    ./tests/ci/setup/setup_code_coverage.sh enable
+                    ./vendor/bin/phpunit -v --coverage-clover=coverage.clover tests
+                    wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover
             -
-                # @todo bring back $PHPUNIT_OPTS to trigger code coverage
+                if: ${{ matrix.php != '7.4' }}
                 run: './vendor/bin/phpunit -v tests'
             -
                 run: 'python3 demo/client/python/test.py'
@@ -71,8 +78,8 @@ jobs:
                     #env
                     #php -i
                     #ps auxwww
-                    dpkg --list | grep php
-                    ps auxwww | grep fpm
+                    #dpkg --list | grep php
+                    #ps auxwww | grep fpm
                     #pwd
                     #sudo env
                     #systemctl status apache2.service
@@ -83,8 +90,8 @@ jobs:
                     #ls -la /etc/apache2/sites-available/
                     #sudo cat /etc/apache2/envvars
                     #sudo cat /etc/apache2/sites-available/000-default.conf
-                    ls -ltr /var/log
-                    ls -ltr /var/log/apache2
+                    #ls -ltr /var/log
+                    #ls -ltr /var/log/apache2
                     sudo cat /var/log/privoxy/*
                     sudo cat /var/log/apache2/error.log
                     sudo cat /var/log/apache2/other_vhosts_access.log
