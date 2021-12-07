@@ -25,30 +25,34 @@ jobs:
                 php: ['8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6']
         steps:
             -
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: ${{ matrix.php }}
-                    extensions: curl, dom, mbstring, xsl
-                    ini-values: 'cgi.fix_pathinfo=1, always_populate_raw_post_data=-1'
-                    #tools: phpunit/phpunit:a_version_compatible_with_php_5.3-5.5
-                    # NB: this disables xdebug completely
-                    coverage: none
-            #-
-            #    run: 'php -v && env'
-            -
                 uses: actions/checkout@v2
+            # Although this action is useful, we prefer to use the same script to set up php that we use for the
+            # docker image used for local testing. This allows us to make sure that script is always in good shape
+            #-
+            #    uses: shivammathur/setup-php@v2
+            #    with:
+            #        php-version: ${{ matrix.php }}
+            #        extensions: curl, dom, mbstring, xsl
+            #        ini-values: 'cgi.fix_pathinfo=1, always_populate_raw_post_data=-1'
+            #        #tools: phpunit/phpunit:a_version_compatible_with_php_5.3-5.5
+            #        # NB: this disables xdebug completely
+            #        coverage: none
             -
                 # @todo add config setup scripts for windows
-                run: 'chmod 755 ./tests/ci/setup/*.sh && sudo ./tests/ci/setup/setup_perl.sh && sudo ./tests/ci/setup/setup_apache.sh && sudo ./tests/ci/setup/setup_privoxy.sh && sudo ./tests/ci/setup/setup_php_github.sh'
-            # Avoid downloading composer deps on every workflow. Is this useful for us?
+                run: |
+                    chmod 755 ./tests/ci/setup/*.sh
+                    sudo ./tests/ci/setup/setup_perl.sh
+                    sudo ./tests/ci/setup/setup_apache.sh
+                    sudo ./tests/ci/setup/setup_privoxy.sh
+                    sudo ./tests/ci/setup/setup_php.sh ${{ matrix.php }}
+                    sudo ./setup_composer.sh
+            # Avoid downloading composer deps on every workflow. Is this useful/working for us?
             #-
             #    uses: actions/cache@v2
             #    with:
             #        path: /tmp/composer-cache
             #        key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
             -
-                # simpler alternative ? Atm, php-actions/composer also fails because of missing php xsl extension!
-                #uses: php-actions/composer@v6
                 run: 'composer install'
             -
                 if: ${{ matrix.php == '7.4' }}
