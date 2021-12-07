@@ -9,7 +9,7 @@ include_once __DIR__ . '/5ServerTest.php';
 
 /**
  * Tests which stress http features of the library.
- * Each of these tests iterates over (almost) all of the 'localhost' tests
+ * Each of these tests iterates over (almost) all the 'localhost' tests
  */
 class HTTPTest extends ServerTest
 {
