@@ -87,7 +87,7 @@ function wrap_php_class($className, $extraOptions=array())
  * @see PhpXmlRpc\Wrapper::wrapXmlrpcMethod
  * @param xmlrpc_client $client
  * @param string $methodName
- * @param int|array $extraOptions the usage of an int as signature number is deprecated, use an option in $extraOptions
+ * @param int|array $extraOptions the usage of an int as signature number is deprecated, use an option 'signum' in $extraOptions
  * @param int $timeout            deprecated, use an option in $extraOptions
  * @param string $protocol        deprecated, use an option in $extraOptions
  * @param string $newFuncName     deprecated, use an option in $extraOptions
@@ -112,8 +112,10 @@ function wrap_xmlrpc_method($client, $methodName, $extraOptions=0, $timeout=0, $
         // backwards compat: return string instead of callable
         $extraOptions['return_source'] = true;
         $wrapped = $wrapper->wrapXmlrpcMethod($client, $methodName, $extraOptions);
-        eval($wrapped['source']);
-        $wrapped = $wrapped['function'];
+        if (is_array($wrapped)) {
+            eval($wrapped['source']);
+            $wrapped = $wrapped['function'];
+        }
     } else {
         $wrapped = $wrapper->wrapXmlrpcMethod($client, $methodName, $extraOptions);
     }
