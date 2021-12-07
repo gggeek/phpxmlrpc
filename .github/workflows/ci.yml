@@ -45,7 +45,7 @@ jobs:
                     sudo ./tests/ci/setup/setup_apache.sh
                     sudo ./tests/ci/setup/setup_privoxy.sh
                     sudo ./tests/ci/setup/setup_php.sh ${{ matrix.php }}
-                    sudo ./setup_composer.sh
+                    sudo ./tests/ci/setup/setup_composer.sh
             # Avoid downloading composer deps on every workflow. Is this useful/working for us?
             #-
             #    uses: actions/cache@v2
