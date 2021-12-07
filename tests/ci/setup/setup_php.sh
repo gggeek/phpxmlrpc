@@ -66,7 +66,7 @@ fi
 if [ -f "/lib/systemd/system/php${PHPVER}-fpm.service" ]; then
     ln -s "/lib/systemd/system/php${PHPVER}-fpm.service" /lib/systemd/system/php-fpm.service
     if [ ! -f /.dockerenv ]; then
-        systemctl daeamon-reload
+        systemctl daemon-reload
     fi
 fi
 
