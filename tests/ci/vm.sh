@@ -9,7 +9,6 @@ ACTION="${1}"
 # Valid values: 'default', 5.6, 7.0 .. 7.4, 8.0 .. 8.1
 export PHP_VERSION=${PHP_VERSION:-default}
 # Valid values: precise (12), trusty (14), xenial (16), bionic (18), focal (20)
-# We default to the same version we use on Travis
 export UBUNTU_VERSION=${UBUNTU_VERSION:-bionic}
 
 CONTAINER_USER=docker

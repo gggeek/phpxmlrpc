@@ -3,44 +3,25 @@
 # @todo add 'query' action
 # @todo avoid reloading php-fpm if config did not change
 
-# Note: we have php set up either via phpenv (TRAVIS=true), Ubuntu packages (PHP_VERSION=default) or Sury packages.
+# Note: we have php set up either via Ubuntu packages (PHP_VERSION=default) or Sury packages.
 #       xdebug comes either at version 2 or 3
 
 set -e
 
-if [ "$TRAVIS" != true ]; then
-    PHPCONFDIR_CLI=$(php -i | grep 'Scan this dir for additional .ini files' | sed 's|Scan this dir for additional .ini files => ||')
-    PHPCONFDIR_FPM=$(echo "$PHPCONFDIR_CLI" | sed 's|/cli/|/fpm/|')
-fi
-
 enable_cc() {
-    if [ "$TRAVIS" = true ]; then
-        phpenv config-add tests/ci/config/codecoverage_xdebug.ini
+    if [ -L "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"; fi
+    sudo ln -s $(realpath tests/ci/config/codecoverage_xdebug.ini) "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"
+    if [ -L "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini"; fi
+    sudo ln -s $(realpath tests/ci/config/codecoverage_xdebug.ini) "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini"
 
-        pkill php-fpm
-        ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-    else
-        if [ -L "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"; fi
-        sudo ln -s $(realpath tests/ci/config/codecoverage_xdebug.ini) "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"
-        if [ -L "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini"; fi
-        sudo ln -s $(realpath tests/ci/config/codecoverage_xdebug.ini) "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini"
-
-        sudo service php-fpm restart
-    fi
+    sudo service php-fpm restart
 }
 
 disable_cc() {
-    if [ "$TRAVIS" = true ]; then
-        phpenv config-rm tests/ci/config/codecoverage_xdebug.ini
+    if [ -L "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"; fi
+    if [ -L "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini"; fi
 
-        pkill php-fpm
-        ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-    else
-        if [ -L "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"; fi
-        if [ -L "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini"; fi
-
-        sudo service php-fpm restart
-    fi
+    sudo service php-fpm restart
 }
 
 case "$1" in

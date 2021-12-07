@@ -139,7 +139,7 @@ lib/*:: a compatibility layer for applications which still rely on version 3 of 
 
 src/*:: the XML-RPC library classes. You can autoload these via Composer, or via a dedicated Autoloader class
 
-tests/*:: the test suite for the library, written using PhpUnit, and the configuration to run it on Travis
+tests/*:: the test suite for the library, written using PhpUnit, and the configuration to run it either on GitHub Actions or in a local Docker container
 
 
 [[bugs]]
@@ -1953,7 +1953,7 @@ Backward compatibility is maintained via _lib/xmlrpc.inc_, _lib/xmlrpcs.inc_ and
 
 * improved: a specific option allows users to decide the version of SSL to use for https calls.
   This is useful f.e. for the testing suite, when the server target of calls has no proper ssl certificate,
-  and the cURL extension has been compiled with GnuTLS (such as on Travis VMs)
+  and the cURL extension has been compiled with GnuTLS
 
 * improved: the function `wrap_php_function()` now can be used to wrap closures (it is now a method btw)
 

@@ -11,7 +11,6 @@ SCRIPT_DIR="$(dirname -- "$(readlink -f "$0")")"
 DEBIAN_FRONTEND=noninteractive apt-get install -y apache2
 
 # set up Apache for php-fpm
-# @see https://github.com/travis-ci/travis-ci.github.com/blob/master/docs/user/languages/php.md#apache--php
 
 a2enmod rewrite proxy_fcgi setenvif ssl
 
@@ -28,7 +27,7 @@ if [ -f /etc/apache2/sites-available/default-ssl.conf ]; then
     rm /etc/apache2/sites-available/default-ssl.conf
 fi
 
-if [ -n "${TRAVIS}" -o -n "${GITHUB_ACTIONS}" ]; then
+if [ -n "${GITHUB_ACTIONS}" ]; then
     echo "export TESTS_ROOT_DIR=$(pwd)" >> /etc/apache2/envvars
 else
     echo "export TESTS_ROOT_DIR=/var/www/html" >> /etc/apache2/envvars

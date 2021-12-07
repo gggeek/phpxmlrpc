@@ -11,9 +11,9 @@ jobs:
             HTTPSSERVER: localhost
             HTTPSURI: /demo/server/server.php
             PROXYSERVER: localhost:8080
-            # Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
-            # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below.
             # @todo check: is this necessary as well on GHA runners?
+            # was: Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
+            # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below.
             HTTPSVERIFYHOST: 0
             HTTPSIGNOREPEER: 1
             SSLVERSION: 0
