@@ -57,6 +57,9 @@ sed -e "s?^listen.group =.*?listen.group = ${USERNAME}?g" --in-place "${FPMCONF}
 
 echo "[$(date)] Running Composer..."
 
+# @todo if there is a composer.lock file present, there are chances it might be a leftover from when running the
+#       container using a different php version. We should then back it up / do some symlink magic to make sure that
+#       it matches the current php version and a hash of composer.json...
 sudo "${USERNAME}" -c "cd ${TESTS_ROOT_DIR} && composer install"
 
 trap clean_up TERM
