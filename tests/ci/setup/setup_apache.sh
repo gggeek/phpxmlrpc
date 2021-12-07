@@ -16,6 +16,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y apache2
 a2enmod rewrite proxy_fcgi setenvif ssl
 
 # in case mod-php was enabled (this is the case on at least github's ubuntu with php 5.x and shivammathur/setup-php)
+# @todo silence errors in a smarter way
 rm /etc/apache2/mods-enabled/php* || true
 
 # configure apache virtual hosts

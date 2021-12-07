@@ -57,9 +57,18 @@ PHPVER=$(php -r 'echo implode(".",array_slice(explode(".",PHP_VERSION),0,2));' 2
 
 configure_php_ini /etc/php/${PHPVER}/fpm/php.ini
 
-# use a nice name for the php-fpm service, so that it does not depend on php version running
+# use a nice name for the php-fpm service, so that it does not depend on php version running. Try to make that work
+# both for docker and VMs
 service "php${PHPVER}-fpm" stop
-ln -s "/etc/init.d/php${PHPVER}-fpm" /etc/init.d/php-fpm
+if [ -f "/etc/init.d/php${PHPVER}-fpm" ]; then
+    ln -s "/etc/init.d/php${PHPVER}-fpm" /etc/init.d/php-fpm
+fi
+if [ -f "/lib/systemd/system/php${PHPVER}-fpm.service" ]; then
+    ln -s "/lib/systemd/system/php${PHPVER}-fpm.service" /lib/systemd/system/php-fpm.service
+    if [ ! -f /.dockerenv ]; then
+        systemctl daeamon-reload
+    fi
+fi
 
 # @todo shall we configure php-fpm?
 

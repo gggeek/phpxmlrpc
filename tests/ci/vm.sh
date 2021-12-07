@@ -6,7 +6,7 @@ set -e
 
 ACTION="${1}"
 
-# Valid values: 'default', 5.6, 7.0 .. 7.4, 8.0
+# Valid values: 'default', 5.6, 7.0 .. 7.4, 8.0 .. 8.1
 export PHP_VERSION=${PHP_VERSION:-default}
 # Valid values: precise (12), trusty (14), xenial (16), bionic (18), focal (20)
 # We default to the same version we use on Travis
@@ -42,7 +42,7 @@ Options:
     -h                print help
 
 Environment variables: to be set before the 'build' action
-    PHP_VERSION       default value: 'default', ie. the stock php version from the Ubuntu version in use. Other possible values: 7.0 .. 8.0
+    PHP_VERSION       default value: 'default', ie. the stock php version from the Ubuntu version in use. Other possible values: 5.6, 7.0 .. 8.1
     UBUNTU_VERSION    default value: xenial. Other possible values: bionic, focal
 "
 }
