@@ -826,6 +826,21 @@ And turned it into nylon';
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
+    public function testWrapInexistentMethod()
+    {
+        // make a 'deep client copy' as the original one might have many properties set
+        $func = wrap_xmlrpc_method($this->client, 'examples.getStateName.notexisting', array('simple_client_copy' => 0));
+        $this->assertEquals(false, $func);
+    }
+
+    public function testWrapInexistentUrl()
+    {
+        $this->client->path = '/notexisting';
+        // make a 'deep client copy' as the original one might have many properties set
+        $func = wrap_xmlrpc_method($this->client, 'examples.getStateName', array('simple_client_copy' => 0));
+        $this->assertEquals(false, $func);
+    }
+
     public function testWrappedMethod()
     {
         // make a 'deep client copy' as the original one might have many properties set

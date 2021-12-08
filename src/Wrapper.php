@@ -581,7 +581,7 @@ class Wrapper
         }
 
         // since we are building source code for later use, if we are given an object instance,
-        // we go out of our way and store a pointer to it in a static class var var...
+        // we go out of our way and store a pointer to it in a static class var...
         if (is_array($callable) && is_object($callable[0])) {
             self::$objHolder[$newFuncName] = $callable[0];
             $innerCode .= "\$obj = PhpXmlRpc\\Wrapper::\$objHolder['$newFuncName'];\n";
@@ -733,7 +733,6 @@ class Wrapper
 
             return $results;
         }
-
     }
 
     /**
