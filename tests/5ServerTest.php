@@ -841,6 +841,15 @@ And turned it into nylon';
         $this->assertEquals(false, $func);
     }
 
+    public function testServerWrappedClassWithNamespace()
+    {
+        $m = new xmlrpcmsg('namespacetest.findState', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($m);
+        $this->assertEquals('Michigan', $v->scalarval());
+    }
+
     public function testWrappedMethod()
     {
         // make a 'deep client copy' as the original one might have many properties set

@@ -138,6 +138,8 @@ $c = new xmlrpcServerMethodsContainer();
 
 $moreSignatures = $wrapper->wrapPhpClass($c, array('prefix' => 'tests.', 'method_type' => 'all'));
 
+$namespaceSignatures = $wrapper->wrapPhpClass($c, array('namespace' => 'namespacetest', 'method_type' => 'all'));
+
 $returnObj_sig =  $wrapper->wrapPhpFunction(array($c, 'returnObject'), '', array('encode_php_objs' => true));
 
 return array_merge(
@@ -154,5 +156,6 @@ return array_merge(
         'tests.getStateName.11' => $findstate11_sig,
         'tests.returnPhpObject' => $returnObj_sig,
     ),
+    $namespaceSignatures,
     $moreSignatures
 );

@@ -622,8 +622,8 @@ class Wrapper
      * @param array $extraOptions see the docs for wrapPhpMethod for basic options, plus
      *                            - string method_type    'static', 'nonstatic', 'all' and 'auto' (default); the latter will switch between static and non-static depending on whether $className is a class name or object instance
      *                            - string method_filter  a regexp used to filter methods to wrap based on their names
-     *                            - string prefix         used for the names of the xmlrpc methods created
-     *
+     *                            - string prefix         used for the names of the xmlrpc methods created.
+     *                            - string namespace      use when classes with actual namespaces should only have one namespace. e.g. \Some\Namespace\Api is needed as my.Api set this to "my". Works in conjunction with prefix!
      * @return array|false false on failure
      */
     public function wrapPhpClass($className, $extraOptions = array())
@@ -631,6 +631,7 @@ class Wrapper
         $methodFilter = isset($extraOptions['method_filter']) ? $extraOptions['method_filter'] : '';
         $methodType = isset($extraOptions['method_type']) ? $extraOptions['method_type'] : 'auto';
         $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : '';
+        $namespace = isset($extraOptions['namespace']) ? $extraOptions['namespace'] : '';
 
         $results = array();
         $mList = get_class_methods($className);
@@ -643,10 +644,14 @@ class Wrapper
                     ) {
                         $methodWrap = $this->wrapPhpFunction(array($className, $mName), '', $extraOptions);
                         if ($methodWrap) {
-                            if (is_object($className)) {
-                                $realClassName = get_class($className);
-                            }else {
-                                $realClassName = $className;
+                            if ($namespace) {
+                                $realClassName = $namespace;
+                            } else {
+                                if (is_object($className)) {
+                                    $realClassName = get_class($className);
+                                }else {
+                                    $realClassName = $className;
+                                }
                             }
                             $results[$prefix."$realClassName.$mName"] = $methodWrap;
                         }
