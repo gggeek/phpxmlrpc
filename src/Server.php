@@ -275,10 +275,12 @@ class Server
         if (!$r) {
             // this actually executes the request
             $r = $this->parseRequest($data, $reqCharset);
-        }
 
-        // save full body of request into response, for more debugging usages
-        $r->raw_data = $rawData;
+            // save full body of request into response, for more debugging usages.
+            // Note that this is the _request_ data, not the response's own data, unlike what happens client-side
+            /// @todo try to move this injection to the resp. constructor or use a non-deprecated access method
+            $r->raw_data = $rawData;
+        }
 
         if ($this->debug > 2 && static::$_xmlrpcs_occurred_errors) {
             $this->debugmsg("+++PROCESSING ERRORS AND WARNINGS+++\n" .
@@ -428,7 +430,7 @@ class Server
     /**
      * Parse http headers received along with xmlrpc request. If needed, inflate request.
      *
-     * @return mixed Response|null on success or an error Response
+     * @return Response|null null on success or an error Response
      */
     protected function parseRequestHeaders(&$data, &$reqEncoding, &$respEncoding, &$respCompression)
     {
@@ -453,6 +455,8 @@ class Server
             $contentEncoding = '';
         }
 
+        $rawData = $data;
+
         // check if request body has been compressed and decompress it
         if ($contentEncoding != '' && strlen($data)) {
             if ($contentEncoding == 'deflate' || $contentEncoding == 'gzip') {
@@ -469,12 +473,16 @@ class Server
                             $this->debugmsg("+++INFLATED REQUEST+++[" . strlen($data) . " chars]+++\n" . $data . "\n+++END+++");
                         }
                     } else {
-                        $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_decompress_fail'], PhpXmlRpc::$xmlrpcstr['server_decompress_fail']);
+                        $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_decompress_fail'],
+                            PhpXmlRpc::$xmlrpcstr['server_decompress_fail'], '', array('raw_data' => $rawData)
+                        );
 
                         return $r;
                     }
                 } else {
-                    $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_cannot_decompress'], PhpXmlRpc::$xmlrpcstr['server_cannot_decompress']);
+                    $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_cannot_decompress'],
+                        PhpXmlRpc::$xmlrpcstr['server_cannot_decompress'], '', array('raw_data' => $rawData)
+                    );
 
                     return $r;
                 }

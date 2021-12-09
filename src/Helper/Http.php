@@ -2,6 +2,7 @@
 
 namespace PhpXmlRpc\Helper;
 
+use PhpXmlRpc\Exception\HttpException;
 use PhpXmlRpc\PhpXmlRpc;
 
 class Http
@@ -66,12 +67,12 @@ class Http
      * @param string $data the http response, headers and body. It will be stripped of headers
      * @param bool $headersProcessed when true, we assume that response inflating and dechunking has been already carried out
      *
-     * @return array with keys 'headers' and 'cookies'
-     * @throws \Exception
+     * @return array with keys 'headers', 'cookies', 'raw_data' and 'status_code'
+     * @throws HttpException
      */
     public function parseResponseHeaders(&$data, $headersProcessed = false, $debug=0)
     {
-        $httpResponse = array('raw_data' => $data, 'headers'=> array(), 'cookies' => array());
+        $httpResponse = array('raw_data' => $data, 'headers'=> array(), 'cookies' => array(), 'status_code' => null);
 
         // Support "web-proxy-tunnelling" connections for https through proxies
         if (preg_match('/^HTTP\/1\.[0-1] 200 Connection established/', $data)) {
@@ -95,7 +96,7 @@ class Http
                 $data = substr($data, $bd);
             } else {
                 Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': HTTPS via proxy error, tunnel connection possibly failed');
-                throw new \Exception(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (HTTPS via proxy error, tunnel connection possibly failed)', PhpXmlRpc::$xmlrpcerr['http_error']);
+                throw new HttpException(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (HTTPS via proxy error, tunnel connection possibly failed)', PhpXmlRpc::$xmlrpcerr['http_error']);
             }
         }
 
@@ -114,16 +115,20 @@ class Http
 
         // When using Curl to query servers using Digest Auth, we get back a double set of http headers.
         // We strip out the 1st...
-        if ($headersProcessed && preg_match('/^HTTP\/[0-9.]+ 401 /', $data)) {
-            if (preg_match('/(\r?\n){2}HTTP\/[0-9.]+ 200 /', $data)) {
-                $data = preg_replace('/^HTTP\/[0-9.]+ 401 .+?(?:\r?\n){2}(HTTP\/[0-9.]+ 200 )/s', '$1', $data, 1);
+        if ($headersProcessed && preg_match('/^HTTP\/[0-9]\.[0-9] 401 /', $data)) {
+            if (preg_match('/(\r?\n){2}HTTP\/[0-9]\.[0-9] 200 /', $data)) {
+                $data = preg_replace('/^HTTP\/[0-9]\.[0-9] 401 .+?(?:\r?\n){2}(HTTP\/[0-9.]+ 200 )/s', '$1', $data, 1);
             }
         }
 
-        if (!preg_match('/^HTTP\/[0-9.]+ 200 /', $data)) {
+        if (preg_match('/^HTTP\/[0-9]\.[0-9] ([0-9]{3}) /', $data, $matches)) {
+            $httpResponse['status_code'] = $matches[1];
+        }
+
+        if ($httpResponse['status_code'] !== '200') {
             $errstr = substr($data, 0, strpos($data, "\n") - 1);
             Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': HTTP error, got response: ' . $errstr);
-            throw new \Exception(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (' . $errstr . ')', PhpXmlRpc::$xmlrpcerr['http_error']);
+            throw new HttpException(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (' . $errstr . ')', PhpXmlRpc::$xmlrpcerr['http_error'], null, $httpResponse['status_code'] );
         }
 
         // be tolerant to usage of \n instead of \r\n to separate headers and data
@@ -220,7 +225,7 @@ class Http
             if (isset($httpResponse['headers']['transfer-encoding']) && $httpResponse['headers']['transfer-encoding'] == 'chunked') {
                 if (!$data = static::decodeChunked($data)) {
                     Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': errors occurred when trying to rebuild the chunked data received from server');
-                    throw new \Exception(PhpXmlRpc::$xmlrpcstr['dechunk_fail'], PhpXmlRpc::$xmlrpcerr['dechunk_fail']);
+                    throw new HttpException(PhpXmlRpc::$xmlrpcstr['dechunk_fail'], PhpXmlRpc::$xmlrpcerr['dechunk_fail'], null, $httpResponse['status_code']);
                 }
             }
 
@@ -243,11 +248,11 @@ class Http
                             }
                         } else {
                             Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': errors occurred when trying to decode the deflated data received from server');
-                            throw new \Exception(PhpXmlRpc::$xmlrpcstr['decompress_fail'], PhpXmlRpc::$xmlrpcerr['decompress_fail']);
+                            throw new HttpException(PhpXmlRpc::$xmlrpcstr['decompress_fail'], PhpXmlRpc::$xmlrpcerr['decompress_fail'], null, $httpResponse['status_code']);
                         }
                     } else {
                         Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': the server sent deflated data. Your php install must have the Zlib extension compiled in to support this.');
-                        throw new \Exception(PhpXmlRpc::$xmlrpcstr['cannot_decompress'], PhpXmlRpc::$xmlrpcerr['cannot_decompress']);
+                        throw new HttpException(PhpXmlRpc::$xmlrpcstr['cannot_decompress'], PhpXmlRpc::$xmlrpcerr['cannot_decompress'], null, $httpResponse['status_code']);
                     }
                 }
             }

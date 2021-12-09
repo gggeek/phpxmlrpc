@@ -3,7 +3,7 @@
 namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\Logger;
-
+use PhpXmlRpc\Helper\XMLParser;
 /**
  * Used to represent a client of an XML-RPC server.
  */
@@ -111,7 +111,7 @@ class Client
      * response will be lost. It will be e.g. impossible to tell whether a particular php string value was sent by the
      * server as an xmlrpc string or base64 value.
      */
-    public $return_type = 'xmlrpcvals';
+    public $return_type = XMLParser::RETURN_XMLRPCVALS;
 
     /**
      * Sent to servers in http headers.
@@ -659,7 +659,7 @@ class Client
 
         // Only create the payload if it was not created previously
         if (empty($req->payload)) {
-            $req->createPayload($this->request_charset_encoding);
+            $req->serialize($this->request_charset_encoding);
         }
 
         $payload = $req->payload;
@@ -894,7 +894,7 @@ class Client
 
         // Only create the payload if it was not created previously
         if (empty($req->payload)) {
-            $req->createPayload($this->request_charset_encoding);
+            $req->serialize($this->request_charset_encoding);
         }
 
         // Deflate request body and set appropriate request headers

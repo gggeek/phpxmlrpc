@@ -21,6 +21,17 @@ XML-RPC for PHP version 4.6.0 - 2021/12/9
 * new: method `Wrapper::wrapPhpClass` allows to customize the names of the phpxmlrpc methods by stripping the original
   class name and accompanying namespace and replace it with a user-defined prefix, via option `replace_class_name`
 
+* new: `Response` constructor gained a 4th argument
+
+* deprecated: properties `Response::hdrs`, `Response::_cookies`, `Response::raw_data`. Use `Response::httpResponse()` instead.
+  That method returns an array which also holds the http response's status code - useful in case of http errors.
+
+* deprecated: method `Request::createPayload`. Use `Request::serialize` instead
+
+* deprecated: property `Request::httpResponse`
+
+* improved: `Http::parseResponseHeaders` now throws a more specific exception in case of http errors
+
 * improved: Continuous Integration is now running on Github Actions instead of Travis
 
 

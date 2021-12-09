@@ -54,6 +54,8 @@ include_once(__DIR__.'/../src/PhpXmlRpc.php');
 include_once(__DIR__.'/../src/Request.php');
 include_once(__DIR__.'/../src/Response.php');
 include_once(__DIR__.'/../src/Value.php');
+include_once(__DIR__.'/../src/Exception/HttpException.php');
+include_once(__DIR__.'/../src/Exception/PhpXmlrpcException.php');
 include_once(__DIR__.'/../src/Helper/Charset.php');
 include_once(__DIR__.'/../src/Helper/Date.php');
 include_once(__DIR__.'/../src/Helper/Http.php');
