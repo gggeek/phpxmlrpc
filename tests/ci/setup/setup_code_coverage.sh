@@ -8,6 +8,9 @@
 
 set -e
 
+PHPCONFDIR_CLI=$(php -i | grep 'Scan this dir for additional .ini files' | sed 's|Scan this dir for additional .ini files => ||')
+PHPCONFDIR_FPM=$(echo "$PHPCONFDIR_CLI" | sed 's|/cli/|/fpm/|')
+
 enable_cc() {
     if [ -L "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"; fi
     sudo ln -s $(realpath tests/ci/config/codecoverage_xdebug.ini) "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"
