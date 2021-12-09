@@ -826,6 +826,15 @@ And turned it into nylon';
         $this->assertEquals('Michigan', $v->scalarval());
     }
 
+    public function testServerWrappedClassWithNamespace()
+    {
+        $m = new xmlrpcmsg('namespacetest.findState', array(
+            new xmlrpcval(23, 'int'),
+        ));
+        $v = $this->send($m);
+        $this->assertEquals('Michigan', $v->scalarval());
+    }
+
     public function testWrapInexistentMethod()
     {
         // make a 'deep client copy' as the original one might have many properties set
@@ -839,15 +848,6 @@ And turned it into nylon';
         // make a 'deep client copy' as the original one might have many properties set
         $func = wrap_xmlrpc_method($this->client, 'examples.getStateName', array('simple_client_copy' => 0));
         $this->assertEquals(false, $func);
-    }
-
-    public function testServerWrappedClassWithNamespace()
-    {
-        $m = new xmlrpcmsg('namespacetest.findState', array(
-            new xmlrpcval(23, 'int'),
-        ));
-        $v = $this->send($m);
-        $this->assertEquals('Michigan', $v->scalarval());
     }
 
     public function testWrappedMethod()

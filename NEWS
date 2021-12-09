@@ -1,4 +1,4 @@
-XML-RPC for PHP version 4.6.0 - unreleased
+XML-RPC for PHP version 4.6.0 - 2021/12/9
 
 * fixed: compatibility with php 8.1
 
@@ -17,6 +17,9 @@ XML-RPC for PHP version 4.6.0 - unreleased
       $request->serialize($funkyCharset);
 
 * new: method `XMLParser::parse()` acquired a 4th argument
+
+* new: method `Wrapper::wrapPhpClass` allows to customize the names of the phpxmlrpc methods by stripping the original
+  class name and accompanying namespace and replace it with a user-defined prefix, via option `replace_class_name`
 
 * improved: Continuous Integration is now running on Github Actions instead of Travis
 

@@ -138,7 +138,7 @@ $c = new xmlrpcServerMethodsContainer();
 
 $moreSignatures = $wrapper->wrapPhpClass($c, array('prefix' => 'tests.', 'method_type' => 'all'));
 
-$namespaceSignatures = $wrapper->wrapPhpClass($c, array('namespace' => 'namespacetest', 'method_type' => 'all'));
+$namespaceSignatures = $wrapper->wrapPhpClass($c, array('prefix' => 'namespacetest.', 'replace_class_name' => true, 'method_filter' => '/^findState$/', 'method_type' => 'static'));
 
 $returnObj_sig =  $wrapper->wrapPhpFunction(array($c, 'returnObject'), '', array('encode_php_objs' => true));
 

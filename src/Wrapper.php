@@ -623,15 +623,13 @@ class Wrapper
      *                            - string method_type    'static', 'nonstatic', 'all' and 'auto' (default); the latter will switch between static and non-static depending on whether $className is a class name or object instance
      *                            - string method_filter  a regexp used to filter methods to wrap based on their names
      *                            - string prefix         used for the names of the xmlrpc methods created.
-     *                            - string namespace      use when classes with actual namespaces should only have one namespace. e.g. \Some\Namespace\Api is needed as my.Api set this to "my". Works in conjunction with prefix!
+     *                            - string replace_class_name use to completely replace the class name with the prefix in the generated method names. e.g. instead of \Some\Namespace\Class.method use prefixmethod
      * @return array|false false on failure
      */
     public function wrapPhpClass($className, $extraOptions = array())
     {
         $methodFilter = isset($extraOptions['method_filter']) ? $extraOptions['method_filter'] : '';
         $methodType = isset($extraOptions['method_type']) ? $extraOptions['method_type'] : 'auto';
-        $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : '';
-        $namespace = isset($extraOptions['namespace']) ? $extraOptions['namespace'] : '';
 
         $results = array();
         $mList = get_class_methods($className);
@@ -643,17 +641,9 @@ class Wrapper
                         (!$func->isStatic() && ($methodType == 'all' || $methodType == 'nonstatic' || ($methodType == 'auto' && is_object($className))))
                     ) {
                         $methodWrap = $this->wrapPhpFunction(array($className, $mName), '', $extraOptions);
+
                         if ($methodWrap) {
-                            if ($namespace) {
-                                $realClassName = $namespace;
-                            } else {
-                                if (is_object($className)) {
-                                    $realClassName = get_class($className);
-                                }else {
-                                    $realClassName = $className;
-                                }
-                            }
-                            $results[$prefix."$realClassName.$mName"] = $methodWrap;
+                            $results[$this->generateMethodNameForClassMethod($className, $mName, $extraOptions)] = $methodWrap;
                         }
                     }
                 }
@@ -661,6 +651,26 @@ class Wrapper
         }
 
         return $results;
+    }
+
+    /**
+     * @param string|object $className
+     * @param string $classMethod
+     * @param array $extraOptions
+     * @return string
+     */
+    protected function generateMethodNameForClassMethod($className, $classMethod, $extraOptions = array())
+    {
+        if (isset($extraOptions['replace_class_name']) && $extraOptions['replace_class_name']) {
+            return (isset($extraOptions['prefix']) ?  $extraOptions['prefix'] : '') . $classMethod;
+        }
+
+        if (is_object($className)) {
+            $realClassName = get_class($className);
+        } else {
+            $realClassName = $className;
+        }
+        return (isset($extraOptions['prefix']) ?  $extraOptions['prefix'] : '') . "$realClassName.$classMethod";
     }
 
     /**
