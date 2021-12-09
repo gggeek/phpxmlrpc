@@ -64,7 +64,7 @@ jobs:
                 run: |
                     ./tests/ci/setup/setup_code_coverage.sh enable
                     ./vendor/bin/phpunit -v --coverage-clover=coverage.clover tests
-                    wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+                    if [ -f coverage.clover ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
             -
                 if: ${{ matrix.php != '7.4' }}
                 run: './vendor/bin/phpunit -v tests'
