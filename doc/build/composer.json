@@ -1,0 +1,26 @@
+{
+    "name": "phpxmlrpc/phpxmlrpc-doc-toolchain",
+    "require-dev": {
+        "php": "^5.3.0 || ^7.0 || ^8.0",
+        "ext-xsl": "*",
+        "indeyets/pake": "^1.99",
+        "docbook/docbook-xsl": "^1.79",
+        "sami/sami": "^3.3 || ^4.1"
+    },
+    "config": {
+        "secure-http": false
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "docbook/docbook-xsl",
+                "version": "1.79.1",
+                "dist": {
+                    "url": "https://sourceforge.net/projects/docbook/files/docbook-xsl/1.79.1/docbook-xsl-1.79.1.zip/download",
+                    "type": "zip"
+                }
+            }
+        }
+    ]
+}

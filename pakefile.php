@@ -3,7 +3,7 @@
  * Makefile for phpxmlrpc library.
  * To be used with the Pake tool: https://github.com/indeyets/pake/wiki
  *
- * @copyright (c) 2015-2020 G. Giunta
+ * @copyright (c) 2015-2021 G. Giunta
  *
  * @todo !important allow user to specify location of docbook xslt instead of the one installed via composer
  */
@@ -40,6 +40,11 @@ class Builder
     public static function workspaceDir()
     {
         return self::buildDir().'/workspace';
+    }
+
+    public static function toolsDir()
+    {
+        return self::buildDir().'/tools';
     }
 
     /// most likely things will break if this one is moved outside of BuildDir
@@ -104,7 +109,6 @@ class Builder
      */
     public static function applyXslt($inFile, $xssFile, $outFileOrDir)
     {
-
         if (!file_exists($inFile)) {
             throw new \Exception("File $inFile cannot be found");
         }
@@ -256,9 +260,11 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
 
     // API docs
 
+    /// @todo sami is anbandonware, whereas phpdocumentor is not. switch back to phpdocumentor
+
     // from phpdoc comments using phpdocumentor
     //$cmd = Builder::tool('php');
-    //pake_sh("$cmd vendor/phpdocumentor/phpdocumentor/bin/phpdoc run -d ".Builder::workspaceDir().'/src'." -t ".Builder::workspaceDir().'/doc/api --title PHP-XMLRPC');
+    //pake_sh("$cmd " . Builder::toolsDir(). "/vendor/bin/phpdoc run -d ".Builder::workspaceDir().'/src'." -t ".Builder::workspaceDir().'/doc/api --title PHP-XMLRPC');
 
     // from phpdoc comments using Sami
     $samiConfig = <<<EOT
@@ -278,7 +284,7 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
 EOT;
     file_put_contents('build/sami_config.php', $samiConfig);
     $cmd = Builder::tool('php');
-    pake_sh("$cmd vendor/sami/sami/sami.php update -vvv build/sami_config.php");
+    pake_sh("$cmd " . Builder::toolsDir(). "/vendor/bin/sami.php update -vvv build/sami_config.php");
 
     // User Manual
 

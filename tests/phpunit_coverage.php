@@ -2,7 +2,7 @@
 /**
  * Used to serve back the server-side code coverage results to phpunit-selenium
  *
- * @copyright (C) 2007-2020 G. Giunta
+ * @copyright (C) 2007-2021 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  **/
 

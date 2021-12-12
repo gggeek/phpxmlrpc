@@ -15,18 +15,14 @@
         "yoast/phpunit-polyfills": "*",
         "ext-curl": "*",
         "ext-dom": "*",
-        "ext-mbstring": "*",
-        "ext-xsl": "*",
-        "indeyets/pake": "^1.99",
-        "docbook/docbook-xsl": "^1.79"
+        "ext-mbstring": "*"
     },
     "suggest": {
         "ext-curl": "Needed for HTTPS and HTTP 1.1 support, NTLM Auth etc...",
         "ext-zlib": "Needed for sending compressed requests and receiving compressed responses, if cURL is not available",
         "ext-mbstring": "Needed to allow reception of requests/responses in character sets other than ASCII,LATIN-1,UTF-8",
         "phpxmlrpc/extras": "Adds more featured Server classes and other useful bits",
-        "phpxmlrpc/jsonrpc": "Adds support for the JSON-RPC protocol",
-        "sami/sami": "Required for doc generation using pake. Version constraints: ^3.3 || ^4.1"
+        "phpxmlrpc/jsonrpc": "Adds support for the JSON-RPC protocol"
     },
     "_comment::conflict": "Within the extras package, only the XMLRPC extension emulation is not compatible... the JSONRPC part should be ok. Both have been moved to different packages anyway",
     "conflict": {
@@ -34,21 +30,5 @@
     },
     "autoload": {
         "psr-4": {"PhpXmlRpc\\": "src/"}
-    },
-    "config": {
-        "secure-http": false
-    },
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "docbook/docbook-xsl",
-                "version": "1.79.1",
-                "dist": {
-                    "url": "https://sourceforge.net/projects/docbook/files/docbook-xsl/1.79.1/docbook-xsl-1.79.1.zip/download",
-                    "type": "zip"
-                }
-            }
-        }
-    ]
+    }
 }
