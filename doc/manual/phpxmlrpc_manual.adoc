@@ -17,13 +17,10 @@ Main goals of the project are ease of use, flexibility and completeness.
 
 The original author is Edd Dumbill of link:$$http://usefulinc.com/$$[Useful Information Company]. As of the 1.0 stable
     release, the project was opened to wider involvement and moved to
-    link:$$http://phpxmlrpc.sourceforge.net/$$[SourceForge]; later, to link:$$https://github.com/gggeek/phpxmlrpc$$[Github]
+    link:$$https://sourceforge.net/projects/phpxmlrpc/$$[SourceForge]; later, to link:$$https://github.com/gggeek/phpxmlrpc$$[Github]
 
 XML-RPC is a format devised by link:$$http://www.userland.com/$$[Userland Software] for achieving remote procedure call
     via XML using HTTP as the transport. XML-RPC has its own web site, link:$$http://www.xmlrpc.com/$$[www.xmlrpc.com]
-
-A list of XML-RPC implementations for other languages such as Perl and Python can be found on the
-    link:$$http://www.xmlrpc.com/$$[www.xmlrpc.com] site.
 
 === Acknowledgements
 
@@ -53,9 +50,9 @@ Peter Kocks
 
 Daniel Krippner
 
-{empty}S. Kuip
+S. Kuip
 
-{empty}A. Lambert
+A. Lambert
 
 Frederic Lecointre
 
@@ -131,9 +128,9 @@ debugger/*:: a graphical debugger which can be used to test calls to xmlrpc serv
 
 demo/*:: example code for implementing both xmlrpc client and server functionality
 
-doc/*:: the documentation/ this manual, and the list of API changes between versions 3 and 4
+doc/*:: the documentation, including this manual, and the list of API changes between versions 3 and 4
 
-extras/test.pl, extras/test.py:: Perl and Python programs to exercise server.php to test that some of the methods work.
+extras/*:: php utility scripts, such as a benchmark suite and an evironment compatibility checker
 
 lib/*:: a compatibility layer for applications which still rely on version 3 of the API
 
@@ -143,7 +140,6 @@ tests/*:: the test suite for the library, written using PhpUnit, and the configu
 
 
 [[bugs]]
-
 == Known Bugs
 
 Known bugs are tracked using the link:$$https://github.com/gggeek/phpxmlrpc/issues$$[GitHub issue tracker]
@@ -166,14 +162,9 @@ Very little HTTP response checking is performed (e.g. HTTP redirects are not fol
     header, mandated by the xml-rpc spec, is not validated); cookie support still involves quite a bit of coding on the
     part of the user.
 
-Support for receiving from servers version 1 cookies (i.e. conforming to RFC 2965) is quite incomplete, and might cause
-    unforeseen errors.
-
 
 [[support]]
-
 == Support
-
 
 === Online Support
 
@@ -185,30 +176,27 @@ XML-RPC for PHP is offered "as-is" without any warranty or commitment to support
     posted to the link:$$https://github.com/gggeek/phpxmlrpc/issues$$[project's website].
 
 * The __PHP XML-RPC interest mailing list__ is run by the original author. More details
-    link:$$http://lists.gnomehack.com/mailman/listinfo/phpxmlrpc$$[can be found here].
+    link:$$https://lists.usefulinc.com/cgi-bin/mailman/listinfo/phpxmlrpc$$[can be found here].
 
 
 [[jellyfish]]
-
 === The Jellyfish Book
 
 image::progxmlrpc.s.gif[The Jellyfish Book]
 Together with Simon St.Laurent and Joe Johnston, Edd Dumbill wrote a book on XML-RPC for O'Reilly and Associates on
     XML-RPC. It features a rather fetching jellyfish on the cover.
 
-Complete details of the book are link:$$http://www.oreilly.com/catalog/progxmlrpc/$$[available from O'Reilly's web site.]
+Complete details of the book are link:$$https://www.oreilly.com/library/view/programming-web-services/0596001193/$$[available from O'Reilly's web site.]
 
 Edd is responsible for the chapter on PHP, which includes a worked example of creating a forum server, and hooking it up
-    the O'Reilly's link:$$http://meerkat.oreillynet.com/$$[Meerkat] service in order to allow commenting on news stories
+    the (now discontinued) O'Reilly's Meerkat service in order to allow commenting on news stories
     from around the Web.
 
 If you've benefited from the effort that has been put into writing this software, then please consider buying the book!
 
 
 [[apidocs]]
-
 == Class documentation
-
 
 ==== Notes on types
 
@@ -259,7 +247,6 @@ There is no support for encoding ++null++
           them, and uses the same encoding convention (see ...).
 
 [[xmlrpcval-creation]]
-
 ==== Xmlrpcval creation
 
 The constructor is the normal way to create an
@@ -288,12 +275,10 @@ Examples:
 
 [source, php]
 ----
-
 $myInt = new xmlrpcval(1267, "int");
 $myString = new xmlrpcval("Hello, World!", "string");
 $myBool = new xmlrpcval(1, "boolean");
 $myString2 = new xmlrpcval(1.24, "string"); // note: this will serialize a php float value as xmlrpc string
-
 ----
 
 The fourth constructor form can be used to compose complex
@@ -309,7 +294,6 @@ Examples:
 
 [source, php]
 ----
-
 $myArray = new xmlrpcval(
   array(
     new xmlrpcval("Tom"),
@@ -331,14 +315,12 @@ $myStruct = new xmlrpcval(
       "struct")
   ),
   "struct");
-
 ----
 
 See the file ++vardemo.php++ in this distribution
         for more examples.
 
 [[xmlrpc-client]]
-
 ==== Xmlrpc-client creation
 
 The constructor accepts one of two possible syntaxes:
@@ -350,10 +332,8 @@ xmlrpc_clientnew
 
 [source, php]
 ----
-
 $client = new xmlrpc_client("http://phpxmlrpc.sourceforge.net/server.php");
 $another_client = new xmlrpc_client("https://james:bond@secret.service.com:443/xmlrpcserver?agent=007");
-
 ----
 
 The second syntax does not allow to express a username and
@@ -366,15 +346,12 @@ Here's another example client set up to query Userland's XML-RPC
 
 [source, php]
 ----
-
 $client = new xmlrpc_client("/RPC2", "betty.userland.com", 80);
-
 ----
 
 The server_port parameter is optional,
         and if omitted will default to 80 when using HTTP and 443 when using
-        HTTPS (see the <<xmlrpc-client-send>> method
-        below).
+        HTTPS.
 
 The transport parameter is optional, and
         if omitted will default to 'http'. Allowed values are either
@@ -396,7 +373,6 @@ The implementation of this class has been kept as simple to use as
 
 [source, php]
 ----
-
   function foo ($xmlrpcmsg) {
     ...
     return new xmlrpcresp($some_xmlrpc_val);
@@ -414,7 +390,6 @@ The implementation of this class has been kept as simple to use as
       "examples.myFunc1" => array("function" => "foo"),
       "examples.myFunc2" => array("function" => "bar::foobar"),
     ));
-
 ----
 
 This performs everything you need to do with a server. The single
@@ -460,7 +435,6 @@ Here is a more detailed example of what the handler function
 
 [source, php]
 ----
-
   function foo ($xmlrpcmsg) {
     global $xmlrpcerruser; // import user errcode base value
 
@@ -479,7 +453,6 @@ Here is a more detailed example of what the handler function
       return new xmlrpcresp(new xmlrpcval("All's fine!", "string"));
     }
   }
-
 ----
 
 See __server.php__ in this distribution for
@@ -542,7 +515,6 @@ Look at the __server.php__ example in the
         distribution to see what a dispatch map looks like.
 
 [[signatures]]
-
 ==== Method signatures
 
 A signature is a description of a method's return type and its
@@ -551,24 +523,24 @@ A signature is a description of a method's return type and its
 Within a server's dispatch map, each method has an array of
         possible signatures. Each signature is an array of types. The first
         entry is the return type. For instance, the method
+
 [source, php]
 ----
 string examples.getStateName(int)
-
 ----
 
  has the signature
+
 [source, php]
 ----
 array($xmlrpcString, $xmlrpcInt)
-
 ----
 
  and, assuming that it is the only possible signature for the
         method, it might be used like this in server creation:
+
 [source, php]
 ----
-
 $findstate_sig = array(array($xmlrpcString, $xmlrpcInt));
 
 $findstate_doc = 'When passed an integer between 1 and 51 returns the
@@ -581,10 +553,7 @@ $s = new xmlrpc_server( array(
     "signature" => $findstate_sig,
     "docstring" => $findstate_doc
   )));
-
 ----
-
-
 
 Note that method signatures do not allow to check nested
         parameters, e.g. the number, names and types of the members of a
@@ -598,10 +567,8 @@ If a method that you want to expose has a definite number of
         used in method signatures as a placeholder for 'any xmlrpc
         type':
 
-
 [source, php]
 ----
-
 $echoback_sig = array(array($xmlrpcValue, $xmlrpcValue));
 
 $findstate_doc = 'Echoes back to the client the received value, regardless of its type';
@@ -612,7 +579,6 @@ $s = new xmlrpc_server( array(
     "signature" => $echoback_sig, // this sig guarantees that the method handler will be called with one and only one parameter
     "docstring" => $echoback_doc
   )));
-
 ----
 
 Methods system.listMethods,
@@ -621,7 +587,6 @@ Methods system.listMethods,
         system.multicall are already defined by the
         server, and should not be reimplemented (see Reserved Methods
         below).
-
 
 ==== Delaying the server response
 
@@ -635,13 +600,11 @@ You may want to construct the server, but for some reason not
 
 [source, php]
 ----
-
 $s = new xmlrpc_server($myDispMap, 0); // second parameter = 0 prevents automatic servicing of request
 
 // ... some code that does other stuff here
 
 $s->service();
-
 ----
 
 Note that the service method will print
@@ -659,10 +622,8 @@ To prevent the server from sending HTTP headers back to the
 Xmlrpc requests retrieved by other means than HTTP POST bodies
         can also be processed. For example:
 
-
 [source, php]
 ----
-
 $s = new xmlrpc_server(); // not passing a dispatch map prevents automatic servicing of request
 
 // ... some code that does other stuff here, including setting dispatch map into server object
@@ -670,9 +631,7 @@ $s = new xmlrpc_server(); // not passing a dispatch map prevents automatic servi
 $resp = $s->service($xmlrpc_request_body, true); // parse a variable instead of POST body, retrieve response payload
 
 // ... some code that does other stuff with xml response $resp here
-
 ----
-
 
 ==== Modifying the server behaviour
 
@@ -805,7 +764,6 @@ In the same spirit of simplification that inspired the
         words:
 [source, php]
 ----
-
   function foo($usr_id, $out_lang='en') {
     global $xmlrpcerruser;
 
@@ -833,7 +791,6 @@ In the same spirit of simplification that inspired the
     ), false);
   $s->functions_parameters_type = 'phpvals';
   $s->service();
-
 ----
 
 There are a few things to keep in mind when using this
@@ -868,7 +825,6 @@ last but not least, the direct parsing of xml to php values is
 
 
 [[globalvars]]
-
 == Global variables
 
 Many global variables are defined in the xmlrpc.inc file. Some of
@@ -894,7 +850,6 @@ For convenience the strings representing the XML-RPC types have
         been encoded as global variables:
 [source, php]
 ----
-
 $xmlrpcI4="i4";
 $xmlrpcI8="i8";
 $xmlrpcInt="int";
@@ -907,7 +862,6 @@ $xmlrpcArray="array";
 $xmlrpcStruct="struct";
 $xmlrpcValue="undefined";
 $xmlrpcNull="null";
-
 ----
 
 ==== $xmlrpcTypes, $xmlrpc_valid_parents, $xmlrpcerr, $xmlrpcstr, $xmlrpcerrxml, $xmlrpc_backslash, $_xh, $xml_iso88591_Entities, $xmlEntities, $xmlrpcs_capabilities
@@ -918,7 +872,6 @@ Reserved for internal usage.
 === Variables whose value can be modified
 
 [[xmlrpc-defencoding]]
-
 ==== xmlrpc_defencoding
 
 $xmlrpc_defencoding"UTF8"This variable defines the character set encoding that will be
@@ -955,13 +908,11 @@ $xmlrpc_internalencoding"ISO-8859-1"This variable defines the character set enco
 
 [source, php]
 ----
-
 <?php
 
 include('xmlrpc.inc');
 $xmlrpc_internalencoding = 'UTF-8'; // this has to be set after the inclusion above
 $v = new xmlrpcval('Îºá½¹ÏÎ¼Îµ'); // This xmlrpc value will be correctly serialized as the greek word 'kosme'
-
 ----
 
 ==== xmlrpcName
@@ -1003,7 +954,6 @@ When set to ++TRUE++, php NULL values encoded
 
 
 [[helpers]]
-
 == Helper functions
 
 XML-RPC for PHP contains some helper functions which you can use to
@@ -1037,7 +987,6 @@ For more information about dates, see link:$$http://www.uic.edu/year2000/datefmt
       representations: CCYYMMDDTHH:MM:SS.
 
 [[iso8601encode]]
-
 ==== iso8601_encode
 
 stringiso8601_encodestring$time_tint$utc0Returns an ISO 8601 formatted date generated from the UNIX
@@ -1055,7 +1004,6 @@ The included demo program __vardemo.php__
         includes a demonstration of this function.
 
 [[iso8601decode]]
-
 ==== iso8601_decode
 
 intiso8601_decodestring$isoStringint$utc0Returns a UNIX timestamp from an ISO 8601 encoded time and date
@@ -1066,7 +1014,6 @@ intiso8601_decodestring$isoStringint$utc0Returns a UNIX timestamp from an ISO 86
         local timestamp.
 
 [[arrayuse]]
-
 === Easy use with nested PHP values
 
 Dan Libby was kind enough to contribute two helper functions that
@@ -1081,7 +1028,6 @@ Dan Libby was kind enough to contribute two helper functions that
 These functions reside in __xmlrpc.inc__.
 
 [[phpxmlrpcdecode]]
-
 ==== php_xmlrpc_decode
 
 mixedphp_xmlrpc_decodexmlrpcval$xmlrpc_valarray$optionsarrayphp_xmlrpc_decodexmlrpcmsg$xmlrpcmsg_valstring$optionsReturns a native PHP value corresponding to the values found in
@@ -1119,7 +1065,6 @@ ____WARNING__:__ please take
 Example:
 [source, php]
 ----
-
 // wrapper to expose an existing php function as xmlrpc method handler
 function foo_wrapper($m)
 {
@@ -1133,11 +1078,9 @@ $s = new xmlrpc_server(array(
      "function" => "foo_wrapper",
      "signatures" => ...
   )));
-
 ----
 
 [[phpxmlrpcencode]]
-
 ==== php_xmlrpc_encode
 
 xmlrpcvalphp_xmlrpc_encodemixed$phpvalarray$optionsReturns an xmlrpcval object populated with the PHP
@@ -1171,7 +1114,6 @@ The first will enable the creation of 'particular' xmlrpcval
 Example:
 [source, php]
 ----
-
 // the easy way to build a complex xml-rpc struct, showing nested base64 value and datetime values
 $val = php_xmlrpc_encode(array(
   'first struct_element: an int' => 666,
@@ -1179,7 +1121,6 @@ $val = php_xmlrpc_encode(array(
   'third: a base64 element' => new xmlrpcval('hello world', 'base64'),
   'fourth: a datetime' => '20060107T01:53:00'
   ), array('auto_dates'));
-
 ----
 
 ==== php_xmlrpc_decode_xml
@@ -1196,11 +1137,9 @@ The options parameter is optional. If
 Example:
 [source, php]
 ----
-
 $text = '<value><array><data><value>Hello world</value></data></array></value>';
 $val = php_xmlrpc_decode_xml($text);
 if ($val) echo 'Found a value of type '.$val->kindOf(); else echo 'Found invalid xml';
-
 ----
 
 === Automatic conversion of php functions into xmlrpc methods (and vice versa)
@@ -1296,7 +1235,6 @@ Example usage:
 
 [source, php]
 ----
-
 $c = new xmlrpc_client('http://phpxmlrpc.sourceforge.net/server.php');
 
 $function = wrap_xmlrpc_method($client, 'examples.getStateName');
@@ -1314,11 +1252,9 @@ else {
   else
     echo "OK, state nr. $stateno is $statename";
 }
-
 ----
 
 [[wrap_php_function]]
-
 ==== wrap_php_function
 
 arraywrap_php_functionstring$funcnamestring$wrapper_function_namearray$extra_optionsGiven a user-defined PHP function, create a PHP 'wrapper'
@@ -1411,11 +1347,9 @@ $findstate_sig = wrap_php_function('findstate');
 if ($findstate_sig)
   $methods['examples.getStateName'] = $findstate_sig;
 $srv = new xmlrpc_server($methods);
-
 ----
 
 [[deprecated]]
-
 === Functions removed from the library
 
 The following two functions have been deprecated in version 1.1 of
@@ -1435,25 +1369,20 @@ To ease the transition to the new naming scheme and avoid breaking
             constant `XMLRPC_EPI_ENABLED` will be set to
             '1'
 
-
-
 The following documentation is kept for historical
       reference:
 
 [[xmlrpcdecode]]
-
 ==== xmlrpc_decode
 
 mixedx mlrpc_decode xmlrpcval $xmlrpc_val Alias for php_xmlrpc_decode.
 
 [[xmlrpcencode]]
-
 ==== xmlrpc_encode
 
 xmlrpcval xmlrpc_encode mixed $phpvalAlias for php_xmlrpc_encode.
 
 [[debugging]]
-
 === Debugging aids
 
 ==== xmlrpc_debugmsg
@@ -1469,7 +1398,6 @@ Use this function in your methods so you can pass back
 
 
 [[reserved]]
-
 == Reserved methods
 
 In order to extend the functionality offered by XML-RPC servers
@@ -1501,7 +1429,6 @@ The system.listMethods method requires no
       a method implemented by the server.
 
 [[sysmethodsig]]
-
 === system.methodSignature
 
 This method takes one parameter, the name of a method implemented
@@ -1530,19 +1457,16 @@ If no signature is defined for the method, a not-array value is
 
 [source, php]
 ----
-
 $v = $resp->value();
 if ($v->kindOf() != "array") {
   // then the method did not have a signature defined
 }
-
 ----
 
 See the __introspect.php__ demo included in this
       distribution for an example of using this method.
 
 [[sysmethhelp]]
-
 === system.methodHelp
 
 This method takes one parameter, the name of a method implemented
@@ -1569,14 +1493,12 @@ It returns a response of type array, with each value of the array
 
 
 [[examples]]
-
 == Examples
 
 The best examples are to be found in the sample files included with
     the distribution. Some are included here.
 
 [[statename]]
-
 === XML-RPC client: state name query
 
 Code to get the corresponding state name from a number (1-50) from
@@ -1584,7 +1506,6 @@ Code to get the corresponding state name from a number (1-50) from
 
 [source, php]
 ----
-
   $m = new xmlrpcmsg('examples.getStateName',
     array(new xmlrpcval($HTTP_POST_VARS["stateno"], "int")));
   $c = new xmlrpc_client("/server.php", "phpxmlrpc.sourceforge.net", 80);
@@ -1600,7 +1521,6 @@ Code to get the corresponding state name from a number (1-50) from
       print "Code: " . htmlentities($r->faultCode()) . "<BR>" .
             "Reason: '" . htmlentities($r->faultString()) . "'<BR>";
   }
-
 ----
 
 === Executing a multicall call
@@ -1610,7 +1530,7 @@ To be documented...
 
 [[faq]]
 
-[qanda]
+[[qanda]]
 == Frequently Asked Questions
 
 ==== How to send custom XML as payload of a method call::
@@ -1691,11 +1611,9 @@ If what you need is to save the responses received from the server
 
 [source, php]
 ----
-
 $resp = $client->send($msg);
 if (!$resp->faultCode())
   $data_to_be_saved = $resp->serialize();
-
 ----
 
 Note that this will not be 100% accurate, since the xml generated
@@ -1713,13 +1631,11 @@ Note that this will not be 100% accurate, since the xml generated
 
 [source, php]
 ----
-
 $client = new xmlrpc_client($url);
 $client->return_type = 'xml';
 $resp = $client->send($msg);
 if (!$resp->faultCode())
   $data_to_be_saved = $resp->value();
-
 ----
 
 Note that using this method the xml response response will not be
@@ -1768,7 +1684,6 @@ The code below uses sessions to e.g. let the client store a value
 
 [source, php]
 ----
-
 $resp = $client->send(new xmlrpcmsg('registervalue', array(new xmlrpcval('foo'), new xmlrpcval('bar'))));
 if (!$resp->faultCode())
 {
@@ -1783,7 +1698,6 @@ if (!$resp->faultCode())
     $val = $client->send(new xmlrpcmsg('getvalue', array(new xmlrpcval('foo')));
   }
 }
-
 ----
 
 Server-side sessions are handled normally like in any other
@@ -1797,7 +1711,6 @@ NB: unlike web browsers, not all xmlrpc clients support usage of
 
 
 [[integration]]
-
 [appendix]
 == Integration with the PHP xmlrpc extension
 
@@ -1810,7 +1723,6 @@ In short: for the fastest execution possible, you can enable the php
 
 [source, php]
 ----
-
 /*** client side ***/
 $c = new xmlrpc_client('http://phpxmlrpc.sourceforge.net/server.php');
 
@@ -1837,12 +1749,9 @@ else
   else
     echo'Got response: '.htmlentities($v);
 }
-
 ----
 
-
 [[substitution]]
-
 [appendix]
 == Substitution of the PHP xmlrpc extension
 
@@ -1861,7 +1770,6 @@ Since version 2.1, the PHP-XMLRPC library provides a compatibility
 
 
 [[enough]]
-
 [appendix]
 == 'Enough of xmlrpcvals!': new style library usage
 
@@ -1873,7 +1781,6 @@ In the meantime, see docs about xmlrpc_client::return_type and
 
 
 [[debugger]]
-
 [appendix]
 == Usage of the debugger
 
@@ -1905,7 +1812,6 @@ The debugger can take advantage of the JSONRPC library extension, to
           either to the same directory as the debugger or somewhere in your
           php include path
 
-
 * to enable the visual value editing dialog, download the
           JS-XMLRPC library, and copy somewhere in the web root files
           __visualeditor.php__,
@@ -1914,11 +1820,8 @@ The debugger can take advantage of the JSONRPC library extension, to
           debugger file __controller.php__ and set
           appropriately the variable $editorpath.
 
-
 [[news]]
-
 [appendix]
-
 == Whats's new
 
 CAUTION: not all items the following list have (yet) been fully documented, and some might not be present in any other

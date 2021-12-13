@@ -156,9 +156,10 @@ class Http
             if (count($arr) > 1) {
                 $headerName = strtolower(trim($arr[0]));
                 /// @todo some other headers (the ones that allow a CSV list of values)
-                /// do allow many values to be passed using multiple header lines.
-                /// We should add content to $xmlrpc->_xh['headers'][$headerName]
-                /// instead of replacing it for those...
+                ///       do allow many values to be passed using multiple header lines.
+                ///       We should add content to $xmlrpc->_xh['headers'][$headerName]
+                ///       instead of replacing it for those...
+                /// @todo should we drop support for rfc2965 (set-cookie2) cookies? It has been obsoleted since 2011
                 if ($headerName == 'set-cookie' || $headerName == 'set-cookie2') {
                     if ($headerName == 'set-cookie2') {
                         // version 2 cookies:
