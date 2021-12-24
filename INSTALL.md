@@ -29,7 +29,7 @@ Installation of the library is quite easy:
 
     3.  Open a terminal and use Composer to grab the library.
 
-            $ composer require phpxmlrpc/phpxmlrpc:4
+            $ composer require phpxmlrpc/phpxmlrpc:^4
 
     4.  Write your code.
         Once Composer has downloaded the component(s), all you need to do is include the vendor/autoload.php file that
