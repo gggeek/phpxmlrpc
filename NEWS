@@ -1,3 +1,8 @@
+XML-RPC for PHP version 4.6.1 - 2022/2/15
+
+* fixed: one php warning with php 8 and up
+
+
 XML-RPC for PHP version 4.6.0 - 2021/12/9
 
 * fixed: compatibility with php 8.1
