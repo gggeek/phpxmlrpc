@@ -3,6 +3,7 @@
 # Has to be run as admin
 
 # @todo make it optional to install xdebug. It is fe. missing in sury's ppa for Xenial
+# @todo make it optional to install fpm. It is not needed for the cd workflow
 # @todo make it optional to disable xdebug ?
 
 set -e
@@ -80,6 +81,8 @@ fi
 
 service php-fpm start
 
-# configure apache
-a2enconf php${PHPVER}-fpm
-service apache2 restart
+# configure apache (if installed)
+if [ -n "$(dpkg --list | grep apache)" ]; then
+    a2enconf php${PHPVER}-fpm
+    service apache2 restart
+fi
