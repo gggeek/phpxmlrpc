@@ -321,6 +321,11 @@ function mailSend($req)
     }
 }
 
+function timedout()
+{
+    sleep(10);
+}
+
 return array(
     "examples.getStateName" => array(
         "function" => "findState",
@@ -351,6 +356,9 @@ return array(
         "function" => "echoBack",
         "signature" => $echoback_sig,
         "docstring" => $echoback_doc,
+    ),
+    "examples.timedout" => array(
+        "function" => "timedout",
     ),
     "examples.decode64" => array(
         "function" => "echoSixtyFour",

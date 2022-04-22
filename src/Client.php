@@ -827,6 +827,13 @@ class Client
         // It should yield slightly better execution times, and make easier recursive calls (e.g. to follow http redirects)
         $ipd = '';
         do {
+            $info = stream_get_meta_data($fp);
+
+            if ($info['timed_out']) {
+                $r = new Response(0, PhpXmlRpc::$xmlrpcerr['timed_out'], PhpXmlRpc::$xmlrpcstr['timed_out']);
+
+                return $r;
+            }
             // shall we check for $data === FALSE?
             // as per the manual, it signals an error
             $ipd .= fread($fp, 32768);
@@ -1075,7 +1082,7 @@ class Client
             $this->getLogger()->debugMessage($message);
         }
 
-        if (!$result) {
+        if (!$result || curl_errno($curl)) {
             /// @todo we should use a better check here - what if we get back '' or '0'?
 
             $this->errstr = 'no response';
