@@ -1,3 +1,10 @@
+XML-RPC for PHP version 4.7.0 - 2022/5/25
+
+* new: HTTP/2 is supported by both the Client and Server components (with the php cURL extension being required to use
+  it client-side).
+  To force the client to use http/2 and http/2-tls requests, pass `http2` or `http2tls` as 3rd argument to `Client::send`.
+
+
 XML-RPC for PHP version 4.6.1 - 2022/2/15
 
 * fixed: one php warning with php 8 and up
