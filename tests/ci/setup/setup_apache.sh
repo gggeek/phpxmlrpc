@@ -12,7 +12,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y apache2
 
 # set up Apache for php-fpm
 
-a2enmod rewrite proxy_fcgi setenvif ssl
+a2enmod rewrite proxy_fcgi setenvif ssl http2
 
 # in case mod-php was enabled (this is the case at least on GHA's ubuntu with php 5.x and shivammathur/setup-php)
 # @todo silence errors in a smarter way

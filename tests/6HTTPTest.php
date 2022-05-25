@@ -307,6 +307,51 @@ class HTTPTest extends ServerTest
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
      */
+    public function testHttp2($method)
+    {
+        if (!function_exists('curl_init'))
+        {
+            $this->markTestSkipped('CURL missing: cannot test http/2');
+            return;
+        }
+
+        $this->method = 'http2'; // not an error the double assignment!
+        $this->client->method = 'http2';
+        //$this->client->keepalive = false; // q: is this a good idea?
+        $this->$method();
+    }
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
+    public function testHttp2tls($method)
+    {
+        if (!function_exists('curl_init'))
+        {
+            $this->markTestSkipped('CURL missing: cannot test http/2 tls');
+            return;
+        } else if ($this->args['HTTPSSERVER'] == '')
+        {
+            $this->markTestSkipped('HTTPS SERVER definition missing: cannot test http/2 tls');
+            return;
+        }
+
+        $this->client->server = $this->args['HTTPSSERVER'];
+        $this->method = 'http2tls';
+        $this->client->method = 'http2tls';
+        $this->client->path = $this->args['HTTPSURI'];
+        $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
+        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
+        $this->client->setSSLVersion($this->args['SSLVERSION']);
+
+        $this->$method();
+    }
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
     public function testUTF8Responses($method)
     {
         $this->addQueryParams(array('RESPONSE_ENCODING' => 'UTF-8'));

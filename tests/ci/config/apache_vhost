@@ -2,6 +2,9 @@
 # HTTPSERVER
 # TESTS_ROOT_DIR
 
+# Enable http2
+Protocols h2 h2c http/1.1
+
 <VirtualHost *:80>
 
   DocumentRoot ${TESTS_ROOT_DIR}
