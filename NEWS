@@ -1,4 +1,13 @@
+XML-RPC for PHP version 4.7.1 - 2022/5/25
+
+* fixed: http/2 on non-https requests works in either "prior-knowledge" mode or "upgrade" mode, known as h2c.
+  Given the fact that h2c is not compatible with POST requests, we switched to using "prior-knowledge" mode for requests
+  sent with the `http2` argument passed to the client's constructor or `send` method.
+  NB: this means that requests sent with `http2` are only compatible with servers and proxies known to be http/2 compliant.
+
+
 XML-RPC for PHP version 4.7.0 - 2022/5/25
+
 
 * new: HTTP/2 is supported by both the Client and Server components (with the php cURL extension being required to use
   it client-side).

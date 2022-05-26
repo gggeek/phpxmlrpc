@@ -137,16 +137,17 @@ class Client
      *                     should use and empty string for all other parameters)
      *                     e.g. /xmlrpc/server.php
      *                     e.g. http://phpxmlrpc.sourceforge.net/server.php
-     *                     e.g. https://james:bond@secret.service.com:443/xmlrpcserver?agent=007
-     *                     e.g. http2tls://fast-and-secure-services/endpoint
+     *                     e.g. https://james:bond@secret.service.com:444/xmlrpcserver?agent=007
+     *                     e.g. http2tls://fast-and-secure-services.org/endpoint
      * @param string $server the server name / ip address
      * @param integer $port the port the server is listening on, when omitted defaults to 80 or 443 depending on
      *                      protocol used
-     * @param string $method the http protocol variant: defaults to 'http'; 'https', 'http11', 'http2' and 'http2tls' can
+     * @param string $method the http protocol variant: defaults to 'http'; 'https', 'http11', 'http2tls' and 'http2' can
      *                       be used if CURL is installed. The value set here can be overridden in any call to $this->send().
-     *                       Use 'http2' to make the lib attempt to use http/2 without tls and 'http2tls' for secure http/2
-     *                       (note that 'http2' will most likely not result in an http/2 connection in any case, as it
-     *                       seems that upgrading a POST request on the fly from http is hard or impossible)
+     *                       Use 'http2tls' to make the lib attempt to use http/2 over a secure connection, and 'http2'
+     *                       for http/2 without tls. Note that 'http2' will not use the h2c 'upgrade' method, and be
+     *                       thus incompatible with any server/proxy not supporting http/2. This is because POST
+     *                       request are not compatible with h2c.
      */
     public function __construct($path, $server = '', $port = '', $method = '')
     {
@@ -480,11 +481,12 @@ class Client
      *                         This timeout value is passed to fsockopen(). It is also used for detecting server
      *                         timeouts during communication (i.e. if the server does not send anything to the client
      *                         for $timeout seconds, the connection will be closed).
-     * @param string $method valid values are 'http', 'http11', 'https', 'http2' and 'http2tls'. If left unspecified,
+     * @param string $method valid values are 'http', 'http11', 'https', 'http2tls' and 'http2'. If left unspecified,
      *                       the http protocol chosen during creation of the object will be used.
-     *                       Use 'http2' to make the lib attempt to use http/2 without tls and 'http2tls' for secure http/2
-     *                       (note that 'http2' will most likely not result in an http/2 connection in any case, as it
-     *                       seems that upgrading a POST request on the fly from http is hard or impossible)
+     *                       Use 'http2tls' to make the lib attempt to use http/2 over a secure connection, and 'http2'
+     *                       for http/2 without tls. Note that 'http2' will not use the h2c 'upgrade' method, and be
+     *                       thus incompatible with any server/proxy not supporting http/2. This is because POST
+     *                       request are not compatible with h2c.
      *
      * @return Response|Response[] Note that the client will always return a Response object, even if the call fails
      * @todo allow throwing exceptions instead of returning responses in case of failed calls and/or Fault responses
@@ -883,14 +885,17 @@ class Client
             $this->errstr = 'CURL unavailable on this install';
             return new Response(0, PhpXmlRpc::$xmlrpcerr['no_curl'], PhpXmlRpc::$xmlrpcstr['no_curl']);
         }
-        if ($method == 'https') {
+        if ($method == 'https' || $method == 'http2tls') {
+            // q: what about installs where we get back a string, but curl is linked to other ssl libs than openssl?
             if (($info = curl_version()) &&
                 ((is_string($info) && strpos($info, 'OpenSSL') === null) || (is_array($info) && !isset($info['ssl_version'])))
             ) {
                 $this->errstr = 'SSL unavailable on this install';
                 return new Response(0, PhpXmlRpc::$xmlrpcerr['no_ssl'], PhpXmlRpc::$xmlrpcstr['no_ssl']);
             }
-        } elseif (($method == 'http2' || $method == 'http2tls') && !defined('CURL_HTTP_VERSION_2')) {
+        }
+        if (($method == 'http2tls' && !defined('CURL_HTTP_VERSION_2TLS')) ||
+            ($method == 'http2' && !defined('CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE'))) {
             $this->errstr = 'HTTP/2 unavailable on this install';
             return new Response(0, PhpXmlRpc::$xmlrpcerr['no_http2'], PhpXmlRpc::$xmlrpcstr['no_http2']);
         }
@@ -1006,7 +1011,7 @@ class Client
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
                 break;
             case 'http2':
-                curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2);
+                curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
                 break;
             case 'http2tls':
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);

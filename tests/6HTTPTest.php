@@ -315,7 +315,7 @@ class HTTPTest extends ServerTest
         {
             $this->markTestSkipped('CURL missing: cannot test http/2');
             return;
-        } else if (!defined('CURL_HTTP_VERSION_2'))
+        } else if (!defined('CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE'))
         {
             $this->markTestSkipped('CURL http/2 support missing: cannot test http/2');
             return;
@@ -325,10 +325,9 @@ class HTTPTest extends ServerTest
         $this->client->method = 'http2';
         //$this->client->keepalive = false; // q: is this a good idea?
 
-        /// @todo we disable checking for HTTP2 on plain http calls, as that is unsupported for POST requests
-        //$this->expectHttp2 = true;
+        $this->expectHttp2 = true;
         $this->$method();
-        //$this->expectHttp2 = false;
+        $this->expectHttp2 = false;
     }
 
     /**
@@ -345,7 +344,7 @@ class HTTPTest extends ServerTest
         {
             $this->markTestSkipped('HTTPS SERVER definition missing: cannot test http/2 tls');
             return;
-        } else if (!defined('CURL_HTTP_VERSION_2'))
+        } else if (!defined('CURL_HTTP_VERSION_2TLS'))
         {
             $this->markTestSkipped('CURL http/2 support missing: cannot test http/2 tls');
             return;
