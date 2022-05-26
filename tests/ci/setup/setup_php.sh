@@ -81,8 +81,12 @@ fi
 
 service php-fpm start
 
-# configure apache (if installed)
+# reconfigure apache (if installed). Sadly, php will switch on mod-php and mpm_prefork at install time...
 if [ -n "$(dpkg --list | grep apache)" ]; then
+    # @todo silence errors in a smarter way
+    rm /etc/apache2/mods-enabled/php* || true
+    a2dismod mpm_prefork
+    a2enmod mpm_event
     a2enconf php${PHPVER}-fpm
     service apache2 restart
 fi

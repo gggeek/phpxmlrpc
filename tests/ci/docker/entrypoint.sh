@@ -73,6 +73,8 @@ service apache2 start
 echo "[$(date)] Starting Privoxy..."
 service privoxy start
 
+echo "[$(date)] Bootstrap finished"
+
 tail -f /dev/null &
 child=$!
 wait "$child"

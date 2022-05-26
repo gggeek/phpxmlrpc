@@ -2,7 +2,7 @@
 
 # Install and configure apache2
 # Has to be run as admin
-# @todo make this work across all ubuntu versions (precise to focal)
+# @todo make this work across all ubuntu versions (precise to jammy)
 
 set -e
 

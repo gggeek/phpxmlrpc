@@ -325,9 +325,10 @@ class HTTPTest extends ServerTest
         $this->client->method = 'http2';
         //$this->client->keepalive = false; // q: is this a good idea?
 
-        $this->expectHttp2 = true;
+        /// @todo we disable checking for HTTP2 on plain http calls, as that is unsupported for POST requests
+        //$this->expectHttp2 = true;
         $this->$method();
-        $this->expectHttp2 = false;
+        //$this->expectHttp2 = false;
     }
 
     /**
@@ -445,9 +446,9 @@ class HTTPTest extends ServerTest
      */
     protected function validateResponse($r)
     {
-        /// @todo check $r->httpResponse()['protocol_version']
         if ($this->expectHttp2) {
-
+            $hr = $r->httpResponse();
+            $this->assertEquals("2", $hr['protocol_version']);
         } else {
 
         }

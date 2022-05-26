@@ -2,10 +2,16 @@
 # HTTPSERVER
 # TESTS_ROOT_DIR
 
+<IfModule http2_module>
+  LogLevel http2:info
+</IfModule>
+
 <VirtualHost *:80>
 
-  # Enable http2
-  Protocols h2c http/1.1
+  <IfModule http2_module>
+    # Enable http2
+    Protocols h2c http/1.1
+  </IfModule>
 
   DocumentRoot ${TESTS_ROOT_DIR}
 
@@ -33,8 +39,10 @@
 
 <VirtualHost _default_:443>
 
-  # Enable http2
-  Protocols h2 http/1.1
+  <IfModule http2_module>
+    # Enable http2
+    Protocols h2 http/1.1
+  </IfModule>
 
   DocumentRoot ${TESTS_ROOT_DIR}
 
