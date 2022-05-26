@@ -894,7 +894,7 @@ class Client
                 return new Response(0, PhpXmlRpc::$xmlrpcerr['no_ssl'], PhpXmlRpc::$xmlrpcstr['no_ssl']);
             }
         }
-        if (($method == 'http2tls' && !defined('CURL_HTTP_VERSION_2TLS')) ||
+        if (($method == 'http2tls' && !defined('CURL_HTTP_VERSION_2_0')) ||
             ($method == 'http2' && !defined('CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE'))) {
             $this->errstr = 'HTTP/2 unavailable on this install';
             return new Response(0, PhpXmlRpc::$xmlrpcerr['no_http2'], PhpXmlRpc::$xmlrpcstr['no_http2']);
@@ -1014,7 +1014,7 @@ class Client
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
                 break;
             case 'http2tls':
-                curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
+                curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
                 break;
         }
 

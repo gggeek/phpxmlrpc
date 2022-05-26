@@ -344,7 +344,7 @@ class HTTPTest extends ServerTest
         {
             $this->markTestSkipped('HTTPS SERVER definition missing: cannot test http/2 tls');
             return;
-        } else if (!defined('CURL_HTTP_VERSION_2TLS'))
+        } else if (!defined('CURL_HTTP_VERSION_2_0'))
         {
             $this->markTestSkipped('CURL http/2 support missing: cannot test http/2 tls');
             return;
