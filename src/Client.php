@@ -138,16 +138,16 @@ class Client
      *                     e.g. /xmlrpc/server.php
      *                     e.g. http://phpxmlrpc.sourceforge.net/server.php
      *                     e.g. https://james:bond@secret.service.com:444/xmlrpcserver?agent=007
-     *                     e.g. http2tls://fast-and-secure-services.org/endpoint
+     *                     e.g. h2://fast-and-secure-services.org/endpoint
      * @param string $server the server name / ip address
      * @param integer $port the port the server is listening on, when omitted defaults to 80 or 443 depending on
      *                      protocol used
-     * @param string $method the http protocol variant: defaults to 'http'; 'https', 'http11', 'http2tls' and 'http2' can
+     * @param string $method the http protocol variant: defaults to 'http'; 'https', 'http11', 'h2' and 'h2c' can
      *                       be used if CURL is installed. The value set here can be overridden in any call to $this->send().
-     *                       Use 'http2tls' to make the lib attempt to use http/2 over a secure connection, and 'http2'
-     *                       for http/2 without tls. Note that 'http2' will not use the h2c 'upgrade' method, and be
+     *                       Use 'h2' to make the lib attempt to use http/2 over a secure connection, and 'h2c'
+     *                       for http/2 without tls. Note that 'h2c' will not use the h2c 'upgrade' method, and be
      *                       thus incompatible with any server/proxy not supporting http/2. This is because POST
-     *                       request are not compatible with h2c.
+     *                       request are not compatible with h2c upgrade.
      */
     public function __construct($path, $server = '', $port = '', $method = '')
     {
@@ -481,12 +481,12 @@ class Client
      *                         This timeout value is passed to fsockopen(). It is also used for detecting server
      *                         timeouts during communication (i.e. if the server does not send anything to the client
      *                         for $timeout seconds, the connection will be closed).
-     * @param string $method valid values are 'http', 'http11', 'https', 'http2tls' and 'http2'. If left unspecified,
+     * @param string $method valid values are 'http', 'http11', 'https', 'h2' and 'h2c'. If left unspecified,
      *                       the http protocol chosen during creation of the object will be used.
-     *                       Use 'http2tls' to make the lib attempt to use http/2 over a secure connection, and 'http2'
-     *                       for http/2 without tls. Note that 'http2' will not use the h2c 'upgrade' method, and be
+     *                       Use 'h2' to make the lib attempt to use http/2 over a secure connection, and 'h2c'
+     *                       for http/2 without tls. Note that 'h2c' will not use the h2c 'upgrade' method, and be
      *                       thus incompatible with any server/proxy not supporting http/2. This is because POST
-     *                       request are not compatible with h2c.
+     *                       request are not compatible with h2c upgrade.
      *
      * @return Response|Response[] Note that the client will always return a Response object, even if the call fails
      * @todo allow throwing exceptions instead of returning responses in case of failed calls and/or Fault responses
@@ -516,7 +516,7 @@ class Client
         /// @todo we could be smarter about this and force usage of curl in scenarios where it is both available and
         ///       needed, such as digest or ntlm auth. Do not attempt to use it for https if not present
         $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO &&
-            (in_array($method, array('https', 'http11', 'http2', 'http2tls'))));
+            (in_array($method, array('https', 'http11', 'h2c', 'h2'))));
 
         if ($useCurl) {
             $r = $this->sendPayloadCURL(
@@ -869,7 +869,7 @@ class Client
      * @param string $proxyUsername
      * @param string $proxyPassword
      * @param int $proxyAuthType
-     * @param string $method 'http' (let curl decide), 'http10', 'http11', 'https', 'http2' or 'http2tls'
+     * @param string $method 'http' (let curl decide), 'http10', 'http11', 'https', 'h2c' or 'h2'
      * @param bool $keepAlive
      * @param string $key
      * @param string $keyPass
@@ -885,7 +885,7 @@ class Client
             $this->errstr = 'CURL unavailable on this install';
             return new Response(0, PhpXmlRpc::$xmlrpcerr['no_curl'], PhpXmlRpc::$xmlrpcstr['no_curl']);
         }
-        if ($method == 'https' || $method == 'http2tls') {
+        if ($method == 'https' || $method == 'h2') {
             // q: what about installs where we get back a string, but curl is linked to other ssl libs than openssl?
             if (($info = curl_version()) &&
                 ((is_string($info) && strpos($info, 'OpenSSL') === null) || (is_array($info) && !isset($info['ssl_version'])))
@@ -894,14 +894,14 @@ class Client
                 return new Response(0, PhpXmlRpc::$xmlrpcerr['no_ssl'], PhpXmlRpc::$xmlrpcstr['no_ssl']);
             }
         }
-        if (($method == 'http2tls' && !defined('CURL_HTTP_VERSION_2_0')) ||
-            ($method == 'http2' && !defined('CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE'))) {
+        if (($method == 'h2' && !defined('CURL_HTTP_VERSION_2_0')) ||
+            ($method == 'h2c' && !defined('CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE'))) {
             $this->errstr = 'HTTP/2 unavailable on this install';
             return new Response(0, PhpXmlRpc::$xmlrpcerr['no_http2'], PhpXmlRpc::$xmlrpcstr['no_http2']);
         }
 
         if ($port == 0) {
-            if (in_array($method, array('http', 'http10', 'http11', 'http2'))) {
+            if (in_array($method, array('http', 'http10', 'http11', 'h2c'))) {
                 $port = 80;
             } else {
                 $port = 443;
@@ -938,10 +938,10 @@ class Client
         }
 
         if (!$keepAlive || !$this->xmlrpc_curl_handle) {
-            if ($method == 'http11' || $method == 'http10' || $method == 'http2') {
+            if ($method == 'http11' || $method == 'http10' || $method == 'h2c') {
                 $protocol = 'http';
             } else {
-                if ($method == 'http2tls') {
+                if ($method == 'h2') {
                     $protocol = 'https';
                 } else {
                     $protocol = $method;
@@ -1010,10 +1010,10 @@ class Client
             case 'http11':
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
                 break;
-            case 'http2':
+            case 'h2c':
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
                 break;
-            case 'http2tls':
+            case 'h2':
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
                 break;
         }
@@ -1027,7 +1027,7 @@ class Client
             }
         }
 
-        if ($method == 'https' || $method == 'http2tls') {
+        if ($method == 'https' || $method == 'h2') {
             // set cert file
             if ($cert) {
                 curl_setopt($curl, CURLOPT_SSLCERT, $cert);
@@ -1184,6 +1184,7 @@ class Client
         if ($fallback) {
             // system.multicall is (probably) unsupported by server:
             // emulate multicall via multiple requests
+            /// @todo use curl multi_ functions to make this quicker
             foreach ($reqs as $req) {
                 $results[] = $this->send($req, $timeout, $method);
             }

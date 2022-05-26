@@ -9,7 +9,6 @@
  * @todo add a check for response ok in call testing
  * @todo add support for --help option to give users the list of supported parameters
  * @todo make number of test iterations flexible
- * @todo add https tests
  **/
 
 use PhpXmlRpc\PhpXmlRpc;
@@ -89,6 +88,7 @@ if ($is_web) {
     }
 }
 
+/*
 // test 'manual style' data encoding vs. 'automatic style' encoding
 begin_test('Data encoding (large array)', 'manual encoding');
 for ($i = 0; $i < $num_tests; $i++) {
@@ -199,11 +199,14 @@ if (function_exists('xmlrpc_decode')) {
     end_test('Data decoding (large array)', 'xmlrpc-epi decoding', $value);
 }
 
+*/
+
 if (!$xd) {
 
     $num_tests = 25;
 
-    /// test multicall vs. many calls vs. keep-alives
+    /// test multicall vs. many calls vs. keep-alives - HTTP
+
     $encoder = new Encoder();
     $value = $encoder->encode($data1, array('auto_dates'));
     $req = new Request('interopEchoTests.echoValue', array($value));
@@ -211,23 +214,22 @@ if (!$xd) {
     for ($i = 0; $i < $num_tests; $i++) {
         $reqs[] = $req;
     }
+
     $server = explode(':', $args['HTTPSERVER']);
     if (count($server) > 1) {
-        $srv = $server[1] . '://' . $server[0] . $args['HTTPURI'];
+        $srv = 'http://' . $server[0] . '://' . $server[1] . $args['HTTPURI'];
         $c = new Client($args['HTTPURI'], $server[0], $server[1]);
     } else {
-        $srv = $args['HTTPSERVER'] . $args['HTTPURI'];
+        $srv = 'http://' . $args['HTTPSERVER'] . $args['HTTPURI'];
         $c = new Client($args['HTTPURI'], $args['HTTPSERVER']);
     }
+
     // do not interfere with http compression
-    $c->accepted_compression = array();
-    //$c->debug=true;
+    $c->setAcceptedCompression(false);
+    //$c->debug = 1;
 
     $testName = "Repeated send (small array) to $srv";
 
-    if (function_exists('gzinflate')) {
-        $c->accepted_compression = null;
-    }
     begin_test($testName, 'http 10');
     $response = array();
     for ($i = 0; $i < $num_tests; $i++) {
@@ -237,6 +239,15 @@ if (!$xd) {
     end_test($testName, 'http 10', $response);
 
     if (function_exists('curl_init')) {
+        $c->keepalive = false;
+        begin_test($testName, 'http 11 no keepalive');
+        $response = array();
+        for ($i = 0; $i < $num_tests; $i++) {
+            $resp = $c->send($req, 10, 'http11');
+            $response[] = $resp->value();
+        }
+        end_test($testName, 'http 11 no keepalive', $response);
+
         begin_test($testName, 'http 11 w. keep-alive');
         $response = array();
         for ($i = 0; $i < $num_tests; $i++) {
@@ -244,17 +255,10 @@ if (!$xd) {
             $response[] = $resp->value();
         }
         end_test($testName, 'http 11 w. keep-alive', $response);
-
-        $c->keepalive = false;
-        begin_test($testName, 'http 11');
-        $response = array();
-        for ($i = 0; $i < $num_tests; $i++) {
-            $resp = $c->send($req, 10, 'http11');
-            $response[] = $resp->value();
-        }
-        end_test($testName, 'http 11', $response);
+        $c->xmlrpc_curl_handle = null;
     }
 
+    // this is a single http call - keepalive on/off does not bother us
     begin_test($testName, 'multicall');
     $response = $c->send($reqs);
     foreach ($response as $key => & $val) {
@@ -275,6 +279,16 @@ if (!$xd) {
         end_test($testName, 'http 10 w. compression', $response);
 
         if (function_exists('curl_init')) {
+            $c->keepalive = false;
+            begin_test($testName, 'http 11 w. compression and no keepalive');
+            $response = array();
+            for ($i = 0; $i < $num_tests; $i++) {
+                $resp = $c->send($req, 10, 'http11');
+                $response[] = $resp->value();
+            }
+            end_test($testName, 'http 11 w. compression and no keepalive', $response);
+
+            $c->keepalive = true;
             begin_test($testName, 'http 11 w. keep-alive and compression');
             $response = array();
             for ($i = 0; $i < $num_tests; $i++) {
@@ -282,15 +296,7 @@ if (!$xd) {
                 $response[] = $resp->value();
             }
             end_test($testName, 'http 11 w. keep-alive and compression', $response);
-
-            $c->keepalive = false;
-            begin_test($testName, 'http 11 w. compression');
-            $response = array();
-            for ($i = 0; $i < $num_tests; $i++) {
-                $resp = $c->send($req, 10, 'http11');
-                $response[] = $resp->value();
-            }
-            end_test($testName, 'http 11 w. compression', $response);
+            $c->xmlrpc_curl_handle = null;
         }
 
         begin_test($testName, 'multicall w. compression');
@@ -299,6 +305,162 @@ if (!$xd) {
             $val = $val->value();
         }
         end_test($testName, 'multicall w. compression', $response);
+    }
+
+    if (function_exists('curl_init')) {
+
+        /// test multicall vs. many calls vs. keep-alives - HTTPS
+
+        $server = explode(':', $args['HTTPSSERVER']);
+        if (count($server) > 1) {
+            $srv = 'https://' . $server[0] . ':' . $server[1] . $args['HTTPSURI'];
+            $c = new Client($args['HTTPSURI'], $server[0], $server[1], 'https');
+        } else {
+            $srv = 'https://' . $args['HTTPSSERVER'] . $args['HTTPSURI'];
+            $c = new Client($args['HTTPSURI'], $args['HTTPSSERVER'], 443, 'https');
+        }
+        $c->setSSLVerifyPeer(!$args['HTTPSIGNOREPEER']);
+        $c->setSSLVerifyHost($args['HTTPSVERIFYHOST']);
+        // do not interfere with http compression
+        $c->setAcceptedCompression(false);
+        //$c->debug = 1;
+
+        $testName = "Repeated send (small array) to $srv";
+
+        begin_test($testName, 'https no keep-alive');
+        $c->keepalive = false;
+        $response = array();
+        for ($i = 0; $i < $num_tests; $i++) {
+            $resp = $c->send($req);
+            $response[] = $resp->value();
+        }
+        end_test($testName, 'https no keep-alive', $response);
+
+        begin_test($testName, 'https w. keep-alive');
+        $c->keepalive = true;
+        $response = array();
+        for ($i = 0; $i < $num_tests; $i++) {
+            $resp = $c->send($req, 10);
+            $response[] = $resp->value();
+        }
+        end_test($testName, 'https w. keep-alive', $response);
+        $c->xmlrpc_curl_handle = null;
+
+        begin_test($testName, 'https multicall');
+        $response = $c->send($reqs);
+        foreach ($response as $key => & $val) {
+            $val = $val->value();
+        }
+        end_test($testName, 'https multicall', $response);
+
+        if (function_exists('gzinflate')) {
+            $c->accepted_compression = array('gzip');
+            $c->request_compression = 'gzip';
+
+            $c->keepalive = false;
+            begin_test($testName, 'https w. compression and no keepalive');
+            $response = array();
+            for ($i = 0; $i < $num_tests; $i++) {
+                $resp = $c->send($req);
+                $response[] = $resp->value();
+            }
+            end_test($testName, 'https w. compression and no keepalive', $response);
+
+            $c->keepalive = true;
+            begin_test($testName, 'https w. keep-alive and compression');
+            $response = array();
+            for ($i = 0; $i < $num_tests; $i++) {
+                $resp = $c->send($req, 10);
+                $response[] = $resp->value();
+            }
+            end_test($testName, 'https w. keep-alive and compression', $response);
+            $c->xmlrpc_curl_handle = null;
+
+            begin_test($testName, 'multicall w. https and compression');
+            $response = $c->send($reqs);
+            foreach ($response as $key => & $val) {
+                $val = $val->value();
+            }
+            end_test($testName, 'multicall w. https and compression', $response);
+        }
+    }
+
+    if (function_exists('curl_init') && defined('CURL_HTTP_VERSION_2_0')) {
+
+        /// test multicall vs. many calls vs. keep-alives - HTTP/2
+
+        $server = explode(':', $args['HTTPSSERVER']);
+        if (count($server) > 1) {
+            $srv = 'https://' . $server[0] . ':' . $server[1] . $args['HTTPSURI'];
+            $c = new Client($args['HTTPSURI'], $server[0], $server[1], 'https');
+        } else {
+            $srv = 'https://' . $args['HTTPSSERVER'] . $args['HTTPSURI'];
+            $c = new Client($args['HTTPSURI'], $args['HTTPSSERVER'], 443, 'h2');
+        }
+        $c->setSSLVerifyPeer(!$args['HTTPSIGNOREPEER']);
+        $c->setSSLVerifyHost($args['HTTPSVERIFYHOST']);
+        // do not interfere with http compression
+        $c->setAcceptedCompression(false);
+        //$c->debug = 1;
+
+        $testName = "Repeated send (small array) to $srv - HTTP/2";
+
+        begin_test($testName, 'http2 no keep-alive');
+        $c->keepalive = false;
+        $response = array();
+        for ($i = 0; $i < $num_tests; $i++) {
+            $resp = $c->send($req);
+            $response[] = $resp->value();
+        }
+        end_test($testName, 'http2 no keep-alive', $response);
+
+        begin_test($testName, 'http2 w. keep-alive');
+        $c->keepalive = true;
+        $response = array();
+        for ($i = 0; $i < $num_tests; $i++) {
+            $resp = $c->send($req, 10);
+            $response[] = $resp->value();
+        }
+        end_test($testName, 'http2 w. keep-alive', $response);
+        $c->xmlrpc_curl_handle = null;
+
+        begin_test($testName, 'http2 multicall');
+        $response = $c->send($reqs);
+        foreach ($response as $key => & $val) {
+            $val = $val->value();
+        }
+        end_test($testName, 'http2 multicall', $response);
+
+        if (function_exists('gzinflate')) {
+            $c->accepted_compression = array('gzip');
+            $c->request_compression = 'gzip';
+
+            $c->keepalive = false;
+            begin_test($testName, 'http2 w. compression and no keepalive');
+            $response = array();
+            for ($i = 0; $i < $num_tests; $i++) {
+                $resp = $c->send($req);
+                $response[] = $resp->value();
+            }
+            end_test($testName, 'http2 w. compression and no keepalive', $response);
+
+            $c->keepalive = true;
+            begin_test($testName, 'http2 w. keep-alive and compression');
+            $response = array();
+            for ($i = 0; $i < $num_tests; $i++) {
+                $resp = $c->send($req, 10);
+                $response[] = $resp->value();
+            }
+            end_test($testName, 'http2 w. keep-alive and compression', $response);
+            $c->xmlrpc_curl_handle = null;
+
+            begin_test($testName, 'multicall w. http2 and compression');
+            $response = $c->send($reqs);
+            foreach ($response as $key => & $val) {
+                $val = $val->value();
+            }
+            end_test($testName, 'multicall w. http2 and compression', $response);
+        }
     }
 } // end of 'if no xdebug profiling'
 

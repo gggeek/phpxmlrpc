@@ -321,8 +321,8 @@ class HTTPTest extends ServerTest
             return;
         }
 
-        $this->method = 'http2'; // not an error the double assignment!
-        $this->client->method = 'http2';
+        $this->method = 'h2c'; // not an error the double assignment!
+        $this->client->method = 'h2c';
         //$this->client->keepalive = false; // q: is this a good idea?
 
         $this->expectHttp2 = true;
@@ -351,8 +351,8 @@ class HTTPTest extends ServerTest
         }
 
         $this->client->server = $this->args['HTTPSSERVER'];
-        $this->method = 'http2tls';
-        $this->client->method = 'http2tls';
+        $this->method = 'h2';
+        $this->client->method = 'h2';
         $this->client->path = $this->args['HTTPSURI'];
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);

@@ -1,17 +1,24 @@
+XML-RPC for PHP version 4.7.2 - 2022/5/25
+
+* modified the strings used to tell the client to use http/2: to avoid users mistaking 'http2' for the preferred value,
+  we switched to using `h2` and `h2c`
+
+* improved: the `benchmark.php` file does now also test calls using https and http/2 protocols
+
+
 XML-RPC for PHP version 4.7.1 - 2022/5/25
 
-* fixed: http/2 on non-https requests works in either "prior-knowledge" mode or "upgrade" mode, known as h2c.
-  Given the fact that h2c is not compatible with POST requests, we switched to using "prior-knowledge" mode for requests
-  sent with the `http2` argument passed to the client's constructor or `send` method.
-  NB: this means that requests sent with `http2` are only compatible with servers and proxies known to be http/2 compliant.
+* fixed: http/2 on non-https requests (known as h2c) works in either "prior-knowledge" mode or "upgrade" mode.
+  Given the fact that "upgrade" mode is not compatible with POST requests, we switched to using "prior-knowledge" mode
+  for requests sent with the `h2c` argument passed to the client's constructor or `send` method.
+  NB: this means that requests sent with `h2c` are only compatible with servers and proxies known to be http/2 compliant.
 
 
 XML-RPC for PHP version 4.7.0 - 2022/5/25
 
-
 * new: HTTP/2 is supported by both the Client and Server components (with the php cURL extension being required to use
   it client-side).
-  To force the client to use http/2 and http/2-tls requests, pass `http2` or `http2tls` as 3rd argument to `Client::send`.
+  To force the client to use http/2 over tls or http/2 over tcp requests, pass `h2` or `h2c` as 3rd argument to `Client::send`.
 
 
 XML-RPC for PHP version 4.6.1 - 2022/2/15
