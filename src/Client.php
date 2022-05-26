@@ -516,7 +516,7 @@ class Client
         /// @todo we could be smarter about this and force usage of curl in scenarios where it is both available and
         ///       needed, such as digest or ntlm auth. Do not attempt to use it for https if not present
         $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO &&
-            ($method == 'https' || $method == 'http11' || $method == 'http2' || $method == 'http2tls'));
+            (in_array($method, array('https', 'http11', 'http2', 'http2tls'))));
 
         if ($useCurl) {
             $r = $this->sendPayloadCURL(
