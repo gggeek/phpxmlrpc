@@ -4,6 +4,7 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
+
 /**
  * Used to represent a client of an XML-RPC server.
  */
@@ -137,11 +138,13 @@ class Client
      *                     e.g. /xmlrpc/server.php
      *                     e.g. http://phpxmlrpc.sourceforge.net/server.php
      *                     e.g. https://james:bond@secret.service.com:443/xmlrpcserver?agent=007
+     *                     e.g. http2tls://fast-and-secure-services/endpoint
      * @param string $server the server name / ip address
      * @param integer $port the port the server is listening on, when omitted defaults to 80 or 443 depending on
      *                      protocol used
      * @param string $method the http protocol variant: defaults to 'http'; 'https', 'http11', 'http2' and 'http2tls' can
      *                       be used if CURL is installed. The value set here can be overridden in any call to $this->send().
+     *                       Use 'http2' to make the lib attempt to use http/2 without tls and 'http2tls' for secure http/2
      */
     public function __construct($path, $server = '', $port = '', $method = '')
     {
@@ -477,6 +480,7 @@ class Client
      *                         for $timeout seconds, the connection will be closed).
      * @param string $method valid values are 'http', 'http11', 'https', 'http2' and 'http2tls'. If left unspecified,
      *                       the http protocol chosen during creation of the object will be used.
+     *                       Use 'http2' to make the lib attempt to use http/2 without tls and 'http2tls' for secure http/2
      *
      * @return Response|Response[] Note that the client will always return a Response object, even if the call fails
      * @todo allow throwing exceptions instead of returning responses in case of failed calls and/or Fault responses

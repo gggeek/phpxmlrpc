@@ -121,8 +121,9 @@ class Http
             }
         }
 
-        if (preg_match('/^HTTP\/[0-9](?:\.[0-9])? ([0-9]{3}) /', $data, $matches)) {
-            $httpResponse['status_code'] = $matches[1];
+        if (preg_match('/^HTTP\/([0-9](?:\.[0-9])?) ([0-9]{3}) /', $data, $matches)) {
+            $httpResponse['protocol_version'] = $matches[1];
+            $httpResponse['status_code'] = $matches[2];
         }
 
         if ($httpResponse['status_code'] !== '200') {

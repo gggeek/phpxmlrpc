@@ -13,6 +13,8 @@ include_once __DIR__ . '/5ServerTest.php';
  */
 class HTTPTest extends ServerTest
 {
+    protected $expectHttp2 = false;
+
     /**
      * Returns all test methods from the base class, except the ones which failed already
      *
@@ -313,12 +315,19 @@ class HTTPTest extends ServerTest
         {
             $this->markTestSkipped('CURL missing: cannot test http/2');
             return;
+        } else if (!defined('CURL_HTTP_VERSION_2'))
+        {
+            $this->markTestSkipped('CURL http/2 support missing: cannot test http/2');
+            return;
         }
 
         $this->method = 'http2'; // not an error the double assignment!
         $this->client->method = 'http2';
         //$this->client->keepalive = false; // q: is this a good idea?
+
+        $this->expectHttp2 = true;
         $this->$method();
+        $this->expectHttp2 = false;
     }
 
     /**
@@ -335,6 +344,10 @@ class HTTPTest extends ServerTest
         {
             $this->markTestSkipped('HTTPS SERVER definition missing: cannot test http/2 tls');
             return;
+        } else if (!defined('CURL_HTTP_VERSION_2'))
+        {
+            $this->markTestSkipped('CURL http/2 support missing: cannot test http/2 tls');
+            return;
         }
 
         $this->client->server = $this->args['HTTPSSERVER'];
@@ -345,7 +358,9 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
 
+        $this->expectHttp2 = true;
         $this->$method();
+        $this->expectHttp2 = false;
     }
 
     /**
@@ -422,5 +437,19 @@ class HTTPTest extends ServerTest
         $this->client->method = 'http11';
 
         $this->$method();
+    }
+
+    /**
+     * @param \PhpXmlRpc\Response $r
+     * @return void
+     */
+    protected function validateResponse($r)
+    {
+        /// @todo check $r->httpResponse()['protocol_version']
+        if ($this->expectHttp2) {
+
+        } else {
+
+        }
     }
 }

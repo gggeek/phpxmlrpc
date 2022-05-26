@@ -2,10 +2,10 @@
 # HTTPSERVER
 # TESTS_ROOT_DIR
 
-# Enable http2
-Protocols h2 h2c http/1.1
-
 <VirtualHost *:80>
+
+  # Enable http2
+  Protocols h2c http/1.1
 
   DocumentRoot ${TESTS_ROOT_DIR}
 
@@ -32,6 +32,9 @@ Protocols h2 h2c http/1.1
 <IfModule mod_ssl.c>
 
 <VirtualHost _default_:443>
+
+  # Enable http2
+  Protocols h2 http/1.1
 
   DocumentRoot ${TESTS_ROOT_DIR}
 

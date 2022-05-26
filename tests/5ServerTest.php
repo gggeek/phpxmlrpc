@@ -141,6 +141,7 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
         if (is_array($r)) {
             return $r;
         }
+        $this->validateResponse($r);
         if (is_array($errorCode)) {
             $this->assertContains($r->faultCode(), $errorCode, 'Error ' . $r->faultCode() . ' connecting to server: ' . $r->faultString());
         } else {
@@ -155,6 +156,11 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
         } else {
             return null;
         }
+    }
+
+    protected function validateResponse($r)
+    {
+        // to be implemented in subclasses
     }
 
     /**
