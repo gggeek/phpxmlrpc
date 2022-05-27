@@ -1,3 +1,11 @@
+XML-RPC for PHP version 4.X.Y - unreleased
+
+* fixed: the `benchmark.php` file had seen some tests accidentally dropped
+
+* improved: added method `Client::prepareCurlHandle`, to make it easier to send multiple requests in parallel when using
+  curl and the server does not support `system.multicall`. See new demo file `parallel.php` for how this can be done.
+
+
 XML-RPC for PHP version 4.7.2 - 2022/5/25
 
 * modified the strings used to tell the client to use http/2: to avoid users mistaking 'http2' for the preferred value,

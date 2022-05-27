@@ -490,6 +490,7 @@ class Client
      *
      * @return Response|Response[] Note that the client will always return a Response object, even if the call fails
      * @todo allow throwing exceptions instead of returning responses in case of failed calls and/or Fault responses
+     * @todo refactor: we now support many options besides connection timeout and http version to use. Why only privilege those?
      */
     public function send($req, $timeout = 0, $method = '')
     {
@@ -657,12 +658,16 @@ class Client
      * @param string $keyPass @todo not implemented yet.
      * @param int $sslVersion @todo not implemented yet. See http://php.net/manual/en/migration56.openssl.php
      * @return Response
+     *
+     * @todo refactor: we get many options for the call passed in, but some we use from $this. We should clean that up
      */
     protected function sendPayloadSocket($req, $server, $port, $timeout = 0, $username = '', $password = '',
         $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
         $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method='http', $key = '', $keyPass = '',
         $sslVersion = 0)
     {
+        /// @todo log a warning if passed an unsupported method
+
         if ($port == 0) {
             $port = ( $method === 'https' ) ? 443 : 80;
         }
@@ -875,6 +880,8 @@ class Client
      * @param string $keyPass
      * @param int $sslVersion
      * @return Response
+     *
+     * @todo refactor: we get many options for the call passed in, but some we use from $this. We should clean that up
      */
     protected function sendPayloadCURL($req, $server, $port, $timeout = 0, $username = '', $password = '',
         $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
@@ -900,6 +907,54 @@ class Client
             return new Response(0, PhpXmlRpc::$xmlrpcerr['no_http2'], PhpXmlRpc::$xmlrpcstr['no_http2']);
         }
 
+        $curl = $this->prepareCurlHandle($req, $server, $port, $timeout, $username, $password,
+            $authType, $cert, $certPass, $caCert, $caCertDir, $proxyHost, $proxyPort,
+            $proxyUsername, $proxyPassword, $proxyAuthType, $method, $keepAlive, $key,
+            $keyPass, $sslVersion);
+
+        $result = curl_exec($curl);
+
+        if ($this->debug > 1) {
+            $message = "---CURL INFO---\n";
+            foreach (curl_getinfo($curl) as $name => $val) {
+                if (is_array($val)) {
+                    $val = implode("\n", $val);
+                }
+                $message .= $name . ': ' . $val . "\n";
+            }
+            $message .= '---END---';
+            $this->getLogger()->debugMessage($message);
+        }
+
+        if (!$result) {
+            /// @todo we should use a better check here - what if we get back '' or '0'?
+
+            $this->errstr = 'no response';
+            $resp = new Response(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': ' . curl_error($curl));
+            curl_close($curl);
+            if ($keepAlive) {
+                $this->xmlrpc_curl_handle = null;
+            }
+        } else {
+            if (!$keepAlive) {
+                curl_close($curl);
+            }
+            $resp = $req->parseResponse($result, true, $this->return_type);
+            // if we got back a 302, we can not reuse the curl handle for later calls
+            if ($resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error'] && $keepAlive) {
+                curl_close($curl);
+                $this->xmlrpc_curl_handle = null;
+            }
+        }
+
+        return $resp;
+    }
+
+    protected function prepareCurlHandle($req, $server, $port, $timeout = 0, $username = '', $password = '',
+         $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
+         $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'https', $keepAlive = false, $key = '',
+         $keyPass = '', $sslVersion = 0)
+    {
         if ($port == 0) {
             if (in_array($method, array('http', 'http10', 'http11', 'h2c'))) {
                 $port = 80;
@@ -933,10 +988,6 @@ class Client
             $encodingHdr = '';
         }
 
-        if ($this->debug > 1) {
-            $this->getLogger()->debugMessage("---SENDING---\n$payload\n---END---");
-        }
-
         if (!$keepAlive || !$this->xmlrpc_curl_handle) {
             if ($method == 'http11' || $method == 'http10' || $method == 'h2c') {
                 $protocol = 'http';
@@ -944,6 +995,7 @@ class Client
                 if ($method == 'h2') {
                     $protocol = 'https';
                 } else {
+                    // http, https
                     $protocol = $method;
                 }
             }
@@ -1090,42 +1142,11 @@ class Client
             curl_setopt($curl, $opt, $val);
         }
 
-        $result = curl_exec($curl);
-
         if ($this->debug > 1) {
-            $message = "---CURL INFO---\n";
-            foreach (curl_getinfo($curl) as $name => $val) {
-                if (is_array($val)) {
-                    $val = implode("\n", $val);
-                }
-                $message .= $name . ': ' . $val . "\n";
-            }
-            $message .= '---END---';
-            $this->getLogger()->debugMessage($message);
+            $this->getLogger()->debugMessage("---SENDING---\n$payload\n---END---");
         }
 
-        if (!$result) {
-            /// @todo we should use a better check here - what if we get back '' or '0'?
-
-            $this->errstr = 'no response';
-            $resp = new Response(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': ' . curl_error($curl));
-            curl_close($curl);
-            if ($keepAlive) {
-                $this->xmlrpc_curl_handle = null;
-            }
-        } else {
-            if (!$keepAlive) {
-                curl_close($curl);
-            }
-            $resp = $req->parseResponse($result, true, $this->return_type);
-            // if we got back a 302, we can not reuse the curl handle for later calls
-            if ($resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error'] && $keepAlive) {
-                curl_close($curl);
-                $this->xmlrpc_curl_handle = null;
-            }
-        }
-
-        return $resp;
+        return $curl;
     }
 
     /**
@@ -1209,7 +1230,7 @@ class Client
      * @param Request[] $reqs
      * @param int $timeout
      * @param string $method
-     * @return Response[]|bool|mixed|Response
+     * @return Response[]|false|mixed|Response
      */
     private function _try_multicall($reqs, $timeout, $method)
     {
