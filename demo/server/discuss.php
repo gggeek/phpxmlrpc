@@ -1,4 +1,8 @@
 <?php
+/**
+ * A basic comment server. Given an ID it will store a list of names and comment texts against it.
+ * It uses a Berkeley DB database for storage.
+ */
 
 require_once __DIR__ . "/_prepend.php";
 
@@ -75,6 +79,8 @@ function getComments($req)
                 );
             }
         }
+    } else {
+        $err = "Unable to open comments database.";
     }
     // if we generated an error, create an error return response
     if ($err) {

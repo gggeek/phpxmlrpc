@@ -1,17 +1,18 @@
-<?php require_once __DIR__ . "/_prepend.php"; ?><html lang="en">
+<?php
+require_once __DIR__ . "/_prepend.php";
+
+output('<html lang="en">
 <head><title>xmlrpc - Mail demo</title></head>
 <body>
 <h1>Mail demo</h1>
-
 <p>This form enables you to send mail via an XML-RPC server.
     When you press <kbd>Send</kbd> this page will reload, showing you the XML-RPC request sent to the host server, the
     XML-RPC response received and the internal evaluation done by the PHP implementation.</p>
-
 <p>You can see the source to this page here: <a href="mail.php?showSource=1">mail.php</a><br/>
     And the source to a functionally identical mail-by-XML-RPC server in the file <a
-        href="../server/server.php?showSource=1">server.php</a> included with the library (look for the 'mail_send'
+        href="../server/server.php?showSource=1">server.php</a> included with the library (look for the "mail_send"
     method)</p>
-<?php
+');
 
 if (isset($_POST["mailto"]) && $_POST["mailto"]) {
     $server = XMLRPCSERVER;
@@ -29,17 +30,17 @@ if (isset($_POST["mailto"]) && $_POST["mailto"]) {
     $client->setDebug(2);
     $resp = $client->send($req);
     if (!$resp->faultCode()) {
-        print "Mail sent OK<br/>\n";
+        output("Mail sent OK<br/>\n");
     } else {
-        print "<font color=\"red\">";
-        print "Mail send failed<br/>\n";
-        print "Fault: ";
-        print "Code: " . htmlspecialchars($resp->faultCode()) .
-            " Reason: '" . htmlspecialchars($resp->faultString()) . "'<br/>";
-        print "</font><br/>";
+        output("<font color=\"red\">");
+        output("Mail send failed<br/>\n");
+        output("Fault: ");
+        output("Code: " . htmlspecialchars($resp->faultCode()) .
+            " Reason: '" . htmlspecialchars($resp->faultString()) . "'<br/>");
+        output("</font><br/>");
     }
 }
-?>
+output('
 <form method="POST">
     From <input size="60" name="mailfrom" value=""/><br/>
     <hr/>
@@ -53,4 +54,7 @@ if (isset($_POST["mailto"]) && $_POST["mailto"]) {
     <input type="Submit" value="Send"/>
 </form>
 </body>
-</html><?php require_once __DIR__ . "/_append.php"; ?>
+</html>
+');
+
+require_once __DIR__ . "/_append.php";

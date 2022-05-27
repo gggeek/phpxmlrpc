@@ -1,21 +1,21 @@
-<?php require_once __DIR__ . "/_prepend.php"; ?><html lang="en">
+<?php
+require_once __DIR__ . "/_prepend.php";
+
+output('<html lang="en">
 <head><title>xmlrpc - Agesort demo</title></head>
 <body>
 <h1>Agesort demo</h1>
-
-<h2>Send an array of 'name' => 'age' pairs to the server that will send it back sorted.</h2>
-
+<h2>Send an array of "name" => "age" pairs to the server that will send it back sorted.</h2>
 <h3>The source code demonstrates basic lib usage, including handling of xmlrpc arrays and structs</h3>
-
 <p>You can see the source to this page here: <a href="agesort.php?showSource=1">agesort.php</a></p>
-<?php
+');
 
 $inAr = array("Dave" => 24, "Edd" => 45, "Joe" => 37, "Fred" => 27);
-print "This is the input data:<br/><pre>";
+output("This is the input data:<br/><pre>");
 foreach ($inAr as $key => $val) {
-    print $key . ", " . $val . "\n";
+    output($key . ", " . $val . "\n");
 }
-print "</pre>";
+output("</pre>");
 
 // Create parameters from the input array: an xmlrpc array of xmlrpc structs
 $p = array();
@@ -29,7 +29,7 @@ foreach ($inAr as $key => $val) {
     );
 }
 $v = new PhpXmlRpc\Value($p, "array");
-print "Encoded into xmlrpc format it looks like this: <pre>\n" . htmlentities($v->serialize()) . "</pre>\n";
+output("Encoded into xmlrpc format it looks like this: <pre>\n" . htmlentities($v->serialize()) . "</pre>\n");
 
 // create client and message objects
 $req = new PhpXmlRpc\Request('examples.sortByAge', array($v));
@@ -39,27 +39,27 @@ $client = new PhpXmlRpc\Client(XMLRPCSERVER);
 $client->setDebug(2);
 
 // send request
-print "Now sending request (detailed debug info follows)";
+output("Now sending request (detailed debug info follows)");
 $resp = $client->send($req);
 
 // check response for errors, and take appropriate action
 if (!$resp->faultCode()) {
-    print "The server gave me these results:<pre>";
+    output("The server gave me these results:<pre>");
     $value = $resp->value();
     foreach ($value as $struct) {
         $name = $struct["name"];
         $age = $struct["age"];
-        print htmlspecialchars($name->scalarval()) . ", " . htmlspecialchars($age->scalarval()) . "\n";
+        output(htmlspecialchars($name->scalarval()) . ", " . htmlspecialchars($age->scalarval()) . "\n");
     }
 
-    print "<hr/>For nerds: I got this value back<br/><pre>" .
-        htmlentities($resp->serialize()) . "</pre><hr/>\n";
+    output("<hr/>For nerds: I got this value back<br/><pre>" .
+        htmlentities($resp->serialize()) . "</pre><hr/>\n");
 } else {
-    print "An error occurred:<pre>";
-    print "Code: " . htmlspecialchars($resp->faultCode()) .
-        "\nReason: '" . htmlspecialchars($resp->faultString()) . '\'</pre><hr/>';
+    output("An error occurred:<pre>");
+    output("Code: " . htmlspecialchars($resp->faultCode()) .
+        "\nReason: '" . htmlspecialchars($resp->faultString()) . '\'</pre><hr/>');
 }
 
-?>
-</body>
-</html><?php require_once __DIR__ . "/_append.php"; ?>
+output("</body></html>\n");
+
+require_once __DIR__ . "/_append.php";

@@ -4,9 +4,10 @@
  *
  * Implements a lot of webservices, including a suite of services used for interoperability testing (validator1 methods),
  * and some whose only purpose is to be used for unit-testing the library.
+ * It also allows the caller to configure specific features by using "out of band" query string parameters.
  *
  * Please _do not_ copy this file verbatim into your production server.
- **/
+ */
 
 require_once __DIR__ . "/_prepend.php";
 

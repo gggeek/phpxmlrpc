@@ -1,23 +1,26 @@
-<?php require_once __DIR__ . "/_prepend.php"; ?><html lang="en">
+<?php
+
+require_once __DIR__ . "/_prepend.php";
+
+output('<html lang="en">
 <head><title>xmlrpc - Introspect demo</title></head>
 <body>
 <h1>Introspect demo</h1>
 <h2>Query server for available methods and their description</h2>
 <h3>The code demonstrates usage of multicall and introspection methods</h3>
 <p>You can see the source to this page here: <a href="introspect.php?showSource=1">introspect.php</a></p>
-<?php
+');
 
 function display_error($r)
 {
-    print "An error occurred: ";
-    print "Code: " . $r->faultCode()
-        . " Reason: '" . $r->faultString() . "'<br/>";
+    output("An error occurred: ");
+    output("Code: " . $r->faultCode() . " Reason: '" . $r->faultString() . "'<br/>");
 }
 
 $client = new PhpXmlRpc\Client(XMLRPCSERVER);
 
 // First off, let's retrieve the list of methods available on the remote server
-print "<h3>methods available at http://" . $client->server . $client->path . "</h3>\n";
+output("<h3>methods available at http://" . $client->server . $client->path . "</h3>\n");
 $req = new PhpXmlRpc\Request('system.listMethods');
 $resp = $client->send($req);
 
@@ -28,7 +31,7 @@ if ($resp->faultCode()) {
 
     // Then, retrieve the signature and help text of each available method
     foreach ($v as $methodName) {
-        print "<h4>" . $methodName->scalarval() . "</h4>\n";
+        output("<h4>" . $methodName->scalarval() . "</h4>\n");
         // build messages first, add params later
         $m1 = new PhpXmlRpc\Request('system.methodHelp');
         $m2 = new PhpXmlRpc\Request('system.methodSignature');
@@ -45,40 +48,41 @@ if ($resp->faultCode()) {
             $val = $rs[0]->value();
             $txt = $val->scalarval();
             if ($txt != "") {
-                print "<h4>Documentation</h4><p>${txt}</p>\n";
+                output("<h4>Documentation</h4><p>${txt}</p>\n");
             } else {
-                print "<p>No documentation available.</p>\n";
+                output("<p>No documentation available.</p>\n");
             }
         }
         if ($rs[1]->faultCode()) {
             display_error($rs[1]);
         } else {
-            print "<h4>Signature</h4><p>\n";
+            output("<h4>Signature</h4><p>\n");
             // note: using PhpXmlRpc\Encoder::decode() here would lead to cleaner code
             $val = $rs[1]->value();
             if ($val->kindOf() == "array") {
                 foreach ($val as $x) {
                     $ret = $x[0];
-                    print "<code>" . htmlspecialchars($ret->scalarval()) . " "
-                        . htmlspecialchars($methodName->scalarval()) . "(";
+                    output("<code>" . htmlspecialchars($ret->scalarval()) . " "
+                        . htmlspecialchars($methodName->scalarval()) . "(");
                     if ($x->count() > 1) {
                         for ($k = 1; $k < $x->count(); $k++) {
                             $y = $x[$k];
-                            print htmlspecialchars($y->scalarval());
+                            output(htmlspecialchars($y->scalarval()));
                             if ($k < $x->count() - 1) {
-                                print ", ";
+                                output(", ");
                             }
                         }
                     }
-                    print ")</code><br/>\n";
+                    output(")</code><br/>\n");
                 }
             } else {
-                print "Signature unknown\n";
+                output("Signature unknown\n");
             }
-            print "</p>\n";
+            output("</p>\n");
         }
     }
 }
-?>
-</body>
-</html><?php require_once __DIR__ . "/_append.php"; ?>
+
+output("</body></html>\n");
+
+require_once __DIR__ . "/_append.php";

@@ -1,9 +1,9 @@
 <?php
 /**
  * XMLRPC server acting as proxy for requests to other servers
- * (useful e.g. for ajax-originated calls that can only connect back to
- * the originating server).
- * For an example of a transparent reverse-proxy, see the ReverseProxy class in package phpxmlrpc/extras
+ * (useful e.g. for ajax-originated calls that can only connect back to the originating server).
+ * NB: this is an OPEN RELAY. It is meant as a demo, not to be used in production!
+ * For an example of a transparent reverse-proxy, see the ReverseProxy class in package phpxmlrpc/extras.
  *
  * @author Gaetano Giunta
  * @copyright (C) 2006-2021 G. Giunta
@@ -28,6 +28,7 @@ function forward_request($req)
     // create client
     $timeout = 0;
     $url = $encoder->decode($req->getParam(0));
+    // NB: here we should validate the received url, using f.e. a whitelist...
     $client = new PhpXmlRpc\Client($url);
 
     if ($req->getNumParams() > 3) {
@@ -73,7 +74,7 @@ function forward_request($req)
     return $client->send($req, $timeout);
 }
 
-// run the server
+// Run the server
 // NB: take care not to output anything else after this call, as it will mess up the responses and it will be hard to
 // debug. In case you have to do so, at least re-emit a correct Content-Length http header (requires output buffering)
 $server = new PhpXmlRpc\Server(
