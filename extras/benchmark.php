@@ -88,7 +88,6 @@ if ($is_web) {
     }
 }
 
-/*
 // test 'manual style' data encoding vs. 'automatic style' encoding
 begin_test('Data encoding (large array)', 'manual encoding');
 for ($i = 0; $i < $num_tests; $i++) {
@@ -198,8 +197,6 @@ if (function_exists('xmlrpc_decode')) {
     }
     end_test('Data decoding (large array)', 'xmlrpc-epi decoding', $value);
 }
-
-*/
 
 if (!$xd) {
 
