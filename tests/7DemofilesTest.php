@@ -45,6 +45,11 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
         ));
     }
 
+    public function testParallel()
+    {
+        $page = $this->request('client/parallel.php');
+    }
+
     public function testProxy()
     {
         $page = $this->request('client/proxy.php', 'GET', null, true);
