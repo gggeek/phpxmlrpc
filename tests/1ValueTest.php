@@ -94,6 +94,16 @@ class ValueTests extends PhpXmlRpc_PolyfillTestCase
         $this->assertequals("<value><int>0</int></value>\n", $s);
     }
 
+    public function testDate()
+    {
+        $tz = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+        $v = new xmlrpcval(86401, 'dateTime.iso8601');
+        $s = $v->serialize();
+        $this->assertequals("<value><dateTime.iso8601>19700102T00:00:01</dateTime.iso8601></value>\n", $s);
+        date_default_timezone_set($tz);
+    }
+
     public function testStructMemExists()
     {
         $v = new xmlrpcval(array('hello' => new xmlrpcval('world')), 'struct');
