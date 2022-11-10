@@ -309,7 +309,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                         } elseif (is_int($val)) {
                             $rs .= "<${typ}>" . date('Ymd\TH:i:s', $val) . "</${typ}>";
                         } else {
-                            // not really a good idea here: but what shall we output anyway? left for backward compat...
+                            // not really a good idea here: but what should we output anyway? left for backward compat...
                             $rs .= "<${typ}>${val}</${typ}>";
                         }
                         break;
