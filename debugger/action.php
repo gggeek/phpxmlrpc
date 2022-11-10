@@ -271,12 +271,12 @@ if ($action) {
             echo "<h3>$protoName call FAILED!</h3>\n";
             echo "<p>Fault code: [" . htmlspecialchars($response->faultCode(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) .
                 "] Reason: '" . htmlspecialchars($response->faultString(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding) . "'</p>\n";
-            echo(strftime("%d/%b/%Y:%H:%M:%S\n"));
+            echo(date("d/M/Y:H:i:s\n"));
         } else {
             // call succeeded: parse results
             //echo '<h2>'.htmlspecialchars($actionname, ENT_COMPAT, $inputcharset).' on server '.htmlspecialchars($server, ENT_COMPAT, $inputcharset).'</h2>';
             printf("<h3>%s call(s) OK (%.2f secs.)</h3>\n", $protoName, $time);
-            echo(strftime("%d/%b/%Y:%H:%M:%S\n"));
+            echo(date("d/M/Y:H:i:s\n"));
 
             switch ($action) {
                 case 'list':
