@@ -74,8 +74,8 @@ else
         # we have to do this as the init script we get for starting/stopping php-fpm seems to be faulty...
         pkill php-fpm
         echo 'listen = /run/php/php-fpm.sock' >> "/usr/local/php/${PHP_VERSION}/etc/php-fpm.conf"
-        echo 'listen.owner = docker' >> "/usr/local/php/${PHP_VERSION}/etc/php-fpm.conf"
-        echo 'listen.group = docker' >> "/usr/local/php/${PHP_VERSION}/etc/php-fpm.conf"
+        # the user running apache will be different in GHA and local VMS. We just open fully perms on the fpm socket
+        echo 'listen.mode = 0666' >> "/usr/local/php/${PHP_VERSION}/etc/php-fpm.conf"
         cp "$SCRIPT_DIR/../config/apache_phpfpm_proxyfcgi" "/etc/apache2/conf-available/php${PHP_VERSION}-fpm.conf"
     else
         DEBIAN_FRONTEND=noninteractive apt-get install -y language-pack-en-base software-properties-common
