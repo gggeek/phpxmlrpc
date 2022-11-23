@@ -52,6 +52,10 @@ jobs:
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_privoxy.sh
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_php.sh ${{ matrix.php }}
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_composer.sh
+                    # fix perms for recent Apache versions
+                    chmod 755 .
+                    find demo -type d -exec chmod 755 {} \;
+                    find demo -type f -exec chmod 644 {} \;
 
             # Avoid downloading composer deps on every workflow. Is this useful/working for us?
             #-
