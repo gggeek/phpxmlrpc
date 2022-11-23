@@ -8,6 +8,8 @@
 
 set -e
 
+SCRIPT_DIR="$(dirname -- "$(readlink -f "$0")")"
+
 configure_php_ini() {
     # note: these settings are not required for cli config
     echo "cgi.fix_pathinfo = 1" >> "${1}"
@@ -71,6 +73,10 @@ else
         curl -sSL https://github.com/shivammathur/php5-ubuntu/releases/latest/download/install.sh | bash -s "${PHP_VERSION}"
         # we have to do this as the init script we get for starting/stopping php-fpm seems to be faulty...
         pkill php-fpm
+        echo 'listen = /run/php/php-fpm.sock' >> "/usr/local/php/${PHP_VERSION}/etc/php-fpm.conf"
+        echo 'listen.owner = docker' >> "/usr/local/php/${PHP_VERSION}/etc/php-fpm.conf"
+        echo 'listen.group = docker' >> "/usr/local/php/${PHP_VERSION}/etc/php-fpm.conf"
+        cp "$SCRIPT_DIR/../config/apache_phpfpm_proxyfcgi" "/etc/apache2/conf-available/php${PHP_VERSION}-fpm.conf"
     else
         DEBIAN_FRONTEND=noninteractive apt-get install -y language-pack-en-base software-properties-common
         LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php
