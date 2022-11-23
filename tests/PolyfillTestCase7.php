@@ -16,6 +16,6 @@ abstract class PhpXmlRpc_PolyfillTestCase extends TestCase
 
     public static function fail($message = '') {
         static::_fail($message);
-        self::fail($message);
+        parent::fail($message);
     }
 }

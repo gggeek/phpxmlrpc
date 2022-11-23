@@ -28,8 +28,9 @@ jobs:
                 # @todo enable testing on php 5.3 - it requires use an older version of phpunit (and no yoast/phpunit-polyfills?)
                 php: ['8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4']
         steps:
-            -
-                uses: actions/checkout@v2
+            -    name: checkout code
+                 uses: actions/checkout@v2
+
             # Although this action is useful, we prefer to use the same script to set up php that we use for the
             # docker image used for local testing. This allows us to make sure that script is always in good shape
             #-
@@ -41,7 +42,8 @@ jobs:
             #        #tools: phpunit/phpunit:a_version_compatible_with_php_5.3-5.5
             #        # NB: this disables xdebug completely
             #        coverage: none
-            -
+
+            -   name: env setup
                 # @todo add env setup scripts for windows
                 run: |
                     chmod 755 ./tests/ci/setup/*.sh
@@ -50,29 +52,36 @@ jobs:
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_privoxy.sh
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_php.sh ${{ matrix.php }}
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_composer.sh
+
             # Avoid downloading composer deps on every workflow. Is this useful/working for us?
             #-
             #    uses: actions/cache@v2
             #    with:
             #        path: /tmp/composer-cache
             #        key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-            -
+
+            -   name: composer install
                 run: 'composer install'
-            -
+
+            -   name: run tests and upload coverage
                 if: ${{ matrix.php == '7.4' }}
                 run: |
                     ./tests/ci/setup/setup_code_coverage.sh enable
                     ./vendor/bin/phpunit -v --coverage-clover=coverage.clover tests
                     if [ -f coverage.clover ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
-            -
+
+            -   name: run tests
                 if: ${{ matrix.php != '7.4' }}
                 run: './vendor/bin/phpunit -v tests'
             # @todo would it be useful to run a 2nd test with composer --prefer-lowest? After all the only dependencies we have are testing tools
-            -
+
+            -   name: test python demo files
                 run: 'python3 demo/client/python/test.py'
-            -
+
+            -   name: test perl demo files
                 run: 'perl demo/client/perl/test.pl'
-            -
+
+            -   name: failure troubleshooting
                 if: ${{ failure() }}
                 run: |
                     #env
