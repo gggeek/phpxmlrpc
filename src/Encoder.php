@@ -108,7 +108,7 @@ class Encoder
                         $result->setTimestamp($out);
 
                         return $result;
-                    } elseif (is_a($out, 'DateTimeInterface')) {
+                    } elseif (is_a($out, 'DateTimeInterface') || is_a($out, 'DateTime')) {
                         return $out;
                     }
                 }
@@ -218,7 +218,8 @@ class Encoder
             case 'object':
                 if (is_a($phpVal, 'PhpXmlRpc\Value')) {
                     $xmlrpcVal = $phpVal;
-                } elseif (is_a($phpVal, 'DateTimeInterface')) {
+                // DateTimeInterface is not present in php 5.4...
+                } elseif (is_a($phpVal, 'DateTimeInterface') || is_a($phpVal, 'DateTime')) {
                     $xmlrpcVal = new Value($phpVal->format('Ymd\TH:i:s'), Value::$xmlrpcDateTime);
                 } elseif (in_array('extension_api', $options) && $phpVal instanceof \stdClass && isset($phpVal->xmlrpc_type)) {
                     // Handle the 'pre-converted' base64 and datetime values

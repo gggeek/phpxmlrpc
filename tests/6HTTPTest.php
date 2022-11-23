@@ -259,6 +259,12 @@ class HTTPTest extends ServerTest
             return;
         }
 
+        if (version_compare(PHP_VERSION, '5.6.0', '<'))
+        {
+            $this->markTestSkipped('HTTPS via Socket known to fail on php 5.5 and earlier');
+            return;
+        }
+
         $this->client->server = $this->args['HTTPSSERVER'];
         $this->method = 'https';
         $this->client->method = 'https';

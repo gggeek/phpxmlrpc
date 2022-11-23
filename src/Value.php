@@ -304,7 +304,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                     case static::$xmlrpcDateTime:
                         if (is_string($val)) {
                             $rs .= "<${typ}>${val}</${typ}>";
-                        } elseif (is_a($val, 'DateTime') || is_a($val, 'DateTimeInterface')) {
+                        // DateTimeInterface is not present in php 5.4...
+                        } elseif (is_a($val, 'DateTimeInterface') || is_a($val, 'DateTime')) {
                             $rs .= "<${typ}>" . $val->format('Ymd\TH:i:s') . "</${typ}>";
                         } elseif (is_int($val)) {
                             $rs .= "<${typ}>" . date('Ymd\TH:i:s', $val) . "</${typ}>";

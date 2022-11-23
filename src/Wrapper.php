@@ -83,7 +83,8 @@ class Wrapper
                 return '';
             default:
                 if (class_exists($phpType)) {
-                    if (is_a($phpType, 'DateTimeInterface')) {
+                    // DateTimeInterface is not present in php 5.4...
+                    if (is_a($phpType, 'DateTimeInterface') || is_a($phpType, 'DateTime')) {
                         return Value::$xmlrpcDateTime;
                     }
                     return Value::$xmlrpcStruct;
