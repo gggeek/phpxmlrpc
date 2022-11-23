@@ -9,7 +9,7 @@ ACTION="${1}"
 # Valid values: 'default', 5.6, 7.0 .. 7.4, 8.0 .. 8.1
 export PHP_VERSION=${PHP_VERSION:-default}
 # Valid values: precise (12), trusty (14), xenial (16), bionic (18), focal (20), jammy (22)
-export UBUNTU_VERSION=${UBUNTU_VERSION:-bionic}
+export UBUNTU_VERSION=${UBUNTU_VERSION:-focal}
 
 CONTAINER_USER=docker
 CONTAINER_BUILD_DIR="/home/${CONTAINER_USER}/build"
@@ -42,7 +42,7 @@ Options:
 
 Environment variables: to be set before the 'build' action
     PHP_VERSION       default value: 'default', ie. the stock php version from the Ubuntu version in use. Other possible values: 5.6, 7.0 .. 8.1
-    UBUNTU_VERSION    default value: bionic. Other possible values: xenial, focal, jammy
+    UBUNTU_VERSION    default value: focal. Other possible values: xenial, bionic, jammy
 "
 }
 

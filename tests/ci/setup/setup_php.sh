@@ -14,7 +14,11 @@ configure_php_ini() {
     echo "always_populate_raw_post_data = -1" >> "${1}"
 
     # we disable xdebug for speed for both cli and web mode
-    phpdismod xdebug
+    if which phpdesmod >/dev/null 2>/dev/null; then
+        phpdismod xdebug
+    elif [ -f /usr/local/php/$PHP_VERSION/etc/conf.d/20-xdebug.ini ]; then
+        mv /usr/local/php/$PHP_VERSION/etc/conf.d/20-xdebug.ini /usr/local/php/$PHP_VERSION/etc/conf.d/20-xdebug.ini.bak
+    fi
 }
 
 # install php
@@ -44,25 +48,54 @@ else
         fi
     done
 
-    DEBIAN_FRONTEND=noninteractive apt-get install -y language-pack-en-base software-properties-common
-    LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php
-    apt-get update
+    if [ "${PHP_VERSION}" = 5.3 -o "${PHP_VERSION}" = 5.4 -o "${PHP_VERSION}" = 5.5 ]; then
+        # NB: this set of packages has only been tested on Focal so far
+        DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            curl \
+            enchant \
+            imagemagick \
+            libc-client2007e \
+            libcurl3-gnutls \
+            libmcrypt4 \
+            libodbc1 \
+            libpq5 \
+            libqdbm14 \
+            libtinfo5 \
+            libxpm4 \
+            libxslt1.1 \
+            mysql-common \
+            zstd
+        if [ ! -d /usr/include/php ]; then mkdir -p /usr/include/php; fi
 
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        php${PHP_VERSION} \
-        php${PHP_VERSION}-cli \
-        php${PHP_VERSION}-dom \
-        php${PHP_VERSION}-curl \
-        php${PHP_VERSION}-fpm \
-        php${PHP_VERSION}-mbstring \
-        php${PHP_VERSION}-xdebug
+        set +e
+        curl -sSL https://github.com/shivammathur/php5-ubuntu/releases/latest/download/install.sh | bash -s "${PHP_VERSION}"
+        # we have to do this as the init script we get for starting/stopping php-fpm seems to be faulty...
+        pkill php-fpm
+    else
+        DEBIAN_FRONTEND=noninteractive apt-get install -y language-pack-en-base software-properties-common
+        LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php
+        apt-get update
 
-    update-alternatives --set php /usr/bin/php${PHP_VERSION}
+        DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            php${PHP_VERSION} \
+            php${PHP_VERSION}-cli \
+            php${PHP_VERSION}-dom \
+            php${PHP_VERSION}-curl \
+            php${PHP_VERSION}-fpm \
+            php${PHP_VERSION}-mbstring \
+            php${PHP_VERSION}-xdebug
+
+        update-alternatives --set php /usr/bin/php${PHP_VERSION}
+    fi
 fi
 
 PHPVER=$(php -r 'echo implode(".",array_slice(explode(".",PHP_VERSION),0,2));' 2>/dev/null)
 
-configure_php_ini /etc/php/${PHPVER}/fpm/php.ini
+if [ -d /etc/php/${PHPVER}/fpm ]; then
+    configure_php_ini /etc/php/${PHPVER}/fpm/php.ini
+elif [ -f /usr/local/php/${PHPVER}/etc/php.ini ]; then
+    configure_php_ini /usr/local/php/${PHPVER}/etc/php.ini
+fi
 
 # use a nice name for the php-fpm service, so that it does not depend on php version running. Try to make that work
 # both for docker and VMs

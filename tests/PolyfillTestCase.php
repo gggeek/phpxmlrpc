@@ -14,7 +14,7 @@ if ( class_exists( 'PHPUnit_Runner_BaseTestRunner' ) === true
     class_alias( 'PHPUnit_Runner_BaseTestRunner', 'PHPUnit\Runner\BaseTestRunner' );
 }
 
-if (class_exists(PHPUnit_Version::class) === false || version_compare(PHPUnit_Version::id(), '8.0.0', '<')) {
+if (class_exists('PHPUnit_Version') === false || version_compare(PHPUnit_Version::id(), '8.0.0', '<')) {
     include_once __DIR__ . '/PolyfillTestCase7.php';
 } else {
     include_once __DIR__ . '/PolyfillTestCase8.php';
