@@ -24,17 +24,14 @@ jobs:
                 # @see https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
                 # @todo fix: atm our tests fail when using ubuntu 20 (focal) and php 5.6 - 7.1, when using
                 #       an ssl stream context for connecting to localhost via https
-                # @todo ubuntu 18 is deprecated. move to 20
-                operating-system: ['ubuntu-18.04'] # @todo add 'windows-latest'
-                # @todo use an older version of phpunit to enable testing on php 5.3 - 5.5 . Also: we will most likely
-                #       have to resort to using shivammathur/setup-php@v2 instead of sury's ppa to get php installed
-                php: ['8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6']
+                operating-system: ['ubuntu-20.04'] # @todo add 'windows-latest'
+                # @todo enable testing on php 5.3 - it requires use an older version of phpunit (and no yoast/phpunit-polyfills?)
+                php: ['8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4']
         steps:
             -
                 uses: actions/checkout@v2
             # Although this action is useful, we prefer to use the same script to set up php that we use for the
             # docker image used for local testing. This allows us to make sure that script is always in good shape
-            # @todo shivammathur/setup-php@v2 allows us to test with php 5.3 - 5.5 and 8.2. Use it in those cases!
             #-
             #    uses: shivammathur/setup-php@v2
             #    with:

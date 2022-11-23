@@ -1,3 +1,14 @@
+XML-RPC for PHP version xxx - unreleased
+
+* fixed: decoding of responses with latin-1 charset declared in the xml prolog but not in http headers, when on php 5.4, 5.5
+
+* fixed: DateTimeInterface is not present in php 5.4 (error introduced in ver. 4.8.1)
+
+* improved: CI tests now run on php versions 5.4, 5.5 besides all more recent ones
+
+* improved: the test container for local testing now defaults to php 7.4 on ubuntu 20 focal
+
+
 XML-RPC for PHP version 4.8.1 - 2022/11/10
 
 * improved: remove warnings with php 8.1 due to usage of strftime

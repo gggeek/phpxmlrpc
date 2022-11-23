@@ -261,6 +261,7 @@ class HTTPTest extends ServerTest
 
         if (version_compare(PHP_VERSION, '5.6.0', '<'))
         {
+            /// @todo investigate: can we make this work?
             $this->markTestSkipped('HTTPS via Socket known to fail on php 5.5 and earlier');
             return;
         }
