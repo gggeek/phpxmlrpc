@@ -24,7 +24,7 @@ jobs:
                 # @see https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
                 # @todo fix: atm our tests fail when using ubuntu 20 (focal) and php 5.6 - 7.1, when using
                 #       an ssl stream context for connecting to localhost via https
-                operating-system: ['ubuntu-20.04'] # @todo add 'windows-latest'
+                operating-system: ['ubuntu-22.04'] # @todo add 'windows-latest'
                 # @todo enable testing on php 5.3 - it requires use an older version of phpunit (and no yoast/phpunit-polyfills?)
                 php: ['8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4']
         steps:
