@@ -1,4 +1,7 @@
 <?php
+
+if (getenv('TESTMODE') === 'true') require_once __DIR__ . "../demo/server/_prepend.php";
+
 $query = '';
 if (isset($_GET['run'])) {
     $path = parse_url($_GET['run']);
@@ -20,3 +23,4 @@ if (isset($_GET['run'])) {
     <frame name="frmaction" src="action.php" marginwidth="0" marginheight="0" frameborder="0"/>
 </frameset>
 </html>
+<?php if (getenv('TESTMODE') === 'true') require_once __DIR__ . "../demo/server/_append.php"; ?>
