@@ -12,8 +12,8 @@ jobs:
             HTTPSURI: /demo/server/server.php
             PROXYSERVER: localhost:8080
             # @todo check: is this necessary as well on GHA runners?
-            # was: Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
-            # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below.
+            # was: "Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
+            # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below."
             HTTPSVERIFYHOST: 0
             HTTPSIGNOREPEER: 1
             SSLVERSION: 0
@@ -25,7 +25,8 @@ jobs:
                 # @todo fix: atm our tests fail when using ubuntu 20 (focal) and php 5.6 - 7.1, when using
                 #       an ssl stream context for connecting to localhost via https
                 operating-system: ['ubuntu-22.04'] # @todo add 'windows-latest'
-                # @todo enable testing on php 5.3 - it requires use an older version of phpunit (and no yoast/phpunit-polyfills?)
+                # @todo enable testing on php 5.3. Note that it requires use an older version of phpunit (and there is
+                #       no yoast/phpunit-polyfills support?)
                 php: ['8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4']
         steps:
             -    name: checkout code
@@ -39,9 +40,8 @@ jobs:
             #        php-version: ${{ matrix.php }}
             #        extensions: curl, dom, mbstring, xsl
             #        ini-values: 'cgi.fix_pathinfo=1, always_populate_raw_post_data=-1'
-            #        #tools: phpunit/phpunit:a_version_compatible_with_php_5.3-5.5
-            #        # NB: this disables xdebug completely
-            #        coverage: none
+            #        #tools: ${{ matrix.phpunit-version }}
+            #        coverage: ${{ matrix.code-coverage}}
 
             -   name: env setup
                 # @todo add env setup scripts for windows
@@ -52,10 +52,11 @@ jobs:
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_privoxy.sh
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_php.sh ${{ matrix.php }}
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_composer.sh
-                    # fix perms for recent Apache versions
-                    chmod 755 .
-                    find demo -type d -exec chmod 755 {} \;
-                    find demo -type f -exec chmod 644 {} \;
+                    # fix fs perms for recent Apache versions
+                    chmod 775 . ..
+                    find demo -type d -exec chmod 775 {} \;
+                    find demo -type f -exec chmod 664 {} \;
+                    pwd
 
             # Avoid downloading composer deps on every workflow. Is this useful/working for us?
             #-
@@ -77,6 +78,7 @@ jobs:
             -   name: run tests
                 if: ${{ matrix.php != '7.4' }}
                 run: './vendor/bin/phpunit -v tests'
+
             # @todo would it be useful to run a 2nd test with composer --prefer-lowest? After all the only dependencies we have are testing tools
 
             -   name: test python demo files
