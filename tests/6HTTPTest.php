@@ -260,14 +260,7 @@ class HTTPTest extends ServerTest
         }
 
         /// @todo investigate: can we make this work?
-        if (version_compare(PHP_VERSION, '5.6.0', '<'))
-        {
-            $this->markTestSkipped('HTTPS via Socket known to fail on php 5.5 and earlier');
-            return;
-        }
-
-        /// @todo investigate: can we make this work?
-        if (version_compare(PHP_VERSION, '5.6.1', '>=') && version_compare(PHP_VERSION, '7.2', '<'))
+        if (version_compare(PHP_VERSION, '7.2', '<'))
         {
             if (is_readable('/etc/os-release')) {
                 $output = file_get_contents('/etc/os-release');
@@ -279,8 +272,7 @@ class HTTPTest extends ServerTest
                 $ubuntuVersion = @$matches[1];
             }
             if ($ubuntuVersion >= 20) {
-                /// @todo investigate: can we make this work?
-                $this->markTestSkipped('HTTPS via Socket known to fail on php 5.6.1 to 7.1 on Ubuntu 20 and higher');
+                $this->markTestSkipped('HTTPS via Socket known to fail on php less than 7.2 on Ubuntu 20 and higher');
                 return;
             }
         }
