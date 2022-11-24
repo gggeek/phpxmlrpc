@@ -9,7 +9,7 @@
  * @todo be smarter in creating client stub for proxy/auth cases: only set appropriate property of client obj
  **/
 
-if (getenv('TESTMODE') === 'true') require_once __DIR__ . "../demo/server/_prepend.php";
+if (getenv('TESTMODE') === 'true') require_once __DIR__ . "/../demo/server/_prepend.php";
 
 header('Content-Type: text/html; charset=utf-8');
 
@@ -565,4 +565,4 @@ if ($action) {
 ?>
 </body>
 </html>
-<?php if (getenv('TESTMODE') === 'true') require_once __DIR__ . "../demo/server/_append.php"; ?>
+<?php if (getenv('TESTMODE') === 'true') require_once __DIR__ . "/../demo/server/_append.php"; ?>
