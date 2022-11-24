@@ -8,7 +8,7 @@ ini_set('display_errors', true);
 error_reporting(E_ALL);
 
 if (isset($_GET['showSource']) && $_GET['showSource']) {
-    $file = debug_backtrace()[0]['file'];
+    $file = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)[0]['file'];
     highlight_file($file);
     die();
 }

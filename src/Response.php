@@ -203,7 +203,7 @@ class Response
             case 'raw_data':
                 return $this->httpResponse['raw_data'];
             default:
-                $trace = debug_backtrace();
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
                 return null;
         }
@@ -224,7 +224,7 @@ class Response
                 $this->httpResponse['raw_data'] = $value;
                 break;
             default:
-                $trace = debug_backtrace();
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }
     }
@@ -256,7 +256,7 @@ class Response
                 unset($this->httpResponse['raw_data']);
                 break;
             default:
-                $trace = debug_backtrace();
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }
     }
