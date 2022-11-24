@@ -71,7 +71,6 @@ jobs:
                 run: |
                     ./tests/ci/setup/setup_code_coverage.sh enable
                     ./vendor/bin/phpunit -v --coverage-clover=coverage.clover tests
-                    #if [ -f coverage.clover ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
                     if [ -f coverage.clover ]; then wget https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && ./codecov -f coverage.clover; fi
 
             -   name: run tests
