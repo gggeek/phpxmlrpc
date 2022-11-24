@@ -4,6 +4,10 @@ XML-RPC for PHP version xxx - unreleased
 
 * fixed: DateTimeInterface is not present in php 5.4 (error introduced in ver. 4.8.1)
 
+* new: allow users of the library to get more fine-grained information about errors in parsing received responses by
+  overriding the integer value of `PhpXmlRpc::$xmlrpcerr['invalid_xml']`, `PhpXmlRpc::$xmlrpcerr['xml_not_compliant']`,
+  `PhpXmlRpc::$xmlrpcerr['xml_parsing_error']` and the equivalent `PhpXmlRpc::$xmlrpcstr` strings. Feature req. #101
+
 * improved: CI tests now run on php versions 5.4, 5.5 besides all more recent ones
 
 * improved: the test container for local testing now defaults to php 7.4 on ubuntu 20 focal

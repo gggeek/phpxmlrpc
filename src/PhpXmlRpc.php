@@ -9,6 +9,7 @@ class PhpXmlRpc
 {
     static public $xmlrpcerr = array(
         'unknown_method' => 1,
+        /// @deprecated. left in for BC
         'invalid_return' => 2,
         'incorrect_params' => 3,
         'introspect_unknown' => 4,
@@ -27,6 +28,11 @@ class PhpXmlRpc
         'multicall_noparams' => 13,
         'multicall_notarray' => 14,
         'no_http2' => 15,
+        // the following 3 are meant to give greater insight than 'invalid_return'. They use the same code for BC,
+        // but you can override their value in your own code
+        'invalid_xml' => 2,
+        'xml_not_compliant' => 2,
+        'xml_parsing_error' => 2,
 
         'cannot_decompress' => 103,
         'decompress_fail' => 104,
@@ -37,6 +43,7 @@ class PhpXmlRpc
 
     static public $xmlrpcstr = array(
         'unknown_method' => 'Unknown method',
+        /// @deprecated. left in for BC
         'invalid_return' => 'Invalid response payload (you can use the setDebug method to allow analysis of the response)',
         'incorrect_params' => 'Incorrect parameters passed to method',
         'introspect_unknown' => "Can't introspect: method unknown",
@@ -55,6 +62,11 @@ class PhpXmlRpc
         'multicall_noparams' => 'Missing params',
         'multicall_notarray' => 'params is not an array',
         'no_http2' => 'No HTTP/2 support compiled in',
+        // the following 3 are meant to give greater insight than 'invalid_return'. They use the same string for BC,
+        // but you can override their value in your own code
+        'invalid_xml' => 'Invalid response payload (you can use the setDebug method to allow analysis of the response)',
+        'xml_not_compliant' => 'Invalid response payload (you can use the setDebug method to allow analysis of the response)',
+        'xml_parsing_error' => 'Invalid response payload (you can use the setDebug method to allow analysis of the response)',
 
         'cannot_decompress' => 'Received from server compressed HTTP and cannot decompress',
         'decompress_fail' => 'Received from server invalid compressed HTTP',

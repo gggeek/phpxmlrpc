@@ -336,8 +336,8 @@ class Request
 
             // BC break: in the past for some cases we used the error message: 'XML error at line 1, check URL'
 
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'],
-                PhpXmlRpc::$xmlrpcstr['invalid_return'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '',
+            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_xml'],
+                PhpXmlRpc::$xmlrpcstr['invalid_xml'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '',
                 $this->httpResponse
             );
 
@@ -347,8 +347,8 @@ class Request
         }
         // second error check: xml well formed but not xml-rpc compliant
         elseif ($xmlRpcParser->_xh['isf'] == 2) {
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'],
-                PhpXmlRpc::$xmlrpcstr['invalid_return'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '',
+            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['xml_not_compliant'],
+                PhpXmlRpc::$xmlrpcstr['xml_not_compliant'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '',
                 $this->httpResponse
             );
 
@@ -359,10 +359,8 @@ class Request
         // third error check: parsing of the response has somehow gone boink.
         /// @todo shall we omit this check, since we trust the parsing code?
         elseif ($returnType == XMLParser::RETURN_XMLRPCVALS && !is_object($xmlRpcParser->_xh['value'])) {
-            // something odd has happened
-            // and it's time to generate a client side error
-            // indicating something odd went on
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_return'], PhpXmlRpc::$xmlrpcstr['invalid_return'],
+            // something odd has happened and it's time to generate a client side error indicating something odd went on
+            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['xml_parsing_error'], PhpXmlRpc::$xmlrpcstr['xml_parsing_error'],
                 '', $this->httpResponse
             );
         } else {
