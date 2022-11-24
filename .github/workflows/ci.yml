@@ -13,7 +13,7 @@ jobs:
             PROXYSERVER: localhost:8080
             # @todo check: is this necessary as well on GHA runners?
             # was: "Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
-            # to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below."
+            #       to make the tests pass when Apache has a bogus SSL cert whe need the full set of options below."
             HTTPSVERIFYHOST: 0
             HTTPSIGNOREPEER: 1
             SSLVERSION: 0
@@ -22,9 +22,7 @@ jobs:
             fail-fast: false
             matrix:
                 # @see https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
-                # @todo fix: atm our tests fail when using ubuntu 20 (focal) and php 5.6 - 7.1, when using
-                #       an ssl stream context for connecting to localhost via https
-                operating-system: ['ubuntu-22.04'] # @todo add 'windows-latest'
+                operating-system: ['ubuntu-20.04'] # @todo add 'windows-latest'. Also: run some tests on ubuntu 22
                 # @todo enable testing on php 5.3. Note that it requires use an older version of phpunit (and there is
                 #       no yoast/phpunit-polyfills support?)
                 php: ['8.1', '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6', '5.5', '5.4']
@@ -32,9 +30,9 @@ jobs:
             -    name: checkout code
                  uses: actions/checkout@v2
 
-            # Although this action is useful, we prefer to use the same script to set up php that we use for the
+            # Although this action is quite nice, we prefer to use the same script to set up php that we use for the
             # docker image used for local testing. This allows us to make sure that script is always in good shape
-            #-
+            #-   name: set up php
             #    uses: shivammathur/setup-php@v2
             #    with:
             #        php-version: ${{ matrix.php }}
@@ -43,7 +41,7 @@ jobs:
             #        #tools: ${{ matrix.phpunit-version }}
             #        coverage: ${{ matrix.code-coverage}}
 
-            -   name: env setup
+            -   name: set up env
                 # @todo add env setup scripts for windows
                 run: |
                     chmod 755 ./tests/ci/setup/*.sh
@@ -54,25 +52,27 @@ jobs:
                     sudo --preserve-env=GITHUB_ACTIONS ./tests/ci/setup/setup_composer.sh
                     # fix fs perms for recent Apache versions configuration (ie. starting from Jammy)
                     f="$(pwd)"; while [[ $f != / ]]; do sudo chmod +rx "$f"; f=$(dirname "$f"); done;
-                    find . -type d -exec chmod 775 {} \;
-                    find . -type f -exec chmod 664 {} \;
+                    find . -type d -exec chmod +rx {} \;
+                    find . -type f -exec chmod +r {} \;
 
-            # Avoid downloading composer deps on every workflow. Is this useful/working for us?
+            # Avoid downloading composer deps on every workflow run. Is this useful for us? Caching the installation of
+            # php/apache/privoxy/perl would be more useful...
             #-
             #    uses: actions/cache@v2
             #    with:
             #        path: /tmp/composer-cache
             #        key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-            -   name: composer install
+            -   name: install dependencies
                 run: 'composer install'
 
-            -   name: run tests and upload coverage
+            -   name: run tests and upload coverage info
                 if: ${{ matrix.php == '7.4' }}
                 run: |
                     ./tests/ci/setup/setup_code_coverage.sh enable
                     ./vendor/bin/phpunit -v --coverage-clover=coverage.clover tests
-                    if [ -f coverage.clover ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+                    #if [ -f coverage.clover ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+                    if [ -f coverage.clover ]; then wget https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && ./codecov -f coverage.clover; fi
 
             -   name: run tests
                 if: ${{ matrix.php != '7.4' }}

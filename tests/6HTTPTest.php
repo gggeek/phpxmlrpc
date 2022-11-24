@@ -259,11 +259,30 @@ class HTTPTest extends ServerTest
             return;
         }
 
+        /// @todo investigate: can we make this work?
         if (version_compare(PHP_VERSION, '5.6.0', '<'))
         {
-            /// @todo investigate: can we make this work?
             $this->markTestSkipped('HTTPS via Socket known to fail on php 5.5 and earlier');
             return;
+        }
+
+        /// @todo investigate: can we make this work?
+        if (version_compare(PHP_VERSION, '5.6.1', '>=') && version_compare(PHP_VERSION, '7.2', '<'))
+        {
+            if (is_readable('/etc/os-release')) {
+                $output = file_get_contents('/etc/os-release');
+                preg_match('/VERSION="?([0-9]+)/', $output, $matches);
+                $ubuntuVersion = @$matches[1];
+            } else {
+                exec('uname -a', $output, $retval);
+                preg_match('/ubunutu([0-9]+)/', $output[0], $matches);
+                $ubuntuVersion = @$matches[1];
+            }
+            if ($ubuntuVersion >= 20) {
+                /// @todo investigate: can we make this work?
+                $this->markTestSkipped('HTTPS via Socket known to fail on php 5.6.1 to 7.1 on Ubuntu 20 and higher');
+                return;
+            }
         }
 
         $this->client->server = $this->args['HTTPSSERVER'];
