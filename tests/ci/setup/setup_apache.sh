@@ -4,6 +4,8 @@
 # Has to be run as admin
 # @todo make this work across all ubuntu versions (precise to jammy)
 
+echo "Installing and configuring Apache2..."
+
 set -e
 
 SCRIPT_DIR="$(dirname -- "$(readlink -f "$0")")"
@@ -36,3 +38,5 @@ fi
 echo "export HTTPSERVER=localhost" >> /etc/apache2/envvars
 
 service apache2 restart
+
+echo "Done Installing and configuring Apache2"

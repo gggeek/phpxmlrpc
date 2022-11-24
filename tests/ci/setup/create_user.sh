@@ -4,6 +4,8 @@
 
 set -e
 
+echo "Creating user account..."
+
 USERNAME="${1:-docker}"
 
 addgroup --gid 2000 "${USERNAME}"
@@ -19,3 +21,5 @@ if [ -f /etc/sudoers ]; then
     adduser "${USERNAME}" sudo
     sed -i "\$ a ${USERNAME}   ALL=\(ALL:ALL\) NOPASSWD: ALL" /etc/sudoers
 fi
+
+echo "Done creating user account"
