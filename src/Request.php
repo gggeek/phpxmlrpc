@@ -279,7 +279,10 @@ class Request
         }
 
         // try to 'guestimate' the character encoding of the received response
-        $respEncoding = XMLParser::guessEncoding(@$this->httpResponse['headers']['content-type'], $data);
+        $respEncoding = XMLParser::guessEncoding(
+            isset($this->httpResponse['headers']['content-type']) ? $this->httpResponse['headers']['content-type'] : '',
+            $data
+        );
 
         if ($this->debug) {
             $start = strpos($data, '<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
