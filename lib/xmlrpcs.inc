@@ -69,6 +69,7 @@ class xmlrpc_server extends Server
             case 'dmap':
                 return $this->dmap;
             default:
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' .
                     $trace[0]['line'], E_USER_NOTICE);
                 return null;
