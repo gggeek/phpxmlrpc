@@ -30,6 +30,8 @@ configure_php_ini() {
 PHP_VERSION="$1"
 DEBIAN_VERSION="$(lsb_release -s -c)"
 
+# @todo use native packages if requested for a specific version and that is the same as available in the os repos
+
 if [ "${PHP_VERSION}" = default ]; then
     echo "Using native PHP packages..."
 

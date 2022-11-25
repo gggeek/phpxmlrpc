@@ -36,7 +36,7 @@ if (isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) && extension_loaded('xdebug')) {
     include_once __DIR__ . "/../../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumCommon/prepend.php";
 }
 
-// A helper for cli vs we output:
+// A helper for cli vs web output:
 function output($text)
 {
     echo PHP_SAPI == 'cli' ? strip_tags(str_replace('<br/>', "\n", $text)) : $text;
