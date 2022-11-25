@@ -1,6 +1,6 @@
 XML-RPC for PHP version xxx - unreleased
 
-* fixed: a php warning on php 8 when parsing responses which do not have a Content-Type header
+* fixed: a php warning on php 8 when parsing responses which do not have a Content-Type header (issue #104)
 
 * fixed: added a missing html-escaping call in demo file `introspect.php`
 
@@ -10,7 +10,7 @@ XML-RPC for PHP version xxx - unreleased
 
 * new: allow users of the library to get more fine-grained information about errors in parsing received responses by
   overriding the integer value of `PhpXmlRpc::$xmlrpcerr['invalid_xml']`, `PhpXmlRpc::$xmlrpcerr['xml_not_compliant']`,
-  `PhpXmlRpc::$xmlrpcerr['xml_parsing_error']` and the equivalent `PhpXmlRpc::$xmlrpcstr` strings. Feature req. #101
+  `PhpXmlRpc::$xmlrpcerr['xml_parsing_error']` and the equivalent `PhpXmlRpc::$xmlrpcstr` strings (feature req. #101)
 
 * improved: CI tests now run on php versions 5.4 and 5.5, besides all more recent ones
 
@@ -19,7 +19,7 @@ XML-RPC for PHP version xxx - unreleased
 
 XML-RPC for PHP version 4.8.1 - 2022/11/10
 
-* improved: remove warnings with php 8.1 due to usage of strftime
+* improved: remove warnings with php 8.1 due to usage of strftime (issue #103)
 
 * improved: cast correctly php objects sporting `DateTimeInterface` to phpxmlrpc datetime values
 
@@ -32,7 +32,7 @@ XML-RPC for PHP version 4.8.0 - 2022/6/20
   curl and the server does not support `system.multicall`. See new demo file `parallel.php` for how this can be done.
 
 * fixed: error 'Class "PhpXmlRpc\Exception\PhpXmlrpcException" not found' when including `xmlrpc.inc` and on php 8.1
-  (might also happen on other php versions)
+  (might also happen on other php versions) (issue #99)
 
 
 XML-RPC for PHP version 4.7.2 - 2022/5/25
@@ -54,13 +54,13 @@ XML-RPC for PHP version 4.7.1 - 2022/5/25
 XML-RPC for PHP version 4.7.0 - 2022/5/25
 
 * new: HTTP/2 is supported by both the Client and Server components (with the php cURL extension being required to use
-  it client-side).
+  it client-side) (issue #94).
   To force the client to use http/2 over tls or http/2 over tcp requests, pass `h2` or `h2c` as 3rd argument to `Client::send`.
 
 
 XML-RPC for PHP version 4.6.1 - 2022/2/15
 
-* fixed: one php warning with php 8 and up
+* fixed: one php warning with php 8 and up (issue #97)
 
 
 XML-RPC for PHP version 4.6.0 - 2021/12/9
