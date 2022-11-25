@@ -150,7 +150,7 @@ function build_remote_method_wrapper_code($client, $methodName, $xmlrpcFuncName,
     $code = "function $xmlrpcFuncName (";
     if ($clientCopyMode < 2) {
         // client copy mode 0 or 1 == partial / full client copy in emitted code
-        $innerCode = build_client_wrapper_code($client, $clientCopyMode, $prefix, $namespace);
+        $innerCode = build_client_wrapper_code($client, $clientCopyMode, $prefix);
         $innerCode .= "\$client->setDebug(\$debug);\n";
         $this_ = '';
     } else {
@@ -229,9 +229,9 @@ function build_client_wrapper_code($client, $verbatim_client_copy, $prefix='xmlr
     // (this provides for future expansion or subclassing of client obj)
     if ($verbatim_client_copy)
     {
-        foreach($client as $fld => $val)
+        foreach ($client as $fld => $val)
         {
-            if($fld != 'debug' && $fld != 'return_type')
+            if ($fld != 'debug' && $fld != 'return_type')
             {
                 $val = var_export($val, true);
                 $code .= "\$client->$fld = $val;\n";

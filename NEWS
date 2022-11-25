@@ -8,6 +8,8 @@ XML-RPC for PHP version xxx - unreleased
 
 * fixed: DateTimeInterface is not present in php 5.4 (error introduced in ver. 4.8.1)
 
+* fixed: use of uninitialized var when accessing nonexisting member of legacy class `xmlrpc_server` - thanks SonarQube
+
 * new: allow users of the library to get more fine-grained information about errors in parsing received responses by
   overriding the integer value of `PhpXmlRpc::$xmlrpcerr['invalid_xml']`, `PhpXmlRpc::$xmlrpcerr['xml_not_compliant']`,
   `PhpXmlRpc::$xmlrpcerr['xml_parsing_error']` and the equivalent `PhpXmlRpc::$xmlrpcstr` strings (feature req. #101)

@@ -163,7 +163,7 @@ class ValueTests extends PhpXmlRpc_PolyfillTestCase
     }
 
     /// @todo do not use \PhpXmlRpc\Encoder for this test
-    function testBigXML()
+    public function testBigXML()
     {
         // nb: make sure that  the serialized xml corresponding to this is > 10MB in size
         $data = array();
