@@ -31,7 +31,7 @@ if ($resp->faultCode()) {
 
     // Then, retrieve the signature and help text of each available method
     foreach ($v as $methodName) {
-        output("<h4>" . $methodName->scalarval() . "</h4>\n");
+        output("<h4>" . htmlspecialchars($methodName->scalarval()) . "</h4>\n");
         // build messages first, add params later
         $m1 = new PhpXmlRpc\Request('system.methodHelp');
         $m2 = new PhpXmlRpc\Request('system.methodSignature');
