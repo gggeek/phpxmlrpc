@@ -26,11 +26,12 @@ jobs:
                     # @todo run some tests on 'windows-latest' (needs test env setup scripts for windows to be developed)
                     -   php: '8.1'
                         operating-system: ubuntu-22.04
-                        code-coverage: true
                     -   php: '8.0'
                         operating-system: ubuntu-22.04
                     -   php: '7.4'
                         operating-system: ubuntu-22.04
+                        # nb: the version of phpunit we use does not support code coverage generation on php 8
+                        code-coverage: true
                     -   php: '7.3'
                         operating-system: ubuntu-22.04
                     -   php: '7.2'
@@ -87,7 +88,7 @@ jobs:
 
             -   name: run tests and upload coverage info if needed
                 run: |
-                    if [ "${{ matrix.code-coverage }}" != true ]; then
+                    if [ -z "${{ matrix.code-coverage }}" ]; then
                         ./vendor/bin/phpunit -v tests
                     else
                         ./tests/ci/setup/setup_code_coverage.sh enable
@@ -96,6 +97,8 @@ jobs:
                             wget https://uploader.codecov.io/latest/linux/codecov && \
                             chmod +x codecov && \
                             ./codecov -f coverage.clover
+                        else
+                            echo "WARNING: code coverage not generated. Is xdebug disabled?"
                         fi
                     fi
 
