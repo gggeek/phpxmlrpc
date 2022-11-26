@@ -92,5 +92,3 @@ output("Which was the time in UTC at " . PhpXmlRpc\Helper\Date::iso8601Encode($t
 output("</pre>\n");
 
 output('</body></html>');
-
-require_once __DIR__ . "/client/_append.php";

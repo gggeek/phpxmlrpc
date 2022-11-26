@@ -56,5 +56,3 @@ output('
 </body>
 </html>
 ');
-
-require_once __DIR__ . "/_append.php";

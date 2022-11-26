@@ -11,31 +11,31 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
     {
         $this->args = argParser::getArgs();
 
-        $this->baseUrl = $this->args['HTTPSERVER'] . str_replace( '/demo/server/server.php', '/demo/', $this->args['HTTPURI'] );
+        $this->baseUrl = $this->args['HTTPSERVER'] . str_replace( '/demo/server/server.php', '/tests/index.php', $this->args['HTTPURI'] );
 
-        $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . '/' . str_replace( '/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['HTTPURI'] );
+        $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . str_replace( '/demo/server/server.php', '/tests/phpunit_coverage.php', $this->args['HTTPURI'] );
     }
 
     public function testAgeSort()
     {
-        $page = $this->request('client/agesort.php');
+        $page = $this->request('?demo=client/agesort.php');
     }
 
     public function testGetStateName()
     {
-        $page = $this->request('client/getstatename.php');
-        $page = $this->request('client/getstatename.php', 'POST', array('stateno' => '1'));
+        $page = $this->request('?demo=client/getstatename.php');
+        $page = $this->request('?demo=client/getstatename.php', 'POST', array('stateno' => '1'));
     }
 
     public function testIntrospect()
     {
-        $page = $this->request('client/introspect.php');
+        $page = $this->request('?demo=client/introspect.php');
     }
 
     public function testMail()
     {
-        $page = $this->request('client/mail.php');
-        $page = $this->request('client/mail.php', 'POST', array(
+        $page = $this->request('?demo=client/mail.php');
+        $page = $this->request('?demo=client/mail.php', 'POST', array(
             "mailto" => '',
             "mailsub" => '',
             "mailmsg" => '',
@@ -47,28 +47,28 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
 
     public function testParallel()
     {
-        $page = $this->request('client/parallel.php');
+        $page = $this->request('?demo=client/parallel.php');
     }
 
     public function testProxy()
     {
-        $page = $this->request('client/proxy.php', 'GET', null, true);
+        $page = $this->request('?demo=client/proxy.php', 'GET', null, true);
     }
 
     public function testWhich()
     {
-        $page = $this->request('client/which.php');
+        $page = $this->request('?demo=client/which.php');
     }
 
     public function testWrap()
     {
-        $page = $this->request('client/wrap.php');
+        $page = $this->request('?demo=client/wrap.php');
     }
 
     public function testDiscussServer()
     {
         /// @todo add a couple of proper xmlrpc calls, too
-        $page = $this->request('server/discuss.php');
+        $page = $this->request('?demo=server/discuss.php');
         $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
     }
@@ -76,7 +76,7 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
     public function testProxyServer()
     {
         /// @todo add a couple of proper xmlrpc calls, too
-        $page = $this->request('server/proxy.php');
+        $page = $this->request('?demo=server/proxy.php');
         $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
     }

@@ -40,5 +40,3 @@ output("<form action=\"getstatename.php\" method=\"POST\">
 <p>Enter a state number to query its name</p>");
 
 output("</body></html>\n");
-
-require_once __DIR__ . "/_append.php";

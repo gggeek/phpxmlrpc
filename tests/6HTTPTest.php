@@ -465,7 +465,7 @@ class HTTPTest extends ServerTest
     {
         if ($this->expectHttp2) {
             $hr = $r->httpResponse();
-            $this->assertEquals("2", $hr['protocol_version']);
+            $this->assertEquals("2", @$hr['protocol_version']);
         } else {
 
         }

@@ -29,5 +29,3 @@ if (!$resp->faultCode()) {
 }
 
 output("</body></html>\n");
-
-require_once __DIR__ . "/_append.php";

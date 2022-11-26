@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . "/_prepend.php";
 
 output('<html lang="en">
@@ -84,5 +83,3 @@ if ($resp->faultCode()) {
 }
 
 output("</body></html>\n");
-
-require_once __DIR__ . "/_append.php";

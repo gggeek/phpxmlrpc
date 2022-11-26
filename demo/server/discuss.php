@@ -106,5 +106,3 @@ $srv = new PhpXmlRpc\Server(array(
         "docstring" => $getComments_doc,
     ),
 ));
-
-require_once __DIR__ . "/_append.php";

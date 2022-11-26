@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . "/_prepend.php";
 
 use PhpXmlRpc\Encoder;
@@ -122,5 +121,3 @@ $t = microtime(true);
 $resp = $client->send($reqs);
 $t = microtime(true) - $t;
 echo "Multicall send: $t secs\n";
-
-require_once __DIR__ . "/_append.php";

@@ -14,8 +14,6 @@
  * @todo if js libs are not available, do not try to load them
  **/
 
-if (getenv('TESTMODE') === 'true') require_once __DIR__ . "/../demo/server/_prepend.php";
-
 // Make sure we set the correct charset type for output, so that we can display all characters
 header('Content-Type: text/html; charset=utf-8');
 
@@ -361,4 +359,3 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
 </form>
 </body>
 </html>
-<?php if (getenv('TESTMODE') === 'true') require_once __DIR__ . "/../demo/server/_append.php"; ?>

@@ -9,10 +9,6 @@ if (isset($_GET['showSource']) && $_GET['showSource']) {
     die();
 }
 
-// Make errors visible
-ini_set('display_errors', true);
-error_reporting(E_ALL);
-
 // Use the custom class autoloader. These two lines not needed when the phpxmlrpc library is installed using Composer
 include_once __DIR__ . '/../../src/Autoloader.php';
 PhpXmlRpc\Autoloader::register();
@@ -22,18 +18,6 @@ if (isset($_SERVER['HTTPSERVER'])) {
     define('XMLRPCSERVER', 'http://'.$_SERVER['HTTPSERVER'].'/demo/server/server.php');
 } else {
     define('XMLRPCSERVER', 'http://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php');
-}
-
-// Out-of-band information: let the client manipulate the page operations.
-// We do this to help the testsuite script: do not reproduce in production!
-if (isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) && extension_loaded('xdebug')) {
-    $GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'] = '/tmp/phpxmlrpc_coverage';
-    if (!is_dir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'])) {
-        mkdir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY']);
-        chmod($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'], 0777);
-    }
-
-    include_once __DIR__ . "/../../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumCommon/prepend.php";
 }
 
 // A helper for cli vs web output:

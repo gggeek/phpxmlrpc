@@ -9,7 +9,6 @@
             <exclude>
                 <directory>./build</directory>
                 <directory>./doc</directory>
-                <directory>./extras</directory>
                 <directory>./tests</directory>
                 <directory>./vendor</directory>
                 <file>./pakefile.php</file>

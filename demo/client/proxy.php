@@ -76,5 +76,3 @@ $stateName = $proxy->getStateName($stateNo);
 output("State $stateNo is ".htmlspecialchars($stateName));
 
 output("</body></html>\n");
-
-require_once __DIR__ . "/_append.php";

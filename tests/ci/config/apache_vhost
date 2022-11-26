@@ -20,7 +20,6 @@
 
   # Env vars used by the test code, which we get from the environment
   SetEnv HTTPSERVER ${HTTPSERVER}
-  SetEnv TESTMODE true
 
   <Directory "${TESTS_ROOT_DIR}">
     Options FollowSymLinks MultiViews
@@ -52,7 +51,6 @@
 
   # Env vars used by the test code, which we get from the environment
   SetEnv HTTPSERVER ${HTTPSERVER}
-  SetEnv TESTMODE true
 
   <Directory "${TESTS_ROOT_DIR}">
     Options FollowSymLinks MultiViews

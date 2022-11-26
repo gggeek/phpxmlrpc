@@ -95,18 +95,19 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
     {
         $this->args = argParser::getArgs();
 
+        $uri = str_replace('/demo/server/server.php', '/tests/index.php?demo=server/server.php', $this->args['HTTPURI']);
         $server = explode(':', $this->args['HTTPSERVER']);
         if (count($server) > 1) {
-            $this->client = new xmlrpc_client($this->args['HTTPURI'], $server[0], $server[1]);
+            $this->client = new xmlrpc_client($uri, $server[0], $server[1]);
         } else {
-            $this->client = new xmlrpc_client($this->args['HTTPURI'], $this->args['HTTPSERVER']);
+            $this->client = new xmlrpc_client($uri, $this->args['HTTPSERVER']);
         }
 
         $this->client->setDebug($this->args['DEBUG']);
         $this->client->request_compression = $this->request_compression;
         $this->client->accepted_compression = $this->accepted_compression;
 
-        $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . '/' . str_replace( '/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['HTTPURI'] );
+        $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . '/' . str_replace('/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['HTTPURI']);
 
         if ($this->args['DEBUG'] == 1)
             ob_start();

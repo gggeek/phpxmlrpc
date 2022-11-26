@@ -120,5 +120,3 @@ if (isset($_GET['FORCE_AUTH'])) {
 
 $s->service();
 // That should do all we need!
-
-require_once __DIR__ . "/_append.php";
