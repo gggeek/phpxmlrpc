@@ -1,5 +1,21 @@
 XML-RPC for PHP version xxx - unreleased
 
+* security fix: hardened the `Client::send()` method against misuse of the `$method` argument (issue #81).
+  Abusing its value, it was possible to force the client to _access local files_ or _connect to undesired urls_ instead
+  of the intended target server's url (the one used in the Client constructor).
+
+  This weakness only affects installations where all of the following conditions apply at the same time:
+
+  - the xmlrpc Client is used, ie. not xmlrpc servers
+  - untrusted data (eg. data from remote users) is used as value for the `$method` argument of method `Client::send()`,
+    in conjunction with conditions which trigger usage of curl as http transport (ie. either using the https, http11 or
+    http2 protocols, or calling `Client::setUseCurl()` beforehand)
+  - make the resulting Response's object `httpResponse` member, which is intended to be used for debugging purposes only,
+    available to 3rd parties, eg. by displaying it to the end user or serializing it in some storage (note that the
+    same data can also be accessed via magic property `Response::raw_data`, and in the Request's `httpResponse` member)
+
+  This is most likely a very uncommon usage scenario, and as such the severity of this issue can be considered low.
+
 * fixed: a php warning on php 8 when parsing responses which do not have a Content-Type header (issue #104)
 
 * fixed: added a missing html-escaping call in demo file `introspect.php`

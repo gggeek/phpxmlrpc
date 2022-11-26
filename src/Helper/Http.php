@@ -120,9 +120,9 @@ class Http
         // When using Curl to query servers using Digest Auth, we get back a double set of http headers.
         // Same when following redirects
         // We strip out the 1st...
-        if ($headersProcessed && preg_match('/^HTTP\/[0-9](?:\.[0-9])? (?:401|301|302) /', $data)) {
+        if ($headersProcessed && preg_match('/^HTTP\/[0-9](?:\.[0-9])? (?:401|30[1278]) /', $data)) {
             if (preg_match('/(\r?\n){2}HTTP\/[0-9](?:\.[0-9])? 200 /', $data)) {
-                $data = preg_replace('/^HTTP\/[0-9](?:\.[0-9])? (?:401|301|302) .+?(?:\r?\n){2}(HTTP\/[0-9.]+ 200 )/s', '$1', $data, 1);
+                $data = preg_replace('/^HTTP\/[0-9](?:\.[0-9])? (?:401|30[1278]) .+?(?:\r?\n){2}(HTTP\/[0-9.]+ 200 )/s', '$1', $data, 1);
             }
         }
 
