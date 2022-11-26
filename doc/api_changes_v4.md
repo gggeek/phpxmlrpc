@@ -148,10 +148,10 @@ Enabling compatibility with legacy code
 ---------------------------------------
 
 If you have code which relies on version 3 of the phpxmlrpc API, you *should* be able to use version 4 as a drop-in
-replacement, regardless of all of the changes mentioned above.
+replacement, regardless of all the changes mentioned above.
 
 The magic happens via the xmlrpc.inc, xmlrpcs.inc and xmlrpc_wrappers.inc files, which have been kept solely for
-the purpose of backwards compatibility (you might notice that they are still in the 'lib' directory, whereas all of
+the purpose of backwards compatibility (you might notice that they are still in the 'lib' directory, whereas all
 the refactored code now sits in the 'src' directory).
 
 Of course, some minor changes where inevitable, and backwards compatibility can not be guaranteed at 100%.

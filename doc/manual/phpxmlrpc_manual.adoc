@@ -972,7 +972,6 @@ Don't assume a timezone. It should be
         about timezones.
 ____
 
-
 Unfortunately, this means that date processing isn't
       straightforward. Although XML-RPC uses ISO 8601 format dates, it doesn't
       use the timezone specifier.
