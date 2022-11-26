@@ -238,6 +238,8 @@ class Request
      * @return Response
      *
      * @todo parsing Responses is not really the responsibility of the Request class. Maybe of the Client...
+     * @todo what about only populating 'raw_data' and 'headers' in httpResponse when debug mode is on? Even better, have
+     *       3 debug levels: data only, echo messages, echo more messages
      */
     public function parseResponse($data = '', $headersProcessed = false, $returnType = XMLParser::RETURN_XMLRPCVALS)
     {
