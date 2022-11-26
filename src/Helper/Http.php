@@ -74,7 +74,7 @@ class Http
      * @todo if $debug is 0, we could avoid populating 'raw_data' and 'headers' in the returned value - even better, have
      *       2 debug levels
      */
-    public function parseResponseHeaders(&$data, $headersProcessed = false, $debug=0)
+    public function parseResponseHeaders(&$data, $headersProcessed = false, $debug = 0)
     {
         $httpResponse = array('raw_data' => $data, 'headers'=> array(), 'cookies' => array(), 'status_code' => null);
 
@@ -133,7 +133,7 @@ class Http
         if ($httpResponse['status_code'] !== '200') {
             $errstr = substr($data, 0, strpos($data, "\n") - 1);
             Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': HTTP error, got response: ' . $errstr);
-            throw new HttpException(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (' . $errstr . ')', PhpXmlRpc::$xmlrpcerr['http_error'], null, $httpResponse['status_code'] );
+            throw new HttpException(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (' . $errstr . ')', PhpXmlRpc::$xmlrpcerr['http_error'], null, $httpResponse['status_code']);
         }
 
         // be tolerant to usage of \n instead of \r\n to separate headers and data
@@ -155,7 +155,7 @@ class Http
         // be tolerant to line endings, and extra empty lines
         $ar = preg_split("/\r?\n/", trim(substr($data, 0, $pos)));
 
-        foreach($ar as $line) {
+        foreach ($ar as $line) {
             // take care of multi-line headers and cookies
             $arr = explode(':', $line, 2);
             if (count($arr) > 1) {

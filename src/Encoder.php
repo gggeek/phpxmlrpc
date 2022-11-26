@@ -116,7 +116,7 @@ class Encoder
 
             case 'array':
                 $arr = array();
-                foreach($xmlrpcVal as $value) {
+                foreach ($xmlrpcVal as $value) {
                     $arr[] = $this->decode($value, $options);
                 }
                 return $arr;
@@ -240,7 +240,7 @@ class Encoder
 
                 } else {
                     $arr = array();
-                    foreach($phpVal as $k => $v) {
+                    foreach ($phpVal as $k => $v) {
                         $arr[$k] = $this->encode($v, $options);
                     }
                     $xmlrpcVal = new Value($arr, Value::$xmlrpcStruct);

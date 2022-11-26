@@ -63,7 +63,7 @@ class Charset
      */
     protected function buildConversionTable($tableName)
     {
-        switch($tableName) {
+        switch ($tableName) {
             case 'xml_iso88591_Entities':
                 if (count($this->xml_iso88591_Entities['in'])) {
                     return;

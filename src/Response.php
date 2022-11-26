@@ -195,7 +195,7 @@ class Response
     {
         //trigger_error('getting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
 
-        switch($name) {
+        switch ($name) {
             case 'hdrs':
                 return $this->httpResponse['headers'];
             case '_cookies':
@@ -213,7 +213,7 @@ class Response
     {
         //trigger_error('setting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
 
-        switch($name) {
+        switch ($name) {
             case 'hdrs':
                 $this->httpResponse['headers'] = $value;
                 break;
@@ -231,7 +231,7 @@ class Response
 
     public function __isset($name)
     {
-        switch($name) {
+        switch ($name) {
             case 'hdrs':
                 return isset($this->httpResponse['headers']);
             case '_cookies':
@@ -245,7 +245,7 @@ class Response
 
     public function __unset($name)
     {
-        switch($name) {
+        switch ($name) {
             case 'hdrs':
                 unset($this->httpResponse['headers']);
                 break;

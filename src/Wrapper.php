@@ -606,7 +606,7 @@ class Wrapper
             }
         }
         // shall we exclude functions returning by ref?
-        // if($func->returnsReference())
+        // if ($func->returnsReference())
         //     return false;
 
         $code = "function $newFuncName(\$req) {\n" . $innerCode . "\n}";
@@ -877,7 +877,7 @@ class Wrapper
             }
 
             $xmlrpcArgs = array();
-            foreach($currentArgs as $i => $arg) {
+            foreach ($currentArgs as $i => $arg) {
                 if ($i == $maxArgs) {
                     break;
                 }
@@ -1135,7 +1135,7 @@ class Wrapper
      *
      * @return string
      */
-    protected function buildClientWrapperCode($client, $verbatimClientCopy, $prefix = 'xmlrpc', $namespace = '\\PhpXmlRpc\\' )
+    protected function buildClientWrapperCode($client, $verbatimClientCopy, $prefix = 'xmlrpc', $namespace = '\\PhpXmlRpc\\')
     {
         $code = "\$client = new {$namespace}Client('" . str_replace("'", "\'", $client->path) .
             "', '" . str_replace("'", "\'", $client->server) . "', $client->port);\n";

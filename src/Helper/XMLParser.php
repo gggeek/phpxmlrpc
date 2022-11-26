@@ -137,7 +137,7 @@ class XMLParser
 
         xml_set_object($parser, $this);
 
-        switch($returnType) {
+        switch ($returnType) {
             case self::RETURN_PHP:
                 xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_fast');
                 break;

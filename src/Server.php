@@ -1063,7 +1063,7 @@ class Server
         }
 
         $req = new Request($methName->scalarval());
-        foreach($params as $i => $param) {
+        foreach ($params as $i => $param) {
             if (!$req->addParam($param)) {
                 $i++; // for error message, we count params from 1
                 return static::_xmlrpcs_multicall_error(new Response(0,
@@ -1140,7 +1140,7 @@ class Server
         // let accept a plain list of php parameters, beside a single xmlrpc msg object
         if (is_object($req)) {
             $calls = $req->getParam(0);
-            foreach($calls as $call) {
+            foreach ($calls as $call) {
                 $result[] = static::_xmlrpcs_multicall_do_call($server, $call);
             }
         } else {
@@ -1168,7 +1168,7 @@ class Server
             return;
         }
 
-        //if($errCode != E_NOTICE && $errCode != E_WARNING && $errCode != E_USER_NOTICE && $errCode != E_USER_WARNING)
+        //if ($errCode != E_NOTICE && $errCode != E_WARNING && $errCode != E_USER_NOTICE && $errCode != E_USER_WARNING)
         if ($errCode != E_STRICT) {
             \PhpXmlRpc\Server::error_occurred($errString);
         }
