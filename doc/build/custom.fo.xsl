@@ -7,12 +7,11 @@
  @author Gaetano Giunta
  @copyright (c) 2007-2015 G. Giunta
  @license code licensed under the BSD License
- @todo make the xsl more dynamic: the path to import docbook.xsl could be f.e. rewritten/injected by the php user
 -->
 
 
 <!-- import base stylesheet. This assumes the 'workspace' dir is next to the 'tools' one -->
-<xsl:import href="../../../../tools/vendor/docbook/docbook-xsl/fo/docbook.xsl"/>
+<xsl:import href="%docbook.xsl%"/>
 
 
 <!-- customization vars -->

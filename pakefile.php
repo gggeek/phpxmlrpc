@@ -117,6 +117,12 @@ class Builder
             throw new \Exception("File $xssFile cannot be found");
         }
 
+        $docbookXslPath = realpath(Builder::buildDir().'/tools/vendor/docbook/docbook-xsl/fo/docbook.xsl');
+        file_put_contents(
+            $xssFile,
+            str_replace('%docbook.xsl%', $docbookXslPath, file_get_contents($xssFile))
+        );
+
         // Load the XML source
         $xml = new \DOMDocument();
         $xml->load($inFile);
@@ -196,7 +202,8 @@ function run_default($task=null, $args=array(), $cliOpts=array())
     echo "\n";
     echo "  Task options:\n";
     echo "      --repo=REPO      URL of the source repository to clone. Defaults to the github repo.\n";
-    echo "      --branch=BRANCH  The git branch to build from.\n";
+    echo "      --branch=BRANCH  The git branch to build from. Defaults to master\n";
+    echo "      --workspace=DIR   The dir where to check out source code. Defaults to build/workspace\n";
     echo "      --asciidoctor=ASCIIDOCTOR Location of the asciidoctor command-line tool\n";
     echo "      --fop=FOP        Location of the apache fop command-line tool\n";
     echo "      --php=PHP        Location of the php command-line interpreter\n";
@@ -210,7 +217,7 @@ function run_getopts($task=null, $args=array(), $cliOpts=array())
 
 /**
  * Downloads source code in the build workspace directory, optionally checking out the given branch/tag
- * @todo allow using current installation as source, bypassing git clone in workspace - at least for doc generation
+ * @todo allow using current installation / dir as source, bypassing git clone in workspace - at least for doc generation
  */
 function run_init($task=null, $args=array(), $cliOpts=array())
 {
@@ -225,7 +232,7 @@ function run_init($task=null, $args=array(), $cliOpts=array())
             throw new Exception("Directory '$targetDir' exists and is not linked to correct git repo");
         }
 
-        /// @todo should we not just fetch instead?
+        /// @todo we should just fetch if we are checking out a tag, but pull if we are checking out a branch...
         $repo->pull();
     } else {
         pake_mkdirs(dirname($targetDir));
@@ -383,6 +390,9 @@ function run_dist($task=null, $args=array(), $cliOpts=array())
 
 function run_clean_workspace($task=null, $args=array(), $cliOpts=array())
 {
+    if (realpath(__DIR__) === realpath(Builder::workspaceDir())) {
+        throw new \Exception("Can not remove workspace dir, as it is where pakefile is located!");
+    }
     pake_remove_dir(Builder::workspaceDir());
 }
 
