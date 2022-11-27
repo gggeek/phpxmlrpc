@@ -122,7 +122,7 @@ if ($action) {
         $client = new $clientClass($path, $host);
         $server = "$host$path";
     }
-    if ($protocol == 2) {
+    if ($protocol == 2 || $protocol == 3) {
         $server = 'https://' . $server;
     } else {
         $server = 'http://' . $server;
@@ -137,13 +137,19 @@ if ($action) {
         $client->setProxy($pproxy[0], $pport, $proxyuser, $proxypwd);
     }
 
-    if ($protocol == 2) {
+    if ($protocol == 2 || $protocol == 3) {
         $client->setSSLVerifyPeer($verifypeer);
         $client->setSSLVerifyHost($verifyhost);
         if ($cainfo) {
             $client->setCaCertificate($cainfo);
         }
-        $httpprotocol = 'https';
+        if ($protocol == 3) {
+            $httpprotocol = 'h2';
+        } else {
+            $httpprotocol = 'https';
+        }
+    } elseif ($protocol == 4) {
+        $httpprotocol = 'h2c';
     } elseif ($protocol == 1) {
         $httpprotocol = 'http11';
     } else {
@@ -474,7 +480,7 @@ if ($action) {
                         $encoder = new PhpXmlRpc\Encoder();
                         $msig = $encoder->decode($r2);
                         $msig = $msig[$methodsig];
-                        $proto = $protocol == 2 ? 'https' : ( $protocol == 1 ? 'http11' : '' );
+                        $proto = ($protocol == 1) ? 'http11' : ( $protocol == 2 ? 'https' : ( $protocol == 3 ? 'h2' : ( $protocol == 4 ? 'h2c' : '' ) ) );
                         if ($proxy == '' && $username == '' && !$requestcompression && !$responsecompression &&
                             $clientcookies == ''
                         ) {

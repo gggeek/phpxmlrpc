@@ -86,14 +86,19 @@ if (isset($_GET['action'])) {
         }
     }
     $host = isset($_GET['host']) ? $_GET['host'] : 'localhost'; // using '' will trigger an xmlrpc error...
-    if (isset($_GET['protocol']) && ($_GET['protocol'] == '1' || $_GET['protocol'] == '2')) {
+    if (isset($_GET['protocol']) && ($_GET['protocol'] == '1' || $_GET['protocol'] == '2' || $_GET['protocol'] == '3')
+        || $_GET['protocol'] == '4') {
         $protocol = $_GET['protocol'];
     }
     if (strpos($host, 'http://') === 0) {
+        // NB: if protocol is https or h2, it will override http://
         $host = substr($host, 7);
     } elseif (strpos($host, 'https://') === 0) {
         $host = substr($host, 8);
-        $protocol = 2;
+        // NB: otoh if protocol is http1.0 or http1.1, it will be overridden by https://
+        if ($protocol == 0 || $protocol = 1) {
+            $protocol = 2;
+        }
     }
     $port = isset($_GET['port']) ? $_GET['port'] : '';
     $path = isset($_GET['path']) ? $_GET['path'] : '';

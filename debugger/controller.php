@@ -142,7 +142,7 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
         }
 
         function switchssl() {
-            if (document.frmaction.protocol.value != '2') {
+            if (document.frmaction.protocol.value != '2' && document.frmaction.protocol.value != '3') {
                 document.frmaction.verifypeer.disabled = true;
                 document.frmaction.verifyhost.disabled = true;
                 document.frmaction.cainfo.disabled = true;
@@ -294,6 +294,8 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
                     <option value="0"<?php if ($protocol == 0) { echo ' selected="selected"'; } ?>>HTTP 1.0</option>
                     <option value="1"<?php if ($protocol == 1) { echo ' selected="selected"'; } ?>>HTTP 1.1</option>
                     <option value="2"<?php if ($protocol == 2) { echo ' selected="selected"'; } ?>>HTTPS</option>
+                    <option value="3"<?php if ($protocol == 3) { echo ' selected="selected"'; } ?>>HTTP2</option>
+                    <option value="4"<?php if ($protocol == 3) { echo ' selected="selected"'; } ?>>HTTP2 no TLS</option>
                 </select></td>
         </tr>
         <tr>
