@@ -11,8 +11,8 @@
 -->
 
 
-<!-- import base stylesheet -->
-<xsl:import href="../../../../vendor/docbook/docbook-xsl/fo/docbook.xsl"/>
+<!-- import base stylesheet. This assumes the 'workspace' dir is next to the 'tools' one -->
+<xsl:import href="../../../../tools/vendor/docbook/docbook-xsl/fo/docbook.xsl"/>
 
 
 <!-- customization vars -->

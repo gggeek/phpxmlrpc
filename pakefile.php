@@ -22,7 +22,8 @@ class Builder
     );
     protected static $options = array(
         'repo' => 'https://github.com/gggeek/phpxmlrpc',
-        'branch' => 'master'
+        'branch' => 'master',
+        'workspace' => null
     );
 
     public static function libVersion()
@@ -39,7 +40,7 @@ class Builder
 
     public static function workspaceDir()
     {
-        return self::buildDir().'/workspace';
+        return self::option('workspace') != '' ? self::option('workspace') : self::buildDir().'/workspace';
     }
 
     public static function toolsDir()
@@ -352,9 +353,10 @@ function run_dist($task=null, $args=array(), $cliOpts=array())
     // copy workspace dir into dist dir, without git
     pake_mkdirs(Builder::distDir());
     $finder = pakeFinder::type('any')->ignore_version_control();
+    /// @todo make sure we don't recurse - avoid 'build' dir
     pake_mirror($finder, realpath(Builder::workspaceDir()), realpath(Builder::distDir()));
 
-    // remove unwanted files from dist dir
+    // @todo remove unwanted files from dist dir - files and dirs from .gitattributes
 
     // also: do we still need to run dos2unix?
 
