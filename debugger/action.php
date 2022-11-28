@@ -530,14 +530,14 @@ if ($action) {
     </ol>
     <?php
     if (!extension_loaded('curl')) {
-        echo "<p class=\"evidence\">You will need to enable the CURL extension to use the HTTPS and HTTP 1.1 transports</p>\n";
+        echo "<p class=\"evidence\">You will need to enable the CURL extension to use the HTTPS, HTTP 1.1 and HTTP/2 transports</p>\n";
     }
     ?>
 
     <h3>Example</h3>
     <p>
-        Server Address: phpxmlrpc.sourceforge.net<br/>
-        Path: /server.php
+        Server Address: gggeek.altervista.org<br/>
+        Path: /sw/xmlrpc/demo/server/server.php
     </p>
 
     <h3>Notice</h3>
@@ -546,6 +546,7 @@ if ($action) {
 
     <h3>Changelog</h3>
     <ul>
+        <li>2022-11-28: allow to use http/2 protocol; two security issues fixed in the underlying library</li>
         <li>2020-12-11: fix problems with running the debugger on php 8</li>
         <li>2015-05-30: fix problems with generating method payloads for NIL and Undefined parameters</li>
         <li>2015-04-19: fix problems with LATIN-1 characters in payload</li>
