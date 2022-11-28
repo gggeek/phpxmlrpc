@@ -33,6 +33,7 @@ class Builder
         return self::$libVersion;
     }
 
+    /// @todo allow this to be set via an option
     public static function buildDir()
     {
         return self::$buildDir;
@@ -48,13 +49,13 @@ class Builder
         return self::buildDir().'/tools';
     }
 
-    /// most likely things will break if this one is moved outside of BuildDir
+    // most likely things will break if this one is moved outside the BuildDir
     public static function distDir()
     {
         return self::buildDir().'/xmlrpc-'.self::libVersion();
     }
 
-    /// these will be generated in BuildDir
+    // these will be generated in BuildDir
     public static function distFiles()
     {
         return array(
@@ -201,8 +202,8 @@ function run_default($task=null, $args=array(), $cliOpts=array())
     echo "  Run 'pake -P' to list all available tasks (including hidden ones) and their dependencies\n";
     echo "\n";
     echo "  Task options:\n";
-    echo "      --repo=REPO      URL of the source repository to clone. Defaults to the github repo.\n";
-    echo "      --branch=BRANCH  The git branch to build from. Defaults to master\n";
+    echo "      --repo=REPO      URL of the source repository to clone. Defaults to the official github repo.\n";
+    echo "      --branch=BRANCH  The git branch to build from. Defaults to 'master'\n";
     echo "      --workspace=DIR   The dir where to check out source code. Defaults to build/workspace\n";
     echo "      --asciidoctor=ASCIIDOCTOR Location of the asciidoctor command-line tool\n";
     echo "      --fop=FOP        Location of the apache fop command-line tool\n";
@@ -232,7 +233,8 @@ function run_init($task=null, $args=array(), $cliOpts=array())
             throw new Exception("Directory '$targetDir' exists and is not linked to correct git repo");
         }
 
-        /// @todo we should just fetch if we are checking out a tag, but pull if we are checking out a branch...
+        /// @todo we should just fetch if we are checking out a tag, but pull if we are checking out a branch.
+        ///       Also, we should only pull after having checked out the correct branch...
         $repo->pull();
     } else {
         pake_mkdirs(dirname($targetDir));
