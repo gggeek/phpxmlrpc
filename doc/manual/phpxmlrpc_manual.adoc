@@ -9,7 +9,7 @@
 [preface]
 == Introduction
 
-WARNING: THIS MANUAL HAS NOT YET BEEN UPDATED TO REFLECT ALL THE CHANGES WHICH HAVE MADE IN VERSION 4. *DO NOT USE* FOR NOW. You can find the API documentation at link:$$http://gggeek.github.io/phpxmlrpc/doc-4/api/index.html$$[http://gggeek.github.io/phpxmlrpc/doc-4/api/index.html]
+WARNING: THIS MANUAL HAS NOT YET BEEN UPDATED TO REFLECT ALL THE CHANGES WHICH HAVE MADE IN VERSION 4. *DO NOT USE* FOR NOW. You can find the API documentation at link:$$https://gggeek.github.io/phpxmlrpc/doc-4/api/index.html$$[https://gggeek.github.io/phpxmlrpc/doc-4/api/index.html]
 
 This collection of PHP classes provides a framework for writing XML-RPC clients and servers in PHP.
 

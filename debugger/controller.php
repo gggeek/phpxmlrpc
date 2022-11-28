@@ -234,7 +234,7 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
     <form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);" <?php if (!class_exists('\PhpXmlRpc\Client')) { echo 'disabled="disabled"';} ?>/></form>
     /
     <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);" <?php if (!class_exists('\PhpXmlRpc\JsonRpc\Client')) { echo 'disabled="disabled"';} ?>/></form>
-    JSONRPC Debugger (based on the <a href="http://gggeek.github.io/phpxmlrpc/">PHP-XMLRPC</a> library)
+    JSONRPC Debugger (based on the <a href="https://gggeek.github.io/phpxmlrpc/">PHP-XMLRPC</a> library)
 </h1>
 <form name="frmaction" method="get" action="action.php" target="frmaction" onSubmit="switchFormMethod();">
 
