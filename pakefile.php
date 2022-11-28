@@ -276,7 +276,7 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
 
     // from phpdoc comments using phpdocumentor
     $cmd = Builder::tool('php');
-    pake_sh("$cmd " . Builder::toolsDir(). "/vendor/bin/phpdoc run --cache-folder ".Builder::buildDir()."/.phpdoc -d ".$srcDir.'/src'." -t ".$docDir.'/api --title PHP-XMLRPC');
+    pake_sh("$cmd " . Builder::toolsDir(). "/vendor/bin/phpdoc run --cache-folder ".Builder::buildDir()."/.phpdoc -d ".$srcDir.'/src'." -t ".$docDir.'/api --title PHP-XMLRPC --defaultpackagename PHPXMLRPC');
 
     // from phpdoc comments using Sami
     // deprecated on 2021/12, as Sami is abandonware
