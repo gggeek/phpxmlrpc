@@ -136,6 +136,11 @@ Search.appendIndex(
             "summary": "Contributed\u0020by\u0020Justin\u0020Miller\u0020\u003Cjustin\u0040voxel.net\u003E\nRequires\u0020curl\u0020to\u0020be\u0020built\u0020into\u0020PHP\nNB\u003A\u0020CURL\u0020versions\u0020before\u00207.11.10\u0020cannot\u0020use\u0020proxy\u0020to\u0020talk\u0020to\u0020https\u0020servers\u0021",
             "url": "classes/PhpXmlRpc-Client.html#method_sendPayloadCURL"
         },                {
+            "fqsen": "\\PhpXmlRpc\\Client\u003A\u003AprepareCurlHandle\u0028\u0029",
+            "name": "prepareCurlHandle",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Client.html#method_prepareCurlHandle"
+        },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003Amulticall\u0028\u0029",
             "name": "multicall",
             "summary": "Send\u0020an\u0020array\u0020of\u0020requests\u0020and\u0020return\u0020an\u0020array\u0020of\u0020responses.",
@@ -528,7 +533,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\XMLParser\u003A\u003AhasEncoding\u0028\u0029",
             "name": "hasEncoding",
-            "summary": "Helper\u0020function\u003A\u0020checks\u0020if\u0020an\u0020xml\u0020chunk\u0020as\u0020a\u0020charset\u0020declaration\u0020\u0028BOM\u0020or\u0020in\u0020the\u0020xml\u0020declaration\u0029",
+            "summary": "Helper\u0020function\u003A\u0020checks\u0020if\u0020an\u0020xml\u0020chunk\u0020has\u0020a\u0020charset\u0020declaration\u0020\u0028BOM\u0020or\u0020in\u0020the\u0020xml\u0020declaration\u0029",
             "url": "classes/PhpXmlRpc-Helper-XMLParser.html#method_hasEncoding"
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\XMLParser\u003A\u003ARETURN_XMLRPCVALS",
