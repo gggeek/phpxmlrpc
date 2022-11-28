@@ -1126,10 +1126,9 @@ class Wrapper
 
     /**
      * Given necessary info, generate php code that will build a client object just like the given one.
-     * Take care that no full checking of input parameters is done to ensure that
-     * valid php code is emitted.
+     * Take care that no full checking of input parameters is done to ensure that valid php code is emitted.
      * @param Client $client
-     * @param bool $verbatimClientCopy when true, copy all of the state of the client, except for 'debug' and 'return_type'
+     * @param bool $verbatimClientCopy when true, copy the whole state of the client, except for 'debug' and 'return_type'
      * @param string $prefix used for the return_type of the created client
      * @param string $namespace
      *
@@ -1137,8 +1136,8 @@ class Wrapper
      */
     protected function buildClientWrapperCode($client, $verbatimClientCopy, $prefix = 'xmlrpc', $namespace = '\\PhpXmlRpc\\')
     {
-        $code = "\$client = new {$namespace}Client('" . str_replace("'", "\'", $client->path) .
-            "', '" . str_replace("'", "\'", $client->server) . "', $client->port);\n";
+        $code = "\$client = new {$namespace}Client('" . str_replace(array("\\", "'"), array("\\\\", "\'"), $client->path) .
+            "', '" . str_replace(array("\\", "'"), array("\\\\", "\'"), $client->server) . "', $client->port);\n";
 
         // copy all client fields to the client that will be generated runtime
         // (this provides for future expansion or subclassing of client obj)

@@ -14,7 +14,7 @@ Documentation
 See the documentation page at [gggeek.github.io/phpxmlrpc](https://gggeek.github.io/phpxmlrpc) for a list of the
 library main features and all project related information.
 
-The user manual can be found in the doc/manual directory, in Asciidoc format: [phpxmlrpc_manual.adoc](doc/manual/phpxmlrpc_manual.adoc)
+The user manual can be found in the doc/manual directory, in AsciiDoc format: [phpxmlrpc_manual.adoc](doc/manual/phpxmlrpc_manual.adoc)
 
 Older release tarballs also contain HTML and PDF versions of the manual, as well as an automatically generated API documentation.
 

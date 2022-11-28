@@ -103,7 +103,7 @@ class Client
      * Decides the content of Response objects returned by calls to send() and multicall().
      * Valid values are 'xmlrpcvals', 'phpvals' or 'xml'.
      *
-     * Determines whether the value returned inside an Response object as results of calls to the send() and multicall()
+     * Determines whether the value returned inside a Response object as results of calls to the send() and multicall()
      * methods will be a Value object, a plain php value or a raw xml string.
      * Allowed values are 'xmlrpcvals' (the default), 'phpvals' and 'xml'.
      * To allow the user to differentiate between a correct and a faulty response, fault responses will be returned as
@@ -669,7 +669,7 @@ class Client
         /// @todo log a warning if passed an unsupported method
 
         if ($port == 0) {
-            $port = ( $method === 'https' ) ? 443 : 80;
+            $port = ($method === 'https') ? 443 : 80;
         }
 
         // Only create the payload if it was not created previously
@@ -728,7 +728,7 @@ class Client
         } else {
             $connectServer = $server;
             $connectPort = $port;
-            $transport = ( $method === 'https' ) ? 'tls' : 'tcp';
+            $transport = ($method === 'https') ? 'tls' : 'tcp';
             $uri = $this->path;
         }
 
@@ -912,6 +912,10 @@ class Client
             $proxyUsername, $proxyPassword, $proxyAuthType, $method, $keepAlive, $key,
             $keyPass, $sslVersion);
 
+        if (!$curl) {
+            return new Response(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': error during curl initialization. Check php error log for details');
+        }
+
         $result = curl_exec($curl);
 
         if ($this->debug > 1) {
@@ -940,10 +944,12 @@ class Client
                 curl_close($curl);
             }
             $resp = $req->parseResponse($result, true, $this->return_type);
-            // if we got back a 302, we can not reuse the curl handle for later calls
-            if ($resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error'] && $keepAlive) {
-                curl_close($curl);
-                $this->xmlrpc_curl_handle = null;
+            if ($keepAlive) {
+                /// @todo if we got back a 302 or 308, we should not reuse the curl handle for later calls
+                if ($resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error']) {
+                    curl_close($curl);
+                    $this->xmlrpc_curl_handle = null;
+                }
             }
         }
 
@@ -997,9 +1003,16 @@ class Client
                 } else {
                     // http, https
                     $protocol = $method;
+                    if (strpos($protocol, ':') !== false) {
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": warning - attempted hacking attempt?. The curl protocol requested for the call is: '$protocol'");
+                        return false;
+                    }
                 }
             }
             $curl = curl_init($protocol . '://' . $server . ':' . $port . $this->path);
+            if (!$curl) {
+                return false;
+            }
             if ($keepAlive) {
                 $this->xmlrpc_curl_handle = $curl;
             }
@@ -1055,7 +1068,7 @@ class Client
             curl_setopt($curl, CURLOPT_TIMEOUT, $timeout == 1 ? 1 : $timeout - 1);
         }
 
-        switch($method) {
+        switch ($method) {
             case 'http10':
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
                 break;
@@ -1166,7 +1179,7 @@ class Client
      * @param Request[] $reqs an array of Request objects
      * @param integer $timeout connection timeout (in seconds). See the details in the docs for the send() method
      * @param string $method the http protocol variant to be used. See the details in the docs for the send() method
-     * @param boolean fallback When true, upon receiving an error during multicall, multiple single calls will be
+     * @param boolean $fallback When true, upon receiving an error during multicall, multiple single calls will be
      *                         attempted
      *
      * @return Response[]
@@ -1318,7 +1331,7 @@ class Client
             }
 
             $response = array();
-            foreach($rets as $val) {
+            foreach ($rets as $val) {
                 switch ($val->kindOf()) {
                     case 'array':
                         if ($val->count() != 1) {
