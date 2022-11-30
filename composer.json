@@ -10,12 +10,12 @@
     },
     "_comment::tests": "The dev packages below require a minimum of php 5.4, even though we support php 5.3. Can we manage to do better?",
     "require-dev": {
-        "phpunit/phpunit": "^4.8 || ^5.0 || ^8.5.14",
-        "phpunit/phpunit-selenium": "*",
-        "yoast/phpunit-polyfills": "*",
         "ext-curl": "*",
         "ext-dom": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "phpunit/phpunit": "^4.8 || ^5.0 || ^8.5.14",
+        "phpunit/phpunit-selenium": "*",
+        "yoast/phpunit-polyfills": "*"
     },
     "suggest": {
         "ext-curl": "Needed for HTTPS and HTTP 1.1 support, NTLM Auth etc...",
