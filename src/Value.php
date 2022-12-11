@@ -279,19 +279,19 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
             case 1:
                 switch ($typ) {
                     case static::$xmlrpcBase64:
-                        $rs .= "<${typ}>" . base64_encode($val) . "</${typ}>";
+                        $rs .= "<{$typ}>" . base64_encode($val) . "</{$typ}>";
                         break;
                     case static::$xmlrpcBoolean:
-                        $rs .= "<${typ}>" . ($val ? '1' : '0') . "</${typ}>";
+                        $rs .= "<{$typ}>" . ($val ? '1' : '0') . "</{$typ}>";
                         break;
                     case static::$xmlrpcString:
                         // Do NOT use htmlentities, since it will produce named html entities, which are invalid xml
-                        $rs .= "<${typ}>" . $this->getCharsetEncoder()->encodeEntities($val, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</${typ}>";
+                        $rs .= "<{$typ}>" . $this->getCharsetEncoder()->encodeEntities($val, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</{$typ}>";
                         break;
                     case static::$xmlrpcInt:
                     case static::$xmlrpcI4:
                     case static::$xmlrpcI8:
-                        $rs .= "<${typ}>" . (int)$val . "</${typ}>";
+                        $rs .= "<{$typ}>" . (int)$val . "</{$typ}>";
                         break;
                     case static::$xmlrpcDouble:
                         // avoid using standard conversion of float to string because it is locale-dependent,
@@ -299,19 +299,19 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                         // sprintf('%F') could be most likely ok but it fails eg. on 2e-14.
                         // The code below tries its best at keeping max precision while avoiding exp notation,
                         // but there is of course no limit in the number of decimal places to be used...
-                        $rs .= "<${typ}>" . preg_replace('/\\.?0+$/', '', number_format((double)$val, PhpXmlRpc::$xmlpc_double_precision, '.', '')) . "</${typ}>";
+                        $rs .= "<{$typ}>" . preg_replace('/\\.?0+$/', '', number_format((double)$val, PhpXmlRpc::$xmlpc_double_precision, '.', '')) . "</{$typ}>";
                         break;
                     case static::$xmlrpcDateTime:
                         if (is_string($val)) {
-                            $rs .= "<${typ}>${val}</${typ}>";
+                            $rs .= "<{$typ}>{$val}</{$typ}>";
                         // DateTimeInterface is not present in php 5.4...
                         } elseif (is_a($val, 'DateTimeInterface') || is_a($val, 'DateTime')) {
-                            $rs .= "<${typ}>" . $val->format('Ymd\TH:i:s') . "</${typ}>";
+                            $rs .= "<{$typ}>" . $val->format('Ymd\TH:i:s') . "</{$typ}>";
                         } elseif (is_int($val)) {
-                            $rs .= "<${typ}>" . date('Ymd\TH:i:s', $val) . "</${typ}>";
+                            $rs .= "<{$typ}>" . date('Ymd\TH:i:s', $val) . "</{$typ}>";
                         } else {
                             // not really a good idea here: but what should we output anyway? left for backward compat...
-                            $rs .= "<${typ}>${val}</${typ}>";
+                            $rs .= "<{$typ}>{$val}</{$typ}>";
                         }
                         break;
                     case static::$xmlrpcNull:
@@ -324,7 +324,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                     default:
                         // no standard type value should arrive here, but provide a possibility
                         // for xmlrpc values of unknown type...
-                        $rs .= "<${typ}>${val}</${typ}>";
+                        $rs .= "<{$typ}>{$val}</{$typ}>";
                 }
                 break;
             case 3:
