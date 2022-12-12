@@ -28,15 +28,15 @@ function addComment($req)
 
     $dbh = dba_open("/tmp/comments.db", "c", "db2");
     if ($dbh) {
-        $countID = "${msgID}_count";
+        $countID = "{$msgID}_count";
         if (dba_exists($countID, $dbh)) {
             $count = dba_fetch($countID, $dbh);
         } else {
             $count = 0;
         }
         // add the new comment in
-        dba_insert($msgID . "_comment_${count}", $comment, $dbh);
-        dba_insert($msgID . "_name_${count}", $name, $dbh);
+        dba_insert($msgID . "_comment_{$count}", $comment, $dbh);
+        dba_insert($msgID . "_name_{$count}", $name, $dbh);
         $count++;
         dba_replace($countID, $count, $dbh);
         dba_close($dbh);
@@ -66,12 +66,12 @@ function getComments($req)
     $msgID = $encoder->decode($req->getParam(0));
     $dbh = dba_open("/tmp/comments.db", "r", "db2");
     if ($dbh) {
-        $countID = "${msgID}_count";
+        $countID = "{$msgID}_count";
         if (dba_exists($countID, $dbh)) {
             $count = dba_fetch($countID, $dbh);
             for ($i = 0; $i < $count; $i++) {
-                $name = dba_fetch("${msgID}_name_${i}", $dbh);
-                $comment = dba_fetch("${msgID}_comment_${i}", $dbh);
+                $name = dba_fetch("{$msgID}_name_{$i}", $dbh);
+                $comment = dba_fetch("{$msgID}_comment_{$i}", $dbh);
                 // push a new struct onto the return array
                 $ra[] = array(
                     "name" => $name,

@@ -47,7 +47,7 @@ if ($resp->faultCode()) {
             $val = $rs[0]->value();
             $txt = $val->scalarval();
             if ($txt != "") {
-                output("<h4>Documentation</h4><p>${txt}</p>\n");
+                output("<h4>Documentation</h4><p>{$txt}</p>\n");
             } else {
                 output("<p>No documentation available.</p>\n");
             }
