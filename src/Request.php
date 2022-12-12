@@ -309,12 +309,11 @@ class Request
             // The following code might be better for mb_string enabled installs, but makes the lib about 200% slower...
             //if (!is_valid_charset($respEncoding, array('UTF-8')))
             if (!in_array($respEncoding, array('UTF-8', 'US-ASCII')) && !XMLParser::hasEncoding($data)) {
-                if ($respEncoding == 'ISO-8859-1') {
-                    $data = utf8_encode($data);
+                if (extension_loaded('mbstring')) {
+                    $data = mb_convert_encoding($data, 'UTF-8', $respEncoding);
                 } else {
-
-                    if (extension_loaded('mbstring')) {
-                        $data = mb_convert_encoding($data, 'UTF-8', $respEncoding);
+                    if ($respEncoding == 'ISO-8859-1') {
+                        $data = utf8_encode($data);
                     } else {
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of received response: ' . $respEncoding);
                     }

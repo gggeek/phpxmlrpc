@@ -283,7 +283,8 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
             $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
             return;
         }
-        $sendString = utf8_decode('élève');
+        // the warning suppression is due to utf8_decode being deprecated in php 8.2
+        $sendString = @utf8_decode('élève');
         $str = '<?xml version="1.0"?>
 <methodCall>
     <methodName>examples.stringecho</methodName>

@@ -145,7 +145,8 @@ class MessageTests extends PhpXmlRpc_PolyfillTestCase
 
     public function testUnicodeInErrorString()
     {
-        $response = utf8_encode(
+        // the warning suppression is due to utf8_decode being deprecated in php 8.2
+        $response = @utf8_encode(
             '<?xml version="1.0"?>
 <!-- $Id -->
 <!-- found by G. Giunta, covers what happens when lib receives UTF8 chars in response text and comments -->
@@ -413,7 +414,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 
         $s = $this->newMsg('dummy');
         $f = "HTTP/1.1 200 OK\r\nContent-type: text/xml; charset=UTF-8\r\n\r\n" . '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
-<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . utf8_encode($string) . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
+<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . @utf8_encode($string) . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
         $r = $s->parseResponse($f, false, 'phpvals');
         $v = $r->value();
@@ -421,7 +422,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals($string, $v);
 
         $f = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
-<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . utf8_encode($string) . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
+<member><name>dateCreated</name><value><dateTime.iso8601>20011126T09:17:52</dateTime.iso8601></value></member><member><name>content</name><value>' . @utf8_encode($string) . '</value></member><member><name>postid</name><value>7414222</value></member></struct></value></param></params></methodResponse>
 ';
         $r = $s->parseResponse($f, false, 'phpvals');
         $v = $r->value();

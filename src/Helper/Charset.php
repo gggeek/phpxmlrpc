@@ -235,6 +235,7 @@ class Charset
 
             case 'ISO-8859-1_UTF-8':
                 $escapedData = str_replace(array('&', '"', "'", '<', '>'), array('&amp;', '&quot;', '&apos;', '&lt;', '&gt;'), $data);
+                /// @todo if on php >= 8.2, prefer using mbstring or iconv
                 $escapedData = utf8_encode($escapedData);
                 break;
 

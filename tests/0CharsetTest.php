@@ -67,7 +67,8 @@ class CharsetTest extends PhpXmlRpc_PolyfillTestCase
             mb_detect_encoding($this->latinString, 'ISO-8859-1, UTF-8, WINDOWS-1251, ASCII', true),
             'Setup latinString is not ISO-8859-1 encoded...'
         );*/
-        $string = utf8_encode($this->latinString);
+        // the warning suppression is due to utf8_encode being deprecated in php 8.2
+        $string = @utf8_encode($this->latinString);
         $encoded = $this->utf8ToLatin1($string);
         $this->assertEquals(str_replace(array('&', '"', "'", '<', '>'), array('&amp;', '&quot;', '&apos;', '&lt;', '&gt;'), $this->latinString), $encoded);
     }
@@ -76,7 +77,8 @@ class CharsetTest extends PhpXmlRpc_PolyfillTestCase
     {
         $string = 'a.b.c.å.ä.ö.€.';
         $encoded = $this->utf8ToLatin1($string);
-        $this->assertEquals(utf8_decode('a.b.c.å.ä.ö.&#8364;.'), $encoded);
+        // the warning suppression is due to utf8_decode being deprecated in php 8.2
+        $this->assertEquals(@utf8_decode('a.b.c.å.ä.ö.&#8364;.'), $encoded);
     }
 
     public function testUtf8ToLatin1Runes()

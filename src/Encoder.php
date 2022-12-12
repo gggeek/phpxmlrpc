@@ -304,11 +304,11 @@ class Encoder
             // The following code might be better for mb_string enabled installs, but makes the lib about 200% slower...
             //if (!is_valid_charset($valEncoding, array('UTF-8'))
             if (!in_array($valEncoding, array('UTF-8', 'US-ASCII')) && !XMLParser::hasEncoding($xmlVal)) {
-                if ($valEncoding == 'ISO-8859-1') {
-                    $xmlVal = utf8_encode($xmlVal);
+                if (extension_loaded('mbstring')) {
+                    $xmlVal = mb_convert_encoding($xmlVal, 'UTF-8', $valEncoding);
                 } else {
-                    if (extension_loaded('mbstring')) {
-                        $xmlVal = mb_convert_encoding($xmlVal, 'UTF-8', $valEncoding);
+                    if ($valEncoding == 'ISO-8859-1') {
+                        $xmlVal = utf8_encode($xmlVal);
                     } else {
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of xml text: ' . $valEncoding);
                     }
