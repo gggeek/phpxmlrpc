@@ -1,6 +1,8 @@
-## XML-RPC for PHP version 4.9.1 - unreleased
+## XML-RPC for PHP version 4.9.1 - 2022-12-12
 
-* fixed: php warnings on php 8.2
+* fixed: php warnings on php 8.2. This includes preferring usage of mbstring for converting between Latin1 and UTF8
+
+* improved: CI tests now also run on php 8.2
 
 
 ## XML-RPC for PHP version 4.9.0 - 2022/11/28
