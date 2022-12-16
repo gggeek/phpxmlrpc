@@ -198,7 +198,7 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
         }
 
         function activateeditor() {
-            var url = '<?php echo $editorpath; ?>visualeditor.php?params=<?php echo $alt_payload; ?>';
+            var url = '<?php echo $editorpath; ?>visualeditor.html?params=<?php echo str_replace(array("\\", "'"), array( "\\\\","\\'"), $alt_payload); ?>';
             if (document.frmaction.wstype.value == "1")
                 url += '&type=jsonrpc';
             var wnd = window.open(url, '_blank', 'width=750, height=400, location=0, resizable=1, menubar=0, scrollbars=1');
