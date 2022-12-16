@@ -118,10 +118,15 @@ class Builder
             throw new \Exception("File $xssFile cannot be found");
         }
 
-        $docbookXslPath = realpath(Builder::buildDir().'/tools/vendor/docbook/docbook-xsl/fo/docbook.xsl');
+        $docbookFoXslPath = realpath(Builder::buildDir().'/tools/vendor/docbook/docbook-xsl/fo/docbook.xsl');
+        $docbookChunkXslPath = realpath(Builder::buildDir().'/tools/vendor/docbook/docbook-xsl/xhtml/chunk.xsl');
         file_put_contents(
             $xssFile,
-            str_replace('%docbook.xsl%', $docbookXslPath, file_get_contents($xssFile))
+            str_replace(
+                array('%fo-docbook.xsl%', '%docbook-chunk.xsl%'),
+                array($docbookFoXslPath, $docbookChunkXslPath),
+                file_get_contents($xssFile)
+            )
         );
 
         // Load the XML source
@@ -278,8 +283,7 @@ function run_doc($task=null, $args=array(), $cliOpts=array())
     $cmd = Builder::tool('php');
     pake_sh("$cmd " . Builder::toolsDir(). "/vendor/bin/phpdoc run --cache-folder ".Builder::buildDir()."/.phpdoc -d ".$srcDir.'/src'." -t ".$docDir.'/api --title PHP-XMLRPC --defaultpackagename PHPXMLRPC');
 
-    // from phpdoc comments using Sami
-    // deprecated on 2021/12, as Sami is abandonware
+    // from phpdoc comments using Sami - deprecated on 2021/12, as Sami is abandonware
     /*$samiConfig = <<<EOT
 <?php
     \$iterator = Symfony\Component\Finder\Finder::create()
