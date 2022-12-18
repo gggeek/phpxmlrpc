@@ -22,15 +22,19 @@ if ($action == '') {
     $action = 'list';
 }
 
-// Relative path to the visual xmlrpc editing dialog
+// Path to the visual xmlrpc editing dialog's containing folder. Can be absolute, or relative to this debugger's folder.
 // We allow to easily configure this path via defines
 $editorpath = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/debugger/';
-if ($editorpath[0] !== '/') {
-    $haseditor = true;//is_file(realpath(__DIR__.'/'.$editorpath.'visualeditor.html'));
+// In case the webserver is set up so that the url to that folder is different. We default to JSXMLRPC_PATH for BC
+$editorurlpath = defined('JSXMLRPC_BASEURL') ? JSXMLRPC_BASEURL : $editorpath;
+if (defined('JSXMLRPC_BASEURL')) {
+    $haseditor = true;
 } else {
-    /// @todo path to editing dialog is absolute - we need to figure out where he webserver doc root is on disk, and
-    ///       check there. We should be able to do that based on our own on-disk path...
-    $haseditor = false;
+    if ($editorpath[0] !== '/') {
+        $haseditor = is_file(realpath(__DIR__ . '/' . $editorpath . 'visualeditor.html'));
+    } else {
+        $haseditor = is_file(realpath($editorpath . 'visualeditor.html'));;
+    }
 }
 
 ?><!DOCTYPE html>
@@ -204,7 +208,7 @@ if ($editorpath[0] !== '/') {
         }
 
         function activateeditor() {
-            var url = '<?php echo $editorpath; ?>visualeditor.html?params=<?php echo str_replace(array("\\", "'"), array( "\\\\","\\'"), $alt_payload); ?>';
+            var url = '<?php echo $editorurlpath; ?>visualeditor.html?params=<?php echo str_replace(array("\\", "'"), array( "\\\\","\\'"), $alt_payload); ?>';
             if (document.frmaction.wstype.value == "1")
                 url += '&type=jsonrpc';
             var wnd = window.open(url, '_blank', 'width=750, height=400, location=0, resizable=1, menubar=0, scrollbars=1');
