@@ -92,7 +92,7 @@ class PhpXmlRpc
     public static $xmlrpc_internalencoding = "UTF-8";
 
     public static $xmlrpcName = "XML-RPC for PHP";
-    public static $xmlrpcVersion = "4.9.1";
+    public static $xmlrpcVersion = "4.9.2";
 
     // let user errors start at 800
     public static $xmlrpcerruser = 800;

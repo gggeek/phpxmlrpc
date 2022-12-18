@@ -1,3 +1,14 @@
+## XML-RPC for PHP version 4.9.2 - 2022-12-18
+
+* security fix: removed the possibility of an XSS attack in the debugger.
+  Since the debugger is not designed to be exposed to end users but only to the developers using this library, and in
+  the default configuration it is not exposed to requests from the web, the severity of this issue can be considered low.
+
+* improved: the debugger now uses jsxmlrpc lib version 0.6. It loads it from a cdn rather than locally.
+  It also can make use of a 2nd constant to help telling it where the visual-editor form the jsxmlrpc lib is located,
+  in case its path on disk relative to the debugger and its url relative to the web root do not match.
+
+
 ## XML-RPC for PHP version 4.9.1 - 2022-12-12
 
 * fixed: php warnings on php 8.2. This includes preferring usage of mbstring for converting between Latin1 and UTF8
