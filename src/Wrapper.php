@@ -991,7 +991,7 @@ class Wrapper
             $mDesc .= "* @param int \$debug when 1 (or 2) will enable debugging of the underlying {$prefix} call (defaults to 0)\n";
         }
         $plist = implode(', ', $plist);
-        $mDesc .= '* @return {$namespace}Response|' . $this->xmlrpc2PhpType($mSig[0]) . " (an {$namespace}Response obj instance if call fails)\n*/\n";
+        $mDesc .= "* @return {$namespace}Response|" . $this->xmlrpc2PhpType($mSig[0]) . " (an {$namespace}Response obj instance if call fails)\n*/\n";
 
         $innerCode .= "\$res = \${$this_}client->send(\$req, $timeout, '$protocol');\n";
         if ($decodeFault) {
