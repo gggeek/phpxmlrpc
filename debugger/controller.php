@@ -25,11 +25,16 @@ if ($action == '') {
 // Relative path to the visual xmlrpc editing dialog
 // We allow to easily configure this path via defines
 $editorpath = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/debugger/';
-$editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/lib/';
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+if ($editorpath[0] !== '/') {
+    $haseditor = true;//is_file(realpath(__DIR__.'/'.$editorpath.'visualeditor.html'));
+} else {
+    /// @todo path to editing dialog is absolute - we need to figure out where he webserver doc root is on disk, and
+    ///       check there. We should be able to do that based on our own on-disk path...
+    $haseditor = false;
+}
+
+?><!DOCTYPE html>
+<html lang="en">
 <head>
     <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
     <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSONRPC'; else echo 'XMLRPC'; ?> Debugger</title>
@@ -39,9 +44,11 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
             top.location.replace('index.php?run=' + escape(self.location));
     </script>
     <!-- xmlrpc/jsonrpc base library -->
-    <script type="text/javascript" src="<?php echo $editorlibs; ?>xmlrpc_lib.js"></script>
-    <script type="text/javascript" src="<?php echo $editorlibs; ?>jsonrpc_lib.js"></script>
-    <style type="text/css">
+    <script type="module">
+        import {base64_decode} from 'https://cdn.jsdelivr.net/npm/@jsxmlrpc/jsxmlrpc@0.6/lib/index.js';
+        window.base64_decode = base64_decode;
+    </script>
+    <style>
         <!--
         html {
             overflow: -moz-scrollbars-vertical;
@@ -50,7 +57,7 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
         body {
             padding: 0.5em;
             background-color: #EEEEEE;
-            font-family: Verdana, Arial, Helvetica;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
             font-size: 8pt;
         }
 
@@ -78,18 +85,16 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
 
         td {
             vertical-align: top;
-            font-family: Verdana, Arial, Helvetica;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
             font-size: 8pt;
         }
 
         .labelcell {
             text-align: right;
         }
-
         -->
     </style>
-    <script language="JavaScript" type="text/javascript">
-        <!--
+    <script type="text/javascript">
         function verifyserver() {
             if (document.frmaction.host.value == '') {
                 alert('Please insert a server name or address');
@@ -109,6 +114,7 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
             if (document.frmaction.authtype.value != '1' && document.frmaction.username.value == '') {
                 alert('No username for authenticating to server: authentication disabled');
             }
+
             return true;
         }
 
@@ -189,7 +195,7 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
         }
 
         function displaydialogeditorbtn(show) {
-            if (show && ((typeof base64_decode) == 'function')) {
+            if (show && <?php echo $haseditor ? 'true' : 'false'; ?>) {
                 document.getElementById('methodpayloadbtn').innerHTML = '[<a href="#" onclick="activateeditor(); return false;">Edit</a>]';
             }
             else {
@@ -222,8 +228,6 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
                 document.frmaction.method = 'post';
             }
         }
-
-        //-->
     </script>
 </head>
 <body
@@ -241,6 +245,14 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
     <table id="serverblock">
         <tr>
             <td><h2>Target server</h2></td>
+            <td class="labelcell">Protocol:</td>
+            <td><select name="protocol" onchange="switchssl(); switchauth(); swicthcainfo();">
+                <option value="0"<?php if ($protocol == 0) { echo ' selected="selected"'; } ?>>HTTP 1.0</option>
+                <option value="1"<?php if ($protocol == 1) { echo ' selected="selected"'; } ?>>HTTP 1.1</option>
+                <option value="2"<?php if ($protocol == 2) { echo ' selected="selected"'; } ?>>HTTPS</option>
+                <option value="3"<?php if ($protocol == 3) { echo ' selected="selected"'; } ?>>HTTP2</option>
+                <option value="4"<?php if ($protocol == 3) { echo ' selected="selected"'; } ?>>HTTP2 no TLS</option>
+            </select></td>
             <td class="labelcell">Address:</td>
             <td><input type="text" name="host" value="<?php echo htmlspecialchars($host, ENT_COMPAT, $inputcharset); ?>"/></td>
             <td class="labelcell">Port:</td>
@@ -289,14 +301,8 @@ $editorlibs = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/
             </td>
             <td class="labelcell">Timeout:</td>
             <td><input type="text" name="timeout" size="3" value="<?php if ($timeout > 0) { echo $timeout; } ?>"/></td>
-            <td class="labelcell">Protocol:</td>
-            <td><select name="protocol" onchange="switchssl(); switchauth(); swicthcainfo();">
-                    <option value="0"<?php if ($protocol == 0) { echo ' selected="selected"'; } ?>>HTTP 1.0</option>
-                    <option value="1"<?php if ($protocol == 1) { echo ' selected="selected"'; } ?>>HTTP 1.1</option>
-                    <option value="2"<?php if ($protocol == 2) { echo ' selected="selected"'; } ?>>HTTPS</option>
-                    <option value="3"<?php if ($protocol == 3) { echo ' selected="selected"'; } ?>>HTTP2</option>
-                    <option value="4"<?php if ($protocol == 3) { echo ' selected="selected"'; } ?>>HTTP2 no TLS</option>
-                </select></td>
+            <td</td>
+            <td></td>
         </tr>
         <tr>
             <td class="labelcell">AUTH:</td>
