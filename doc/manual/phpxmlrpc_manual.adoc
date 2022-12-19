@@ -1,5 +1,5 @@
 = XML-RPC for PHP
-:revision: 4.0.0
+:revision: 4.9.2
 :keywords: xmlrpc, xml, rpc, webservices, http
 :toc: left
 :imagesdir: images
@@ -158,9 +158,9 @@ dateTime.iso8601 is supported opaquely. It can't be done natively as the XML-RPC
     passing of timezone specifiers in ISO8601 format dates. You can, however, use the PhpXmlRpc\Helper\Date class to do
     the encoding and decoding for you.
 
-Very little HTTP response checking is performed (e.g. HTTP redirects are not followed and the Content-Length HTTP
-    header, mandated by the xml-rpc spec, is not validated); cookie support still involves quite a bit of coding on the
-    part of the user.
+Very little HTTP response checking is performed (e.g. HTTP redirects are not followed by default and the Content-Length
+    HTTP header, mandated by the xml-rpc spec, is not validated); cookie support still involves quite a bit of coding on
+    the part of the user.
 
 
 [[support]]
@@ -202,15 +202,11 @@ If you've benefited from the effort that has been put into writing this software
 
 ===== int
 
-The type i4 is accepted as a synonym
-          for int when creating xmlrpcval objects. The
-          xml parsing code will always convert i4 to
-          int: int is regarded
-          by this implementation as the canonical name for this type.
+The type i4 is accepted as a synonym for int when creating xmlrpcval objects. The xml parsing code will always convert i4
+    to int: int is regarded by this implementation as the canonical name for this type.
 
-The type i8 on the other hand is considered as a separate type.
-          Note that the library will never output integers as 'i8' on its own,
-          even when php is compiled in 64-bit mode.
+The type i8 on the other hand is considered as a separate type. Note that the library will never output integers as 'i8'
+     on its own, even when php is compiled in 64-bit mode.
 
 ===== base64
 
@@ -249,9 +245,7 @@ There is no support for encoding ++null++
 [[xmlrpcval-creation]]
 ==== Xmlrpcval creation
 
-The constructor is the normal way to create an
-        xmlrpcval. The constructor can take these
-        forms:
+The constructor is the normal way to create an xmlrpcval. The constructor can take these forms:
 
 xmlrpcvalnew
             xmlrpcval xmlrpcvalnew
@@ -1783,36 +1777,26 @@ In the meantime, see docs about xmlrpc_client::return_type and
 [appendix]
 == Usage of the debugger
 
-A webservice debugger is included in the library to help during
-    development and testing.
+A webservice debugger is included in the library to help during development and testing.
 
-The interface should be self-explicative enough to need little
-    documentation.
+The interface should be self-explicative enough to need little documentation.
 
 image::debugger.gif[,,,,align="center"]
 
-The most useful feature of the debugger is without doubt the "Show
-    debug info" option. It allows to have a screen dump of the complete http
-    communication between client and server, including the http headers as
-    well as the request and response payloads, and is invaluable when
-    troubleshooting problems with charset encoding, authentication or http
+The most useful feature of the debugger is without doubt the "Show debug info" option. It allows to have a screen dump
+    of the complete http communication between client and server, including the http headers as well as the request and
+    response payloads, and is invaluable when troubleshooting problems with charset encoding, authentication or http
     compression.
 
-The debugger can take advantage of the JSONRPC library extension, to
-    allow debugging of JSON-RPC webservices, and of the JS-XMLRPC library
-    visual editor to allow easy mouse-driven construction of the payload for
-    remote methods. Both components have to be downloaded separately from the
-    sourceforge.net web pages and copied to the debugger directory to enable
-    the extra functionality:
+The debugger can take advantage of the JSONRPC library extension, to allow debugging of JSON-RPC webservices, and of the
+    JSXMLRPC library visual editor to allow easy mouse-driven construction of the payload for remote methods. Both
+    components have to be downloaded separately and copied to the debugger directory to enable the extra functionality:
 
 
-* to enable jsonrpc functionality, download the PHP-XMLRPC
-          EXTRAS package, and copy the file __jsonrpc.inc__
-          either to the same directory as the debugger or somewhere in your
-          php include path
+* to enable jsonrpc functionality, download the PHP-XMLRPC EXTRAS package, and copy the file __jsonrpc.inc__
+  either to the same directory as the debugger or somewhere in your php include path
 
-* to enable the visual value editing dialog, download the
-          JS-XMLRPC library, and copy somewhere in the web root files
+* to enable the visual value editing dialog, download the JS-XMLRPC library, and copy somewhere in the web root files
           __visualeditor.php__,
           __visualeditor.css__ and the folders
           __yui__ and __img__. Then edit the
@@ -2167,7 +2151,7 @@ Supported encodings are US-ASCII, UTF-8 and ISO-8859-1.
 * Allow a server to NOT respond to system.* method calls (setting the `$server->allow_system_funcs` property).
 
 * Implement a new xmlrpcval method to determine if a value of type struct has a member of a given name without having to
-    loop trough all members: `xmlrpcval::structMemExists()`
+    loop through all members: `xmlrpcval::structMemExists()`
 
 * Expand methods `xmlrpcval::addArray`, `addScalar` and `addStruct` allowing extra php values to be added to
     xmlrpcval objects already formed.

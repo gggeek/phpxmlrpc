@@ -29,7 +29,7 @@ Installation of the library is quite easy:
 
     3.  Open a terminal and use Composer to grab the library.
 
-            $ composer require phpxmlrpc/phpxmlrpc:^4
+            $ composer require phpxmlrpc/phpxmlrpc:^4.9
 
     4.  Write your code.
         Once Composer has downloaded the component(s), all you need to do is include the vendor/autoload.php file that
@@ -75,13 +75,12 @@ Installation of the library is quite easy:
             $client = new Client('http://some/server');
             $response = $client->send(new Request('method', array(new Value('parameter'))));
 
-    5.  IMPORTANT! Make sure that the vendor/phpxmlrpc directory is not directly accessible from the internet,
+    4.  IMPORTANT! Make sure that the phpxmlrpc directory is not directly accessible from the internet,
         as leaving it open to access means that any visitor can trigger execution of php code such as
         the built-in debugger.
 
 Tips
 ----
 
-Please note that usage of the 'pake' command is not required for installation of the library.
-At this moment it is only useful to build the html and pdf versions of the documentation, and the tarballs
-for distribution of the library.
+* Please note that usage of the 'pake' command is not required for installation of the library.
+  At this moment it is only useful to build the html and pdf versions of the documentation.
