@@ -1,3 +1,9 @@
+## XML-RPC for PHP version 4.xx.yy - unreleased
+
+* improved: avoid stalling the webserver when using the debugger with the php built-in webserver and testing the demo
+  server within the same install
+
+
 ## XML-RPC for PHP version 4.9.2 - 2022-12-18
 
 * security fix: removed the possibility of an XSS attack in the debugger.

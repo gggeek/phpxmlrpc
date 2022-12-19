@@ -94,153 +94,166 @@ include __DIR__ . '/common.php';
 
 if ($action) {
 
-    // make sure the script waits long enough for the call to complete...
-    if ($timeout) {
-        set_time_limit($timeout + 10);
-    }
-
-    if ($wstype == 1) {
-        //@include 'jsonrpc.inc';
-        if (!class_exists('\PhpXmlRpc\JsonRpc\Client')) {
-            die('Error: to debug the jsonrpc protocol the phpxmlrpc/jsonrpc package is needed');
-        }
-        $clientClass = '\PhpXmlRpc\JsonRpc\Client';
-        $requestClass = '\PhpXmlRpc\JsonRpc\Request';
-        $protoName = 'JSONRPC';
-    } else {
-        $clientClass = '\PhpXmlRpc\Client';
-        $requestClass = '\PhpXmlRpc\Request';
-        $protoName = 'XMLRPC';
-    }
-
-    if ($port != "") {
-        $client = new $clientClass($path, $host, $port);
-        $server = "$host:$port$path";
-    } else {
-        $client = new $clientClass($path, $host);
-        $server = "$host$path";
-    }
-    if ($protocol == 2 || $protocol == 3) {
-        $server = 'https://' . $server;
-    } else {
-        $server = 'http://' . $server;
-    }
-    if ($proxy != '') {
-        $pproxy = explode(':', $proxy);
-        if (count($pproxy) > 1) {
-            $pport = $pproxy[1];
-        } else {
-            $pport = 8080;
-        }
-        $client->setProxy($pproxy[0], $pport, $proxyuser, $proxypwd);
-    }
-
-    if ($protocol == 2 || $protocol == 3) {
-        $client->setSSLVerifyPeer($verifypeer);
-        $client->setSSLVerifyHost($verifyhost);
-        if ($cainfo) {
-            $client->setCaCertificate($cainfo);
-        }
-        if ($protocol == 3) {
-            $httpprotocol = 'h2';
-        } else {
-            $httpprotocol = 'https';
-        }
-    } elseif ($protocol == 4) {
-        $httpprotocol = 'h2c';
-    } elseif ($protocol == 1) {
-        $httpprotocol = 'http11';
-    } else {
-        $httpprotocol = 'http';
-    }
-
-    if ($username) {
-        $client->setCredentials($username, $password, $authtype);
-    }
-
-    $client->setDebug($debug);
-
-    switch ($requestcompression) {
-        case 0:
-            $client->request_compression = '';
-            break;
-        case 1:
-            $client->request_compression = 'gzip';
-            break;
-        case 2:
-            $client->request_compression = 'deflate';
-            break;
-    }
-
-    switch ($responsecompression) {
-        case 0:
-            $client->accepted_compression = '';
-            break;
-        case 1:
-            $client->accepted_compression = array('gzip');
-            break;
-        case 2:
-            $client->accepted_compression = array('deflate');
-            break;
-        case 3:
-            $client->accepted_compression = array('gzip', 'deflate');
-            break;
-    }
-
-    $cookies = explode(',', $clientcookies);
-    foreach ($cookies as $cookie) {
-        if (strpos($cookie, '=')) {
-            $cookie = explode('=', $cookie);
-            $client->setCookie(trim($cookie[0]), trim(@$cookie[1]));
+    // avoid php hanging when using the builtin webserver and sending requests to itself
+    $skip = false;
+    if (php_sapi_name() === 'cli-server' && ((int)getenv('PHP_CLI_SERVER_WORKERS') < 2)) {
+        $localHost = explode(':', $_SERVER['HTTP_HOST']);
+        /// @todo support also case where port is null (on either side), and when there is a Proxy in the parameters,
+        ///       and that proxy is us
+        if ($localHost[0] == $host && (@$localHost[1] == $port)) {
+            $actionname = '[ERROR: can not make call to self when running php-cli webserver without setting PHP_CLI_SERVER_WORKERS]';
+            $skip = true;
         }
     }
 
-    $msg = array();
-    switch ($action) {
-        // fall thru intentionally
-        case 'describe':
-        case 'wrap':
-            $msg[0] = new $requestClass('system.methodHelp', array(), $id);
-            $msg[0]->addparam(new PhpXmlRpc\Value($method));
-            $msg[1] = new $requestClass('system.methodSignature', array(), (int)$id + 1);
-            $msg[1]->addparam(new PhpXmlRpc\Value($method));
-            $actionname = 'Description of method "' . $method . '"';
-            break;
-        case 'list':
-            $msg[0] = new $requestClass('system.listMethods', array(), $id);
-            $actionname = 'List of available methods';
-            break;
-        case 'execute':
-            if (!payload_is_safe($payload)) {
-                die("Tsk tsk tsk, please stop it or I will have to call in the cops!");
+    if (!$skip) {
+        // make sure the script waits long enough for the call to complete...
+        if ($timeout) {
+            set_time_limit($timeout + 10);
+        }
+
+        if ($wstype == 1) {
+            if (!class_exists('\PhpXmlRpc\JsonRpc\Client')) {
+                die('Error: to debug the jsonrpc protocol the phpxmlrpc/jsonrpc package is needed');
             }
-            $msg[0] = new $requestClass($method, array(), $id);
-            // hack! build xml payload by hand
-            if ($wstype == 1) {
-                $msg[0]->payload = "{\n" .
-                    '"method": "' . $method . "\",\n\"params\": [" .
-                    $payload .
-                    "\n],\n\"id\": ";
-                // fix: if user gave an empty string, use NULL, or we'll break json syntax
-                if ($id == "") {
-                    $msg[0]->payload .= "null\n}";
-                } else {
-                    if (is_numeric($id) || $id == 'false' || $id == 'true' || $id == 'null') {
-                        $msg[0]->payload .= "$id\n}";
-                    } else {
-                        $msg[0]->payload .= "\"$id\"\n}";
-                    }
-                }
+            $clientClass = '\PhpXmlRpc\JsonRpc\Client';
+            $requestClass = '\PhpXmlRpc\JsonRpc\Request';
+            $protoName = 'JSONRPC';
+        } else {
+            $clientClass = '\PhpXmlRpc\Client';
+            $requestClass = '\PhpXmlRpc\Request';
+            $protoName = 'XMLRPC';
+        }
+
+        if ($port != "") {
+            $client = new $clientClass($path, $host, $port);
+            $server = "$host:$port$path";
+        } else {
+            $client = new $clientClass($path, $host);
+            $server = "$host$path";
+        }
+        if ($protocol == 2 || $protocol == 3) {
+            $server = 'https://' . $server;
+        } else {
+            $server = 'http://' . $server;
+        }
+        if ($proxy != '') {
+            $pproxy = explode(':', $proxy);
+            if (count($pproxy) > 1) {
+                $pport = $pproxy[1];
             } else {
-                $msg[0]->payload = $msg[0]->xml_header($inputcharset) .
-                    '<methodName>' . $method . "</methodName>\n<params>" .
-                    $payload .
-                    "</params>\n" . $msg[0]->xml_footer();
+                $pport = 8080;
             }
-            $actionname = 'Execution of method ' . $method;
-            break;
-        default: // give a warning
-            $actionname = '[ERROR: unknown action] "' . $action . '"';
+            $client->setProxy($pproxy[0], $pport, $proxyuser, $proxypwd);
+        }
+
+        if ($protocol == 2 || $protocol == 3) {
+            $client->setSSLVerifyPeer($verifypeer);
+            $client->setSSLVerifyHost($verifyhost);
+            if ($cainfo) {
+                $client->setCaCertificate($cainfo);
+            }
+            if ($protocol == 3) {
+                $httpprotocol = 'h2';
+            } else {
+                $httpprotocol = 'https';
+            }
+        } elseif ($protocol == 4) {
+            $httpprotocol = 'h2c';
+        } elseif ($protocol == 1) {
+            $httpprotocol = 'http11';
+        } else {
+            $httpprotocol = 'http';
+        }
+
+        if ($username) {
+            $client->setCredentials($username, $password, $authtype);
+        }
+
+        $client->setDebug($debug);
+
+        switch ($requestcompression) {
+            case 0:
+                $client->request_compression = '';
+                break;
+            case 1:
+                $client->request_compression = 'gzip';
+                break;
+            case 2:
+                $client->request_compression = 'deflate';
+                break;
+        }
+
+        switch ($responsecompression) {
+            case 0:
+                $client->accepted_compression = '';
+                break;
+            case 1:
+                $client->accepted_compression = array('gzip');
+                break;
+            case 2:
+                $client->accepted_compression = array('deflate');
+                break;
+            case 3:
+                $client->accepted_compression = array('gzip', 'deflate');
+                break;
+        }
+
+        $cookies = explode(',', $clientcookies);
+        foreach ($cookies as $cookie) {
+            if (strpos($cookie, '=')) {
+                $cookie = explode('=', $cookie);
+                $client->setCookie(trim($cookie[0]), trim(@$cookie[1]));
+            }
+        }
+
+        $msg = array();
+        switch ($action) {
+            // fall thru intentionally
+            case 'describe':
+            case 'wrap':
+                $msg[0] = new $requestClass('system.methodHelp', array(), $id);
+                $msg[0]->addparam(new PhpXmlRpc\Value($method));
+                $msg[1] = new $requestClass('system.methodSignature', array(), (int)$id + 1);
+                $msg[1]->addparam(new PhpXmlRpc\Value($method));
+                $actionname = 'Description of method "' . $method . '"';
+                break;
+            case 'list':
+                $msg[0] = new $requestClass('system.listMethods', array(), $id);
+                $actionname = 'List of available methods';
+                break;
+            case 'execute':
+                if (!payload_is_safe($payload)) {
+                    die("Tsk tsk tsk, please stop it or I will have to call in the cops!");
+                }
+                $msg[0] = new $requestClass($method, array(), $id);
+                // hack! build xml payload by hand
+                if ($wstype == 1) {
+                    $msg[0]->payload = "{\n" .
+                        '"method": "' . $method . "\",\n\"params\": [" .
+                        $payload .
+                        "\n],\n\"id\": ";
+                    // fix: if user gave an empty string, use NULL, or we'll break json syntax
+                    if ($id == "") {
+                        $msg[0]->payload .= "null\n}";
+                    } else {
+                        if (is_numeric($id) || $id == 'false' || $id == 'true' || $id == 'null') {
+                            $msg[0]->payload .= "$id\n}";
+                        } else {
+                            $msg[0]->payload .= "\"$id\"\n}";
+                        }
+                    }
+                } else {
+                    $msg[0]->payload = $msg[0]->xml_header($inputcharset) .
+                        '<methodName>' . $method . "</methodName>\n<params>" .
+                        $payload .
+                        "</params>\n" . $msg[0]->xml_footer();
+                }
+                $actionname = 'Execution of method ' . $method;
+                break;
+            default: // give a warning
+                $actionname = '[ERROR: unknown action] "' . $action . '"';
+        }
     }
 
     // Before calling execute, echo out brief description of action taken + date and time ???
@@ -256,8 +269,7 @@ if ($action) {
     $resp = array();
     $time = microtime(true);
     foreach ($msg as $message) {
-        // catch errors: for older xmlrpc libs, send does not return by ref
-        @$response = $client->send($message, $timeout, $httpprotocol);
+        $response = $client->send($message, $timeout, $httpprotocol);
         $resp[] = $response;
         if (!$response || $response->faultCode()) {
             break;

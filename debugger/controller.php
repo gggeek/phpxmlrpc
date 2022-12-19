@@ -226,11 +226,17 @@ if (defined('JSXMLRPC_BASEURL')) {
 
         // use GET for ease of refresh, switch to POST when payload is too big to fit in url (in IE: 2048 bytes! see http://support.microsoft.com/kb/q208427/)
         function switchFormMethod() {
-            /// @todo use a more precise calculation, adding the rest of the fields to the actual generated url lenght
+            /// @todo use a more precise calculation, adding the rest of the fields to the actual generated url length -
+            ///       retrieve first max url length for current browsers and webservers
             if (document.frmaction.methodpayload.value.length > 1536) {
                 document.frmaction.action = 'action.php?usepost=true';
                 document.frmaction.method = 'post';
             }
+            /*let form = document.forms[0];
+            let formData = new FormData(form);
+            let search = new URLSearchParams(formData);
+            let queryString = search.toString();
+            alert(queryString);alert(queryString.length);*/
         }
     </script>
 </head>
@@ -305,7 +311,7 @@ if (defined('JSXMLRPC_BASEURL')) {
             </td>
             <td class="labelcell">Timeout:</td>
             <td><input type="text" name="timeout" size="3" value="<?php if ($timeout > 0) { echo $timeout; } ?>"/></td>
-            <td</td>
+            <td></td>
             <td></td>
         </tr>
         <tr>
