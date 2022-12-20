@@ -1,6 +1,6 @@
-## XML-RPC for PHP version 4.9.yy - unreleased
+## XML-RPC for PHP version 4.9.3 - 2022-12-20
 
-* improved: avoid stalling the webserver when using the debugger with the php built-in webserver and testing the demo
+* improved: avoid stalling the webserver when using the debugger with the php cli-webserver and testing the demo
   server within the same install
 
 * improved: allow installation of the jsxmlrpc library within the debugger folder via composer or npm to enable the
