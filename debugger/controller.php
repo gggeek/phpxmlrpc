@@ -22,21 +22,41 @@ if ($action == '') {
     $action = 'list';
 }
 
-// Path to the visual xmlrpc editing dialog's containing folder. Can be absolute, or relative to this debugger's folder.
-// We allow to easily configure this path via defines
-$editorpath = (defined('JSXMLRPC_PATH') ? JSXMLRPC_PATH : '../..') . '/jsxmlrpc/debugger/';
-// In case the webserver is set up so that the url to that folder is different. We default to JSXMLRPC_PATH for BC
-$editorurlpath = defined('JSXMLRPC_BASEURL') ? JSXMLRPC_BASEURL : $editorpath;
+$haseditor = false;
+$editorurlpath = null;
+// @const JSXMLRPC_BASEURL Url to the visual xmlrpc editing dialog's containing folder. We allow to easily configure this
 if (defined('JSXMLRPC_BASEURL')) {
+    $editorurlpath = JSXMLRPC_BASEURL;
     $haseditor = true;
 } else {
-    if ($editorpath[0] !== '/') {
-        $haseditor = is_file(realpath(__DIR__ . '/' . $editorpath . 'visualeditor.html'));
+    /// @deprecated
+    /// @const JSXMLRPC_PATH Path to the visual xmlrpc editing dialog's containing folder. Can be absolute, or
+    ///         relative to this debugger's folder.
+    if (defined('JSXMLRPC_PATH')) {
+        $editorpaths = array(JSXMLRPC_PATH[0] === '/' ? JSXMLRPC_PATH : (__DIR__ . '/' . JSXMLRPC_PATH));
     } else {
-        $haseditor = is_file(realpath($editorpath . 'visualeditor.html'));;
+        $editorpaths = array(
+            __DIR__ . '/vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via composer in debugger
+            __DIR__ . '/node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via npm in debugger
+            __DIR__ . '/../vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via composer
+            __DIR__ . '/../node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via npm
+            __DIR__ . '/../../jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc too
+        );
+    }
+    foreach($editorpaths as $editorpath) {
+        if (is_file(realpath($editorpath . 'visualeditor.html'))) {
+            $haseditor = true;
+            break;
+        }
+    }
+    if ($haseditor) {
+        $editorurlpath = preg_replace('|^' . preg_quote(__DIR__, '|') .'|', '', $editorpath);
+
+        /// @todo for cases 3, 4 and 5 above, look at `parse_url($_SERVER['REQUEST_URI'],  PHP_URL_PATH)` and check if the
+        ///       web root is not pointing directly at this folder, as in that case the link to the visualeditor will not
+        ///       work, as it will be in the form http(s)://domain/../../jsxmlrpc/debugger/visualeditor.html
     }
 }
-
 ?><!DOCTYPE html>
 <html lang="en">
 <head>

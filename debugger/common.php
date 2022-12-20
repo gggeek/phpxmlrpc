@@ -13,12 +13,13 @@
 
 // handle class autoloading:
 if (file_exists(__DIR__.'/../vendor/autoload.php')) {
-    // if the debugger is installed as top-level project with Composer, allow finding classes from dependencies
+    // if the debugger's package is installed as top-level project, and dependencies via Composer, allow finding classes
+    // from dependencies
     include_once(__DIR__.'/../vendor/autoload.php');
 } else {
     // assume this is either a standalone install, or installed as Composer dependency
     /// @todo if the latter is true, should we just not skip using the custom Autoloader, and let a top-level
-    ///       debugger include this one, taking care of autoloading ?
+    ///       debugger include this one, taking care of autoloading?
     include_once __DIR__ . "/../src/Autoloader.php";
     PhpXmlRpc\Autoloader::register();
 }
