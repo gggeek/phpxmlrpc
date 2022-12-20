@@ -1,5 +1,5 @@
 = XML-RPC for PHP
-:revision: 4.9.2
+:revision: 4.9.23
 :keywords: xmlrpc, xml, rpc, webservices, http
 :toc: left
 :imagesdir: images
