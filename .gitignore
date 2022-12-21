@@ -1,6 +1,11 @@
 /.scannerwork
 /.idea
-/build/*
+/doc/api
+/doc/build/.phpdoc
+/doc/build/composer.lock
+/doc/build/vendor
+/doc/manual/phpxmlrpc_manual.html
+/doc/manual/phpxmlrpc_manual.pdf
 /vendor/*
 /.phpunit.result.cache
 /composer.lock

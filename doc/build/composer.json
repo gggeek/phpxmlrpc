@@ -2,6 +2,7 @@
     "name": "phpxmlrpc/phpxmlrpc-doc-toolchain",
     "require": {
         "php": "^5.3.0 || ^7.0 || ^8.0",
+        "ext-dom": "*",
         "ext-xsl": "*",
         "indeyets/pake": "^1.99",
         "docbook/docbook-xsl": "^1.79",
