@@ -1,5 +1,6 @@
 *.inc	diff=php
 
+.githooks/ export-ignore
 .github/ export-ignore
 demo/ export-ignore
 doc/ export-ignore

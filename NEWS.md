@@ -1,3 +1,9 @@
+## XML-RPC for PHP version XXX - unreleased
+
+* improved: added a pre-push git hook script, to avoid pushing tagged versions with inconsistent version tags in code.
+  To install it, execute `composer run-script setup-git-hooks`
+
+
 ## XML-RPC for PHP version 4.9.3 - 2022-12-20
 
 * improved: avoid stalling the webserver when using the debugger with the php cli-webserver and testing the demo

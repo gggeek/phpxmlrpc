@@ -24,6 +24,9 @@
         "phpxmlrpc/extras": "Adds more featured Server classes and other useful bits",
         "phpxmlrpc/jsonrpc": "Adds support for the JSON-RPC protocol"
     },
+    "scripts": {
+        "setup-git-hooks": "if ln -s -f $(pwd)/.githooks/pre-push.sh .git/hooks/pre-push; then echo hooks installed; else echo fail; fi"
+    },
     "_comment::conflict": "Within the extras package, only the XMLRPC extension emulation is not compatible... the JSONRPC part should be ok. Both have been moved to different packages anyway",
     "conflict": {
         "phpxmlrpc/extras": "<= 0.6.3"
