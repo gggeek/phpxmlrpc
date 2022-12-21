@@ -66,6 +66,16 @@ $processor->importStyleSheet($xsl);
 
 $out = $processor->transformToXML($xml);
 
+// bring back the xsl file to its pristine state
+file_put_contents(
+    $xss,
+    str_replace(
+        array($docbookFoXslPath, $docbookChunkXslPath),
+        array('%fo-docbook.xsl%', '%docbook-chunk.xsl%'),
+        file_get_contents($xss)
+    )
+);
+
 if (!is_dir($target)) {
     if (!file_put_contents($target, $out)) {
         error("KO saving output to '{$target}'");

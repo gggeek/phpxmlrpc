@@ -11,7 +11,7 @@
 
 
 <!-- import base stylesheet. This assumes the xslt is preprocessed before being used -->
-<xsl:import href="/home/docker/build/doc/build/vendor/docbook/docbook-xsl/fo/docbook.xsl"/>
+<xsl:import href="%fo-docbook.xsl%"/>
 
 
 <!-- customization vars -->
