@@ -93,4 +93,4 @@ while read local_ref local_oid remote_ref remote_oid; do
     fi
 done
 
-exit 3
+exit 0
