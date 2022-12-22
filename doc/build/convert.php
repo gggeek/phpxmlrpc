@@ -54,8 +54,7 @@ if (version_compare(PHP_VERSION, '5.4', "<")) {
         $processor->setSecurityPreferences(XSL_SECPREF_CREATE_DIRECTORY | XSL_SECPREF_WRITE_FILE);
     }
 }
-if (is_dir($target))
-{
+if (is_dir($target)) {
     if (!$processor->setParameter('', 'base.dir', $target)) {
         error("KO setting param base.dir");
     }
@@ -91,7 +90,7 @@ function info($msg)
     echo "$msg\n";
 }
 
-function error($msg, $errcode=1)
+function error($msg, $errcode = 1)
 {
     fwrite(STDERR, "$msg\n");
     exit($errcode);
