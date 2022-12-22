@@ -1,0 +1,16 @@
+<html lang="en">
+<head>
+    <title>XML-RPC for PHP User Manual</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/asciidoctor.js/1.5.9/asciidoctor.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/asciidoctor.js/1.5.9/css/asciidoctor.min.css">
+</head>
+<body>
+<div id="target"></div>
+<script>
+    var asciidoctor = Asciidoctor();
+    const content = "include::phpxmlrpc_manual.adoc[]"
+    const html = asciidoctor.convert(content, {safe: 'safe', header_footer: false});
+    document.getElementById('target').innerHTML = html;
+</script>
+</body>
+</html>
