@@ -12,7 +12,7 @@ export PHP_VERSION=${PHP_VERSION:-default}
 export UBUNTU_VERSION=${UBUNTU_VERSION:-focal}
 
 CONTAINER_USER=docker
-CONTAINER_BUILD_DIR="/home/${CONTAINER_USER}/build"
+CONTAINER_WORKSPACE_DIR="/home/${CONTAINER_USER}/workspace"
 ROOT_DIR="$(dirname -- "$(dirname -- "$(dirname -- "$(readlink -f "$0")")")")"
 IMAGE_NAME=phpxmlrpc:${UBUNTU_VERSION}-${PHP_VERSION}
 CONTAINER_NAME=phpxmlrpc_${UBUNTU_VERSION}_${PHP_VERSION}
@@ -56,7 +56,7 @@ build() {
         -p 80:80 -p 443:443 -p 8080:8080 \
         --name "${CONTAINER_NAME}" \
         --env CONTAINER_USER_UID=$(id -u) --env CONTAINER_USER_GID=$(id -g) \
-        --env TESTS_ROOT_DIR=${CONTAINER_BUILD_DIR} \
+        --env TESTS_ROOT_DIR=${CONTAINER_WORKSPACE_DIR} \
         --env HTTPSERVER=localhost \
         --env HTTPURI=/demo/server/server.php \
         --env HTTPSSERVER=localhost \
@@ -66,7 +66,7 @@ build() {
         --env HTTPSIGNOREPEER=1 \
         --env SSLVERSION=0 \
         --env DEBUG=0 \
-        -v "${ROOT_DIR}":"${CONTAINER_BUILD_DIR}" \
+        -v "${ROOT_DIR}":"${CONTAINER_WORKSPACE_DIR}" \
          "${IMAGE_NAME}"
 }
 
@@ -113,9 +113,9 @@ case "${ACTION}" in
     runcoverage)
         # @todo clean up /tmp/phpxmlrpc and .phpunit.result.cache
         if [ ! -d build ]; then mkdir build; fi
-        docker exec -t "${CONTAINER_NAME}" /home/${CONTAINER_USER}/build/tests/ci/setup/setup_code_coverage.sh enable
+        docker exec -t "${CONTAINER_NAME}" "${CONTAINER_WORKSPACE_DIR}/tests/ci/setup/setup_code_coverage.sh" enable
         docker exec -it "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html build/coverage -v tests"
-        docker exec -t "${CONTAINER_NAME}" /home/${CONTAINER_USER}/build/tests/ci/setup/setup_code_coverage.sh disable
+        docker exec -t "${CONTAINER_NAME}" "${CONTAINER_WORKSPACE_DIR}/tests/ci/setup/setup_code_coverage.sh" disable
         ;;
 
     runtests)
