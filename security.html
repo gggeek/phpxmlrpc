@@ -57,9 +57,9 @@ Security
         </p><p>
             If it is not possible to upgrade to this release of the library at this time, a proactive security measure, to avoid
             the Client accessing any local file on the server which hosts it, is to add the following call to your code:
-        </p><p>
-            <pre>    $client->setCurlOptions([CURLOPT_PROTOCOLS, CURLPROTO_HTTPS|CURLPROTO_HTTP]);</pre>
         </p>
+        <pre>    $client->setCurlOptions([CURLOPT_PROTOCOLS, CURLPROTO_HTTPS|CURLPROTO_HTTP]);</pre>
+
         <h4>2: hardened the `Wrapper::buildClientWrapperCode` method's code generation against <i>code injection</i> via
             usage of a malevolent `$client` argument (issue <a href="https://github.com/gggeek/phpxmlrpc/issues/80">#80</a>, reported March 2021)</h4>
         <p>
