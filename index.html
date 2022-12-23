@@ -26,74 +26,107 @@
 <div id="content">
 
 <h2>Introduction</h2>
-<p>Welcome to the homepage of "XML-RPC for PHP". It is a library implementing the <a href="http://www.xmlrpc.com/">XML-RPC</a> protocol, written in <a href="http://www.php.net/">PHP</a>. It is also known as PHPXMLRPC.<br/>
-It is designed for ease of use, flexibility and completeness. High speed and reduced memory footprint are not the main goals of the project.
-</p>
-<p>Note that this is not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> which can be compiled as a <a href="https://pecl.php.net/package/xmlrpc">php extension</a> and has been bundled with php from version 4.1 up to version 7.4.<br/>
-This is also not the same library as <a href="http://pear.php.net/package/XML_RPC/">the one</a> that is part of PEAR, either. They both share a common ancestry, since the PEAR version is a branch of the original phpxmlrpc library, later independently maintained.</p>
+<p>Welcome to the homepage of "XML-RPC for PHP". It is a library implementing the <a href="http://www.xmlrpc.com/">XML-RPC</a>
+    protocol, written in <a href="http://www.php.net/">PHP</a>. It is also known as PHPXMLRPC.<br/>
+    It is designed for ease of use, flexibility and completeness. High speed and reduced memory footprint are not the main
+    goals of the project.</p>
+<p>XML-RPC is a format devised by <a href="http://www.userland.com">Userland Software</a> for achieving remote procedure
+    call via XML using HTTP as the transport. XML-RPC has its own website, <a href="http://xmlrpc.com">http://xmlrpc.com</a></p>
+<p>Note that this is not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> which can be compiled as a
+    <a href="https://pecl.php.net/package/xmlrpc">php extension</a> and has been bundled with php from version 4.1 up to
+    version 7.4.<br/>
+    This is also not the same library as <a href="http://pear.php.net/package/XML_RPC/">the one</a> that is part of PEAR,
+    either. They both share a common ancestry, since the PEAR version is a branch of the original phpxmlrpc library, later
+    independently maintained.</p>
 
 <h2><a name="features">Main Features</a></h2>
 <ul>
 <li>Support for creating both xmlrpc clients and servers</li>
 <li>Fully automated or fully manual, fine-grained encoding and decoding from php values to xmlrpc</li>
-<li>Support for UTF8, Latin-1 and ASCII character encodings. With the php mbstring extension enabled, even more character sets are supported</li>
-<li>Support for http features including compression of both requests and responses, cookies, proxies, basic and digest auth, ntlm auth, https, http2, keepalives (some only with the php cURL extension)</li>
+<li>Support for UTF8, Latin-1 and ASCII character encodings. With the php mbstring extension enabled, even more character
+    sets are supported</li>
+<li>Support for http features including compression of both requests and responses, cookies, proxies, basic and digest auth,
+    ntlm auth, https, http2, keepalives (some only with the php cURL extension)</li>
 <li>Optional validation of parameter types of incoming xmlrpc request</li>
 <li>Support for `system.listMethods`, `system.methodHelp`, `system.multicall` and `system.getCapabilities` methods</li>
-<li>Support for the &lt;NIL/&gt; and &lt;EX:NIL/&gt; extensions to xmlrpc</li>
-<li>Possibility to register existing php function or class methods as webservices, extracting value-added information from phpdoc comments</li>
+<li>Support for the `&lt;NIL/&gt;` and `&lt;EX:NIL/&gt;` extensions to xmlrpc</li>
+<li>Possibility to register existing php function or class methods as webservices, extracting value-added information
+    from phpdoc comments</li>
 <li>A web based visual debugger is included with the library</li>
-<li>A package emulating the API of the native XML-RPC extension for PHP, built on this library, is available at <a href="https://github.com/gggeek/polyfill-xmlrpc">https://github.com/gggeek/polyfill-xmlrpc</a></li>
-<!--<li>Many other cool features are delivered with the 'Extras' package, such as a complete emulation layer of php native xmlrpc calls, an xmlrpc server that generates html documentation of exposed webservices, and a complete jsonrpc library...</li>
-<li>Last but not least, <a href="http://gggeek.github.io/jsxmlrpc/">a version of the library</a> implementing the same API in Javascript is available, allowing to leverage acquired knowledge to easily build ajax/dhtml clients</li>-->
+<li>A package emulating the API of the native XML-RPC extension for PHP, built on this library, is available at
+    <a href="https://github.com/gggeek/polyfill-xmlrpc">https://github.com/gggeek/polyfill-xmlrpc</a></li>
+<!--<li>Many other cool features are delivered with the 'Extras' package, such as a complete emulation layer of php native
+    xmlrpc calls, an xmlrpc server that generates html documentation of exposed webservices, and a complete jsonrpc library...</li>
+<li>Last but not least, <a href="http://gggeek.github.io/jsxmlrpc/">a version of the library</a> implementing the same
+    API in Javascript is available, allowing to leverage acquired knowledge to easily build ajax/dhtml clients</li>-->
 </ul>
 
 <h2><a name="requirements">Requirements</a></h2>
+<p>The library has been designed with goals of flexibility and backward compatibility. As such, it supports a wide range
+    of PHP installs. Note that not all features of the lib are available in every configuration.</p>
 <ul>
 <li>PHP 5.3.0 or later; 7.4 or later recommended</li>
-<li>the php "curl" extension is needed if you wish to use SSL or HTTP 1.1 to communicate with remote servers</li>
-<li>the php "mbstring" extension is needed to allow reception of requests/responses in character sets other than ASCII, Latin-1, UTF-8</li>
-<li>the php "xmlrpc" native extension is not required, but if it is installed, there will be no interference with the operation of this library</li>
+<li>the php "curl" extension is needed if you wish to use HTTPS, HTTP 1.1 or HTTP2 to communicate with remote servers or
+    to use NTLM/Digest authentication</li>
+<li>the php "mbstring" extension is needed to allow reception of requests/responses in character sets other than ASCII,
+    Latin-1, UTF-8</li>
+<li>the php "xmlrpc" native extension is not required, but if it is installed, there will be no interference with the
+    operation of this library</li>
 </ul>
 
 <h2><a name="download">Download</a></h2>
-<p>The latest stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.9.3"><span class="evidence">4.9.3</span></a> released on Dec. 20th, 2022
-(<a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.9.3">Release notes</a>)</p>
-<p><b>NB: there are a security-related fixes in recent releases, please upgrade to it ASAP!</b></p>
+<p>For the latest release, check out the <a href="https://github.com/gggeek/phpxmlrpc/releases">Releases page</a> on GitHub.</p>
+<p><b>NB: there are a security-related fixes in releases 4.9.1 and 4.9.2, please upgrade to 4.9.2 or later ASAP!</b></p>
+<p>Ancient releases (older than version 2.2.2) are still available for historical purposes at
+    <a href="https://sourceforge.net/projects/phpxmlrpc/files/phpxmlrpc/">SourceForge</a></p>
 
 <h2><a name="news">News</a></h2>
-<p>
-For the latest release, check out the <a href="https://github.com/gggeek/phpxmlrpc/releases">Releases page</a> on GitHub.
-</p>
-<a href="news.html">Older news...</a>
+<p>The latest stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.9.3"><span class="evidence">4.9.3</span></a>
+    released on Dec. 20th, 2022 (<a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.9.3">Release notes</a>)</p>
+<p><a href="news.html">Older news</a> (up to December 2021)...</p>
 
 <h2><a name="interest">Documentation</a></h2>
+
 <h3>User manual</h3>
-<p>
-A proper user manual for version 4 is not yet available; for the moment the <a href="doc-4/api/index.html">API docs</a> will have to do.<br/>
-A good way to get started with API usage is to take a look at the <a href="https://github.com/gggeek/phpxmlrpc/tree/master/demo">demo source code</a>, showcasing both Client and Server use cases.
-</p>
-<p>
-Manuals for older versions:
-</p>
+<p>A proper user manual for version 4 is not yet available; for the moment the <a href="doc-4/api/index.html">API docs</a>
+    will have to do.<br/>
+    A good way to get started with API usage is to take a look at the <a href="https://github.com/gggeek/phpxmlrpc/tree/master/demo">demo source code</a>,
+    showcasing both Client and Server use cases.</p>
+<p>Manuals for older versions:</p>
 <ul>
-<li><a href="https://github.com/gggeek/phpxmlrpc/blob/master/doc/api_changes_v4.md">API changes between version 3 and version 4</a></li>
+<li><a href="https://github.com/gggeek/phpxmlrpc/blob/master/doc/api_changes_v4.md">API changes between version 3 and
+    version 4</a></li>
 <li>User manual for version 3, in <a href="doc-2/">HTML</a> or <a href="doc-2/xmlrpc_php.pdf">PDF</a> format.<br/>
-For the adventurous there is even an <a href="doc-2/xmlrpc_php.xml">xml+css</a> version (note: better viewing results obtained by Firefox and Opera users)</li>
+    For the adventurous there is even an <a href="doc-2/xmlrpc_php.xml">xml+css</a> version (note: better viewing results
+    obtained by Firefox and Opera users)</li>
 <li><a href="doc-1.1/">User manual for version 1.2.1</a></li>
 <li><a href="doc/">User manual for version 1.0.99</a></li>
 </ul>
+
+<h3>Release Notes</h3>
+<p>The description of changes in each release is available as part of the distribution. It is also accessible
+    <a href="https://github.com/gggeek/phpxmlrpc/blob/master/NEWS.md">online</a>.</p>
+
 <h3>Changelogs</h3>
-Detailed release notes are <a href="https://github.com/gggeek/phpxmlrpc/releases">available on GitHub</a> for all releases starting with 2.2.2.<br/>
-A changelog for very old versions, before the introduction of git (ie. up to version 2.2.2), is distributed as part of the source code. It is also <a href="https://github.com/gggeek/phpxmlrpc/blob/master/doc/ChangeLog">available online</a>.
+<p>Detailed changelogs are available <a href="https://github.com/gggeek/phpxmlrpc/commits">on GitHub</a> for all releases
+    starting with 2.2.2.<br/>
+    A changelog for very old versions, before the introduction of git (ie. up to version 2.2.2), is also available
+    <a href="https://github.com/gggeek/phpxmlrpc/blob/master/doc/ChangeLog">online</a>.</p>
 
 <h2><a name="demoserver">Online demo server</a></h2>
-<p>A demo server is active at the address <b>https://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php</b>. It exposes functions that can be used for interoperability testing (the full code for the server is included in the Git version of the library).<br/>
-<!--You can see the source code here: <a href="https://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php?showSource=TRUE">https://phpxmlrpc.sourceforge.net/server.php</a> (the xmlrpc server will activate on POST requests, and display its API on GET requests), and auto-generated documentation <a href="server.php">here</a>--></p>
+<p>A demo server is active at the address <b>https://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php</b>. It
+    exposes functions that can be used for interoperability testing (the full code for the server is included in the
+    Git version of the library).<br/>
+    <!--You can see the source code here:
+    <a href="https://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php?showSource=TRUE">https://phpxmlrpc.sourceforge.net/server.php</a>
+    (the xmlrpc server will activate on POST requests, and display its API on GET requests), and auto-generated documentation
+    <a href="server.php">here</a>--></p>
 
 <h2><a name="debugger">Online xmlrpc debugger</a></h2>
-<p>A demo xmlrpc debugger application, built on top of this library, is active at the address <a href="https://gggeek.altervista.org/sw/xmlrpc/debugger/">https://gggeek.altervista.org/sw/xmlrpc/debugger/</a>.
-You can use the debugger to e.g. query the demo server, or debug your own personal xmlrpc server, if it is accessible on the net.</p>
+<p>A demo xmlrpc debugger application, built on top of this library, is active at the address
+    <a href="https://gggeek.altervista.org/sw/xmlrpc/debugger/">https://gggeek.altervista.org/sw/xmlrpc/debugger/</a>.
+    You can use the debugger to e.g. query the demo server, or debug your own personal xmlrpc server, if it is accessible
+    on the net.</p>
 
 <h2><a name="development">Development</a></h2>
 <p><a href="https://github.com/gggeek/phpxmlrpc/">GitHub home page</a> (downloads, source code and bug tracker).</p>
@@ -101,17 +134,21 @@ You can use the debugger to e.g. query the demo server, or debug your own person
 <h2><a name="roadmap">Roadmap</a></h2>
 <p>See the list of issues on <a href="https://github.com/gggeek/phpxmlrpc/issues">Github</a></p>
 
-<h2><a name="history">History</a></h2>
-<p>XML-RPC for PHP was originally developed by Edd Dumbill of <a href="http://usefulinc.com/">Useful Information Company</a>. As of the 1.0 stable release, the project was opened to wider involvement and moved to SourceForge. It is hosted on GitHub since December 2013.</p>
-<p>PHPXMLRPC or derivative versions are or have been used in many open source projects, including <a href="https://ampache.org/">Ampache</a>, Xaraya, <a href="https://www.drupal.org/">Drupal</a> (only up to releases 4.6.2 and 4.5.4), <a href="http://www.postnuke.com/">PostNuke</a>, <a href="https://b2evolution.net/">b2evolution</a>, <a href="http://nucleuscms.org/">nucleus cms</a>, <a href="https://www.phpmyfaq.de/">phpmyfaq</a>, <a href="https://sourceforge.net/projects/phppgads/">phpPgAds</a>, <a href="https://en.wikipedia.org/wiki/PhpGroupWare">phpgroupware</a>, <a href="https://www.egroupware.org/en">egroupware</a>, <a href="https://tiki.org">TikiWiki</a>, Civicspace, <a href="https://mailwatch.org/">MailWatch for MailScanner</a>, WikiTeX and OpenAutonomy.</p>
+<h2><a name="support">Support</a></h2>
 
-<h2><a name="mailinglists">Mailing lists</a></h2>
+<p>XML-RPC for PHP is offered "as-is" without any warranty or commitment to support. However, informal advice and help
+    is available via the XML-RPC for PHP website and mailing list.</p>
+
+<h3>Online Support</h3>
+<p>Bugs, feature requests and patches can be posted to the <a href=https://github.com/gggeek/phpxmlrpc/issues">project's website</a>.</p>
+
+<h3><a name="mailinglists">Mailing lists</a></h3>
 <ul>
-<li><a href="https://lists.usefulinc.com/pipermail/phpxmlrpc/">User's mailing list</a> - very low traffic</li>
-<li><a href="https://sourceforge.net/p/phpxmlrpc/mailman/phpxmlrpc-devel/">Developers' mailing list</a> - discontinued as of December 2013</li>
+    <li><a href="https://lists.usefulinc.com/cgi-bin/mailman/listinfo/phpxmlrpc">User's mailing list</a> - very low traffic</li>
+    <li><a href="https://sourceforge.net/p/phpxmlrpc/mailman/phpxmlrpc-devel/">Developers' mailing list</a> - discontinued on December 2013</li>
 </ul>
 
-<h2><a name="contact">Contact</a></h2>
+<h3><a name="contact">Contact</a></h3>
 <!-- See the lib's <a href="http://sourceforge.net/projects/phpxmlrpc/">SourceForge home page</a> for the complete list of maintainers, file a bug report, feature request or patch.<br/> -->
 For security related issues feel free to contact <a href="http://sourceforge.net/sendmessage.php?touser=114789">ggiunta at users.sourceforge.net</a>
 
@@ -121,11 +158,78 @@ To contact the maintainers of the library please goto the library <a href="http:
     <p>The original <a href="http://xmlrpc.usefulinc.com/php.html">project homepage</a> is still available.</p>
 -->
 
+<h3>The Jellyfish Book</h3>
+
+<img src="images/progxmlrpc.s.gif" alt="The Jellyfish Book"/>
+<p>Together with Simon St.Laurent and Joe Johnston, Edd Dumbill wrote a book on XML-RPC for O'Reilly and Associates on
+    XML-RPC. It features a rather fetching jellyfish on the cover.<br/>
+    Complete details of the book are available from <a href="https://www.oreilly.com/library/view/programming-web-services/0596001193/">O'Reilly's web site</a>.<br/>
+    Edd is responsible for the chapter on PHP, which includes a worked example of creating a forum server, and hooking it
+    up the (now discontinued) O'Reilly's Meerkat service in order to allow commenting on news stories from around the Web.</p>
+<p>If you've benefited from the effort that has been put into writing this software, then please consider buying the book!</p>
+
+<h2><a name="history">History</a></h2>
+<p>XML-RPC for PHP was originally developed by Edd Dumbill of <a href="http://usefulinc.com/">Useful Information Company</a>.
+    As of the 1.0 stable release, the project was opened to wider involvement and moved to SourceForge. It is hosted on
+    GitHub since December 2013.</p>
+<p>PHPXMLRPC or derivative versions are or have been used in many open source projects, including
+    <a href="https://ampache.org/">Ampache</a>, Xaraya, <a href="https://www.drupal.org/">Drupal</a> (only up to releases
+    4.6.2 and 4.5.4), <a href="http://www.postnuke.com/">PostNuke</a>, <a href="https://b2evolution.net/">b2evolution</a>,
+    <a href="http://nucleuscms.org/">nucleus cms</a>, <a href="https://www.phpmyfaq.de/">phpmyfaq</a>,
+    <a href="https://sourceforge.net/projects/phppgads/">phpPgAds</a>,
+    <a href="https://en.wikipedia.org/wiki/PhpGroupWare">phpgroupware</a>,
+    <a href="https://www.egroupware.org/en">egroupware</a>, <a href="https://tiki.org">TikiWiki</a>, Civicspace,
+    <a href="https://mailwatch.org/">MailWatch for MailScanner</a>, WikiTeX and OpenAutonomy.</p>
+
+<h2><a name="acknowledgmenets">Acknowledgements</a></h2>
+All the contributors listed on <a href="https://github.com/gggeek/phpxmlrpc/graphs/contributors">Github</a>, plus:
+<ul>
+<li>Daniel E. Baumann</li>
+<li>James Bercegay</li>
+<li>Leon Blackwell</li>
+<li>Stephane Bortzmeyer</li>
+<li>Daniel Convissor</li>
+<li>Geoffrey T. Dairiki</li>
+<li>Stefan Esser</li>
+<li>James Flemer</li>
+<li>Ernst de Haan</li>
+<li>Tom Knight</li>
+<li>Axel Kollmorgen</li>
+<li>Peter Kocks</li>
+<li>Daniel Krippner</li>
+<li>S. Kuip</li>
+<li>A. Lambert</li>
+<li>Frederic Lecointre</li>
+<li>Dan Libby</li>
+<li>Arnaud Limbourg</li>
+<li>Ernest MacDougal Campbell III</li>
+<li>Lukasz Mach</li>
+<li>Kjartan Mannes</li>
+<li>Ben Margolin</li>
+<li>Nicolay Mausz</li>
+<li>Justin Miller</li>
+<li>Jan Pfeifer</li>
+<li>Giancarlo Pinerolo</li>
+<li>Peter Russel</li>
+<li>Jean-Jacques Sarton</li>
+<li>Viliam Simko</li>
+<li>Idan Sofer</li>
+<li>Douglas Squirrel</li>
+<li>Heiko Stübner</li>
+<li>Anatoly Techtonik</li>
+<li>Tommaso Trani</li>
+<li>Eric van der Vlist</li>
+<li>Christian Wenz</li>
+<li>Jim Winstead</li>
+<li>Przemyslaw Wroblewski</li>
+<li>Bruno Zanetti Melotti
+</ul>
+
 <hr/>
 <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fgggeek.github.io%2Fphpxmlrpc%2F"><img
         src="//www.w3.org/Icons/valid-xhtml10" height="31" width="88"
         alt="Valid XHTML 1.0!" /></a><br/>
-Page last updated: 2022/12/20
+Page last updated: 2022/12/23
 
 </div>
 </body>
