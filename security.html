@@ -1,11 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>XML-RPC for PHP Security Infos</title>
-    <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="xmlrpc.css" />
+    <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
+    <link rel="stylesheet" type="text/css" href="xmlrpc.css">
 </head>
 <body>
 <h1>XML-RPC for PHP Security Infos</h1>
@@ -14,14 +13,13 @@
 <a href="index.html#download">Download</a> |
 <a href="index.html#features">Features</a> |
 <a href="index.html#requirements">Requirements</a> |
-<a href="index.html#interest">Documentation</a> |
+<a href="index.html#documentation">Documentation</a> |
 <a href="index.html#demoserver">Online demo server</a> |
-<a href="index.html#debugger">Online xmlrpc debugger</a> |
+<a href="index.html#debugger">Online xmlrpc debugger</a>
+<a href="index.html#support">Support</a> |
 <a href="index.html#development">Development</a> |
 <a href="index.html#roadmap">Roadmap</a> |
 <a href="index.html#history">History</a> |
-<a href="index.html#mailinglists">Mailing lists</a> |
-<a href="index.html#contact">Contact</a> |
 Security
 </div>
 <div id="content">
@@ -29,6 +27,12 @@ Security
     <p>
     The following is the list of all known security problems in the history of the library.
     </p>
+
+    <div class="incident">
+        <h3>Security issues fixed: December 2022</h3>
+
+        <h4>Hardened the debugger against a possible XSS injection</h4>
+    </div>
 
     <div class="incident">
         <h3>Security issues fixed: November 2022</h3>
@@ -97,18 +101,18 @@ Security
 
         <h3>Scope of the problem</h3>
         <ul>
-            <li>the bug affects the two libraries known as PEAR::XMLRPC and PHPXMLRMPC.<br/>It DOES NOT affect the xmlrpc implementation which is built-in in php and enabled at compile time with the "--with-xmlrpc" option (on Unix, on windows generally it is enabled/disabled by changing the appropriate line in php.ini)</li>
+            <li>the bug affects the two libraries known as PEAR::XMLRPC and PHPXMLRMPC.<br>It DOES NOT affect the xmlrpc implementation which is built-in in php and enabled at compile time with the "--with-xmlrpc" option (on Unix, on windows generally it is enabled/disabled by changing the appropriate line in php.ini)</li>
             <li>the bug (execution of php-code injected by remote hosts) resides exclusively in the file <b>xmlrpc.inc</b> in the phpxmlrpc distribution and <b>RPC.php</b> in the PEAR distribution</li>
             <li>both PEAR::XMLRPC and PHPXMLRMPC have released updated versions of the library that fix the problem</li>
-            <li>both libraries have been used in a large number of php applications (see the incomplete list above).<br/>
-                Since the whole lib consists basically of 2 very simple files, everybody tends to patch them according to its own tastes/needs and bundle them when distributing their app.<br/>
-                Most high-profile projects have been extremely quick in releasing new versions of their respective apps, but it will take a much longer time for every single user to update his system.<br/>
-                It has to be said that many applications had been shipping until recently with extremely outdated versions of the phpxmlrpc library included; <a>a first injection bug had been fixed in 2001</a> without anyone apparently taking notice (...)<br/><br/>
+            <li>both libraries have been used in a large number of php applications (see the incomplete list above).<br>
+                Since the whole lib consists basically of 2 very simple files, everybody tends to patch them according to its own tastes/needs and bundle them when distributing their app.<br>
+                Most high-profile projects have been extremely quick in releasing new versions of their respective apps, but it will take a much longer time for every single user to update his system.<br>
+                It has to be said that many applications had been shipping until recently with extremely outdated versions of the phpxmlrpc library included; <a>a first injection bug had been fixed in 2001</a> without anyone apparently taking notice (...)<br><br>
                 This makes it unfortunately a lot harder for sysadmins to find an easy cure for the problem: there is a great chance that on public hosting servers the aforementioned files will be found in many different directories and in many different versions.</li>
         </ul>
         <h3>How the vulnerability is triggered</h3>
         <ul>
-            <li>to trigger the bug an attacker needs to have some specially crafted xml evaluated in the creation process of an xmlrpcval object. Xmlrpcval objects are created when the server script decodes xmlrpc requests or when some php scripts acts as an xmlrpc client and decodes a response sent by a server.<br/>
+            <li>to trigger the bug an attacker needs to have some specially crafted xml evaluated in the creation process of an xmlrpcval object. Xmlrpcval objects are created when the server script decodes xmlrpc requests or when some php scripts acts as an xmlrpc client and decodes a response sent by a server.<br>
                 The server script is application specific, and it is often named server.php (but any project- or user-chosen variant is possible), and it has to include both xmlrpc.inc and xmlrpcs.inc files (for the pear version, server.php is the equivalent of xmlrpcs.inc).</li>
             <li>Only including xmlrpc.inc and xmlrpcs.inc in php scripts is (afaik...) completely safe, as well as calling them directly via http requests, since only definition of functions, variables and classes is carried out in those two files, i.e. no immediate code execution.</li>
             <li>The server.php and discuss.php files distributed with full the phpxmlrpc lib actually do implement a live xmlrpc server, so you might consider blocking access to them or even better removing them if you find them deployed on production servers (off the top of my mind I can conjure some kind of attack involving a second php app suffering of a takeover-php-file-inclusion breach to pull them in + exploit the lib known bug)</li>
@@ -117,23 +121,23 @@ Security
         <ul>
             <li>Give your web server process as little system privileges as you can. On Unix this generally involves running Apache as user nobody and/or in a jailrooted/chrooted environment. Since the PHP engine runs under the same user as the web server, this is the first line of defense: any php code injected by an attacker will run on the server as a least privileged user, and all damage it could do will be limited to disrupting the php application itself</li>
             <li>Run php in safe mode. If you are a public host and are not doing this, chances are your server has been rooted anyway. This prevents the php scripts from using any function you deem to be unsafe, such as system() or eval()</li>
-            <li><span class="evidence">The hard block:</span> find all the existing phpxmlrpc files (xmlrpc.inc and xmlrpcs.inc) and disable them (chmod 0) across the system.<br/>
+            <li><span class="evidence">The hard block:</span> find all the existing phpxmlrpc files (xmlrpc.inc and xmlrpcs.inc) and disable them (chmod 0) across the system.<br>
                 This may of course prevent some user applications from working so you should inform your users at the time you do it.</li>
-            <li><span class="evidence">The soft block:</span> replace all copies of existing phpxmlrpc files (xmlrpc.inc and xmlrpcs.inc) with the ones coming from version 1.1.1.<br/>
+            <li><span class="evidence">The soft block:</span> replace all copies of existing phpxmlrpc files (xmlrpc.inc and xmlrpcs.inc) with the ones coming from version 1.1.1.<br>
                 This method is unfortunately not 100% guaranteed to keep all apps working. Some internals of the lib objects changed from version 0.9 to 1.0 to 1.1 (e.g. the representation of http headers stored inside an xmlrpcresp object), and if code you have deployed on your servers subclasses them, it might find itself in trouble. The xml sent over-the-wire has changed too with respect to some older versions of the lib (in particular: version 1.0.99.2 wrongly encoded chars outside the ASCII range as html entities, whereas now they are encoded as xml charset entities). A couple of new error response codes have been added, too. Having said that, you should be 95% safe running that script and sit there waiting for users to start yelling something is broken...</li>
-            <li>the PHP PEAR library is upgradeable  with a one-line command, so that's not really a huge problem:<br/>
+            <li>the PHP PEAR library is upgradeable  with a one-line command, so that's not really a huge problem:<br>
                 <pre>pear upgrade XML_RPC</pre>
-                and to tell whether it's been upgraded (1.3.1 or later is OK, the latest as of now is 1.3.2):<br/>
+                and to tell whether it's been upgraded (1.3.1 or later is OK, the latest as of now is 1.3.2):<br>
                 <pre>pear list | grep RPC</pre></li>
         </ul>
         <h3>Some extra considerations</h3>
-        The file xmlrpcs.inc has been patched too in release 1.1.1 to provide a better user experience. In more detail: sending specially crafted malformed xml to a server would cause the php script to emit a php error instead of returning an appropriate xml response.<br/>
-        According to some, this actually entails a "path disclosure security breach" (i.e. the php error message displayed usually contains sensitive information about filesystem paths), but then any single PHP script suffers of the same security problem if the sysadmin is running production servers with the ini directive display_errors=On.<br/>
+        The file xmlrpcs.inc has been patched too in release 1.1.1 to provide a better user experience. In more detail: sending specially crafted malformed xml to a server would cause the php script to emit a php error instead of returning an appropriate xml response.<br>
+        According to some, this actually entails a "path disclosure security breach" (i.e. the php error message displayed usually contains sensitive information about filesystem paths), but then any single PHP script suffers of the same security problem if the sysadmin is running production servers with the ini directive display_errors=On.<br>
         I also know for a fact that there are many places in xmlrpc.inc where calling a function with an unexpected parameter will generate a php warning or error, and I am not planning to implement strict parameter check for every single function anytime soon - if you aim for that, imho, you might as well code in java in the first place.
         <h3>Is this the end of the world?</h3>
-        I hope not.<br/>
-        The reason is there are tens of PHP applications out there that suffer from code injection exploits. Just take a look at the security track of bulletin boards... and yet a lot of people still think PHP is a good choice for web development.<br/>
-        Remember: security is a process, not a state that can be reached.<br/><br/>
+        I hope not.<br>
+        The reason is there are tens of PHP applications out there that suffer from code injection exploits. Just take a look at the security track of bulletin boards... and yet a lot of people still think PHP is a good choice for web development.<br>
+        Remember: security is a process, not a state that can be reached.<br><br>
         Gaetano Giunta
     </div>
 
@@ -299,11 +303,11 @@ if/else removed, such that there is zero chance for this type of exploit.
         </pre>
     </div>
 
-    <hr/>
-    <a href="http://validator.w3.org/check?uri=https%3A%2F%2Fgggeek.github.io%2Fphpxmlrpc%2Fsecurity.html"><img
-            src="http://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
-            alt="Valid XHTML 1.0!" /></a><br/>
-    Page last updated: 2021/12/12
+    <hr>
+    <!--<a href="https://validator.w3.org/nu/?doc=https%3A%2F%2Fgggeek.github.io%2Fphpxmlrpc%2Fsecurity.html"><img
+        src="https://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
+        alt="Valid XHTML 5"></a><br>-->
+    Page last updated: 2022/12/23
 
 </div>
 </body>
