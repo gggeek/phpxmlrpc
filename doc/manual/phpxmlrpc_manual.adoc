@@ -1,124 +1,9 @@
-= XML-RPC for PHP
-:revision: 4.9.23
+= XML-RPC for PHP User Manual
+:revision: 4.9.3
 :keywords: xmlrpc, xml, rpc, webservices, http
 :toc: left
 :imagesdir: images
 :source-highlighter: highlightjs
-
-
-[preface]
-== Introduction
-
-This collection of PHP classes provides a framework for writing XML-RPC clients and servers in PHP.
-
-Main goals of the project are ease of use, flexibility and completeness.
-
-The original author is Edd Dumbill of http://usefulinc.com/[Useful Information Company]. As of the 1.0 stable
-release, the project was opened to wider involvement and moved to https://sourceforge.net/projects/phpxmlrpc/[SourceForge];
-later, to https://github.com/gggeek/phpxmlrpc[Github]
-
-XML-RPC is a format devised by http://www.userland.com[Userland Software] for achieving remote procedure call
-via XML using HTTP as the transport. XML-RPC has its own web site, http://xmlrpc.com
-
-=== Acknowledgements
-
-Daniel E. Baumann
-
-James Bercegay
-
-Leon Blackwell
-
-Stephane Bortzmeyer
-
-Daniel Convissor
-
-Geoffrey T. Dairiki
-
-Stefan Esser
-
-James Flemer
-
-Ernst de Haan
-
-Tom Knight
-
-Axel Kollmorgen
-
-Peter Kocks
-
-Daniel Krippner
-
-S . Kuip
-
-A . Lambert
-
-Frederic Lecointre
-
-Dan Libby
-
-Arnaud Limbourg
-
-Ernest MacDougal Campbell III
-
-Lukasz Mach
-
-Kjartan Mannes
-
-Ben Margolin
-
-Nicolay Mausz
-
-Justin Miller
-
-Jan Pfeifer
-
-Giancarlo Pinerolo
-
-Peter Russel
-
-Jean-Jacques Sarton
-
-Viliam Simko
-
-Idan Sofer
-
-Douglas Squirrel
-
-Heiko Stübner
-
-Anatoly Techtonik
-
-Tommaso Trani
-
-Eric van der Vlist
-
-Christian Wenz
-
-Jim Winstead
-
-Przemyslaw Wroblewski
-
-Bruno Zanetti Melotti
-
-And all the contributors listed on https://github.com/gggeek/phpxmlrpc/graphs/contributors[Github]
-
-
-[[requirements]]
-== System Requirements
-
-The library has been designed with goals of flexibility and backward compatibility. As such, it supports a wide range of
-PHP installs. Note that not all features of the lib are available in every configuration.
-
-The __minimum supported__ PHP version is 5.3.
-
-If you wish to use HTTPS, HTTP 1.1 or HTTP2 to communicate with remote servers, or to use NTLM authentication, you need
-the *curl* extension compiled into your PHP installation.
-
-If you wish to receive XML-RPC requests or responses in any other character set than US-ASCII, ISO-8859-1 or UTF-8, you
-will need the *mbstring* extension compiled into your PHP installation.
-
-The *xmlrpc* native extension is not required to be compiled into your PHP installation, but if it is, there will be no
-interference with the operation of this library.
 
 
 [[manifest]]
@@ -137,12 +22,6 @@ lib/*:: a compatibility layer for applications which still rely on version 3 of 
 src/*:: the XML-RPC library classes. You can autoload these via Composer, or via a dedicated Autoloader class
 
 tests/*:: the test suite for the library, written using PhpUnit, and the configuration to run it either on GitHub Actions or in a local Docker container
-
-
-[[bugs]]
-== Known Bugs
-
-Known bugs are tracked using the https://github.com/gggeek/phpxmlrpc/issues[GitHub issue tracker]
 
 
 [[limitations]]
@@ -165,43 +44,6 @@ HTTP header, mandated by the xml-rpc spec, is not validated); cookie support sti
 the part of the user.
 
 Extensions to the XMLRPC protocol, such as the `+<NIL>+` tag, have to be manually enabled before usage.
-
-
-[[news]]
-== What's new
-
-The list of changes is available online at https://github.com/gggeek/phpxmlrpc/blob/master/NEWS.md.
-The detailed changelog is available on GitHub: https://github.com/gggeek/phpxmlrpc/commits[changes from the git era],
-https://github.com/gggeek/phpxmlrpc/blob/master/doc/ChangeLog[changes from the SourceForge era].
-
-
-[[support]]
-== Support
-
-=== Online Support
-
-XML-RPC for PHP is offered "as-is" without any warranty or commitment to support. However, informal advice and help is
-available via the XML-RPC for PHP website and mailing list.
-
-* The __XML-RPC for PHP__ development is hosted at https://github.com/gggeek/phpxmlrpc[github.com/gggeek/phpxmlrpc].
-  Bugs, feature requests and patches can be posted to the https://github.com/gggeek/phpxmlrpc/issues[project's website].
-
-* The __PHP XML-RPC interest mailing list__ is run by the original author. More details can be found
-    https://lists.usefulinc.com/cgi-bin/mailman/listinfo/phpxmlrpc[here].
-
-[[jellyfish]]
-=== The Jellyfish Book
-
-image::progxmlrpc.s.gif[The Jellyfish Book]
-Together with Simon St.Laurent and Joe Johnston, Edd Dumbill wrote a book on XML-RPC for O'Reilly and Associates on
-XML-RPC. It features a rather fetching jellyfish on the cover.
-
-Complete details of the book are available from https://www.oreilly.com/library/view/programming-web-services/0596001193/[O'Reilly's web site].
-
-Edd is responsible for the chapter on PHP, which includes a worked example of creating a forum server, and hooking it up
-the (now discontinued) O'Reilly's Meerkat service in order to allow commenting on news stories from around the Web.
-
-If you've benefited from the effort that has been put into writing this software, then please consider buying the book!
 
 
 [[apidocs]]

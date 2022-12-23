@@ -52,7 +52,6 @@ Installation of the library is quite easy:
         as leaving it open to access means that any visitor can trigger execution of php code such as
         the built-in debugger.
 
-
 2.  Via manual download and autoload configuration
 
     1.  copy the contents of the src/ folder to any location required by your

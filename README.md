@@ -2,21 +2,21 @@ XMLRPC for PHP
 ==============
 A php library for building xml-rpc clients and servers.
 
-Installation
-------------
+Requirements and Installation
+-----------------------------
 The recommended way to install this library is using Composer.
 
 Detailed installation instructions are in the [INSTALL.md](INSTALL.md) file, along with system requirements listing.
 
 Documentation
 -------------
-
 See the documentation page at [gggeek.github.io/phpxmlrpc](https://gggeek.github.io/phpxmlrpc) for a list of the
 library main features and all project related information.
 
-The user manual can be found in the doc/manual directory, in AsciiDoc format: [phpxmlrpc_manual.adoc](doc/manual/phpxmlrpc_manual.adoc)
+The user manual can be found in the doc/manual directory: [phpxmlrpc_manual.adoc](doc/manual/phpxmlrpc_manual.adoc)
 
-Older release tarballs also contain HTML and PDF versions of the manual, as well as an automatically generated API documentation.
+Older release tarballs also contain HTML and PDF versions of the manual, as well as an automatically generated API
+documentation. The documentation for the API is currently available online at [http://gggeek.github.io/phpxmlrpc/doc-4/api/index.html](http://gggeek.github.io/phpxmlrpc/doc-4/api/index.html)
 
 *NB: the user manual has not been updated yet with all the changes made in version 4. Please consider it unreliable!*
 

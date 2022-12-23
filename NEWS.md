@@ -340,7 +340,7 @@
 * improved: all of the API documentation has been moved out of the manual and into the source code phpdoc comments
 
 * fixed: when the internal character set is set to UTF-8 and the client sends requests (or the server responses), too
-  many characters were encoded as numeric entities, whereas some, like åäö, needed not not be
+  many characters were encoded as numeric entities, whereas some, like åäö, needed not to be
 
 * fixed: the 'valtyp' property of Response was not present in all cases; the ValType property had been added by error
   and has been removed
@@ -353,8 +353,7 @@ This release does away with the past and starts a transition to modern-world php
 Code has been heavily refactored, taking care to preserve backwards compatibility as much as possible,
 but some breackage is to be expected.
 
-The minimum required php version has been increased to 5.3, even though we strongly urge you to use
-more recent versions.
+The minimum required php version has been increased to 5.3, even though we strongly urge you to use more recent versions.
 
 PLEASE READ CAREFULLY THE NOTES BELOW to insure a smooth upgrade.
 
@@ -461,12 +460,10 @@ See the Changelog file or the pdf docs for a complete list of changes.
 ## XML-RPC for PHP version 3.0.0 beta - 2009/09/05
 
 This is the first release of the library to only support PHP 5.
-Some legacy code has been removed, and support for features such as exceptions
-and dateTime objects introduced.
+Some legacy code has been removed, and support for features such as exceptions and dateTime objects introduced.
 
-The "beta" tag is meant to indicate the fact that the refactoring has been more widespread
-than in precedent releases and that more changes are likely to be introduced with time -
-the library is still considered to be production quality.
+The "beta" tag is meant to indicate the fact that the refactoring has been more widespread than in precedent releases
+and that more changes are likely to be introduced with time - the library is still considered to be production quality.
 
 * improved: removed all usage of php functions deprecated in php 5.3, usage of assign-by-ref when creating new objects
   etc...
@@ -487,10 +484,9 @@ the library is still considered to be production quality.
 
 ## XML-RPC for PHP version 2.2.2 - 2009/03/16
 
-This release corrects all bugs that have been reported and successfully reproduced since
-version 2.2.1.
-Regardless of the intimidating message about dropping PHP 4 support, it still does
-support that ancient, broken and insecure platform.
+This release corrects all bugs that have been reported and successfully reproduced since version 2.2.1.
+Regardless of the intimidating message about dropping PHP 4 support, it still does support that ancient, broken and
+insecure platform.
 
 * fixed: php warning when receiving 'false' in a bool value
 * fixed: improve robustness of the debugger when parsing weird results from non-compliant servers
@@ -530,8 +526,8 @@ This release corrects a couple of bugs and adds a few minor features.
 * fixed: wrap_xmlrpc_method() generated code failed to properly encode php objects
 * improved: slightly faster encoding of data which is internally UTF-8
 * improved: debugger always generates a 'null' id for jsonrpc if user omits it
-* new: debugger can take advantage of a graphical value builder
-  (it has to be downloaded separately, as part of jsxmlrpc package)
+* new: debugger can take advantage of a graphical value builder (it has to be downloaded separately, as part of
+  jsxmlrpc package)
 * new: support for the <NIL/> xmlrpc extension
 * new: server support for the system.getCapabilities xmlrpc extension
 * new: wrap_xmlrpc_method() accepts two new options: debug and return_on_fault
@@ -748,6 +744,12 @@ For a more detailed list of changes, please read carefully chapter 2 of the
 included documentation, or, even better, take a look at the source code, which
 is commented in javadoc style quite a bit.
 
+
+## XML-RPC for PHP version 1.2.1 - 2005/09
+
+This release restores compatibility with PHP3, which had been broken in release 1.2.
+The only other changes are some minor documentation updates and removal of unused
+files that had been erroneously packed in 1.2.
 
 ## XML-RPC for PHP version 1.2 - 2005/08/14
 
