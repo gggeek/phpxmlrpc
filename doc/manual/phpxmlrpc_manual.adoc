@@ -1478,6 +1478,41 @@ components have to be downloaded separately and copied to the debugger directory
   and set appropriately the variable `+$editorpath+`.
 
 
+== Upgrading
+
+If you are upgrading from version 3 or earlier you have two options:
+
+1. adapt your code to the new API (all changes needed are described in [doc/api_changes_v4.md](doc/api_changes_v4.md))
+
+2. use instead the *compatibility layer* which is provided. Instructions and pitfalls described in [doc/api_changes_v4.md](doc/api_changes_v4.md##enabling-compatibility-with-legacy-code)
+
+In any case, read carefully the docs available online at https://github.com/gggeek/phpxmlrpc/blob/master/doc/api_changes_v4.md
+and report back any undocumented issue using GitHub.
+
+== Running tests
+
+The recommended way to run the library's test suite is via the provided Docker containers.
+A handy shell script is available that simplifies usage of Docker.
+
+The full sequence of operations is:
+
+    ./tests/ci/vm.sh build
+    ./tests/ci/vm.sh start
+    ./tests/ci/vm.sh runtests
+    ./tests/ci/vm.sh stop
+
+    # and, once you have finished all testing related work:
+    ./tests/ci/vm.sh cleanup
+
+By default, tests are run using php 7.4 in a Container based on Ubuntu 20 Focal.
+You can change the version of PHP and Ubuntu in use by setting the environment variables PHP_VERSION and UBUNTU_VERSION
+before building the Container.
+
+To generate the code-coverage report, run `./tests/ci/vm.sh runcoverage`
+
+Note: to reduce the size of the download, the test suite is not part of the default package installed with Composer.
+In order to have it onboard, install the library using Composer option `--prefer-install=source`.
+
 ++++++++++++++++++++++++++++++++++++++
 <!-- Keep this comment at the end of the file
 Local variables:
