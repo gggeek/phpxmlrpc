@@ -597,7 +597,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 $this->me[$type] = $value;
                 return;
             default:
-                // it would be nice to allow empty values to be be turned into non-empty ones this way, but we miss info to do so
+                // it would be nice to allow empty values to be turned into non-empty ones this way, but we miss info to do so
                 throw new \Exception("XML-RPC Value is of type 'undef' and its value can not be set using array index");
         }
     }

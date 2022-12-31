@@ -1,5 +1,6 @@
 XMLRPC for PHP
 ==============
+
 A php library for building xml-rpc clients and servers.
 
 Requirements and Installation
@@ -17,7 +18,8 @@ library main features and all project related information, including information
 and demo servers.
 
 The user manual can be found in the doc/manual directory: [phpxmlrpc_manual.adoc](doc/manual/phpxmlrpc_manual.adoc).
-It includes sections about upgrading from previous versions as well as running the library's testing suite.
+It includes sections about upgrading from previous versions as well as running the library's testing suite and bundled
+debugger.
 
 The manual is formatted as an asciidoc file - if viewing it locally, it is recommended to either use an IDE which can
 natively render asciidoc, or view it as html via in-browser rendering by serving it via a webserver and accessing /doc/manual/index.html
