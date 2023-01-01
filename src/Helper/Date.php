@@ -2,6 +2,9 @@
 
 namespace PhpXmlRpc\Helper;
 
+/**
+ * Feature creep -- add support for custom TZs
+ */
 class Date
 {
     /**
@@ -12,8 +15,8 @@ class Date
      * "Don't assume a timezone. It should be specified by the server in its documentation what assumptions it makes
      *  about timezones."
      *
-     * These routines always assume localtime unless $utc is set to 1, in which case UTC is assumed and an adjustment
-     * for locale is made when encoding
+     * This routine always encodes to local time unless $utc is set to 1, in which case UTC output is produced and an
+     * adjustment for the local timezone's offset is made
      *
      * @param int $timet (timestamp)
      * @param int $utc (0 or 1)
@@ -35,9 +38,9 @@ class Date
      * Given an ISO8601 date string, return a timet in the localtime, or UTC.
      *
      * @param string $idate
-     * @param int $utc either 0 or 1
+     * @param int $utc either 0 (assume date is in local time) or 1 (assume date is in UTC)
      *
-     * @return int (datetime)
+     * @return int (timestamp) 0 if the source string does not match the xmlrpc dateTime format
      */
     public static function iso8601Decode($idate, $utc = 0)
     {

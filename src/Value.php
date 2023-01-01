@@ -129,7 +129,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * If the xmlrpc value is an array, the php value is added as its last element.
      * If the xmlrpc value is empty (uninitialized), this method makes it a scalar value, and sets that value.
-     * Fails if the xmlrpc value is not an array and already initialized.
+     * Fails if the xmlrpc value is not an array (i.e. a struct or a scalar) and already initialized.
      *
      * @param mixed $val
      * @param string $type allowed values: i4, i8, int, boolean, string, double, dateTime.iso8601, base64, null.
@@ -149,8 +149,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         // coerce booleans into correct values
-        // NB: we should either do it for datetimes, integers, i8 and doubles, too,
-        // or just plain remove this check, implemented on booleans only...
+        /// @todo we should either do it for datetimes, integers, i8 and doubles, too,
+        ///       or just plain remove this check, implemented on booleans only...
         if ($type == static::$xmlrpcBoolean) {
             if (strcasecmp($val, 'true') == 0 || $val == 1 || ($val == true && strcasecmp($val, 'false'))) {
                 $val = true;

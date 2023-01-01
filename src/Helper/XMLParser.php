@@ -97,7 +97,7 @@ class XMLParser
      * @param string $data
      * @param string $returnType
      * @param int $accept a bit-combination of self::ACCEPT_REQUEST, self::ACCEPT_RESPONSE, self::ACCEPT_VALUE
-     * @param array $options
+     * @param array $options passed to the xml parser, in addition to the options received in the constructor
      */
     public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3, $options = array())
     {
