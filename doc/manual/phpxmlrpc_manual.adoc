@@ -938,7 +938,11 @@ PhpxmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
 $v = new Value(utf8_decode('Hélène')); // This xmlrpc value will be correctly serialized as the french name
 ----
 
-===== $xmlrpcName
+==== $xmlpc_double_precision
+
+@TODO...
+
+==== $xmlrpcName
 
     PhpxmlRpc\PhpXmlRpc::$xmlrpcName = "XML-RPC for PHP"
 
@@ -946,7 +950,7 @@ The string representation of the name of the XML-RPC for PHP library. It is used
 HTTP header that is sent with every request to the server. You can change its value if you need to customize the User-Agent
 string.
 
-===== $xmlrpcVersion
+==== $xmlrpcVersion
 
     PhpxmlRpc\PhpXmlRpc::$xmlrpcVersion = "4.9.3"
 
@@ -954,7 +958,7 @@ The string representation of the version number of the XML-RPC for PHP library i
 building the User-Agent HTTP header that is sent with every request to the server. You can change its value if you need
 to customize the User-Agent string.
 
-===== $xmlrpc_null_extension
+==== $xmlrpc_null_extension
 
     PhpxmlRpc\PhpXmlRpc::$xmlrpc_null_extension = FALSE
 
@@ -962,7 +966,7 @@ When set to `TRUE`, the lib will enable support for the `<NIL/>` (and `<EX:NIL/>
 the standard proposed here. This means that `<NIL>` and `<EX:NIL/>` tags received will be parsed as valid
 xmlrpc, and the corresponding xmlrpcvals will return "null" for scalarTyp().
 
-===== $xmlrpc_null_apache_encoding
+==== $xmlrpc_null_apache_encoding
 
     PhpxmlRpc\PhpXmlRpc::$$xmlrpc_null_apache_encoding = FALSE
 
@@ -1135,7 +1139,15 @@ $val = php_xmlrpc_decode_xml($text);
 if ($val) echo 'Found a value of type '.$val->kindOf(); else echo 'Found invalid xml';
 ----
 
-==== Automatic conversion of php functions into xmlrpc methods (and vice versa)
+=== Logging
+
+@TODO...
+
+=== Transferring PHP objects over XML-RPC
+
+@TODO...
+
+=== Code generation, Proxy objects & co.
 
 For the extremely lazy coder, helper functions have been added that allow to convert a php function into an xmlrpc method,
 and a remotely exposed xmlrpc method into a local php function - or a set of xmlrpc methods into a php class. Note that these come with many caveat.
@@ -1310,6 +1322,9 @@ if ($findstate_sig)
 $srv = new Server($methods);
 ----
 
+== Performances
+
+@TODO...
 
 == Upgrading
 
