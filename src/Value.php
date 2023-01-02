@@ -297,7 +297,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                     case static::$xmlrpcDouble:
                         // avoid using standard conversion of float to string because it is locale-dependent,
                         // and also because the xmlrpc spec forbids exponential notation.
-                        // sprintf('%F') could be most likely ok but it fails eg. on 2e-14.
+                        // sprintf('%F') could be most likely ok, but it fails eg. on 2e-14.
                         // The code below tries its best at keeping max precision while avoiding exp notation,
                         // but there is of course no limit in the number of decimal places to be used...
                         $rs .= "<{$typ}>" . preg_replace('/\\.?0+$/', '', number_format((double)$val, PhpXmlRpc::$xmlpc_double_precision, '.', '')) . "</{$typ}>";

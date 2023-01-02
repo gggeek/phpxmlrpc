@@ -7,6 +7,8 @@ use PhpXmlRpc\Helper\XMLParser;
 
 /**
  * Used to represent a client of an XML-RPC server.
+ *
+ * @todo add a setTimeout method, in the vein of other options which can be set to the Client
  */
 class Client
 {
@@ -545,7 +547,6 @@ class Client
                 $this->sslversion
             );
         } else {
-            // plain 'http 1.0': default to using socket
             $r = $this->sendPayloadSocket(
                 $req,
                 $this->server,
@@ -1096,6 +1097,7 @@ class Client
             }
         }
 
+        // note: h2c is http2 without the https. No need to have it in this IF
         if ($method == 'https' || $method == 'h2') {
             // set cert file
             if ($cert) {

@@ -24,9 +24,8 @@ class Server
     public $functions_parameters_type = 'xmlrpcvals';
 
     /**
-     * Option used for fine-tuning the encoding the php values returned from
-     * functions registered in the dispatch map when the functions_parameters_types
-     * member is set to 'phpvals'
+     * Option used for fine-tuning the encoding the php values returned from functions registered in the dispatch map
+     * when the functions_parameters_types member is set to 'phpvals'.
      * @see Encoder::encode for a list of values
      */
     public $phpvals_encoding_options = array('auto_dates');
@@ -46,8 +45,8 @@ class Server
     public $exception_handling = 0;
 
     /**
-     * When set to true, it will enable HTTP compression of the response, in case
-     * the client has declared its support for compression in the request.
+     * When set to true, it will enable HTTP compression of the response, in case the client has declared its support
+     * for compression in the request.
      * Set at constructor time.
      */
     public $compress_response = false;
@@ -306,12 +305,10 @@ class Server
         // add a new header. We cannot say we are sending xml, either...
         if (!headers_sent()) {
             header('Content-Type: ' . $r->content_type);
-            // we do not know if client actually told us an accepted charset, but if he did
-            // we have to tell him what we did
+            // we do not know if client actually told us an accepted charset, but if it did we have to tell it what we did
             header("Vary: Accept-Charset");
 
-            // http compression of output: only
-            // if we can do it, and we want to do it, and client asked us to,
+            // http compression of output: only if we can do it, and we want to do it, and client asked us to,
             // and php ini settings do not force it already
             /// @todo check separately for gzencode and gzcompress functions, in case of polyfills
             $phpNoSelfCompress = !ini_get('zlib.output_compression') && (ini_get('output_handler') != 'ob_gzhandler');
@@ -329,8 +326,7 @@ class Server
                 }
             }
 
-            // Do not output content-length header if php is compressing output for us:
-            // it will mess up measurements.
+            // Do not output content-length header if php is compressing output for us: it will mess up measurements.
             // Note that Apache/mod_php will add (and even alter!) the Content-Length header on its own, but only for
             // responses up to 8000 bytes
             if ($phpNoSelfCompress) {
