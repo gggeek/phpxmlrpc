@@ -14,11 +14,13 @@ class PhpXmlRpcProxy
 {
     protected $client;
     protected $prefix;
+    protected $encodingOptions = array();
 
-    public function __construct(PhpXmlRpc\Client $client, $prefix = 'examples.')
+    public function __construct(PhpXmlRpc\Client $client, $prefix = 'examples.', $encodingOptions = array())
     {
         $this->client = $client;
         $this->prefix = $prefix;
+        $this->encodingOptions = $encodingOptions;
     }
 
     /**
@@ -38,7 +40,7 @@ class PhpXmlRpcProxy
         $encoder = new PhpXmlRpc\Encoder();
         $valueArray = array();
         foreach ($arguments as $parameter) {
-            $valueArray[] = $encoder->encode($parameter);
+            $valueArray[] = $encoder->encode($parameter, $this->encodingOptions);
         }
 
         // just in case this was set to something else
