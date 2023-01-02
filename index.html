@@ -15,7 +15,7 @@
 <a href="#requirements">Requirements</a> |
 <a href="#documentation">Documentation</a> |
 <a href="#demoserver">Online demo server</a> |
-<a href="#debugger">Online xmlrpc debugger</a> |
+<a href="#debugger">Online xml-rpc debugger</a> |
 <a href="#support">Support</a> |
 <a href="#development">Development</a> |
 <a href="#roadmap">Roadmap</a> |
@@ -40,15 +40,15 @@
 
 <h2><a id="features">Main Features</a></h2>
 <ul>
-<li>Support for creating both xmlrpc clients and servers</li>
-<li>Fully automated or fully manual, fine-grained encoding and decoding from php values to xmlrpc</li>
+<li>Support for creating both xml-rpc clients and servers</li>
+<li>Fully automated or fully manual, fine-grained encoding and decoding from php values to xml-rpc</li>
 <li>Support for UTF8, Latin-1 and ASCII character encodings. With the php mbstring extension enabled, even more character
     sets are supported</li>
 <li>Support for http features including compression of both requests and responses, cookies, proxies, basic and digest auth,
     ntlm auth, https, http2, keepalives (some only with the php cURL extension)</li>
-<li>Optional validation of parameter types of incoming xmlrpc request</li>
+<li>Optional validation of parameter types of incoming xml-rpc request</li>
 <li>Support for `system.listMethods`, `system.methodHelp`, `system.multicall` and `system.getCapabilities` methods</li>
-<li>Support for the `&lt;NIL/&gt;` and `&lt;EX:NIL/&gt;` extensions to xmlrpc</li>
+<li>Support for the `&lt;NIL/&gt;` and `&lt;EX:NIL/&gt;` extensions to xml-rpc</li>
 <li>Possibility to register existing php function or class methods as webservices, extracting value-added information
     from phpdoc comments</li>
 <li>A web based visual debugger is included with the library. It is also available as self-contained Container from
@@ -56,7 +56,7 @@
 <li>A package emulating the API of the native XML-RPC extension for PHP, built on this library, is available at
     <a href="https://github.com/gggeek/polyfill-xmlrpc">https://github.com/gggeek/polyfill-xmlrpc</a></li>
 <!--<li>Many other cool features are delivered with the 'Extras' package, such as a complete emulation layer of php native
-    xmlrpc calls, an xmlrpc server that generates html documentation of exposed webservices, and a complete jsonrpc library...</li>
+    xml-rpc calls, an xml-rpc server that generates html documentation of exposed webservices, and a complete jsonrpc library...</li>
 <li>Last but not least, <a href="http://gggeek.github.io/jsxmlrpc/">a version of the library</a> implementing the same
     API in Javascript is available, allowing to leverage acquired knowledge to easily build ajax/dhtml clients</li>-->
 </ul>
@@ -84,10 +84,10 @@
 <p>The latest stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.9.3"><span class="evidence">4.9.3</span></a>
     released on Dec. 20th, 2022 (<a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.9.3">Release notes</a>)</p>
 <h4>17/12/2022</h4>
-<p>the "sister" library `jsxmlrpc`, implementing xmlrpc support in javascript with the same API of
+<p>the "sister" library `jsxmlrpc`, implementing xml-rpc support in javascript with the same API of
 phpxmlrpc, is now available as a NodeJS package at <a href="https://www.npmjs.com/package/@jsxmlrpc/jsxmlrpc">https://www.npmjs.com/package/@jsxmlrpc/jsxmlrpc</a></p>
 <h4>29/11/2022</h4>
-<p>the xmlrpc debugger which was historically made available as part of this library, or as an online
+<p>the xml-rpc debugger which was historically made available as part of this library, or as an online
 tool (currently at gggeek.altervista.org), is now also packaged as a Docker Container, making it easier to use by
 anyone who does not have a php installation set up. Available at <a href="https://github.com/gggeek/phpxmlrpc-debugger/pkgs/container/phpxmlrpc-debugger">https://github.com/gggeek/phpxmlrpc-debugger/</a></p>
 <p><a href="news.html">Older news</a> (up to December 2021)...</p>
@@ -95,8 +95,8 @@ anyone who does not have a php installation set up. Available at <a href="https:
 <h2><a id="documentation">Documentation</a></h2>
 
 <h3>User manual</h3>
-<p>A proper user manual for version 4 is not yet available; for the moment the <a href="doc-4/api/index.html">API docs</a>
-    will have to do.<br>
+    <p>The user manual for version 4 can be viewed online <a href="https://github.com/gggeek/phpxmlrpc/blob/master/doc/manual/phpxmlrpc_manual.adoc">on GitHub</a>;
+    it is complemented by automatically generated<a href="doc-4/api/index.html">API docs</a>.<br>
     A good way to get started with API usage is to take a look at the <a href="https://github.com/gggeek/phpxmlrpc/tree/master/demo">demo source code</a>,
     showcasing both Client and Server use cases.</p>
 <h4>Manuals for older versions</h4>
@@ -126,15 +126,15 @@ anyone who does not have a php installation set up. Available at <a href="https:
     Git version of the library).<br>
     <!--You can see the source code here:
     <a href="https://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php?showSource=TRUE">https://phpxmlrpc.sourceforge.net/server.php</a>
-    (the xmlrpc server will activate on POST requests, and display its API on GET requests), and auto-generated documentation
+    (the xml-rpc server will activate on POST requests, and display its API on GET requests), and auto-generated documentation
     <a href="server.php">here</a>--></p>
 
-<h2><a id="debugger">Online xmlrpc debugger</a></h2>
-<p>A demo xmlrpc debugger application, built on top of this library, is active at the address
+<h2><a id="debugger">Online xml-rpc debugger</a></h2>
+<p>A demo xml-rpc debugger application, built on top of this library, is active at the address
     <a href="https://gggeek.altervista.org/sw/xmlrpc/debugger/">https://gggeek.altervista.org/sw/xmlrpc/debugger/</a>.<br/>
-    You can use the debugger to e.g. query the demo server, or debug your own personal xmlrpc server, if it is accessible
+    You can use the debugger to e.g. query the demo server, or debug your own personal xml-rpc server, if it is accessible
     on the net.<br/>
-    If your xmlrpc server is not accessible from the internet, we recommend using the <a href="https://github.com/gggeek/phpxmlrpc-debugger/pkgs/container/phpxmlrpc-debugger">Container version</a>
+    If your xml-rpc server is not accessible from the internet, we recommend using the <a href="https://github.com/gggeek/phpxmlrpc-debugger/pkgs/container/phpxmlrpc-debugger">Container version</a>
     of the debugger.</p>
 
 <h2><a id="support">Support</a></h2>
@@ -238,7 +238,7 @@ All the contributors listed on <a href="https://github.com/gggeek/phpxmlrpc/grap
 <!--<a href="https://validator.w3.org/nu/?doc=http%3A%2F%2Fgggeek.github.io%2Fphpxmlrpc%2F"><img
     src="https://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
     alt="Valid HTML 5"></a><br>-->
-Page last updated: 2022/12/23
+Page last updated: 2023/1/2
 
 </div>
 </body>
