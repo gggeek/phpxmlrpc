@@ -368,7 +368,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $this->assertEquals(2, $v);
     }
 
-    public function testAutodecodeResponse()
+    public function testAutoDecodeResponse()
     {
         $s = $this->newMsg('dummy');
         $f = '<?xml version="1.0"?><methodResponse><params><param><value><struct><member><name>userid</name><value>311127</value></member>
