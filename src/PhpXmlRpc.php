@@ -27,13 +27,14 @@ class PhpXmlRpc
         'multicall_recursion' => 12,
         'multicall_noparams' => 13,
         'multicall_notarray' => 14,
-        'no_http2' => 15,
+        'no_http2' => 19,
         // the following 3 are meant to give greater insight than 'invalid_return'. They use the same code for BC,
         // but you can override their value in your own code
         'invalid_xml' => 2,
         'xml_not_compliant' => 2,
         'xml_parsing_error' => 2,
 
+        /// @todo verify: can these conflict with $xmlrpcerrxml?
         'cannot_decompress' => 103,
         'decompress_fail' => 104,
         'dechunk_fail' => 105,
