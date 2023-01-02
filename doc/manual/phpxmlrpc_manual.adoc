@@ -1478,7 +1478,7 @@ for more details).
 
 To be documented...
 
-=== How to enable long-lasting method calls::
+=== How to enable long-lasting method calls
 
 To be documented...
 
@@ -1528,7 +1528,7 @@ protocol will be checked. This means that xmlrpc responses sent by the server th
 response on the client (e.g. malformed xml, responses that have faultCode set, etc...) now will not be flagged as
 invalid, and you might end up saving not valid xml but random junk...
 
-=== Can I use the MS Windows character set?::
+=== Can I use the MS Windows character set?
 
 If the data your application is using comes from a Microsoft application, there are some chances that the character set
 used to encode it is CP1252 (the same might apply to data received from an external xmlrpc server/client, but it is quite
@@ -1545,7 +1545,7 @@ To properly encode outgoing data that is natively in CP1252, you will have to un
 __xmlrpc.inc__ (you can search for the string "1252"), then set `GLOBALS['xmlrpc_internalencoding']='CP1252';`
 Please note that all incoming data will then be fed to your application as UTF-8 to avoid any potential data loss.
 
-=== Does the library support using cookies / http sessions?::
+=== Does the library support using cookies / http sessions?
 
 In short: yes, but a little coding is needed to make it happen.
 
