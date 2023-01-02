@@ -26,11 +26,11 @@ tests/*:: the test suite for the library, written using PhpUnit, and the configu
 == A foreword [[foreword]]
 
 You might be surprised by some API design choices made by this library. In order to understand that, please keep
-in mind that this started out as a bare framework, a long time ago, when Exceptions and the DateTime class did not exist,
-and PHP best practices were quite different from current ones. While many "nice bits" have been put in over time,
-__backwards compatibility has always taken precedence__ over API cleanups.
+in mind that this started out as a bare framework around the time of PHP 3, when Exceptions and the DateTime class did
+not exist, and PHP best practices were remarkably different from current ones. While many "nice bits" have been put in
+over time, __backwards compatibility has always taken precedence__ over API cleanups.
 
-In no particular order, this is a list of some of the things developers might find perplexing.
+In no particular order, this is partial list of things some developers might find perplexing.
 
 Extensions to the XMLRPC protocol, such as support for the `<NIL>` tag, have to be manually enabled before usage.
 
@@ -48,7 +48,7 @@ use the `PhpXmlRpc\Helper\Date` class to do the encoding and decoding for you.
 
 Most class members have "public" access, even those only meant for internal usage.
 
-There are a lot of static class variables which should be treated as if they were constants.
+There are a lot of static class variables which are meant be treated as if they were constants.
 
 Usage of Exceptions is almost non-existent.
 
@@ -59,9 +59,9 @@ A mix of snake_case and CamelCase naming is used.
 
 === Type conversion [[types]]
 
-A big part the job of this library is to convert between the data types supported by PHP (null, bool, int, float, string,
-array, object, callable, resource), and the value types supported by XMLRPC (int, boolean, string, double, dateTime.iso8601,
-base64, struct, array).
+A big part the job of this library is to convert between the data types supported by PHP (`null`, `bool`, `int`, `float`,
+`string`, `array`, `object`, `callable`, `resource`), and the value types supported by XMLRPC (`int`, `boolean`, `string`,
+`double`, `dateTime.iso8601`, `base64`, `struct`, `array`).
 
 The conversion process can be mostly automated or fully manual. It is up to the single developer to decide the best
 approach to take for his/her application.
@@ -78,7 +78,7 @@ The constructor is the normal way to create a Value. The constructor can take th
     Value new Value(Value[] $arrayVal, string $arrayTyp)
 
 The first constructor creates an empty value, which must be altered using the methods `addScalar()`, `addArray()` or
-`addStruct()` before it can be used.
+`addStruct()` before it can be used further.
 
 The second constructor creates a string scalar value.
 
@@ -156,8 +156,8 @@ $myStruct = new Value(
 
 ==== Manual type conversion: XMLRPC to PHP
 
-For Value objects of scalar type, the php value can be obtained via the `scalarval()` method. For base64 values, The
-returned value will be decoded transparently. __For dateTime values the php native value will be the string representation
+For Value objects of scalar type, the php primitive value can be obtained via the `scalarval()` method. For base64 values,
+the returned value will be decoded transparently. __NB: for dateTime values the php value will be the string representation
 by default.__
 
 Value objects of type struct and array support the `Countable`, `IteratorAggregate` and `ArrayAccess` interfaces, meaning
@@ -174,7 +174,7 @@ if (count($structValue)) {
 }
 ----
 
-As you can see, the elements of the array are Value objects themselves, ie. there is no recursive decoding happening.
+As you can see, the elements of the array are Value objects themselves, i.e. there is no recursive decoding happening.
 
 ==== Automatic type conversion: PHP to XMLRPC
 
@@ -197,7 +197,8 @@ $myStruct = new Encoder()->encode([
 ]);
 ----
 
-See the phpdoc documentation for `PhpXmlRpc\Encoder::encode` for the full details of the encoding process.
+See the http://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Encoder.html#method_encode[phpdoc documentation]
+for `PhpXmlRpc\Encoder::encode` for the full details of the encoding process.
 
 ==== Automatic type conversion: XMLRPC to PHP
 
@@ -224,10 +225,13 @@ Note that when using automatic conversion this way, all information about the or
 impossible to tell apart an `i4` from an `i8` value, or to know if a php string had been encoded as xmlrpc string or as
 base64.
 
+See the http://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Encoder.html#method_encode[phpdoc documentation]
+for `PhpXmlRpc\Encoder::decode` for the full details of the decoding process.
+
 ==== Notes on types
 
 ===== int
-...TODO VERIFY...
+@TODO VERIFY...
 The xml parsing code will always convert "i4" to "int": int is regarded by this implementation as the canonical name for this type.
 
 The type i8 on the other hand is considered as a separate type. Note that the library will never output integers as 'i8'
@@ -236,7 +240,7 @@ on its own, even when php is compiled in 64-bit mode.
 ===== base64
 
 Base 64 encoding is performed transparently to the caller when using this type. Decoding is also transparent.
-Therefore, you ought to consider it as a "binary" data type, for use when you want to pass data that is not 7-bit clean.
+Therefore, you ought to consider it as a "binary" data type, for use when you want to pass data that is not XML-safe.
 
 ===== boolean
 
@@ -247,37 +251,39 @@ values (including the empty string) are converted to `false`.
 
 When serializing strings, characters '<', '>', ''', '"', '&', are encoded using their entity reference as '\&lt;', '\&gt;',
 '\&apos;', '\&quot;' and '\&amp;'. All other characters outside the ASCII range are encoded using their unicode character
-reference representation (e.g. '&#200' for 'é'). The XML-RPC spec recommends only encoding '<' and '&', but this implementation
-goes further, for reasons explained by the http://www.w3.org/TR/REC-xml#syntax[XML 1.0 recommendation]. In particular,
-using character reference representation has the advantage of producing XML that is valid independently of the charset
-encoding assumed.
+reference representation (e.g. '\&#200;' for 'é'). The XML-RPC spec recommends only encoding '<' and '&', but this
+implementation goes further, for reasons explained by the http://www.w3.org/TR/REC-xml#syntax[XML 1.0 recommendation].
+In particular, using character reference representation has the advantage of producing XML that is valid independently of
+the charset encoding assumed.
 
 Note that, despite what the specification states, string values should not be used to encode binary data, as control
 characters (such as f.e. characters nr. 0 to 8) are never allowed in XML, even when encoded as character references.
 
-...TODO mention how to avoid the encoding of non-ascii, as it has perfs implications for chinese/japanese...
+@TODO mention how to avoid the encoding of non-ascii, as it has perfs implications for chinese/japanese...
 
 ===== dateTime
 
 When manually creating Value objects representing an xmlrpc dateTime.iso8601, php integers, strings and DateTimes can be
-used as source values. In such case, the original value will be returned when calling `+$value->scalarval();+`.
+used as source values. For those, the original value will be returned when calling `+$value->scalarval();+`.
 
 When Value objects are created by the library by parsing some received XML text, all Value objects representing an xmlrpc
-dateTime.iso8601 value will give return the string representation of the date when calling `+$value->scalarval();+`.
-Datetime conversion can't be reliably done in a transparent manner as the XML-RPC specification explicitly forbids passing
-of timezone specifiers in ISO8601 format dates. You can, however, use the `PhpXmlRpc\Helper\Date` class to decode the string into
-a unix timestamp, or use the `PhpXmlRpc\Encoder::decode` method with the 'dates_as_objects' option to get back a php
-DateTime (in which case the conversion is done using the `strtotime` function, which uses the timezone set in php.ini).
+dateTime.iso8601 value will return the string representation of the date when calling `+$value->scalarval();+`.
+
+Datetime conversion can't be safely done in a transparent manner as the XML-RPC specification explicitly forbids passing
+of timezone specifiers in ISO8601 format dates. You can, however, use the `PhpXmlRpc\Helper\Date` class to decode the date
+string into a unix timestamp, or use the `PhpXmlRpc\Encoder::decode` method with the 'dates_as_objects' option to get
+back a php DateTime (in which case the conversion is done using the `strtotime` function, which uses the timezone set in
+php.ini).
 
 ===== null
 
 There is no support for encoding `null` values in the XML-RPC spec, but at least a couple of extensions (and many
-toolkits) do support it. Before using `null` values in your messages, make sure that the responding party accepts
+toolkits) do support it. Before using `null` values in your messages, make sure that the remote party accepts
 them, and uses the same encoding convention.
 
 To allow reception of messages containing `<NIL/>` or `<EX:NIL/>` elements, set
 
-    PhpXmlRpc\PhpXmlRpc\$xmlrpc_null_extension = true;
+    PhpXmlRpc\PhpXmlRpc::$xmlrpc_null_extension = true;
 
 somewhere in your code before the messages are received.
 
@@ -285,7 +291,7 @@ To allow sending of messages containing `<NIL/>` elements, simply create Value o
 2nd argument in the constructor. If you'd rather have those null Values be serialized as `<EX:NIL/>` instead of `<NIL/>`,
 please set
 
-    PhpXmlRpc\PhpXmlRpc\$xmlrpc_null_apache_encoding = true;
+    PhpXmlRpc\PhpXmlRpc::$xmlrpc_null_apache_encoding = true;
 
 somewhere in your code before the values are serialized.
 
@@ -304,11 +310,11 @@ Here are a couple of usage examples of the first form:
 ----
 use PhpXmlRpc\Client;
 
-$client = new Client("http://phpxmlrpc.sourceforge.net/server.php");
+$client = new Client("https://phpxmlrpc.sourceforge.net/server.php");
 $another_client = new Client("https://james:bond@secret.service.com:443/xmlrpcserver?agent=007");
 ----
 
-...TODO TEST...
+@TODO TEST...
 Note that 'http11', '...', 'http2' and 'h2c' can be used as valid alternatives to 'http' and 'https' in the provided url.
 
 The second syntax does not allow to express a username and password to be used for basic HTTP authorization as in the
@@ -327,16 +333,102 @@ $client = new Client("/RPC2", "betty.userland.com", 80);
 The `$server_port` parameter is optional, and if omitted will default to '80' when using HTTP and '443' when using HTTPS or HTTP2.
 
 The `$transport` parameter is optional, and if omitted will default to 'http'. Allowed values are either 'http', 'https',
-'http11', 'http2' or 'h2c'. Its value can be overridden with every call to the `send()` method. See the <<send>> method below
-for more details about the meaning of the different values.
+'http11', 'http2' or 'h2c'. Its value can be overridden with every call to the `send()` method. See the
+http://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Client.html#method_send[phpdoc documentation] for the send
+method for more details about the meaning of the different values.
 
 ==== Sending requests
 
-...TODO...
+The Client's `send` method takes a `PhpmlRpc\Request` object as first argument, and always returns a `PhpmlRpc\Response`
+one, even in case of errors communicating with the server.
+
+[source, php]
+----
+use PhpXmlRpc\Client;
+use PhpXmlRpc\Request;
+use PhpXmlRpc\Value;
+
+$stateNo = (int)$_POST["stateno"];
+$req = new Request('examples.getStateName', array(new Value($stateNo, Value::$xmlrpcInt)));
+$client = new Client("https://phpxmlrpc.sourceforge.net/server.php");
+$resp = $client->send($req);
+if (!$resp->faultCode()) {
+    $v = $resp->value();
+    print "State number $stateNo is " . htmlentities($v->scalarval()) . "<BR>";
+    print "<HR>I got this xml back<BR><PRE>" . htmlentities($resp->serialize()) . "</PRE><HR>\n";
+} else {
+    print "Fault <BR>";
+    print "Code: " . htmlentities($resp->faultCode()) . "<BR>" . "Reason: '" . htmlentities($resp->faultString()) . "'<BR>";
+}
+----
+
+==== Automatic decoding of the response's value
+
+By default, the Response object's `value()` method will return a Value object, leaving it to the developer to unbox it
+further into php primitive types. In the spirit of making the conversion between the xmlrpc types and php native types
+as simple as possible, it is possible to make the Client object return directly the decoded data by setting a value to
+the `$client->return_type` property:
+
+[source, php]
+----
+use PhpXmlRpc\Client;
+use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Request;
+use PhpXmlRpc\Value;
+
+$stateNo = (int)$_POST["stateno"];
+$req = new Request('examples.getStateName', array(new Value($stateNo, Value::$xmlrpcInt)));
+$client = new Client("https://phpxmlrpc.sourceforge.net/server.php");
+$client->return_type = XMLParser::RETURN_PHP;
+$resp = $client->send($req);
+if (!$resp->faultCode()) {
+    $v = $resp->value();
+    print "State number $stateNo is " . htmlentities($v) . "<BR>"; // no need to call `scalarval` here
+    print "<HR>I got this xml back<BR><PRE>" . htmlentities($resp->serialize()) . "</PRE><HR>\n";
+} else {
+    print "Fault <BR>";
+    print "Code: " . htmlentities($resp->faultCode()) . "<BR>" . "Reason: '" . htmlentities($resp->faultString()) . "'<BR>";
+}
+----
+
+This style of making calls will result in reduced memory and cpu usage, and be slightly faster. It is recommended for
+scenarios where the expected responses are huge, or every little bit of optimization is required.
+
+Please note that, just as with the `PhpXmlRpc\Encoder::decode` method, this will make it impossible to tell apart
+values which were sent over the wire as strings from values which were base64. On the other hand, unlike that method,
+at the moment it is not possible to make use of any options to tweak the decoding process.
+
+==== Troubleshooting failed calls
+
+To ease troubleshooting problems related to the underlying communication layer, such as authentication failures,
+character set encoding snafus, compression problems, invalid xml, etc..., the Client class can dump to the screen a
+detailed log of the HTTP request sent and response received. It can be enabled by calling the `setDebug` method with
+values `1` or `2`.
+
+It is also possible to analyze the different parts of the HTTP response received by making use of the
+`PhpXmlRpc\Response::httpResponse` method.
 
 ==== Modifying the client's behaviour
 
-...TODO...
+A wide range of options can be set to the client to manage the details of the HTTP communication layer, including
+authentication (Basic, Digest, NTLM), SSL certificates, proxies, cookies, compression of the requests, usage of keepalives
+for consecutive calls, the accepted response compression, charset encoding used for the requests and the user-agent string.
+
+See the http://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Client.html[phpdoc documentation] for details on
+all of those.
+
+===== cURL vs socket calls
+
+Please note that, depending on the HTTP protocol version used and the options set to the client, the client will
+transparently switch between using a socket-based HTTP implementation and a cURL based implementation. If needed, you
+can make use of the `setUseCurl` method to force or disable usage of the cURL based implementation.
+
+When using cURL as the underlying transport, it is possible to set directly into the client any of the cURL options
+available in your php installation, via the `setCurlOptions` method.
+
+==== Sending multiple calls
+
+@TODO...
 
 === Server [[server]]
 
@@ -345,16 +437,17 @@ does all the work. Here's a minimal example:
 
 [source, php]
 ----
+use PhpXmlRpc\Request;
 use PhpXmlRpc\Response;
 use PhpXmlRpc\Server;
 
-function foo($xmlrpc_request) {
+function foo(Request $xmlrpc_request) {
     ...
     return new Response($some_xmlrpc_val);
 }
 
 class Bar {
-    public static function fooBar($xmlrpc_request) {
+    public static function fooBar(Request $xmlrpc_request) {
         ...
         return new Response($some_xmlrpc_val);
     }
@@ -369,60 +462,7 @@ $s = new Server(
 ----
 
 This performs everything you need to do with a server. The single constructor argument is an associative array
-from xmlrpc method names to php function names. The incoming request is parsed and dispatched to the relevant php
-function, which is responsible for returning a `Response` object, that will be serialized back to the caller.
-
-==== Method handler functions
-
-Both php functions and class methods can be registered as xmlrpc method handlers.
-
-The synopsis of a method handler function is:
-
-    Response $resp = function(Request $req)
-
-No text should be echoed 'to screen' by the handler function, or it will break the xml response sent back to the client.
-This applies also to error and warning messages that PHP prints to screen unless the appropriate parameters have been
-set in the `php.ini` file. Another way to prevent echoing of errors inside the response and facilitate debugging is to use
-the server's `SetDebug` method with debug level 3 (see ...). Exceptions thrown during execution of handler functions are
-caught by default and a XML-RPC error response is generated instead. This behaviour can be fine-tuned by usage of the
-`exception_handling` member variable (see ...).
-
-Note that if you implement a method with a name prefixed by `system.` the handler function will be invoked by the
-server with two parameters, the first being the server itself and the second being the Request object.
-
-The same php function can be registered as handler of multiple xmlrpc methods.
-
-Here is a more detailed example of what the handler function foo may do:
-
-[source, php]
-----
-use PhpXmlRpc\PhpXmlRpc;
-use PhpXmlRpc\Response;
-use PhpXmlRpc\Value;
-
-function foo ($xmlrpcreq)
-{
-    $meth = $xmlrpcreq->method(); // retrieve method name
-    $par = $xmlrpcreq->getParam(0); // retrieve value of first parameter - assumes at least one param received
-    $val = $par->scalarval(); // decode value of first parameter - assumes it is a scalar value
-
-    ...
-
-    if ($err) {
-        // this is an error condition
-        return new Response(
-            0,
-            PhpXmlRpc::$xmlrpcerruser + 1, // user error 1
-            "There's a problem, Captain"
-        );
-    } else {
-        // this is a successful value being returned
-        return new Response(new Value("All's fine!", "string"));
-    }
-}
-----
-
-See __server.php__ in this distribution for more examples of how to do this.
+from xmlrpc method names to php callables.
 
 ==== The dispatch map
 
@@ -435,7 +475,7 @@ members:
 
 * `function` - this entry is mandatory. It must be a callable: either a name of a function in the global scope which
   services the XML-RPC method, an array containing an instance of an object and a method name, or an array containing
-  a class name and a static method name (for static class methods the 'class::method' syntax is also supported).
+  a class name and a static method name (for static class methods the '$class::$method' syntax is also supported).
 
 * `signature` - this entry is an array containing the possible signatures (see <<signatures>>) for the method. If this
   entry is present then the server will check that the correct number and type of parameters have been sent for this
@@ -450,19 +490,20 @@ members:
 
 * `parameters_type` - this entry can be used when the server is working in 'xmlrpcvals' mode (see ...) to define one
   or more entries in the dispatch map as being functions that follow the 'phpvals' calling convention. The only useful
-  value is currently the string `phpvals`.
+  value is currently the string 'phpvals'.
 
-Look at the __server.php__ example in the distribution to see what a dispatch map looks like.
+Methods `system.listMethods`, `system.methodHelp`, `system.methodSignature` and `system.multicall` are already defined
+by the server, and should not be reimplemented (see ... Reserved Methods below).
 
 ==== Method signatures [[signatures]]
 
 A signature is a description of a method's return type and its parameter types. A method may have more than one
 signature.
 
-Within a server's dispatch map, each method has an array of possible signatures. Each signature is an array of types.
-The first entry is the return type. For instance, the method
+Within a server's dispatch map, each method has an array of possible signatures. Each signature is an array, with the
+first element being the return type, and the others being the types of the parameters. For instance, the method
 
-[source, php]
+[source]
 ----
 string examples.getStateName(int)
 ----
@@ -485,12 +526,12 @@ use PhpXmlRpc\Value;
 
 $findstate_sig = array(array(Value::$xmlrpcString, Value::$xmlrpcInt));
 
-$findstate_doc = 'When passed an integer between 1 and 51 returns the name of a US state, where the integer is the index
-    of that state name in an alphabetic order.';
+$findstate_doc = 'When passed an integer between 1 and 51 returns the name of a US state, where the integer is the index' .
+    'of that state name in an alphabetic order.';
 
-$s = new Server(array(
+$srv = new Server(array(
     "examples.getStateName" => array(
-        "function" => "findstate",
+        "function" => "...",
         "signature" => $findstate_sig,
         "docstring" => $findstate_doc
     )
@@ -501,8 +542,8 @@ Note that method signatures do not allow to check nested parameters, e.g. the nu
 a struct param cannot be validated.
 
 If a method that you want to expose has a definite number of parameters, but each of those parameters could reasonably
-be of multiple types, the array of acceptable signatures will easily grow into a combinatorial explosion. To avoid such
-a situation, the lib defines the class var `Value::$xmlrpcValue`, which can be used in method signatures as a placeholder
+be of multiple types, the list of acceptable signatures will easily grow into a combinatorial explosion. To avoid such
+a situation, the lib defines the class property `Value::$xmlrpcValue`, which can be used in method signatures as a placeholder
 for 'any xmlrpc type':
 
 [source, php]
@@ -514,17 +555,136 @@ $echoback_sig = array(array(Value::$xmlrpcValue, Value::$xmlrpcValue));
 
 $findstate_doc = 'Echoes back to the client the received value, regardless of its type';
 
-$s = new Server(array(
+$srv = new Server(array(
     "echoBack" => array(
-        "function" => "echoback",
+        "function" => "...",
         "signature" => $echoback_sig, // this sig guarantees that the method handler will be called with one and only one parameter
         "docstring" => $echoback_doc
     )
 ));
 ----
 
-Methods `system.listMethods`, `system.methodHelp`, `system.methodSignature` and `system.multicall` are already defined
-by the server, and should not be reimplemented (see Reserved Methods below).
+==== Method handler functions
+
+The same php function can be registered as handler of multiple xmlrpc methods.
+
+No text should be echoed 'to screen' by the handler function, or it will break the xml response sent back to the client.
+This applies also to error and warning messages that PHP prints to screen unless the appropriate settings have been
+set in `php.ini`, namely `display_errors`. Another way to prevent echoing of errors inside the response and
+facilitate debugging is to use the server's `SetDebug` method with debug level 3 (see ...).
+
+Exceptions thrown during execution of handler functions are caught by default and an XML-RPC error response is generated
+instead. This behaviour can be fine-tuned by usage of the `$exception_handling` server property (see ...).
+
+===== Manual type conversion
+
+In this mode of operation, the incoming request is parsed into a `Request` object and dispatched to the relevant php
+function, which is responsible for returning a `Response` object, that will be serialized back to the caller.
+The synopsis of a method handler function is thus:
+
+    Response $resp = function(Request $req)
+
+Note that if you implement a method with a name prefixed by `system.` the handler function will be invoked by the
+server with two parameters, the first being the server itself and the second being the Request object.
+
+Here is a more detailed example of what a handler function "foo" might do:
+
+[source, php]
+----
+use PhpXmlRpc\PhpXmlRpc;
+use PhpXmlRpc\Response;
+use PhpXmlRpc\Value;
+
+function foo ($xmlrpcreq)
+{
+    $meth = $xmlrpcreq->method(); // retrieve method name
+    $par = $xmlrpcreq->getParam(0); // retrieve value of first parameter - assumes at least one param received
+    $val = $par->scalarval(); // decode value of first parameter - assumes it is a scalar value
+
+    ...
+
+    if ($err) {
+        // this is an error condition
+        return new Response(
+            null,
+            PhpXmlRpc::$xmlrpcerruser + 1, // user error 1
+            "There's a problem, Captain"
+        );
+    } else {
+        // this is a successful value being returned
+        return new Response(new Value("All's fine!"));
+    }
+}
+----
+
+===== Automatic type conversion
+
+In the same spirit of simplification that inspired the Client's `$return_type` property, a similar property
+is available within the server class: `$functions_parameters_type`. When set to the string 'phpvals', the functions
+registered in the server dispatch map will be called with plain php values as parameters, instead of a single Request
+instance parameter. The return value of those functions is expected to be a plain php value, too. An example is worth a
+thousand words:
+
+[source, php]
+----
+use PhpXmlRpc\PhpXmlRpc;
+use PhpXmlRpc\Server;
+use PhpXmlRpc\Value;
+
+function foo($usr_id, $out_lang='en')
+{
+    ...
+
+    if ($someErrorCondition)
+        throw new \Exception('DOH!', PhpXmlRpc::$xmlrpcerruser+1);
+    else
+        return array(
+            'name' => 'Joe',
+            'age' => 27,
+            'picture' => new Value(file_get_contents($picOfTheGuy), 'base64'), // it is possible to mix php values and Value objects!
+        );
+}
+
+$srv = new Server(
+    array(
+        "examples.myFunc" => array(
+            "function" => "foo",
+            "signature" => array(
+                array(Value::$xmlrpcStruct, Value::$xmlrpcInt),
+                array(Value::$xmlrpcStruct, Value::$xmlrpcInt, $xmlrpcString)
+            )
+        )
+    ),
+    false
+);
+$srv->functions_parameters_type = 'phpvals';
+$srv->exception_handling = 1;
+$srv->service();
+----
+
+There are a few things to keep in mind when using this calling convention:
+
+* to return an xmlrpc error, the method handler function must return an instance of Response. The only other way for the
+  server to know when an error response should be served to the client is to throw an exception and set the server's
+  `exception_handling` member var to 1 (as shown above);
+
+* to return a base64 value, the method handler function must encode it on its own, creating an instance of a Value
+  object;
+
+* to fine-tune the encoding to xmlrpc types of the method handler's result, you can use the Server's
+  `$phpvals_encoding_options` property
+
+* the method handler function cannot determine the name of the xmlrpc method it is serving, unlike manual-conversion
+  handler functions that can retrieve it from the Request object;
+
+* when receiving nested parameters, the method handler function has no way to distinguish a php string that was sent as
+  base64 value from one that was sent as a string value;
+
+* this has a direct consequence on the support of `system.multicall`: a method whose signature contains datetime or base64
+  values will not be available to multicall calls;
+
+* last but not least, the direct parsing of xml to php values is faster than using xmlrpcvals, and allows the library
+  to handle much bigger messages without allocating all available server memory or smashing PHP recursive call stack.
 
 ==== Delaying the server response
 
@@ -548,7 +708,7 @@ the client, but also return the response object. This permits further manipulati
 combination with output buffering.
 
 To prevent the server from sending HTTP headers back to the client, you can pass a second parameter with a value of
-`TRUE` to the service method (the first parameter being the payload of the incoming request; it can be left empty to
+`TRUE` to the `service` method (the first parameter being the payload of the incoming request; it can be left empty to
 use automatically the HTTP POST body). In this case, the response payload will be returned instead of the response object.
 
 Xmlrpc requests retrieved by other means than HTTP POST bodies can also be processed. For example:
@@ -557,32 +717,32 @@ Xmlrpc requests retrieved by other means than HTTP POST bodies can also be proce
 ----
 use PhpXmlRpc\Server;
 
-$s = new Server(); // not passing a dispatch map prevents automatic servicing of request
+$srv = new Server(); // not passing a dispatch map prevents automatic servicing of request
 
 // ... some code that does other stuff here, including setting dispatch map into server object
 
-$resp = $s->service($xmlrpc_request_body, true); // parse a variable instead of POST body, retrieve response payload
+$resp = $srv->service($xmlrpc_request_body, true); // parse a variable instead of POST body, retrieve response payload
 
 // ... some code that does other stuff with xml response $resp here
 ----
 
-==== Modifying the server behaviour
+==== Modifying the server's behaviour
 
-A couple of methods / class variables are available to modify the behaviour of the server. The only way to take
+A couple of methods / class properties are available to modify the behaviour of the server. The only way to take
 advantage of their existence is by usage of a delayed server response (see above).
 
 ===== setDebug()
 
 This function controls weather the server is going to echo debugging messages back to the client as comments in response
 body. Valid values: 0,1,2,3, with 1 being the default. At level 0, no debug info is returned to the client. At level 2,
-the complete client request is added to the response, as part of the xml
-comments. At level 3, a new PHP error handler is set when executing user functions exposed as server methods, and all
-non-fatal errors are trapped and added as comments into the response.
+the complete client request is added to the response, as part of the xml comments. At level 3, a new PHP error handler
+is set when executing user functions exposed as server methods, and all non-fatal errors are trapped and added as comments
+into the response.
 
 ===== $allow_system_funcs
 
-Default_value: `TRUE`. When set to `FALSE`, disables support for `System.xxx` functions in the server. It might be useful e.g.
-if you do not wish the server to respond to requests to `System.ListMethods`.
+Default_value: `TRUE`. When set to `FALSE`, disables support for `System.xxx` functions in the server. It might be useful
+e.g. if you do not wish the server to respond to requests to `System.ListMethods`.
 
 ===== $compress_response
 
@@ -590,31 +750,46 @@ When set to `TRUE`, enables the server to take advantage of HTTP compression, ot
 transparently compressed, but only when an xmlrpc-client declares its support for compression in the HTTP headers of the
 request.
 
-Note that the ZLIB php extension must be installed for this to work. If it is, compress_response will default to TRUE.
+Note that the ZLIB php extension must be installed for this to work. If it is, `$compress_response` will default to TRUE.
 
 ===== $exception_handling
 
-This variable controls the behaviour of the server when an exception is thrown by a method handler php function. Valid
+This property controls the behaviour of the server when an exception is thrown by a method handler php function. Valid
 values: 0,1,2, with 0 being the default. At level 0, the server catches the exception and returns an 'internal error'
 xmlrpc response; at 1 it catches the exception and returns an xmlrpc response with the error code and error message
-corresponding to the exception that was thrown; at 2 = the exception is floated to the upper layers in the code.
+corresponding to the exception that was thrown; at 2, the exception is floated to the upper layers in the code.
 
 ===== $response_charset_encoding
 
-Charset encoding to be used for response (only affects string values).
+Charset encoding to be used for responses (only affects string values).
 
 If it can, the server will convert the generated response from internal_encoding to the intended one.
 
 Valid values are: a supported xml encoding (only `UTF-8` and `ISO-8859-1` at present, unless mbstring is enabled), `null`
 (leave charset unspecified in response and convert output stream to US_ASCII), `default` (use xmlrpc library default as
-specified in ...TODO..., convert output stream if needed), or `auto` (use client-specified charset encoding or same as
+specified in @TODO..., convert output stream if needed), or `auto` (use client-specified charset encoding or same as
 request if request headers do not specify it (unless request is US-ASCII: then use library default anyway).
 
-==== Fault reporting
+==== Troubleshooting server's method handlers
 
-Fault codes for your servers should start at the value indicated by the variable `PhpXmlRpc::$xmlrpcerruser` + 1.
+A tried-and-true way to debug a piece of php code is to add a `var_dump()` call, followed by `die()`, at the exact place
+where one thinks things are going wrong. However, doing so in functions registered as xmlrpc method handlers is not as
+handy as it is for web pages: for a start a valid xmlrpc request is required to trigger execution of the code, which forces
+usage of an xmlrpc client instead of a plain browser; then, the xmlrpc client in use might lack the capability of displaying
+the received payload if it is not valid xmlrpc xml.
 
-Standard errors returned by the server include:
+In order to overcome this issue, two helper methods are available in the Server class: `error_occurred($message)` and
+`debugmsg($message)`. The given messages will be added as xml comments, using base64 encoding to avoid breaking xml,
+into the server's responses, provided the server's debug level has been set to at least 1 for debug messages and 2 for
+error messages. The xmlrpc client provided with this library can handle the specific format used by those xml comments,
+and will display their decoded value when it also has been set to use an appropriate debug level.
+
+=== Fault reporting
+
+In order to avoid conflict with error codes used by the library, fault codes used by your servers' method handlers should
+start at the value indicated by the variable `PhpXmlRpc::$xmlrpcerruser` + 1.
+
+Standard errors returned by the library include:
 
 `1` Unknown method:: Returned if the server was asked to dispatch a method it didn't know about
 
@@ -640,75 +815,18 @@ Standard errors returned by the server include:
 `8` CURL error:: This error is generated by the client when trying to send a request with HTTPS and the HTTPS
     communication fails.
 
-`9-14` multicall errors:: These errors are generated by the server when something fails inside a system.multicall request.
+`9-14, 18` multicall errors:: These errors are generated by the server when something fails inside a system.multicall request.
+
+`15` Invalid request payload:: ...
+
+`16` No CURL support compiled in:: ...
+
+`17` Internal server error:: ...
+
+`19` No HTTP/2 support compiled in:: ...
 
 `100-` XML parse errors:: Returns 100 plus the XML parser error code for the fault that occurred. The faultString returned
     explains where the parse error was in the incoming XML stream.
-
-==== 'New style' servers
-
-In the same spirit of simplification that inspired the `Client::$return_type` class variable, a new class variable
-has been added to the server class: `$functions_parameters_type`. When set to `phpvals`, the functions registered in the
-server dispatch map will be called with plain php values as parameters, instead of a single Request instance parameter.
-The return value of those functions is expected to be a plain php value, too. An example is worth a thousand words:
-
-[source, php]
-----
-use PhpXmlRpc\Response;
-use PhpXmlRpc\Server;
-use PhpXmlRpc\Value;
-
-function foo($usr_id, $out_lang='en')
-{
-    global $xmlrpcerruser;
-
-    ...
-
-    if ($someErrorCondition)
-        return new Response(0, $xmlrpcerruser+1, 'DOH!');
-    else
-        return array(
-            'name' => 'Joe',
-            'age' => 27,
-            'picture' => new Value(file_get_contents($picOfTheGuy), 'base64')
-        );
-}
-
-$s = new Server(
-    array(
-        "examples.myFunc" => array(
-            "function" => "foo",
-            "signature" => array(
-                array($xmlrpcString, $xmlrpcInt),
-                array($xmlrpcString, $xmlrpcInt, $xmlrpcString)
-            )
-        )
-    ),
-false);
-$s->functions_parameters_type = 'phpvals';
-$s->service();
-----
-
-There are a few things to keep in mind when using this simplified syntax:
-
-to return an xmlrpc error, the method handler function must return an instance of Response. The only other way for the
-server to know when an error response should be served to the client is to throw an exception and set the server's
-`exception_handling` member var to 1;
-
-to return a base64 value, the method handler function must encode it on its own, creating an instance of a Value
-object;
-
-the method handler function cannot determine the name of the xmlrpc method it is serving, unlike standard handler
-functions that can retrieve it from the Request object;
-
-when receiving nested parameters, the method handler function has no way to distinguish a php string that was sent as
-base64 value from one that was sent as a string value;
-
-this has a direct consequence on the support of `system.multicall`: a method whose signature contains datetime or base64
-values will not be available to multicall calls;
-
-last but not least, the direct parsing of xml to php values is much faster than using xmlrpcvals, and allows the library
-to handle much bigger messages without allocating all available server memory or smashing PHP recursive call stack.
 
 === Reserved methods [[reserved]]
 
@@ -719,12 +837,12 @@ All methods starting with __system.__ are considered reserved by the server. PHP
 special methods, detailed in this chapter.
 
 Note that all server objects will automatically respond to clients querying these methods, unless the property
-`allow_system_funcs` has been set to false before calling the `service()` method. This might pose a security risk
+`$allow_system_funcs` has been set to false before calling the `service()` method. This might pose a security risk
 if the server is exposed to public access, e.g. on the internet.
 
 ==== system.getCapabilities
 
-...
+@TODO...
 
 ==== system.listMethods
 
@@ -760,7 +878,7 @@ if ($v->kindOf() != "array") {
 }
 ----
 
-See the __introspect.php__ demo included in this distribution for an example of using this method.
+See the __demo/client/introspect.php__ demo included in this distribution for an example of using this method.
 
 ==== system.methodHelp [[sysmethhelp]]
 
@@ -779,44 +897,13 @@ member of type string and a `params` member of type array, and corresponds to th
 It returns a response of type array, with each value of the array being either an error struct (containing the `faultCode`
 and `faultString` members) or the successful response value of the corresponding single method call.
 
-=== Static class variables [[globalvars]]
+=== Global configuration [[globalvars]]
 
-Many static variables are defined in the `PhpxmlRpc\PhpXmlRpc` and other classes. Some of those are meant to be used as
-constants (and modifying their value might cause unpredictable behaviour), while some others can be modified in your
-php scripts to alter the behaviour of the xml-rpc client and server.
+Many static variables are defined in the `PhpxmlRpc\PhpXmlRpc` class and other classes. Some of those are meant to be
+used as constants (and modifying their value might cause unpredictable behaviour), while some others can be modified in
+your php scripts to alter the behaviour of either the xml-rpc client and server.
 
-==== "Constant" variables
-
-===== $xmlrpcerruser
-
-    PhpxmlRpc\PhpXmlRpc::$xmlrpcerruser = 800
-
-The minimum value for errors reported by user implemented XML-RPC servers. Error numbers lower than that are reserved
-for library usage.
-
-===== $xmlrpcI4, $xmlrpcI8 $xmlrpcInt, $xmlrpcBoolean, $xmlrpcDouble, $xmlrpcString, $xmlrpcDateTime, $xmlrpcBase64, $xmlrpcArray, $xmlrpcStruct, $xmlrpcValue, $xmlrpcNull
-
-For convenience the strings representing the XML-RPC types have been encoded as static class variables of `PhpxmlRpc\Value`:
-
-[source, php]
-----
-Value::$xmlrpcI4 = "i4";
-Value::$xmlrpcI8 = "i8";
-Value::$xmlrpcInt = "int";
-Value::$xmlrpcBoolean = "boolean";
-Value::$xmlrpcDouble = "double";
-Value::$xmlrpcString = "string";
-Value::$xmlrpcDateTime = "dateTime.iso8601";
-Value::$xmlrpcBase64 = "base64";
-Value::$xmlrpcArray = "array";
-Value::$xmlrpcStruct = "struct";
-Value::$xmlrpcValue = "undefined";
-Value::$xmlrpcNull = "null";
-----
-
-==== Variables whose value can be modified
-
-===== xmlrpc_defencoding [[xmlrpc-defencoding]]
+==== $xmlrpc_defencoding [[xmlrpc-defencoding]]
 
     PhpxmlRpc\PhpXmlRpc::$xmlrpc_defencoding = "UTF8"
 
@@ -830,28 +917,28 @@ Note that the appropriate RFC actually mandates that XML received over HTTP with
 treated as US-ASCII, but many servers and clients 'in the wild' violate the standard, and assume the default encoding is
 UTF-8.
 
-===== xmlrpc_internalencoding
+==== $xmlrpc_internalencoding
 
     PhpxmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = "UTF-8"
 
 This variable defines the character set encoding that the library uses to transparently encode into valid XML the
 xml-rpc values created by the user and to re-encode the received xml-rpc values when it passes them to the PHP application.
-It only affects xml-rpc values of string type. It is a separate value from xmlrpc_defencoding, allowing e.g. to send/receive
+It only affects xml-rpc values of string type. It is a separate value from `$xmlrpc_defencoding`, allowing e.g. to send/receive
 xml messages encoded on-the-wire in US-ASCII and process them as UTF-8. It defaults to the character set used internally
 by PHP (unless you are running an MBString-enabled installation), so you should change it only in special situations, if
 e.g. the string values exchanged in the xml-rpc messages are directly inserted into / fetched from a database
-configured to return non-UTF8 encoded strings to PHP. Example
-usage:
+configured to return non-UTF8 encoded strings to PHP. Example usage (quite contrived, as the asciidoc manual is saved
+in UTF-8):
 
 [source, php]
 ----
 use PhpXmlRpc\Value;
 
-PhpxmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'UTF-8'; // this has to be set after the inclusion above
-$v = new Value('Îºá½¹ÏÎ¼Îµ'); // This xmlrpc value will be correctly serialized as the greek word 'kosme'
+PhpxmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
+$v = new Value(utf8_decode('Hélène')); // This xmlrpc value will be correctly serialized as the french name
 ----
 
-===== xmlrpcName
+===== $xmlrpcName
 
     PhpxmlRpc\PhpXmlRpc::$xmlrpcName = "XML-RPC for PHP"
 
@@ -859,7 +946,7 @@ The string representation of the name of the XML-RPC for PHP library. It is used
 HTTP header that is sent with every request to the server. You can change its value if you need to customize the User-Agent
 string.
 
-===== xmlrpcVersion
+===== $xmlrpcVersion
 
     PhpxmlRpc\PhpXmlRpc::$xmlrpcVersion = "4.9.3"
 
@@ -867,7 +954,7 @@ The string representation of the version number of the XML-RPC for PHP library i
 building the User-Agent HTTP header that is sent with every request to the server. You can change its value if you need
 to customize the User-Agent string.
 
-===== xmlrpc_null_extension
+===== $xmlrpc_null_extension
 
     PhpxmlRpc\PhpXmlRpc::$xmlrpc_null_extension = FALSE
 
@@ -875,16 +962,16 @@ When set to `TRUE`, the lib will enable support for the `<NIL/>` (and `<EX:NIL/>
 the standard proposed here. This means that `<NIL>` and `<EX:NIL/>` tags received will be parsed as valid
 xmlrpc, and the corresponding xmlrpcvals will return "null" for scalarTyp().
 
-===== xmlrpc_null_apache_encoding
+===== $xmlrpc_null_apache_encoding
 
     PhpxmlRpc\PhpXmlRpc::$$xmlrpc_null_apache_encoding = FALSE
 
 When set to `TRUE`, php NULL values encoded into Value objects will get serialized using the `<EX:NIL/>` tag instead of
 `<NIL/>`. Please note that both forms are always accepted as input regardless of the value of this variable.
 
-=== Helper functions [[helpers]]
+=== Helper classes [[helpers]]
 
-XML-RPC for PHP contains some helper functions which you can use to make processing of XML-RPC requests easier.
+XML-RPC for PHP contains some helper classes which you can use to make processing of XML-RPC requests easier.
 
 ==== Date functions
 
@@ -927,7 +1014,7 @@ to be in the UTC timezone, and thus the result is also UTC: otherwise, the timez
 and you receive a local timestamp.
 
 [[arrayuse]]
-...TODO MERGE...
+@TODO MERGE...
 ==== Easy use with nested PHP values
 
 Dan Libby was kind enough to contribute two helper functions that make it easier to translate to and from PHP values.
@@ -997,7 +1084,7 @@ struct-type xmlrpcvals, excepted for php values that are already
 instances of the Value class or descendants thereof, which will
 not be further encoded. Note that there's no support for encoding php
 values into base-64 values. Encoding of date-times is optionally
-carried on on php strings with the correct format.
+carried-on on php strings with the correct format.
 
 The options parameter is optional. If specified, it must consist of an array of options to be enabled in the
 encoding process. At the moment the only valid options are encode_php_objs, `null_extension` and auto_dates.
@@ -1050,26 +1137,19 @@ if ($val) echo 'Found a value of type '.$val->kindOf(); else echo 'Found invalid
 
 ==== Automatic conversion of php functions into xmlrpc methods (and vice versa)
 
-For the extremely lazy coder, helper functions have been added
-that allow to convert a php function into an xmlrpc method, and a
-remotely exposed xmlrpc method into a local php function - or a set of
-methods into a php class. Note that these comes with many caveat.
+For the extremely lazy coder, helper functions have been added that allow to convert a php function into an xmlrpc method,
+and a remotely exposed xmlrpc method into a local php function - or a set of xmlrpc methods into a php class. Note that these come with many caveat.
 
 [[wrap_xmlrpc_method]]
 ===== wrap_xmlrpc_method
 
     string wrap_xmlrpc_method($client, $methodname, $extra_options)
-    string wrap_xmlrpc_method($client, $methodname, $signum, $timeout, $protocol, $funcname)
 
-Given an xmlrpc server and a method name, creates a php wrapper
-function that will call the remote method and return results using
-native php types for both params and results. The generated php
-function will return an Response object for failed xmlrpc
-calls.
+Given an xmlrpc server and a method name, creates a php wrapper function that will call the remote method and return
+results using native php types for both params and results. The generated php function will return a Response object
+for failed xmlrpc calls.
 
-The second syntax is deprecated, and is listed here only for backward compatibility.
-
-The server must support the system.methodSignature xmlrpc method call for this function to work.
+The server must support the `system.methodSignature` xmlrpc method call for this function to work.
 
 The client param must be a valid Client object, previously created with the address of the target xmlrpc server, and to
 which the preferred communication options have been set.
@@ -1095,7 +1175,7 @@ set, instances of php objects later passed as parameters to the newly
 created function will receive a 'special' treatment that allows the
 server to rebuild them as php objects instead of simple arrays. Note
 that this entails using a "slightly augmented" version of the xmlrpc
-protocol (ie. using element attributes), which might not be understood
+protocol (i.e. using element attributes), which might not be understood
 by xmlrpc servers implemented using other libraries.
 
 If the `decode_php_objs` optional parameter is
@@ -1135,7 +1215,7 @@ Example usage:
 ----
 use PhpXmlRpc\Client;
 
-$c = new Client('http://phpxmlrpc.sourceforge.net/server.php');
+$c = new Client('https://phpxmlrpc.sourceforge.net/server.php');
 
 $function = wrap_xmlrpc_method($client, 'examples.getStateName');
 
@@ -1161,21 +1241,19 @@ else {
 Given a user-defined PHP function, create a PHP 'wrapper' function that can be exposed as xmlrpc method from a Server
 object and called from remote clients, and return the appropriate definition to be added to a server's dispatch map.
 
-The optional $wrapper_function_name specifies the name that will be used for the auto-generated function.
+The optional `$wrapper_function_name` specifies the name that will be used for the auto-generated function.
 
-Since php is a typeless language, to infer types of input and output parameters, it relies on parsing the javadoc-style
+Since php is a typeless language, to infer types of input and output parameters, it relies on parsing the phpdoc-style
 comment block associated with the given function. Usage of xmlrpc native types (such as datetime.dateTime.iso8601 and
 base64) in the docblock @param tag is also allowed, if you need the php function to receive/send data in that particular
-format (note that base64 encoding/decoding is transparently carried out by the lib, while datetime vals are passed
+format (note that base64 encoding/decoding is transparently carried out by the lib, while datetime values are passed
 around as strings).
 
-Known limitations: only works for user-defined functions, not for PHP internal functions (reflection
-does not support retrieving number/type of params for those); the
-wrapped php function will not be able to programmatically return an
+Known limitations: only works for user-defined functions, not for PHP internal functions (reflection does not support
+retrieving number/type of params for those); the wrapped php function will not be able to programmatically return an
 xmlrpc error response.
 
-If the `return_source` optional parameter is
-set, the function will return the php source code to build the wrapper
+If the `return_source` optional parameter is set, the function will return the php source code to build the wrapper
 function, instead of evaluating it (useful to save the code and use it
 later in a stand-alone xmlrpc server). It will be in the stored in the
 `source` member of the returned array.
@@ -1185,31 +1263,20 @@ is set, any runtime warning generated while processing the
 user-defined php function will be caught and not be printed in the
 generated xml response.
 
-If the extra_options array contains the
-`encode_php_objs` value, wrapped functions returning
-php objects will generate "special" xmlrpc responses: when the xmlrpc
-decoding of those responses is carried out by this same lib, using the
-appropriate param in php_xmlrpc_decode(), the objects will be
-rebuilt.
+If the extra_options array contains the `encode_php_objs` value, wrapped functions returning php objects will generate
+"special" xmlrpc responses: when the xmlrpc decoding of those responses is carried out by this same lib, using the
+appropriate param in php_xmlrpc_decode(), the objects will be rebuilt.
 
-In short: php objects can be serialized, too (except for their
-resource members), using this function. Other libs might choke on the
-very same xml that will be generated in this case (i.e. it has a
-nonstandard attribute on struct element tags)
+In short: php objects can be serialized, too (except for their resource members), using this function. Other libs might
+choke on the very same xml that will be generated in this case (i.e. it has a nonstandard attribute on struct element tags)
 
-If the `decode_php_objs` optional parameter is
-set, instances of php objects that have been appropriately encoded by
-the client using a coordinate option will be deserialized and passed
-to the user function as php objects instead of simple arrays (the same
-class definition should be present server side and client
-side).
+If the `decode_php_objs` optional parameter is set, instances of php objects that have been appropriately encoded by
+the client using a coordinate option will be deserialized and passed to the user function as php objects instead of simple
+arrays (the same class definition should be present server side and client side).
 
-__Note that this might pose a security risk__,
-since in order to rebuild the object instances their constructor
-method has to be invoked, and this means that the remote client can
-trigger execution of unforeseen php code on the server: not really a
-code injection, but almost. Please enable this option only when you
-trust the remote clients.
+__Note that this might pose a security risk__, since in order to rebuild the object instances their constructor
+method has to be invoked, and this means that the remote client can trigger execution of unforeseen php code on the
+server: not really a code injection, but almost. Please enable this option only when you trust the remote clients.
 
 Example usage:
 
@@ -1224,7 +1291,7 @@ use PhpXmlRpc\Server;
 */
 function findstate($stateno)
 {
-    global $stateNames;
+    $stateNames = array(...);
     if (isset($stateNames[$stateno-1]))
     {
         return $stateNames[$stateno-1];
@@ -1242,59 +1309,6 @@ if ($findstate_sig)
     $methods['examples.getStateName'] = $findstate_sig;
 $srv = new Server($methods);
 ----
-
-=== Debugging aids [[debugging]]
-
-==== xmlrpc_debugmsg
-
-    void xmlrpc_debugmsg(string $debug)
-
-Sends the contents of $debugstring in XML comments in the server return payload. If a PHP client has debugging
-turned on, the user will be able to see server debug information.
-
-Use this function in your methods so you can pass back diagnostic information. It is only available from
-__xmlrpcs.inc__.
-
-=== 'Enough of xmlrpcvals!': new style library usage [[enough]]
-
-To be documented...
-
-In the meantime, see docs about Client::return_type and Server::functions_parameters_types, as well as php_xmlrpc_encode,
-php_xmlrpc_decode and php_xmlrpc_decode_xml
-
-=== Examples [[examples]]
-
-The best examples are to be found in the sample files included with the distribution. Some are included here.
-
-==== XML-RPC client: state name query [[statename]]
-
-Code to get the corresponding state name from a number (1-50) from the demo server available on SourceForge
-
-[source, php]
-----
-use PhpXmlRpc\Client;
-use PhpXmlRpc\Request;
-use PhpXmlRpc\Value;
-
-$m = new Request('examples.getStateName', array(new Value((int)$_POST["stateno"], "int")));
-$c = new Client("/server.php", "phpxmlrpc.sourceforge.net", 80);
-$r = $c->send($m);
-if (!$r->faultCode()) {
-    $v = $r->value();
-    print "State number " . htmlentities($_POST["stateno"]) . " is " .
-        htmlentities($v->scalarval()) . "<BR>";
-    print "<HR>I got this value back<BR><PRE>" .
-        htmlentities($r->serialize()) . "</PRE><HR>\n";
-} else {
-    print "Fault <BR>";
-    print "Code: " . htmlentities($r->faultCode()) . "<BR>" .
-        "Reason: '" . htmlentities($r->faultString()) . "'<BR>";
-}
-----
-
-==== Executing a multicall call
-
-To be documented...
 
 
 == Upgrading
@@ -1375,7 +1389,7 @@ connectivity reasons, one way to make sure that it is working as expected and ge
 is to test against the "demo" server which comes bundled with the library:
 
 - install the library using the Composer option `--prefer-install=source`, to make sure the demo files are also downloaded
-- make sure both the `/debugger` and the `/demo` folders are within your webserver's root folder, eg. run
+- make sure both the `/debugger` and the `/demo` folders are within your webserver's root folder, e.g. run
   `PHP_CLI_SERVER_WORKERS=2 php -S 127.0.0.1:8081` from the root of the phpxmlrpc library
 - access the debugger at __http://127.0.0.1:8081/debugger__ and use it with Address: __127.0.0.1__,
   Path: __/demo/server/server.php__
@@ -1384,7 +1398,7 @@ is to test against the "demo" server which comes bundled with the library:
 
 The debugger can take advantage of the JSXMLRPC library's visual editor component to allow easy mouse-driven construction
 of the payload for remote methods. To enable the extra functionality, it has have to be downloaded separately and copied
-to the debugger directory: ...TODO...
+to the debugger directory: @TODO...
 
 
 == Running tests
@@ -1414,6 +1428,8 @@ In order to have it onboard, install the library using Composer option `--prefer
 
 == Frequently Asked Questions [[qanda]]
 
+@TODO mention setting curl options directly, following http redirects...
+
 === How to send custom XML as payload of a method call
 
 Unfortunately, at the time the XML-RPC spec was designed, support for namespaces in XML was not as ubiquitous as it
@@ -1440,7 +1456,7 @@ data over socket would be much more efficient. Or even Googles' ProtoBuffer.
 
 If you really need to move a massive amount of data around, and you are crazy enough to do it using phpxmlrpc, your best
 bet is to bypass usage of the Value objects, at least in the decoding phase, and have the server (or client) object
-return to the calling function directly php values (see `Client::return_type` and `Server::functions_parameters_type`
+return to the calling function directly php values (see `Client::return_type` and `Server::functions_parameters_types`
 for more details).
 
 === My server (client) returns an error whenever the client (server) returns accented characters
@@ -1476,7 +1492,7 @@ if (!$resp->faultCode())
 ----
 
 Note that this will not be 100% accurate, since the xml generated by the response object can be different from the xml
-received, especially if there is some character set conversion involved, or such (eg. if you receive an empty string tag
+received, especially if there is some character set conversion involved, or such (e.g. if you receive an empty string tag
 as "<string/>", `serialize()` will output "<string></string>"), or if the server sent back as response something invalid (in
 which case the xml generated client side using serialize() will correspond to the error response generated
 internally by the lib).
@@ -1494,7 +1510,7 @@ if (!$resp->faultCode())
 
 Note that using this method the xml response will not be parsed at all by the library, only the http communication
 protocol will be checked. This means that xmlrpc responses sent by the server that would have generated an error
-response on the client (eg. malformed xml, responses that have faultCode set, etc...) now will not be flagged as
+response on the client (e.g. malformed xml, responses that have faultCode set, etc...) now will not be flagged as
 invalid, and you might end up saving not valid xml but random junk...
 
 === Can I use the MS Windows character set?::
@@ -1557,7 +1573,7 @@ with phpxmlrpc. The following code snippet gives an example of such integration
 [source, php]
 ----
 /*** client side ***/
-$c = new Client('http://phpxmlrpc.sourceforge.net/server.php');
+$c = new Client('https://phpxmlrpc.sourceforge.net/server.php');
 
 // tell the client to return raw xml as response value
 $c->return_type = 'xml';

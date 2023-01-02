@@ -77,8 +77,7 @@ class Client
     public $request_compression = '';
 
     /**
-     * CURL handle: used for keep-alive connections (PHP 4.3.8 up, see:
-     * http://curl.haxx.se/docs/faq.html#7.3).
+     * CURL handle: used for keep-alive
      * @internal
      */
     public $xmlrpc_curl_handle = null;
@@ -91,11 +90,11 @@ class Client
 
     /**
      * The charset encoding that will be used for serializing request sent by the client.
-     * It defaults to NULL, which means using US-ASCII and encoding all characters outside of the ASCII printable range
+     * It defaults to NULL, which means using US-ASCII and encoding all characters outside the ASCII printable range
      * using their xml character entity representation (this has the benefit that line end characters will not be mangled
      * in the transfer, a CR-LF will be preserved as well as a singe LF).
      * Valid values are 'US-ASCII', 'UTF-8' and 'ISO-8859-1'.
-     * For the fastest mode of operation, set your both your app internal encoding as well as this to UTF-8.
+     * For the fastest mode of operation, set your both your app internal encoding and this to UTF-8.
      */
     public $request_charset_encoding = '';
 
@@ -218,15 +217,15 @@ class Client
     }
 
     /**
-     * Enable/disable the echoing to screen of the xmlrpc responses received. The default is not no output anything.
+     * Enable/disable the echoing to screen of the xmlrpc responses received. The default is not to output anything.
      *
      * The debugging information at level 1 includes the raw data returned from the XML-RPC server it was querying
      * (including bot HTTP headers and the full XML payload), and the PHP value the client attempts to create to
-     * represent the value returned by the server
-     * At level2, the complete payload of the xmlrpc request is also printed, before being sent t the server.
+     * represent the value returned by the server.
+     * At level2, the complete payload of the xmlrpc request is also printed, before being sent to the server.
      *
      * This option can be very useful when debugging servers as it allows you to see exactly what the client sends and
-     * the server returns.
+     * the server returns. Never leave it enabled for production!
      *
      * @param integer $level values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
      */
@@ -489,6 +488,7 @@ class Client
      *                       request are not compatible with h2c upgrade.
      *
      * @return Response|Response[] Note that the client will always return a Response object, even if the call fails
+     *
      * @todo allow throwing exceptions instead of returning responses in case of failed calls and/or Fault responses
      * @todo refactor: we now support many options besides connection timeout and http version to use. Why only privilege those?
      */
@@ -588,6 +588,7 @@ class Client
      * @param string $proxyPassword
      * @param int $proxyAuthType
      * @param string $method
+     *
      * @return Response
      */
     protected function sendPayloadHTTP10($req, $server, $port, $timeout = 0, $username = '', $password = '',
@@ -622,6 +623,7 @@ class Client
      * @param string $key
      * @param string $keyPass
      * @param int $sslVersion
+     *
      * @return Response
      */
     protected function sendPayloadHTTPS($req, $server, $port, $timeout = 0, $username = '',  $password = '',
@@ -657,6 +659,7 @@ class Client
      * @param string $key
      * @param string $keyPass @todo not implemented yet.
      * @param int $sslVersion @todo not implemented yet. See http://php.net/manual/en/migration56.openssl.php
+     *
      * @return Response
      *
      * @todo refactor: we get many options for the call passed in, but some we use from $this. We should clean that up
@@ -879,6 +882,7 @@ class Client
      * @param string $key
      * @param string $keyPass
      * @param int $sslVersion
+     *
      * @return Response
      *
      * @todo refactor: we get many options for the call passed in, but some we use from $this. We should clean that up
@@ -1243,6 +1247,7 @@ class Client
      * @param Request[] $reqs
      * @param int $timeout
      * @param string $method
+     *
      * @return Response[]|false|mixed|Response
      */
     private function _try_multicall($reqs, $timeout, $method)

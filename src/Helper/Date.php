@@ -35,7 +35,7 @@ class Date
     }
 
     /**
-     * Given an ISO8601 date string, return a timet in the localtime, or UTC.
+     * Given an ISO8601 date string, return a timestamp in the localtime, or UTC.
      *
      * @param string $idate
      * @param int $utc either 0 (assume date is in local time) or 1 (assume date is in UTC)

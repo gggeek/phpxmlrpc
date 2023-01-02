@@ -62,7 +62,7 @@ class Logger
     }
 
     /**
-     * Writes a message to the error log
+     * Writes a message to the error log.
      * @param string $message
      */
     public function errorLog($message)

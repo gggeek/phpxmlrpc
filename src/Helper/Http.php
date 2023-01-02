@@ -8,13 +8,13 @@ use PhpXmlRpc\PhpXmlRpc;
 class Http
 {
     /**
-     * Decode a string that is encoded with "chunked" transfer encoding as defined in rfc2068 par. 19.4.6
+     * Decode a string that is encoded with "chunked" transfer encoding as defined in rfc2068 par. 19.4.6.
      * Code shamelessly stolen from nusoap library by Dietrich Ayala.
+     * @internal this function will become protected in the future
      *
      * @param string $buffer the string to be decoded
      *
      * @return string
-     * @internal this function will become protected in the future
      */
     public static function decodeChunked($buffer)
     {
@@ -51,7 +51,7 @@ class Http
 
             $chunkEnd = strpos($buffer, "\r\n", $chunkStart) + 2;
             if ($chunkEnd == false) {
-                break; //just in case we got a broken connection
+                break; // just in case we got a broken connection
             }
             $temp = substr($buffer, $chunkStart, $chunkEnd - $chunkStart);
             $chunkSize = hexdec(trim($temp));
@@ -80,8 +80,7 @@ class Http
 
         // Support "web-proxy-tunnelling" connections for https through proxies
         if (preg_match('/^HTTP\/1\.[0-1] 200 Connection established/', $data)) {
-            // Look for CR/LF or simple LF as line separator,
-            // (even though it is not valid http)
+            // Look for CR/LF or simple LF as line separator (even though it is not valid http)
             $pos = strpos($data, "\r\n\r\n");
             if ($pos || is_int($pos)) {
                 $bd = $pos + 4;
@@ -95,8 +94,7 @@ class Http
                 }
             }
             if ($bd) {
-                // this filters out all http headers from proxy.
-                // maybe we could take them into account, too?
+                // this filters out all http headers from proxy. maybe we could take them into account, too?
                 $data = substr($data, $bd);
             } else {
                 Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ': HTTPS via proxy error, tunnel connection possibly failed');
@@ -138,8 +136,7 @@ class Http
             throw new HttpException(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (' . $errstr . ')', PhpXmlRpc::$xmlrpcerr['http_error'], null, $httpResponse['status_code']);
         }
 
-        // be tolerant to usage of \n instead of \r\n to separate headers and data
-        // (even though it is not valid http)
+        // be tolerant to usage of \n instead of \r\n to separate headers and data (even though it is not valid http)
         $pos = strpos($data, "\r\n\r\n");
         if ($pos || is_int($pos)) {
             $bd = $pos + 4;
@@ -162,10 +159,9 @@ class Http
             $arr = explode(':', $line, 2);
             if (count($arr) > 1) {
                 $headerName = strtolower(trim($arr[0]));
-                /// @todo some other headers (the ones that allow a CSV list of values)
-                ///       do allow many values to be passed using multiple header lines.
-                ///       We should add content to $xmlrpc->_xh['headers'][$headerName]
-                ///       instead of replacing it for those...
+                /// @todo some other headers (the ones that allow a CSV list of values) do allow many values to be
+                ///       passed using multiple header lines.
+                ///       We should add content to $xmlrpc->_xh['headers'][$headerName] instead of replacing it for those...
                 /// @todo should we drop support for rfc2965 (set-cookie2) cookies? It has been obsoleted since 2011
                 if ($headerName == 'set-cookie' || $headerName == 'set-cookie2') {
                     if ($headerName == 'set-cookie2') {
@@ -176,8 +172,7 @@ class Http
                         $cookies = array($arr[1]);
                     }
                     foreach ($cookies as $cookie) {
-                        // glue together all received cookies, using a comma to separate them
-                        // (same as php does with getallheaders())
+                        // glue together all received cookies, using a comma to separate them (same as php does with getallheaders())
                         if (isset($httpResponse['headers'][$headerName])) {
                             $httpResponse['headers'][$headerName] .= ', ' . trim($cookie);
                         } else {
@@ -225,8 +220,7 @@ class Http
             Logger::instance()->debugMessage($msg);
         }
 
-        // if CURL was used for the call, http headers have been processed,
-        // and dechunking + reinflating have been carried out
+        // if CURL was used for the call, http headers have been processed, and dechunking + reinflating have been carried out
         if (!$headersProcessed) {
 
             // Decode chunked encoding sent by http 1.1 servers

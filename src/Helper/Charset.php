@@ -27,9 +27,10 @@ class Charset
 
     /**
      * This class is singleton for performance reasons.
-     * @todo should we just make $xml_iso88591_Entities a static variable instead ?
      *
      * @return Charset
+     *
+     * @todo should we just make $xml_iso88591_Entities a static variable instead ?
      */
     public static function instance()
     {
@@ -41,7 +42,7 @@ class Charset
     }
 
     /**
-     * Force usage as singleton
+     * Force usage as singleton.
      */
     protected function __construct()
     {
@@ -49,7 +50,9 @@ class Charset
 
     /**
      * @param string $tableName
+     *
      * @throws \Exception for unsupported $tableName
+     *
      * @todo add support for cp1252 as well as latin-2 .. latin-10
      *       Optimization creep: instead of building all those tables on load, keep them ready-made php files
      *       which are not even included until needed
@@ -58,8 +61,8 @@ class Charset
      *       (though no luck when receiving them...)
      *       Note also that, apparently, while 'ISO/IEC 8859-1' has no characters defined for bytes 128 to 159,
      *       IANA ISO-8859-1 does have well-defined 'C1' control codes for those - wikipedia's page on latin-1 says:
-     *       "ISO-8859-1 is the IANA preferred name for this standard when supplemented with the C0 and C1 control codes from ISO/IEC 6429."
-     *       Check what mbstring/iconv do by default with those?
+     *       "ISO-8859-1 is the IANA preferred name for this standard when supplemented with the C0 and C1 control codes
+     *       from ISO/IEC 6429." Check what mbstring/iconv do by default with those?
      */
     protected function buildConversionTable($tableName)
     {
@@ -121,6 +124,12 @@ class Charset
      * Note that when not sending a charset encoding mime type along with http headers, we are bound by RFC 3023 to emit
      * strict us-ascii for 'text/xml' payloads (but we should review RFC 7303, which seems to have changed the rules...)
      *
+     * @param string $data
+     * @param string $srcEncoding
+     * @param string $destEncoding
+     *
+     * @return string
+     *
      * @todo do a bit of basic benchmarking (strtr vs. str_replace)
      * @todo make usage of iconv() or mb_string() where available
      * @todo support aliases for charset names, eg ASCII, LATIN1, ISO-88591 (see f.e. polyfill-iconv for a list),
@@ -128,12 +137,6 @@ class Charset
      * @todo when converting to ASCII, allow to choose whether to escape the range 0-31,127 (non-print chars) or not
      * @todo allow picking different strategies to deal w. invalid chars? eg. source in latin-1 and chars 128-159
      * @todo add support for escaping using CDATA sections? (add cdata start and end tokens, replace only ']]>' with ']]]]><![CDATA[>')
-     *
-     * @param string $data
-     * @param string $srcEncoding
-     * @param string $destEncoding
-     *
-     * @return string
      */
     public function encodeEntities($data, $srcEncoding = '', $destEncoding = '')
     {
@@ -305,13 +308,12 @@ class Charset
     }
 
     /**
-     * Used only for backwards compatibility
+     * Used only for backwards compatibility.
      * @deprecated
      *
      * @param string $charset
      *
      * @return array
-     *
      * @throws \Exception for unknown/unsupported charsets
      */
     public function getEntities($charset)

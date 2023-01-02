@@ -84,7 +84,9 @@ class Request
 
     /**
      * @internal this function will become protected in the future
+     *
      * @param string $charsetEncoding
+     *
      * @return string
      */
     public function xml_header($charsetEncoding = '')
@@ -98,6 +100,7 @@ class Request
 
     /**
      * @internal this function will become protected in the future
+     *
      * @return string
      */
     public function xml_footer()
@@ -107,6 +110,7 @@ class Request
 
     /**
      * @internal this function will become protected in the future
+     *
      * @param string $charsetEncoding
      */
     public function createPayload($charsetEncoding = '')
@@ -160,7 +164,6 @@ class Request
 
     /**
      * Add a parameter to the list of parameters to be used upon method invocation.
-     *
      * Checks that $params is actually a Value object and not a plain php value.
      *
      * @param Value $param
@@ -335,7 +338,7 @@ class Request
         $xmlRpcParser = $this->getParser();
         $xmlRpcParser->parse($data, $returnType, XMLParser::ACCEPT_RESPONSE, $options);
 
-        // first error check: xml not well formed
+        // first error check: xml not well-formed
         if ($xmlRpcParser->_xh['isf'] > 2) {
 
             // BC break: in the past for some cases we used the error message: 'XML error at line 1, check URL'
@@ -349,7 +352,7 @@ class Request
                 print $xmlRpcParser->_xh['isf_reason'];
             }
         }
-        // second error check: xml well formed but not xml-rpc compliant
+        // second error check: xml well-formed but not xml-rpc compliant
         elseif ($xmlRpcParser->_xh['isf'] == 2) {
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['xml_not_compliant'],
                 PhpXmlRpc::$xmlrpcstr['xml_not_compliant'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '',
@@ -390,6 +393,7 @@ class Request
 
                 if ($errNo == 0) {
                     // FAULT returned, errno needs to reflect that
+                    /// @todo we should signal somehow that the server returned a fault with code 0?
                     $errNo = -1;
                 }
 

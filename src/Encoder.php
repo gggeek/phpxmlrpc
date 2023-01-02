@@ -6,7 +6,8 @@ use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
 
 /**
- * A helper class to easily convert between Value objects and php native values
+ * A helper class to easily convert between Value objects and php native values.
+ *
  * @todo implement an interface
  * @todo add class constants for the options values
  */

@@ -265,6 +265,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @param string $typ
      * @param Value[]|mixed $val
      * @param string $charsetEncoding
+     *
      * @return string
      */
     protected function serializedata($typ, $val, $charsetEncoding = '')
@@ -536,9 +537,10 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Implements the IteratorAggregate interface
+     * @internal required to be public to implement an Interface
      *
      * @return \ArrayIterator
-     * @internal required to be public to implement an Interface
+     *
      */
     #[\ReturnTypeWillChange]
     public function getIterator()
@@ -557,8 +559,10 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * @internal required to be public to implement an Interface
+     *
      * @param mixed $offset
      * @param mixed $value
+     *
      * @throws \Exception
      */
     #[\ReturnTypeWillChange]
@@ -604,7 +608,9 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * @internal required to be public to implement an Interface
+     *
      * @param mixed $offset
+     *
      * @return bool
      */
     #[\ReturnTypeWillChange]
@@ -625,7 +631,9 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * @internal required to be public to implement an Interface
+     *
      * @param mixed $offset
+     *
      * @throws \Exception
      */
     #[\ReturnTypeWillChange]
@@ -648,7 +656,9 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * @internal required to be public to implement an Interface
+     *
      * @param mixed $offset
+     *
      * @return mixed|Value|null
      * @throws \Exception
      */

@@ -3,6 +3,12 @@
 * improved: added a pre-push git hook script, to avoid pushing tagged versions with inconsistent version tags in code.
   To install it, execute `composer run-script setup-git-hooks`
 
+* improved: updated the user's manual to be inline with the version4 API and all modern coding practices.
+  The manual is now bundled in the default distribution tarball, and is easily viewable as html provided you can
+  serve it using a webserver.
+
+* fixed: the value for error 'no_http2' has been switched from 15 to 19 to avoid a collision
+
 
 ## XML-RPC for PHP version 4.9.3 - 2022-12-20
 

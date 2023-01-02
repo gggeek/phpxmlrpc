@@ -145,7 +145,6 @@ class Response
      * @param string $charsetEncoding the charset to be used for serialization. If null, US-ASCII is assumed
      *
      * @return string the xml representation of the response
-     *
      * @throws \Exception
      */
     public function serialize($charsetEncoding = '')

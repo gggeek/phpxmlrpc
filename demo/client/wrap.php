@@ -2,9 +2,9 @@
 require_once __DIR__ . "/_prepend.php";
 
 output('<html lang="en">
-<head><title>xmlrpc - Webservice wrappper demo</title></head>
+<head><title>xmlrpc - Webservice wrapper demo</title></head>
 <body>
-<h1>Webservice wrappper demo</h1>
+<h1>Webservice wrapper demo</h1>
 
 <h2>Wrap methods exposed by server into php functions</h2>
 
