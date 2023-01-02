@@ -133,7 +133,7 @@ class Charset
      * @todo do a bit of basic benchmarking (strtr vs. str_replace)
      * @todo make usage of iconv() or mb_string() where available
      * @todo support aliases for charset names, eg ASCII, LATIN1, ISO-88591 (see f.e. polyfill-iconv for a list),
-     *       but then take those into account as well in other methods, ie.isValidCharset)
+     *       but then take those into account as well in other methods, ie. isValidCharset)
      * @todo when converting to ASCII, allow to choose whether to escape the range 0-31,127 (non-print chars) or not
      * @todo allow picking different strategies to deal w. invalid chars? eg. source in latin-1 and chars 128-159
      * @todo add support for escaping using CDATA sections? (add cdata start and end tokens, replace only ']]>' with ']]]]><![CDATA[>')

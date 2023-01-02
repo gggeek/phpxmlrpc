@@ -672,6 +672,7 @@ class XMLParser
         }
 
         // 4 - if mbstring is available, let it do the guesswork
+        /// @todo replace with function_exists
         if (extension_loaded('mbstring')) {
             if ($encodingPrefs == null && PhpXmlRpc::$xmlrpc_detectencodings != null) {
                 $encodingPrefs = PhpXmlRpc::$xmlrpc_detectencodings;

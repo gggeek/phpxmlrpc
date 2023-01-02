@@ -59,7 +59,7 @@ class Encoder
      * @author Dan Libby (dan@libby.com)
      *
      * @param Value|Request $xmlrpcVal
-     * @param array $options
+     * @param array $options accepted elements:
      *                      - 'decode_php_objs': if set in the options array, xmlrpc structs can be decoded into php
      *                         objects, see the details above;
      *                      - 'dates_as_objects': when set xmlrpc dateTimes are decoded as php DateTime objects
@@ -321,6 +321,7 @@ class Encoder
             // The following code might be better for mb_string enabled installs, but makes the lib about 200% slower...
             //if (!is_valid_charset($valEncoding, array('UTF-8'))
             if (!in_array($valEncoding, array('UTF-8', 'US-ASCII')) && !XMLParser::hasEncoding($xmlVal)) {
+                /// @todo replace with function_exists
                 if (extension_loaded('mbstring')) {
                     $xmlVal = mb_convert_encoding($xmlVal, 'UTF-8', $valEncoding);
                 } else {

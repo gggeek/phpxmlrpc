@@ -1,6 +1,6 @@
 <?php
 /**
- * Benchmarking suite for the PHP-XMLRPC lib.
+ * Benchmarking suite for the PHPXMLRPC lib.
  *
  * @author Gaetano Giunta
  * @copyright (c) 2005-2021 G. Giunta

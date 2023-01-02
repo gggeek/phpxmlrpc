@@ -1,5 +1,5 @@
-XMLRPC for PHP
-==============
+XMLRPC for PHP (a.k.a. PHPXMLRPC)
+=================================
 
 A php library for building xml-rpc clients and servers.
 
@@ -22,16 +22,17 @@ It includes sections about upgrading from previous versions as well as running t
 debugger.
 
 The manual is formatted as an asciidoc file - if viewing it locally, it is recommended to either use an IDE which can
-natively render asciidoc, or view it as html via in-browser rendering by serving it via a webserver and accessing /doc/manual/index.html
+natively render asciidoc, or view it as html via in-browser rendering by serving it via a webserver and accessing
+/doc/manual/index.html
 
 Automatically-generated documentation for the API is available online at [http://gggeek.github.io/phpxmlrpc/doc-4/api/index.html](http://gggeek.github.io/phpxmlrpc/doc-4/api/index.html)
 
 You are encouraged to look also at the code examples found in the demo/ directory.
 
 Note: to reduce the size of the download, the demo files are not part of the default package installed with Composer.
-You can either make sure they are available locally, by installing the library using Composer option `--prefer-install=source`
-(when doing so, make sure that the demo folder is not directly accessible from the internet, ie. it is not within the
-webserver root directory), or just check them out online at https://github.com/gggeek/phpxmlrpc/tree/master/demo.
+You can either check them out online at https://github.com/gggeek/phpxmlrpc/tree/master/demo, or make sure they are
+available locally, by installing the library using Composer option `--prefer-install=source` (when doing so, make sure
+that the demo folder is not directly accessible from the internet, ie. it is not within the webserver root directory).
 
 License
 -------

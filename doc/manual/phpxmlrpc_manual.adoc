@@ -197,8 +197,31 @@ $myStruct = new Encoder()->encode([
 ]);
 ----
 
-See the http://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Encoder.html#method_encode[phpdoc documentation]
-for `PhpXmlRpc\Encoder::encode` for the full details of the encoding process.
+Encoding works recursively on arrays and objects, encoding numerically indexed php arrays into array-type Value objects
+and non numerically indexed php arrays into struct-type Value objects. PHP objects are encoded into struct-type Value by
+iterating over their public properties, excepted for those that are already instances of the Value class or descendants
+thereof, which will not be further encoded. Optionally, encoding of date-times is carried-on on php strings with the
+corresponding format, as well as encoding of NULL values. Note that there's no support for encoding php values into base64
+values - base64 Value objects have to be created manually (but they can be part of a php array passed to `encode`).
+Another example, showcasing some of those features:
+
+[source, php]
+----
+use PhpXmlRpc\Encoder;
+use PhpXmlRpc\Value;
+
+$value = new Encoder()->encode(
+    array(
+        'first struct_element: a null' => null,
+        '2nd: a base64 element' => new Value('hello world', 'base64'),
+        '3rd: a datetime' => '20060107T01:53:00'
+    ),
+    array('auto_dates', 'null_extension')
+);
+----
+
+See the https://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Encoder.html#method_encode[phpdoc documentation]
+for `PhpXmlRpc\Encoder::encode` for more details on the encoding process and available options.
 
 ==== Automatic type conversion: XMLRPC to PHP
 
@@ -225,7 +248,7 @@ Note that when using automatic conversion this way, all information about the or
 impossible to tell apart an `i4` from an `i8` value, or to know if a php string had been encoded as xmlrpc string or as
 base64.
 
-See the http://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Encoder.html#method_encode[phpdoc documentation]
+See the https://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Encoder.html#method_encode[phpdoc documentation]
 for `PhpXmlRpc\Encoder::decode` for the full details of the decoding process.
 
 ==== Notes on types
@@ -334,7 +357,7 @@ The `$server_port` parameter is optional, and if omitted will default to '80' wh
 
 The `$transport` parameter is optional, and if omitted will default to 'http'. Allowed values are either 'http', 'https',
 'http11', 'http2' or 'h2c'. Its value can be overridden with every call to the `send()` method. See the
-http://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Client.html#method_send[phpdoc documentation] for the send
+https://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Client.html#method_send[phpdoc documentation] for the send
 method for more details about the meaning of the different values.
 
 ==== Sending requests
@@ -414,7 +437,7 @@ A wide range of options can be set to the client to manage the details of the HT
 authentication (Basic, Digest, NTLM), SSL certificates, proxies, cookies, compression of the requests, usage of keepalives
 for consecutive calls, the accepted response compression, charset encoding used for the requests and the user-agent string.
 
-See the http://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Client.html[phpdoc documentation] for details on
+See the https://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Client.html[phpdoc documentation] for details on
 all of those.
 
 ===== cURL vs socket calls
@@ -426,7 +449,7 @@ can make use of the `setUseCurl` method to force or disable usage of the cURL ba
 When using cURL as the underlying transport, it is possible to set directly into the client any of the cURL options
 available in your php installation, via the `setCurlOptions` method.
 
-==== Sending multiple calls
+==== Sending multiple requests
 
 @TODO...
 
@@ -600,6 +623,9 @@ function foo ($xmlrpcreq)
     $meth = $xmlrpcreq->method(); // retrieve method name
     $par = $xmlrpcreq->getParam(0); // retrieve value of first parameter - assumes at least one param received
     $val = $par->scalarval(); // decode value of first parameter - assumes it is a scalar value
+
+    // note that we could also have achieved the same this way:
+    //$val = new PhpXmlRpc\Encoder()->decode($xmlrpcreq)[0];
 
     ...
 
@@ -973,11 +999,11 @@ xmlrpc, and the corresponding xmlrpcvals will return "null" for scalarTyp().
 When set to `TRUE`, php NULL values encoded into Value objects will get serialized using the `<EX:NIL/>` tag instead of
 `<NIL/>`. Please note that both forms are always accepted as input regardless of the value of this variable.
 
-=== Helper classes [[helpers]]
+=== Helper classes and functions [[helpers]]
 
 XML-RPC for PHP contains some helper classes which you can use to make processing of XML-RPC requests easier.
 
-==== Date functions
+==== Date handling
 
 The XML-RPC specification has this to say on dates:
 
@@ -1007,7 +1033,7 @@ The argument $utc can be omitted, in which case it defaults to `0`. If it is set
 time passed in for UTC. Example: if you're in the GMT-6:00 timezone and set $utc, you will receive a date representation
 six hours ahead of your local time.
 
-The included demo program __vardemo.php__ includes a demonstration of this function.
+The included demo program __demo/client/vardemo.php__ includes a demonstration of this function.
 
 ===== iso8601_decode [[iso8601decode]]
 
@@ -1017,116 +1043,12 @@ Returns a UNIX timestamp from an ISO 8601 encoded time and date string passed in
 to be in the UTC timezone, and thus the result is also UTC: otherwise, the timezone is assumed to be your local timezone
 and you receive a local timestamp.
 
-[[arrayuse]]
-@TODO MERGE...
-==== Easy use with nested PHP values
+==== Decoding xml
 
-Dan Libby was kind enough to contribute two helper functions that make it easier to translate to and from PHP values.
-This makes it easier to deal with complex structures. At the moment support is limited to int, double, string,
-array, datetime and struct datatypes; note also that all PHP arrays are encoded as structs, except arrays whose keys are
-integer numbers starting with 0 and incremented by 1.
-
-These functions reside in __xmlrpc.inc__.
-
-[[phpxmlrpcdecode]]
-===== php_xmlrpc_decode
-
-    mixed php_xmlrpc_decode(Value $xmlrpc_val, array $options)
-    array php_xmlrpc_decode(xmlrpcmsg $xmlrpcmsg_val, string $options)
-
-Returns a native PHP value corresponding to the values found in the Value $xmlrpc_val, translated into PHP types. Base-64
-and datetime values are automatically decoded to strings.
-
-In the second form, returns an array containing the parameters of the given xmlrpcmsg_val, decoded to php types.
-
-The options parameter is optional. If specified, it must consist of an array of options to be enabled in the decoding
-process. At the moment the only valid option are decode_php_objs and `dates_as_objects`. When the first is set, php
-objects that have been converted to xml-rpc structs using the php_xmlrpc_encode function and a corresponding
-encoding option will be converted back into object values instead of arrays (provided that the class definition is
-available at reconstruction time). When the second is set, XML-RPC datetime values will be converted into native dateTime
-objects instead of strings.
-
-____WARNING__:__ please take extreme care before enabling the decode_php_objs option: when php objects are rebuilt from
-the received xml, their constructor function will be silently invoked. This means that you are allowing the remote end
-to trigger execution of uncontrolled PHP code on your server, opening the door to code injection exploits. Only
-enable this option when you have complete trust of the remote server/client.
-
-Example:
-[source, php]
-----
-use PhpXmlRpc\Response;
-use PhpXmlRpc\Server;
-use PhpXmlRpc\Value;
-
-// wrapper to expose an existing php function as xmlrpc method handler
-function foo_wrapper($m)
-{
-    $params = php_xmlrpc_decode($m);
-    $retval = call_user_func_array('foo', $params);
-    return new Response(new Value($retval)); // foo return value will be serialized as string
-}
-
-$s = new Server(array(
-     "examples.myFunc1" => array(
-         "function" => "foo_wrapper",
-         "signatures" => ...
-    )
-));
-----
-
-[[phpxmlrpcencode]]
-===== php_xmlrpc_encode
-
-    Value php_xmlrpc_encode(mixed $phpval, array $options)
-
-Returns a Value object populated with the PHP
-values in $phpval. Works recursively on arrays
-and objects, encoding numerically indexed php arrays into array-type
-Value objects and non numerically indexed php arrays into
-struct-type Value objects. Php objects are encoded into
-struct-type xmlrpcvals, excepted for php values that are already
-instances of the Value class or descendants thereof, which will
-not be further encoded. Note that there's no support for encoding php
-values into base-64 values. Encoding of date-times is optionally
-carried-on on php strings with the correct format.
-
-The options parameter is optional. If specified, it must consist of an array of options to be enabled in the
-encoding process. At the moment the only valid options are encode_php_objs, `null_extension` and auto_dates.
-
-The first will enable the creation of 'particular' Value
-objects out of php objects, that add a "php_class" xml attribute to
-their serialized representation. This attribute allows the function
-php_xmlrpc_decode to rebuild the native php objects (provided that the
-same class definition exists on both sides of the communication). The
-second allows to encode php `NULL` values to the
-`<NIL/>` (or
-`<EX:NIL>`, see ...) tag. The last encodes any
-string that matches the ISO8601 format into an XML-RPC
-datetime.
-
-Example:
-[source, php]
-----
-use PhpXmlRpc\Server;
-
-// the easy way to build a complex xml-rpc struct, showing nested base64 value and datetime values
-$val = php_xmlrpc_encode(
-    array(
-        'first struct_element: an int' => 666,
-        'second: an array' => array ('apple', 'orange', 'banana'),
-        'third: a base64 element' => new Value('hello world', 'base64'),
-        'fourth: a datetime' => '20060107T01:53:00'
-    ),
-    array('auto_dates')
-);
-----
-
-===== php_xmlrpc_decode_xml
-
-    Value | Response | xmlrpcmsg php_xmlrpc_decode_xml(string $xml, array $options)
+    Value | Request | Response Encoder::decodeXml(string $xml, array $options)
 
 Decodes the xml representation of either an xmlrpc request, response or single value, returning the corresponding
-php-xmlrpc object, or `FALSE` in case of an error.
+phpxmlrpc object, or `FALSE` in case of an error.
 
 The options parameter is optional. If specified, it must consist of an array of options to be enabled in the
 decoding process. At the moment, no option is supported.
@@ -1135,8 +1057,8 @@ Example:
 [source, php]
 ----
 $text = '<value><array><data><value>Hello world</value></data></array></value>';
-$val = php_xmlrpc_decode_xml($text);
-if ($val) echo 'Found a value of type '.$val->kindOf(); else echo 'Found invalid xml';
+$val = $encoder::decodeXml($text);
+if ($val) echo 'Found a value of type ' . $val->kindOf(); else echo 'Found invalid xml';
 ----
 
 === Logging
@@ -1145,7 +1067,28 @@ if ($val) echo 'Found a value of type '.$val->kindOf(); else echo 'Found invalid
 
 === Transferring PHP objects over XML-RPC
 
-@TODO...
+In case there is a (real) need to transfer php object instances over XMLRPC, the "usual" way would be to use a `serialize`
+call on the sender side, then transfer the serialized string using a base64 xmlrpc value, and call `unserialize` on the
+receiving side.
+
+The phpxmlrpc library does offer an alternative method, which might offer marginally better performances and ease of use,
+by usage of  `PhpXmlRpc\Encoder::encode` and `PhpXmlRpc\Encoder::decode`:
+
+. on the sender side, encode the desired object using option 'encode_php_objs'. This will lead to the creation of an
+  xmlrpc struct value with an extra xml attribute: "php_class"
+
+. on the receiver side, decode the received Value using option 'decode_php_objs'. The xml-rpc struct with the extra
+  attribute will be converted back into an object of the desired class instead of an array
+
+____WARNING__:__ please take extreme care before enabling the 'decode_php_objs' option: when php objects are rebuilt from
+the received xml, their constructor function will be silently invoked. This means that you are allowing the remote end
+to trigger execution of uncontrolled PHP code on your server, opening the door to code injection exploits. Only
+enable this option when you trust completely the remote server/client. DO NOT USE THIS WITH UNTRUSTED USER INPUT
+
+Note also that there are multiple limitations to this: the same PHP class definition must be available on both ends of
+the communication; the class constructor will be called but with no parameters at all, and methods such as `__unserialize`
+or `__wakeup` will not be called. Also, if a different toolkit than the phpxmlrpc library is used on the receiving side,
+it might reject the generated xml as invalid.
 
 === Code generation, Proxy objects & co.
 
@@ -1153,7 +1096,7 @@ For the extremely lazy coder, helper functions have been added that allow to con
 and a remotely exposed xmlrpc method into a local php function - or a set of xmlrpc methods into a php class. Note that these come with many caveat.
 
 [[wrap_xmlrpc_method]]
-===== wrap_xmlrpc_method
+==== wrap_xmlrpc_method
 
     string wrap_xmlrpc_method($client, $methodname, $extra_options)
 
@@ -1246,7 +1189,7 @@ else {
 }
 ----
 
-===== wrap_php_function [[wrap_php_function]]
+==== wrap_php_function [[wrap_php_function]]
 
     array wrap_php_function(string $funcname, string $wrapper_function_name, array $extra_options)
 
@@ -1497,7 +1440,7 @@ To find out what the server is really returning to your client, you have to enab
 
 If what you need is to save the responses received from the server as xml, you have two options:
 
-1- use the serialize() method on the response object.
+1- use the `serialize` method on the Response object.
 
 [source, php]
 ----
@@ -1528,6 +1471,10 @@ protocol will be checked. This means that xmlrpc responses sent by the server th
 response on the client (e.g. malformed xml, responses that have faultCode set, etc...) now will not be flagged as
 invalid, and you might end up saving not valid xml but random junk...
 
+3 - use the Response's `httpResponse` method
+
+@TODO...
+
 === Can I use the MS Windows character set?
 
 If the data your application is using comes from a Microsoft application, there are some chances that the character set
@@ -1535,7 +1482,7 @@ used to encode it is CP1252 (the same might apply to data received from an exter
 rare to find xmlrpc toolkits that encode to CP1252 instead of UTF8). It is a character set which is "almost" compatible
 with ISO 8859-1, but for a few extra characters.
 
-PHP-XMLRPC only supports the ISO 8859-1 and UTF8 character sets.
+PHPXMLRPC only supports the ISO 8859-1 and UTF8 character sets.
 The net result of this situation is that those extra characters will not be properly encoded, and will be received at
 the other end of the XML-RPC transmission as "garbled data". Unfortunately the library cannot provide real support for
 CP1252 because of limitations in the PHP 4 xml parser. Luckily, we tried our best to support this character set anyway,
@@ -1622,10 +1569,10 @@ because of shared hosting constraints).
 
 Since version 2.1, the PHP-XMLRPC library provides a compatibility layer that aims to be 100% compliant with the xmlrpc
 extension API. This means that any code written to run on the extension should obtain the exact same results, albeit
-using more resources and a longer processing time, using the PHP-XMLRPC library and the extension compatibility module.
+using more resources and a longer processing time, using the PHPXMLRPC library and the extension compatibility module.
 
 The module was originally part of the EXTRAS package, available as a separate download from the sourceforge.net website;
-it has since become available aa Packagist package `phpxmlrpc/polyfill-xmlrpc ` and can be found on GitHub at
+it has since become available as Packagist package `phpxmlrpc/polyfill-xmlrpc` and can be found on GitHub at
 https://github.com/gggeek/polyfill-xmlrpc
 
 ++++++++++++++++++++++++++++++++++++++

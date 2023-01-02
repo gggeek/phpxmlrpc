@@ -6,7 +6,7 @@ cd "$(dirname -- "$(dirname -- "${BASH_SOURCE[0]}")")"
 
 ### API docs
 
-php ./build/vendor/bin/phpdoc run --cache-folder './build/.phpdoc' -d "$(realpath ../src/)" -t './api' --title PHP-XMLRPC --defaultpackagename PHPXMLRPC
+php ./build/vendor/bin/phpdoc run --cache-folder './build/.phpdoc' -d "$(realpath ../src/)" -t './api' --title PHPXMLRPC --defaultpackagename PHPXMLRPC
 
 ### User Manual
 
