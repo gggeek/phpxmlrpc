@@ -363,7 +363,8 @@ use PhpXmlRpc\Client;
 $client = new Client("/RPC2", "betty.userland.com", 80);
 ----
 
-The `$server_port` parameter is optional, and if omitted will default to '80' when using HTTP and '443' when using HTTPS or HTTP2.
+The `$server_port` parameter is optional, and if omitted will default to '80' when using HTTP and '443' when using HTTPS
+or HTTP2.
 
 The `$transport` parameter is optional, and if omitted will default to 'http'. Allowed values are either 'http', 'https',
 'http11', 'http10', 'h2' or 'h2c'. Its value can be overridden with every call to the `send()` method. See the
@@ -777,7 +778,7 @@ into the response.
 
 ===== $allow_system_funcs
 
-Default_value: `TRUE`. When set to `FALSE`, disables support for `System.xxx` functions in the server. It might be useful
+Default value: `TRUE`. When set to `FALSE`, disables support for `System.xxx` functions in the server. It might be useful
 e.g. if you do not wish the server to respond to requests to `System.ListMethods`.
 
 ===== $compress_response
@@ -802,9 +803,9 @@ Charset encoding to be used for responses (only affects string values).
 If it can, the server will convert the generated response from internal_encoding to the intended one.
 
 Valid values are: a supported xml encoding (only `UTF-8` and `ISO-8859-1` at present, unless mbstring is enabled), `null`
-(leave charset unspecified in response and convert output stream to US_ASCII), `default` (use xmlrpc library default as
-specified in @TODO..., convert output stream if needed), or `auto` (use client-specified charset encoding or same as
-request if request headers do not specify it (unless request is US-ASCII: then use library default anyway).
+(leave charset unspecified in response and convert output stream to US_ASCII), or `auto` (use client-specified charset
+encoding or same as request if request headers do not specify it (unless request is US-ASCII: then use library default
+anyway).
 
 ==== Troubleshooting server's method handlers
 
@@ -1296,6 +1297,8 @@ php values to Value objects.
 
 * if the server you are communicating with does support it, and the requests you are sending are big, or the network slow,
   you should enable compression of the requests, via setting `+$client->request_compression = true+`
+
+* set `+$server->debug = 0+`
 
 * boxcar multiple xml-rpc calls into a single http request by making usage of the `system.multicall` capability. Just
   passing in an array of Request objects to `+$client->send()+` is usually enough. If the server you are talking to does

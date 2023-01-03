@@ -57,7 +57,9 @@ class Server
      */
     public $accepted_compression = array();
 
-    /// Shall we serve calls to system.* methods?
+    /**
+     * Shall we serve calls to system.* methods?
+     */
     public $allow_system_funcs = true;
 
     /**
@@ -72,7 +74,6 @@ class Server
      * NB: if we can, we will convert the generated response from internal_encoding to the intended one.
      * Can be: a supported xml encoding (only UTF-8 and ISO-8859-1 at present, unless mbstring is enabled),
      * null (leave unspecified in response, convert output stream to US_ASCII),
-     * 'default' (use xmlrpc library default as specified in xmlrpc.inc, convert output stream if needed),
      * or 'auto' (use client-specified charset encoding or same as request if request headers do not specify it (unless request is US-ASCII: then use library default anyway).
      * NB: pretty dangerous if you accept every charset and do not have mbstring enabled)
      */
