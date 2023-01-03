@@ -7,6 +7,9 @@
 ini_set('display_errors', true);
 error_reporting(E_ALL);
 
+// Set up a constant which can be used by demo code to tell if the testuite is in action
+const TESTMODE = true;
+
 // Out-of-band information: let the client manipulate the page operations
 if (isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) && extension_loaded('xdebug')) {
     $GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'] = '/tmp/phpxmlrpc_coverage';

@@ -14,7 +14,7 @@ use PhpXmlRpc\Server;
 use PhpXmlRpc\Value;
 
 // a PHP version of the state-number server
-// send me an integer and i'll sell you a state
+// send me an integer and I'll sell you a state
 
 $GLOBALS['stateNames'] = array(
     "Alabama", "Alaska", "Arizona", "Arkansas", "California",

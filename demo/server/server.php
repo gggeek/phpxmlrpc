@@ -90,30 +90,32 @@ $s->compress_response = true;
 
 // Out-of-band information: let the client manipulate the server operations.
 // We do this to help the testsuite script: do not reproduce in production!
-if (isset($_GET['RESPONSE_ENCODING'])) {
-    $s->response_charset_encoding = $_GET['RESPONSE_ENCODING'];
-}
-if (isset($_GET['DETECT_ENCODINGS'])) {
-    PhpXmlRpc::$xmlrpc_detectencodings = $_GET['DETECT_ENCODINGS'];
-}
-if (isset($_GET['EXCEPTION_HANDLING'])) {
-    $s->exception_handling = $_GET['EXCEPTION_HANDLING'];
-}
-if (isset($_GET['FORCE_AUTH'])) {
-    // We implement both  Basic and Digest auth in php to avoid having to set it up in a vhost.
-    // Code taken from php.net
-    // NB: we do NOT check for valid credentials!
-    if ($_GET['FORCE_AUTH'] == 'Basic') {
-        if (!isset($_SERVER['PHP_AUTH_USER']) && !isset($_SERVER['REMOTE_USER']) && !isset($_SERVER['REDIRECT_REMOTE_USER'])) {
-            header('HTTP/1.0 401 Unauthorized');
-            header('WWW-Authenticate: Basic realm="Phpxmlrpc Basic Realm"');
-            die('Text visible if user hits Cancel button');
-        }
-    } elseif ($_GET['FORCE_AUTH'] == 'Digest') {
-        if (empty($_SERVER['PHP_AUTH_DIGEST'])) {
-            header('HTTP/1.1 401 Unauthorized');
-            header('WWW-Authenticate: Digest realm="Phpxmlrpc Digest Realm",qop="auth",nonce="'.uniqid().'",opaque="'.md5('Phpxmlrpc Digest Realm').'"');
-            die('Text visible if user hits Cancel button');
+if (defined('TESTMODE')) {
+    if (isset($_GET['RESPONSE_ENCODING'])) {
+        $s->response_charset_encoding = $_GET['RESPONSE_ENCODING'];
+    }
+    if (isset($_GET['DETECT_ENCODINGS'])) {
+        PhpXmlRpc::$xmlrpc_detectencodings = $_GET['DETECT_ENCODINGS'];
+    }
+    if (isset($_GET['EXCEPTION_HANDLING'])) {
+        $s->exception_handling = $_GET['EXCEPTION_HANDLING'];
+    }
+    if (isset($_GET['FORCE_AUTH'])) {
+        // We implement both  Basic and Digest auth in php to avoid having to set it up in a vhost.
+        // Code taken from php.net
+        // NB: we do NOT check for valid credentials!
+        if ($_GET['FORCE_AUTH'] == 'Basic') {
+            if (!isset($_SERVER['PHP_AUTH_USER']) && !isset($_SERVER['REMOTE_USER']) && !isset($_SERVER['REDIRECT_REMOTE_USER'])) {
+                header('HTTP/1.0 401 Unauthorized');
+                header('WWW-Authenticate: Basic realm="Phpxmlrpc Basic Realm"');
+                die('Text visible if user hits Cancel button');
+            }
+        } elseif ($_GET['FORCE_AUTH'] == 'Digest') {
+            if (empty($_SERVER['PHP_AUTH_DIGEST'])) {
+                header('HTTP/1.1 401 Unauthorized');
+                header('WWW-Authenticate: Digest realm="Phpxmlrpc Digest Realm",qop="auth",nonce="' . uniqid() . '",opaque="' . md5('Phpxmlrpc Digest Realm') . '"');
+                die('Text visible if user hits Cancel button');
+            }
         }
     }
 }
