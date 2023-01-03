@@ -65,6 +65,7 @@ class Request
         return self::$charsetEncoder;
     }
 
+    /// @todo this should be a static method
     public function setCharsetEncoder($charsetEncoder)
     {
         self::$charsetEncoder = $charsetEncoder;
@@ -300,7 +301,7 @@ class Request
             }
         }
 
-        // if user wants back raw xml, give it to her
+        // if the user wants back raw xml, give it to her
         if ($returnType == 'xml') {
             return new Response($data, 0, '', 'xml', $this->httpResponse);
         }

@@ -14,6 +14,7 @@ use PhpXmlRpc\Value;
  *       - add parseRequest, parseResponse, parseValue methods
  * @todo if iconv() or mb_string() are available, we could allow to convert the received xml to a custom charset encoding
  *       while parsing, which is faster than doing it later by going over the rebuilt data structure
+ * @todo allow usage of a custom Logger via the DIC(ish) pattern we use in other classes
  */
 class XMLParser
 {

@@ -1074,9 +1074,21 @@ $val = $encoder::decodeXml($text);
 if ($val) echo 'Found a value of type ' . $val->kindOf(); else echo 'Found invalid xml';
 ----
 
-=== Logging
+=== Errors and Logging
 
-@TODO...
+Many of the classes in this library by default use the php error logging facilities to log errors in case there
+is some unexpected but non-fatal event happening, such as f.e. when an invalid xml-rpc request or response are received.
+Going straight to the log instead of triggering a php warning or error has the advantage of not breaking the xml-rpc
+output when the issue is happening within the context of an xmlrpc-server and `display_errors` is enabled.
+
+In case things are not going as you expect, please check the error log first for the presence of any messages from
+PHPXMLRPC which could be useful in troubleshooting what is going on under the hood.
+
+You can customize the way error messages are traced via the static method `setLogger` available for the classes
+`Client`, `Encoder`, `Request`, `Server` and `Value`. Keep in mind that for the moment, classes `Charset`, `HTTP` and
+`XMLParser` do not allow the same customization without hacking the `PhpXmlRpc\Logger` class. Last but not least, be
+aware that the same Logger is also responsible for echoing to screen the debug messages produced by the Client when its
+debug level has been set; this allows to customize the debugging process in the same way.
 
 === Transferring PHP objects over XML-RPC
 
@@ -1477,7 +1489,22 @@ To find out what the server is really returning to your client, you have to enab
 
 If what you need is to save the responses received from the server as xml, you have multiple options:
 
-1- use the `serialize` method on the Response object.
+1 - use the Response's `httpResponse` method
+
+[source, php]
+----
+$resp = $client->send($msg);
+if (!$resp->faultCode())
+    $data_to_be_saved = $resp->httpResponse()['raw_data'];
+----
+
+Note that, while the data saved this way is an accurate copy of what is received from the server, it might not match what
+gets parsed into the response's value, as there is some filtering involved, such as stripping of comments junk from
+the end of the message, character set conversion, etc...
+
+Note also that, in the future, this might need some debug mode to be enabled in order to work.
+
+2 - use the `serialize` method on the Response object.
 
 [source, php]
 ----
@@ -1492,7 +1519,7 @@ as "<string/>", `serialize()` will output "<string></string>"), or if the server
 which case the xml generated client side using serialize() will correspond to the error response generated
 internally by the lib).
 
-2 - set the client object to return the raw xml received instead of the decoded objects:
+3 - set the client object to return the raw xml received instead of the decoded objects:
 
 [source, php]
 ----
@@ -1507,10 +1534,6 @@ Note that using this method the xml response will not be parsed at all by the li
 protocol will be checked. This means that xml-rpc responses sent by the server that would have generated an error
 response on the client (e.g. malformed xml, responses that have faultCode set, etc...) now will not be flagged as
 invalid, and you might end up saving not valid xml but random junk...
-
-3 - use the Response's `httpResponse` method
-
-@TODO...
 
 === Can I use the MS Windows character set?
 

@@ -133,6 +133,7 @@ class Server
         return self::$charsetEncoder;
     }
 
+    /// @todo this should be a static method
     public function setCharsetEncoder($charsetEncoder)
     {
         self::$charsetEncoder = $charsetEncoder;

@@ -272,6 +272,7 @@ class Charset
 
             default:
                 $escapedData = '';
+                /// @todo allow usage of a custom Logger via the DIC(ish) pattern we use in other classes
                 Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ": Converting from $srcEncoding to $destEncoding: not supported...");
         }
 
