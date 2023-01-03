@@ -1,9 +1,10 @@
 ## XML-RPC for PHP version XXX - unreleased
 
 * improved: added a pre-push git hook script, to avoid pushing tagged versions with inconsistent version tags in code.
-  To install it, execute `composer run-script setup-git-hooks`
+  To install it, execute `composer run-script setup-git-hooks` (NB: it is only useful for developers of this library,
+  not for the developers simply using it)
 
-* improved: updated the user's manual to be inline with the version4 API and all modern coding practices.
+* improved: updated the user's manual to be inline with the version4 API and modern coding practices.
   The manual is now bundled in the default distribution tarball, and is easily viewable as html provided you can
   serve it using a webserver.
 
@@ -458,7 +459,7 @@ version 3.0.0 beta.
 The requirements have increased to php 5.1.0 - which is still way older than what you should be running for any serious
 purpose, really.
 
-It also is the first release to be installable via composer.
+It also is the first release to be installable via Composer.
 
 See the Changelog file or the pdf docs for a complete list of changes.
 
@@ -466,7 +467,7 @@ See the Changelog file or the pdf docs for a complete list of changes.
 ## XML-RPC for PHP version 3.0.0 beta - 2009/09/05
 
 This is the first release of the library to only support PHP 5.
-Some legacy code has been removed, and support for features such as exceptions and dateTime objects introduced.
+Some legacy code has been removed, and support for features such as exceptions and DateTime objects introduced.
 
 The "beta" tag is meant to indicate the fact that the refactoring has been more widespread than in precedent releases
 and that more changes are likely to be introduced with time - the library is still considered to be production quality.
@@ -474,18 +475,18 @@ and that more changes are likely to be introduced with time - the library is sti
 * improved: removed all usage of php functions deprecated in php 5.3, usage of assign-by-ref when creating new objects
   etc...
 * improved: add support for the <ex:nil/> tag used by the apache library, both in input and output
-* improved: add support for dateTime objects in both in php_xmlrpc_encode and as parameter for constructor of xmlrpcval
+* improved: add support for DateTime objects in both in php_xmlrpc_encode and as parameter for constructor of xmlrpcval
 * improved: add support for timestamps as parameter for constructor of xmlrpcval
 * improved: add option 'dates_as_objects' to php_xmlrpc_decode to return dateTime objects for xmlrpc datetimes
 * improved: add new method SetCurlOptions to xmrlpc_client to allow extra flexibility in tweaking http config, such as
   explicitly binding to an ip address
-* improved: add new method SetUserAgent to xmrlpc_client to allow having different user-agent http headers
+* improved: add new method setUserAgent to xmrlpc_client to allow having different user-agent http headers
 * improved: add a new member variable in server class to allow fine-tuning of the encoding of returned values when the
   server is in 'phpvals' mode
 * improved: allow servers in 'xmlrpcvals' mode to also register plain php functions by defining them in the dispatch map
   with an added option
 * improved: catch exceptions thrown during execution of php functions exposed as methods by the server
-* fixed: bad encoding if same object is encoded twice using php_xmlrpc_encode
+* fixed: bad encoding if the same object is encoded twice using php_xmlrpc_encode
 
 
 ## XML-RPC for PHP version 2.2.2 - 2009/03/16
@@ -773,7 +774,7 @@ All users are invited to upgrade as soon as possible.
 ## XML-RPC for PHP version 1.1 - 2005/05/03
 
 I'm pleased to announce ## XML-RPC for PHP version 1.1
-It's taken two years to get to the this point, but here we are, finally.
+It's taken two years to get to this point, but here we are, finally.
 
 This is a bugfix and maintenance release. No major new features have been added.
 All known bugs have been ironed out, unless fixing would have meant breaking
@@ -843,7 +844,7 @@ available at http://xmlrpc.usefulinc.com/list.html, or to
 ## XML-RPC for PHP version 1.0 beta 9
 
 I'm pleased to announce ## XML-RPC for PHP version 1.0 beta 9. This is
-is largely a bugfix release.
+largely a bugfix release.
 
 It can be downloaded from http://xmlrpc.usefulinc.com/php.html
 

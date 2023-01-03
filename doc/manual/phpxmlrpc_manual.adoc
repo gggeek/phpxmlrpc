@@ -965,15 +965,16 @@ It only affects xml-rpc values of string type. It is a separate value from `$xml
 xml messages encoded on-the-wire in US-ASCII and process them as UTF-8. It defaults to the character set used internally
 by PHP (unless you are running an MBString-enabled installation), so you should change it only in special situations, if
 e.g. the string values exchanged in the xml-rpc messages are directly inserted into / fetched from a database
-configured to return non-UTF8 encoded strings to PHP. Example usage (quite contrived, as the asciidoc manual is saved
-in UTF-8):
+configured to return non-UTF8 encoded strings to PHP. Example usage:
 
 [source, php]
 ----
 use PhpXmlRpc\Value;
 
-PhpxmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
-$v = new Value(utf8_decode('Hélène')); // This xml-rpc value will be correctly serialized as the french name
+$latin1String = utf8_decode('Hélène'); // This is quite contrived. It is done because the asciidoc manual is saved in UTF-8...
+$v = new Value($latin1String);
+PhpxmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1'; // Feel free to set this as early as possible
+$xmlSnippet = $v->serialize(); // The xml-rpc value will be correctly serialized as the french name
 ----
 
 ==== $xmlpc_double_precision
@@ -1422,7 +1423,7 @@ In order to have it onboard, install the library using Composer option `--prefer
 
 == Frequently Asked Questions [[qanda]]
 
-@TODO mention setting curl options directly, following http redirects...
+@TODO mention setting curl options directly, following http redirects, using value/req/resp->serialize...
 
 === How to send custom XML as payload of a method call
 
