@@ -12,10 +12,14 @@
 
 require_once __DIR__ . "/_prepend.php";
 
+// *** NB: WE BLOCK THIS FROM RUNNING BY DEFAULT IN CASE ACCESS IS GRANTED TO IT IN PRODUCTION BY MISTAKE ***
+// Comment out the following safeguard if you want to use it as is, but remember: this is an open relay !!!
+if (!defined('TESTMODE')) {
+    die("Server disabled by default for safety");
+}
+
 /**
  * Forward an xmlrpc request to another server, and return to client the response received.
- *
- * DO NOT RUN AS IS IN PRODUCTION - this is an open relay !!!
  *
  * @param PhpXmlRpc\Request $req (see method docs below for a description of the expected parameters)
  *
@@ -38,8 +42,10 @@ function forward_request($req)
         foreach ($options as $key => $val) {
             switch ($key) {
                 case 'Cookie':
+                    /// @todo add support for this if needed
                     break;
                 case 'Credentials':
+                    /// @todo add support for this as well if needed
                     break;
                 case 'RequestCompression':
                     $client->setRequestCompression($val);
