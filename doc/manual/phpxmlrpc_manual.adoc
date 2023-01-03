@@ -1451,7 +1451,7 @@ data over socket would be much more efficient. Or even Googles' ProtoBuffer.
 If you really need to move a massive amount of data around, and you are crazy enough to do it using phpxmlrpc, your best
 bet is to bypass usage of the Value objects, at least in the decoding phase, and have the server (or client) object
 return to the calling function directly php values (see `Client::return_type` and `Server::functions_parameters_types`
-for more details).
+for more details, and the tips in the "performance" section TODO add link...).
 
 === My server (client) returns an error whenever the client (server) returns accented characters
 
@@ -1474,7 +1474,7 @@ To find out what the server is really returning to your client, you have to enab
 
 === How can I save to a file the xml of the xml-rpc responses received from servers?
 
-If what you need is to save the responses received from the server as xml, you have two options:
+If what you need is to save the responses received from the server as xml, you have multiple options:
 
 1- use the `serialize` method on the Response object.
 
@@ -1550,7 +1550,7 @@ if (!$resp->faultCode())
         // do some other stuff here...
 
         $client->setcookie('PHPSESSID', $session_id);
-        $val = $client->send(new Request('getvalue', array(new Value('foo')));
+        $val = $client->send(new Request('doStuff', array(new Value('foo')));
     }
 }
 ----
@@ -1566,7 +1566,7 @@ control only the server side of the communication, please check with the makers 
 To be documented more...
 
 In short: for the fastest execution possible, you can enable the php native xmlrpc extension, and use it in conjunction
-with phpxmlrpc. The following code snippet gives an example of such integration
+with phpxmlrpc. The following code snippet gives an example of such integration:
 
 [source, php]
 ----
@@ -1597,11 +1597,14 @@ if ($r->faultCode()) {
 }
 ----
 
+*NB:* Please note that, as of PHP 8.2, the native xmlrpc extension has been moved to Pecl, and it is not bundled in the
+stock PHP builds anymore. Moreover, its development has all but ceased, and its usage is discouraged.
+
 === Substitution of the PHP xmlrpc extension
 
 Yet another interesting situation is when you are using a ready-made php application, that provides support for the
 XML-RPC protocol via the native php xmlrpc extension, but the extension is not available on your php install (e.g.
-because of shared hosting constraints).
+because of shared hosting constraints, or because you are using php 8.2 or later).
 
 Since version 2.1, the PHPXMLRPC library provides a compatibility layer that aims to be 100% compliant with the xmlrpc
 extension API. This means that any code written to run on the extension should obtain the exact same results, albeit
