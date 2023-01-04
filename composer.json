@@ -18,7 +18,7 @@
         "yoast/phpunit-polyfills": "*"
     },
     "suggest": {
-        "ext-curl": "Needed for HTTPS and HTTP 1.1 support, NTLM Auth etc...",
+        "ext-curl": "Needed for HTTPS, HTTP2 and HTTP 1.1 support, NTLM Auth etc...",
         "ext-zlib": "Needed for sending compressed requests and receiving compressed responses, if cURL is not available",
         "ext-mbstring": "Needed to allow reception of requests/responses in character sets other than ASCII,LATIN-1,UTF-8",
         "phpxmlrpc/extras": "Adds more featured Server classes and other useful bits",

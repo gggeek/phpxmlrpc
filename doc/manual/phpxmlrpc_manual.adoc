@@ -462,7 +462,40 @@ available in your php installation, via the `setCurlOptions` method.
 
 ==== Sending multiple requests
 
-@TODO...
+Both the Client and Server classes provided by the library support the multicall xmlrpc extension, which allows to execute
+multiple xml-rpc requests with a single http call, by wrapping them up in a call to the  `system.multiCall` method.
+
+The expected advantage is a nice improvements in performances, especially when there are many small requests at play, but,
+as always, the devil is in the details: the multicall specification does not mandate for the server to execute the
+single requests within the multicall method in a specific order, nor how to handle execution errors happening halfway
+through the list.
+
+The phpxmlrpc server will execute all the requests sequentially, in the same order in which they appear in the xml payload,
+and will try its best to execute them all, even if one of them fails, but there is no guarantee on the latter point.
+
+In order to take advantage of multicall, either use the Client's `multicall` method, or just pass an array of Request to
+the `send` method:
+
+----
+$m1 = new PhpXmlRpc\Request('system.methodHelp');
+$m2 = new PhpXmlRpc\Request('system.methodSignature');
+$val = new PhpXmlRpc\Value('an-xmlrpc-method', "string");
+$m1->addParam($val);
+$m2->addParam($val);
+$ms = array($m1, $m2);
+$rs = $client->multicall($ms);
+foreach($rs as $resp) {
+    var_dump($rs->faultCode());
+    var_dump($rs->value());
+}
+----
+
+Please note that, in case of faults during execution of a multicall call, the Client will automatically fail back to
+sending every request separately, one at a time. If you are sure that the server supports the multicall protocol, you
+might want to optimize and avoid this second attempt by passing `false` as 4th argument to `multicall()`.
+
+If, on the other hand, after writing code which uses the `multicall` method, you are forced to migrate to a server which
+does not support the `system.multiCall` method, you can simply set `$client->no_multicall = true`
 
 === Server [[server]]
 
@@ -522,12 +555,12 @@ members:
   in structure the 'signature' member. By default, only the `documenting_xmlrpc_server` class in the extras package will
   take advantage of this, since the `system.methodHelp` protocol does not support documenting method parameters individually.
 
-* `parameters_type` - this entry can be used when the server is working in 'xmlrpcvals' mode (see ...) to define one
-  or more entries in the dispatch map as being functions that follow the 'phpvals' calling convention. The only useful
-  value is currently the string 'phpvals'.
+* `parameters_type` - this entry can be used when the server is working in 'xmlrpcvals' mode (see <<method_handlers>>)
+  to define one or more entries in the dispatch map as being functions that follow the 'phpvals' calling convention.
+  The only useful value is currently the string 'phpvals'.
 
 Methods `system.listMethods`, `system.methodHelp`, `system.methodSignature` and `system.multicall` are already defined
-by the server, and should not be reimplemented (see ... Reserved Methods below).
+by the server, and should not be reimplemented (see <<reserved>> below).
 
 ==== Method signatures [[signatures]]
 
@@ -598,17 +631,17 @@ $srv = new Server(array(
 ));
 ----
 
-==== Method handler functions
+==== Method handler functions [[method_handlers]]
 
 The same php function can be registered as handler of multiple xml-rpc methods.
 
 No text should be echoed 'to screen' by the handler function, or it will break the xml response sent back to the client.
 This applies also to error and warning messages that PHP prints to screen unless the appropriate settings have been
 set in `php.ini`, namely `display_errors`. Another way to prevent echoing of errors inside the response and
-facilitate debugging is to use the server's `SetDebug` method with debug level 3 (see ...).
+facilitate debugging is to use the server's `SetDebug` method with debug level 3 (see <<setdebug>>).
 
 Exceptions thrown during execution of handler functions are caught by default and an XML-RPC error response is generated
-instead. This behaviour can be fine-tuned by usage of the `$exception_handling` server property (see ...).
+instead. This behaviour can be fine-tuned by usage of the `$exception_handling` server property (see <<exception_handling>>).
 
 ===== Manual type conversion
 
@@ -768,7 +801,7 @@ $resp = $srv->service($xmlrpc_request_body, true); // parse a variable instead o
 A couple of methods / class properties are available to modify the behaviour of the server. The only way to take
 advantage of their existence is by usage of a delayed server response (see above).
 
-===== setDebug()
+===== setDebug() [[setdebug]]
 
 This function controls weather the server is going to echo debugging messages back to the client as comments in response
 body. Valid values: 0,1,2,3, with 1 being the default. At level 0, no debug info is returned to the client. At level 2,
@@ -789,7 +822,7 @@ request.
 
 Note that the ZLIB php extension must be installed for this to work. If it is, `$compress_response` will default to TRUE.
 
-===== $exception_handling
+===== $exception_handling [[exception_handling]]
 
 This property controls the behaviour of the server when an exception is thrown by a method handler php function. Valid
 values: 0,1,2, with 0 being the default. At level 0, the server catches the exception and returns an 'internal error'
@@ -1290,7 +1323,7 @@ if ($findstate_sig)
 $srv = new Server($methods);
 ----
 
-== Performances
+== Performances [[performances]]
 
 Although the library is not designed to be the most memory-efficient nor the most fast possible implementation of the
 xml-rpc protocol, care is taken not to introduce unnecessary bloat.
@@ -1464,7 +1497,7 @@ data over socket would be much more efficient. Or even Googles' ProtoBuffer.
 If you really need to move a massive amount of data around, and you are crazy enough to do it using phpxmlrpc, your best
 bet is to bypass usage of the Value objects, at least in the decoding phase, and have the server (or client) object
 return to the calling function directly php values (see `Client::return_type` and `Server::functions_parameters_types`
-for more details, and the tips in the "performance" section TODO add link...).
+for more details, and the tips in the <<performances>> section.
 
 === My server (client) returns an error whenever the client (server) returns accented characters
 
@@ -1586,8 +1619,6 @@ NB: unlike web browsers, not all xml-rpc clients support usage of http cookies. 
 control only the server side of the communication, please check with the makers of the xml-rpc client in use.
 
 === Integration with the PHP xmlrpc extension
-
-To be documented more...
 
 In short: for the fastest execution possible, you can enable the php native xmlrpc extension, and use it in conjunction
 with phpxmlrpc. The following code snippet gives an example of such integration:
