@@ -723,6 +723,7 @@ class Client
             $connectServer = $proxyHost;
             $connectPort = $proxyPort;
             $transport = 'tcp';
+            /// @todo check: should we not use https in some cases?
             $uri = 'http://' . $server . ':' . $port . $this->path;
             if ($proxyUsername != '') {
                 if ($proxyAuthType != 1) {
@@ -822,7 +823,7 @@ class Client
             STREAM_CLIENT_CONNECT, $context);
         if ($fp) {
             if ($timeout > 0) {
-                stream_set_timeout($fp, $timeout);
+                stream_set_timeout($fp, $timeout, 0);
             }
         } else {
             if ($this->errstr == '') {
@@ -983,6 +984,8 @@ class Client
 
         // Deflate request body and set appropriate request headers
         $payload = $req->payload;
+        $encodingHdr = '';
+        /// @todo test for existence of proper function, in case of polyfills
         if (function_exists('gzdeflate') && ($this->request_compression == 'gzip' || $this->request_compression == 'deflate')) {
             if ($this->request_compression == 'gzip') {
                 $a = @gzencode($payload);
@@ -997,8 +1000,6 @@ class Client
                     $encodingHdr = 'Content-Encoding: deflate';
                 }
             }
-        } else {
-            $encodingHdr = '';
         }
 
         if (!$keepAlive || !$this->xmlrpc_curl_handle) {
@@ -1083,7 +1084,12 @@ class Client
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
                 break;
             case 'h2c':
-                curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
+                if (defined('CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE')) {
+                    curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
+                } else {
+                    /// @todo make this a proper error, ie. return a failure
+                    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. HTTP2 is not supported by the current PHP/curl install');
+                }
                 break;
             case 'h2':
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
@@ -1199,14 +1205,16 @@ class Client
         if ($method == '') {
             $method = $this->method;
         }
+
         if (!$this->no_multicall) {
             $results = $this->_try_multicall($reqs, $timeout, $method);
+            /// @todo how to handle the case of $this->return_type = xml?
             if (is_array($results)) {
                 // System.multicall succeeded
                 return $results;
             } else {
-                // either system.multicall is unsupported by server,
-                // or call failed for some other reason.
+                // either system.multicall is unsupported by server, or the call failed for some other reason.
+                // Feature creep: is there a way to tell apart unsupported multicall from other faults?
                 if ($fallback) {
                     // Don't try it next time...
                     $this->no_multicall = true;
@@ -1226,16 +1234,14 @@ class Client
 
         $results = array();
         if ($fallback) {
-            // system.multicall is (probably) unsupported by server:
-            // emulate multicall via multiple requests
-            /// @todo use curl multi_ functions to make this quicker
+            // system.multicall is (probably) unsupported by server: emulate multicall via multiple requests
+            /// @todo use curl multi_ functions to make this quicker (see the implementation in the parallel.php demo)
             foreach ($reqs as $req) {
                 $results[] = $this->send($req, $timeout, $method);
             }
         } else {
-            // user does NOT want to fallback on many single calls:
-            // since we should always return an array of responses,
-            // return an array with the same error repeated n times
+            // user does NOT want to fallback on many single calls: since we should always return an array of responses,
+            // we return an array with the same error repeated n times
             foreach ($reqs as $req) {
                 $results[] = $result;
             }
@@ -1247,14 +1253,15 @@ class Client
     /**
      * Attempt to boxcar $reqs via system.multicall.
      *
-     * Returns either an array of Response, a single error Response or false (when received response does not respect
-     * valid multicall syntax).
-     *
      * @param Request[] $reqs
      * @param int $timeout
      * @param string $method
      *
-     * @return Response[]|false|mixed|Response
+     * @return Response[]|string|false|Response string when return_type=xml, a single Response when the call returned a
+     *                                          fault, false when the returned response does not conform to what we expect
+     *                                          from a multicall response
+     * @todo always send back Response(s) which have the full set of cookies/headers/raw-data
+     * @todo instead of returning false, return a single Response with the proper fault codes + some details
      */
     private function _try_multicall($reqs, $timeout, $method)
     {
@@ -1288,7 +1295,6 @@ class Client
             return $rets;
         } elseif ($this->return_type == 'phpvals') {
             /// @todo test this code branch...
-            $rets = $result->value();
             if (!is_array($rets)) {
                 return false;       // bad return type from system.multicall
             }
@@ -1331,8 +1337,6 @@ class Client
             return $response;
         } else {
             // return type == 'xmlrpcvals'
-
-            $rets = $result->value();
             if ($rets->kindOf() != 'array') {
                 return false;       // bad return type from system.multicall
             }
