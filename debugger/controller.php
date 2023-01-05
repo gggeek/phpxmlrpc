@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Gaetano Giunta
- * @copyright (C) 2005-2021 G. Giunta
+ * @copyright (C) 2005-2023 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  *
  * @todo add links to documentation from every option caption

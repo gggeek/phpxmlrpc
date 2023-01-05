@@ -687,7 +687,7 @@ function foo ($xmlrpcreq)
 }
 ----
 
-===== Automatic type conversion
+===== Automatic type conversion [[autoserver]]
 
 In the same spirit of simplification that inspired the Client's `$return_type` property, a similar property
 is available within the server class: `$functions_parameters_type`. When set to the string 'phpvals', the functions
@@ -903,7 +903,7 @@ Standard errors returned by the library include:
 In order to extend the functionality offered by XML-RPC servers without impacting on the protocol, reserved methods are
 supported.
 
-All methods starting with __system.__ are considered reserved by the server. PHP for XML-RPC itself provides four
+All methods starting with __system.__ are considered reserved by the server. PHPXMLRPC itself provides four
 special methods, detailed in this chapter.
 
 Note that all server objects will automatically respond to clients querying these methods, unless the property
@@ -1045,6 +1045,22 @@ xml-rpc, and the corresponding xmlrpcvals will return "null" for scalarTyp().
 When set to `TRUE`, php NULL values encoded into Value objects will get serialized using the `<EX:NIL/>` tag instead of
 `<NIL/>`. Please note that both forms are always accepted as input regardless of the value of this variable.
 
+=== Errors and Logging [[logging]]
+
+Many of the classes in this library by default use the php error logging facilities to log errors in case there
+is some unexpected but non-fatal event happening, such as f.e. when an invalid xml-rpc request or response are received.
+Going straight to the log instead of triggering a php warning or error has the advantage of not breaking the xml-rpc
+output when the issue is happening within the context of an xmlrpc-server and `display_errors` is enabled.
+
+In case things are not going as you expect, please check the error log first for the presence of any messages from
+PHPXMLRPC which could be useful in troubleshooting what is going on under the hood.
+
+You can customize the way error messages are traced via the static method `setLogger` available for the classes
+`Client`, `Encoder`, `Request`, `Server` and `Value`. Keep in mind that for the moment, classes `Charset`, `HTTP` and
+`XMLParser` do not allow the same customization without hacking the `PhpXmlRpc\Logger` class. Last but not least, be
+aware that the same Logger is also responsible for echoing to screen the debug messages produced by the Client when its
+debug level has been set; this allows to customize the debugging process in the same way.
+
 === Helper classes and functions [[helpers]]
 
 PHPXMLRPC contains some helper classes which you can use to make processing of XML-RPC requests easier.
@@ -1107,22 +1123,6 @@ $val = $encoder::decodeXml($text);
 if ($val) echo 'Found a value of type ' . $val->kindOf(); else echo 'Found invalid xml';
 ----
 
-=== Errors and Logging [[logging]]
-
-Many of the classes in this library by default use the php error logging facilities to log errors in case there
-is some unexpected but non-fatal event happening, such as f.e. when an invalid xml-rpc request or response are received.
-Going straight to the log instead of triggering a php warning or error has the advantage of not breaking the xml-rpc
-output when the issue is happening within the context of an xmlrpc-server and `display_errors` is enabled.
-
-In case things are not going as you expect, please check the error log first for the presence of any messages from
-PHPXMLRPC which could be useful in troubleshooting what is going on under the hood.
-
-You can customize the way error messages are traced via the static method `setLogger` available for the classes
-`Client`, `Encoder`, `Request`, `Server` and `Value`. Keep in mind that for the moment, classes `Charset`, `HTTP` and
-`XMLParser` do not allow the same customization without hacking the `PhpXmlRpc\Logger` class. Last but not least, be
-aware that the same Logger is also responsible for echoing to screen the debug messages produced by the Client when its
-debug level has been set; this allows to customize the debugging process in the same way.
-
 === Transferring PHP objects over XML-RPC
 
 In case there is a (real) need to transfer php object instances over XML-RPC, the "usual" way would be to use a `serialize`
@@ -1150,76 +1150,64 @@ it might reject the generated xml as invalid.
 
 === Code generation, Proxy objects & co.
 
-For the extremely lazy coder, helper functions have been added that allow to convert a php function into an xml-rpc method,
-and a remotely exposed xml-rpc method into a local php function - or a set of xml-rpc methods into a php class. Note that these come with many caveat.
+For the extremely lazy coder, helper functions have been added that allow to expose any pre-existing php functions (or
+all the public methods of a Class) as xml-rpc method handlers, and convert a remotely exposed xml-rpc method into a local
+php function - or a set of xml-rpc methods into a php class. This allows to use the library in a "transparent" fashion,
+ie. without having to deal with the Value, Client, Request and Response classes - but it comes with many gotchas and
+limitations.
 
-[[wrap_xmlrpc_method]]
-==== wrap_xmlrpc_method
+==== wrapXmlrpcMethod [[wrapxmlrpcmethod]]
 
-    string wrap_xmlrpc_method($client, $methodname, $extra_options)
+    Closure|string|false PhpXmlRpc\Wrapper::wrapXmlrpcMethod(Client $client, string $methodName, array $extraOptions = [])
 
-Given an xml-rpc server and a method name, creates a php wrapper function that will call the remote method and return
-results using native php types for both params and results. The generated php function will return a Response object
-for failed xml-rpc calls.
+Given a pre-built client pointing to a given xml-rpc server and a method name, creates a php "wrapper" function that will
+call the remote method and return results using native php types for both params and results. The generated php function
+will return a Response object for failed xml-rpc calls.
 
 The server must support the `system.methodSignature` xml-rpc method call for this function to work.
 
 The client param must be a valid Client object, previously created with the address of the target xml-rpc server, and to
-which the preferred communication options have been set.
+which the preferred options for http communication have been set.
 
-The optional parameters can be passed as array key,value pairs in the extra_options param.
+The optional parameters can be passed as key,value pairs in the `$extra_options` argument.
 
-The signum optional param has the purpose
-of indicating which method signature to use, if the given server
-method has multiple signatures (defaults to 0).
+The `signum` option has the purpose of indicating which method signature to use, if the given xml-rpc method has
+multiple signatures (defaults to 0).
 
-The timeout and protocol optional params are the same as in the Client::send() method.
+The `timeout` and `protocol` options are the same as the arguments with same name of the `Client::send()` method.
 
-If set, the optional new_function_name parameter indicates which name should be used for the generated function. In case
+If set, the `new_function_name` option indicates which name should be used for the generated function. In case
 it is not set the function name will be auto-generated.
 
-If the `return_source` optional parameter is
-set, the function will return the php source code to build the wrapper
-function, instead of evaluating it (useful to save the code and use it
-later as stand-alone xml-rpc client).
+If the `return_source` option is set, the function will return the php source code of the wrapper function, instead of
+evaluating it. This useful to save the code and use it later as stand-alone xml-rpc client with no performance hit
+and no dependency on `system.methodSignature`.
 
-If the `encode_php_objs` optional parameter is
-set, instances of php objects later passed as parameters to the newly
-created function will receive a 'special' treatment that allows the
-server to rebuild them as php objects instead of simple arrays. Note
-that this entails using a "slightly augmented" version of the xml-rpc
-protocol (i.e. using element attributes), which might not be understood
-by xml-rpc servers implemented using other libraries.
+If the `encode_php_objs` option is set, instances of php objects later passed as parameters to the newly created function
+will receive a 'special' treatment that allows the server to rebuild them as php objects instead of simple arrays. Note
+that this entails using a "slightly augmented" version of the xml-rpc protocol (i.e. using element attributes), which
+might not be understood by xml-rpc servers implemented using other libraries; it works well when the server is built
+on top of phpxmlrpc.
 
-If the `decode_php_objs` optional parameter is
-set, instances of php objects that have been appropriately encoded by
-the server using a coordinate option will be deserialized as php
-objects instead of simple arrays (the same class definition should be
+If the `decode_php_objs` option is set, instances of php objects that have been appropriately encoded by the server using
+a corresponding option will be deserialized as php objects instead of simple arrays (the same class definition should be
 present server side and client side).
 
-__Note that this might pose a security risk__,
-since in order to rebuild the object instances their constructor
-method has to be invoked, and this means that the remote server can
-trigger execution of unforeseen php code on the client: not really a
-code injection, but almost. Please enable this option only when you
-trust the remote server.
+__Note that this might pose a security risk__, since in order to rebuild the object instances their constructor
+method has to be invoked, and this means that the remote server can trigger execution of unforeseen php code on the
+client: not really a code injection, but almost. Please enable this option only when you absolutely trust the remote server.
 
-In case of an error during generation of the wrapper function,
-FALSE is returned, otherwise the name (or source code) of the new
-function.
+In case of an error during generation of the wrapper function, FALSE is returned.
 
-Known limitations: server must support
-system.methodsignature for the wanted xml-rpc
-method; for methods that expose multiple signatures, only one can be
-picked; for remote calls with nested xml-rpc params, the caller of the
-generated php function has to encode on its own the params passed to
-the php function if these are structs or arrays whose (sub)members
-include values of type base64.
+Known limitations: the server must support system.methodsignature for the desired xml-rpc method; for methods that expose
+multiple signatures, only one can be picked; for remote calls with nested xml-rpc params, the caller of the
+generated php function has to encode on its own the params passed to the php function if these are structs or arrays
+whose (sub)members include values of type base64.
 
-Note: calling the generated php function 'might' be slow: a new
-xml-rpc client is created on every invocation and an xmlrpc-connection
-opened+closed. An extra 'debug' param is appended to the parameter
-list of the generated php function, useful for debugging
+Note: calling the generated php function 'might' be slow: a new xml-rpc client is created on every invocation and an
+xmlrpc-connection opened+closed.
+
+An extra 'debug' argument is appended to the argument list of the generated php function, useful for debugging
 purposes.
 
 Example usage:
@@ -1227,34 +1215,45 @@ Example usage:
 [source, php]
 ----
 use PhpXmlRpc\Client;
+use PhpXmlRpc\Wrapper;
 
 $c = new Client('https://phpxmlrpc.sourceforge.net/server.php');
 
-$function = wrap_xmlrpc_method($client, 'examples.getStateName');
+$function = new Wrapper()->wrapXmlrpcMethod($client, 'examples.getStateName');
 
 if (!$function)
-    die('Cannot introspect remote method');
+    die('Failed introspecting remote method');
 else {
-    $stateno = 15;
-    $statename = $function($a);
+    $stateNo = 15;
+    $stateName = $function($stateNo);
     // NB: in real life, you should make sure you escape the received data with `htmlspecialchars` when echoing it as html
-    if (is_a($statename, 'Response')) { // call failed
-        echo 'Call failed: '.$statename->faultCode().'. Calling again with debug on';
-        $function($a, true);
+    if (is_a($stateName, 'Response')) { // call failed
+        echo 'Call failed: '.$stateName->faultCode().'. Calling again with debug on...';
+        $function($stateNo, true);
     }
     else
-      echo "OK, state nr. $stateno is $statename";
+      echo "OK, state nr. $stateNo is $stateName";
 }
 ----
 
-==== wrap_php_function [[wrap_php_function]]
+==== wrapXmlrpcServer
 
-    array wrap_php_function(string $funcname, string $wrapper_function_name, array $extra_options)
+    string|array|false PhpXmlRpc\Wrapper::wrapXmlrpcServer(Client $client, array $extraOptions = [])
+
+Similar to wrapXmlrpcMethod, but instead of creating a single php function this creates a php class, whose methods match
+all the xml-rpc methods available on the remote server.
+
+Note that a simpler alternative to this, doing no type-checks on the arguments of the invoked methods, and providing no
+support for IDE auto-completion, can be found in the __demo/client/proxy.php__ demo file.
+
+==== wrapPhpFunction [[wrapphpfunction]]
+
+    array|false PhpXmlRpc\Wrapper::wrapPhpFunction(Callable $callable, string $newFuncName = '', array $extraOptions = [])
 
 Given a user-defined PHP function, create a PHP 'wrapper' function that can be exposed as xml-rpc method from a Server
 object and called from remote clients, and return the appropriate definition to be added to a server's dispatch map.
 
-The optional `$wrapper_function_name` specifies the name that will be used for the auto-generated function.
+The optional `$newFuncName` specifies the name that will be used for the auto-generated function.
 
 Since php is a typeless language, to infer types of input and output parameters, it relies on parsing the phpdoc-style
 comment block associated with the given function. Usage of xml-rpc native types (such as datetime.dateTime.iso8601 and
@@ -1266,15 +1265,12 @@ Known limitations: only works for user-defined functions, not for PHP internal f
 retrieving number/type of params for those); the wrapped php function will not be able to programmatically return an
 xml-rpc error response.
 
-If the `return_source` optional parameter is set, the function will return the php source code to build the wrapper
-function, instead of evaluating it (useful to save the code and use it
-later in a stand-alone xml-rpc server). It will be in the stored in the
-`source` member of the returned array.
+If the `return_source` option parameter is set, the function will return the php source code to build the wrapper
+function, instead of evaluating it (useful to save the code and use it later in a stand-alone xml-rpc server). It will b
+e in the stored in the `source` member of the returned array.
 
-If the `suppress_warnings` optional parameter
-is set, any runtime warning generated while processing the
-user-defined php function will be caught and not be printed in the
-generated xml response.
+If the `suppress_warnings` optional parameter is set, any runtime warning generated while processing the user-defined
+php function will be caught and not be printed in the generated xml response.
 
 If the extra_options array contains the `encode_php_objs` value, wrapped functions returning php objects will generate
 "special" xml-rpc responses: when the decoding of those responses is carried out by this same lib, using the
@@ -1296,11 +1292,12 @@ Example usage:
 [source, php]
 ----
 use PhpXmlRpc\Server;
+use PhpXmlRpc\Wrapper;
 
 /**
 * State name from state number decoder. NB: do NOT remove this comment block.
 * @param integer $stateno the state number
-* @return string the name of the state (or error description)
+* @return string the name of the state (or an error description)
 */
 function findstate($stateno)
 {
@@ -1317,11 +1314,33 @@ function findstate($stateno)
 
 // wrap php function, build xml-rpc server
 $methods = array();
-$findstate_sig = wrap_php_function('findstate');
+$findstate_sig = new Wrapper()->wrapPhpFunction('findstate');
 if ($findstate_sig)
     $methods['examples.getStateName'] = $findstate_sig;
 $srv = new Server($methods);
 ----
+
+Please note that similar results to the above, i.e. adding to the server's dispatch map an existing php function which
+is not aware of xml-rpc, can be obtained without the Wrapper class and the need for introspection, simply by setting
+`+$server->unctions_parameters_type = 'phpvals'+` and `+$server->exception_handling = 1+` (see chapter <<autoserver>>).
+The main difference is that, using the Wrapper class, you get for free the documentation for the xmlrpc-method.
+
+==== wrapPhpClass
+
+    array|false PhpXmlRpc\Wrapper::wrapPhpClass(string|object $className, array $extraOptions = [])
+
+Similar to `wrapPhpFunction`, it works on all public methods of a given object/class. The server must support both the
+`system.methodList` and `system.methodSignature` xml-rpc method calls for this function to work.
+
+==== Code generation
+
+Using the Wrapper class to create some code and execute it directly inline has the worst possible performances, as it
+relies on either using introspection of existing php code or making extra calls to the xml-rpc introspection methods
+of the server. It also does not provide the benefit of allowing IDEs to inspect the generated code and provide
+auto-completion for it, nor for security-minded developers to be able to examine it before executing it. It is thus
+recommended to always  use the `return_source` option when using the Wrapper methods, and save to disk the generated code
+instead of executing it directly.
+
 
 == Performances [[performances]]
 

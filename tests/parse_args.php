@@ -13,7 +13,7 @@
  * @param int     SSLVERSION
  * @param string  PROXYSERVER
  *
- * @copyright (C) 2007-2021 G. Giunta
+ * @copyright (C) 2007-2023 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  *
  * @todo rename both the class and the file. PhpXmlRpc_TestArgParser ?
