@@ -11,6 +11,7 @@ fi
 
 ### Code below taken from https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
 
+# @todo replace wget with curl, so that we only need one of the two tools. Since we use php-curl, libcurl will be installed anyway
 EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 ACTUAL_SIGNATURE="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
