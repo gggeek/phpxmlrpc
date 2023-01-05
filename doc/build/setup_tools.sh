@@ -4,17 +4,17 @@
 
 set -e
 
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    asciidoctor fop git unzip zip
-
 PHPPKG=$(dpkg --list | grep php | grep cli | grep -v -F '(default)' | awk '{print $2}')
+
+# git, curl, gpg are needed by phive, used to install phpdocumentor
+# @todo besides php-cli, there are other php extensions used by phpdocumentor that we should make sure are onboard
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    asciidoctor \
-    curl \
-    gpg \
-    "${PHPPKG}" \
-    "${PHPPKG/cli/xsl}" \
-    unzip
+    asciidoctor curl git gpg unzip zip "${PHPPKG}" \
+    pandoc texlive-xetex texlive-fonts-extra texlive-latex-extra
+
+#sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+#    fop \
+#    "${PHPPKG/cli/xsl}" \
 
 cd "$(dirname -- "${BASH_SOURCE[0]}")"
 
@@ -35,6 +35,18 @@ if [ ! -d docbook-xsl ]; then
     unzip dbx.zip
     mv docbook-xsl-1.79.2 docbook-xsl
     rm dbx.zip
+fi
+
+# Get the eisvogel template for pandoc
+if [ ! -f eisvogel.latex ]; then
+    curl -fsSL -o ev.zip "https://github.com/Wandmalfarbe/pandoc-latex-template/releases/download/v2.1.0/Eisvogel-2.1.0.zip"
+    unzip ev.zip
+    rm -rf examples
+    rm ev.zip LICENSE CHANGELOG.md icon.png
+fi
+
+if [ ! -L images ]; then
+    ln -s "$(realpath ../manual/images)" images
 fi
 
 # Install phpdocumentor via Phive
