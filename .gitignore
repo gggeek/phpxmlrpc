@@ -2,7 +2,11 @@
 /.idea
 /doc/api
 /doc/build/.phpdoc
+/doc/build/.phive
 /doc/build/composer.lock
+/doc/build/docbook-xsl
+/doc/build/phive
+/doc/build/phpDocumentor
 /doc/build/vendor
 /doc/manual/phpxmlrpc_manual.html
 /doc/manual/phpxmlrpc_manual.pdf

@@ -14,6 +14,7 @@ if ($_SERVER['argc'] < 4) {
 $doc = $_SERVER['argv'][1];
 $xss = $_SERVER['argv'][2];
 $target = $_SERVER['argv'][3];
+$docbookDir = isset($_SERVER['argv'][4]) ? $_SERVER['argv'][4] : './build/vendor/docbook/docbook-xsl';
 
 if (!file_exists($doc))
   error("KO: file $doc cannot be found");
@@ -23,8 +24,8 @@ if (!file_exists($xss))
 info("Starting xsl conversion process...");
 
 // Replace tokens in the existing xslt file
-$docbookFoXslPath = realpath('./build/vendor/docbook/docbook-xsl/fo/docbook.xsl');
-$docbookChunkXslPath = realpath('./build/vendor/docbook/docbook-xsl/xhtml/chunk.xsl');
+$docbookFoXslPath = realpath($docbookDir.'/fo/docbook.xsl');
+$docbookChunkXslPath = realpath($docbookDir.'/xhtml/chunk.xsl');
 file_put_contents(
     $xss,
     str_replace(

@@ -2,11 +2,16 @@
 
 set -e
 
-cd "$(dirname -- "$(dirname -- "${BASH_SOURCE[0]}")")"
+cd "$(dirname -- "$(dirname -- "$(realpath "${BASH_SOURCE[0]}")")")"
+
+PHPDOC='./build/phpDocumentor'
+DOCBOOKXSLTDIR='./build/docbook-xsl'
+#PHPDOC='php ./build/vendor/bin/phpdoc'
+#DOCBOOKXSLTDIR='./build/vendor/docbook/docbook-xsl'
 
 ### API docs
 
-php ./build/vendor/bin/phpdoc run --cache-folder './build/.phpdoc' -d "$(realpath ../src/)" -t './api' --title PHPXMLRPC --defaultpackagename PHPXMLRPC
+$PHPDOC run --cache-folder './build/.phpdoc' -d "$(realpath ../src/)" -t './api' --title PHPXMLRPC --defaultpackagename PHPXMLRPC
 
 ### User Manual
 
@@ -18,6 +23,6 @@ php ./build/vendor/bin/phpdoc run --cache-folder './build/.phpdoc' -d "$(realpat
 # PDF file from asciidoc via docbook and apache fop
 # @todo test: is it faster to use pandoc+texlive (including tools download time)? Does it render better?
 asciidoctor -d book -b docbook -o './build/phpxmlrpc_manual.xml' './manual/phpxmlrpc_manual.adoc'
-php ./build/convert.php './build/phpxmlrpc_manual.xml' './build/custom.fo.xsl' './manual/phpxmlrpc_manual.fo.xml'
+php ./build/convert.php './build/phpxmlrpc_manual.xml' './build/custom.fo.xsl' './manual/phpxmlrpc_manual.fo.xml' "$DOCBOOKXSLTDIR"
 fop ./manual/phpxmlrpc_manual.fo.xml ./manual/phpxmlrpc_manual.pdf
 rm ./build/phpxmlrpc_manual.xml ./manual/phpxmlrpc_manual.fo.xml

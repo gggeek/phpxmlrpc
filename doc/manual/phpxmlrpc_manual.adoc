@@ -1144,8 +1144,8 @@ to trigger execution of uncontrolled PHP code on your server, opening the door t
 enable this option when you trust completely the remote server/client. DO NOT USE THIS WITH UNTRUSTED USER INPUT
 
 Note also that there are multiple limitations to this: the same PHP class definition must be available on both ends of
-the communication; the class constructor will be called but with no parameters at all, and methods such as `__unserialize`
-or `__wakeup` will not be called. Also, if a different toolkit than the phpxmlrpc library is used on the receiving side,
+the communication; the class constructor will be called but with no parameters at all, and methods such as `+__unserialize+`
+or `+__wakeup+` will not be called. Also, if a different toolkit than the phpxmlrpc library is used on the receiving side,
 it might reject the generated xml as invalid.
 
 === Code generation, Proxy objects & co.
