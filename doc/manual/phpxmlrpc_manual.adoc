@@ -1,9 +1,12 @@
 = XML-RPC for PHP User Manual
-:revision: 4.9.3
+Gaetano Giunta; Edd Dumbill
+4.9.3
 :keywords: xmlrpc, xml, rpc, webservices, http
-:toc: left
+:title-page:
+:toc:
+:toclevels: 3
 :imagesdir: images
-:source-highlighter: highlightjs
+:source-highlighter: rouge
 
 
 == Files in the distribution [[manifest]]
@@ -1431,7 +1434,7 @@ then access the debugger by pointing your browser at __http://127.0.0.1:8081__
 
 The interface should be self-explicative enough to need little documentation.
 
-image::debugger.gif[,,,,align="center"]
+image::debugger.jpg[debugger,458,385,,align="center"]
 
 To make sure that the debugger is working properly, you can use it make f.e. a "list available methods" call against the
 public demo server available at: Address: __gggeek.altervista.org__, Path: __/sw/xmlrpc/demo/server/server.php__
@@ -1707,23 +1710,3 @@ using more resources and a longer processing time, using the PHPXMLRPC library a
 The module was originally part of the EXTRAS package, available as a separate download from the sourceforge.net website;
 it has since become available as Packagist package `phpxmlrpc/polyfill-xmlrpc` and can be found on GitHub at
 https://github.com/gggeek/polyfill-xmlrpc
-
-++++++++++++++++++++++++++++++++++++++
-<!-- Keep this comment at the end of the file
-Local variables:
-mode: sgml
-sgml-omittag:nil
-sgml-shorttag:t
-sgml-minimize-attributes:nil
-sgml-always-quote-attributes:t
-sgml-indent-step:2
-sgml-indent-data:t
-sgml-parent-document:nil
-sgml-exposed-tags:nil
-sgml-local-catalogs:nil
-sgml-local-ecat-files:nil
-sgml-namecase-general:t
-sgml-general-insert-case:lower
-End:
--->
-++++++++++++++++++++++++++++++++++++++
