@@ -82,7 +82,6 @@ jobs:
                 if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
                 run: |
                     tar -cvzf demofiles.tgz demo
-                    echo "## XML-RPC for PHP version ${{ github.ref_name }} - $(date +%Y/%m/%d)" > announcement.txt
                     tail -n+2 NEWS.md | sed '/## XML-RPC for PHP version/Q' >> announcement.txt
 
             -   name: create release on github
