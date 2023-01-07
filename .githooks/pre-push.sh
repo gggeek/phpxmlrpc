@@ -38,7 +38,7 @@
 # @todo we could allow the variables `files` and `version_tag_regexp` to be set via git config parameters instead of hardcoded
 
 # List of files which do contain the version tag
-files='NEWS.md src/PhpXmlRpc.php doc/phpxmlrpc_manual.adoc'
+files='NEWS.md src/PhpXmlRpc.php doc/manual/phpxmlrpc_manual.adoc'
 
 # Regexp use to decide if a git tag is a version label
 version_tag_regexp='^v?[0-9]{1,4}\.[0-9]{1,4}(\.[0-9]{1,4})?'
