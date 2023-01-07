@@ -1,0 +1,135 @@
+name: CD
+
+on:
+    # we limit this workflow to pushes to master. No need to run on prs
+    push:
+        branches:
+            - master
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: checkout code
+                uses: actions/checkout@v3
+                with:
+                    fetch-depth: 0 # apparently required by tj-actions/changed-files
+
+            -   name: get changed files - manual
+                id: changed-manual
+                uses: tj-actions/changed-files@v35
+                with:
+                    files: |
+                        doc/manual/**
+
+            -   name: get changed files - source
+                id: changed-source
+                uses: tj-actions/changed-files@v35
+                with:
+                    files: |
+                        src/**
+
+            # build and upload api docs
+            # NB: this happens independently of releases!
+            -   name: generate and upload api docs
+                if: ${{ steps.changed-source.outputs.any_changed == 'true' }}
+                run: |
+                    chmod 755 ./doc/build/taskfile
+                    ./doc/build/taskfile setup_tools
+                    ./doc/build/taskfile build_api
+                    mv doc/api .
+                    git fetch
+                    git checkout gh-pages
+                    rm -rf doc-4/api
+                    mv ./api doc-4
+                    git add doc-4/api
+                    git commit -m 'update api docs'
+                    git push
+                    git checkout master
+
+            # build and upload manual
+            # NB: this happens _also_ independently of releases!
+            -   name: generate and upload manual
+                if: ${{ steps.changed-manual.outputs.any_changed == 'true' || (github.ref_type == 'tag' && startsWith('4.', github.ref_name)) }}
+                run: |
+                    chmod 755 ./doc/build/taskfile
+                    ./doc/build/taskfile setup_tools
+                    ./doc/build/taskfile build_manual
+                    mv doc/manual/phpxmlrpc_manual.pdf .
+                    git fetch
+                    git checkout gh-pages
+                    mv ./phpxmlrpc_manual.pdf doc-4
+                    git add doc-4/phpxmlrpc_manual.pdf
+                    git commit -m 'update pdf version of manual'
+                    git push
+                    cp doc-4/phpxmlrpc_manual.pdf .
+                    git checkout master
+                    mv ./phpxmlrpc_manual.pdf doc/manual
+
+            # create release on github, with data from the NEWS file and add docs+demo artifacts
+
+            -   name: create release assets
+                if: ${{ github.ref_type == 'tag' && startsWith('4.', github.ref_name) }}
+                run: |
+                    tar -cvzf demofiles.tgz demo
+                    echo "## XML-RPC for PHP version ${{ github.ref_name }} - $(date +%Y/%m/%d)" > announcement.txt
+                    tail -n+2 NEWS.md | sed '/## XML-RPC for PHP version/Q' >> announcement.txt
+
+            -   name: create release on github
+                if: ${{ github.ref_type == 'tag' && startsWith('4.', github.ref_name) }}
+                uses: softprops/action-gh-release@v1
+                with:
+                    body_path: announcement.txt
+                    files: |
+                        demofiles.tgz
+
+            # update github pages with release info
+            -   name: update website with info about the latest release
+                if: ${{ github.ref_type == 'tag' && startsWith('4.', github.ref_name) }}
+                run: |
+                    git fetch
+                    git checkout gh-pages
+                    sed -i 's|href="https://github.com/gggeek/phpxmlrpc/releases/tag/[^"]*"|href="https://github.com/gggeek/phpxmlrpc/releases/tag/${{ github.ref_name }}"|g' index.html
+                    sed -i 's|<span class="evidence">.*</span>|<span class="evidence">${{ github.ref_name }}</span>|' index.html
+                    sed -i "s|released on [^(]*|released on $(date '+%b. %-d, %Y') |" index.html
+                    sed -i "s|Page last updated:.*|Page last updated: $(date +%Y/%-m/%-d)|" index.html
+                    git add index.html
+                    git commit -m 'update index page with latest release'
+                    git push
+                    git checkout master
+
+            # deploy the lib to gggeek.altervista.org
+            # q: should we filter out alpha/beta releases?
+            -   name: upload lib to gggeek.altervista.org - src
+                if: ${{ github.ref_type == 'tag' && startsWith('4.', github.ref_name) }}
+                uses: SamKirkland/FTP-Deploy-Action@4.3
+                with:
+                    server: ftp.gggeek.altervista.org
+                    username: ${{ secrets.ftp_gggeek_altervista_org_user }}
+                    password: ${{ secrets.ftp_gggeek_altervista_org_password }}
+                    protocol: ftps
+                    local-dir: ./src
+                    server-dir: sw/xmlrpc/src/
+                    dangerous-clean-slate: true
+            -   name: upload lib to gggeek.altervista.org - demo
+                if: ${{ github.ref_type == 'tag' && startsWith('4.', github.ref_name) }}
+                uses: SamKirkland/FTP-Deploy-Action@4.3
+                with:
+                    server: ftp.gggeek.altervista.org
+                    username: ${{ secrets.ftp_gggeek_altervista_org_user }}
+                    password: ${{ secrets.ftp_gggeek_altervista_org_password }}
+                    protocol: ftps
+                    local-dir: ./demo
+                    server-dir: sw/xmlrpc/demo/
+                    dangerous-clean-slate: true
+            -   name: upload lib to gggeek.altervista.org - debugger
+                if: ${{ github.ref_type == 'tag' && startsWith('4.', github.ref_name) }}
+                uses: SamKirkland/FTP-Deploy-Action@4.3
+                with:
+                    server: ftp.gggeek.altervista.org
+                    username: ${{ secrets.ftp_gggeek_altervista_org_user }}
+                    password: ${{ secrets.ftp_gggeek_altervista_org_password }}
+                    protocol: ftps
+                    local-dir: ./debugger
+                    server-dir: sw/xmlrpc/debugger/
+                    dangerous-clean-slate: true
