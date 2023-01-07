@@ -24,6 +24,10 @@ class Encoder
         return self::$logger;
     }
 
+    /**
+     * @param $logger
+     * @return void
+     */
     public static function setLogger($logger)
     {
         self::$logger = $logger;
@@ -37,6 +41,10 @@ class Encoder
         return self::$parser;
     }
 
+    /**
+     * @param $parser
+     * @return void
+     */
     public static function setParser($parser)
     {
         self::$parser = $parser;
@@ -64,7 +72,6 @@ class Encoder
      *                         objects, see the details above;
      *                      - 'dates_as_objects': when set xmlrpc dateTimes are decoded as php DateTime objects
      *                      - 'extension_api': reserved for usage by phpxmlrpc-polyfill
-     *
      * @return mixed
      *
      * Feature creep -- add an option to allow converting xmlrpc dateTime values to unix timestamps (integers)
@@ -186,7 +193,6 @@ class Encoder
      *                       - 'auto_dates': when set, any string which respects the xmlrpc datetime format will be converted to a dateTime Value
      *                       - 'null_extension': when set, php NULL values will be converted to an xmlrpc <NIL> (or <EX:NIL>) Value
      *                       - 'extension_api': reserved for usage by phpxmlrpc-polyfill
-     *
      * @return Value
      *
      * Feature creep -- could support more types via optional type argument (string => datetime support has been added,
@@ -300,7 +306,6 @@ class Encoder
      *
      * @param string $xmlVal
      * @param array $options
-     *
      * @return Value|Request|Response|false false on error, or an instance of either Value, Request or Response
      *
      * @todo is this a good name/class for this method? It does something quite different from 'decode' after all

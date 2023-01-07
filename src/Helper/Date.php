@@ -19,8 +19,7 @@ class Date
      * adjustment for the local timezone's offset is made
      *
      * @param int $timet (timestamp)
-     * @param int $utc (0 or 1)
-     *
+     * @param bool|int $utc (0 or 1)
      * @return string
      */
     public static function iso8601Encode($timet, $utc = 0)
@@ -38,7 +37,7 @@ class Date
      * Given an ISO8601 date string, return a timestamp in the localtime, or UTC.
      *
      * @param string $idate
-     * @param int $utc either 0 (assume date is in local time) or 1 (assume date is in UTC)
+     * @param bool|int $utc either 0 (assume date is in local time) or 1 (assume date is in UTC)
      *
      * @return int (timestamp) 0 if the source string does not match the xmlrpc dateTime format
      */

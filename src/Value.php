@@ -44,11 +44,11 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     /** @var Value[]|mixed */
     public $me = array();
     /**
-     * @var int $mytype
+     * @var int
      * @internal
      */
     public $mytype = 0;
-    /** @var string|null $_php_class */
+    /** @var string|null */
     public $_php_class = null;
 
     public function getLogger()
@@ -59,6 +59,10 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         return self::$logger;
     }
 
+    /**
+     * @param $logger
+     * @return void
+     */
     public static function setLogger($logger)
     {
         self::$logger = $logger;
@@ -72,7 +76,12 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         return self::$charsetEncoder;
     }
 
-    /// @todo this should be a static method
+    /**
+     * @param $charsetEncoder
+     * @return void
+     *
+     * @todo this should be a static method
+     */
     public function setCharsetEncoder($charsetEncoder)
     {
         self::$charsetEncoder = $charsetEncoder;
@@ -134,7 +143,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @param mixed $val
      * @param string $type allowed values: i4, i8, int, boolean, string, double, dateTime.iso8601, base64, null.
-     *
      * @return int 1 or 0 on failure
      */
     public function addScalar($val, $type = 'string')
@@ -189,7 +197,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * Fails otherwise.
      *
      * @param Value[] $values
-     *
      * @return int 1 or 0 on failure
      *
      * @todo add some checking for $values to be an array of xmlrpc values?
@@ -220,7 +227,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * Fails otherwise.
      *
      * @param Value[] $values
-     *
      * @return int 1 or 0 on failure
      *
      * @todo add some checking for $values to be an array?
@@ -266,7 +272,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @param string $typ
      * @param Value[]|mixed $val
      * @param string $charsetEncoding
-     *
      * @return string
      */
     protected function serializedata($typ, $val, $charsetEncoding = '')
@@ -367,7 +372,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * Returns the xml representation of the value. XML prologue not included.
      *
      * @param string $charsetEncoding the charset to be used for serialization. if null, US-ASCII is assumed
-     *
      * @return string
      */
     public function serialize($charsetEncoding = '')
@@ -384,7 +388,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * Works only on xmlrpc values of type struct.
      *
      * @param string $key the name of the struct member to be looked up
-     *
      * @return boolean
      *
      * @deprecated use array access, e.g. isset($val[$key])
@@ -401,7 +404,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * Will raise a php warning if struct member of given name does not exist.
      *
      * @param string $key the name of the struct member to be looked up
-     *
      * @return Value
      *
      * @deprecated use array access, e.g. $val[$key]
@@ -415,6 +417,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Reset internal pointer for xmlrpc values of type struct.
+     * @return void
+     *
      * @deprecated iterate directly over the object using foreach instead
      */
     public function structreset()
@@ -541,7 +545,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @internal required to be public to implement an Interface
      *
      * @return \ArrayIterator
-     *
      */
     #[\ReturnTypeWillChange]
     public function getIterator()
@@ -563,6 +566,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @param mixed $offset
      * @param mixed $value
+     * @return void
      *
      * @throws \Exception
      */
@@ -611,7 +615,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @internal required to be public to implement an Interface
      *
      * @param mixed $offset
-     *
      * @return bool
      */
     #[\ReturnTypeWillChange]
@@ -634,6 +637,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @internal required to be public to implement an Interface
      *
      * @param mixed $offset
+     * @return void
      *
      * @throws \Exception
      */
@@ -659,7 +663,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @internal required to be public to implement an Interface
      *
      * @param mixed $offset
-     *
      * @return mixed|Value|null
      * @throws \Exception
      */

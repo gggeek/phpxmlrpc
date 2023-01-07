@@ -31,6 +31,7 @@ class Logger
      *
      * @param string $message
      * @param string $encoding
+     * @return void
      */
     public function debugMessage($message, $encoding = null)
     {
@@ -64,6 +65,7 @@ class Logger
     /**
      * Writes a message to the error log.
      * @param string $message
+     * @return void
      */
     public function errorLog($message)
     {

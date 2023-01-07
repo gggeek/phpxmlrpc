@@ -99,6 +99,7 @@ class XMLParser
      * @param string $returnType
      * @param int $accept a bit-combination of self::ACCEPT_REQUEST, self::ACCEPT_RESPONSE, self::ACCEPT_VALUE
      * @param array $options passed to the xml parser, in addition to the options received in the constructor
+     * @return void
      */
     public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3, $options = array())
     {
@@ -180,6 +181,7 @@ class XMLParser
      * @param string $name
      * @param $attrs
      * @param bool $acceptSingleVals DEPRECATED use the $accept parameter instead
+     * @return void
      */
     public function xmlrpc_se($parser, $name, $attrs, $acceptSingleVals = false)
     {
@@ -344,6 +346,7 @@ class XMLParser
      * @param resource $parser
      * @param $name
      * @param $attrs
+     * @return void
      */
     public function xmlrpc_se_any($parser, $name, $attrs)
     {
@@ -357,6 +360,7 @@ class XMLParser
      * @param resource $parser
      * @param string $name
      * @param int $rebuildXmlrpcvals >1 for rebuilding xmlrpcvals, 0 for rebuilding php values, -1 for xmlrpc-extension compatibility
+     * @return void
      */
     public function xmlrpc_ee($parser, $name, $rebuildXmlrpcvals = 1)
     {
@@ -544,6 +548,7 @@ class XMLParser
      *
      * @param resource $parser
      * @param string $name
+     * @return void
      */
     public function xmlrpc_ee_fast($parser, $name)
     {
@@ -556,6 +561,7 @@ class XMLParser
      *
      * @param resource $parser
      * @param string $name
+     * @return void
      */
     public function xmlrpc_ee_epi($parser, $name)
     {
@@ -568,6 +574,7 @@ class XMLParser
      *
      * @param resource $parser
      * @param string $data
+     * @return void
      */
     public function xmlrpc_cd($parser, $data)
     {
@@ -588,6 +595,7 @@ class XMLParser
      *
      * @param $parser
      * @param string data
+     * @return void
      */
     public function xmlrpc_dh($parser, $data)
     {
@@ -703,7 +711,6 @@ class XMLParser
      * Helper function: checks if an xml chunk has a charset declaration (BOM or in the xml declaration).
      *
      * @param string $xmlChunk
-     *
      * @return bool
      */
     public static function hasEncoding($xmlChunk)

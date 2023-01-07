@@ -50,6 +50,7 @@ class Charset
 
     /**
      * @param string $tableName
+     * @return void
      *
      * @throws \Exception for unsupported $tableName
      *
@@ -127,7 +128,6 @@ class Charset
      * @param string $data
      * @param string $srcEncoding
      * @param string $destEncoding
-     *
      * @return string
      *
      * @todo do a bit of basic benchmarking (strtr vs. str_replace)
@@ -285,7 +285,6 @@ class Charset
      *
      * @param string $encoding charset to be tested
      * @param string|array $validList comma separated list of valid charsets (or array of charsets)
-     *
      * @return bool
      */
     public function isValidCharset($encoding, $validList)
@@ -313,7 +312,6 @@ class Charset
      * @deprecated
      *
      * @param string $charset
-     *
      * @return array
      * @throws \Exception for unknown/unsupported charsets
      */

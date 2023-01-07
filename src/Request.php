@@ -39,6 +39,10 @@ class Request
         return self::$logger;
     }
 
+    /**
+     * @param $logger
+     * @return void
+     */
     public static function setLogger($logger)
     {
         self::$logger = $logger;
@@ -52,6 +56,10 @@ class Request
         return self::$parser;
     }
 
+    /**
+     * @param $parser
+     * @return void
+     */
     public static function setParser($parser)
     {
         self::$parser = $parser;
@@ -65,7 +73,12 @@ class Request
         return self::$charsetEncoder;
     }
 
-    /// @todo this should be a static method
+    /**
+     * @param $charsetEncoder
+     * @return void
+     *
+     * @todo this should be a static method
+     */
     public function setCharsetEncoder($charsetEncoder)
     {
         self::$charsetEncoder = $charsetEncoder;
@@ -87,7 +100,6 @@ class Request
      * @internal this function will become protected in the future
      *
      * @param string $charsetEncoding
-     *
      * @return string
      */
     public function xml_header($charsetEncoding = '')
@@ -113,6 +125,7 @@ class Request
      * @internal this function will become protected in the future
      *
      * @param string $charsetEncoding
+     * @return void
      */
     public function createPayload($charsetEncoding = '')
     {
@@ -137,7 +150,6 @@ class Request
      * Gets/sets the xmlrpc method to be invoked.
      *
      * @param string $methodName the method to be set (leave empty not to set it)
-     *
      * @return string the method that will be invoked
      */
     public function method($methodName = '')
@@ -153,7 +165,6 @@ class Request
      * Returns xml representation of the message. XML prologue included.
      *
      * @param string $charsetEncoding
-     *
      * @return string the xml representation of the message, xml prologue included
      */
     public function serialize($charsetEncoding = '')
@@ -168,7 +179,6 @@ class Request
      * Checks that $params is actually a Value object and not a plain php value.
      *
      * @param Value $param
-     *
      * @return boolean false on failure
      */
     public function addParam($param)
@@ -187,7 +197,6 @@ class Request
      * Returns the nth parameter in the request. The index zero-based.
      *
      * @param integer $i the index of the parameter to fetch (zero based)
-     *
      * @return Value the i-th parameter
      */
     public function getParam($i)
@@ -216,7 +225,6 @@ class Request
      * @param resource $fp stream pointer
      * @param bool $headersProcessed
      * @param string $returnType
-     *
      * @return Response
      */
     public function parseResponseFile($fp, $headersProcessed = false, $returnType = 'xmlrpcvals')
@@ -238,7 +246,6 @@ class Request
      *                               consequent decoding
      * @param string $returnType decides return type, i.e. content of response->value(). Either 'xmlrpcvals', 'xml' or
      *                           'phpvals'
-     *
      * @return Response
      *
      * @todo parsing Responses is not really the responsibility of the Request class. Maybe of the Client...
@@ -422,6 +429,7 @@ class Request
      * Enables/disables the echoing to screen of the xmlrpc responses received.
      *
      * @param integer $level values 0, 1, 2 are supported
+     * @return void
      */
     public function setDebug($level)
     {

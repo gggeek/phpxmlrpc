@@ -14,7 +14,6 @@ class Http
      * @internal this function will become protected in the future
      *
      * @param string $buffer the string to be decoded
-     *
      * @return string
      */
     public static function decodeChunked($buffer)
@@ -68,7 +67,6 @@ class Http
      * @param string $data the http response, headers and body. It will be stripped of headers
      * @param bool $headersProcessed when true, we assume that response inflating and dechunking has been already carried out
      * @param int $debug when != 0, logs to screen messages detailing info about the parsed data
-     *
      * @return array with keys 'headers', 'cookies', 'raw_data' and 'status_code'
      * @throws HttpException
      *

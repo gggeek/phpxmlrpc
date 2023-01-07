@@ -50,6 +50,10 @@ class Client
 
     public $cookies = array();
     public $extracurlopts = array();
+
+    /**
+     * @var int
+     */
     public $use_curl = self::USE_CURL_AUTO;
 
     /**
@@ -63,6 +67,8 @@ class Client
     public $no_multicall = false;
 
     /**
+     * @var array
+     *
      * List of http compression methods accepted by the client for responses.
      * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib.
      *
@@ -73,8 +79,10 @@ class Client
     public $accepted_compression = array();
 
     /**
+     * @var string|null
+     *
      * Name of compression scheme to be used for sending requests.
-     * Either null, gzip or deflate.
+     * Either null, 'gzip' or 'deflate'.
      */
     public $request_compression = '';
 
@@ -84,13 +92,23 @@ class Client
      */
     public $xmlrpc_curl_handle = null;
 
-    /// Whether to use persistent connections for http 1.1 and https
+    /**
+     * @var bool
+     *
+     * Whether to use persistent connections for http 1.1 and https.
+     */
     public $keepalive = false;
 
-    /// Charset encodings that can be decoded without problems by the client
+    /**
+     * @var string[]
+     *
+     * Charset encodings that can be decoded without problems by the client
+     */
     public $accepted_charset_encodings = array();
 
     /**
+     * @var string
+     *
      * The charset encoding that will be used for serializing request sent by the client.
      * It defaults to NULL, which means using US-ASCII and encoding all characters outside the ASCII printable range
      * using their xml character entity representation (this has the benefit that line end characters will not be mangled
@@ -101,6 +119,8 @@ class Client
     public $request_charset_encoding = '';
 
     /**
+     * @var string
+     *
      * Decides the content of Response objects returned by calls to send() and multicall().
      * Valid values are 'xmlrpcvals', 'phpvals' or 'xml'.
      *
@@ -116,6 +136,8 @@ class Client
     public $return_type = XMLParser::RETURN_XMLRPCVALS;
 
     /**
+     * @var string
+     *
      * Sent to servers in http headers.
      */
     public $user_agent;
@@ -128,6 +150,10 @@ class Client
         return self::$logger;
     }
 
+    /**
+     * @param $logger
+     * @return void
+     */
     public static function setLogger($logger)
     {
         self::$logger = $logger;
@@ -230,6 +256,7 @@ class Client
      * the server returns. Never leave it enabled for production!
      *
      * @param integer $level values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
+     * @return void
      */
     public function setDebug($level)
     {
@@ -249,6 +276,7 @@ class Client
      * @param integer $authType auth type. See curl_setopt man page for supported auth types. Defaults to CURLAUTH_BASIC
      *                          (basic auth). Note that auth types NTLM and Digest will only work if the Curl php
      *                          extension is enabled.
+     * @return void
      */
     public function setCredentials($user, $password, $authType = 1)
     {
@@ -266,6 +294,7 @@ class Client
      *
      * @param string $cert the name of a file containing a PEM formatted certificate
      * @param string $certPass the password required to use it
+     * @return void
      */
     public function setCertificate($cert, $certPass = '')
     {
@@ -280,6 +309,7 @@ class Client
      *
      * @param string $caCert certificate file name (or dir holding certificates)
      * @param bool $isDir set to true to indicate cacert is a dir. defaults to false
+     * @return void
      */
     public function setCaCertificate($caCert, $isDir = false)
     {
@@ -298,6 +328,7 @@ class Client
      *
      * @param string $key The name of a file containing a private SSL key
      * @param string $keyPass The secret password needed to use the private SSL key
+     * @return void
      */
     public function setKey($key, $keyPass)
     {
@@ -313,6 +344,7 @@ class Client
      * To specify custom SSL certificates to validate the server with, use the setCaCertificate method.
      *
      * @param bool $i enable/disable verification of peer certificate
+     * @return void
      */
     public function setSSLVerifyPeer($i)
     {
@@ -325,6 +357,7 @@ class Client
      * Note that support for value 1 has been removed in cURL 7.28.1
      *
      * @param int $i Set to 1 to only the existence of a CN, not that it matches
+     * @return void
      */
     public function setSSLVerifyHost($i)
     {
@@ -335,6 +368,7 @@ class Client
      * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let cURL decide
      *
      * @param int $i
+     * @return void
      */
     public function setSSLVersion($i)
     {
@@ -352,6 +386,7 @@ class Client
      * @param string $proxyPassword Leave blank if proxy has public access
      * @param int $proxyAuthType defaults to CURLAUTH_BASIC (Basic authentication protocol); set to constant CURLAUTH_NTLM
      *                           to use NTLM auth with proxy (has effect only when the client uses the HTTP 1.1 protocol)
+     * @return void
      */
     public function setProxy($proxyHost, $proxyPort, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1)
     {
@@ -371,6 +406,7 @@ class Client
      * It is up to the xmlrpc server to return compressed responses when receiving such requests.
      *
      * @param string $compMethod either 'gzip', 'deflate', 'any' or ''
+     * @return void
      */
     public function setAcceptedCompression($compMethod)
     {
@@ -391,6 +427,7 @@ class Client
      * uncompressed requests is not yet implemented).
      *
      * @param string $compMethod either 'gzip', 'deflate' or ''
+     * @return void
      */
     public function setRequestCompression($compMethod)
     {
@@ -411,6 +448,7 @@ class Client
      * @param string $path leave this empty unless the xml-rpc server only accepts RFC 2109 cookies
      * @param string $domain leave this empty unless the xml-rpc server only accepts RFC 2109 cookies
      * @param int $port leave this empty unless the xml-rpc server only accepts RFC 2109 cookies
+     * @return void
      *
      * @todo check correctness of urlencoding cookie value (copied from php way of doing it, but php is generally sending
      *       response not requests. We do the opposite...)
@@ -435,6 +473,7 @@ class Client
      * It allows eg. to bind client to a specific IP interface / address.
      *
      * @param array $options
+     * @return void
      */
     public function setCurlOptions($options)
     {
@@ -443,6 +482,7 @@ class Client
 
     /**
      * @param int $useCurlMode self::USE_CURL_ALWAYS, self::USE_CURL_AUTO or self::USE_CURL_NEVER
+     * @return void
      */
     public function setUseCurl($useCurlMode)
     {
@@ -456,6 +496,7 @@ class Client
      * The default user agent string includes the name of this library and the version number.
      *
      * @param string $agentString
+     * @return void
      */
     public function setUserAgent($agentString)
     {
@@ -488,7 +529,6 @@ class Client
      *                       for http/2 without tls. Note that 'h2c' will not use the h2c 'upgrade' method, and be
      *                       thus incompatible with any server/proxy not supporting http/2. This is because POST
      *                       request are not compatible with h2c upgrade.
-     *
      * @return Response|Response[] Note that the client will always return a Response object, even if the call fails
      *
      * @todo allow throwing exceptions instead of returning responses in case of failed calls and/or Fault responses
@@ -589,7 +629,6 @@ class Client
      * @param string $proxyPassword
      * @param int $proxyAuthType
      * @param string $method
-     *
      * @return Response
      */
     protected function sendPayloadHTTP10($req, $server, $port, $timeout = 0, $username = '', $password = '',
@@ -624,7 +663,6 @@ class Client
      * @param string $key
      * @param string $keyPass
      * @param int $sslVersion
-     *
      * @return Response
      */
     protected function sendPayloadHTTPS($req, $server, $port, $timeout = 0, $username = '',  $password = '',
@@ -660,7 +698,6 @@ class Client
      * @param string $key
      * @param string $keyPass @todo not implemented yet.
      * @param int $sslVersion @todo not implemented yet. See http://php.net/manual/en/migration56.openssl.php
-     *
      * @return Response
      *
      * @todo refactor: we get many options for the call passed in, but some we use from $this. We should clean that up
@@ -886,7 +923,6 @@ class Client
      * @param string $key
      * @param string $keyPass
      * @param int $sslVersion
-     *
      * @return Response
      *
      * @todo refactor: we get many options for the call passed in, but some we use from $this. We should clean that up
@@ -1197,7 +1233,6 @@ class Client
      * @param string $method the http protocol variant to be used. See the details in the docs for the send() method
      * @param boolean $fallback When true, upon receiving an error during multicall, multiple single calls will be
      *                         attempted
-     *
      * @return Response[]
      */
     public function multicall($reqs, $timeout = 0, $method = '', $fallback = true)
@@ -1256,7 +1291,6 @@ class Client
      * @param Request[] $reqs
      * @param int $timeout
      * @param string $method
-     *
      * @return Response[]|string|false|Response string when return_type=xml, a single Response when the call returned a
      *                                          fault, false when the returned response does not conform to what we expect
      *                                          from a multicall response
