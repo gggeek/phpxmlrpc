@@ -30,9 +30,10 @@ Automatically-generated documentation for the API is available online at [http:/
 You are encouraged to look also at the code examples found in the demo/ directory.
 
 Note: to reduce the size of the download, the demo files are not part of the default package installed with Composer.
-You can either check them out online at https://github.com/gggeek/phpxmlrpc/tree/master/demo, or make sure they are
-available locally, by installing the library using Composer option `--prefer-install=source` (when doing so, make sure
-that the demo folder is not directly accessible from the internet, ie. it is not within the webserver root directory).
+You can either check them out online at https://github.com/gggeek/phpxmlrpc/tree/master/demo, download them as a separate
+tarball at https://github.com/gggeek/phpxmlrpc/releases or make sure they are available locally, by installing the library
+using Composer option `--prefer-install=source`. Whatever the method chosen, make sure that the demo folder is not directly
+accessible from the internet, ie. it is not within the webserver root directory).
 
 License
 -------
