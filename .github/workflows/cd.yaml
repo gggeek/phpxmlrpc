@@ -18,6 +18,10 @@ jobs:
                 with:
                     fetch-depth: 0 # apparently required by tj-actions/changed-files
 
+            -   name: debug
+                run: |
+                    echo "${{ github.ref_type }} - ${{ github.ref_name }}"
+
             -   name: get changed files - manual
                 id: changed-manual
                 uses: tj-actions/changed-files@v35
