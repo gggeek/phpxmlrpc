@@ -1,7 +1,12 @@
 name: CD
 
 on:
-    # we limit this workflow to pushes to master and to tags. No need to run on prs
+    # We limit this workflow to pushes to master and to tags. No need to run on prs
+    # @todo when pushing a tag, this workflow will likely run twice, basically in parallel (once for the branch, once for
+    #        the tag). Can we avoid that, while still making it run for both tag and branch pushes? Or would it be enough
+    #        to just run it on branches, instead of updating the manual and api docs on every commit? We could maybe move
+    #        just the api docs generation to a separate workflow.
+    #        We could as well avoid updating the pdf manual and/or the latest-release on the site for beta releases...
     push:
         branches:
             - master
@@ -17,10 +22,6 @@ jobs:
                 uses: actions/checkout@v3
                 with:
                     fetch-depth: 0 # apparently required by tj-actions/changed-files
-
-            #-   name: debug
-            #    run: |
-            #        echo "${{ github.ref_type }} - ${{ github.ref_name }}"
 
             -   name: get changed files - manual
                 id: changed-manual
@@ -91,6 +92,7 @@ jobs:
                     body_path: announcement.txt
                     files: |
                         demofiles.tgz
+                        doc/manual/phpxmlrpc_manual.pdf
 
             # update github pages with release info
             -   name: update website with info about the latest release
