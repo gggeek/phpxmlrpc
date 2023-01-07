@@ -6,7 +6,7 @@
 
 * improved: updated the user's manual to be inline with the version4 API and modern coding practices.
   The manual is now bundled in the default distribution tarball, and is easily viewable as html, provided you can
-  serve it using a webserver.
+  serve it using a webserver. It is also available as pdf at https://gggeek.github.io/phpxmlrpc/doc-4/phpxmlrpc_manual.pdf
 
 * fixed: the value for error 'no_http2' has been switched from 15 to 19 to avoid a collision
 
