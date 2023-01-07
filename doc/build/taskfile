@@ -65,6 +65,8 @@ function setup_tools() {
     #rm phive.phar.asc
     chmod +x build/phive
     cd build; ./phive install --trust-gpg-keys F33A0AF69AF7A8B15017DB526DA3ACC4991FFAE5 -t "$(pwd)" phpdocumentor; cd ..
+    # phive behaves weirdly... fix that
+    if [ -L ./build/phpDocumentor ]; then mv  ./build/phpDocumentor ./build/phpdocumentor; fi
 
     #sudo chown -R "$(id -u):$(id -g)" build/vendor
 
