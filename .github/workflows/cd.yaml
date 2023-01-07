@@ -7,7 +7,8 @@ on:
             - master
 
 jobs:
-    release:
+    # we could try to split in 2 jobs: one for docs and one for release, but the release one needs the asset from the docs one...
+    docs_and_release:
         runs-on: ubuntu-latest
         steps:
             -   name: checkout code
@@ -28,6 +29,9 @@ jobs:
                 with:
                     files: |
                         src/**
+
+            -   name: set git credentials as user triggering the build
+                uses: fregante/setup-git-user@v1
 
             # build and upload api docs
             # NB: this happens independently of releases!
