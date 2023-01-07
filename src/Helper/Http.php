@@ -5,7 +5,10 @@ namespace PhpXmlRpc\Helper;
 use PhpXmlRpc\Exception\HttpException;
 use PhpXmlRpc\PhpXmlRpc;
 
-/// @todo allow usage of a custom Logger via the DIC(ish) pattern we use in other classes
+/**
+ *
+ * @todo allow usage of a custom Logger via the DIC(ish) pattern we use in other classes
+ */
 class Http
 {
     /**

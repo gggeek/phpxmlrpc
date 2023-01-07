@@ -12,7 +12,7 @@
     const content = "include::phpxmlrpc_manual.adoc[]"
     try {
         let html = asciidoctor.convert(content, {safe: 'safe'});
-        /// @todo we should make this error parsing more robust, in case we want to load a different version  of jsmin above
+        /// @todo we should make this error parsing more robust, in case we want to load a different version of asciidoctor.min.js above
         if (html.includes('Unresolved directive in &lt;stdin&gt; - include::phpxmlrpc_manual.adoc[]')) {
             html = 'ERROR: you are most likely viewing this file by loading it from the filesystem. You need to view it via an http request, ie. use a webserver.'
         }
