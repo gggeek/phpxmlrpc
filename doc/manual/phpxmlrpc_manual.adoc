@@ -9,23 +9,6 @@ Gaetano Giunta; Edd Dumbill
 :source-highlighter: rouge
 
 
-== Files in the distribution [[manifest]]
-
-debugger/*:: a graphical debugger which can be used to test calls to xml-rpc servers
-
-demo/*:: example code for implementing both client and server functionality. Only included when installing with `--prefer-install=source`
-
-doc/*:: the documentation, including this manual, and the list of API changes between versions 3 and 4
-
-extras/*:: php utility scripts, such as a benchmark suite and an environment compatibility checker. Only included when installing with `--prefer-install=source`
-
-lib/*:: a compatibility layer for applications which still rely on version 3 of the API
-
-src/*:: the XML-RPC library classes. You can autoload these via Composer, or via a dedicated Autoloader class
-
-tests/*:: the test suite for the library, written using PhpUnit, and the configuration to run it in a local Docker container. Only included when installing with `--prefer-install=source`
-
-
 == A foreword [[foreword]]
 
 You might be surprised by some API design choices made by this library. In order to understand that, please keep
@@ -114,11 +97,15 @@ use PhpXmlRpc\Value;
 $myString = new Value("Hello, World!");
 $myInt = new Value(1267, "int");
 $myBool = new Value(1, Value::$xmlrpcBoolean);
-$myString2 = new Value(1.24, Value::$xmlrpcString); // note: this will serialize a php float value as xml-rpc string
-$myBase64 = new Value(file_get_contents('my.gif'), Value::$xmlrpcBase64); // the lib will take care of base64 encoding
+// note: this will serialize a php float value as xml-rpc string
+$myString2 = new Value(1.24, Value::$xmlrpcString);
+// the lib will take care of base64 encoding
+$myBase64 = new Value(file_get_contents('my.gif'), Value::$xmlrpcBase64);
 $myDate1 = new Value(new DateTime(), Value::$xmlrpcDateTime);
-$myDate2 = new Value(time(), Value::$xmlrpcDateTime); // when passing in an int, it is assumed to be a UNIX timestamp
-$myDate3 = new Value(date("Ymd\TH:i:s", time()), Value::$xmlrpcDateTime); // when passing in a string, you have to take care of the formatting
+// when passing in an int, it is assumed to be a UNIX timestamp
+$myDate2 = new Value(time(), Value::$xmlrpcDateTime);
+// when passing in a string, you have to take care of the formatting
+$myDate3 = new Value(date("Ymd\TH:i:s", time()), Value::$xmlrpcDateTime);
 ----
 
 The fourth constructor form can be used to compose complex XML-RPC values. The first argument is either a simple array
@@ -170,7 +157,8 @@ that they can be manipulated as if they were arrays:
 ----
 if (count($structValue)) {
     foreach($structValue as $elementName => $elementValue) {
-        echo "Struct member '$elementName' is of type " . $elementValue->scalartyp() . "\n"; // do not forget html-escaping $elementName in real life!
+        // do not forget html-escaping $elementName in real life!
+        echo "Struct member '$elementName' is of type " . $elementValue->scalartyp() . "\n";
     }
 } else {
     echo "Struct has no members\n";
@@ -240,7 +228,8 @@ use PhpXmlRpc\Encoder;
 $data = new Encoder()->decode($structValue);
 if (count($data)) {
     foreach($data as $elementName => $element) {
-        echo "Struct member '$elementName' is of type " . gettype($element) . "\n"; // do not forget html-escaping $elementName in real life!
+        // do not forget html-escaping $elementName in real life!
+        echo "Struct member '$elementName' is of type " . gettype($element) . "\n";
     }
 } else {
     echo "Struct has no members\n";
@@ -386,16 +375,21 @@ use PhpXmlRpc\Request;
 use PhpXmlRpc\Value;
 
 $stateNo = (int)$_POST["stateno"];
-$req = new Request('examples.getStateName', array(new Value($stateNo, Value::$xmlrpcInt)));
+$req = new Request(
+    'examples.getStateName',
+    array(new Value($stateNo, Value::$xmlrpcInt))
+);
 $client = new Client("https://phpxmlrpc.sourceforge.net/server.php");
 $resp = $client->send($req);
 if (!$resp->faultCode()) {
     $v = $resp->value();
     print "State number $stateNo is " . htmlentities($v->scalarval()) . "<BR>";
-    print "<HR>I got this xml back<BR><PRE>" . htmlentities($resp->serialize()) . "</PRE><HR>\n";
+    print "<HR>I got this xml back<BR><PRE>" . htmlentities($resp->serialize()) .
+        "</PRE><HR>\n";
 } else {
     print "Fault <BR>";
-    print "Code: " . htmlentities($resp->faultCode()) . "<BR>" . "Reason: '" . htmlentities($resp->faultString()) . "'<BR>";
+    print "Code: " . htmlentities($resp->faultCode()) . "<BR>" . "Reason: '" .
+        htmlentities($resp->faultString()) . "'<BR>";
 }
 ----
 
@@ -414,17 +408,23 @@ use PhpXmlRpc\Request;
 use PhpXmlRpc\Value;
 
 $stateNo = (int)$_POST["stateno"];
-$req = new Request('examples.getStateName', array(new Value($stateNo, Value::$xmlrpcInt)));
+$req = new Request(
+    'examples.getStateName',
+    array(new Value($stateNo, Value::$xmlrpcInt))
+);
 $client = new Client("https://phpxmlrpc.sourceforge.net/server.php");
 $client->return_type = XMLParser::RETURN_PHP;
 $resp = $client->send($req);
 if (!$resp->faultCode()) {
     $v = $resp->value();
-    print "State number $stateNo is " . htmlentities($v) . "<BR>"; // no need to call `scalarval` here
-    print "<HR>I got this xml back<BR><PRE>" . htmlentities($resp->serialize()) . "</PRE><HR>\n";
+    // no need to call `scalarval` here
+    print "State number $stateNo is " . htmlentities($v) . "<BR>";
+    print "<HR>I got this xml back<BR><PRE>" . htmlentities($resp->serialize()) .
+        "</PRE><HR>\n";
 } else {
     print "Fault <BR>";
-    print "Code: " . htmlentities($resp->faultCode()) . "<BR>" . "Reason: '" . htmlentities($resp->faultString()) . "'<BR>";
+    print "Code: " . htmlentities($resp->faultCode()) . "<BR>" . "Reason: '" .
+        htmlentities($resp->faultString()) . "'<BR>";
 }
 ----
 
@@ -479,6 +479,7 @@ and will try its best to execute them all, even if one of them fails, but there 
 In order to take advantage of multicall, either use the Client's `multicall` method, or just pass an array of Request to
 the `send` method:
 
+[source, php]
 ----
 $m1 = new PhpXmlRpc\Request('system.methodHelp');
 $m2 = new PhpXmlRpc\Request('system.methodSignature');
@@ -596,8 +597,8 @@ use PhpXmlRpc\Value;
 
 $findstate_sig = array(array(Value::$xmlrpcString, Value::$xmlrpcInt));
 
-$findstate_doc = 'When passed an integer between 1 and 51 returns the name of a US state, where the integer is the index' .
-    'of that state name in an alphabetic order.';
+$findstate_doc = 'When passed an integer between 1 and 51 returns the name of a US ' .
+    'state, where the integer is the index of that state name in an alphabetic order.';
 
 $srv = new Server(array(
     "examples.getStateName" => array(
@@ -628,7 +629,8 @@ $findstate_doc = 'Echoes back to the client the received value, regardless of it
 $srv = new Server(array(
     "echoBack" => array(
         "function" => "...",
-        "signature" => $echoback_sig, // this sig guarantees that the method handler will be called with one and only one parameter
+        // this sig guarantees that the method handler will be called with one and only one parameter
+        "signature" => $echoback_sig,
         "docstring" => $echoback_doc
     )
 ));
@@ -667,9 +669,12 @@ use PhpXmlRpc\Value;
 
 function foo ($xmlrpcreq)
 {
-    $meth = $xmlrpcreq->method(); // retrieve method name
-    $par = $xmlrpcreq->getParam(0); // retrieve value of first parameter - assumes at least one param received
-    $val = $par->scalarval(); // decode value of first parameter - assumes it is a scalar value
+    // retrieve method name
+    $meth = $xmlrpcreq->method();
+    // retrieve value of first parameter - assumes at least one param received
+    $par = $xmlrpcreq->getParam(0);
+    // decode value of first parameter - assumes it is a scalar value
+    $val = $par->scalarval();
 
     // note that we could also have achieved the same this way:
     //$val = new PhpXmlRpc\Encoder()->decode($xmlrpcreq)[0];
@@ -714,7 +719,8 @@ function foo($usr_id, $out_lang='en')
         return array(
             'name' => 'Joe',
             'age' => 27,
-            'picture' => new Value(file_get_contents($picOfTheGuy), 'base64'), // it is possible to mix php values and Value objects!
+            // it is possible to mix php values and Value objects!
+            'picture' => new Value(file_get_contents($picOfTheGuy), 'base64'),
         );
 }
 
@@ -769,7 +775,8 @@ have the desired effect. You can then use the `service` method of the server ins
 ----
 use PhpXmlRpc\Server;
 
-$s = new Server($myDispMap, 0); // second parameter = 0 prevents automatic servicing of request
+// second parameter = 0 prevents automatic servicing of request
+$s = new Server($myDispMap, 0);
 
 // ... some code that does other stuff here
 
@@ -794,7 +801,8 @@ $srv = new Server(); // not passing a dispatch map prevents automatic servicing 
 
 // ... some code that does other stuff here, including setting dispatch map into server object
 
-$resp = $srv->service($xmlrpc_request_body, true); // parse a variable instead of POST body, retrieve response payload
+// parse a variable instead of POST body, retrieve response payload
+$resp = $srv->service($xmlrpc_request_body, true);
 
 // ... some code that does other stuff with xml response $resp here
 ----
@@ -1007,10 +1015,13 @@ configured to return non-UTF8 encoded strings to PHP. Example usage:
 ----
 use PhpXmlRpc\Value;
 
-$latin1String = utf8_decode('Hélène'); // This is quite contrived. It is done because the asciidoc manual is saved in UTF-8...
+// This is quite contrived. It is done because the asciidoc manual is saved in UTF-8...
+$latin1String = utf8_decode('Hélène');
 $v = new Value($latin1String);
-PhpxmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1'; // Feel free to set this as early as possible
-$xmlSnippet = $v->serialize(); // The xml-rpc value will be correctly serialized as the french name
+// Feel free to set this as early as possible
+PhpxmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
+// The xml-rpc value will be correctly serialized as the french name
+$xmlSnippet = $v->serialize();
 ----
 
 ==== $xmlpc_double_precision
@@ -1123,7 +1134,10 @@ Example:
 ----
 $text = '<value><array><data><value>Hello world</value></data></array></value>';
 $val = $encoder::decodeXml($text);
-if ($val) echo 'Found a value of type ' . $val->kindOf(); else echo 'Found invalid xml';
+if ($val)
+    echo 'Found a value of type ' . $val->kindOf();
+else
+    echo 'Found invalid xml';
 ----
 
 === Transferring PHP objects over XML-RPC
@@ -1225,17 +1239,18 @@ $c = new Client('https://phpxmlrpc.sourceforge.net/server.php');
 $function = new Wrapper()->wrapXmlrpcMethod($client, 'examples.getStateName');
 
 if (!$function)
-    die('Failed introspecting remote method');
+  die('Failed introspecting remote method');
 else {
-    $stateNo = 15;
-    $stateName = $function($stateNo);
-    // NB: in real life, you should make sure you escape the received data with `htmlspecialchars` when echoing it as html
-    if (is_a($stateName, 'Response')) { // call failed
-        echo 'Call failed: '.$stateName->faultCode().'. Calling again with debug on...';
-        $function($stateNo, true);
-    }
-    else
-      echo "OK, state nr. $stateNo is $stateName";
+  $stateNo = 15;
+  $stateName = $function($stateNo);
+  // NB: in real life, you should make sure you escape the received data with
+  // `htmlspecialchars` when echoing it as html
+  if (is_a($stateName, 'Response')) { // call failed
+    echo 'Call failed: '.$stateName->faultCode().'. Calling again with debug on...';
+    $function($stateNo, true);
+  }
+  else
+    echo "OK, state nr. $stateNo is $stateName";
 }
 ----
 
@@ -1620,11 +1635,15 @@ The code below uses sessions to e.g. let the client store a value on the server 
 use PhpXmlRpc/Request;
 use PhpXmlRpc/Value;
 
-$resp = $client->send(new Request('registervalue', array(new Value('foo'), new Value('bar'))));
+$resp = $client->send(new Request(
+    'registervalue',
+    array(new Value('foo'), new Value('bar')))
+);
 if (!$resp->faultCode())
 {
     $cookies = $resp->cookies();
-    if (array_key_exists('PHPSESSID', $cookies)) // nb: make sure to use the correct session cookie name
+    // nb: make sure to use the correct session cookie name
+    if (array_key_exists('PHPSESSID', $cookies))
     {
         $session_id = $cookies['PHPSESSID']['value'];
 
@@ -1710,3 +1729,27 @@ using more resources and a longer processing time, using the PHPXMLRPC library a
 The module was originally part of the EXTRAS package, available as a separate download from the sourceforge.net website;
 it has since become available as Packagist package `phpxmlrpc/polyfill-xmlrpc` and can be found on GitHub at
 https://github.com/gggeek/polyfill-xmlrpc
+
+[appendix]
+== Files in the distribution [[manifest]]
+
+debugger/*:: a graphical debugger which can be used to test calls to xml-rpc servers
+
+demo/*:: example code for implementing both client and server functionality. Only included when installing with `--prefer-install=source`
+
+doc/*:: the documentation, including this manual, and the list of API changes between versions 3 and 4
+
+extras/*:: php utility scripts, such as a benchmark suite and an environment compatibility checker. Only included when installing with `--prefer-install=source`
+
+lib/*:: a compatibility layer for applications which still rely on version 3 of the API
+
+src/*:: the XML-RPC library classes. You can autoload these via Composer, or via a dedicated Autoloader class
+
+tests/*:: the test suite for the library, written using PhpUnit, and the configuration to run it in a local Docker container. Only included when installing with `--prefer-install=source`
+
+*Note* the standard procedure to download locally the demo and test files is to use Composer with  the option `--prefer-install=source`
+on the command line. That requires to have `git` installed. If that is not the case on your server, you might be able to
+download the complete source code from GitHub with other tools, such as f.e. TortoiseSVN.
+
+*Note* when downloading the full source code, including the demo files, make sure that the demo folder is not directly
+accessible from the internet, i.e. it is not within the webserver root directory.
