@@ -1,4 +1,4 @@
-## XML-RPC for PHP version XXX - unreleased
+## XML-RPC for PHP version 4.9.4 - 2023-1-7
 
 * improved: added a pre-push git hook script, to avoid pushing tagged versions with inconsistent version tags in code.
   To install it, execute `composer run-script setup-git-hooks` (NB: it is only useful for developers of this library,
@@ -7,6 +7,9 @@
 * improved: updated the user's manual to be inline with the version4 API and modern coding practices.
   The manual is now bundled in the default distribution tarball, and is easily viewable as html, provided you can
   serve it using a webserver. It is also available as pdf at https://gggeek.github.io/phpxmlrpc/doc-4/phpxmlrpc_manual.pdf
+
+* improved: automated the process of creating the github release when pushing a releate-tag to GitHub; also add a tarball
+  of the demo files as release asset, and automatically update both the http://gggeek.github.io and the code on altervista
 
 * fixed: the value for error 'no_http2' has been switched from 15 to 19 to avoid a collision
 
