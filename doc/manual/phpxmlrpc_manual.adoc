@@ -336,7 +336,7 @@ Here are a couple of usage examples of the first form:
 ----
 use PhpXmlRpc\Client;
 
-$client = new Client("https://phpxmlrpc.sourceforge.net/server.php");
+$client = new Client("https://phpxmlrpc.sourceforge.io/server.php");
 $another_client = new Client("https://james:bond@secret.service.com:443/xmlrpcserver?agent=007");
 ----
 
@@ -379,7 +379,7 @@ $req = new Request(
     'examples.getStateName',
     array(new Value($stateNo, Value::$xmlrpcInt))
 );
-$client = new Client("https://phpxmlrpc.sourceforge.net/server.php");
+$client = new Client("https://phpxmlrpc.sourceforge.io/server.php");
 $resp = $client->send($req);
 if (!$resp->faultCode()) {
     $v = $resp->value();
@@ -412,7 +412,7 @@ $req = new Request(
     'examples.getStateName',
     array(new Value($stateNo, Value::$xmlrpcInt))
 );
-$client = new Client("https://phpxmlrpc.sourceforge.net/server.php");
+$client = new Client("https://phpxmlrpc.sourceforge.io/server.php");
 $client->return_type = XMLParser::RETURN_PHP;
 $resp = $client->send($req);
 if (!$resp->faultCode()) {
@@ -1234,7 +1234,7 @@ Example usage:
 use PhpXmlRpc\Client;
 use PhpXmlRpc\Wrapper;
 
-$c = new Client('https://phpxmlrpc.sourceforge.net/server.php');
+$c = new Client('https://phpxmlrpc.sourceforge.io/server.php');
 
 $function = new Wrapper()->wrapXmlrpcMethod($client, 'examples.getStateName');
 
@@ -1687,7 +1687,7 @@ with phpxmlrpc. The following code snippet gives an example of such integration:
 [source, php]
 ----
 /*** client side ***/
-$c = new Client('https://phpxmlrpc.sourceforge.net/server.php');
+$c = new Client('https://phpxmlrpc.sourceforge.io/server.php');
 
 // tell the client to return raw xml as response value
 $c->return_type = 'xml';
