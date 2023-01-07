@@ -1,10 +1,12 @@
 name: CD
 
 on:
-    # we limit this workflow to pushes to master. No need to run on prs
+    # we limit this workflow to pushes to master and to tags. No need to run on prs
     push:
         branches:
             - master
+        tags:
+            - '**'
 
 jobs:
     # we could try to split in 2 jobs: one for docs and one for release, but the release one needs the asset from the docs one...
