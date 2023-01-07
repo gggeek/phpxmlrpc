@@ -8,20 +8,20 @@ function setup_tools() {
 
     # git, curl, gpg are needed by phive, used to install phpdocumentor
     # @todo besides php-cli, there are other php extensions used by phpdocumentor that we should make sure are onboard?
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    sudo --preserve-env=GITHUB_ACTIONS DEBIAN_FRONTEND=noninteractive apt-get install -y \
         asciidoctor curl git gpg unzip zip "${PHPPKG}"
 
     # pandoc toolchain
-    #sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    #sudo --preserve-env=GITHUB_ACTIONS DEBIAN_FRONTEND=noninteractive apt-get install -y \
     #    pandoc texlive-xetex texlive-fonts-extra texlive-latex-extra
 
     # FOP toolchain
-    #sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    #sudo --preserve-env=GITHUB_ACTIONS DEBIAN_FRONTEND=noninteractive apt-get install -y \
     #    fop \
     #    "${PHPPKG/cli/xsl}" \
 
     # ascidoctor-pdf toolchain
-    sudo gem install asciidoctor-pdf rouge
+    sudo --preserve-env=GITHUB_ACTIONS gem install asciidoctor-pdf rouge
 
     #cd build
 
@@ -64,7 +64,7 @@ function setup_tools() {
     #gpg --verify phive.phar.asc build/phive
     #rm phive.phar.asc
     chmod +x build/phive
-    cd build; ./phive install --trust-gpg-keys F33A0AF69AF7A8B15017DB526DA3ACC4991FFAE5 -t "$(pwd)" phpdocumentor
+    cd build; ./phive install --trust-gpg-keys F33A0AF69AF7A8B15017DB526DA3ACC4991FFAE5 -t "$(pwd)" phpdocumentor; cd ..
 
     #sudo chown -R "$(id -u):$(id -g)" build/vendor
 
@@ -115,7 +115,7 @@ function distclean() {
     if [ -f build/phive ]; then rm build/phive; fi
     if [ -f build/phpdocumentor ]; then rm build/phpdocumentor; fi
 
-    # @todo what about removing dpks stuff and gems?
+    # @todo what about removing dpkg stuff and gems?
 }
 
 function help() {
