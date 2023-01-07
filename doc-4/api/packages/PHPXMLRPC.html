@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PHP-XMLRPC</title>
+            <title>PHPXMLRPC</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
     <link rel="icon" href="images/favicon.ico"/>
@@ -23,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">PHP-XMLRPC</a></h1>
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">PHPXMLRPC</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -54,14 +55,16 @@
 <aside class="phpdocumentor-column -four phpdocumentor-sidebar">
                     <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/phpxmlrpc.html">PhpXmlRpc</a></h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/phpxmlrpc.html" class="">PhpXmlRpc</a>
+</h4>
     <ul class="phpdocumentor-list">
                     <li>
-                <a href="namespaces/phpxmlrpc-exception.html">Exception</a>
+                <a href="namespaces/phpxmlrpc-exception.html" class="">Exception</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpxmlrpc-helper.html">Helper</a>
+                <a href="namespaces/phpxmlrpc-helper.html" class="">Helper</a>
                 
             </li>
             </ul>
@@ -69,7 +72,9 @@
                         </section>
                 <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="packages/Application.html">Application</a></h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/PHPXMLRPC.html" class="-active">PHPXMLRPC</a>
+</h4>
 
                         </section>
             
@@ -90,30 +95,53 @@
                     <ul class="phpdocumentor-breadcrumbs">
     </ul>
 
-    <article class="phpdocumentor-element -file">
-        <h2 class="phpdocumentor-content__title">PhpXmlrpcException.php</h2>
+    <article class="phpdocumentor-element -package">
+        <h2 class="phpdocumentor-content__title">PHPXMLRPC</h2>
 
         
-    <section class="phpdocumentor-description"></section>
-
-
-
-
-
 
 <h3 id="interfaces_class_traits">
-    Interfaces, Classes and Traits
+    Interfaces, Classes, Traits and Enums
     <a href="#interfaces_class_traits" class="headerlink"><i class="fas fa-link"></i></a>
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
     
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Autoloader.html"><abbr title="\PhpXmlRpc\Autoloader">Autoloader</abbr></a></dt>
+        <dd>In the unlikely event that you are not using Composer to manage class autoloading, here&#039;s an autoloader for this lib.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Client.html"><abbr title="\PhpXmlRpc\Client">Client</abbr></a></dt>
+        <dd>Used to represent a client of an XML-RPC server.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Encoder.html"><abbr title="\PhpXmlRpc\Encoder">Encoder</abbr></a></dt>
+        <dd>A helper class to easily convert between Value objects and php native values.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-HttpException.html"><abbr title="\PhpXmlRpc\Exception\HttpException">HttpException</abbr></a></dt>
+        <dd></dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-PhpXmlrpcException.html"><abbr title="\PhpXmlRpc\Exception\PhpXmlrpcException">PhpXmlrpcException</abbr></a></dt>
         <dd></dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Charset.html"><abbr title="\PhpXmlRpc\Helper\Charset">Charset</abbr></a></dt>
+        <dd></dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Date.html"><abbr title="\PhpXmlRpc\Helper\Date">Date</abbr></a></dt>
+        <dd>Feature creep -- add support for custom TZs</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Http.html"><abbr title="\PhpXmlRpc\Helper\Http">Http</abbr></a></dt>
+        <dd></dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Logger.html"><abbr title="\PhpXmlRpc\Helper\Logger">Logger</abbr></a></dt>
+        <dd></dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-XMLParser.html"><abbr title="\PhpXmlRpc\Helper\XMLParser">XMLParser</abbr></a></dt>
+        <dd>Deals with parsing the XML.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-PhpXmlRpc.html"><abbr title="\PhpXmlRpc\PhpXmlRpc">PhpXmlRpc</abbr></a></dt>
+        <dd>Manages global configuration for operation of the library.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a></dt>
+        <dd>This class provides the representation of a request to an XML-RPC server.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a></dt>
+        <dd>This class provides the representation of the response of an XML-RPC server.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Server.html"><abbr title="\PhpXmlRpc\Server">Server</abbr></a></dt>
+        <dd>Allows effortless implementation of XML-RPC servers</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></dt>
+        <dd>This class enables the creation of values for XML-RPC, by encapsulating plain php values.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Wrapper.html"><abbr title="\PhpXmlRpc\Wrapper">Wrapper</abbr></a></dt>
+        <dd>PHPXMLRPC &quot;wrapper&quot; class - generate stubs to transparently access xmlrpc methods as php functions and vice-versa.</dd>
+    
     
     </dl>
-
-
 
 
 
@@ -134,7 +162,7 @@
 </section>
             </div>
         </div>
-        <a href="files/build-workspace-src-exception-phpxmlrpcexception.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="packages/PHPXMLRPC.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

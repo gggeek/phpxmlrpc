@@ -38,7 +38,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003AsetDebug\u0028\u0029",
             "name": "setDebug",
-            "summary": "Enable\/disable\u0020the\u0020echoing\u0020to\u0020screen\u0020of\u0020the\u0020xmlrpc\u0020responses\u0020received.\u0020The\u0020default\u0020is\u0020not\u0020no\u0020output\u0020anything.",
+            "summary": "Enable\/disable\u0020the\u0020echoing\u0020to\u0020screen\u0020of\u0020the\u0020xmlrpc\u0020responses\u0020received.\u0020The\u0020default\u0020is\u0020not\u0020to\u0020output\u0020anything.",
             "url": "classes/PhpXmlRpc-Client.html#method_setDebug"
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003AsetCredentials\u0028\u0029",
@@ -313,12 +313,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003A\u0024accepted_compression",
             "name": "accepted_compression",
-            "summary": "List\u0020of\u0020http\u0020compression\u0020methods\u0020accepted\u0020by\u0020the\u0020client\u0020for\u0020responses.",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Client.html#property_accepted_compression"
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003A\u0024request_compression",
             "name": "request_compression",
-            "summary": "Name\u0020of\u0020compression\u0020scheme\u0020to\u0020be\u0020used\u0020for\u0020sending\u0020requests.",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Client.html#property_request_compression"
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003A\u0024keepalive",
@@ -333,22 +333,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003A\u0024request_charset_encoding",
             "name": "request_charset_encoding",
-            "summary": "The\u0020charset\u0020encoding\u0020that\u0020will\u0020be\u0020used\u0020for\u0020serializing\u0020request\u0020sent\u0020by\u0020the\u0020client.",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Client.html#property_request_charset_encoding"
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003A\u0024return_type",
             "name": "return_type",
-            "summary": "Decides\u0020the\u0020content\u0020of\u0020Response\u0020objects\u0020returned\u0020by\u0020calls\u0020to\u0020send\u0028\u0029\u0020and\u0020multicall\u0028\u0029.",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Client.html#property_return_type"
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003A\u0024user_agent",
             "name": "user_agent",
-            "summary": "Sent\u0020to\u0020servers\u0020in\u0020http\u0020headers.",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Client.html#property_user_agent"
         },                {
             "fqsen": "\\PhpXmlRpc\\Encoder",
             "name": "Encoder",
-            "summary": "A\u0020helper\u0020class\u0020to\u0020easily\u0020convert\u0020between\u0020Value\u0020objects\u0020and\u0020php\u0020native\u0020values",
+            "summary": "A\u0020helper\u0020class\u0020to\u0020easily\u0020convert\u0020between\u0020Value\u0020objects\u0020and\u0020php\u0020native\u0020values.",
             "url": "classes/PhpXmlRpc-Encoder.html"
         },                {
             "fqsen": "\\PhpXmlRpc\\Encoder\u003A\u003AgetLogger\u0028\u0029",
@@ -373,12 +373,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Encoder\u003A\u003Adecode\u0028\u0029",
             "name": "decode",
-            "summary": "Takes\u0020an\u0020xmlrpc\u0020value\u0020in\u0020object\u0020format\u0020and\u0020translates\u0020it\u0020into\u0020native\u0020PHP\u0020types.",
+            "summary": "Takes\u0020an\u0020xmlrpc\u0020Value\u0020in\u0020object\u0020instance\u0020and\u0020translates\u0020it\u0020into\u0020native\u0020PHP\u0020types,\u0020recursively.",
             "url": "classes/PhpXmlRpc-Encoder.html#method_decode"
         },                {
             "fqsen": "\\PhpXmlRpc\\Encoder\u003A\u003Aencode\u0028\u0029",
             "name": "encode",
-            "summary": "Takes\u0020native\u0020php\u0020types\u0020and\u0020encodes\u0020them\u0020into\u0020xmlrpc\u0020PHP\u0020object\u0020format.",
+            "summary": "Takes\u0020native\u0020php\u0020types\u0020and\u0020encodes\u0020them\u0020into\u0020xmlrpc\u0020Value\u0020objects,\u0020recursively.",
             "url": "classes/PhpXmlRpc-Encoder.html#method_encode"
         },                {
             "fqsen": "\\PhpXmlRpc\\Encoder\u003A\u003AdecodeXml\u0028\u0029",
@@ -428,7 +428,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Charset\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Force\u0020usage\u0020as\u0020singleton",
+            "summary": "Force\u0020usage\u0020as\u0020singleton.",
             "url": "classes/PhpXmlRpc-Helper-Charset.html#method___construct"
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Charset\u003A\u003AbuildConversionTable\u0028\u0029",
@@ -448,7 +448,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Charset\u003A\u003AgetEntities\u0028\u0029",
             "name": "getEntities",
-            "summary": "Used\u0020only\u0020for\u0020backwards\u0020compatibility",
+            "summary": "Used\u0020only\u0020for\u0020backwards\u0020compatibility.",
             "url": "classes/PhpXmlRpc-Helper-Charset.html#method_getEntities"
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Charset\u003A\u003A\u0024xml_iso88591_Entities",
@@ -463,7 +463,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Date",
             "name": "Date",
-            "summary": "",
+            "summary": "Feature\u0020creep\u0020\u002D\u002D\u0020add\u0020support\u0020for\u0020custom\u0020TZs",
             "url": "classes/PhpXmlRpc-Helper-Date.html"
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Date\u003A\u003Aiso8601Encode\u0028\u0029",
@@ -473,7 +473,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Date\u003A\u003Aiso8601Decode\u0028\u0029",
             "name": "iso8601Decode",
-            "summary": "Given\u0020an\u0020ISO8601\u0020date\u0020string,\u0020return\u0020a\u0020timet\u0020in\u0020the\u0020localtime,\u0020or\u0020UTC.",
+            "summary": "Given\u0020an\u0020ISO8601\u0020date\u0020string,\u0020return\u0020a\u0020timestamp\u0020in\u0020the\u0020localtime,\u0020or\u0020UTC.",
             "url": "classes/PhpXmlRpc-Helper-Date.html#method_iso8601Decode"
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Http",
@@ -483,7 +483,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Http\u003A\u003AparseResponseHeaders\u0028\u0029",
             "name": "parseResponseHeaders",
-            "summary": "Parses\u0020HTTP\u0020an\u0020http\u0020response\u0020headers\u0020and\u0020separates\u0020them\u0020from\u0020the\u0020body.",
+            "summary": "Parses\u0020HTTP\u0020an\u0020http\u0020response\u0027s\u0020headers\u0020and\u0020separates\u0020them\u0020from\u0020the\u0020body.",
             "url": "classes/PhpXmlRpc-Helper-Http.html#method_parseResponseHeaders"
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Logger",
@@ -503,7 +503,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Logger\u003A\u003AerrorLog\u0028\u0029",
             "name": "errorLog",
-            "summary": "Writes\u0020a\u0020message\u0020to\u0020the\u0020error\u0020log",
+            "summary": "Writes\u0020a\u0020message\u0020to\u0020the\u0020error\u0020log.",
             "url": "classes/PhpXmlRpc-Helper-Logger.html#method_errorLog"
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\XMLParser",
@@ -533,7 +533,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\XMLParser\u003A\u003AhasEncoding\u0028\u0029",
             "name": "hasEncoding",
-            "summary": "Helper\u0020function\u003A\u0020checks\u0020if\u0020an\u0020xml\u0020chunk\u0020has\u0020a\u0020charset\u0020declaration\u0020\u0028BOM\u0020or\u0020in\u0020the\u0020xml\u0020declaration\u0029",
+            "summary": "Helper\u0020function\u003A\u0020checks\u0020if\u0020an\u0020xml\u0020chunk\u0020has\u0020a\u0020charset\u0020declaration\u0020\u0028BOM\u0020or\u0020in\u0020the\u0020xml\u0020declaration\u0029.",
             "url": "classes/PhpXmlRpc-Helper-XMLParser.html#method_hasEncoding"
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\XMLParser\u003A\u003ARETURN_XMLRPCVALS",
@@ -936,11 +936,6 @@ Search.appendIndex(
             "summary": "Add\u0020a\u0020string\u0020to\u0020the\u0020debug\u0020info\u0020that\u0020will\u0020be\u0020later\u0020serialized\u0020by\u0020the\u0020server\u0020as\u0020part\u0020of\u0020the\u0020response\u0020message\n\u0028base64\u0020encoded,\u0020only\u0020when\u0020debug\u0020level\u0020\u003E\u003D\u00202\u0029",
             "url": "classes/PhpXmlRpc-Server.html#method_error_occurred"
         },                {
-            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003AserializeDebug\u0028\u0029",
-            "name": "serializeDebug",
-            "summary": "Return\u0020a\u0020string\u0020with\u0020the\u0020serialized\u0020representation\u0020of\u0020all\u0020debug\u0020info.",
-            "url": "classes/PhpXmlRpc-Server.html#method_serializeDebug"
-        },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003Aservice\u0028\u0029",
             "name": "service",
             "summary": "Execute\u0020the\u0020xmlrpc\u0020request,\u0020printing\u0020the\u0020response.",
@@ -996,51 +991,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpXmlRpc-Server.html#method_getCapabilities"
         },                {
-            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A_xmlrpcs_getCapabilities\u0028\u0029",
-            "name": "_xmlrpcs_getCapabilities",
-            "summary": "",
-            "url": "classes/PhpXmlRpc-Server.html#method__xmlrpcs_getCapabilities"
-        },                {
-            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A_xmlrpcs_listMethods\u0028\u0029",
-            "name": "_xmlrpcs_listMethods",
-            "summary": "",
-            "url": "classes/PhpXmlRpc-Server.html#method__xmlrpcs_listMethods"
-        },                {
-            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A_xmlrpcs_methodSignature\u0028\u0029",
-            "name": "_xmlrpcs_methodSignature",
-            "summary": "",
-            "url": "classes/PhpXmlRpc-Server.html#method__xmlrpcs_methodSignature"
-        },                {
-            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A_xmlrpcs_methodHelp\u0028\u0029",
-            "name": "_xmlrpcs_methodHelp",
-            "summary": "",
-            "url": "classes/PhpXmlRpc-Server.html#method__xmlrpcs_methodHelp"
-        },                {
-            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A_xmlrpcs_multicall_error\u0028\u0029",
-            "name": "_xmlrpcs_multicall_error",
-            "summary": "",
-            "url": "classes/PhpXmlRpc-Server.html#method__xmlrpcs_multicall_error"
-        },                {
-            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A_xmlrpcs_multicall_do_call\u0028\u0029",
-            "name": "_xmlrpcs_multicall_do_call",
-            "summary": "",
-            "url": "classes/PhpXmlRpc-Server.html#method__xmlrpcs_multicall_do_call"
-        },                {
-            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A_xmlrpcs_multicall_do_call_phpvals\u0028\u0029",
-            "name": "_xmlrpcs_multicall_do_call_phpvals",
-            "summary": "",
-            "url": "classes/PhpXmlRpc-Server.html#method__xmlrpcs_multicall_do_call_phpvals"
-        },                {
-            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A_xmlrpcs_multicall\u0028\u0029",
-            "name": "_xmlrpcs_multicall",
-            "summary": "",
-            "url": "classes/PhpXmlRpc-Server.html#method__xmlrpcs_multicall"
-        },                {
-            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A_xmlrpcs_errorHandler\u0028\u0029",
-            "name": "_xmlrpcs_errorHandler",
-            "summary": "Error\u0020handler\u0020used\u0020to\u0020track\u0020errors\u0020that\u0020occur\u0020during\u0020server\u002Dside\u0020execution\u0020of\u0020PHP\u0020code.",
-            "url": "classes/PhpXmlRpc-Server.html#method__xmlrpcs_errorHandler"
-        },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024logger",
             "name": "logger",
             "summary": "",
@@ -1058,32 +1008,32 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024functions_parameters_type",
             "name": "functions_parameters_type",
-            "summary": "Defines\u0020how\u0020functions\u0020in\u0020dmap\u0020will\u0020be\u0020invoked\u003A\u0020either\u0020using\u0020an\u0020xmlrpc\u0020request\u0020object\nor\u0020plain\u0020php\u0020values.",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Server.html#property_functions_parameters_type"
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024phpvals_encoding_options",
             "name": "phpvals_encoding_options",
-            "summary": "Option\u0020used\u0020for\u0020fine\u002Dtuning\u0020the\u0020encoding\u0020the\u0020php\u0020values\u0020returned\u0020from\nfunctions\u0020registered\u0020in\u0020the\u0020dispatch\u0020map\u0020when\u0020the\u0020functions_parameters_types\nmember\u0020is\u0020set\u0020to\u0020\u0027phpvals\u0027",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Server.html#property_phpvals_encoding_options"
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024debug",
             "name": "debug",
-            "summary": "Controls\u0020whether\u0020the\u0020server\u0020is\u0020going\u0020to\u0020echo\u0020debugging\u0020messages\u0020back\u0020to\u0020the\u0020client\u0020as\u0020comments\u0020in\u0020response\u0020body.",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Server.html#property_debug"
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024exception_handling",
             "name": "exception_handling",
-            "summary": "Controls\u0020behaviour\u0020of\u0020server\u0020when\u0020the\u0020invoked\u0020user\u0020function\u0020throws\u0020an\u0020exception\u003A\n0\u0020\u003D\u0020catch\u0020it\u0020and\u0020return\u0020an\u0020\u0027internal\u0020error\u0027\u0020xmlrpc\u0020response\u0020\u0028default\u0029\n1\u0020\u003D\u0020catch\u0020it\u0020and\u0020return\u0020an\u0020xmlrpc\u0020response\u0020with\u0020the\u0020error\u0020corresponding\u0020to\u0020the\u0020exception\n2\u0020\u003D\u0020allow\u0020the\u0020exception\u0020to\u0020float\u0020to\u0020the\u0020upper\u0020layers",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Server.html#property_exception_handling"
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024compress_response",
             "name": "compress_response",
-            "summary": "When\u0020set\u0020to\u0020true,\u0020it\u0020will\u0020enable\u0020HTTP\u0020compression\u0020of\u0020the\u0020response,\u0020in\u0020case\nthe\u0020client\u0020has\u0020declared\u0020its\u0020support\u0020for\u0020compression\u0020in\u0020the\u0020request.",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Server.html#property_compress_response"
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024accepted_compression",
             "name": "accepted_compression",
-            "summary": "List\u0020of\u0020http\u0020compression\u0020methods\u0020accepted\u0020by\u0020the\u0020server\u0020for\u0020requests.\u0020Set\u0020at\u0020constructor\u0020time.",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Server.html#property_accepted_compression"
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024allow_system_funcs",
@@ -1098,12 +1048,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024response_charset_encoding",
             "name": "response_charset_encoding",
-            "summary": "Charset\u0020encoding\u0020to\u0020be\u0020used\u0020for\u0020response.",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Server.html#property_response_charset_encoding"
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024user_data",
             "name": "user_data",
-            "summary": "Extra\u0020data\u0020passed\u0020at\u0020runtime\u0020to\u0020method\u0020handling\u0020functions.\u0020Used\u0020only\u0020by\u0020EPI\u0020layer",
+            "summary": "",
             "url": "classes/PhpXmlRpc-Server.html#property_user_data"
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024dmap",
@@ -1328,7 +1278,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Wrapper",
             "name": "Wrapper",
-            "summary": "PHP\u002DXMLRPC\u0020\u0022wrapper\u0022\u0020class\u0020\u002D\u0020generate\u0020stubs\u0020to\u0020transparently\u0020access\u0020xmlrpc\u0020methods\u0020as\u0020php\u0020functions\u0020and\u0020vice\u002Dversa.",
+            "summary": "PHPXMLRPC\u0020\u0022wrapper\u0022\u0020class\u0020\u002D\u0020generate\u0020stubs\u0020to\u0020transparently\u0020access\u0020xmlrpc\u0020methods\u0020as\u0020php\u0020functions\u0020and\u0020vice\u002Dversa.",
             "url": "classes/PhpXmlRpc-Wrapper.html"
         },                {
             "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003AgetLogger\u0028\u0029",
@@ -1353,7 +1303,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003AwrapPhpFunction\u0028\u0029",
             "name": "wrapPhpFunction",
-            "summary": "Given\u0020a\u0020user\u002Ddefined\u0020PHP\u0020function,\u0020create\u0020a\u0020PHP\u0020\u0027wrapper\u0027\u0020function\u0020that\u0020can\nbe\u0020exposed\u0020as\u0020xmlrpc\u0020method\u0020from\u0020an\u0020xmlrpc\u0020server\u0020object\u0020and\u0020called\u0020from\u0020remote\nclients\u0020\u0028as\u0020well\u0020as\u0020its\u0020corresponding\u0020signature\u0020info\u0029.",
+            "summary": "Given\u0020a\u0020user\u002Ddefined\u0020PHP\u0020function,\u0020create\u0020a\u0020PHP\u0020\u0027wrapper\u0027\u0020function\u0020that\u0020can\u0020be\u0020exposed\u0020as\u0020xmlrpc\u0020method\u0020from\u0020an\nxmlrpc\u0020server\u0020object\u0020and\u0020called\u0020from\u0020remote\u0020clients\u0020\u0028as\u0020well\u0020as\u0020its\u0020corresponding\u0020signature\u0020info\u0029.",
             "url": "classes/PhpXmlRpc-Wrapper.html#method_wrapPhpFunction"
         },                {
             "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003AintrospectFunction\u0028\u0029",
@@ -1393,7 +1343,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003AwrapXmlrpcMethod\u0028\u0029",
             "name": "wrapXmlrpcMethod",
-            "summary": "Given\u0020an\u0020xmlrpc\u0020client\u0020and\u0020a\u0020method\u0020name,\u0020register\u0020a\u0020php\u0020wrapper\u0020function\nthat\u0020will\u0020call\u0020it\u0020and\u0020return\u0020results\u0020using\u0020native\u0020php\u0020types\u0020for\u0020both\nparams\u0020and\u0020results.\u0020The\u0020generated\u0020php\u0020function\u0020will\u0020return\u0020a\u0020Response\nobject\u0020for\u0020failed\u0020xmlrpc\u0020calls.",
+            "summary": "Given\u0020an\u0020xmlrpc\u0020client\u0020and\u0020a\u0020method\u0020name,\u0020register\u0020a\u0020php\u0020wrapper\u0020function\u0020that\u0020will\u0020call\u0020it\u0020and\u0020return\u0020results\nusing\u0020native\u0020php\u0020types\u0020for\u0020both\u0020arguments\u0020and\u0020results.\u0020The\u0020generated\u0020php\u0020function\u0020will\u0020return\u0020a\u0020Response\nobject\u0020for\u0020failed\u0020xmlrpc\u0020calls.",
             "url": "classes/PhpXmlRpc-Wrapper.html#method_wrapXmlrpcMethod"
         },                {
             "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003AretrieveMethodSignature\u0028\u0029",
@@ -1411,14 +1361,9 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpXmlRpc-Wrapper.html#method_buildWrapMethodClosure"
         },                {
-            "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003AbuildWrapMethodSource\u0028\u0029",
-            "name": "buildWrapMethodSource",
-            "summary": "",
-            "url": "classes/PhpXmlRpc-Wrapper.html#method_buildWrapMethodSource"
-        },                {
             "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003AwrapXmlrpcServer\u0028\u0029",
             "name": "wrapXmlrpcServer",
-            "summary": "Similar\u0020to\u0020wrapXmlrpcMethod,\u0020but\u0020will\u0020generate\u0020a\u0020php\u0020class\u0020that\u0020wraps\nall\u0020xmlrpc\u0020methods\u0020exposed\u0020by\u0020the\u0020remote\u0020server\u0020as\u0020own\u0020methods.",
+            "summary": "Similar\u0020to\u0020wrapXmlrpcMethod,\u0020but\u0020will\u0020generate\u0020a\u0020php\u0020class\u0020that\u0020wraps\u0020all\u0020xmlrpc\u0020methods\u0020exposed\u0020by\u0020the\u0020remote\nserver\u0020as\u0020own\u0020methods.",
             "url": "classes/PhpXmlRpc-Wrapper.html#method_wrapXmlrpcServer"
         },                {
             "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003AbuildClientWrapperCode\u0028\u0029",

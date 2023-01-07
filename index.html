@@ -20,7 +20,8 @@
 <a href="#development">Development</a> |
 <a href="#roadmap">Roadmap</a> |
 <a href="#history">History</a> |
-<a href="security.html">Security</a>
+<a href="security.html">Security</a> |
+<a href="#license">License</a>
 </div>
 <div id="content">
 
@@ -50,7 +51,8 @@
 <li>Support for `system.listMethods`, `system.methodHelp`, `system.multicall` and `system.getCapabilities` methods</li>
 <li>Support for the `&lt;NIL/&gt;` and `&lt;EX:NIL/&gt;` extensions to xml-rpc</li>
 <li>Possibility to register existing php function or class methods as webservices, extracting value-added information
-    from phpdoc comments</li>
+    from phpdoc comments, including code-generation capabilities</li>
+<li>Zero dependencies on 3rd party packages</li>
 <li>A web based visual debugger is included with the library. It is also available as self-contained Container from
     <a href="https://github.com/gggeek/phpxmlrpc-debugger/pkgs/container/phpxmlrpc-debugger">https://github.com/gggeek/phpxmlrpc-debugger/</a></li>
 <li>A package emulating the API of the native XML-RPC extension for PHP, built on this library, is available at
@@ -80,9 +82,15 @@
 <p>Ancient releases (older than version 2.2.2) are still available for historical purposes at
     <a href="https://sourceforge.net/projects/phpxmlrpc/files/phpxmlrpc/">SourceForge</a></p>
 
+<h2><a id="license">License</a></h2>
+<p>Use of this software is subject to the terms in the <a href="https://github.com/gggeek/phpxmlrpc/blob/master/license.txt">license.txt</a> file (BSD License).</p>
+
 <h2><a id="news">News</a></h2>
 <p>The latest stable release is version <a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.9.3"><span class="evidence">4.9.3</span></a>
     released on Dec. 20th, 2022 (<a href="https://github.com/gggeek/phpxmlrpc/releases/tag/4.9.3">Release notes</a>)</p>
+<h4>7/1/2023</h4>
+<p>The user manual has finally been updated to cover modern usage of the library. The PDF version is now available for
+    download from this site. The API docs have been regenerated with more detailed type information.</p>
 <h4>17/12/2022</h4>
 <p>the "sister" library `jsxmlrpc`, implementing xml-rpc support in javascript with the same API of
 phpxmlrpc, is now available as a NodeJS package at <a href="https://www.npmjs.com/package/@jsxmlrpc/jsxmlrpc">https://www.npmjs.com/package/@jsxmlrpc/jsxmlrpc</a></p>
@@ -95,8 +103,9 @@ anyone who does not have a php installation set up. Available at <a href="https:
 <h2><a id="documentation">Documentation</a></h2>
 
 <h3>User manual</h3>
-    <p>The user manual for version 4 can be viewed online <a href="https://github.com/gggeek/phpxmlrpc/blob/master/doc/manual/phpxmlrpc_manual.adoc">on GitHub</a>;
-    it is complemented by automatically generated<a href="doc-4/api/index.html">API docs</a>.<br>
+    <p>The user manual for version 4 can be viewed online <a href="https://github.com/gggeek/phpxmlrpc/blob/master/doc/manual/phpxmlrpc_manual.adoc">on GitHub</a>
+    or downloaded in pdf format <a href="doc-4/phpxmlrpc_manual.pdf">here</a>;
+    it is complemented by automatically generated <a href="doc-4/api/index.html">API docs</a>.<br>
     A good way to get started with API usage is to take a look at the <a href="https://github.com/gggeek/phpxmlrpc/tree/master/demo">demo source code</a>,
     showcasing both Client and Server use cases.</p>
 <h4>Manuals for older versions</h4>
@@ -211,6 +220,7 @@ All the contributors listed on <a href="https://github.com/gggeek/phpxmlrpc/grap
 <li>Frederic Lecointre</li>
 <li>Dan Libby</li>
 <li>Arnaud Limbourg</li>
+<li>Miles Lott</li>
 <li>Ernest MacDougal Campbell III</li>
 <li>Lukasz Mach</li>
 <li>Kjartan Mannes</li>
@@ -220,6 +230,7 @@ All the contributors listed on <a href="https://github.com/gggeek/phpxmlrpc/grap
 <li>Jan Pfeifer</li>
 <li>Giancarlo Pinerolo</li>
 <li>Peter Russel</li>
+<li>Andres Salomon</li>
 <li>Jean-Jacques Sarton</li>
 <li>Viliam Simko</li>
 <li>Idan Sofer</li>
@@ -238,7 +249,7 @@ All the contributors listed on <a href="https://github.com/gggeek/phpxmlrpc/grap
 <!--<a href="https://validator.w3.org/nu/?doc=http%3A%2F%2Fgggeek.github.io%2Fphpxmlrpc%2F"><img
     src="https://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
     alt="Valid HTML 5"></a><br>-->
-Page last updated: 2023/1/2
+Page last updated: 2023/1/7
 
 </div>
 </body>

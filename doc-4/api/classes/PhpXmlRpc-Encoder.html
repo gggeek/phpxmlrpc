@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PHP-XMLRPC</title>
+            <title>PHPXMLRPC</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
     <link rel="icon" href="images/favicon.ico"/>
@@ -23,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">PHP-XMLRPC</a></h1>
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">PHPXMLRPC</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -54,14 +55,16 @@
 <aside class="phpdocumentor-column -four phpdocumentor-sidebar">
                     <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/phpxmlrpc.html">PhpXmlRpc</a></h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/phpxmlrpc.html" class="">PhpXmlRpc</a>
+</h4>
     <ul class="phpdocumentor-list">
                     <li>
-                <a href="namespaces/phpxmlrpc-exception.html">Exception</a>
+                <a href="namespaces/phpxmlrpc-exception.html" class="">Exception</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpxmlrpc-helper.html">Helper</a>
+                <a href="namespaces/phpxmlrpc-helper.html" class="">Helper</a>
                 
             </li>
             </ul>
@@ -69,7 +72,9 @@
                         </section>
                 <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="packages/Application.html">Application</a></h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/PHPXMLRPC.html" class="">PHPXMLRPC</a>
+</h4>
 
                         </section>
             
@@ -99,7 +104,7 @@
             <div class="phpdocumentor-element__package">
             in package
             <ul class="phpdocumentor-breadcrumbs">
-                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Application.html">Application</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/PHPXMLRPC.html">PHPXMLRPC</a></li>
                             </ul>
         </div>
     
@@ -107,13 +112,13 @@
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="build/workspace/src/Encoder.php"><a href="files/build-workspace-src-encoder.html"><abbr title="build/workspace/src/Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">13</span>
+    <span class="phpdocumentor-element-found-in__line">14</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">A helper class to easily convert between Value objects and php native values</p>
+            <p class="phpdocumentor-summary">A helper class to easily convert between Value objects and php native values.</p>
 
 
 
@@ -153,31 +158,31 @@
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
-                <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+                    <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpXmlRpc-Encoder.html#property_logger">$logger</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpXmlRpc-Encoder.html#property_parser">$parser</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Encoder.html#method_decode">decode()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
-<dd>Takes an xmlrpc value in object format and translates it into native PHP types.</dd>
+<dd>Takes an xmlrpc Value in object instance and translates it into native PHP types, recursively.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Encoder.html#method_decodeXml">decodeXml()</a>
     <span>
-                        &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|<a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>|false    </span>
+                                &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|<a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>|false    </span>
 </dt>
 <dd>Convert the xml representation of a method response, method request or single
 xmlrpc value into the appropriate object (a.k.a. deserialize).</dd>
@@ -185,35 +190,35 @@ xmlrpc value into the appropriate object (a.k.a. deserialize).</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Encoder.html#method_encode">encode()</a>
     <span>
-                        &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>    </span>
+                                &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>    </span>
 </dt>
-<dd>Takes native php types and encodes them into xmlrpc PHP object format.</dd>
+<dd>Takes native php types and encodes them into xmlrpc Value objects, recursively.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Encoder.html#method_getLogger">getLogger()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Encoder.html#method_getParser">getParser()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Encoder.html#method_setLogger">setLogger()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: void    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Encoder.html#method_setParser">setParser()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: void    </span>
 </dt>
 <dd></dd>
 
@@ -243,9 +248,9 @@ xmlrpc value into the appropriate object (a.k.a. deserialize).</dd>
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="build/workspace/src/Encoder.php"><a href="files/build-workspace-src-encoder.html"><abbr title="build/workspace/src/Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">15</span>
+    <span class="phpdocumentor-element-found-in__line">16</span>
 
     </aside>
 
@@ -277,9 +282,9 @@ xmlrpc value into the appropriate object (a.k.a. deserialize).</dd>
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="build/workspace/src/Encoder.php"><a href="files/build-workspace-src-encoder.html"><abbr title="build/workspace/src/Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">16</span>
+    <span class="phpdocumentor-element-found-in__line">17</span>
 
     </aside>
 
@@ -315,21 +320,24 @@ xmlrpc value into the appropriate object (a.k.a. deserialize).</dd>
         <a href="classes/PhpXmlRpc-Encoder.html#method_decode" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="build/workspace/src/Encoder.php"><a href="files/build-workspace-src-encoder.html"><abbr title="build/workspace/src/Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">65</span>
+    <span class="phpdocumentor-element-found-in__line">79</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Takes an xmlrpc value in object format and translates it into native PHP types.</p>
+        <p class="phpdocumentor-summary">Takes an xmlrpc Value in object instance and translates it into native PHP types, recursively.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">decode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|<a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$xmlrpcVal</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">decode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|<a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$xmlrpcVal</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"><p>Works with xmlrpc requests objects as input, too.</p>
-<p>Given proper options parameter, can rebuild generic php object instances (provided those have been encoded to
-xmlrpc format using a corresponding option in php_xmlrpc_encode())
+        <section class="phpdocumentor-description"><p>Works with xmlrpc Request objects as input, too.
+Xmlrpc dateTime values will be converted to strings or DateTime objects depending on an $options parameter
+Supports i8 and NIL xmlrpc values without the need for specific options.
+Both xmlrpc arrays and structs are decoded into PHP arrays, with the exception described below:
+Given proper options parameter, can rebuild generic php object instances (provided those have been encoded to
+xmlrpc format using a corresponding option in php_xmlrpc_encode()).
 PLEASE NOTE that rebuilding php objects involves calling their constructor function.
 This means that the remote communication end can decide which php code will get executed on your server, leaving
 the door possibly open to 'php-injection' style of attacks (provided you have some classes defined on your server
@@ -351,8 +359,13 @@ Make sure you trust the remote server/client before enabling this!</p>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">array()</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>if 'decode_php_objs' is set in the options array, xmlrpc structs can be decoded into php
-objects; if 'dates_as_objects' is set xmlrpc datetimes are decoded as php DateTime objects</p>
+                    <section class="phpdocumentor-description"><p>accepted elements:</p>
+<ul>
+<li>'decode_php_objs': if set in the options array, xmlrpc structs can be decoded into php
+objects, see the details above;</li>
+<li>'dates_as_objects': when set xmlrpc dateTimes are decoded as php DateTime objects</li>
+<li>'extension_api': reserved for usage by phpxmlrpc-polyfill</li>
+</ul>
 </section>
 
             </dd>
@@ -378,7 +391,9 @@ objects; if 'dates_as_objects' is set xmlrpc datetimes are decoded as php DateTi
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-        
+            <section class="phpdocumentor-description"><p>Feature creep -- add an option to allow converting xmlrpc dateTime values to unix timestamps (integers)</p>
+</section>
+
     
 </article>
                     <article
@@ -392,9 +407,9 @@ objects; if 'dates_as_objects' is set xmlrpc datetimes are decoded as php DateTi
         <a href="classes/PhpXmlRpc-Encoder.html#method_decodeXml" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="build/workspace/src/Encoder.php"><a href="files/build-workspace-src-encoder.html"><abbr title="build/workspace/src/Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">293</span>
+    <span class="phpdocumentor-element-found-in__line">315</span>
 
     </aside>
 
@@ -403,7 +418,7 @@ xmlrpc value into the appropriate object (a.k.a. deserialize).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">decodeXml</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$xmlVal</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|<a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>|false</span></code>
+                    <span class="phpdocumentor-signature__name">decodeXml</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$xmlVal</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|<a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>|false</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -436,7 +451,8 @@ xmlrpc value into the appropriate object (a.k.a. deserialize).</p>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
                                                  <section class="phpdocumentor-description"><p>is this a good name/class for this method? It does something quite different from 'decode' after all
-(returning objects vs returns plain php values)... In fact it belongs rather to a Parser class</p>
+(returning objects vs returns plain php values)... In fact, it belongs rather to a Parser class
+Feature creep -- should we allow an option to return php native types instead of PhpXmlRpc objects instances?</p>
 </section>
 
                                     </dd>
@@ -461,23 +477,30 @@ xmlrpc value into the appropriate object (a.k.a. deserialize).</p>
         <a href="classes/PhpXmlRpc-Encoder.html#method_encode" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="build/workspace/src/Encoder.php"><a href="files/build-workspace-src-encoder.html"><abbr title="build/workspace/src/Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">174</span>
+    <span class="phpdocumentor-element-found-in__line">201</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Takes native php types and encodes them into xmlrpc PHP object format.</p>
+        <p class="phpdocumentor-summary">Takes native php types and encodes them into xmlrpc Value objects, recursively.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">encode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$phpVal</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">encode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$phpVal</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span></code>
 
-        <section class="phpdocumentor-description"><p>It will not re-encode xmlrpc value objects.</p>
-<p>Feature creep -- could support more types via optional type argument
-(string =&gt; datetime support has been added, ??? =&gt; base64 not yet)</p>
-<p>If given a proper options parameter, php object instances will be encoded into 'special' xmlrpc values, that can
-later be decoded into php objects by calling php_xmlrpc_decode() with a corresponding option</p>
+        <section class="phpdocumentor-description"><p>PHP strings, integers, floats and booleans have a straightforward encoding - note that integers will <em>not</em> be
+converted to xmlrpc <i8> elements, even if they exceed the 32-bit range.
+PHP arrays will be encoded to either xmlrpc structs or arrays, depending on whether they are hashes
+or plain 0..N integer indexed.
+PHP objects will be encoded into xmlrpc structs, except if they implement DateTimeInterface, in which case they
+will be encoded as dateTime values.
+PhpXmlRpc\Value objects will not be double-encoded - which makes it possible to pass in a pre-created base64 Value
+as part of a php array.
+If given a proper $options parameter, php object instances will be encoded into 'special' xmlrpc values, that can
+later be decoded into php object instances by calling php_xmlrpc_decode() with a corresponding option.
+PHP resource and NULL variables will be converted into uninitialized Value objects (which will lead to invalid
+xmlrpc when later serialized); to support encoding of the latter use the appropriate $options parameter.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -496,7 +519,15 @@ later be decoded into php objects by calling php_xmlrpc_decode() with a correspo
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">array()</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>can include 'encode_php_objs', 'auto_dates', 'null_extension' or 'extension_api'</p>
+                    <section class="phpdocumentor-description"><p>can include:</p>
+<ul>
+<li>'encode_php_objs' when set, some out-of-band info will be added to the xml produced by
+serializing the built Value, which can later be decoced by this library to rebuild an
+instance of the same php object</li>
+<li>'auto_dates': when set, any string which respects the xmlrpc datetime format will be converted to a dateTime Value</li>
+<li>'null_extension': when set, php NULL values will be converted to an xmlrpc &lt;NIL&gt; (or <a href="EX:NIL">EX:NIL</a>) Value</li>
+<li>'extension_api': reserved for usage by phpxmlrpc-polyfill</li>
+</ul>
 </section>
 
             </dd>
@@ -522,7 +553,10 @@ later be decoded into php objects by calling php_xmlrpc_decode() with a correspo
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span>
             &mdash;
-        
+            <section class="phpdocumentor-description"><p>Feature creep -- could support more types via optional type argument (string =&gt; datetime support has been added,
+??? =&gt; base64 not yet). Also: allow auto-encoding of integers to i8 when too-big to fit into i4</p>
+</section>
+
     
 </article>
                     <article
@@ -536,16 +570,16 @@ later be decoded into php objects by calling php_xmlrpc_decode() with a correspo
         <a href="classes/PhpXmlRpc-Encoder.html#method_getLogger" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="build/workspace/src/Encoder.php"><a href="files/build-workspace-src-encoder.html"><abbr title="build/workspace/src/Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">18</span>
+    <span class="phpdocumentor-element-found-in__line">19</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getLogger</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">getLogger</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -569,16 +603,16 @@ later be decoded into php objects by calling php_xmlrpc_decode() with a correspo
         <a href="classes/PhpXmlRpc-Encoder.html#method_getParser" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="build/workspace/src/Encoder.php"><a href="files/build-workspace-src-encoder.html"><abbr title="build/workspace/src/Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">31</span>
+    <span class="phpdocumentor-element-found-in__line">36</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">getParser</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">getParser</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -602,35 +636,33 @@ later be decoded into php objects by calling php_xmlrpc_decode() with a correspo
         <a href="classes/PhpXmlRpc-Encoder.html#method_setLogger" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="build/workspace/src/Encoder.php"><a href="files/build-workspace-src-encoder.html"><abbr title="build/workspace/src/Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">26</span>
+    <span class="phpdocumentor-element-found-in__line">31</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">setLogger</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setLogger</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$logger</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">void</span>
             &mdash;
         
     
@@ -646,35 +678,33 @@ later be decoded into php objects by calling php_xmlrpc_decode() with a correspo
         <a href="classes/PhpXmlRpc-Encoder.html#method_setParser" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="build/workspace/src/Encoder.php"><a href="files/build-workspace-src-encoder.html"><abbr title="build/workspace/src/Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">39</span>
+    <span class="phpdocumentor-element-found-in__line">48</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">setParser</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parser</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setParser</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parser</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$parser</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">void</span>
             &mdash;
         
     
