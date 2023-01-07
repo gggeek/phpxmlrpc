@@ -463,7 +463,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Date",
             "name": "Date",
-            "summary": "Feature\u0020creep\u0020\u002D\u002D\u0020add\u0020support\u0020for\u0020custom\u0020TZs",
+            "summary": "Helps\u0020to\u0020convert\u0020timestamps\u0020to\u0020the\u0020xml\u002Drpc\u0020date\u0020format.",
             "url": "classes/PhpXmlRpc-Helper-Date.html"
         },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Date\u003A\u003Aiso8601Encode\u0028\u0029",
