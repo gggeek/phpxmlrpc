@@ -3,9 +3,6 @@
 /doc/api
 /doc/build/.phpdoc
 /doc/build/.phive
-/doc/build/docbook-xsl
-/doc/build/eisvogel.latex
-/doc/build/images
 /doc/build/phive
 /doc/build/phpDocumentor
 /doc/manual/phpxmlrpc_manual.html
