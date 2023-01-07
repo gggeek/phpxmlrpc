@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+
+set -e
+
+# has to be run as sudoer
+function setup_tools() {
+    PHPPKG=$(dpkg --list | grep php | grep cli | grep -v -F '(default)' | awk '{print $2}')
+
+    # git, curl, gpg are needed by phive, used to install phpdocumentor
+    # @todo besides php-cli, there are other php extensions used by phpdocumentor that we should make sure are onboard?
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        asciidoctor curl git gpg unzip zip "${PHPPKG}"
+
+    # pandoc toolchain
+    #sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    #    pandoc texlive-xetex texlive-fonts-extra texlive-latex-extra
+
+    # FOP toolchain
+    #sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    #    fop \
+    #    "${PHPPKG/cli/xsl}" \
+
+    # ascidoctor-pdf toolchain
+    sudo gem install asciidoctor-pdf rouge
+
+    #cd build
+
+    # Install phpdocumentor and the docbook xslt using Composer
+    # Sadly this method, as of 2023/1, does not allow installing version 3.3.0 and later
+    ## in case we are switching between php versions, always reinstall every tool with the correct version...
+    #if [ -f composer.lock ]; then
+    #    rm composer.lock
+    #fi
+    #composer install --no-dev
+    # required as of phpdoc 3.1.2
+    #sed -r -i -e "s|resource: '%kernel\\.project_dir%/vendor/phpdocumentor/reflection/src/phpDocumentor/Reflection/Php'|resource: '%kernel.project_dir%/../reflection/src/phpDocumentor/Reflection/Php'|g" ./vendor/phpdocumentor/phpdocumentor/config/reflection.yaml
+    #sudo chown -R "$(id -u):$(id -g)" vendor
+
+    # Install the DocBook xslt
+    #if [ ! -d docbook-xsl ]; then
+    #    curl -fsSL -o dbx.zip "https://github.com/docbook/xslt10-stylesheets/releases/download/release/1.79.2/docbook-xsl-1.79.2.zip"
+    #    unzip dbx.zip
+    #    mv docbook-xsl-1.79.2 docbook-xsl
+    #    rm dbx.zip
+    #fi
+
+    # Get the eisvogel template for pandoc
+    #if [ ! -f eisvogel.latex ]; then
+    #    curl -fsSL -o ev.zip "https://github.com/Wandmalfarbe/pandoc-latex-template/releases/download/v2.1.0/Eisvogel-2.1.0.zip"
+    #    unzip ev.zip
+    #    rm -rf examples
+    #    rm ev.zip LICENSE CHANGELOG.md icon.png
+    #fi
+
+    #if [ ! -L images ]; then
+    #    ln -s "$(realpath ./manual/images)" build/images
+    #fi
+
+    # Install phpdocumentor via Phive
+    # @todo wouldn't it be quicker to just scan the github page for the last release and just get the phar?
+    curl -fsSL -o build/phive "https://phar.io/releases/phive.phar"
+    #curl -fsSL -o -O phive.phar.asc "https://phar.io/releases/phive.phar.asc"
+    #gpg --keyserver hkps://keys.openpgp.org --recv-keys 0x6AF725270AB81E04D79442549D8A98B29B2D5D79
+    #gpg --verify phive.phar.asc build/phive
+    #rm phive.phar.asc
+    chmod +x build/phive
+    cd build; ./phive install --trust-gpg-keys F33A0AF69AF7A8B15017DB526DA3ACC4991FFAE5 -t "$(pwd)" phpdocumentor
+
+    #sudo chown -R "$(id -u):$(id -g)" build/vendor
+
+    #cd ..
+}
+
+function build_api() {
+    PHPDOC='build/phpdocumentor'
+    #PHPDOC='php build/vendor/bin/phpdoc'
+
+    $PHPDOC run --cache-folder 'build/.phpdoc' -d "$(realpath ../src/)" -t 'api' --title PHPXMLRPC --defaultpackagename PHPXMLRPC
+}
+
+function build_manual() {
+    #DOCBOOKXSLTDIR='build/docbook-xsl'
+    #DOCBOOKXSLTDIR='build/vendor/docbook/docbook-xsl'
+
+    # HTML (single file) from asciidoc
+    # Not generated any more - the github rendering is good enough for online viewing, and for local viewing the html+asciidoc.js
+    # solution is preferred
+    #asciidoctor -d book -o './manual/phpxmlrpc_manual.html' './manual/phpxmlrpc_manual.adoc'
+
+    # PDF file from asciidoc direct conversion
+    asciidoctor-pdf manual/phpxmlrpc_manual.adoc
+
+    # PDF file from asciidoc via docbook
+    ## 1. get docbook
+    #asciidoctor -d book -b docbook -o 'build/phpxmlrpc_manual.xml' './manual/phpxmlrpc_manual.adoc'
+    ## 2a. then PDF via apache fop
+    ##php build/convert.php 'build/phpxmlrpc_manual.xml' 'build/custom.fo.xsl' './manual/phpxmlrpc_manual.fo.xml' "$DOCBOOKXSLTDIR"
+    ##fop ./manual/phpxmlrpc_manual.fo.xml ./manual/phpxmlrpc_manual.pdf
+    ##rm ./manual/phpxmlrpc_manual.fo.xml
+    ## 2b. then PDF via pandoc+xelatex, using a nice template
+    #cd build; pandoc -s --from=docbook --pdf-engine=xelatex --data-dir=. --template=eisvogel -o ../manual/phpxmlrpc_manual.pdf phpxmlrpc_manual.xml; cd ..
+    #rm build/phpxmlrpc_manual.xml
+}
+
+function clean() {
+    if [ -d api ]; then rm -rf api; fi
+    if [ -f manual/phpxmlrpc_manual.pdf ]; then rm manual/phpxmlrpc_manual.pdf; fi
+}
+
+function distclean() {
+    clean
+
+    if [ -d build/.phive ]; then rm -rf build/.phive; fi
+    if [ -d build/.phpdoc ]; then rm -rf build/.phpdoc; fi
+    if [ -f build/phive ]; then rm build/phive; fi
+    if [ -f build/phpdocumentor ]; then rm build/phpdocumentor; fi
+
+    # @todo what about removing dpks stuff and gems?
+}
+
+function help() {
+    echo "$0 <task> <args>"
+    echo "Tasks:"
+    compgen -A function | cat -n
+}
+
+if [ $# -eq 0 ]; then
+    help
+else
+    cd "$(dirname -- "$(dirname -- "$(realpath "${BASH_SOURCE[0]}")")")"
+
+    TIMEFORMAT="Task completed in %3lR"
+    time ${@}
+fi

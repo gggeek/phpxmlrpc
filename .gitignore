@@ -4,8 +4,7 @@
 /doc/build/.phpdoc
 /doc/build/.phive
 /doc/build/phive
-/doc/build/phpDocumentor
-/doc/manual/phpxmlrpc_manual.html
+/doc/build/phpdocumentor
 /doc/manual/phpxmlrpc_manual.pdf
 /vendor/*
 /.phpunit.result.cache
