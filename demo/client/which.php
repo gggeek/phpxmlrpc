@@ -10,8 +10,8 @@ output('<html lang="en">
 <p>You can see the source to this page here: <a href="which.php?showSource=1">which.php</a></p>
 ');
 
-$req = new PhpXmlRpc\Request('interopEchoTests.whichToolkit', array());
 $client = new PhpXmlRpc\Client(XMLRPCSERVER);
+$req = new PhpXmlRpc\Request('interopEchoTests.whichToolkit', array());
 $resp = $client->send($req);
 if (!$resp->faultCode()) {
     $encoder = new PhpXmlRpc\Encoder();

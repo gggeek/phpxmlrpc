@@ -9,7 +9,7 @@ use PhpXmlRpc\Response;
 
 /**
  * A class taking advantage of cURL to send many requests in parallel (to a single server), for when the given server
- * does not support system.multicall method
+ * does not support the system.multicall method
  */
 class ParallelClient extends Client
 {
@@ -106,18 +106,26 @@ for ($i = 0; $i < $num_tests; $i++) {
 $client = new ParallelClient(XMLRPCSERVER);
 $client->no_multicall = true;
 
+// a minimal benchmark - use 3 strategies to execute the same 25 calls: sequentially, using parallel http requests, and
+// using a single system.multiCall request
+
+echo "Making $num_tests xml-rpc calls...\n";
+flush();
+
 $t = microtime(true);
 $resp = $client->send($reqs);
 $t = microtime(true) - $t;
-echo "Sequential send: $t secs\n";
+echo "Sequential send: " . sprintf('%.3f', $t) . " secs.\n";
+flush();
 
 $t = microtime(true);
 $resp = $client->sendParallel($reqs);
 $t = microtime(true) - $t;
-echo "Parallel send: $t secs\n";
+echo "Parallel send: " . sprintf('%.3f', $t) . " secs.\n";
+flush();
 
 $client->no_multicall = false;
 $t = microtime(true);
 $resp = $client->send($reqs);
 $t = microtime(true) - $t;
-echo "Multicall send: $t secs\n";
+echo "Multicall send: " . sprintf('%.3f', $t) . " secs.\n";

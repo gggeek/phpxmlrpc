@@ -6,7 +6,9 @@ output('<html lang="en">
 <body>
 <h1>Agesort demo</h1>
 <h2>Send an array of "name" => "age" pairs to the server that will send it back sorted.</h2>
-<h3>The source code demonstrates basic lib usage, including handling of xmlrpc arrays and structs</h3>
+<h3>The source code demonstrates basic lib usage, including manual creation of xml-rpc arrays and structs</h3>
+<p>Have a look at <a href="getstatename.php">getstatename.php</a> for automatic encoding and decoding, and at
+    <a href="../vardemo.php">vardemo.php</a> for more examples of manual encoding and decoding</p>
 <p>You can see the source to this page here: <a href="agesort.php?showSource=1">agesort.php</a></p>
 ');
 
@@ -58,7 +60,7 @@ if (!$resp->faultCode()) {
 } else {
     output("An error occurred:<pre>");
     output("Code: " . htmlspecialchars($resp->faultCode()) .
-        "\nReason: '" . htmlspecialchars($resp->faultString()) . '\'</pre><hr/>');
+        "\nReason: '" . htmlspecialchars($resp->faultString()) . "'</pre><hr/>");
 }
 
 output("</body></html>\n");

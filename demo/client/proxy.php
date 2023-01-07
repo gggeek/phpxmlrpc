@@ -24,13 +24,12 @@ class PhpXmlRpcProxy
     }
 
     /**
-     * Translates any method call to an xmlrpc call.
+     * Translates any method call to an xml-rpc call.
      *
      * @author Toth Istvan
      *
      * @param string $name remote function name. Will be prefixed
      * @param array $arguments
-     *
      * @return mixed
      *
      * @throws Exception
@@ -60,7 +59,6 @@ class PhpXmlRpcProxy
      *
      * @param string $name remote function name. Will be prefixed
      * @param array $arguments
-     *
      * @return mixed
      *
      * @throws Exception
@@ -71,8 +69,10 @@ class PhpXmlRpcProxy
     }
 }
 
-$stateNo = rand(1, 51);
 $proxy = new PhpXmlRpcProxy(new PhpXmlRpc\Client(XMLRPCSERVER));
+
+$stateNo = rand(1, 51);
+// sadly, no IDE will be able to assist with autocompletion for this method, unless you manually add an equivalent phpdoc comment...
 $stateName = $proxy->getStateName($stateNo);
 
 output("State $stateNo is ".htmlspecialchars($stateName));
