@@ -3,6 +3,8 @@
 namespace PhpXmlRpc\Helper;
 
 /**
+ * Helps to convert timestamps to the xml-rpc date format.
+ *
  * Feature creep -- add support for custom TZs
  */
 class Date
