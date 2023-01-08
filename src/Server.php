@@ -622,6 +622,7 @@ class Server
             // we should allow the 'execute' method handle this, but in the
             // most common scenario (xmlrpc values type server with some methods
             // registered as phpvals) that would mean a useless encode+decode pass
+            /// @bug when parameters_type is set in the method, we still get full-fledged Value objects
             if ($this->functions_parameters_type != 'xmlrpcvals' ||
                 (isset($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type']) &&
                     ($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type'] != 'xmlrpcvals')
@@ -795,7 +796,34 @@ class Server
                     }
                     throw $e;
                 case 1:
-                    $r = new Response(0, $e->getCode(), $e->getMessage());
+                    $errCode = $e->getCode();
+                    if ($errCode == 0) {
+                        $errCode = PhpXmlRpc::$xmlrpcerr['server_error'];
+                    }
+                    $r = new Response(0, $errCode, $e->getMessage());
+                    break;
+                default:
+                    $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_error'], PhpXmlRpc::$xmlrpcstr['server_error']);
+            }
+        } catch (\Error $e) {
+            // (barring errors in the lib) an uncatched exception happened in the called function, we wrap it in a
+            // proper error-response
+            switch ($this->exception_handling) {
+                case 2:
+                    if ($this->debug > 2) {
+                        if (self::$_xmlrpcs_prev_ehandler) {
+                            set_error_handler(self::$_xmlrpcs_prev_ehandler);
+                        } else {
+                            restore_error_handler();
+                        }
+                    }
+                    throw $e;
+                case 1:
+                    $errCode = $e->getCode();
+                    if ($errCode == 0) {
+                        $errCode = PhpXmlRpc::$xmlrpcerr['server_error'];
+                    }
+                    $r = new Response(0, $errCode, $e->getMessage());
                     break;
                 default:
                     $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_error'], PhpXmlRpc::$xmlrpcstr['server_error']);
