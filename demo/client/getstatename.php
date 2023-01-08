@@ -6,35 +6,43 @@ output('<html lang="en">
 <body>
 <h1>Getstatename demo</h1>
 <h2>Send a U.S. state number to the server and get back the state name</h2>
-<h3>The code demonstrates usage of automatic encoding/decoding of php variables into xmlrpc values</h3>
+<h3>The source code demonstrates basic lib usage, including manual creation and decoding of of xml-rpc values</h3>
 <p>You can see the source to this page here: <a href="getstatename.php?showSource=1">getstatename.php</a></p>
 ');
 
-if (isset($_POST["stateno"]) && $_POST["stateno"] != "") {
-    $stateNo = (integer)$_POST["stateno"];
-    $encoder = new PhpXmlRpc\Encoder();
-    $req = new PhpXmlRpc\Request('examples.getStateName',
-        array($encoder->encode($stateNo))
+use PhpXmlRpc\Client;
+use PhpXmlRpc\Request;
+use PhpXmlRpc\Value;
+
+$stateNo = "";
+
+if (isset($_POST['stateno']) && $_POST['stateno'] != "") {
+    $stateNo = (integer)$_POST['stateno'];
+    $method = 'examples.getStateName';
+    $arguments = array(
+        new Value($stateNo, Value::$xmlrpcInt),
     );
-    output("Sending the following request:<pre>\n\n" . htmlentities($req->serialize()) . "\n\n</pre>Debug info of server data follows...\n\n");
-    $client = new PhpXmlRpc\Client(XMLRPCSERVER);
+    $req = new Request($method, $arguments);
+    output("Sending the following request:<pre>\n\n" . htmlentities($req->serialize()) .
+        "\n\n</pre>Debug info of server data follows...\n\n");
+    $client = new Client(XMLRPCSERVER);
     $client->setDebug(1);
-    $r = $client->send($req);
-    if (!$r->faultCode()) {
-        $v = $r->value();
-        output("<br/>State number <b>" . $stateNo . "</b> is <b>"
-            . htmlspecialchars($encoder->decode($v)) . "</b><br/><br/>");
+    $resp = $client->send($req);
+    if (!$resp->faultCode()) {
+        $val = $resp->value();
+        // NB: we are _assuming_ that the server did return a scalar xml-rpc value here.
+        // If the server is not trusted, we might check that via `$val->kindOf() == 'scalar'`
+        output('<br/>State number <b>' . $stateNo . '</b> is <b>'
+            . htmlspecialchars($val->scalarval()) . '</b><br/><br/>');
     } else {
-        output("An error occurred: ");
-        output("Code: " . htmlspecialchars($r->faultCode())
-            . " Reason: '" . htmlspecialchars($r->faultString()) . "'</pre><br/>");
+        output('An error occurred: ');
+        output('<pre>Code: ' . htmlspecialchars($resp->faultCode())
+            . " Reason: '" . htmlspecialchars($resp->faultString()) . "'</pre>");
     }
-} else {
-    $stateNo = "";
 }
 
 output("<form action=\"getstatename.php\" method=\"POST\">
-<input name=\"stateno\" value=\"" . $stateNo . "\">
+<input name=\"stateno\" value=\"$stateNo\">
 <input type=\"submit\" value=\"go\" name=\"submit\">
 </form>
 <p>Enter a state number to query its name</p>");

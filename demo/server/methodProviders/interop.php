@@ -114,7 +114,7 @@ function i_whichToolkit($req)
 {
     global $SERVER_SOFTWARE;
     $ret = array(
-        "toolkitDocsUrl" => "http://phpxmlrpc.sourceforge.net/",
+        "toolkitDocsUrl" => "https://gggeek.github.io/phpxmlrpc/",
         "toolkitName" => PhpXmlRpc\PhpXmlRpc::$xmlrpcName,
         "toolkitVersion" => PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion,
         "toolkitOperatingSystem" => isset($SERVER_SOFTWARE) ? $SERVER_SOFTWARE : $_SERVER['SERVER_SOFTWARE'],
