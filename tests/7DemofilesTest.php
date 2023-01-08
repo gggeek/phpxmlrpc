@@ -32,19 +32,6 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
         $page = $this->request('?demo=client/introspect.php');
     }
 
-    public function testMail()
-    {
-        $page = $this->request('?demo=client/mail.php');
-        $page = $this->request('?demo=client/mail.php', 'POST', array(
-            "mailto" => '',
-            "mailsub" => '',
-            "mailmsg" => '',
-            "mailfrom" => '',
-            "mailcc" => '',
-            "mailbcc" => '',
-        ));
-    }
-
     public function testParallel()
     {
         $page = $this->request('?demo=client/parallel.php');

@@ -44,16 +44,16 @@ class XmlRpcProxy
      */
     public function __call($name, $arguments)
     {
-        $arguments = array();
+        $args = array();
         foreach ($arguments as $parameter) {
-            $arguments[] = $this->encoder->encode($parameter, $this->encodingOptions);
+            $args[] = $this->encoder->encode($parameter, $this->encodingOptions);
         }
 
         // just in case this was set to something else
         $originalReturnType = $this->client->return_type;
         $this->client->return_type = 'phpvals';
 
-        $resp = $this->client->send(new PhpXmlRpc\Request($this->prefix.$name, $arguments));
+        $resp = $this->client->send(new PhpXmlRpc\Request($this->prefix.$name, $args));
 
         $this->client->return_type = $originalReturnType;
 
