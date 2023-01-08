@@ -310,7 +310,7 @@ class Encoder
      *
      * @todo is this a good name/class for this method? It does something quite different from 'decode' after all
      *       (returning objects vs returns plain php values)... In fact, it belongs rather to a Parser class
-     * Feature creep -- should we allow an option to return php native types instead of PhpXmlRpc objects instances?
+     * Feature creep -- we should allow an option to return php native types instead of PhpXmlRpc objects instances
      */
     public function decodeXml($xmlVal, $options = array())
     {
