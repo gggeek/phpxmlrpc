@@ -18,22 +18,26 @@ if (!defined('TESTMODE')) {
     die("Server disabled by default for safety");
 }
 
+use PhpXmlRpc\Client;
+use PhpXmlRpc\Encoder;
+use PhpXmlRpc\Request;
+use PhpXmlRpc\Server;
+
 /**
  * Forward an xmlrpc request to another server, and return to client the response received.
  *
  * @param PhpXmlRpc\Request $req (see method docs below for a description of the expected parameters)
- *
  * @return PhpXmlRpc\Response
  */
 function forward_request($req)
 {
-    $encoder = new \PhpXmlRpc\Encoder();
+    $encoder = new Encoder();
 
     // create client
     $timeout = 0;
     $url = $encoder->decode($req->getParam(0));
     // NB: here we should validate the received url, using f.e. a whitelist...
-    $client = new PhpXmlRpc\Client($url);
+    $client = new Client($url);
 
     if ($req->getNumParams() > 3) {
         // we have to set some options onto the client.
@@ -69,13 +73,13 @@ function forward_request($req)
     ///       - using std http header conventions, such as X-forwarded-for...
     $reqMethod = $req->getParam(1)->scalarval();
     $pars = $req->getParam(2);
-    $req = new PhpXmlRpc\Request($reqMethod);
+    $req = new Request($reqMethod);
     foreach ($pars as $par) {
         $req->addParam($par);
     }
 
     // add debug info into response we give back to caller
-    PhpXmlRpc\Server::xmlrpc_debugmsg("Sending to server $url the payload: " . $req->serialize());
+    Server::xmlrpc_debugmsg("Sending to server $url the payload: " . $req->serialize());
 
     return $client->send($req, $timeout);
 }
@@ -83,7 +87,7 @@ function forward_request($req)
 // Run the server
 // NB: take care not to output anything else after this call, as it will mess up the responses and it will be hard to
 // debug. In case you have to do so, at least re-emit a correct Content-Length http header (requires output buffering)
-$server = new PhpXmlRpc\Server(
+$server = new Server(
     array(
         'xmlrpcproxy.call' => array(
             'function' => 'forward_request',
