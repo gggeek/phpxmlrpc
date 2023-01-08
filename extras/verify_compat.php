@@ -101,11 +101,11 @@ function phpxmlrpc_verify_compat($mode = 'client')
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>PHP XMLRPC compatibility assessment</title>
-    <style type="text/css">
+    <style>
         body, html {
             background-color: white;
             font-family: Arial, Verdana, Geneva, sans-serif;
@@ -151,7 +151,7 @@ function phpxmlrpc_verify_compat($mode = 'client')
 <h4>For phpxmlrpc version 4.0 or later</h4>
 
 <h3>Server usage</h3>
-<table cellspacing="0">
+<table>
     <thead>
     <tr>
         <td>Test</td>
@@ -168,7 +168,7 @@ function phpxmlrpc_verify_compat($mode = 'client')
     </tbody>
 </table>
 <h3>Client usage</h3>
-<table cellspacing="0">
+<table>
     <thead>
     <tr>
         <td>Test</td>
