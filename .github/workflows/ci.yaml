@@ -7,9 +7,9 @@ jobs:
         runs-on: ${{ matrix.operating-system }}
         env:
             HTTPSERVER: localhost
-            URI: /test/index.php?demo=server/server.php
+            URI: /tests/index.php?demo=server/server.php
             HTTPSSERVER: localhost
-            HTTPSURI: /test/index.php?demo=server/server.php
+            HTTPSURI: /tests/index.php?demo=server/server.php
             PROXYSERVER: localhost:8080
             # @todo check: is this necessary as well on GHA runners?
             # was: "Travis currently compiles PHP with an oldish cURL/GnuTLS combination;
