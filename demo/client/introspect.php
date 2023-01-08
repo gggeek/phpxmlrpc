@@ -11,7 +11,7 @@ output('<html lang="en">
 ');
 
 use PhpXmlRpc\Client;
-use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Helper\XMLParser as XMLRPCParser;
 use PhpXmlRpc\Request;
 
 function display_error($r)
@@ -22,7 +22,7 @@ function display_error($r)
 
 $client = new Client(XMLRPCSERVER);
 // tell the client we want back plain php values
-$client->return_type = XMLParser::RETURN_PHP;
+$client->return_type = XMLRPCParser::RETURN_PHP;
 
 // First off, let's retrieve the list of methods available on the remote server
 output("<h3>methods available at http://" . $client->server . $client->path . "</h3>\n");

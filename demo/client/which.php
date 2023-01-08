@@ -6,18 +6,12 @@ output('<html lang="en">
 <body>
 <h1>Which toolkit demo</h1>
 <h2>Query server for toolkit information</h2>
-<h3>The code demonstrates support for http redirects, the `interopEchoTests.whichToolkit` xml-rpc methods and use of pre-built xml</h3>
+<h3>The code demonstrates support for http redirects, the `interopEchoTests.whichToolkit` xml-rpc methods, request compression and use of pre-built xml</h3>
 <p>You can see the source to this page here: <a href="which.php?showSource=1">which.php</a></p>
 ');
 
 use PhpXmlRpc\Client;
 use PhpXmlRpc\Encoder;
-
-$client = new Client(XMLRPCSERVER);
-
-// to support http redirects we have to force usage of cURL even for http 1.0 requests
-$client->setUseCurl(Client::USE_CURL_ALWAYS);
-$client->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
 
 // use a pre-built request payload
 $payload = '<?xml version="1.0"?>
@@ -25,10 +19,21 @@ $payload = '<?xml version="1.0"?>
     <methodName>interopEchoTests.whichToolkit</methodName>
     <params/>
 </methodCall>';
-// and ask the client to give us back xml
+output("XML custom request:<br/><pre>" . htmlspecialchars($payload) . "</pre>\n");
+
+$client = new Client(XMLRPCSERVER);
+
+// to support http redirects we have to force usage of cURL even for http 1.0 requests
+$client->setUseCurl(Client::USE_CURL_ALWAYS);
+$client->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
+
+// if we know that the server supports them, we can enable sending of compressed requests
+$client->setRequestCompression('gzip');
+
+// ask the client to give us back xml
 $client->return_type = 'xml';
 
-output("XML custom request:<br/><pre>" . htmlspecialchars($payload) . "</pre>\n");
+$client->setDebug(1);
 
 $resp = $client->send($payload);
 
