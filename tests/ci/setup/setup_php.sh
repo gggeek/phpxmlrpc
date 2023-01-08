@@ -55,6 +55,7 @@ if [ "${PHP_VERSION}" = default ]; then
         php${PHPSUFFIX}-curl \
         php${PHPSUFFIX}-fpm \
         php${PHPSUFFIX}-mbstring \
+        php${PHPSUFFIX}-sqlite3 \
         php${PHPSUFFIX}-xdebug
 else
     # on GHA runners ubuntu version, php 7.4 and 8.0 seem to be preinstalled. Remove them if found
@@ -117,6 +118,7 @@ else
             php${PHP_VERSION}-curl \
             php${PHP_VERSION}-fpm \
             php${PHP_VERSION}-mbstring \
+            php${PHP_VERSION}-sqlite3 \
             php${PHP_VERSION}-xdebug
 
         update-alternatives --set php /usr/bin/php${PHP_VERSION}
