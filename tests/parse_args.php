@@ -71,11 +71,11 @@ class argParser
         }
 
         if (!isset($HTTPURI) || $HTTPURI == '') {
-            // GUESTIMATE the url of local demo server
-            // play nice to php 4 and 5 in retrieving URL of server.php
+            // GUESTIMATE the url of local test controller
+            // play nice to php 5 and 7 in retrieving URL of index.php
             /// @todo filter out query string from REQUEST_URI
             /// @todo review this code...
-            if (isset($REQUEST_URI)) {
+            /*if (isset($REQUEST_URI)) {
                 $HTTPURI = str_replace('/tests/testsuite.php', '/demo/server/server.php', $REQUEST_URI);
                 $HTTPURI = str_replace('/testsuite.php', '/server.php', $HTTPURI);
                 $HTTPURI = str_replace('/extras/benchmark.php', '/demo/server/server.php', $HTTPURI);
@@ -85,9 +85,9 @@ class argParser
                 $HTTPURI = str_replace('/testsuite.php', '/server.php', $HTTPURI);
                 $HTTPURI = str_replace('/extras/benchmark.php', '/demo/server/server.php', $HTTPURI);
                 $HTTPURI = str_replace('/benchmark.php', '/server.php', $HTTPURI);
-            } else {
-                $HTTPURI = '/demo/server/server.php';
-            }
+            } else {*/
+                $HTTPURI = '/tests/index.php?demo=server/server.php';
+            //}
         }
         if ($HTTPURI[0] != '/') {
             $HTTPURI = '/' . $HTTPURI;

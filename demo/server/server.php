@@ -22,64 +22,22 @@ use PhpXmlRpc\Value;
 // The simplest way of implementing webservices: as xmlrpc-aware global functions
 $signatures1 = include(__DIR__.'/methodProviders/functions.php');
 
-// Examples of exposing as webservices php functions and objects/methods which are not aware of xmlrpc classes
-$signatures2 = include(__DIR__.'/methodProviders/wrapper.php');
-
 // Definitions of webservices used for interoperability testing
-$signatures3 = include(__DIR__.'/methodProviders/interop.php');
-$signatures4 = include(__DIR__.'/methodProviders/validator1.php');
+$signatures2 = include(__DIR__.'/methodProviders/interop.php');
+$signatures3 = include(__DIR__.'/methodProviders/validator1.php');
 
 // And finally a few examples inline
+$signatures = array();
 
-// used to test signatures with NULL params
-$findstate12_sig = array(
-    array(Value::$xmlrpcString, Value::$xmlrpcInt, Value::$xmlrpcNull),
-    array(Value::$xmlrpcString, Value::$xmlrpcNull, Value::$xmlrpcInt),
-);
-function findStateWithNulls($req)
-{
-    $a = $req->getParam(0);
-    $b = $req->getParam(1);
+$signatures = array_merge($signatures, $signatures1, $signatures2, $signatures3);
 
-    if ($a->scalartyp() == Value::$xmlrpcNull)
-        return new Response(new Value(plain_findstate($b->scalarval())));
-    else
-        return new Response(new Value(plain_findstate($a->scalarval())));
+if (defined('TESTMODE')) {
+    // Webservices used only by the testuite
+    $signatures4 = include(__DIR__.'/methodProviders/testsuite.php');
+    $signatures5 = include(__DIR__.'/methodProviders/wrapper.php');
+
+    $signatures = array_merge($signatures, $signatures4, $signatures5);
 }
-
-$object = new xmlrpcServerMethodsContainer();
-
-$signatures = array(
-
-    // signature omitted on purpose
-    "tests.generatePHPWarning" => array(
-        "function" => array($object, "phpWarningGenerator"),
-    ),
-    // signature omitted on purpose
-    "tests.raiseException" => array(
-        "function" => array($object, "exceptionGenerator"),
-    ),
-    // Greek word 'kosme'. NB: NOT a valid ISO8859 string!
-    // NB: we can only register this when setting internal encoding to UTF-8, or it will break system.listMethods
-    "tests.utf8methodname." . 'κόσμε' => array(
-        "function" => "stringEcho",
-        "signature" => $stringecho_sig,
-        "docstring" => $stringecho_doc,
-    ),
-    /*"tests.iso88591methodname." . chr(224) . chr(252) . chr(232) => array(
-        "function" => "stringEcho",
-        "signature" => $stringecho_sig,
-        "docstring" => $stringecho_doc,
-    ),*/
-
-    'tests.getStateName.12' => array(
-        "function" => "findStateWithNulls",
-        "signature" => $findstate12_sig,
-        "docstring" => $findstate_doc,
-    ),
-);
-
-$signatures = array_merge($signatures, $signatures1, $signatures2, $signatures3, $signatures4);
 
 // Enable support for the NULL extension
 PhpXmlRpc::$xmlrpc_null_extension = true;

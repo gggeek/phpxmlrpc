@@ -4,6 +4,7 @@
  *
  * To use this, use something akin to:
  * $signatures = include('wrapper.php');
+ * NB: requires 'functions.php' to be included first
  *
  * Wrap methods of xmlrpc-unaware php classes and xmlrpc-unaware php functions so that they can be used transparently.
  */
@@ -54,6 +55,7 @@ class xmlrpcServerMethodsContainer
      */
     public function phpWarningGenerator($req)
     {
+        /** @noinspection PhpUndefinedVariableInspection */
         $a = $undefinedVariable; // this triggers a warning in E_ALL mode, since $undefinedVariable is undefined
         return new Response(new Value(1, Value::$xmlrpcBoolean));
     }
@@ -116,7 +118,6 @@ eval($findstate6_sig['source']);
 $findstate7_sig = $wrapper->wrapPhpFunction(array('xmlrpcServerMethodsContainer', 'findState'), '', array('return_source' => true));
 eval($findstate7_sig['source']);
 
-//$obj = new xmlrpcServerMethodsContainer();
 $findstate8_sig = $wrapper->wrapPhpFunction(array($obj, 'findstate'), '', array('return_source' => true));
 eval($findstate8_sig['source']);
 
@@ -124,7 +125,7 @@ $findstate9_sig = $wrapper->wrapPhpFunction('xmlrpcServerMethodsContainer::findS
 eval($findstate9_sig['source']);
 
 $findstate10_sig = array(
-    /// @todo add a demo/test with a closure
+    /// @todo add a demo and test with closure usage
     "function" => function ($req) { return findState($req); },
     "signature" => array(array(Value::$xmlrpcString, Value::$xmlrpcInt)),
     "docstring" => 'When passed an integer between 1 and 51 returns the name of a US state, where the integer is the ' .
@@ -145,6 +146,7 @@ $returnObj_sig =  $wrapper->wrapPhpFunction(array($c, 'returnObject'), '', array
 return array_merge(
     array(
         'tests.getStateName.2' => $findstate2_sig,
+
         'tests.getStateName.3' => $findstate3_sig,
         'tests.getStateName.4' => $findstate4_sig,
         'tests.getStateName.5' => $findstate5_sig,
@@ -154,8 +156,18 @@ return array_merge(
         'tests.getStateName.9' => $findstate9_sig,
         'tests.getStateName.10' => $findstate10_sig,
         'tests.getStateName.11' => $findstate11_sig,
-        'tests.returnPhpObject' => $returnObj_sig,
     ),
+    $moreSignatures,
     $namespaceSignatures,
-    $moreSignatures
+    array(
+        'tests.returnPhpObject' => $returnObj_sig,
+        // signature omitted on purpose
+        "tests.generatePHPWarning" => array(
+            "function" => array($obj, "phpWarningGenerator"),
+        ),
+        // signature omitted on purpose
+        "tests.raiseException" => array(
+            "function" => array($obj, "exceptionGenerator"),
+        ),
+    )
 );

@@ -95,19 +95,19 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
     {
         $this->args = argParser::getArgs();
 
-        $uri = str_replace('/demo/server/server.php', '/tests/index.php?demo=server/server.php', $this->args['HTTPURI']);
+        //$uri = str_replace('/demo/server/server.php', '/tests/index.php?demo=server/server.php', $this->args['HTTPURI']);
         $server = explode(':', $this->args['HTTPSERVER']);
         if (count($server) > 1) {
-            $this->client = new xmlrpc_client($uri, $server[0], $server[1]);
+            $this->client = new xmlrpc_client($this->args['HTTPURI'], $server[0], $server[1]);
         } else {
-            $this->client = new xmlrpc_client($uri, $this->args['HTTPSERVER']);
+            $this->client = new xmlrpc_client($this->args['HTTPURI'], $this->args['HTTPSERVER']);
         }
 
         $this->client->setDebug($this->args['DEBUG']);
         $this->client->request_compression = $this->request_compression;
         $this->client->accepted_compression = $this->accepted_compression;
 
-        $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . '/' . str_replace('/demo/server/server.php', 'tests/phpunit_coverage.php', $this->args['HTTPURI']);
+        $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|/tests/index\.php(\?.*)?|', '/tests/phpunit_coverage.php', $this->args['HTTPURI']);
 
         if ($this->args['DEBUG'] == 1)
             ob_start();
@@ -944,7 +944,7 @@ And turned it into nylon';
             'c5' => array('value' => 'c5', 'expires' => time() + 60 * 60 * 24 * 30, 'path' => '/', 'domain' => 'localhost'),
         );
         $cookiesval = php_xmlrpc_encode($cookies);
-        $m = new xmlrpcmsg('examples.setcookies', array($cookiesval));
+        $m = new xmlrpcmsg('tests.setcookies', array($cookiesval));
         $r = $this->send($m, 0, true);
         if ($r) {
             $v = $r->value();
@@ -986,7 +986,7 @@ And turned it into nylon';
             'c2' => '2 3',
             'c3' => '!@#$%^&*()_+|}{":?><,./\';[]\\=-',
         );
-        $m = new xmlrpcmsg('examples.getcookies', array());
+        $m = new xmlrpcmsg('tests.getcookies', array());
         foreach ($cookies as $cookie => $val) {
             $this->client->setCookie($cookie, $val);
             $cookies[$cookie] = (string)$cookies[$cookie];

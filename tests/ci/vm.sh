@@ -58,9 +58,9 @@ build() {
         --env CONTAINER_USER_UID=$(id -u) --env CONTAINER_USER_GID=$(id -g) \
         --env TESTS_ROOT_DIR=${CONTAINER_WORKSPACE_DIR} \
         --env HTTPSERVER=localhost \
-        --env HTTPURI=/demo/server/server.php \
+        --env HTTPURI=/tests/index.php?demo=server/server.php \
         --env HTTPSSERVER=localhost \
-        --env HTTPSURI=/demo/server/server.php \
+        --env HTTPSURI=/tests/index.php?demo=server/server.php \
         --env PROXYSERVER=localhost:8080 \
         --env HTTPSVERIFYHOST=0 \
         --env HTTPSIGNOREPEER=1 \
