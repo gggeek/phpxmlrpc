@@ -1,3 +1,14 @@
+## XML-RPC for PHP version 4.xx - unreleased
+
+* improved: revised all demo files. Showcase more features in client demos; isolate better testsuite functions in
+  server demos and make sure they are not active unless triggered by running the tests
+
+* improved: catch php Errors besides Exceptions thrown by method handler functions (ie. server-side) for php 7 and up
+
+* fixed: when using the Exception or Error thrown by a method handler function to build the xml-rpc response, override
+  fault Code 0, as it makes responses unserializable
+
+
 ## XML-RPC for PHP version 4.9.4 - 2023-1-7
 
 * improved: updated the user's manual to be inline with the version4 API and modern coding practices.
