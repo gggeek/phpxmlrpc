@@ -7,6 +7,9 @@
  * @license code licensed under the BSD License: see file license.txt
  *
  * @todo add a test for php output buffering?
+ * @todo check for presence of specific curl options, such as fe. the HTTP2 ones
+ * @todo check for presence of mbstring
+ * @todo check for presence of the xmlrpc extension
  */
 
 function phpxmlrpc_verify_compat($mode = 'client')
@@ -108,44 +111,36 @@ function phpxmlrpc_verify_compat($mode = 'client')
             font-family: Arial, Verdana, Geneva, sans-serif;
             font-size: small;
         }
-
         table {
             border: 1px solid gray;
             padding: 0;
         }
-
         thead {
             background-color: silver;
             color: black;
         }
-
         td {
             margin: 0;
             padding: 0.5em;
         }
-
         tbody td {
             border-top: 1px solid gray;
         }
-
         .res0 {
             background-color: red;
             color: black;
             border-right: 1px solid gray;
         }
-
         .res1 {
             background-color: yellow;
             color: black;
             border-right: 1px solid gray;
         }
-
         .res2 {
             background-color: green;
             color: black;
             border-right: 1px solid gray;
         }
-
         .result {
             white-space: pre;
         }

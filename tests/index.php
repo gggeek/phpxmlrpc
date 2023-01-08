@@ -1,17 +1,20 @@
 <?php
 
-// File accessed by http requests as part of the test suite, enabling testing of demo, debugger, extras files.
-// It triggers generation of code-coverage information
+// File accessed by http requests sent by the test suite, enabling testing of demo, debugger, extras files.
+// It makes all errors visible, triggers generation of code-coverage information, and runs the target file,
+// which is specified as GET param.
 
 // Make errors visible
 ini_set('display_errors', true);
 error_reporting(E_ALL);
 
-// Set up a constant which can be used by demo code to tell if the testuite is in action
+// Set up a constant which can be used by demo code to tell if the testuite is in action.
+// We use a constant because it can not be injected via GET/POST/COOKIE/ENV
 const TESTMODE = true;
 
 // Out-of-band information: let the client manipulate the page operations
 if (isset($_COOKIE['PHPUNIT_SELENIUM_TEST_ID']) && extension_loaded('xdebug')) {
+    // NB: this has to be kept in sync with phunit_coverage.php
     $GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'] = '/tmp/phpxmlrpc_coverage';
     if (!is_dir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'])) {
         mkdir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY']);

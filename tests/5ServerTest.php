@@ -95,7 +95,6 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
     {
         $this->args = argParser::getArgs();
 
-        //$uri = str_replace('/demo/server/server.php', '/tests/index.php?demo=server/server.php', $this->args['HTTPURI']);
         $server = explode(':', $this->args['HTTPSERVER']);
         if (count($server) > 1) {
             $this->client = new xmlrpc_client($this->args['HTTPURI'], $server[0], $server[1]);

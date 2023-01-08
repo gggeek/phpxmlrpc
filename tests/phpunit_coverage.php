@@ -8,7 +8,7 @@
 
 $coverageFile = realpath(__DIR__ . "/../vendor/phpunit/phpunit-selenium/PHPUnit/Extensions/SeleniumCommon/phpunit_coverage.php");
 
-// has to be the same value as used in server.php
+// has to be the same value as used in index.php
 $GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'] = '/tmp/phpxmlrpc_coverage';
 
 if (!is_dir($GLOBALS['PHPUNIT_COVERAGE_DATA_DIRECTORY'])) {

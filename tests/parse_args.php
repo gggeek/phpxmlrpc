@@ -43,7 +43,8 @@ class argParser
             //'LOCALPATH' => __DIR__,
         );
 
-        // check for command line (env vars) vs. web page input params
+        // check for command line params (passed as env vars) vs. web page input params (passed as GET/POST)
+        // Note that the only usecase for web-page mode is when this is used by benchmark.php
         if (!isset($_SERVER['REQUEST_METHOD'])) {
             foreach($_SERVER as $key => $val) {
                 if (array_key_exists($key, $args)) {

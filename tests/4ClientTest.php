@@ -89,7 +89,6 @@ class ClientTest extends PhpXmlRpc_PolyfillTestCase
             $this->client->port = $server[1];
         }
         $this->client->server = $server[0];
-        //$this->client->path = str_replace('/demo/server/server.php', '/tests/index.php?demo=server/server.php', $this->args['HTTPURI']);
         $this->client->path = $this->args['HTTPURI'];
 
         $r = $this->client->send($m, 5, 'http11');
