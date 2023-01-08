@@ -47,7 +47,7 @@ if (!$resp->faultCode()) {
     $response = $encoder->decodeXml($xml);
     // from Response to Value
     $value = $response->value();
-    // from value to php
+    // from Value to php
     $value = $encoder->decode($value);
 
     output("Toolkit info:<br/>\n");

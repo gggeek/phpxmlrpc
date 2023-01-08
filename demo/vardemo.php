@@ -64,18 +64,31 @@ output("Struct: <PRE>" . htmlentities($v->serialize()) . "</PRE>");
 $w = new PhpXmlRpc\Value(array($v), 'array');
 output("Array containing a struct: <PRE>" . htmlentities($w->serialize()) . "</PRE>");
 
-/*$w = new PhpXmlRpc\Value("Mary had a little lamb,
-Whose fleece was white as snow,
-And everywhere that Mary went
-the lamb was sure to go.
+class MyClass
+{
+    public $public = 'a public property';
+    protected $protected = 'a protected one';
+    private $private = 'a private one';
+}
+$myObject = new MyClass();
+// the public property is the only one which will be serialized. As such, it has to be of type Value
+$myObject->public = new \PhpXmlRpc\Value('a public property, wrapped');
+$w = new PhpXmlRpc\Value($myObject, 'struct');
+output("Struct encoding a php object: <PRE>" . htmlentities($w->serialize()) . "</PRE>");
 
-Mary had a little lamb
-She tied it to a pylon
-Ten thousand volts went down its back
-And turned it into nylon", "base64"
-);
-output("<PRE>" . htmlentities($w->serialize()) . "</PRE>");
-output("<PRE>Value of base64 string is: '" . $w->scalarval() . "'</PRE>");*/
+output("<h3>Testing value serialization - xmlrpc extensions</h3>\n");
+$v = new PhpXmlRpc\Value(1234, 'i8');
+output("I8: <PRE>" . htmlentities($v->serialize()) . "</PRE>");
+$v = new PhpXmlRpc\Value(null, 'null');
+output("Null: <PRE>" . htmlentities($v->serialize()) . "</PRE>");
+\PhpXmlRpc\PhpXmlRpc::$xmlrpc_null_apache_encoding = true;
+output("Null, alternative: <PRE>" . htmlentities($v->serialize()) . "</PRE>");
+
+output("<h3>Testing value serialization - character encoding</h3>\n");
+// The greek word 'kosme'
+$v = new PhpXmlRpc\Value('κόσμε');
+output("Greek (default encoding): <PRE>" . htmlentities($v->serialize()) . "</PRE>");
+output("Greek (utf8 encoding): <PRE>" . htmlentities($v->serialize('UTF-8')) . "</PRE>");
 
 output("<h3>Testing request serialization</h3>\n");
 $req = new PhpXmlRpc\Request('examples.getStateName');
@@ -97,5 +110,10 @@ output("That is to say $date --> $tb\n");
 output("Which comes out at " . PhpXmlRpc\Helper\Date::iso8601Encode($tb) . "\n");
 output("Which was the time in UTC at " . PhpXmlRpc\Helper\Date::iso8601Encode($tb, 1) . "\n");
 output("</pre>\n");
+
+output("<h3>Testing reduced-precision formatting for doubles</h3><pre>\n");
+$v = new PhpXmlRpc\Value(1234.56789, 'double');
+\PhpXmlRpc\PhpXmlRpc::$xmlpc_double_precision = 2;
+output("Double, limited precision: <PRE>" . htmlentities($v->serialize()) . "</PRE>");
 
 output('</body></html>');
