@@ -52,13 +52,13 @@ class Server
      * @var bool
      * When set to true, it will enable HTTP compression of the response, in case the client has declared its support
      * for compression in the request.
-     * Set at constructor time.
+     * Automatically set at constructor time.
      */
     public $compress_response = false;
 
     /**
      * @var string[]
-     * List of http compression methods accepted by the server for requests. Set at constructor time.
+     * List of http compression methods accepted by the server for requests. Automatically set at constructor time.
      * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib
      */
     public $accepted_compression = array();
@@ -177,7 +177,12 @@ class Server
         // if ZLIB is enabled, let the server by default accept compressed requests,
         // and compress responses sent to clients that support them
         if (function_exists('gzinflate')) {
-            $this->accepted_compression = array('gzip', 'deflate');
+            $this->accepted_compression[] = 'gzip';
+        }
+        if (function_exists('gzuncompress')) {
+            $this->accepted_compression[] = 'deflate';
+        }
+        if (function_exists('gzencode') || function_exists('gzcompress')) {
             $this->compress_response = true;
         }
 
@@ -337,16 +342,13 @@ class Server
 
             // http compression of output: only if we can do it, and we want to do it, and client asked us to,
             // and php ini settings do not force it already
-            /// @todo check separately for gzencode and gzcompress functions, in case of polyfills
             $phpNoSelfCompress = !ini_get('zlib.output_compression') && (ini_get('output_handler') != 'ob_gzhandler');
-            if ($this->compress_response && function_exists('gzencode') && $respEncoding != ''
-                && $phpNoSelfCompress
-            ) {
-                if (strpos($respEncoding, 'gzip') !== false) {
+            if ($this->compress_response && $respEncoding != '' && $phpNoSelfCompress) {
+                if (strpos($respEncoding, 'gzip') !== false && function_exists('gzencode')) {
                     $payload = gzencode($payload);
                     header("Content-Encoding: gzip");
                     header("Vary: Accept-Encoding");
-                } elseif (strpos($respEncoding, 'deflate') !== false) {
+                } elseif (strpos($respEncoding, 'deflate') !== false && function_exists('gzcompress')) {
                     $payload = gzcompress($payload);
                     header("Content-Encoding: deflate");
                     header("Vary: Accept-Encoding");
@@ -484,6 +486,7 @@ class Server
         if ($contentEncoding != '' && strlen($data)) {
             if ($contentEncoding == 'deflate' || $contentEncoding == 'gzip') {
                 // if decoding works, use it. else assume data wasn't gzencoded
+                /// @todo test separately for gzinflate and gzuncompress
                 if (function_exists('gzinflate') && in_array($contentEncoding, $this->accepted_compression)) {
                     if ($contentEncoding == 'deflate' && $degzdata = @gzuncompress($data)) {
                         $data = $degzdata;
