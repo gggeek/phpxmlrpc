@@ -3,10 +3,10 @@
 * improved: revised all demo files. Showcase more features in client demos; isolate better testsuite functions in
   server demos and make sure they are not active unless triggered by running the tests
 
-* improved: catch php Errors besides Exceptions thrown by method handler functions (ie. server-side) for php 7 and up
+* improved: for php 7 and up, catch php Errors besides Exceptions thrown by method handler functions (ie. server-side)
 
 * fixed: when using the Exception or Error thrown by a method handler function to build the xml-rpc response, override
-  fault Code 0, as it makes responses unserializable
+  fault Code 0, as it breaks response serialization
 
 
 ## XML-RPC for PHP version 4.9.4 - 2023-1-7
