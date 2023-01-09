@@ -1,11 +1,11 @@
 <?php
 /**
- * Defines functions and signatures which can be registered as methods exposed by an XMLRPC Server
+ * Defines functions and signatures which can be registered as methods exposed by an XML-RPC Server
  *
  * To use this, use something akin to:
  * $signatures = include('functions.php');
  *
- * Simplest possible way to implement webservices: create xmlrpc-aware php functions in the global namespace
+ * Simplest possible way to implement webservices: create xml-rpc-aware php functions in the global namespace
  */
 
 use PhpXmlRpc\Encoder;

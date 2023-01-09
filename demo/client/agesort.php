@@ -2,11 +2,11 @@
 require_once __DIR__ . "/_prepend.php";
 
 output('<html lang="en">
-<head><title>xmlrpc - Agesort demo</title></head>
+<head><title>phpxmlrpc - Agesort demo</title></head>
 <body>
 <h1>Agesort demo</h1>
 <h2>Send an array of "name" => "age" pairs to the server that will send it back sorted.</h2>
-<h3>The code demonstrates usage of automatic encoding/decoding of php variables into xmlrpc values such as arrays and structs</h3>
+<h3>The code demonstrates usage of automatic encoding/decoding of php variables into xml-rpc values such as arrays and structs</h3>
 <p>Have a look at <a href="../vardemo.php">vardemo.php</a> for more examples of manual encoding and decoding</p>
 <p>You can see the source to this page here: <a href="agesort.php?showSource=1">agesort.php</a></p>
 ');
@@ -31,7 +31,7 @@ output('</pre>');
 // Create xml-rpc parameters from the input array: an array of structs
 $encoder = new Encoder();
 $v = $encoder->encode($inAr);
-output("Encoded into xmlrpc format it looks like this: <pre>\n" . htmlentities($v->serialize()) . "</pre>\n");
+output("Encoded into xml-rpc format it looks like this: <pre>\n" . htmlentities($v->serialize()) . "</pre>\n");
 
 // create client and request objects
 $req = new Request('examples.sortByAge', array($v));

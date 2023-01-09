@@ -1,7 +1,12 @@
 <?php
 /**
  * A basic comment server. Given an ID it will store a list of names and comment texts against it.
- * It uses a SQLite DB database for storage.
+ * It uses a SQLite3 database for storage.
+ *
+ * The source code demonstrates:
+ * - registration of php class methods as xml-rpc method handlers
+ * - usage as method handlers of php code which is completely unaware of xml-rpc, via the Server's properties
+ *   `$functions_parameters_type` and `$exception_handling`
  */
 
 require_once __DIR__ . "/_prepend.php";
@@ -20,6 +25,9 @@ class CommentManager
     }
 
     /**
+     * NB: we know for a fact that this will be called with 3 string arguments because of the signature used to register
+     * this method in the dispatch map. But nothing prevents the client from sending empty strings, nor sql-injection attempts!
+     *
      * @param string $msgID
      * @param string $name
      * @param string $comment
@@ -36,6 +44,7 @@ class CommentManager
         $statement->bindValue(':name', $name);
         $statement->bindValue(':comment', $comment);
         $statement->execute();
+
         /// @todo this insert-then-count is not really atomic - we should use a transaction
 
         $statement = $db->prepare("SELECT count(*) AS tot FROM comments WHERE msg_id = :id");
@@ -51,6 +60,9 @@ class CommentManager
     }
 
     /**
+     * NB: we know for a fact that this will be called with 1 strin arguments because of the signature used to register
+     * this method in the dispatch map. But nothing prevents the client from sending empty strings, nor sql-injection attempts!
+     *
      * @param string $msgID
      * @return Response|array[]
      * @throws \Exception

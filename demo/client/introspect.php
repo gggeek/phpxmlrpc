@@ -2,7 +2,7 @@
 require_once __DIR__ . "/_prepend.php";
 
 output('<html lang="en">
-<head><title>xmlrpc - Introspect demo</title></head>
+<head><title>phpxmlrpc - Introspect demo</title></head>
 <body>
 <h1>Introspect demo</h1>
 <h2>Query server for available methods, their description and their signatures</h2>

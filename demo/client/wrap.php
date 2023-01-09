@@ -2,14 +2,14 @@
 require_once __DIR__ . "/_prepend.php";
 
 output('<html lang="en">
-<head><title>xmlrpc - Webservice wrapper demo</title></head>
+<head><title>phpxmlrpc - Webservice wrapper demo</title></head>
 <body>
 <h1>Webservice wrapper demo</h1>
 
 <h2>Wrap methods exposed by server into php functions</h2>
 
 <h3>The code demonstrates usage of some of the most automagic client usage possible:<br/>
-    1) client that returns php values instead of xmlrpc value objects<br/>
+    1) client that returns php values instead of xml-rpc Value objects<br/>
     2) wrapping of remote methods into php functions<br/>
     See also proxy.php for an alternative take
 </h3>

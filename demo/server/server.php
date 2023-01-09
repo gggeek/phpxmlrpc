@@ -1,10 +1,11 @@
 <?php
 /**
- * Demo server for xmlrpc library.
+ * Demo server for phpxmlrpc library.
  *
- * Implements a lot of webservices, including a suite of services used for interoperability testing (validator1 methods),
- * and some whose only purpose is to be used for unit-testing the library.
- * It also allows the caller to configure specific features by using "out of band" query string parameters.
+ * Implements a lot of webservices, including a suite of services used for interoperability testing (validator1 and
+ * interopEchoTests methods), and some whose only purpose is to be used for testing the library.
+ * It also allows the caller to configure specific server features by using "out of band" query string parameters when
+ * in test mode.
  *
  * Please _do not_ copy this file verbatim into your production server.
  */
@@ -16,10 +17,10 @@ use PhpXmlRpc\Response;
 use PhpXmlRpc\Server;
 use PhpXmlRpc\Value;
 
-// Most of the code used to implement the webservices, and their signatures, are stowed away in neatly organized
-// files, each demoing a different topic
+// Most of the code used to implement the webservices, and their signatures, are stowed away in neatly organized files,
+// each demoing a different topic
 
-// The simplest way of implementing webservices: as xmlrpc-aware global functions
+// The simplest way of implementing webservices: as xml-rpc-aware global functions
 $signatures1 = include(__DIR__.'/methodProviders/functions.php');
 
 // Definitions of webservices used for interoperability testing
@@ -27,12 +28,13 @@ $signatures2 = include(__DIR__.'/methodProviders/interop.php');
 $signatures3 = include(__DIR__.'/methodProviders/validator1.php');
 
 // And finally a few examples inline
+/// @todo bring back a few, basic examples here
 $signatures = array();
 
 $signatures = array_merge($signatures, $signatures1, $signatures2, $signatures3);
 
 if (defined('TESTMODE')) {
-    // Webservices used only by the testuite
+    // Webservices used only by the testsuite - do not use them in production
     $signatures4 = include(__DIR__.'/methodProviders/testsuite.php');
     $signatures5 = include(__DIR__.'/methodProviders/wrapper.php');
 
@@ -44,7 +46,6 @@ PhpXmlRpc::$xmlrpc_null_extension = true;
 
 $s = new Server($signatures, false);
 $s->setDebug(3);
-$s->compress_response = true;
 
 // Out-of-band information: let the client manipulate the server operations.
 // We do this to help the testsuite script: do not reproduce in production!

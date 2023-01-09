@@ -2,7 +2,7 @@
 require_once __DIR__ . "/client/_prepend.php";
 
 output('<html lang="en">
-<head><title>xmlrpc</title></head>
+<head><title>phpxmlrpc</title></head>
 <body>
 ');
 
@@ -76,7 +76,7 @@ $myObject->public = new \PhpXmlRpc\Value('a public property, wrapped');
 $w = new PhpXmlRpc\Value($myObject, 'struct');
 output("Struct encoding a php object: <PRE>" . htmlentities($w->serialize()) . "</PRE>");
 
-output("<h3>Testing value serialization - xmlrpc extensions</h3>\n");
+output("<h3>Testing value serialization - xml-rpc extensions</h3>\n");
 $v = new PhpXmlRpc\Value(1234, 'i8');
 output("I8: <PRE>" . htmlentities($v->serialize()) . "</PRE>");
 $v = new PhpXmlRpc\Value(null, 'null');

@@ -2,11 +2,11 @@
 require_once __DIR__ . "/_prepend.php";
 
 output('<html lang="en">
-<head><title>xmlrpc - Getstatename demo</title></head>
+<head><title>phpxmlrpc - Getstatename demo</title></head>
 <body>
 <h1>Getstatename demo</h1>
 <h2>Send a U.S. state number to the server and get back the state name</h2>
-<h3>The source code demonstrates basic lib usage, including manual creation and decoding of of xml-rpc values</h3>
+<h3>The source code demonstrates basic lib usage, including manual creation and decoding of xml-rpc values</h3>
 <p>You can see the source to this page here: <a href="getstatename.php?showSource=1">getstatename.php</a></p>
 ');
 

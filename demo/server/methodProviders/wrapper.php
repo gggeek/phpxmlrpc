@@ -1,12 +1,12 @@
 <?php
 /**
- * Defines functions and signatures which can be registered as methods exposed by an XMLRPC Server
+ * Defines functions and signatures which can be registered as methods exposed by an XML-RPC Server
  *
  * To use this, use something akin to:
  * $signatures = include('wrapper.php');
  * NB: requires 'functions.php' to be included first
  *
- * Wrap methods of xmlrpc-unaware php classes and xmlrpc-unaware php functions so that they can be used transparently.
+ * Wrap methods of xml-rpc-unaware php classes and xml-rpc-unaware php functions so that they can be used transparently.
  */
 
 use PhpXmlRpc\Response;
@@ -16,7 +16,7 @@ use PhpXmlRpc\Value;
 
 /**
  * Inner code of the state-number server.
- * Used to test wrapping of PHP functions into xmlrpc methods.
+ * Used to test wrapping of PHP functions into xml-rpc methods.
  *
  * @param integer $stateNo the state number
  *
@@ -80,7 +80,7 @@ class xmlrpcServerMethodsContainer
 
     /**
      * A PHP version of the state-number server. Send me an integer and i'll sell you a state.
-     * Used to test wrapping of PHP methods into xmlrpc methods.
+     * Used to test wrapping of PHP methods into xml-rpc methods.
      *
      * @param integer $num
      * @return string

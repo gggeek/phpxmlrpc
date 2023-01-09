@@ -2,7 +2,7 @@
 require_once __DIR__ . "/_prepend.php";
 
 output('<html lang="en">
-<head><title>xmlrpc - Which toolkit demo</title></head>
+<head><title>phpxmlrpc - Which toolkit demo</title></head>
 <body>
 <h1>Which toolkit demo</h1>
 <h2>Query server for toolkit information</h2>

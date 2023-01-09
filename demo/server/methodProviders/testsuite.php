@@ -1,11 +1,11 @@
 <?php
 /**
- * Defines functions and signatures which can be registered as methods exposed by an XMLRPC Server.
+ * Defines functions and signatures which can be registered as methods exposed by an XML-RPC Server.
  *
  * To use this, use something akin to:
  * $signatures = include('tests.php');
  *
- * Methods used by the xmlrpc testsuite
+ * Methods used by the phpxmlrpc testsuite
  */
 
 use PhpXmlRpc\Encoder;

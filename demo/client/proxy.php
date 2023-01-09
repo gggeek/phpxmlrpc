@@ -2,7 +2,7 @@
 require_once __DIR__ . "/_prepend.php";
 
 output('<html lang="en">
-<head><title>xmlrpc - Proxy demo</title></head>
+<head><title>phpxmlrpc - Proxy demo</title></head>
 <body>
 <h1>proxy demo</h1>
 <h2>Query server using a "proxy" object</h2>
