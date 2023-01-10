@@ -13,24 +13,6 @@ my $resp = $client->call("examples.getStateName", 32);
 
 print "Got '${resp}'\n";
 
-# now send a mail to nobody in particular
-
-#$resp = $client->call("mail.send", (
-#    "edd",
-#    "Test",
-#    "Bonjour. Je m'appelle Gérard. Mañana. ",
-#    "freddy",
-#    "",
-#    "",
-#    'text/plain; charset="iso-8859-1"')
-#);
-#
-#if ($resp->value()) {
-#    print "Mail sent OK.\n";
-#} else {
-#    print "Error sending mail.\n";
-#}
-
 # test echoing of characters works fine
 
 $resp = $client->call("examples.echo", 'Three "blind" mice - ' . "See 'how' they run");

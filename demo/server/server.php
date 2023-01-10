@@ -10,6 +10,17 @@
  * Please _do not_ copy this file verbatim into your production server.
  */
 
+// We answer to CORS preflight requests, to allow browsers which are visiting a site on a different domain to send
+// xml-rpc requests (generated via javascript) to this server.
+// Doing so has serious security implications, so we lock it by default to only be enabled on the well-known demo server.
+// If enabling it on your server, you most likely want to set up an allowed domains whitelist, rather than using'*'
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS' && $_SERVER['SERVER_ADMIN'] == 'info@altervista.org') {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST");
+    header("Access-Control-Expose-Headers: Content-Encoding");
+    die();
+}
+
 require_once __DIR__ . "/_prepend.php";
 
 use PhpXmlRpc\PhpXmlRpc;
@@ -30,8 +41,8 @@ $signatures3 = include(__DIR__.'/methodProviders/validator1.php');
 
 $signatures = array_merge($signatures1, $signatures2, $signatures3);
 
+// Webservices used only by the testsuite - do not use them in production
 if (defined('TESTMODE')) {
-    // Webservices used only by the testsuite - do not use them in production
     $signatures4 = include(__DIR__.'/methodProviders/testsuite.php');
     $signatures5 = include(__DIR__.'/methodProviders/wrapper.php');
 

@@ -1709,6 +1709,12 @@ $client->setCurlOptions([CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3]
 
 Yes. Set `+$client->use_curl = Client::USE_CURL_ALWAYS+` then use the Client method `+$client->setCurlOptions()+`
 
+=== Does the server support cross-domain xml-rpc calls?
+
+It is trivial to make phpxmlrpc servers support CORS preflight requests, allowing them to receive xml-rpc requests sent
+from browsers visiting different domains. However, this feature is not enabled out of the box, for obvious security concerns.
+See at the top of the file __demo/server/server.php__ for an example of enabling that.
+
 === How to enable long-lasting method calls
 
 To be documented...
