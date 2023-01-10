@@ -4,8 +4,8 @@
   server demos and make sure they are not active unless triggered by running the tests; add demos for code-generation
   for both clients and servers
 
-* improved: added command `taskfile`, which can be used to download the demo files or the visualeditor component for
-  the debugger (requires bash, curl)
+* improved: added cli command `taskfile`, which can be used to download the demo files or the visualeditor component for
+  the debugger (requires bash, curl and a smattering of other common unix/linux/macos? tools)
 
 * improved: for php 7 and up, catch php Errors besides Exceptions thrown by method handler functions (ie. server-side)
 

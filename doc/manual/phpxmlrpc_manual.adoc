@@ -41,6 +41,11 @@ Usage of Exceptions is almost non-existent.
 A mix of snake_case and CamelCase naming is used.
 
 
+== Requirements and installation instructions
+
+See https://github.com/gggeek/phpxmlrpc/blob/master/INSTALL.md
+
+
 == API usage [[apidocs]]
 
 === Type conversion [[types]]
@@ -465,7 +470,7 @@ available in your php installation, via the `setCurlOptions` method.
 
 ==== Sending multiple requests
 
-Both the Client and Server classes provided by the library support the multicall xmlrpc extension, which allows to execute
+Both the Client and Server classes provided by the library support the "multicall" xmlrpc extension, which allows to execute
 multiple xml-rpc requests with a single http call, by wrapping them up in a call to the  `system.multiCall` method.
 
 The expected advantage is a nice improvements in performances, especially when there are many small requests at play, but,
@@ -499,7 +504,15 @@ sending every request separately, one at a time. If you are sure that the server
 might want to optimize and avoid this second attempt by passing `false` as 4th argument to `multicall()`.
 
 If, on the other hand, after writing code which uses the `multicall` method, you are forced to migrate to a server which
-does not support the `system.multiCall` method, you can simply set `$client->no_multicall = true`
+does not support the `system.multiCall` method, you can simply set `+$client->no_multicall = true+`.
+
+In case you are not using multicall, but have to send many requests in a row to the same server, the best performances
+are generally obtained by forcing the Client to use the cURL HTTP transport, which enables usage of http keepalive, and
+possibly of HTTP2.
+
+The demo file __demo/client/parallel.php_ is a good starting point if you want to compare the performances of a single
+multicall request vs. sending multiple requests in a row. It even shows a non-multicall implementation which uses cURL
+to achieve sending of multiple requests in parallel.
 
 === Server [[server]]
 
@@ -545,8 +558,9 @@ method, the key being the method name. The corresponding value is another associ
 members:
 
 * `function` - this entry is mandatory. It must be a callable: either a name of a function in the global scope which
-  services the XML-RPC method, an array containing an instance of an object and a method name, or an array containing
-  a class name and a static method name (for static class methods the '$class::$method' syntax is also supported).
+  services the XML-RPC method, an array containing an instance of an object and a method name, an array containing
+  a class name and a static method name (for static class methods the '$class::$method' syntax is also supported), or
+  an inline anonymous function.
 
 * `signature` - this entry is an array containing the possible signatures (see <<signatures>>) for the method. If this
   entry is present then the server will check that the correct number and type of parameters have been sent for this
@@ -561,7 +575,7 @@ members:
 
 * `parameters_type` - this entry can be used when the server is working in 'xmlrpcvals' mode (see <<method_handlers>>)
   to define one or more entries in the dispatch map as being functions that follow the 'phpvals' calling convention.
-  The only useful value is currently the string 'phpvals'.
+  The only useful value is currently the string 'phpvals'. _NB: this is known to be broken atm_
 
 Methods `system.listMethods`, `system.methodHelp`, `system.methodSignature` and `system.multicall` are already defined
 by the server, and should not be reimplemented (see <<reservedmethods>> below).
@@ -764,6 +778,8 @@ There are a few things to keep in mind when using this calling convention:
 
 * last but not least, the direct parsing of xml to php values is faster than using xmlrpcvals, and allows the library
   to handle much bigger messages without allocating all available server memory or smashing PHP recursive call stack.
+
+An example of a Server using automatic type conversion is found in demo file __demo/server/discuss.php__
 
 ==== Delaying the server response
 
@@ -1475,7 +1491,22 @@ is to test against the "demo" server which comes bundled with the library:
 
 The debugger can take advantage of the JSXMLRPC library's visual editor component to allow easy mouse-driven construction
 of the payload for remote methods. To enable the extra functionality, it has have to be downloaded separately and copied
-to the debugger directory: @TODO...
+to the debugger directory. The easiest way to achieve that is to run the command
+
+    ./taskfile setup_debugger_visualeditor
+
+If that command does not work on your installation (it has not been widely tested on MacOS, and it does not support Windows)
+and you have NodeJS installed, you can achieve the same by executing
+
+    cd debugger && npm install @jsxmlrpc/jsxmlrpc
+
+=== Alternative debugger setup
+
+Since November 2022, the same interactive xml-rpc debugger which is bundled with this library is also available as a
+Docker Container image, making it easy to use it as a standalone tool in any environment, without the need for having PHP
+or Composer installed.
+
+Installation and usage instructions can be found at https://github.com/gggeek/phpxmlrpc-debugger
 
 
 == Running tests [[tests]]

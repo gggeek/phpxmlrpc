@@ -169,7 +169,7 @@ class Server
      *                             - docstring (optional)
      *                             - signature (array, optional)
      *                             - signature_docs (array, optional)
-     *                             - parameters_type (string, optional)
+     *                             - parameters_type (string, optional) - currently broken
      * @param boolean $serviceNow set to false to prevent the server from running upon construction
      */
     public function __construct($dispatchMap = null, $serviceNow = true)

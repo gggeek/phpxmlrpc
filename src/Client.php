@@ -95,14 +95,14 @@ class Client
     /**
      * @var bool
      *
-     * Whether to use persistent connections for http 1.1 and https.
+     * Whether to use persistent connections for http 1.1 and https. Value set at constructor time
      */
     public $keepalive = false;
 
     /**
      * @var string[]
      *
-     * Charset encodings that can be decoded without problems by the client
+     * Charset encodings that can be decoded without problems by the client. Value set at constructor time
      */
     public $accepted_charset_encodings = array();
 
@@ -138,7 +138,7 @@ class Client
     /**
      * @var string
      *
-     * Sent to servers in http headers.
+     * Sent to servers in http headers. Value set at constructor time.
      */
     public $user_agent;
 

@@ -86,8 +86,22 @@ Installation of the library is quite easy:
         as leaving it open to access means that any visitor can trigger execution of php code such as
         the built-in debugger.
 
-Tip: to reduce the size of the download, the demo files are not part of the default package installed with Composer.
-You can either check them out online at https://github.com/gggeek/phpxmlrpc/tree/master/demo, or make sure they are
-available locally, by either installing the library using Composer option `--prefer-install=source`, running
-`./taskfile download_demos` (requires bash, curl, tar commands), or manually downloading them from
-https://github.com/gggeek/phpxmlrpc/releases.
+Tips
+----
+
+* To reduce the size of the download, the demo files are not part of the default package installed with Composer.
+  You can either check them out online at https://github.com/gggeek/phpxmlrpc/tree/master/demo, or make sure they are
+  available locally, by either installing the library using Composer option `--prefer-install=source`, running
+  `./taskfile download_demos` (requires bash, curl, tar commands), or manually downloading them from
+  https://github.com/gggeek/phpxmlrpc/releases.
+
+* The xml-rpc debugger included with the library can be augmented by installing an extra package for js-based interaction.
+  See the [user manual](doc/manual/phpxmlrpc_manual.adoc) for details on installing it.
+
+* When installing the phpxmlrpc library via Composer, Composer takes care of verifying that all the prerequisites are met.
+  In case you are installing the library via manual download, or if you suspect that your php installation might be missing
+  some feature required by the library, you can check the compatibility of phpxmlrpc with your php installation by
+  executing the php file `verify_compat.php`. That file is not part of the default package and has to be downloaded
+  separately, eg:
+
+      curl -fsSL -o verify_compat.php https://raw.githubusercontent.com/gggeek/phpxmlrpc/master/extras/verify_compat.php && php verify_compat.php
