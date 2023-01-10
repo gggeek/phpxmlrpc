@@ -146,7 +146,7 @@ And the array will be returned with the entries sorted by their numbers.';
 
     public static $stringecho_sig = array(array('string', 'string'));
     public static $stringecho_doc = 'Accepts a string parameter, returns the string.';
-    function stringEcho($req)
+    public static function stringEcho($req)
     {
         // just sends back a string
         return new Response(new Value($req->getParam(0)->scalarval()));
@@ -154,7 +154,7 @@ And the array will be returned with the entries sorted by their numbers.';
 
     public static $echoback_sig = array(array('string', 'string'));
     public static $echoback_doc = 'Accepts a string parameter, returns the entire incoming payload';
-    function echoBack($req)
+    public static function echoBack($req)
     {
         // just sends back a string with what I got sent to me, that's all (escaping for xml is automatic)
         $s = "I got the following message:\n" . $req->serialize();
@@ -164,7 +164,7 @@ And the array will be returned with the entries sorted by their numbers.';
 
     public static $echosixtyfour_sig = array(array('string', 'base64'));
     public static $echosixtyfour_doc = 'Accepts a base64 parameter and returns it decoded as a string';
-    function echoSixtyFour($req)
+    public static function echoSixtyFour($req)
     {
         // Accepts an encoded value, but sends it back as a normal string.
         // This is to test that base64 encoding is working as expected
@@ -175,7 +175,7 @@ And the array will be returned with the entries sorted by their numbers.';
 
     public static $bitflipper_sig = array(array('array', 'array'));
     public static $bitflipper_doc = 'Accepts an array of booleans, and returns them inverted';
-    function bitFlipper($req)
+    public static function bitFlipper($req)
     {
         $v = $req->getParam(0);
         $rv = new Value(array(), Value::$xmlrpcArray);

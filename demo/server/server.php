@@ -30,7 +30,7 @@ $signatures3 = include(__DIR__.'/methodProviders/validator1.php');
 
 $signatures = array_merge($signatures1, $signatures2, $signatures3);
 
-if (defined('TESTMODE') || true) {
+if (defined('TESTMODE')) {
     // Webservices used only by the testsuite - do not use them in production
     $signatures4 = include(__DIR__.'/methodProviders/testsuite.php');
     $signatures5 = include(__DIR__.'/methodProviders/wrapper.php');
