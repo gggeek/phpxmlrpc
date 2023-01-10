@@ -271,8 +271,8 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
         // (used on the server side) sort it out
         $this->addQueryParams(array('DETECT_ENCODINGS' => array('EUC-JP', 'UTF-8')));
         $v = $this->send(mb_convert_encoding($str, 'EUC-JP', 'UTF-8'));
-        $this->assertEquals($sendString, $v->scalarval());
         PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
+        $this->assertEquals($sendString, $v->scalarval());
     }
 
     public function testExoticCharsetsRequests3()
@@ -319,10 +319,10 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
             new xmlrpcval('hello')
         ));
         $v = $this->send($m);
+        PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
         if ($v) {
             $this->assertEquals('hello', $v->scalarval());
         }
-        PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
     }
 
     public function testAddingDoubles()
@@ -830,7 +830,7 @@ And turned it into nylon';
 
     public function testServerWrappedClass()
     {
-        $m = new xmlrpcmsg('tests.xmlrpcServerMethodsContainer.findState', array(
+        $m = new xmlrpcmsg('tests.handlersContainer.findState', array(
             new xmlrpcval(23, 'int'),
         ));
         $v = $this->send($m);
@@ -1008,7 +1008,7 @@ And turned it into nylon';
 
     public function testServerComments()
     {
-        $m = new xmlrpcmsg('tests.xmlrpcServerMethodsContainer.debugMessageGenerator', array(
+        $m = new xmlrpcmsg('tests.handlersContainer.debugMessageGenerator', array(
             new xmlrpcval('hello world', 'string'),
         ));
         $r = $this->send($m, 0, true);

@@ -15,6 +15,7 @@ use PhpXmlRpc\Response;
 use PhpXmlRpc\Server;
 use PhpXmlRpc\Value;
 
+// NB: this class is totally unaware of the existence of xml-rpc or phpxmlrpc
 class CommentManager
 {
     protected $dbFile = "/tmp/comments.db";
@@ -87,6 +88,8 @@ class CommentManager
     }
 }
 
+// Here starts the mapping of CommentManager's methods into xml-rpc methods
+
 $manager = new CommentManager();
 
 $addComment_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcString, Value::$xmlrpcString, Value::$xmlrpcString));
@@ -99,8 +102,6 @@ $getComments_sig = array(array(Value::$xmlrpcArray, Value::$xmlrpcString));
 $getComments_doc = 'Returns an array of comments for a given ID, which is the sole argument. Each array item is a struct ' .
     'containing name and comment text.';
 
-// NB: take care not to output anything else after this call, as it will mess up the responses and it will be hard to
-// debug. In case you have to do so, at least re-emit a correct Content-Length http header (requires output buffering)
 $srv = new Server(array(
     "discuss.addComment" => array(
         "function" => array($manager, "addComment"),
@@ -120,4 +121,6 @@ $srv->functions_parameters_type = 'phpvals';
 // let code exceptions float all the way to the remote caller as xml-rpc faults - it helps debugging
 $srv->exception_handling = 1;
 
+// NB: take care not to output anything else after this call, as it will mess up the responses and it will be hard to
+// debug. In case you have to do so, at least re-emit a correct Content-Length http header (requires output buffering)
 $srv->service();

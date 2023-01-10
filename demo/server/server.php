@@ -13,27 +13,24 @@
 require_once __DIR__ . "/_prepend.php";
 
 use PhpXmlRpc\PhpXmlRpc;
-use PhpXmlRpc\Response;
 use PhpXmlRpc\Server;
-use PhpXmlRpc\Value;
 
 // Most of the code used to implement the webservices, and their signatures, are stowed away in neatly organized files,
 // each demoing a different topic
 
-// The simplest way of implementing webservices: as xml-rpc-aware global functions
+// One of the simplest way of implementing webservices: as xml-rpc-aware methods of a php object
 $signatures1 = include(__DIR__.'/methodProviders/functions.php');
 
-// Definitions of webservices used for interoperability testing
+// Even simpler? webservices defined using php functions in the global scope: definitions of webservices used for
+// interoperability testing
 $signatures2 = include(__DIR__.'/methodProviders/interop.php');
 $signatures3 = include(__DIR__.'/methodProviders/validator1.php');
 
-// And finally a few examples inline
-/// @todo bring back a few, basic examples here
-$signatures = array();
+// See also discuss.php for a different take: implementing webservices out of php code which is not aware of xml-rpc
 
-$signatures = array_merge($signatures, $signatures1, $signatures2, $signatures3);
+$signatures = array_merge($signatures1, $signatures2, $signatures3);
 
-if (defined('TESTMODE')) {
+if (defined('TESTMODE') || true) {
     // Webservices used only by the testsuite - do not use them in production
     $signatures4 = include(__DIR__.'/methodProviders/testsuite.php');
     $signatures5 = include(__DIR__.'/methodProviders/wrapper.php');

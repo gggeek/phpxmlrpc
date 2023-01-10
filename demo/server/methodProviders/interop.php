@@ -45,79 +45,23 @@ $i_echoBase64_doc = "Echoes base64.";
 $i_echoDate_sig = array(array(Value::$xmlrpcDateTime, Value::$xmlrpcDateTime));
 $i_echoDate_doc = "Echoes dateTime.";
 
-function i_echoParam($req)
-{
-    $s = $req->getParam(0);
-
-    return new Response($s);
-}
-
-function i_echoString($req)
-{
-    return i_echoParam($req);
-}
-
-function i_echoInteger($req)
-{
-    return i_echoParam($req);
-}
-
-function i_echoFloat($req)
-{
-    return i_echoParam($req);
-}
-
-function i_echoStruct($req)
-{
-    return i_echoParam($req);
-}
-
-function i_echoStringArray($req)
-{
-    return i_echoParam($req);
-}
-
-function i_echoIntegerArray($req)
-{
-    return i_echoParam($req);
-}
-
-function i_echoFloatArray($req)
-{
-    return i_echoParam($req);
-}
-
-function i_echoStructArray($req)
-{
-    return i_echoParam($req);
-}
-
-function i_echoValue($req)
-{
-    return i_echoParam($req);
-}
-
-function i_echoBase64($req)
-{
-    return i_echoParam($req);
-}
-
-function i_echoDate($req)
-{
-    return i_echoParam($req);
-}
-
 $i_whichToolkit_sig = array(array(Value::$xmlrpcStruct));
 $i_whichToolkit_doc = "Returns a struct containing the following strings: toolkitDocsUrl, toolkitName, toolkitVersion, toolkitOperatingSystem.";
 
+function i_echoParam($req)
+{
+    $v = $req->getParam(0);
+
+    return new Response($v);
+}
+
 function i_whichToolkit($req)
 {
-    global $SERVER_SOFTWARE;
     $ret = array(
         "toolkitDocsUrl" => "https://gggeek.github.io/phpxmlrpc/",
         "toolkitName" => PhpXmlRpc\PhpXmlRpc::$xmlrpcName,
         "toolkitVersion" => PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion,
-        "toolkitOperatingSystem" => isset($SERVER_SOFTWARE) ? $SERVER_SOFTWARE : $_SERVER['SERVER_SOFTWARE'],
+        "toolkitOperatingSystem" => $_SERVER['SERVER_SOFTWARE'],
     );
 
     $encoder = new PhpXmlRpc\Encoder();
@@ -126,57 +70,57 @@ function i_whichToolkit($req)
 
 return array(
     "interopEchoTests.echoString" => array(
-        "function" => "i_echoString",
+        "function" => "i_echoParam",
         "signature" => $i_echoString_sig,
         "docstring" => $i_echoString_doc,
     ),
     "interopEchoTests.echoStringArray" => array(
-        "function" => "i_echoStringArray",
+        "function" => "i_echoParam",
         "signature" => $i_echoStringArray_sig,
         "docstring" => $i_echoStringArray_doc,
     ),
     "interopEchoTests.echoInteger" => array(
-        "function" => "i_echoInteger",
+        "function" => "i_echoParam",
         "signature" => $i_echoInteger_sig,
         "docstring" => $i_echoInteger_doc,
     ),
     "interopEchoTests.echoIntegerArray" => array(
-        "function" => "i_echoIntegerArray",
+        "function" => "i_echoParam",
         "signature" => $i_echoIntegerArray_sig,
         "docstring" => $i_echoIntegerArray_doc,
     ),
     "interopEchoTests.echoFloat" => array(
-        "function" => "i_echoFloat",
+        "function" => "i_echoParam",
         "signature" => $i_echoFloat_sig,
         "docstring" => $i_echoFloat_doc,
     ),
     "interopEchoTests.echoFloatArray" => array(
-        "function" => "i_echoFloatArray",
+        "function" => "i_echoParam",
         "signature" => $i_echoFloatArray_sig,
         "docstring" => $i_echoFloatArray_doc,
     ),
     "interopEchoTests.echoStruct" => array(
-        "function" => "i_echoStruct",
+        "function" => "i_echoParam",
         "signature" => $i_echoStruct_sig,
         "docstring" => $i_echoStruct_doc,
     ),
     "interopEchoTests.echoStructArray" => array(
-        "function" => "i_echoStructArray",
+        "function" => "i_echoParam",
         "signature" => $i_echoStructArray_sig,
         "docstring" => $i_echoStructArray_doc,
     ),
     "interopEchoTests.echoValue" => array(
-        "function" => "i_echoValue",
+        "function" => "i_echoParam",
         "signature" => $i_echoValue_sig,
         "docstring" => $i_echoValue_doc,
     ),
     "interopEchoTests.echoBase64" => array(
-        "function" => "i_echoBase64",
+        "function" => "i_echoParam",
         "signature" => $i_echoBase64_sig,
         "docstring" => $i_echoBase64_doc,
     ),
     "interopEchoTests.echoDate" => array(
-        "function" => "i_echoDate",
+        "function" => "i_echoParam",
         "signature" => $i_echoDate_sig,
         "docstring" => $i_echoDate_doc,
     ),

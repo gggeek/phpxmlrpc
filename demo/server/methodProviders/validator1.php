@@ -80,8 +80,7 @@ function v1_moderateSizeArrayCheck($req)
     $first = $ar[0];
     $last = $ar[$sz - 1];
 
-    return new Response(new Value($first->scalarval() .
-        $last->scalarval(), Value::$xmlrpcString));
+    return new Response(new Value($first->scalarval() . $last->scalarval(), Value::$xmlrpcString));
 }
 
 $v1_simpleStructReturn_sig = array(array(Value::$xmlrpcStruct, Value::$xmlrpcInt));
