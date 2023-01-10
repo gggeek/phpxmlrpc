@@ -92,7 +92,7 @@ return array(
     // Greek word 'kosme'. NB: NOT a valid ISO8859 string!
     // NB: we can only register this when setting internal encoding to UTF-8, or it will break system.listMethods
     "tests.utf8methodname." . 'κόσμε' => array(
-        "function" => "exampleMethods::stringEcho",
+        "function" => "\\exampleMethods::stringEcho",
         "signature" => exampleMethods::$stringecho_sig,
         "docstring" => exampleMethods::$stringecho_doc,
     ),
