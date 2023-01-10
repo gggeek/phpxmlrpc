@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+set -e
+
+# @todo test all commands on mac, windows-wsl. If there are issues, rewrite this in (plain, no dependencies) php or make it a polyglot?
+
+function download_demos() {
+    # @todo check for presence of curl, tar, grep, sed and tr first
+    # NB: we always get the demos matching the current version, not the last one available
+    #TAG=$(curl -s https://api.github.com/repos/gggeek/phpxmlrpc/releases/latest | grep "tag_name" | cut -d : -f 2,3 | tr -d \" | tr -d , | tr -d ' ')
+    TAG=$(grep 'public \+static \+$xmlrpcVersion *=' src/PhpXmlRpc.php | sed 's/public \+static \+$xmlrpcVersion *= *//' | tr -d ' ' | tr -d \" | tr -d ';' | tr -d "'")
+    curl -fsSL -o demofiles.tgz "https://github.com/gggeek/phpxmlrpc/releases/download/${TAG}/demofiles.tgz"
+    tar -xvzf demofiles.tgz
+    rm demofiles.tgz
+}
+
+function remove_demos() {
+    ROOT_DIR="$(pwd)"
+    if [ -d "${ROOT_DIR}/demo" ]; then rm -rf "${ROOT_DIR}/demo"; fi
+}
+
+# @todo can we find a better name than this?
+function setup_debugger_visualeditor() {
+    ROOT_DIR="$(pwd)"
+    cd "${TMPDIR-/tmp}"
+    # avoid use of npm - use as few dependencies as possible
+    # @todo check for presence of npm first and use it if found - note that that would leave on disk much more stuff than the manual method...
+    # @todo check for presence of curl, grep, cut, tr and unzip first; if unzip is missing but tar is present, download tarball instead
+    # @todo should we filter the release number, eg. removing betas and anything above 0.6.x (or 0.x) ?
+    TAG=$(curl -s https://api.github.com/repos/gggeek/jsxmlrpc/releases/latest | grep "tag_name" | cut -d : -f 2,3 | tr -d \" | tr -d , | tr -d ' ')
+    #TAG="$(npm show @jsxmlrpc/jsxmlrpc@0.6 version | tail -1 | awk '{print $2}' | tr -d "'")"
+    curl -fsSL -o jsxmlrpc.zip "https://github.com/gggeek/jsxmlrpc/archive/refs/tags/${TAG}.zip"
+    unzip jsxmlrpc.zip
+    mv jsxmlrpc-* jsxmlrpc
+    if [ ! -d "${ROOT_DIR}/debugger/jsxmlrpc" ]; then mkdir -p "${ROOT_DIR}/debugger/jsxmlrpc"; fi
+    cp -R jsxmlrpc/lib "${ROOT_DIR}/debugger/jsxmlrpc"
+    cp -R jsxmlrpc/debugger "${ROOT_DIR}/debugger/jsxmlrpc"
+    rm -rf jsxmlrpc*
+}
+
+function remove_debugger_visualeditor() {
+    ROOT_DIR="$(pwd)"
+    if [ -d "${ROOT_DIR}/debugger/jsxmlrpc" ]; then rm -rf "${ROOT_DIR}/debugger/jsxmlrpc"; fi
+}
+
+function tag_code() {
+    TAG="$1"
+    if [ -n "${TAG}" ]; then
+        echo "Error: miss first argument: tag" >&2
+        exit 1
+    fi
+    sed -i -e "s/public \+static \+\$xmlrpcVersion *=.\+/public \+static \+\$xmlrpcVersion = \"$TAG\";/" src/PhpXmlRpc.php
+    sed -i -e "s/PhpxmlRpc\\\\PhpXmlRpc::\$xmlrpcVersion *=.\+/PhpXmlRpc\PhpXmlRpc::\$xmlrpcVersion = \"$TAG\"/" doc/manual/phpxmlrpc_manual.adoc
+    sed -i -e "3s/.*/$TAG/" doc/manual/phpxmlrpc_manual.adoc
+    sed -i -e "1s/.*/## XML-RPC for PHP version $TAG - $(date +%Y/%m/%d)/" NEWS.md
+}
+
+function help() {
+    echo "$0 <task> <args>"
+    echo "Tasks:"
+    compgen -A function | cat -n
+}
+
+if [ $# -eq 0 ]; then
+    help
+else
+    cd "$(dirname -- "$(realpath "${BASH_SOURCE[0]}")")"
+
+    TIMEFORMAT="Task completed in %3lR"
+    time ${@}
+fi

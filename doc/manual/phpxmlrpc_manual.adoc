@@ -1752,7 +1752,7 @@ tests/*:: the test suite for the library, written using PhpUnit, and the configu
 
 *Note* the standard procedure to download locally the demo and test files is to use Composer with  the option `--prefer-install=source`
 on the command line. That requires to have `git` installed. If that is not the case on your server, you might be able to
-download the complete source code from GitHub with other tools, such as f.e. TortoiseSVN. Staring with release 4.9.4,
+download the complete source code from GitHub with other tools, such as f.e. TortoiseSVN. Starting with release 4.9.4,
 the demo files are also available for download as a separate tarball from the releases page on GitHub.
 
 *Note* when downloading the demo files, make sure that the demo folder is not directly accessible from the internet, i.e.

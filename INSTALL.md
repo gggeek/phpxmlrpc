@@ -51,16 +51,12 @@ Installation of the library is quite easy:
             use PhpXmlRpc\Request;
             use PhpXmlRpc\Client;
 
-            $client = new Client('http://some/server');
+            $client = new Client('https://some/server');
             $response = $client->send(new Request('method', array(new Value('parameter'))));
 
     5.  IMPORTANT! Make sure that the vendor/phpxmlrpc directory is not directly accessible from the internet,
         as leaving it open to access means that any visitor can trigger execution of php code such as
         the built-in debugger.
-
-    Tip: to reduce the size of the download, the demo files are not part of the default package installed with Composer.
-    You can either check them out online at https://github.com/gggeek/phpxmlrpc/tree/master/demo, or make sure they are
-    available locally, by installing the library using Composer option `--prefer-install=source`.
 
 2.  Via manual download and autoload configuration
 
@@ -83,9 +79,15 @@ Installation of the library is quite easy:
             use PhpXmlRpc\Request;
             use PhpXmlRpc\Client;
 
-            $client = new Client('http://some/server');
+            $client = new Client('https://some/server');
             $response = $client->send(new Request('method', array(new Value('parameter'))));
 
     5.  IMPORTANT! Make sure that the phpxmlrpc root directory is not directly accessible from the internet,
         as leaving it open to access means that any visitor can trigger execution of php code such as
         the built-in debugger.
+
+Tip: to reduce the size of the download, the demo files are not part of the default package installed with Composer.
+You can either check them out online at https://github.com/gggeek/phpxmlrpc/tree/master/demo, or make sure they are
+available locally, by either installing the library using Composer option `--prefer-install=source`, running
+`./taskfile download_demos` (requires bash, curl, tar commands), or manually downloading them from
+https://github.com/gggeek/phpxmlrpc/releases.

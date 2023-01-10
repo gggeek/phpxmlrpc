@@ -38,9 +38,11 @@ if (defined('JSXMLRPC_BASEURL')) {
         $editorpaths = array(
             __DIR__ . '/vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via composer in debugger
             __DIR__ . '/node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via npm in debugger
+            __DIR__ . '/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via taskfile in debugger
             __DIR__ . '/../vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via composer
             __DIR__ . '/../node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via npm
             __DIR__ . '/../../jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc too
+            __DIR__ . '/../../../../web/node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc installed via npm
         );
     }
     foreach($editorpaths as $editorpath) {
@@ -50,10 +52,10 @@ if (defined('JSXMLRPC_BASEURL')) {
         }
     }
     if ($haseditor) {
-        $editorurlpath = preg_replace('|^' . preg_quote(__DIR__, '|') .'|', '', $editorpath);
-
-        /// @todo for cases 3, 4 and 5 above, look at `parse_url($_SERVER['REQUEST_URI'],  PHP_URL_PATH)` and check if the
-        ///       web root is not pointing directly at this folder, as in that case the link to the visualeditor will not
+        $controllerRootUrl = str_replace('/controller.php', '', parse_url($_SERVER['REQUEST_URI'],  PHP_URL_PATH));
+        $editorurlpath = $controllerRootUrl . '/' . preg_replace('|^' . preg_quote(__DIR__, '|') .'|', '', $editorpath);
+        /// @todo for cases above 4, 5 and up, look at $controllerRootUrl and check if the web root is not pointing directly
+        ///       at this folder, as in that case the link to the visualeditor will not
         ///       work, as it will be in the form http(s)://domain/../../jsxmlrpc/debugger/visualeditor.html
     }
 }

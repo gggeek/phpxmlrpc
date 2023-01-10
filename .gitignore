@@ -1,5 +1,8 @@
 /.scannerwork
 /.idea
+/debugger/jsxmlrpc
+/debugger/node_modules
+/debugger/vendor
 /doc/api
 /doc/build/.phpdoc
 /doc/build/.phive
