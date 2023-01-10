@@ -16,9 +16,21 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
         $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|/tests/index\.php(\?.*)?|', '/tests/phpunit_coverage.php', $this->args['HTTPURI']);
     }
 
+    public function testVardemo()
+    {
+        $page = $this->request('?demo=vardemo.php');
+    }
+
+    // *** client ***
+
     public function testAgeSort()
     {
         $page = $this->request('?demo=client/agesort.php');
+    }
+
+    public function testCodegen()
+    {
+        $page = $this->request('?demo=client/codegen.php');
     }
 
     public function testGetStateName()
@@ -50,6 +62,16 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
     public function testWrap()
     {
         $page = $this->request('?demo=client/wrap.php');
+    }
+
+    // *** servers ***
+
+    public function testCodegenServer()
+    {
+        /// @todo add a couple of proper xmlrpc calls, too
+        $page = $this->request('?demo=server/codegen.php');
+        $this->assertStringContainsString('<name>faultCode</name>', $page);
+        $this->assertRegexp('#<int>10(5|3)</int>#', $page);
     }
 
     public function testDiscussServer()
