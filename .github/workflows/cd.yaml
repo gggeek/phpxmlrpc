@@ -93,6 +93,7 @@ jobs:
                         doc/manual/phpxmlrpc_manual.pdf
 
             # update github pages with release info
+
             -   name: update website with info about the latest release
                 #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
                 run: |
@@ -107,7 +108,12 @@ jobs:
                     git push
                     git checkout ${{ github.ref_name }}
 
-            # deploy the lib to gggeek.altervista.org
+    deploy_to_altervista:
+        if: ${{ startsWith(github.ref_name, '4.') && !(contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc')) }}
+        runs-on: ubuntu-latest
+        steps:
+            -   name: checkout code
+                uses: actions/checkout@v3
 
             # add the bits of jsxmlrpc that make the debugger nicer, so that they get uploaded to the demo server
             -   name: setup visualeditor for the debugger
@@ -116,14 +122,8 @@ jobs:
                     chmod 755 ./taskfile
                     ./taskfile setup_debugger_visualeditor
 
-    deploy_to_altervista:
-        if: ${{ startsWith(github.ref_name, '4.') && !(contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc')) }}
-        runs-on: ubuntu-latest
-        steps:
-            -   name: checkout code
-                uses: actions/checkout@v3
-
             # upload the lib to gggeek.altervista.org via ftp
+
             -   name: upload lib to gggeek.altervista.org - src
                 #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
                 uses: SamKirkland/FTP-Deploy-Action@4.3.3
@@ -155,17 +155,6 @@ jobs:
                         **/discuss.php
                         **/testsuite.php
                         **/wrapper.php
-            -   name: upload lib to gggeek.altervista.org - demo/server
-                if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
-                uses: SamKirkland/FTP-Deploy-Action@4.3.3
-                with:
-                    server: ftp.gggeek.altervista.org
-                    username: ${{ secrets.ftp_gggeek_altervista_org_user }}
-                    password: ${{ secrets.ftp_gggeek_altervista_org_password }}
-                    protocol: ftps
-                    local-dir: ./demo/server/
-                    server-dir: sw/xmlrpc/demo/server/
-                    dangerous-clean-slate: true
             -   name: upload lib to gggeek.altervista.org - debugger
                 #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
                 uses: SamKirkland/FTP-Deploy-Action@4.3.3
