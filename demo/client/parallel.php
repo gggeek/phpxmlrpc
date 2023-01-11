@@ -7,6 +7,8 @@ use PhpXmlRpc\PhpXmlRpc;
 use PhpXmlRpc\Request;
 use PhpXmlRpc\Response;
 
+/// @todo add an html header with links to view-source
+
 /**
  * A class taking advantage of cURL to send many requests in parallel (to a single server), for when the given server
  * does not support the system.multicall method

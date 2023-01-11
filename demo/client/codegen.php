@@ -6,6 +6,8 @@ require_once __DIR__ . "/_prepend.php";
  * advertised by a remote xml-rpc server.
  */
 
+/// @todo add an html header with links to view-source
+
 use PhpXmlRpc\Client;
 use PhpXmlRpc\Wrapper;
 
