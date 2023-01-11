@@ -1,21 +1,18 @@
 name: CD
 
 on:
-    # We limit this workflow to pushes to master and to tags. No need to run on prs
-    # @todo when pushing a tag, this workflow will likely run twice, basically in parallel (once for the branch, once for
-    #        the tag). Can we avoid that, while still making it run for both tag and branch pushes? Or would it be enough
-    #        to just run it on branches, instead of updating the manual and api docs on every commit? We could maybe move
-    #        just the api docs generation to a separate workflow.
-    #        We could as well avoid updating the pdf manual and/or the latest-release on the site for beta releases...
+    # We limit this workflow to pushes of tags. No need to run on prs and on pushes to master
     push:
-        branches:
-            - master
+        #branches:
+        #    - master
         tags:
             - '**'
 
 jobs:
-    # we could try to split in 2 jobs: one for docs and one for release, but the release one needs the asset from the docs one...
-    docs_and_release:
+    # we could try to split in 2 jobs: one for docs, running also on pushes to master,  and one for releases, but the
+    # release one needs the asset from the docs one...
+    release:
+        if: ${{ startsWith(github.ref_name, '4.') && !(contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc')) }}
         runs-on: ubuntu-latest
         steps:
             -   name: checkout code
@@ -23,27 +20,28 @@ jobs:
                 with:
                     fetch-depth: 0 # apparently required by tj-actions/changed-files
 
-            -   name: get changed files - manual
-                id: changed-manual
-                uses: tj-actions/changed-files@v35
-                with:
-                    files: |
-                        doc/manual/**
+            # these could be useful to update the generated docs on any pushes to master which have changes to docs sources
+            #-   name: get changed files - manual
+            #    id: changed-manual
+            #    uses: tj-actions/changed-files@v35
+            #    with:
+            #        files: |
+            #            doc/manual/**
 
-            -   name: get changed files - source
-                id: changed-source
-                uses: tj-actions/changed-files@v35
-                with:
-                    files: |
-                        src/**
+            #-   name: get changed files - source
+            #    id: changed-source
+            #    uses: tj-actions/changed-files@v35
+            #    with:
+            #        files: |
+            #            src/**
 
             -   name: set git credentials as user triggering the build
                 uses: fregante/setup-git-user@v1
 
             # build and upload api docs
-            # NB: this happens independently of releases!
+            # (was: NB: this happens independently of releases!)
             -   name: generate and upload api docs
-                if: ${{ steps.changed-source.outputs.any_changed == 'true' }}
+                #if: ${{ steps.changed-source.outputs.any_changed == 'true' }}
                 run: |
                     chmod 755 ./doc/build/taskfile
                     ./doc/build/taskfile setup_tools
@@ -56,12 +54,12 @@ jobs:
                     git add doc-4/api
                     git commit -m 'update api docs'
                     git push
-                    git checkout master
+                    git checkout ${{ github.ref_name }}
 
             # build and upload manual
-            # NB: this happens _also_ independently of releases!
+            # (was: NB: this happens _also_ independently of releases!)
             -   name: generate and upload manual
-                if: ${{ steps.changed-manual.outputs.any_changed == 'true' || (github.ref_type == 'tag' && startsWith(github.ref_name, '4.')) }}
+                #if: ${{ steps.changed-manual.outputs.any_changed == 'true' || (github.ref_type == 'tag' && startsWith(github.ref_name, '4.')) }}
                 run: |
                     chmod 755 ./doc/build/taskfile
                     ./doc/build/taskfile setup_tools
@@ -74,19 +72,19 @@ jobs:
                     git commit -m 'update pdf version of manual'
                     git push
                     cp doc-4/phpxmlrpc_manual.pdf .
-                    git checkout master
+                    git checkout ${{ github.ref_name }}
                     mv ./phpxmlrpc_manual.pdf doc/manual
 
             # create release on github, with data from the NEWS file and add docs+demo artifacts
 
             -   name: create release assets
-                if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
+                #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
                 run: |
                     tar -cvzf demofiles.tgz demo
                     tail -n+2 NEWS.md | sed '/## XML-RPC for PHP version/Q' >> announcement.txt
 
             -   name: create release on github
-                if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
+                #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
                 uses: softprops/action-gh-release@v1
                 with:
                     body_path: announcement.txt
@@ -96,7 +94,7 @@ jobs:
 
             # update github pages with release info
             -   name: update website with info about the latest release
-                if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
+                #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
                 run: |
                     git fetch
                     git checkout gh-pages
@@ -107,12 +105,20 @@ jobs:
                     git add index.html
                     git commit -m 'update index page with latest release'
                     git push
-                    git checkout master
+                    git checkout ${{ github.ref_name }}
 
             # deploy the lib to gggeek.altervista.org
-            # q: should we filter out alpha/beta releases?
+
+            # add the bits of jsxmlrpc that make the debugger nicer, so that they get uploaded to the demo server
+            -   name: setup visualeditor for the debugger
+                #if: ${{ steps.changed-manual.outputs.any_changed == 'true' || (github.ref_type == 'tag' && startsWith(github.ref_name, '4.')) }}
+                run: |
+                    chmod 755 ./taskfile
+                    ./taskfile setup_debugger_visualeditor
+
+            # upload the lib to gggeek.altervista.org via ftp
             -   name: upload lib to gggeek.altervista.org - src
-                if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
+                #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
                 uses: SamKirkland/FTP-Deploy-Action@4.3.3
                 with:
                     server: ftp.gggeek.altervista.org
@@ -133,8 +139,28 @@ jobs:
                     local-dir: ./demo/
                     server-dir: sw/xmlrpc/demo/
                     dangerous-clean-slate: true
-            -   name: upload lib to gggeek.altervista.org - debugger
+                    # NB: codegen and discuss demos will not work anyway because /tmp is not writeable
+                    exclude: |
+                        **/*.pl
+                        **/*.py
+                        **/readme.md
+                        **/codegen.php
+                        **/discuss.php
+                        **/testsuite.php
+                        **/wrapper.php
+            -   name: upload lib to gggeek.altervista.org - demo/server
                 if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
+                uses: SamKirkland/FTP-Deploy-Action@4.3.3
+                with:
+                    server: ftp.gggeek.altervista.org
+                    username: ${{ secrets.ftp_gggeek_altervista_org_user }}
+                    password: ${{ secrets.ftp_gggeek_altervista_org_password }}
+                    protocol: ftps
+                    local-dir: ./demo/server/
+                    server-dir: sw/xmlrpc/demo/server/
+                    dangerous-clean-slate: true
+            -   name: upload lib to gggeek.altervista.org - debugger
+                #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
                 uses: SamKirkland/FTP-Deploy-Action@4.3.3
                 with:
                     server: ftp.gggeek.altervista.org
