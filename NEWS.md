@@ -1,3 +1,8 @@
+## XML-RPC for PHP version 4.xx - unreleased
+
+* improved: added the library version number to the debugger title line
+
+
 ## XML-RPC for PHP version 4.9.5 - 2023/01/11
 
 * improved: revised all demo files. Showcase more features in client demos; isolate better testsuite functions in
