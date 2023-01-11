@@ -47,20 +47,21 @@
     sets are supported</li>
 <li>Support for http features including compression of both requests and responses, cookies, proxies, basic and digest auth,
     ntlm auth, https, http2, keepalives (some only with the php cURL extension)</li>
-<li>Optional validation of parameter types of incoming xml-rpc request</li>
 <li>Support for `system.listMethods`, `system.methodHelp`, `system.multicall` and `system.getCapabilities` methods</li>
 <li>Support for the `&lt;NIL/&gt;` and `&lt;EX:NIL/&gt;` extensions to xml-rpc</li>
 <li>Possibility to register existing php function or class methods as webservices, extracting value-added information
     from phpdoc comments, including code-generation capabilities</li>
+<li>Optional validation in the server of parameter types of incoming xml-rpc request</li>
 <li>Zero dependencies on 3rd party packages</li>
 <li>A web based visual debugger is included with the library. It is also available as self-contained Container from
     <a href="https://github.com/gggeek/phpxmlrpc-debugger/pkgs/container/phpxmlrpc-debugger">https://github.com/gggeek/phpxmlrpc-debugger/</a></li>
 <li>A package emulating the API of the native XML-RPC extension for PHP, built on this library, is available at
     <a href="https://github.com/gggeek/polyfill-xmlrpc">https://github.com/gggeek/polyfill-xmlrpc</a></li>
-<!--<li>Many other cool features are delivered with the 'Extras' package, such as a complete emulation layer of php native
-    xml-rpc calls, an xml-rpc server that generates html documentation of exposed webservices, and a complete jsonrpc library...</li>
+<li>Many other cool features are delivered with extra packages, such as an <a href="https://github.com/gggeek/phpxmlrpc-extras">
+    xml-rpc server that automatically generates html documentation of exposed webservices</a>, and a complete
+    <a href="https://github.com/gggeek/phpxmlrpc-jsonrpc">jsonrpc library</a>...</li>
 <li>Last but not least, <a href="http://gggeek.github.io/jsxmlrpc/">a version of the library</a> implementing the same
-    API in Javascript is available, allowing to leverage acquired knowledge to easily build ajax/dhtml clients</li>-->
+    API in Javascript is available, allowing to leverage acquired knowledge to easily build nodejs/browser clients</li>
 </ul>
 
 <h2><a id="requirements">Requirements</a></h2>
@@ -113,8 +114,7 @@ anyone who does not have a php installation set up. Available at <a href="https:
 <li><a href="https://github.com/gggeek/phpxmlrpc/blob/master/doc/api_changes_v4.md">API changes between version 3 and
     version 4</a></li>
 <li>User manual for version 3, in <a href="doc-2/">HTML</a> or <a href="doc-2/xmlrpc_php.pdf">PDF</a> format.<br>
-    For the adventurous there is even an <a href="doc-2/xmlrpc_php.xml">xml+css</a> version (note: better viewing results
-    obtained by Firefox and Opera users)</li>
+    For the adventurous there is even an <a href="doc-2/xmlrpc_php.xml">xml+css</a> version</li>
 <li><a href="doc-1.1/">User manual for version 1.2.1</a></li>
 <li><a href="doc/">User manual for version 1.0.99</a></li>
 </ul>
