@@ -45,14 +45,15 @@ function remove_debugger_visualeditor() {
 
 function tag_code() {
     TAG="$1"
-    if [ -n "${TAG}" ]; then
+    if [ -z "${TAG}" ]; then
         echo "Error: miss first argument: tag" >&2
         exit 1
     fi
-    sed -i -e "s/public \+static \+\$xmlrpcVersion *=.\+/public \+static \+\$xmlrpcVersion = \"$TAG\";/" src/PhpXmlRpc.php
-    sed -i -e "s/PhpxmlRpc\\\\PhpXmlRpc::\$xmlrpcVersion *=.\+/PhpXmlRpc\PhpXmlRpc::\$xmlrpcVersion = \"$TAG\"/" doc/manual/phpxmlrpc_manual.adoc
+    sed -i -e "s/public \+static \+\$xmlrpcVersion *=.\+/public static \$xmlrpcVersion = \"$TAG\";/" src/PhpXmlRpc.php
     sed -i -e "3s/.*/$TAG/" doc/manual/phpxmlrpc_manual.adoc
-    sed -i -e "1s/.*/## XML-RPC for PHP version $TAG - $(date +%Y/%m/%d)/" NEWS.md
+    sed -i -e "s/PhpXmlRpc\\\\PhpXmlRpc::\$xmlrpcVersion *=.\+/PhpXmlRpc\\\\PhpXmlRpc::\$xmlrpcVersion = \"$TAG\"/" doc/manual/phpxmlrpc_manual.adoc
+    DATE=$(date +%Y/%m/%d)
+    sed -i -e "1s|.*|## XML-RPC for PHP version $TAG - $DATE|" NEWS.md
 }
 
 function help() {
