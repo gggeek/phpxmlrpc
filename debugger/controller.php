@@ -79,42 +79,35 @@ if (defined('JSXMLRPC_BASEURL')) {
         html {
             overflow: -moz-scrollbars-vertical;
         }
-
         body {
             padding: 0.5em;
             background-color: #EEEEEE;
             font-family: Verdana, Arial, Helvetica, sans-serif;
             font-size: 8pt;
         }
-
         h1 {
             font-size: 12pt;
             margin: 0.5em;
         }
-
         h2 {
             font-size: 10pt;
             display: inline;
             vertical-align: top;
         }
-
         table {
             border: 1px solid gray;
             margin-bottom: 0.5em;
             padding: 0.25em;
             width: 100%;
         }
-
         #methodpayload {
             display: inline;
         }
-
         td {
             vertical-align: top;
             font-family: Verdana, Arial, Helvetica, sans-serif;
             font-size: 8pt;
         }
-
         .labelcell {
             text-align: right;
         }
@@ -266,11 +259,11 @@ if (defined('JSXMLRPC_BASEURL')) {
     onload="switchtransport(<?php echo $wstype; ?>); switchaction(); switchssl(); switchauth(); swicthcainfo();<?php if ($run) {
         echo ' document.forms[2].submit();';
     } ?>">
-<h1>XMLRPC
+<h1>XML-RPC
     <form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);" <?php if (!class_exists('\PhpXmlRpc\Client')) { echo 'disabled="disabled"';} ?>/></form>
     /
     <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);" <?php if (!class_exists('\PhpXmlRpc\JsonRpc\Client')) { echo 'disabled="disabled"';} ?>/></form>
-    JSONRPC Debugger (based on the <a href="https://gggeek.github.io/phpxmlrpc/">PHPXMLRPC</a> library)
+    JSON-RPC Debugger (based on the <a href="https://gggeek.github.io/phpxmlrpc/">PHPXMLRPC</a> library, ver. <?php echo htmlspecialchars(\PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion)?>)
 </h1>
 <form name="frmaction" method="get" action="action.php" target="frmaction" onSubmit="switchFormMethod();">
 
