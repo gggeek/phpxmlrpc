@@ -116,6 +116,13 @@ jobs:
                     chmod 755 ./taskfile
                     ./taskfile setup_debugger_visualeditor
 
+    deploy_to_altervista:
+        if: ${{ startsWith(github.ref_name, '4.') && !(contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc')) }}
+        runs-on: ubuntu-latest
+        steps:
+            -   name: checkout code
+                uses: actions/checkout@v3
+
             # upload the lib to gggeek.altervista.org via ftp
             -   name: upload lib to gggeek.altervista.org - src
                 #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
