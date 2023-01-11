@@ -114,7 +114,7 @@ class PhpXmlRpc
     /**
      * @var string
      */
-    public static $xmlrpcVersion = "4.9.4";
+    public static $xmlrpcVersion = "4.9.5";
 
     /**
      * @var int

@@ -1,4 +1,4 @@
-## XML-RPC for PHP version 4.xx - unreleased
+## XML-RPC for PHP version 4.9.5 - 2023/01/11
 
 * improved: revised all demo files. Showcase more features in client demos; isolate better testsuite functions in
   server demos and make sure they are not active unless triggered by running the tests; add demos for code-generation
