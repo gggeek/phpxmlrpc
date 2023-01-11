@@ -78,6 +78,8 @@ function build_api() {
     #PHPDOC='php build/vendor/bin/phpdoc'
 
     $PHPDOC run --cache-folder 'build/.phpdoc' -d "$(realpath ../src/)" -t 'api' --title PHPXMLRPC --defaultpackagename PHPXMLRPC
+
+    # @todo manually mangle the index.html file to add generation date, lib version, etc...
 }
 
 function build_manual() {
