@@ -20,12 +20,15 @@ class Date
      * This routine always encodes to local time unless $utc is set to 1, in which case UTC output is produced and an
      * adjustment for the local timezone's offset is made
      *
-     * @param int $timet (timestamp)
+     * @param int|\DateTimeInterface $timet timestamp or datetime
      * @param bool|int $utc (0 or 1)
      * @return string
      */
     public static function iso8601Encode($timet, $utc = 0)
     {
+        if (is_a($timet, 'DateTimeInterface') || is_a($timet, 'DateTime')) {
+            $timet = $timet->getTimestamp();
+        }
         if (!$utc) {
             $t = date('Ymd\TH:i:s', $timet);
         } else {

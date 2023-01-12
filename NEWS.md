@@ -11,6 +11,8 @@
 
 * improved: when calling `Client::multicall()`, the returned `Response` objects did not have any data in their `httpResponse`
 
+* new: method `Helper\Date::iso8601Encode` now accepts a DateTime input beside a timestamp
+
 * improved: added the library version number to the debugger title line
 
 * improved: made sure the test container has at least one locale with comma as decimal separator
