@@ -216,11 +216,12 @@ class Server
      *                    particular, triggering an USER_ERROR level error will not halt script
      *                    execution anymore, but just end up logged in the xmlrpc response)
      *                    Note that info added at level 2 and 3 will be base64 encoded
-     * @return void
+     * @return $this
      */
     public function setDebug($level)
     {
         $this->debug = $level;
+        return $this;
     }
 
     /**
