@@ -1,5 +1,10 @@
 ## XML-RPC for PHP version 4.xx - unreleased
 
+* fixed: when calling `Client::multicall()` with $client->return_type = 'xml', we would be always falling back to
+  non-multicall requests
+
+* improved: when calling `Client::multicall()`, the returned `Response` objects did not have any data in their `httpResponse`
+
 * improved: added the library version number to the debugger title line
 
 

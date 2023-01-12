@@ -1254,11 +1254,7 @@ class Client
                     // Don't try it next time...
                     $this->no_multicall = true;
                 } else {
-                    if (is_a($results, '\PhpXmlRpc\Response')) {
-                        $result = $results;
-                    } else {
-                        $result = new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'], PhpXmlRpc::$xmlrpcstr['multicall_error']);
-                    }
+                    $result = $results;
                 }
             }
         } else {
@@ -1291,11 +1287,8 @@ class Client
      * @param Request[] $reqs
      * @param int $timeout
      * @param string $method
-     * @return Response[]|string|false|Response string when return_type=xml, a single Response when the call returned a
-     *                                          fault, false when the returned response does not conform to what we expect
-     *                                          from a multicall response
-     * @todo always send back Response(s) which have the full set of cookies/headers/raw-data
-     * @todo instead of returning false, return a single Response with the proper fault codes + some details
+     * @return Response[]|Response a single Response when the call returned a fault / does not conform to what we expect
+     *                             from a multicall response
      */
     private function _try_multicall($reqs, $timeout, $method)
     {
@@ -1324,90 +1317,125 @@ class Client
 
         // Unpack responses.
         $rets = $result->value();
+        $response = array();
 
         if ($this->return_type == 'xml') {
-            return $rets;
+            for ($i = 0; $i < count($reqs); $i++) {
+                $response[] = new Response($rets, 0, '', 'xml', $result->httpResponse());
+            }
+
         } elseif ($this->return_type == 'phpvals') {
-            /// @todo test this code branch...
             if (!is_array($rets)) {
-                return false;       // bad return type from system.multicall
+                // bad return type from system.multicall
+                return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                    PhpXmlRpc::$xmlrpcstr['multicall_error'] . ': not an array', 'phpvals', $result->httpResponse());
             }
             $numRets = count($rets);
             if ($numRets != count($reqs)) {
-                return false;       // wrong number of return values.
+                // wrong number of return values.
+                return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                    PhpXmlRpc::$xmlrpcstr['multicall_error'] . ': incorrect number of responses', 'phpvals',
+                    $result->httpResponse());
             }
 
-            $response = array();
             for ($i = 0; $i < $numRets; $i++) {
                 $val = $rets[$i];
                 if (!is_array($val)) {
-                    return false;
+                    return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                        PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i is not an array or struct",
+                        'phpvals', $result->httpResponse());
                 }
                 switch (count($val)) {
                     case 1:
                         if (!isset($val[0])) {
-                            return false;       // Bad value
+                            // Bad value
+                            return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                                PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has no value",
+                                'phpvals', $result->httpResponse());
                         }
                         // Normal return value
-                        $response[$i] = new Response($val[0], 0, '', 'phpvals');
+                        $response[$i] = new Response($val[0], 0, '', 'phpvals', $result->httpResponse());
                         break;
                     case 2:
                         /// @todo remove usage of @: it is apparently quite slow
                         $code = @$val['faultCode'];
                         if (!is_int($code)) {
-                            return false;
+                            /// @todo should we check that it is != 0?
+                            return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                                PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has invalid or no faultCode",
+                                'phpvals', $result->httpResponse());
                         }
                         $str = @$val['faultString'];
                         if (!is_string($str)) {
-                            return false;
+                            return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                                PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has invalid or no FaultString",
+                                'phpvals', $result->httpResponse());
                         }
-                        $response[$i] = new Response(0, $code, $str);
+                        $response[$i] = new Response(0, $code, $str, 'phpvals', $result->httpResponse());
                         break;
                     default:
-                        return false;
+                        return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                            PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has too many items",
+                            'phpvals', $result->httpResponse());
                 }
             }
 
-            return $response;
         } else {
             // return type == 'xmlrpcvals'
             if ($rets->kindOf() != 'array') {
-                return false;       // bad return type from system.multicall
+                return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                    PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i is not an array", 'xmlrpcvals',
+                    $result->httpResponse());
             }
             $numRets = $rets->count();
             if ($numRets != count($reqs)) {
-                return false;       // wrong number of return values.
+                // wrong number of return values.
+                return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                    PhpXmlRpc::$xmlrpcstr['multicall_error'] . ': incorrect number of responses', 'xmlrpcvals',
+                    $result->httpResponse());
             }
 
-            $response = array();
-            foreach ($rets as $val) {
+            foreach ($rets as $i => $val) {
                 switch ($val->kindOf()) {
                     case 'array':
                         if ($val->count() != 1) {
-                            return false;       // Bad value
+                            return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                                PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has too many items",
+                                'phpvals', $result->httpResponse());
                         }
                         // Normal return value
-                        $response[] = new Response($val[0]);
+                        $response[] = new Response($val[0], 0, '', 'xmlrpcvals', $result->httpResponse());
                         break;
                     case 'struct':
-                        $code = $val['faultCode'];
+                        if ($val->count() != 2) {
+                            return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                                PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has too many items",
+                                'phpvals', $result->httpResponse());
+                        }
                         /** @var Value $code */
+                        $code = $val['faultCode'];
                         if ($code->kindOf() != 'scalar' || $code->scalartyp() != 'int') {
-                            return false;
+                            return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                                PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has invalid or no faultCode",
+                                'xmlrpcvals', $result->httpResponse());
                         }
-                        $str = $val['faultString'];
                         /** @var Value $str */
+                        $str = $val['faultString'];
                         if ($str->kindOf() != 'scalar' || $str->scalartyp() != 'string') {
-                            return false;
+                            return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                                PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has invalid or no faultCode",
+                                'xmlrpcvals', $result->httpResponse());
                         }
-                        $response[] = new Response(0, $code->scalarval(), $str->scalarval());
+                        $response[] = new Response(0, $code->scalarval(), $str->scalarval(), 'xmlrpcvals', $result->httpResponse());
                         break;
                     default:
-                        return false;
+                        return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
+                            PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i is not an array or struct",
+                            'xmlrpcvals', $result->httpResponse());
                 }
             }
-
-            return $response;
         }
+
+        return $response;
     }
 }
