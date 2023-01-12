@@ -9,6 +9,8 @@ use PhpXmlRpc\PhpXmlRpc;
  */
 class Charset
 {
+    protected static $logger;
+
     // tables used for transcoding different charsets into us-ascii xml
     protected $xml_iso88591_Entities = array("in" => array(), "out" => array());
 
@@ -39,6 +41,23 @@ class Charset
         }
 
         return self::$instance;
+    }
+
+    public function getLogger()
+    {
+        if (self::$logger === null) {
+            self::$logger = Logger::instance();
+        }
+        return self::$logger;
+    }
+
+    /**
+     * @param $logger
+     * @return void
+     */
+    public static function setLogger($logger)
+    {
+        self::$logger = $logger;
     }
 
     /**
@@ -273,7 +292,7 @@ class Charset
             default:
                 $escapedData = '';
                 /// @todo allow usage of a custom Logger via the DIC(ish) pattern we use in other classes
-                Logger::instance()->errorLog('XML-RPC: ' . __METHOD__ . ": Converting from $srcEncoding to $destEncoding: not supported...");
+                $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": Converting from $srcEncoding to $destEncoding: not supported...");
         }
 
         return $escapedData;
