@@ -13,6 +13,12 @@
 
 * new: method `Helper\Date::iso8601Encode` now accepts a DateTime input beside a timestamp
 
+* new: it is now possible to inject a custom logger into helper classes Charset, Http, XMLParser, inching a step closer
+  to supporting DIC patterns
+
+* improved: removed usage of `extension_loaded` in favour of `function_exists` when checking for mbstring. This allows
+  for mbstring functions to be polyfilled
+
 * improved: added the library version number to the debugger title line
 
 * improved: made sure the test container has at least one locale with comma as decimal separator
