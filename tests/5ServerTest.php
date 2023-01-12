@@ -490,8 +490,8 @@ And turned it into nylon';
         $m = new xmlrpcmsg('system.multicall', array($arg));
         $v = $this->send($m);
         if ($v) {
-            //$this->assertTrue($r->faultCode() == 0, "fault from system.multicall");
-            $this->assertTrue($v->arraysize() == 4, "bad number of return values");
+            //$this->assertEquals(0, $r->faultCode(), "fault from system.multicall");
+            $this->assertEquals(4, $v->arraysize(), "bad number of return values");
 
             $r1 = $v->arraymem(0);
             $this->assertTrue(
@@ -500,16 +500,10 @@ And turned it into nylon';
             );
 
             $r2 = $v->arraymem(1);
-            $this->assertTrue(
-                $r2->kindOf() == 'struct',
-                "no fault from bad"
-            );
+            $this->assertEquals('struct', $r2->kindOf(), "no fault from bad");
 
             $r3 = $v->arraymem(2);
-            $this->assertTrue(
-                $r3->kindOf() == 'struct',
-                "recursive system.multicall did not fail"
-            );
+            $this->assertEquals('struct', $r3->kindOf(), "recursive system.multicall did not fail");
 
             $r4 = $v->arraymem(3);
             $this->assertTrue(
@@ -538,10 +532,10 @@ And turned it into nylon';
 
         $r = $this->send(array($good1, $bad, $recursive, $good2));
         if ($r) {
-            $this->assertTrue(count($r) == 4, "wrong number of return values");
+            $this->assertEquals(4, count($r), "wrong number of return values");
         }
 
-        $this->assertTrue($r[0]->faultCode() == 0, "fault from good1");
+        $this->assertEquals(0, $r[0]->faultCode(), "fault from good1");
         if (!$r[0]->faultCode()) {
             $val = $r[0]->value();
             $this->assertTrue(
@@ -549,18 +543,16 @@ And turned it into nylon';
                 "good1 did not return string"
             );
         }
-        $this->assertTrue($r[1]->faultCode() != 0, "no fault from bad");
-        $this->assertTrue($r[2]->faultCode() != 0, "no fault from recursive system.multicall");
-        $this->assertTrue($r[3]->faultCode() == 0, "fault from good2");
+        $this->assertNotEquals(0, $r[1]->faultCode(), "no fault from bad");
+        $this->assertNotEquals(0, $r[2]->faultCode(), "no fault from recursive system.multicall");
+        $this->assertEquals(0, $r[3]->faultCode(), "fault from good2");
         if (!$r[3]->faultCode()) {
             $val = $r[3]->value();
-            $this->assertTrue($val->kindOf() == 'array', "good2 did not return array");
+            $this->assertEquals('array', $val->kindOf(), "good2 did not return array");
         }
         // This is the only assert in this test which should fail
         // if the test server does not support system.multicall.
-        $this->assertTrue($this->client->no_multicall == false,
-            "server does not support system.multicall"
-        );
+        $this->assertEquals(false, $this->client->no_multicall, "server does not support system.multicall");
 
         $this->client->no_multicall = $noMultiCall;
     }
@@ -584,22 +576,22 @@ And turned it into nylon';
 
         $r = $this->send(array($good1, $bad, $recursive, $good2));
         if ($r) {
-            $this->assertTrue(count($r) == 4, "wrong number of return values");
+            $this->assertEquals(4, count($r), "wrong number of return values");
         }
 
-        $this->assertTrue($r[0]->faultCode() == 0, "fault from good1");
+        $this->assertEquals(0, $r[0]->faultCode(), "fault from good1");
         if (!$r[0]->faultCode()) {
             $val = $r[0]->value();
             $this->assertTrue(
                 $val->kindOf() == 'scalar' && $val->scalartyp() == 'string',
                 "good1 did not return string");
         }
-        $this->assertTrue($r[1]->faultCode() != 0, "no fault from bad");
-        $this->assertTrue($r[2]->faultCode() == 0, "fault from (non recursive) system.multicall");
-        $this->assertTrue($r[3]->faultCode() == 0, "fault from good2");
+        $this->assertNotEquals(0, $r[1]->faultCode(), "no fault from bad");
+        $this->assertEquals(0, $r[2]->faultCode(), "fault from (non recursive) system.multicall");
+        $this->assertEquals(0, $r[3]->faultCode(), "fault from good2");
         if (!$r[3]->faultCode()) {
             $val = $r[3]->value();
-            $this->assertTrue($val->kindOf() == 'array', "good2 did not return array");
+            $this->assertEquals('array', $val->kindOf(), "good2 did not return array");
         }
 
         $this->client->no_multicall = $noMultiCall;
@@ -627,21 +619,51 @@ And turned it into nylon';
 
         $r = $this->send(array($good1, $bad, $recursive, $good2));
         if ($r) {
-            $this->assertTrue(count($r) == 4, "wrong number of return values");
+            $this->assertEquals(4, count($r), "wrong number of return values");
         }
-        $this->assertTrue($r[0]->faultCode() == 0, "fault from good1");
+        $this->assertEquals(0, $r[0]->faultCode(), "fault from good1");
         if (!$r[0]->faultCode()) {
             $val = $r[0]->value();
-            $this->assertTrue(
-                is_string($val), "good1 did not return string");
+            $this->assertIsString($val, "good1 did not return string");
         }
-        $this->assertTrue($r[1]->faultCode() != 0, "no fault from bad");
-        $this->assertTrue($r[2]->faultCode() != 0, "no fault from recursive system.multicall");
-        $this->assertTrue($r[3]->faultCode() == 0, "fault from good2");
+        $this->assertNotEquals(0, $r[1]->faultCode(), "no fault from bad");
+        $this->assertNotEquals(0, $r[2]->faultCode(), "no fault from recursive system.multicall");
+        $this->assertEquals(0, $r[3]->faultCode(), "fault from good2");
         if (!$r[3]->faultCode()) {
             $val = $r[3]->value();
-            $this->assertTrue(is_array($val), "good2 did not return array");
+            $this->assertIsArray($val, "good2 did not return array");
         }
+
+        $this->client->return_type = $returnType;
+        $this->client->no_multicall = $noMultiCall;
+    }
+
+    public function testClientMulticall4()
+    {
+        // NB: This test will NOT pass if server does not support system.multicall.
+
+        $noMultiCall = $this->client->no_multicall;
+        $returnType = $this->client->return_type;
+
+        $this->client->return_type = 'xml';
+        $this->client->no_multicall = false;
+
+        $good1 = new xmlrpcmsg('system.methodHelp',
+            array(php_xmlrpc_encode('system.listMethods')));
+        $good2 = new xmlrpcmsg('system.methodSignature',
+            array(php_xmlrpc_encode('system.listMethods'))
+        );
+
+        $r = $this->send(array($good1, $good2));
+        if ($r) {
+            $this->assertEquals(2, count($r), "wrong number of return values");
+        }
+        $this->assertEquals(0, $r[0]->faultCode(), "fault from good1");
+        $this->assertEquals(0, $r[1]->faultCode(), "fault from good2");
+
+        $hr = $r[0]->httpResponse();
+        $this->assertEquals(200, $hr['status_code'], "http response of multicall has no status code");
+        $this->assertEquals($r[0]->httpResponse(), $r[1]->httpResponse(), "http response of multicall items differs");
 
         $this->client->return_type = $returnType;
         $this->client->no_multicall = $noMultiCall;
