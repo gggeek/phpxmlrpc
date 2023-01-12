@@ -54,6 +54,11 @@ class Client
     /**
      * @var int
      */
+    public $timeout = 0;
+
+    /**
+     * @var int
+     */
     public $use_curl = self::USE_CURL_AUTO;
 
     /**
@@ -256,11 +261,12 @@ class Client
      * the server returns. Never leave it enabled for production!
      *
      * @param integer $level values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
-     * @return void
+     * @return $this
      */
     public function setDebug($level)
     {
         $this->debug = $level;
+        return $this;
     }
 
     /**
@@ -276,13 +282,14 @@ class Client
      * @param integer $authType auth type. See curl_setopt man page for supported auth types. Defaults to CURLAUTH_BASIC
      *                          (basic auth). Note that auth types NTLM and Digest will only work if the Curl php
      *                          extension is enabled.
-     * @return void
+     * @return $this
      */
     public function setCredentials($user, $password, $authType = 1)
     {
         $this->username = $user;
         $this->password = $password;
         $this->authtype = $authType;
+        return $this;
     }
 
     /**
@@ -294,12 +301,13 @@ class Client
      *
      * @param string $cert the name of a file containing a PEM formatted certificate
      * @param string $certPass the password required to use it
-     * @return void
+     * @return $this
      */
     public function setCertificate($cert, $certPass = '')
     {
         $this->cert = $cert;
         $this->certpass = $certPass;
+        return $this;
     }
 
     /**
@@ -309,7 +317,7 @@ class Client
      *
      * @param string $caCert certificate file name (or dir holding certificates)
      * @param bool $isDir set to true to indicate cacert is a dir. defaults to false
-     * @return void
+     * @return $this
      */
     public function setCaCertificate($caCert, $isDir = false)
     {
@@ -318,6 +326,7 @@ class Client
         } else {
             $this->cacert = $caCert;
         }
+        return $this;
     }
 
     /**
@@ -328,12 +337,13 @@ class Client
      *
      * @param string $key The name of a file containing a private SSL key
      * @param string $keyPass The secret password needed to use the private SSL key
-     * @return void
+     * @return $this
      */
     public function setKey($key, $keyPass)
     {
         $this->key = $key;
         $this->keypass = $keyPass;
+        return $this;
     }
 
     /**
@@ -344,11 +354,12 @@ class Client
      * To specify custom SSL certificates to validate the server with, use the setCaCertificate method.
      *
      * @param bool $i enable/disable verification of peer certificate
-     * @return void
+     * @return $this
      */
     public function setSSLVerifyPeer($i)
     {
         $this->verifypeer = $i;
+        return $this;
     }
 
     /**
@@ -357,22 +368,24 @@ class Client
      * Note that support for value 1 has been removed in cURL 7.28.1
      *
      * @param int $i Set to 1 to only the existence of a CN, not that it matches
-     * @return void
+     * @return $this
      */
     public function setSSLVerifyHost($i)
     {
         $this->verifyhost = $i;
+        return $this;
     }
 
     /**
      * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let cURL decide
      *
      * @param int $i
-     * @return void
+     * @return $this
      */
     public function setSSLVersion($i)
     {
         $this->sslversion = $i;
+        return $this;
     }
 
     /**
@@ -386,7 +399,7 @@ class Client
      * @param string $proxyPassword Leave blank if proxy has public access
      * @param int $proxyAuthType defaults to CURLAUTH_BASIC (Basic authentication protocol); set to constant CURLAUTH_NTLM
      *                           to use NTLM auth with proxy (has effect only when the client uses the HTTP 1.1 protocol)
-     * @return void
+     * @return $this
      */
     public function setProxy($proxyHost, $proxyPort, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1)
     {
@@ -395,6 +408,7 @@ class Client
         $this->proxy_user = $proxyUsername;
         $this->proxy_pass = $proxyPassword;
         $this->proxy_authtype = $proxyAuthType;
+        return $this;
     }
 
     /**
@@ -406,7 +420,7 @@ class Client
      * It is up to the xmlrpc server to return compressed responses when receiving such requests.
      *
      * @param string $compMethod either 'gzip', 'deflate', 'any' or ''
-     * @return void
+     * @return $this
      */
     public function setAcceptedCompression($compMethod)
     {
@@ -417,6 +431,7 @@ class Client
         } else {
             $this->accepted_compression = array($compMethod);
         }
+        return $this;
     }
 
     /**
@@ -427,11 +442,12 @@ class Client
      * uncompressed requests is not yet implemented).
      *
      * @param string $compMethod either 'gzip', 'deflate' or ''
-     * @return void
+     * @return $this
      */
     public function setRequestCompression($compMethod)
     {
         $this->request_compression = $compMethod;
+        return $this;
     }
 
     /**
@@ -448,7 +464,7 @@ class Client
      * @param string $path leave this empty unless the xml-rpc server only accepts RFC 2109 cookies
      * @param string $domain leave this empty unless the xml-rpc server only accepts RFC 2109 cookies
      * @param int $port leave this empty unless the xml-rpc server only accepts RFC 2109 cookies
-     * @return void
+     * @return $this
      *
      * @todo check correctness of urlencoding cookie value (copied from php way of doing it, but php is generally sending
      *       response not requests. We do the opposite...)
@@ -465,6 +481,7 @@ class Client
         } else {
             $this->cookies[$name]['version'] = 0;
         }
+        return $this;
     }
 
     /**
@@ -473,20 +490,22 @@ class Client
      * It allows eg. to bind client to a specific IP interface / address.
      *
      * @param array $options
-     * @return void
+     * @return $this
      */
     public function setCurlOptions($options)
     {
         $this->extracurlopts = $options;
+        return $this;
     }
 
     /**
      * @param int $useCurlMode self::USE_CURL_ALWAYS, self::USE_CURL_AUTO or self::USE_CURL_NEVER
-     * @return void
+     * @return $this
      */
     public function setUseCurl($useCurlMode)
     {
         $this->use_curl = $useCurlMode;
+        return $this;
     }
 
 
@@ -496,11 +515,22 @@ class Client
      * The default user agent string includes the name of this library and the version number.
      *
      * @param string $agentString
-     * @return void
+     * @return $this
      */
     public function setUserAgent($agentString)
     {
         $this->user_agent = $agentString;
+        return $this;
+    }
+
+    /**
+     * @param int $timeout
+     * @return $this
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+        return $this;
     }
 
     /**
@@ -519,11 +549,13 @@ class Client
      *                                      containing the complete xml representation of the request. It is e.g. useful
      *                                      when, for maximal speed of execution, the request is serialized into a
      *                                      string using the native php xmlrpc functions (see http://www.php.net/xmlrpc)
-     * @param integer $timeout Connection timeout, in seconds, If unspecified, a platform specific timeout will apply.
+     * @param integer $timeout deprecated. Connection timeout, in seconds, If unspecified, the timeout set with setTimeout
+     *                         will be used. If that is 0, a platform specific timeout will apply.
      *                         This timeout value is passed to fsockopen(). It is also used for detecting server
      *                         timeouts during communication (i.e. if the server does not send anything to the client
      *                         for $timeout seconds, the connection will be closed).
-     * @param string $method valid values are 'http', 'http11', 'https', 'h2' and 'h2c'. If left unspecified,
+     * @param string $method deprecated. Use the same value in the constructor instead.
+     *                       Valid values are 'http', 'http11', 'https', 'h2' and 'h2c'. If left empty,
      *                       the http protocol chosen during creation of the object will be used.
      *                       Use 'h2' to make the lib attempt to use http/2 over a secure connection, and 'h2c'
      *                       for http/2 without tls. Note that 'h2c' will not use the h2c 'upgrade' method, and be
@@ -540,6 +572,10 @@ class Client
         // (i.e. method set during call to constructor)
         if ($method == '') {
             $method = $this->method;
+        }
+
+        if ($timeout == 0) {
+            $timeout = $this->timeout;
         }
 
         if (is_array($req)) {
@@ -1229,8 +1265,8 @@ class Client
      * in pretty much convoluted code...
      *
      * @param Request[] $reqs an array of Request objects
-     * @param integer $timeout connection timeout (in seconds). See the details in the docs for the send() method
-     * @param string $method the http protocol variant to be used. See the details in the docs for the send() method
+     * @param integer $timeout deprecated - connection timeout (in seconds). See the details in the docs for the send() method
+     * @param string $method deprecated - the http protocol variant to be used. See the details in the docs for the send() method
      * @param boolean $fallback When true, upon receiving an error during multicall, multiple single calls will be
      *                         attempted
      * @return Response[]

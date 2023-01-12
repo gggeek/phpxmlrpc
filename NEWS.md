@@ -1,11 +1,27 @@
 ## XML-RPC for PHP version 4.xx - unreleased
 
-* fixed: when calling `Client::multicall()` with $client->return_type = 'xml', we would be always falling back to
+* fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, we would be always falling back to
   non-multicall requests
+
+* improved: added the `Client::setTimeout` method, meant to replace usage of the `$timeout` argument in calls to `send`
+  and `multicall`
+
+* improved: all the Client's `setSomething()` methods now return the client object, allowing for usage of fluent style
+  calling. The same applies to `Request::setDebug`
 
 * improved: when calling `Client::multicall()`, the returned `Response` objects did not have any data in their `httpResponse`
 
 * improved: added the library version number to the debugger title line
+
+* improved: made sure the test container has at least one locale with comma as decimal separator
+
+
+* BC notes:
+
+  - if you had been somehow interacting with private method `Client::_try_multicall`, be warned its returned data has
+    changed: it now returns a Response for the cases in which it previously returned false, and an array of Response
+    objects for the cases in which it previously returned a string
+  - parameters `$timeout` and `$method` are now considered deprecated in `Client::send()` and `Client::multicall()`
 
 
 ## XML-RPC for PHP version 4.9.5 - 2023/01/11

@@ -429,10 +429,11 @@ class Request
      * Enables/disables the echoing to screen of the xmlrpc responses received.
      *
      * @param integer $level values 0, 1, 2 are supported
-     * @return void
+     * @return $this
      */
     public function setDebug($level)
     {
         $this->debug = $level;
+        return $this;
     }
 }
