@@ -320,8 +320,7 @@ class Request
             // The following code might be better for mb_string enabled installs, but makes the lib about 200% slower...
             //if (!is_valid_charset($respEncoding, array('UTF-8')))
             if (!in_array($respEncoding, array('UTF-8', 'US-ASCII')) && !XMLParser::hasEncoding($data)) {
-                /// @todo replace with function_exists
-                if (extension_loaded('mbstring')) {
+                if (function_exists('mb_convert_encoding')) {
                     $data = mb_convert_encoding($data, 'UTF-8', $respEncoding);
                 } else {
                     if ($respEncoding == 'ISO-8859-1') {

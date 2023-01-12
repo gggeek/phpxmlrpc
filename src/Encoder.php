@@ -326,8 +326,7 @@ class Encoder
             // The following code might be better for mb_string enabled installs, but makes the lib about 200% slower...
             //if (!is_valid_charset($valEncoding, array('UTF-8'))
             if (!in_array($valEncoding, array('UTF-8', 'US-ASCII')) && !XMLParser::hasEncoding($xmlVal)) {
-                /// @todo replace with function_exists
-                if (extension_loaded('mbstring')) {
+                if (function_exists('mb_convert_encoding')) {
                     $xmlVal = mb_convert_encoding($xmlVal, 'UTF-8', $valEncoding);
                 } else {
                     if ($valEncoding == 'ISO-8859-1') {
