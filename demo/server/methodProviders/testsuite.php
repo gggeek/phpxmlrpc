@@ -35,18 +35,20 @@ function getAllHeaders_xmlrpc($req)
     }
 }
 
+// used to test mixed-convention calling
 $setcookies_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcStruct));
 $setcookies_doc = 'Sends to client a response containing a single \'1\' digit, and sets to it http cookies as received in the request (array of structs describing a cookie)';
-function setCookies($req)
+function setCookies($cookies)
 {
-    $encoder = new Encoder();
-    $cookies = $req->getParam(0);
-    foreach ($cookies as $name => $value) {
-        $cookieDesc = $encoder->decode($value);
-        setcookie($name, @$cookieDesc['value'], @$cookieDesc['expires'], @$cookieDesc['path'], @$cookieDesc['domain'], @$cookieDesc['secure']);
+    foreach ($cookies as $name => $cookieDesc) {
+        if (is_array($cookieDesc)) {
+            setcookie($name, @$cookieDesc['value'], @$cookieDesc['expires'], @$cookieDesc['path'], @$cookieDesc['domain'], @$cookieDesc['secure']);
+        } else {
+            /// @todo
+        }
     }
 
-    return new Response(new Value(1, Value::$xmlrpcInt));
+    return 1;
 }
 
 $getcookies_sig = array(array(Value::$xmlrpcStruct));
@@ -83,6 +85,7 @@ return array(
         "function" => 'setCookies',
         "signature" => $setcookies_sig,
         "docstring" => $setcookies_doc,
+        "parameters_type" => 'phpvals',
     ),
     "tests.getcookies" => array(
         "function" => 'getCookies',
