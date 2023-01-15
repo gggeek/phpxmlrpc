@@ -11,6 +11,8 @@ use PhpXmlRpc\Helper\XMLParser;
 /**
  * This class provides the representation of a request to an XML-RPC server.
  * A client sends a PhpXmlrpc\Request to a server, and receives back an PhpXmlrpc\Response.
+ *
+ * @todo feature creep - add a protected $httpRequest member, in the same way the Response has one
  */
 class Request
 {
