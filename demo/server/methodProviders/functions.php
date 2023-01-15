@@ -6,18 +6,18 @@
  * $signatures = include('functions.php');
  *
  * Demoes a simple possible way to implement webservices without cluttering the global scope: create xml-rpc-aware static
- * methods in a class, and use them for the Server's dispatch map without the need to instantiate an object.
+ * methods in a class, and use them for the Server's dispatch map without the need to instantiate an object of that class.
  *
  * Alternative implementation strategies are possible as well:
- * 1. same as above, but use non-static class methods
- * 2. define functions in the global scope to be used as xml-rpc method handlers: see interop.php, validator1.php
- * 3. define xml-rpc method handlers as anonymous functions directly within the dispatch map
+ * 1. same as above, but use non-static class methods and an object instance
+ * 2. define functions in the global scope to be used as xml-rpc method handlers: see interop.php
+ * 3. define xml-rpc method handlers as anonymous functions directly within the dispatch map: see validator1.php
  * 4. use php methods or functions which are not aware of xml-rpc and let the Server do all the necessary type conversion:
  *    see discuss.php
  * 5. use the PhpXmlRpc\Wrapper class to achieve the same as in point 4, with no need to manually write the dispatch map
  *    configuration (but taking instead a performance hit)
  * 6. use the PhpXmlRpc\Wrapper class to generate php code in offline mode, achieving the same as in point 5 with no
- *    performance hit at runtime
+ *    performance hit at runtime: see codegen.php
  */
 
 use PhpXmlRpc\Encoder;
