@@ -430,6 +430,7 @@ class XMLParser
      * xml parser handler function for opening element tags.
      * Used in decoding xml chunks that might represent single xmlrpc values as well as requests, responses.
      * @deprecated
+     *
      * @param resource $parser
      * @param $name
      * @param $attrs
@@ -437,6 +438,8 @@ class XMLParser
      */
     public function xmlrpc_se_any($parser, $name, $attrs)
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         $this->xmlrpc_se($parser, $name, $attrs, true);
     }
 

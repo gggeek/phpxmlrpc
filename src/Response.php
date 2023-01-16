@@ -235,6 +235,8 @@ class Response
 
     public function __isset($name)
     {
+        //trigger_error('checking property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
+
         switch ($name) {
             case 'hdrs':
                 return isset($this->httpResponse['headers']);

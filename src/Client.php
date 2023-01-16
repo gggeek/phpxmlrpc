@@ -652,6 +652,7 @@ class Client
 
     /**
      * @deprecated
+     *
      * @param Request $req
      * @param string $server
      * @param int $port
@@ -679,6 +680,7 @@ class Client
 
     /**
      * @deprecated
+     *
      * @param Request $req
      * @param string $server
      * @param int $port
