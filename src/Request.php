@@ -284,7 +284,7 @@ class Request
         // be tolerant of extra whitespace in response body
         $data = trim($data);
 
-        /// @todo return an error msg if $data == '' ?
+        /// @todo optimization creep - return an error msg if $data == ''
 
         // be tolerant of junk after methodResponse (e.g. javascript ads automatically inserted by free hosts)
         // idea from Luca Mariano <luca.mariano@email.it> originally in PEARified version of the lib
@@ -349,9 +349,13 @@ class Request
         $xmlRpcParser->parse($data, $returnType, XMLParser::ACCEPT_RESPONSE, $options);
 
         // first error check: xml not well-formed
-        if ($xmlRpcParser->_xh['isf'] > 2) {
+        if ($xmlRpcParser->_xh['isf'] == 3) {
 
             // BC break: in the past for some cases we used the error message: 'XML error at line 1, check URL'
+
+            // Q: should we give back an error with variable error number, as we do server-side? But if we do, will
+            //    we be able to tell apart the two cases? In theory, we never emit invalid xml on our end, but
+            //    there could be proxies meddling with the request, or network data corruption...
 
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_xml'],
                 PhpXmlRpc::$xmlrpcstr['invalid_xml'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '',
@@ -375,7 +379,7 @@ class Request
         }
         // third error check: parsing of the response has somehow gone boink.
         /// @todo shall we omit this check, since we trust the parsing code?
-        elseif ($returnType == XMLParser::RETURN_XMLRPCVALS && !is_object($xmlRpcParser->_xh['value'])) {
+        elseif ($xmlRpcParser->_xh['isf'] > 3 || $returnType == XMLParser::RETURN_XMLRPCVALS && !is_object($xmlRpcParser->_xh['value'])) {
             // something odd has happened and it's time to generate a client side error indicating something odd went on
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['xml_parsing_error'], PhpXmlRpc::$xmlrpcstr['xml_parsing_error'],
                 '', $this->httpResponse

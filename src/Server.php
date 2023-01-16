@@ -625,8 +625,7 @@ class Server
             return new Response(0, $e->getCode(), $e->getMessage());
         }
 
-/// @todo handle the (unlikely) case of _xh['isf'] = 4
-        if ($xmlRpcParser->_xh['isf'] > 2) {
+        if ($xmlRpcParser->_xh['isf'] == 2) {
             // (BC) we return XML error as a faultCode
             preg_match('/^XML error ([0-9]+)/', $xmlRpcParser->_xh['isf_reason'], $matches);
             return new Response(
@@ -634,6 +633,8 @@ class Server
                 PhpXmlRpc::$xmlrpcerrxml + (int)$matches[1],
                 $xmlRpcParser->_xh['isf_reason']);
         } elseif ($xmlRpcParser->_xh['isf']) {
+            /// @todo separate better the various cases, as we have done in Request::parseResponse: invalid xml-rpc,
+            ///       parsing error
             return new Response(
                 0,
                 PhpXmlRpc::$xmlrpcerr['invalid_request'],
@@ -653,9 +654,8 @@ class Server
 
                 return $this->execute($xmlRpcParser->_xh['method'], $xmlRpcParser->_xh['params'], $xmlRpcParser->_xh['pt']);
             } else {
-                // build a Request object with data parsed from xml
+                // build a Request object with data parsed from xml and add parameters in
                 $req = new Request($xmlRpcParser->_xh['method']);
-                // now add parameters in
                 for ($i = 0; $i < count($xmlRpcParser->_xh['params']); $i++) {
                     $req->addParam($xmlRpcParser->_xh['params'][$i]);
                 }

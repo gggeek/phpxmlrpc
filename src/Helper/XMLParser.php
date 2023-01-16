@@ -42,8 +42,7 @@ class XMLParser
      *    lv - used to indicate "looking for a value": implements the logic to allow values with no types to be strings
      *         (values: 0=not looking, 1=looking, 3=found)
      *  public:
-     *    isf - used to indicate an xml-rpc response fault (1), invalid xml-rpc fault (2), xml parsing fault (3) or
-     *          bad parameters passed to the parsing call (4)
+     *    isf - used to indicate an xml-rpc response fault (1), invalid xml-rpc fault (2), xml parsing fault (3)
      *    isf_reason - used for storing xml-rpc response fault string
      *    value - used to store the value in responses
      *    method - used to store method name in requests
@@ -133,6 +132,7 @@ class XMLParser
      * @param array $options integer-key options are passed to the xml parser, in addition to the options received in
      *                       the constructor. String-key options are used independently
      * @return void
+     * @throws \Exception this can happen if a callback function is set and it does throw (ie. we do not catch exceptions)
      */
     public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3, $options = array())
     {
@@ -167,9 +167,10 @@ class XMLParser
                 switch($key) {
                     case 'methodname_callback':
                         if (!is_callable($val)) {
-                            $this->_xh['isf'] = 4;
-                            $this->_xh['isf_reason'] = "Callback passed as 'methodname_callback' is not callable";
-                            return;
+                            //$this->_xh['isf'] = 4;
+                            //$this->_xh['isf_reason'] = "Callback passed as 'methodname_callback' is not callable";
+                            //return;
+                            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": Callback passed as 'methodname_callback' is not callable");
                         } else {
                             $this->callbacks['methodname'] = $val;
                         }
@@ -447,6 +448,7 @@ class XMLParser
      * @param string $name
      * @param int $rebuildXmlrpcvals >1 for rebuilding xmlrpcvals, 0 for rebuilding php values, -1 for xmlrpc-extension compatibility
      * @return void
+     * @throws \Exception this can happen if a callback function is set and it does throw (ie. we do not catch exceptions)
      */
     public function xmlrpc_ee($parser, $name, $rebuildXmlrpcvals = 1)
     {
