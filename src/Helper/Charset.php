@@ -134,7 +134,7 @@ class Charset
      * Convert a string to the correct XML representation in a target charset.
      * This involves:
      * - character transformation for all characters which have a different representation in source and dest charsets
-     * - using 'charset entity' representation for all characters which are outside of the target charset
+     * - using 'charset entity' representation for all characters which are outside the target charset
      *
      * To help correct communication of non-ascii chars inside strings, regardless of the charset used when sending
      * requests, parsing them, sending responses and parsing responses, an option is to convert all non-ascii chars
@@ -149,8 +149,9 @@ class Charset
      * @param string $destEncoding
      * @return string
      *
-     * @todo do a bit of basic benchmarking (strtr vs. str_replace)
-     * @todo make usage of iconv() or mb_string() where available
+     * @todo do a bit of basic benchmarking: strtr vs. str_replace, str_replace vs htmlspecialchars, hand-coded conversion
+     *       vs mbstring when that is enabled
+     * @todo make usage of iconv when it is available and mbstring is not
      * @todo support aliases for charset names, eg ASCII, LATIN1, ISO-88591 (see f.e. polyfill-iconv for a list),
      *       but then take those into account as well in other methods, ie. isValidCharset)
      * @todo when converting to ASCII, allow to choose whether to escape the range 0-31,127 (non-print chars) or not
@@ -166,6 +167,15 @@ class Charset
 
         if ($destEncoding == '') {
             $destEncoding = 'US-ASCII';
+        }
+
+        // in case there is transcoding going on, let's upscale to UTF8
+        /// @todo we should do this as well when $srcEncoding == $destEncoding and the encoding is not supported by
+        ///       htmlspecialchars
+        if (!in_array($srcEncoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII')) && $srcEncoding != $destEncoding &&
+            function_exists('mb_convert_encoding')) {
+            $data = mb_convert_encoding($data, 'UTF-8', str_replace('US-ASCII', 'ASCII', $srcEncoding));
+            $srcEncoding = 'UTF-8';
         }
 
         $conversion = strtoupper($srcEncoding . '_' . $destEncoding);
@@ -257,7 +267,7 @@ class Charset
 
             case 'ISO-8859-1_UTF-8':
                 $escapedData = str_replace(array('&', '"', "'", '<', '>'), array('&amp;', '&quot;', '&apos;', '&lt;', '&gt;'), $data);
-                /// @todo if on php >= 8.2, prefer using mbstring or iconv
+                /// @todo if on php >= 8.2, prefer using mbstring or iconv. Also: suppress the warning!
                 $escapedData = utf8_encode($escapedData);
                 break;
 
@@ -290,9 +300,30 @@ class Charset
             */
 
             default:
-                $escapedData = '';
-                /// @todo allow usage of a custom Logger via the DIC(ish) pattern we use in other classes
-                $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": Converting from $srcEncoding to $destEncoding: not supported...");
+                if (function_exists('mb_convert_encoding')) {
+                    // If reaching where, there are only 2 cases possible: UTF8->XXX or XXX->XXX
+                    // If src is UTF8, we run htmlspecialchars before converting to the target charset, as
+                    // htmlspecialchars has limited charset support, but it groks utf8
+                    if ($srcEncoding === 'UTF-8') {
+                        $data = htmlspecialchars($data,  defined('ENT_XML1') ? ENT_XML1 | ENT_QUOTES : ENT_QUOTES, 'UTF-8');
+                    }
+                    if ($srcEncoding !== $destEncoding) {
+                        $data = mb_convert_encoding($data, str_replace('US-ASCII', 'ASCII', $destEncoding), str_replace('US-ASCII', 'ASCII', $srcEncoding));
+                    }
+                    if ($data === false) {
+                        $escapedData = '';
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": Converting from $srcEncoding to $destEncoding via mbstring: failed...");
+                    } else {
+                        if ($srcEncoding === 'UTF-8') {
+                            $escapedData = $data;
+                        } else {
+                            $escapedData = htmlspecialchars($data, defined('ENT_XML1') ? ENT_XML1 | ENT_QUOTES : ENT_QUOTES, $destEncoding);
+                        }
+                    }
+                } else {
+                    $escapedData = '';
+                    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": Converting from $srcEncoding to $destEncoding: not supported...");
+                }
         }
 
         return $escapedData;
@@ -301,6 +332,7 @@ class Charset
     /**
      * Checks if a given charset encoding is present in a list of encodings or if it is a valid subset of any encoding
      * in the list.
+     * @deprecated kept around for BC, as it is not in use by the lib
      *
      * @param string $encoding charset to be tested
      * @param string|array $validList comma separated list of valid charsets (or array of charsets)
@@ -308,10 +340,12 @@ class Charset
      */
     public function isValidCharset($encoding, $validList)
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         if (is_string($validList)) {
             $validList = explode(',', $validList);
         }
-        if (@in_array(strtoupper($encoding), $validList)) {
+        if (in_array(strtoupper($encoding), $validList)) {
             return true;
         } else {
             if (array_key_exists($encoding, $this->charset_supersets)) {

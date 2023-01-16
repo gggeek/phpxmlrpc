@@ -108,4 +108,19 @@ class CharsetTest extends PhpXmlRpc_PolyfillTestCase
         $encoded = $this->utf8ToLatin1($string);
         $this->assertEquals('&#25105;&#33021;&#21534;&#19979;&#29627;&#29827;&#32780;&#19981;&#20260;&#36523;&#20307;&#12290;', $encoded);
     }
+
+    public function testLatin15()
+    {
+        if (!function_exists('mb_convert_encoding')) {
+            $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
+            return;
+        }
+
+        // euro symbol in ISO-8859-15
+        $string = chr(164);
+        $encoder = Charset::instance();
+        $this->assertEquals('€', $encoder->encodeEntities($string, 'ISO-8859-15', 'UTF-8'));
+        $this->assertEquals('&#8364;', $encoder->encodeEntities($string, 'ISO-8859-15', 'US-ASCII'));
+        $this->assertEquals(chr(164), $encoder->encodeEntities($string, 'ISO-8859-15', 'ISO-8859-15'));
+    }
 }
