@@ -315,8 +315,8 @@ class Request
             return new Response($data, 0, '', 'xml', $this->httpResponse);
         }
 
+        /// @todo move this block of code into the XMLParser
         if ($respEncoding != '') {
-
             // Since parsing will fail if charset is not specified in the xml prologue,
             // the encoding is not UTF8 and there are non-ascii chars in the text, we try to work round that...
             // The following code might be better for mb_string enabled installs, but makes the lib about 200% slower...
@@ -328,21 +328,17 @@ class Request
                     if ($respEncoding == 'ISO-8859-1') {
                         $data = utf8_encode($data);
                     } else {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of received response: ' . $respEncoding);
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': unsupported charset encoding of received response: ' . $respEncoding);
                     }
                 }
             }
         }
-
         // PHP internally might use ISO-8859-1, so we have to tell the xml parser to give us back data in the expected charset.
         // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8
-        // This allows to send data which is native in various charset, by extending xmlrpc_encode_entities() and
-        // setting xmlrpc_internalencoding
-        if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
-            /// @todo emit a warning
-            $options = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
-        } else {
+        if (in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
             $options = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
+        } else {
+            $options = array(XML_OPTION_TARGET_ENCODING => 'UTF-8', 'target_charset' => PhpXmlRpc::$xmlrpc_internalencoding);
         }
 
         $xmlRpcParser = $this->getParser();

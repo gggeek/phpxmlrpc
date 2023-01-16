@@ -11,8 +11,7 @@ use PhpXmlRpc\Value;
  *
  * @todo implement an interface to allow for alternative implementations
  *       - make access to $_xh protected, return more high-level data structures
- *       - move $this->accept, $this->callbacks to an internal-use parsing-options config, along with the private
- *         parts of $_xh
+ *       - move the private parts of $_xh to the internal-use parsing-options config
  *       - add parseRequest, parseResponse, parseValue methods
  * @todo if iconv() or mb_string() are available, we could allow to convert the received xml to a custom charset encoding
  *       while parsing, which is faster than doing it later by going over the rebuilt data structure
@@ -91,14 +90,15 @@ class XMLParser
         'EX:NIL' => array('VALUE'), // only used when extension activated
     );
 
-    /** @var int[] $parsing_options */
+    /** @var array $parsing_options */
     protected $parsing_options = array();
+
     /** @var int $accept self::ACCEPT_REQUEST | self::ACCEPT_RESPONSE by default */
-    protected $accept = 3;
+    //protected $accept = 3;
     /** @var int $maxChunkLength 4 MB by default. Any value below 10MB should be good */
     protected $maxChunkLength = 4194304;
-    /** @var \Callable[] */
-    protected $callbacks = array();
+    /** @var array */
+    protected $current_parsing_options = array();
 
     public function getLogger()
     {
@@ -158,39 +158,51 @@ class XMLParser
             return;
         }
 
-        $prevAccept = $this->accept;
-        $this->accept = $accept;
+        //$prevAccept = $this->accept;
+        //$this->accept = $accept;
+        $this->current_parsing_options = array('accept' => $accept);
 
-        $this->callbacks = array();
+        $mergedOptions = $this->parsing_options;
         foreach ($options as $key => $val) {
+            $mergedOptions[$key] = $val;
+        }
+
+        foreach ($mergedOptions as $key => $val) {
             if (is_string($key)) {
                 switch($key) {
+                    case 'target_charset':
+                        if (function_exists('mb_convert_encoding')) {
+                            $this->current_parsing_options['target_charset'] = $val;
+                        } else {
+                            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": 'target_charset' option is unsupported without mbstring");
+                        }
+                        break;
+
                     case 'methodname_callback':
-                        if (!is_callable($val)) {
+                        if (is_callable($val)) {
+                            $this->current_parsing_options['methodname_callback'] = $val;
+                        } else {
                             //$this->_xh['isf'] = 4;
                             //$this->_xh['isf_reason'] = "Callback passed as 'methodname_callback' is not callable";
                             //return;
                             $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": Callback passed as 'methodname_callback' is not callable");
-                        } else {
-                            $this->callbacks['methodname'] = $val;
                         }
                         break;
+
                     default:
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": unsupported option: $key");
                 }
-                unset($options[$key]);
+                unset($mergedOptions[$key]);
             }
         }
 
         // NB: we use '' instead of null to force charset detection from the xml declaration
         $parser = xml_parser_create('');
 
-        foreach ($this->parsing_options as $key => $val) {
+        foreach ($mergedOptions as $key => $val) {
             xml_parser_set_option($parser, $key, $val);
         }
-        foreach ($options as $key => $val) {
-            xml_parser_set_option($parser, $key, $val);
-        }
+
         // always set this, in case someone tries to disable it via options...
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 1);
 
@@ -233,15 +245,15 @@ class XMLParser
             }
         } catch (\Exception $e) {
             xml_parser_free($parser);
-            $this->callbacks = array();
-            $this->accept = $prevAccept;
+            $this->current_parsing_options = array();
+            //$this->accept = $prevAccept;
             /// @todo should we set $this->_xh['isf'] and $this->_xh['isf_reason'] ?
             throw $e;
         }
 
         xml_parser_free($parser);
-        $this->callbacks = array();
-        $this->accept = $prevAccept;
+        $this->current_parsing_options = array();
+        //$this->accept = $prevAccept;
     }
 
     /**
@@ -270,8 +282,9 @@ class XMLParser
             ///       there is only a single top level element in xml anyway
             // BC
             if ($acceptSingleVals === false) {
-                $accept = $this->accept;
+                $accept = $this->current_parsing_options['accept'];
             } else {
+                //trigger_error('using argument $acceptSingleVals is deprecated', E_USER_DEPRECATED);
                 $accept = self::ACCEPT_REQUEST | self::ACCEPT_RESPONSE | self::ACCEPT_VALUE;
             }
             if (($name == 'METHODCALL' && ($accept & self::ACCEPT_REQUEST)) ||
@@ -472,6 +485,11 @@ class XMLParser
                     $this->_xh['vt'] = Value::$xmlrpcString;
                 }
 
+                // in case there is charset conversion required, do it here, to catch both cases of string values
+                if (isset($this->current_parsing_options['target_charset']) && $this->_xh['vt'] === Value::$xmlrpcString) {
+                    $this->_xh['vt'] = mb_convert_encoding($this->_xh['vt'], $this->current_parsing_options['target_charset'], 'UTF-8');
+                }
+
                 if ($rebuildXmlrpcvals > 0) {
                     // build the xmlrpc val out of the data received, and substitute it
                     $temp = new Value($this->_xh['value'], $this->_xh['vt']);
@@ -616,8 +634,8 @@ class XMLParser
                 $methodname = preg_replace('/^[\n\r\t ]+/', '', $this->_xh['ac']);
                 $this->_xh['method'] = $methodname;
                 // we allow the callback to f.e. give us back a mangled method name by manipulating $this
-                if (isset($this->callbacks['methodname'])) {
-                    call_user_func($this->callbacks['methodname'], $methodname, $this, $parser);
+                if (isset($this->current_parsing_options['methodname_callback'])) {
+                    call_user_func($this->current_parsing_options['methodname_callback'], $methodname, $this, $parser);
                 }
                 break;
 
@@ -839,5 +857,45 @@ class XMLParser
         }
 
         return false;
+    }
+
+    // BC layer
+
+    public function __set($name, $value)
+    {
+        //trigger_error('setting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
+
+        switch ($name) {
+            case 'accept':
+                $this->current_parsing_options['accept'] = $value;
+                break;
+            default:
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
+    }
+
+    public function __isset($name)
+    {
+        //trigger_error('checking property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
+
+        switch ($name) {
+            case 'accept':
+                return isset($this->current_parsing_options['accept']);
+            default:
+                return false;
+        }
+    }
+
+    public function __unset($name)
+    {
+        switch ($name) {
+            case 'accept':
+                unset($this->current_parsing_options['accept']);
+                break;
+            default:
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
     }
 }

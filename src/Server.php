@@ -531,11 +531,11 @@ class Server
         if ($this->response_charset_encoding == 'auto') {
             $respEncoding = '';
             if (isset($_SERVER['HTTP_ACCEPT_CHARSET'])) {
-                // here we should check if we can match the client-requested encoding
-                // with the encodings we know we can generate.
+                // here we should check if we can match the client-requested encoding with the encodings we know we can generate.
                 /// @todo we should parse q=0.x preferences instead of getting first charset specified...
                 $clientAcceptedCharsets = explode(',', strtoupper($_SERVER['HTTP_ACCEPT_CHARSET']));
                 // Give preference to internal encoding
+/// @todo if mbstring is enabled, we can support other charsets too! Add a method to the Encoder!
                 $knownCharsets = array(PhpXmlRpc::$xmlrpc_internalencoding, 'UTF-8', 'ISO-8859-1', 'US-ASCII');
                 foreach ($knownCharsets as $charset) {
                     foreach ($clientAcceptedCharsets as $accepted) {
@@ -583,14 +583,14 @@ class Server
     {
         // decompose incoming XML into request structure
 
+        /// @todo move this block of code into the XMLParser
         if ($reqEncoding != '') {
             // Since parsing will fail if
             // - charset is not specified in the xml prologue,
             // - the encoding is not UTF8 and
             // - there are non-ascii chars in the text,
             // we try to work round that...
-            // The following code might be better for mb_string enabled installs, but
-            // makes the lib about 200% slower...
+            // The following code might be better for mb_string enabled installs, but it makes the lib about 200% slower...
             //if (!is_valid_charset($reqEncoding, array('UTF-8')))
             if (!in_array($reqEncoding, array('UTF-8', 'US-ASCII')) && !XMLParser::hasEncoding($data)) {
                 if (function_exists('mb_convert_encoding')) {
@@ -599,21 +599,17 @@ class Server
                     if ($reqEncoding == 'ISO-8859-1') {
                         $data = utf8_encode($data);
                     } else {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of received request: ' . $reqEncoding);
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': unsupported charset encoding of received request: ' . $reqEncoding);
                     }
                 }
             }
         }
-
         // PHP internally might use ISO-8859-1, so we have to tell the xml parser to give us back data in the expected charset.
         // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8
-        // This allows to send data which is native in various charset,
-        // by extending xmlrpc_encode_entities() and setting xmlrpc_internalencoding
-        if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
-            /// @todo emit a warning
-            $options = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
-        } else {
+        if (in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
             $options = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
+        } else {
+            $options = array(XML_OPTION_TARGET_ENCODING => 'UTF-8', 'target_charset' => PhpXmlRpc::$xmlrpc_internalencoding);
         }
         // register a callback with the xml parser for when it finds the method name
         $options['methodname_callback'] = array($this, 'methodNameCallback');
