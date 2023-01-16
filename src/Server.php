@@ -625,7 +625,7 @@ class Server
             return new Response(0, $e->getCode(), $e->getMessage());
         }
 
-        if ($xmlRpcParser->_xh['isf'] == 2) {
+        if ($xmlRpcParser->_xh['isf'] == 3) {
             // (BC) we return XML error as a faultCode
             preg_match('/^XML error ([0-9]+)/', $xmlRpcParser->_xh['isf_reason'], $matches);
             return new Response(
