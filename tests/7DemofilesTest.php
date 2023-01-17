@@ -3,7 +3,7 @@
 include_once __DIR__ . '/WebTestCase.php';
 
 /**
- * Tests for php files in the 'demo' directory
+ * Tests for php files in the 'demo' directory.
  */
 class DemoFilesTest extends PhpXmlRpc_WebTestCase
 {

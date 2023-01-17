@@ -223,7 +223,7 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
             $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
             return;
         }
-        $sendString = 'κόσμε'; // Greek word 'kosme'. NB: NOT a valid ISO8859 string!
+        $sendString = 'κόσμε'; // Greek word 'kosme'
         $str = '<?xml version="1.0" encoding="_ENC_"?>
 <methodCall>
     <methodName>examples.stringecho</methodName>
@@ -255,7 +255,7 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
             $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
             return;
         }
-        $sendString = '安室奈美恵'; // No idea what this means :-) NB: NOT a valid ISO8859 string!
+        $sendString = '安室奈美恵'; // Japanese name "Namie Amuro"
         $str = '<?xml version="1.0"?>
 <methodCall>
     <methodName>examples.stringecho</methodName>

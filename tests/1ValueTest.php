@@ -10,7 +10,7 @@ include_once __DIR__ . '/PolyfillTestCase.php';
 use PHPUnit\Runner\BaseTestRunner;
 
 /**
- * Tests involving the Value class
+ * Tests involving the Value class.
  */
 class ValueTests extends PhpXmlRpc_PolyfillTestCase
 {
@@ -179,5 +179,25 @@ class ValueTests extends PhpXmlRpc_PolyfillTestCase
         $parser->parse($xml);
 
         $this->assertequals(0, $parser->_xh['isf']);
+    }
+
+    public function testLatin15InternalEncoding()
+    {
+        if (!function_exists('mb_convert_encoding')) {
+            $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
+            return;
+        }
+
+        $string = chr(164);
+        $v = new \PhpXmlRpc\Value($string);
+
+        $originalEncoding = \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding;
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-15';
+
+        $this->assertEquals("<value><string>&#8364;</string></value>", trim($v->serialize('US-ASCII')));
+        $this->assertEquals("<value><string>$string</string></value>", trim($v->serialize('ISO-8859-15')));
+        $this->assertEquals("<value><string>€</string></value>", trim($v->serialize('UTF-8')));
+
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = $originalEncoding;
     }
 }

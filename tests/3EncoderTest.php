@@ -10,7 +10,8 @@ include_once __DIR__ . '/PolyfillTestCase.php';
 use PHPUnit\Runner\BaseTestRunner;
 
 /**
- * Tests involving automatic encoding/decoding of php values into xmlrpc values
+ * Tests involving automatic encoding/decoding of php values into xmlrpc values (the Encoder class).
+ *
  * @todo add tests for encoding options: 'encode_php_objs', 'auto_dates', 'null_extension' and 'extension_api'
  * @todo add tests for php_xmlrpc_decode options
  */
@@ -81,5 +82,30 @@ class EncoderTests extends PhpXmlRpc_PolyfillTestCase
         $m2 = php_xmlrpc_decode_xml($m1->serialize());
         $m2->serialize(); // needed to set internal member payload
         $this->assertEquals($m1, $m2);
+    }
+
+    public function testLatin15InternalEncoding()
+    {
+        if (!function_exists('mb_convert_encoding')) {
+            $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
+            return;
+        }
+
+        $string = chr(164);
+        $e = new \PhpXmlRpc\Encoder();
+
+        $originalEncoding = \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding;
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-15';
+
+        $a = $e->decodeXml('<?xml version="1.0" encoding="US-ASCII" ?><value><string>&#8364;</string></value>');
+        $this->assertEquals($string, $a->scalarVal());
+
+        $i = $e->decodeXml('<?xml version="1.0" encoding="ISO-8859-15" ?><value><string>' . $string . '</string></value>');
+        $this->assertEquals($string, $i->scalarVal());
+
+        $u = $e->decodeXml('<?xml version="1.0" encoding="UTF-8" ?><value><string>€</string></value>');
+        $this->assertEquals($string, $u->scalarVal());
+
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = $originalEncoding;
     }
 }

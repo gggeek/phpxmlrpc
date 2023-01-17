@@ -8,7 +8,8 @@ include_once __DIR__ . '/PolyfillTestCase.php';
 use PhpXmlRpc\Helper\Charset;
 
 /**
- * Test conversion between encodings
+ * Test conversion between encodings via usage of the Charset class.
+ * Note that quite a few other tests testing different classes also test character set conversion.
  *
  * For Windows if you want to test the output use Consolas font
  * and run the following in cmd:
@@ -62,11 +63,6 @@ class CharsetTest extends PhpXmlRpc_PolyfillTestCase
 
     public function testUtf8ToLatin1All()
     {
-        /*$this->assertEquals(
-            'ISO-8859-1',
-            mb_detect_encoding($this->latinString, 'ISO-8859-1, UTF-8, WINDOWS-1251, ASCII', true),
-            'Setup latinString is not ISO-8859-1 encoded...'
-        );*/
         // the warning suppression is due to utf8_encode being deprecated in php 8.2
         $string = @utf8_encode($this->latinString);
         $encoded = $this->utf8ToLatin1($string);

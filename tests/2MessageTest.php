@@ -11,7 +11,8 @@ use PHPUnit\Runner\BaseTestRunner;
 
 /**
  * Tests involving the Request and Response classes.
- * @todo some tests are here only because we use a Response to trigger parsing of xml for a single Value, but they
+ *
+ * @todo many tests are here only because we use a Response to trigger parsing of xml for a single Value, but they
  *       logically belong elsewhere...
  */
 class MessageTests extends PhpXmlRpc_PolyfillTestCase
@@ -43,7 +44,6 @@ class MessageTests extends PhpXmlRpc_PolyfillTestCase
         $msg->setDebug($this->args['DEBUG']);
         return $msg;
     }
-
 
     public function testValidNumbers()
     {
@@ -148,8 +148,7 @@ class MessageTests extends PhpXmlRpc_PolyfillTestCase
         // the warning suppression is due to utf8_decode being deprecated in php 8.2
         $response = @utf8_encode(
             '<?xml version="1.0"?>
-<!-- $Id -->
-<!-- found by G. Giunta, covers what happens when lib receives UTF8 chars in response text and comments -->
+<!-- covers what happens when lib receives UTF8 chars in response text and comments -->
 <!-- ' . chr(224) . chr(252) . chr(232) . '&#224;&#252;&#232; -->
 <methodResponse>
 <fault>
@@ -271,9 +270,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
     {
         $s = $this->newMsg('dummy');
         $f = '<?xml version="1.0"?>
-<!-- $Id -->
-<!-- found by 2z69xks7bpy001@sneakemail.com, amongst others
- covers what happens when there\'s character data after </string>
+<!-- found by 2z69xks7bpy001@sneakemail.com, amongst others covers what happens when there\'s character data after </string>
  and before </value> -->
 <methodResponse>
 <params>
@@ -398,7 +395,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
 
     public function testUTF8Request()
     {
-        $sendstring = 'κόσμε'; // Greek word 'kosme'. NB: NOT a valid ISO8859 string!
+        $sendstring = 'κόσμε'; // Greek word 'kosme'
         $GLOBALS['xmlrpc_internalencoding'] = 'UTF-8';
         \PhpXmlRpc\PhpXmlRpc::importGlobals();
         $f = new xmlrpcval($sendstring, 'string');
