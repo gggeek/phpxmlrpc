@@ -27,7 +27,9 @@ $getComments_sig = array(array(Value::$xmlrpcArray, Value::$xmlrpcString));
 $getComments_doc = 'Returns an array of comments for a given ID, which is the sole argument. Each array item is a struct ' .
     'containing name and comment text.';
 
-$srv = new Server(array(
+$srv = new Server();
+
+$srv->setDispatchMap(array(
     "discuss.addComment" => array(
         "function" => array($manager, "addComment"),
         "signature" => $addComment_sig,
@@ -38,9 +40,9 @@ $srv = new Server(array(
         "signature" => $getComments_sig,
         "docstring" => $getComments_doc,
     ),
-), false);
+));
 
-// let the xml=rpc server know that the method-handler functions expect plain php values
+// let the xml-rpc server know that the method-handler functions expect plain php values
 $srv->functions_parameters_type = 'phpvals';
 
 // let code exceptions float all the way to the remote caller as xml-rpc faults - it helps debugging

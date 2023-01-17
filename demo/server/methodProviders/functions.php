@@ -21,6 +21,7 @@
  */
 
 use PhpXmlRpc\Encoder;
+use PhpXmlRpc\PhpXmlRpc;
 use PhpXmlRpc\Response;
 use PhpXmlRpc\Server;
 use PhpXmlRpc\Value;
@@ -62,7 +63,7 @@ class exampleMethods
 
         if ($err != '') {
             // if we generated an error, create an error return response
-            return new Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
+            return new Response(0, PhpXmlRpc::$xmlrpcerruser, $err);
         } else {
             // otherwise, we create the right response with the state name
             return new Response(new Value($stateName));
@@ -108,7 +109,7 @@ And the array will be returned with the entries sorted by their numbers.';
 
         if ($err != '') {
             Server::xmlrpc_debugmsg("Aborting 'agesorter'");
-            return new Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
+            return new Response(0, PhpXmlRpc::$xmlrpcerruser, $err);
         }
 
         asort($agar);
@@ -156,8 +157,15 @@ And the array will be returned with the entries sorted by their numbers.';
     public static $echoback_doc = 'Accepts a string parameter, returns the entire incoming payload';
     public static function echoBack($req)
     {
-        // just sends back a string with what I got sent to me, that's all (escaping for xml is automatic)
-        $s = "I got the following message:\n" . $req->serialize();
+        // just sends back a string with what I got sent to me, that's all
+
+        /// @todo file_get_contents does not take into account either receiving compressed requests, or requests with
+        ///       data which is not in UTF-8. Otoh using req->serialize means that what we are sending back is not
+        ///       byte-for-byte identical to what we received, and that <, >, ', " and & will be double-encoded.
+        ///       In fact, we miss some API (or extra data) in the Request...
+        //$payload = file_get_contents('php://input');
+        $payload = $req->serialize(PhpXmlRpc::$xmlrpc_internalencoding);
+        $s = "I got the following message:\n" . $payload;
 
         return new Response(new Value($s));
     }
@@ -251,7 +259,7 @@ mimetype, a string, is a standard MIME type, for example, text/plain.';
         }
 
         if ($err) {
-            return new Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
+            return new Response(0, PhpXmlRpc::$xmlrpcerruser, $err);
         } else {
             return new Response(new Value(true, Value::$xmlrpcBoolean));
         }

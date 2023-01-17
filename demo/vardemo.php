@@ -89,6 +89,9 @@ output("<h3>Testing value serialization - character encoding</h3>\n");
 $v = new PhpXmlRpc\Value('κόσμε');
 output("Greek (default encoding): <PRE>" . htmlentities($v->serialize()) . "</PRE>");
 output("Greek (utf8 encoding): <PRE>" . htmlentities($v->serialize('UTF-8')) . "</PRE>");
+if (function_exists('mb_convert_encoding')) {
+    output("Greek (ISO-8859-7 encoding): <PRE>" . htmlentities($v->serialize('ISO-8859-7')) . "</PRE>");
+}
 
 output("<h3>Testing request serialization</h3>\n");
 $req = new PhpXmlRpc\Request('examples.getStateName');

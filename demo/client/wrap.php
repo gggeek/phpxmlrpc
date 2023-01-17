@@ -11,7 +11,7 @@ output('<html lang="en">
 <h3>The code demonstrates usage of some of the most automagic client usage possible:<br/>
     1) client that returns php values instead of xml-rpc Value objects<br/>
     2) wrapping of remote methods into php functions<br/>
-    See also proxy.php for an alternative take
+    See also proxy.php and codegen.php for alternative takes
 </h3>
 <p>You can see the source to this page here: <a href="wrap.php?showSource=1">wrap.php</a></p>
 ');

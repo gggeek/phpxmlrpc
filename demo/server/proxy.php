@@ -47,16 +47,34 @@ function forward_request($req)
     $client = new Client($url);
 
     if ($req->getNumParams() > 3) {
-        // we have to set some options onto the client.
+        // We have to set some options onto the client.
         // Note that if we do not untaint the received values, warnings might be generated...
         $options = $encoder->decode($req->getParam(3));
         foreach ($options as $key => $val) {
             switch ($key) {
-                case 'Cookie':
+                case 'authType':
+                    /// @todo add support for this if needed
+                    break;
+                case 'followRedirects':
+                    // requires cURL to be enabled
+                    if ($val) {
+                        $client->use_curl = Client::USE_CURL_ALWAYS;
+                        $client->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
+                    }
+                case 'Cookies':
                     /// @todo add support for this if needed
                     break;
                 case 'Credentials':
                     /// @todo add support for this as well if needed
+                    break;
+                case 'HTTPProxy':
+                case 'HTTPProxyCredentials':
+                    /// @todo add support for this as well if needed
+                    break;
+                case 'RequestCharsetEncoding':
+                    // allow the server to work as charset transcoder.
+                    // NB: works best with mbstring enabled
+                    $client->request_charset_encoding = $val;
                     break;
                 case 'RequestCompression':
                     $client->setRequestCompression($val);
