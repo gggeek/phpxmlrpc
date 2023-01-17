@@ -100,7 +100,8 @@ class EncoderTests extends PhpXmlRpc_PolyfillTestCase
         $a = $e->decodeXml('<?xml version="1.0" encoding="US-ASCII" ?><value><string>&#8364;</string></value>');
         $this->assertEquals($string, $a->scalarVal());
 
-        /// @todo it seems that old php versions can not
+        /// @todo it seems that old php versions can not automatically transform latin to utf8 upon xml parsing.
+        ///       We should fix that, then re-enable this test
         if (version_compare(PHP_VERSION, '5.6.0', '>=')) {
             $i = $e->decodeXml('<?xml version="1.0" encoding="ISO-8859-15" ?><value><string>' . $string . '</string></value>');
             $this->assertEquals($string, $i->scalarVal());
