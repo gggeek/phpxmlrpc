@@ -99,12 +99,18 @@ class Encoder
                             return (object)$xmlrpcVal;
                         case 'string':
                             if (isset($options['extension_api_encoding'])) {
-                                $dval = @iconv('UTF-8', $options['extension_api_encoding'], $val);
+                                // if iconv is not available, we use mb_convert_encoding
+                                if (function_exists('iconv')) {
+                                    $dval = @iconv('UTF-8', $options['extension_api_encoding'], $val);
+                                } elseif (function_exists('mb_convert_encoding')) {
+                                    $dval = @mb_convert_encoding($val, $options['extension_api_encoding'], 'UTF-8');
+                                } else {
+                                    $dval = false;
+                                }
                                 if ($dval !== false) {
                                     return $dval;
                                 }
                             }
-                            //return $val;
                             // break through voluntarily
                         default:
                             return $val;
