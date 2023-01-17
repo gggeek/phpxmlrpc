@@ -1416,6 +1416,49 @@ php values to Value objects.
 
 == Upgrading [[upgrading]]
 
+=== our Backward Compatibility promise
+
+The PHPXMLRPC library adheres to Semantic Versioning principles, as outlined in https://semver.org/.
+
+In short, Semantic Versioning means that only major releases (such as 3.0, 4.0 etc.) are allowed to break backward
+compatibility. Minor releases (such as 4.1, 4.2 etc.) may introduce new features, but must do so without breaking the
+existing API of that release branch (4.x in the previous example).
+
+However, __backward compatibility__ comes in many different flavors. In fact, almost every change made to the library can
+potentially break an application. For example:
+* if we add a new argument to an existing class method, this will break an application which extended this class and
+  reimplemented the same method, as it will have to add the new argument as well - even if we give it a default value
+* if we add a new method to a class, this will break an application which extended this class and added the same method,
+  but with a different method signature
+* if we add a new protected property to a class, this will break an application which extended this class and added the
+  same method property, and uses it for a different purpose
+* etc...
+
+The guiding principle used to inform the development process and the version number applied to new releases is:
+* we adhere to strict Semantic Versioning Backward Compatibility rules for __consumers__ of the library.
+* we __strive__ to maintain Semantic Versioning Backward Compatibility for developers __extending__ the library, for
+  as long as humanly possible, but do not guarantee it 100%
+The distinction between __consumers__ and __extenders__ is clear-cut: an extender is anyone implementing a subclass
+of any of the PHPXMLRPC classes, or replacing it wholesale with his/her own implementation.
+
+In detail:
+* to avoid breaking compatibility with extenders, the library will not implement strict type declaration. This might
+  include weird practices such as declaring interfaces but not checking or enforcing them at the point of use
+* return types of functions and methods is only allowed to be changed in major versions
+* new arguments to functions and methods are allowed to be added in minor versions, provided they have a default value
+* new functions and methods are allowed to be added in minor versions
+* existing class methods and properties might be removed or renamed in minor versions. When that happens, their
+  previous incarnations will be kept working via usage of php magic functions `__get`, `__set`, `__call` and friends;
+  using those will eventually lead to deprecation errors being triggered - but that has not yet been enabled
+* exceptions thrown by the library are allowed to be moved to a subclass of their previous class in minor versions
+* exception messages and error messages are not guaranteed to be stable. They mostly get more detailed over time,
+  but might occasionally see complete rewording
+
+Finally, _always read carefully the NEWS file before upgrading_. It is the single most important source of truth
+regarding changes to the API (after the code itself, of course)
+
+=== Upgrading to version 4
+
 If you are upgrading to version 4 from version 3 or earlier you have two options:
 
 1. adapt your code to the new API (all changes needed are described in https://github.com/gggeek/phpxmlrpc/blob/master/doc/api_changes_v4.md)
@@ -1424,18 +1467,10 @@ If you are upgrading to version 4 from version 3 or earlier you have two options
 
 In any case, read carefully the docs available online and report back any undocumented issue using GitHub.
 
-=== Removed from the library [[deprecated]]
+=== Upgrading to version 2
 
 The following two functions have been deprecated in version 1.1 of the library, and removed in version 2, in order to
 avoid conflicts with the PHP xml-rpc extension, which also defines two functions with the same names.
-
-To ease the transition to the new naming scheme and avoid breaking existing implementations, the following scheme has
-been adopted:
-
-* If EPI-XMLRPC is not active in the current PHP installation, the constant `XMLRPC_EPI_ENABLED` will be set to '0'
-
-
-* If EPI-XMLRPC is active in the current PHP installation, the constant `XMLRPC_EPI_ENABLED` will be set to '1'
 
 The following documentation is kept for historical reference:
 

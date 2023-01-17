@@ -151,7 +151,7 @@ class Charset
      *
      * @todo do a bit of basic benchmarking: strtr vs. str_replace, str_replace vs htmlspecialchars, hand-coded conversion
      *       vs mbstring when that is enabled
-     * @todo make usage of iconv when it is available and mbstring is not
+     * @todo make use of iconv when it is available and mbstring is not
      * @todo support aliases for charset names, eg ASCII, LATIN1, ISO-88591 (see f.e. polyfill-iconv for a list),
      *       but then take those into account as well in other methods, ie. isValidCharset)
      * @todo when converting to ASCII, allow to choose whether to escape the range 0-31,127 (non-print chars) or not
