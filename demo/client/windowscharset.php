@@ -17,12 +17,13 @@ if (!function_exists('mb_convert_encoding')) {
 
 PhpXmlRpc::$xmlrpc_internalencoding = 'Windows-1252';
 
-// this is a very contrived way of creating a CP-1252 string...
+// this is a very contrived way of creating a CP-1252 string... start with utf8 and convert it :-D
 $input = 'Euro sign is €, per mille is ‰, trademark is ™, copyright is ©, smart quotes are “these”';
-//var_dump(mb_list_encodings());
+
 echo "This is the value we start with (in UTF-8): ";
 var_dump($input);
 
+// this is all we actually need to do to tell the library we are using CP-1252 for our requests and want back the same from responses
 $input = mb_convert_encoding($input, 'Windows-1252', 'UTF-8');
 
 echo "In CP-1252, it looks like this: ";
