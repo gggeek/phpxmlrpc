@@ -11,6 +11,10 @@ use PhpXmlRpc\PhpXmlRpc;
 use PhpXmlRpc\Request;
 use PhpXmlRpc\Value;
 
+if (!function_exists('mb_convert_encoding')) {
+    die('This demo requires mbstring support');
+}
+
 PhpXmlRpc::$xmlrpc_internalencoding = 'Windows-1252';
 
 // this is a very contrived way of creating a CP-1252 string...
@@ -28,11 +32,11 @@ $c = new Client(XMLRPCSERVER);
 
 // allow the full request and response to be seen on screen
 $c->setDebug(2);
-// tell the server not to compress the response
+// tell the server not to compress the response - this is not necessary btw, it is only done to make the debug look nicer
 $c->accepted_compression = array();
-// tell the server not to encode everything as ASCII - this is not necessary btw. It is only done to make the demo nicer
+// tell the server not to encode everything as ASCII - this is not necessary btw, it is only done to make the debug look nicer
 $c->accepted_charset_encodings = array('UTF-8');
-// force the client not to encode everything as ASCII - this is not necessary btw. It is only done to make the demo nicer
+// force the client not to encode everything as ASCII - this is not necessary btw, it is only done to make the debug nicer
 $c->request_charset_encoding = 'UTF-8';
 
 $r = $c->send(new Request('examples.stringecho', array(new Value($input))));

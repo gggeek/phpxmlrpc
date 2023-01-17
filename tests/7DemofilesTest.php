@@ -59,6 +59,11 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
         $page = $this->request('?demo=client/which.php');
     }
 
+    public function testWindowsCharset()
+    {
+        $page = $this->request('?demo=client/windowscharset.php');
+    }
+
     public function testWrap()
     {
         $page = $this->request('?demo=client/wrap.php');
