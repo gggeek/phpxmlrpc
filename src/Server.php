@@ -1016,12 +1016,14 @@ class Server
                 'specVersion' => 1
             ),
             // if we support system.xxx functions, we always support multicall, too...
-            // Note that, as of 2006/09/17, the following URL does not respond anymore
             'system.multicall' => array(
+                // Note that, as of 2006/09/17, the following URL does not respond anymore
                 'specUrl' => 'http://www.xmlrpc.com/discuss/msgReader$1208',
                 'specVersion' => 1
             ),
-            // introspection: version 2! we support 'mixed', too
+            // introspection: version 2! we support 'mixed', too.
+            // note: the php xml-rpc extension says this instead:
+            //   url http://xmlrpc-epi.sourceforge.net/specs/rfc.introspection.php, version 20010516
             'introspection' => array(
                 'specUrl' => 'http://phpxmlrpc.sourceforge.net/doc-2/ch10.html',
                 'specVersion' => 2,
@@ -1031,10 +1033,19 @@ class Server
         // NIL extension
         if (PhpXmlRpc::$xmlrpc_null_extension) {
             $outAr['nil'] = array(
+                // Note that, as of 2023/01, the following URL does not respond anymore
                 'specUrl' => 'http://www.ontosys.com/xml-rpc/extensions.php',
                 'specVersion' => 1
             );
         }
+
+        /// @todo add support for "standard" error codes
+        //if (...) {
+        //    $outAr['faults_interop'] = array(
+        //        'specUrl' => 'http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php',
+        //        'specVersion' => 20010516
+        //    );
+        //}
 
         return $outAr;
     }
