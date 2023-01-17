@@ -297,14 +297,24 @@ implementation goes further, for reasons explained by the http://www.w3.org/TR/R
 In particular, using character reference representation has the advantage of producing XML that is valid independently of
 the charset encoding assumed.
 
-Note that, despite what the specification states, string values should not be used to encode binary data, as control
-characters (such as f.e. characters nr. 0 to 8) are never allowed in XML, even when encoded as character references.
+Note that the library assumes that your application will be using data in UTF-8. This applies both to string values sent
+and to string values received (i.e. the data fed to your application will be transparently transcoded if the remote
+client/server uses a different character set encoding in its requests/responses). If this is not the case, and you have
+the php mbstring extension enabled, you can set the desired character set to `PhpXmlRpc::$xmlrpc_internalencoding`, and
+the library will go out of its way to make character set encoding a non-issue (*).
 
 In case the string data you are using is mostly outside the ASCII range, such as f.e. when communicating information
 in chinese, japanese, or korean, you might want to avoid the automatic encoding of all non-ascii characters to references,
 as it has performance implications, both in cpu usage and in the size of the generated messages. For such scenarios, it
 is recommended to set both `PhpXmlRpc::$xmlrpc_internalencoding` and `+$client->request_charset_encoding+` /
-`+$server->response_charset_encoding+` to 'UTF-8';
+`+$server->response_charset_encoding+` to 'UTF-8'.
+
+The demo file __demo/client/windowscharset.php__ showcases client-side usage of `$xmlrpc_internalencoding`.
+
+Note that, despite what the specification states, string values should not be used to encode binary data, as control
+characters (such as f.e. characters nr. 0 to 8) are never allowed in XML, even when encoded as character references.
+
+\* = at the time of writing, fault strings and xml-rpc method names are still expected to be UTF-8
 
 ===== null
 
@@ -1637,7 +1647,7 @@ length and cpu load (for carrying out the base64 encoding/decoding).
 See the example given in __demo/client/which.php__ for the possibility of sending "standard xml-rpc" xml which was
 generated outside the phpxmlrpc library.
 
-=== My server (client) returns an error whenever the client (server) returns accented characters
+=== My server (client) returns an error whenever the client (server) sends accented characters
 
 To be documented...
 
@@ -1648,15 +1658,19 @@ used to encode it is CP1252 (the same might apply to data received from an exter
 rare to find xml-rpc toolkits that encode to CP1252 instead of UTF8). It is a character set which is "almost" compatible
 with ISO 8859-1, but for a few extra characters.
 
-PHPXMLRPC only supports the ISO 8859-1 and UTF8 character sets.
-The net result of this situation is that those extra characters will not be properly encoded, and will be received at
-the other end of the XML-RPC transmission as "garbled data". Unfortunately the library cannot provide real support for
-CP1252 because of limitations in the PHP 4 xml parser. Luckily, we tried our best to support this character set anyway,
-and, since version 2.2.1, there is some form of support, left commented out in the code.
+PHPXMLRPC always supports the ISO-8859-1 and UTF-8 character sets, plus any character sets which are available via the
+https://www.php.net/manual/en/book.mbstring.php[mbstring php extension].
 
-To properly encode outgoing data that is natively in CP1252, you will have to uncomment all relative code in the file
-__xmlrpc.inc__ (you can search for the string "1252"), then set `GLOBALS['xmlrpc_internalencoding']='CP1252';`
-Please note that all incoming data will then be fed to your application as UTF-8 to avoid any potential data loss.
+To properly encode outgoing data that is natively in CP1252, you will have to make sure that mbstring is enabled, then set
+
+    PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'Windows-1252';
+
+somewhere in your code, before any outgoing data is serialized.
+
+The same setting will also ensure that the data which is fed back to your application will also be transcoded by the
+library into the same character set, regardless by the character set used over the wire.
+
+This feature is available since release 4.10, and can be seen in action in file __demo/client/windowscharset.php__
 
 === Does the library support using cookies / http sessions?
 
