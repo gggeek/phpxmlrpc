@@ -144,6 +144,7 @@ class PhpXmlRpc
     /**
      * @var int
      * Number of decimal digits used to serialize Double values.
+     * @todo rename :'-(
      */
     public static $xmlpc_double_precision = 128;
 

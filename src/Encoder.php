@@ -103,6 +103,7 @@ class Encoder
                                 if (function_exists('iconv')) {
                                     $dval = @iconv('UTF-8', $options['extension_api_encoding'], $val);
                                 } elseif (function_exists('mb_convert_encoding')) {
+                                    /// @todo check for discrepancies between the supported charset names
                                     $dval = @mb_convert_encoding($val, $options['extension_api_encoding'], 'UTF-8');
                                 } else {
                                     $dval = false;
