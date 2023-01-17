@@ -305,12 +305,14 @@ class Encoder
      * xmlrpc value into the appropriate object (a.k.a. deserialize).
      *
      * @param string $xmlVal
-     * @param array $options
+     * @param array $options unused atm
      * @return Value|Request|Response|false false on error, or an instance of either Value, Request or Response
      *
      * @todo is this a good name/class for this method? It does something quite different from 'decode' after all
      *       (returning objects vs returns plain php values)... In fact, it belongs rather to a Parser class
-     * Feature creep -- we should allow an option to return php native types instead of PhpXmlRpc objects instances
+     * @todo feature creep -- we should allow an option to return php native types instead of PhpXmlRpc objects instances
+     * @todo feature creep -- allow source charset to be passed in as an option, in case the xml misses its declaration
+     * @todo feature creep -- allow expected type (val/req/resp) to be passed in as an option
      */
     public function decodeXml($xmlVal, $options = array())
     {
@@ -319,7 +321,7 @@ class Encoder
         if ($valEncoding != '') {
 
             // Since parsing will fail if
-            // - charset is not specified in the xml prologue,
+            // - charset is not specified in the xml declaration,
             // - the encoding is not UTF8 and
             // - there are non-ascii chars in the text,
             // we try to work round that...
@@ -339,11 +341,10 @@ class Encoder
         }
 
         // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8!
-        if (!in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
-            /// @todo emit a warning
-            $parserOptions = array(XML_OPTION_TARGET_ENCODING => 'UTF-8');
-        } else {
+        if (in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
             $parserOptions = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
+        } else {
+            $parserOptions = array(XML_OPTION_TARGET_ENCODING => 'UTF-8', 'target_charset' => PhpXmlRpc::$xmlrpc_internalencoding);
         }
 
         $xmlRpcParser = $this->getParser();

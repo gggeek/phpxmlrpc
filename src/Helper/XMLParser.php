@@ -53,6 +53,7 @@ class XMLParser
         'ac' => '',
         'stack' => array(),
         'valuestack' => array(),
+
         'isf' => 0,
         'isf_reason' => '',
         'value' => null,
@@ -118,7 +119,7 @@ class XMLParser
     }
 
     /**
-     * @param int[] $options passed to the xml parser
+     * @param array $options passed to the xml parser
      */
     public function __construct(array $options = array())
     {
@@ -131,7 +132,7 @@ class XMLParser
      * @param int $accept a bit-combination of self::ACCEPT_REQUEST, self::ACCEPT_RESPONSE, self::ACCEPT_VALUE
      * @param array $options integer-key options are passed to the xml parser, in addition to the options received in
      *                       the constructor. String-key options are used independently
-     * @return void
+     * @return void the caller has to look into $this->_xh to find the results
      * @throws \Exception this can happen if a callback function is set and it does throw (ie. we do not catch exceptions)
      */
     public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3, $options = array())
@@ -140,6 +141,7 @@ class XMLParser
             'ac' => '',
             'stack' => array(),
             'valuestack' => array(),
+
             'isf' => 0,
             'isf_reason' => '',
             'value' => null,
@@ -487,7 +489,7 @@ class XMLParser
 
                 // in case there is charset conversion required, do it here, to catch both cases of string values
                 if (isset($this->current_parsing_options['target_charset']) && $this->_xh['vt'] === Value::$xmlrpcString) {
-                    $this->_xh['vt'] = mb_convert_encoding($this->_xh['vt'], $this->current_parsing_options['target_charset'], 'UTF-8');
+                    $this->_xh['value'] = mb_convert_encoding($this->_xh['value'], $this->current_parsing_options['target_charset'], 'UTF-8');
                 }
 
                 if ($rebuildXmlrpcvals > 0) {
@@ -833,6 +835,8 @@ class XMLParser
      *
      * @param string $xmlChunk
      * @return bool
+     *
+     * @todo rename to hasEncodingDeclaration
      */
     public static function hasEncoding($xmlChunk)
     {

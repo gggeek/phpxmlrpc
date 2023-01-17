@@ -586,7 +586,7 @@ class Server
         /// @todo move this block of code into the XMLParser
         if ($reqEncoding != '') {
             // Since parsing will fail if
-            // - charset is not specified in the xml prologue,
+            // - charset is not specified in the xml declaration,
             // - the encoding is not UTF8 and
             // - there are non-ascii chars in the text,
             // we try to work round that...
