@@ -100,7 +100,8 @@ class EncoderTests extends PhpXmlRpc_PolyfillTestCase
         $a = $e->decodeXml('<?xml version="1.0" encoding="US-ASCII" ?><value><string>&#8364;</string></value>');
         $this->assertEquals($string, $a->scalarVal());
 
-        if (in_array('ISO-8859-15', mb_list_encodings())) {
+        /// @todo it seems that old php versions can not
+        if (version_compare(PHP_VERSION, '5.6.0', '>=')) {
             $i = $e->decodeXml('<?xml version="1.0" encoding="ISO-8859-15" ?><value><string>' . $string . '</string></value>');
             $this->assertEquals($string, $i->scalarVal());
         }
