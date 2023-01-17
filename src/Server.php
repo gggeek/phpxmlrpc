@@ -195,13 +195,11 @@ class Server
         $this->accepted_charset_encodings = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
 
         // dispMap is a dispatch array of methods mapped to function names and signatures.
-        // If a method doesn't appear in the map then an unknown method error is generated
-        /* milosch - changed to make passing dispMap optional.
-        * instead, you can use the class add_to_map() function
-        * to add functions manually (borrowed from SOAPX4)
-        */
+        // If a method doesn't appear in the map then an unknown method error is generated.
+        // milosch - changed to make passing dispMap optional. Instead, you can use the class add_to_map() function
+        // to add functions manually (borrowed from SOAPX4)
         if ($dispatchMap) {
-            $this->dmap = $dispatchMap;
+            $this->setDispatchMap($dispatchMap);
             if ($serviceNow) {
                 $this->service();
             }
@@ -318,6 +316,7 @@ class Server
             /// @todo try to move this injection to the resp. constructor or use a non-deprecated access method. Or, even
             ///       better: just avoid setting this, and set debug info of the received http request in the request
             ///       object instead? It's not like the developer misses access to _SERVER, _COOKIES though...
+            ///       Last but not least: the raw data might be of use to handler functions - but in decompressed form...
             $resp->raw_data = $rawData;
         }
 
@@ -332,6 +331,7 @@ class Server
         }
 
         // Do not create response serialization if it has already happened. Helps to build json magic
+        /// @todo what if the payload was created targeting a different charset than $respCharset?
         if (empty($resp->payload)) {
             $resp->serialize($respCharset);
         }
@@ -940,6 +940,16 @@ class Server
         return (strpos($methName, "system.") === 0);
     }
 
+
+    /**
+     * @param array $dmap
+     * @return $this
+     */
+    public function setDispatchMap($dmap)
+    {
+        $this->dmap = $dmap;
+        return $this;
+    }
 
     /**
      * @return array[]

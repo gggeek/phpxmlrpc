@@ -371,7 +371,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Returns the xml representation of the value. XML prologue not included.
      *
-     * @param string $charsetEncoding the charset to be used for serialization. if null, US-ASCII is assumed
+     * @param string $charsetEncoding the charset to be used for serialization. If null, US-ASCII is assumed
      * @return string
      */
     public function serialize($charsetEncoding = '')

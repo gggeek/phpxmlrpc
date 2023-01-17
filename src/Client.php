@@ -752,6 +752,7 @@ class Client
         }
 
         // Only create the payload if it was not created previously
+        /// @todo what if the request's payload was created with a different encoding?
         if (empty($req->payload)) {
             $req->serialize($this->request_charset_encoding);
         }
