@@ -487,7 +487,7 @@ class Client
     /**
      * Directly set cURL options, for extra flexibility (when in cURL mode).
      *
-     * It allows eg. to bind client to a specific IP interface / address.
+     * It allows e.g. to bind client to a specific IP interface / address.
      *
      * @param array $options
      * @return $this
@@ -781,7 +781,7 @@ class Client
         if ($username != '') {
             $credentials = 'Authorization: Basic ' . base64_encode($username . ':' . $password) . "\r\n";
             if ($authType != 1) {
-                /// @todo make this a proper error, ie. return a failure
+                /// @todo make this a proper error, i.e. return a failure
                 $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported with HTTP 1.0');
             }
         }
@@ -803,7 +803,7 @@ class Client
             $uri = 'http://' . $server . ':' . $port . $this->path;
             if ($proxyUsername != '') {
                 if ($proxyAuthType != 1) {
-                    /// @todo make this a proper error, ie. return a failure
+                    /// @todo make this a proper error, i.e. return a failure
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported with HTTP 1.0');
                 }
                 $proxyCredentials = 'Proxy-Authorization: Basic ' . base64_encode($proxyUsername . ':' . $proxyPassword) . "\r\n";
@@ -1162,7 +1162,7 @@ class Client
                 if (defined('CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE')) {
                     curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
                 } else {
-                    /// @todo make this a proper error, ie. return a failure
+                    /// @todo make this a proper error, i.e. return a failure
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. HTTP2 is not supported by the current PHP/curl install');
                 }
                 break;
@@ -1176,7 +1176,7 @@ class Client
             if (defined('CURLOPT_HTTPAUTH')) {
                 curl_setopt($curl, CURLOPT_HTTPAUTH, $authType);
             } elseif ($authType != 1) {
-                /// @todo make this a proper error, ie. return a failure
+                /// @todo make this a proper error, i.e. return a failure
                 $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported by the current PHP/curl install');
             }
         }
@@ -1226,7 +1226,7 @@ class Client
                 if (defined('CURLOPT_PROXYAUTH')) {
                     curl_setopt($curl, CURLOPT_PROXYAUTH, $proxyAuthType);
                 } elseif ($proxyAuthType != 1) {
-                    /// @todo make this a proper error, ie. return a failure
+                    /// @todo make this a proper error, i.e. return a failure
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported by the current PHP/curl install');
                 }
             }

@@ -203,7 +203,7 @@ class Encoder
         $type = gettype($phpVal);
         switch ($type) {
             case 'string':
-                /// @todo should we be stricter in the accepted dates (ie. reject more of invalid days & times)?
+                /// @todo should we be stricter in the accepted dates (i.e. reject more of invalid days & times)?
                 if (in_array('auto_dates', $options) && preg_match('/^[0-9]{8}T[0-9]{2}:[0-9]{2}:[0-9]{2}$/', $phpVal)) {
                     $xmlrpcVal = new Value($phpVal, Value::$xmlrpcDateTime);
                 } else {
@@ -340,7 +340,8 @@ class Encoder
             }
         }
 
-        // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8!
+        // What if internal encoding is not in one of the 3 allowed? We use the broadest one, i.e. utf8!
+        /// @todo with php < 5.6, this does not work. We should add a manual conversion of the xml string to UTF8
         if (in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
             $parserOptions = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
         } else {

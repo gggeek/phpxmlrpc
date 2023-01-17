@@ -151,7 +151,7 @@ class Wrapper
      *   Other libs might choke on the very same xml that will be generated in this case (i.e. it has a nonstandard
      *   attribute on struct element tags)
      *
-     * Note that since rel. 2.0RC3 the preferred method to have the server call 'standard' php functions (ie. functions
+     * Note that since rel. 2.0RC3 the preferred method to have the server call 'standard' php functions (i.e. functions
      * not expecting a single Request obj as parameter) is by making use of the $functions_parameters_type and
      * $exception_handling properties.
      *

@@ -133,7 +133,7 @@ class XMLParser
      * @param array $options integer-key options are passed to the xml parser, in addition to the options received in
      *                       the constructor. String-key options are used independently
      * @return void the caller has to look into $this->_xh to find the results
-     * @throws \Exception this can happen if a callback function is set and it does throw (ie. we do not catch exceptions)
+     * @throws \Exception this can happen if a callback function is set and it does throw (i.e. we do not catch exceptions)
      */
     public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3, $options = array())
     {
@@ -466,7 +466,7 @@ class XMLParser
      * @param string $name
      * @param int $rebuildXmlrpcvals >1 for rebuilding xmlrpcvals, 0 for rebuilding php values, -1 for xmlrpc-extension compatibility
      * @return void
-     * @throws \Exception this can happen if a callback function is set and it does throw (ie. we do not catch exceptions)
+     * @throws \Exception this can happen if a callback function is set and it does throw (i.e. we do not catch exceptions)
      */
     public function xmlrpc_ee($parser, $name, $rebuildXmlrpcvals = 1)
     {
@@ -553,9 +553,9 @@ class XMLParser
                     $this->_xh['value'] = base64_decode($this->_xh['ac']);
                 } elseif ($name == 'BOOLEAN') {
                     // special case here: we translate boolean 1 or 0 into PHP constants true or false.
-                    // Strings 'true' and 'false' are accepted, even though the spec never mentions them (see eg.
+                    // Strings 'true' and 'false' are accepted, even though the spec never mentions them (see e.g.
                     // Blogger api docs)
-                    // NB: this simple checks helps a lot sanitizing input, ie. no security problems around here
+                    // NB: this simple checks helps a lot sanitizing input, i.e. no security problems around here
                     if ($this->_xh['ac'] == '1' || strcasecmp($this->_xh['ac'], 'true') == 0) {
                         $this->_xh['value'] = true;
                     } else {
@@ -713,7 +713,7 @@ class XMLParser
     }
 
     /**
-     * xml parser handler function for 'other stuff', ie. not char data or element start/end tag.
+     * xml parser handler function for 'other stuff', i.e. not char data or element start/end tag.
      * In fact it only gets called on unknown entities...
      * @internal
      *

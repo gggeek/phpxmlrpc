@@ -334,7 +334,7 @@ class Request
             }
         }
         // PHP internally might use ISO-8859-1, so we have to tell the xml parser to give us back data in the expected charset.
-        // What if internal encoding is not in one of the 3 allowed? We use the broadest one, ie. utf8
+        // What if internal encoding is not in one of the 3 allowed? We use the broadest one, i.e. utf8
         if (in_array(PhpXmlRpc::$xmlrpc_internalencoding, array('UTF-8', 'ISO-8859-1', 'US-ASCII'))) {
             $options = array(XML_OPTION_TARGET_ENCODING => PhpXmlRpc::$xmlrpc_internalencoding);
         } else {
