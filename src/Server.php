@@ -881,7 +881,7 @@ class Server
 
         if (!isset($dmap[$methodName]['function'])) {
             // No such method
-            throw new PhpXmlrpcException(0, PhpXmlRpc::$xmlrpcstr['unknown_method'], PhpXmlRpc::$xmlrpcerr['unknown_method']);
+            throw new PhpXmlrpcException(PhpXmlRpc::$xmlrpcstr['unknown_method'], PhpXmlRpc::$xmlrpcerr['unknown_method']);
         }
 
         // alter on-the-fly the config of the xml parser if needed

@@ -360,11 +360,16 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
             new xmlrpcval("\"; exec('ls')", 'int'),
         ));
         $v = $this->send($m);
-        /// @todo a fault condition should be generated here
-        /// by the server, which we pick up on
+        /// @todo a specific fault should be generated here by the server, which we can check
         if ($v) {
             $this->assertEquals(0, $v->scalarval());
         }
+    }
+
+    public function testUnknownMethod()
+    {
+        $m = new xmlrpcmsg('examples.a_very_unlikely.method', array());
+        $v = $this->send($m, \PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['unknown_method']);
     }
 
     public function testBoolean()
