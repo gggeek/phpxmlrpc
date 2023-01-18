@@ -86,9 +86,10 @@ class Server
      * @var string
      * Charset encoding to be used for response.
      * NB: if we can, we will convert the generated response from internal_encoding to the intended one.
-     * Can be: a supported xml encoding (only UTF-8 and ISO-8859-1 at present, unless mbstring is enabled),
-     * null (leave unspecified in response, convert output stream to US_ASCII),
-     * or 'auto' (use client-specified charset encoding or same as request if request headers do not specify it (unless request is US-ASCII: then use library default anyway).
+     * Can be:
+     * - a supported xml encoding (only UTF-8 and ISO-8859-1, unless mbstring is enabled),
+     * - null (leave unspecified in response, convert output stream to US_ASCII),
+     * - 'auto' (use client-specified charset encoding or same as request if request headers do not specify it (unless request is US-ASCII: then use library default anyway).
      * NB: pretty dangerous if you accept every charset and do not have mbstring enabled)
      */
     public $response_charset_encoding = '';
