@@ -93,8 +93,8 @@ class PhpXmlRpc
 
     /**
      * @var string[]
-     * The list of encodings used by the server for requests and by the client for responses to detect the charset of
-     * the received payload when
+     * The list of preferred encodings used by the server for requests and by the client for responses to detect the
+     * charset of the received payload when
      * - the charset cannot be determined by looking at http headers, xml declaration or BOM
      * - mbstring extension is enabled
      */
@@ -167,7 +167,9 @@ class PhpXmlRpc
 
         $reflection = new \ReflectionClass('PhpXmlRpc\Value');
         foreach ($reflection->getStaticProperties() as $name => $value) {
-            $GLOBALS[$name] = $value;
+            if (!in_array($name, array('logger', 'charsetEncoder'))) {
+                $GLOBALS[$name] = $value;
+            }
         }
 
         $parser = new Helper\XMLParser();
