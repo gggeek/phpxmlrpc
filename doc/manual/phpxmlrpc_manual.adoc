@@ -1385,6 +1385,13 @@ auto-completion for it, nor for security-minded developers to be able to examine
 recommended to always  use the `return_source` option when using the Wrapper methods, and save to disk the generated code
 instead of executing it directly.
 
+==== Other tools
+
+Other tools exist which share the same goal of generating php code implementing xml-rpc clients or server, starting
+from either an Interface Definition Language or existing php code.
+
+One such project, not affiliated with this library, can be found at: https://github.com/mumitr0ll/xrdl
+
 
 == Performances [[performances]]
 
