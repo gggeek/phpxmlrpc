@@ -98,6 +98,34 @@ class HTTPTest extends ServerTest
         }
     }
 
+    public function testAcceptCharset()
+    {
+        if (!function_exists('mb_list_encodings'))
+        {
+            $this->markTestSkipped('mbstring missing: cannot test accept-charset');
+            return;
+        }
+
+        $r = new \PhpXmlRpc\Request('examples.stringecho', array(new \PhpXmlRpc\Value('€')));
+        //chr(164)
+
+        $originalEncoding = \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding;
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'UTF-8';
+
+        $this->addQueryParams(array('RESPONSE_ENCODING' => 'auto'));
+        $this->client->accepted_charset_encodings = array(
+            'utf-1234;q=0.1',
+            'windows-1252;q=0.8'
+        );
+        $v = $this->send($r, 0, true);
+        $h = $v->httpResponse();
+        $this->assertEquals('text/xml; charset=Windows-1252', $h['headers']['content-type']);
+        if ($v) {
+            $this->assertEquals('€', $v->value()->scalarval());
+        }
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = $originalEncoding;
+    }
+
     /**
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
