@@ -34,6 +34,8 @@
 
 * improved: method `Helper\Date::iso8601Encode` now accepts a DateTime input beside a timestamp
 
+* improved: method `Server::add_to_map` has acquired a 6th parameter: `$parametersType = false`
+
 * improved: removed usage of `extension_loaded` in favour of `function_exists` when checking for mbstring. This allows
   for mbstring functions to be polyfilled
 
@@ -49,6 +51,7 @@
     to a custom character set and the mbstring extension is enabled. It will be encoded instead in the specified character
     set. We expect this to affect few users, as setting `PhpXmlRpc::$internal_encoding` to a custom character set did
     not make a lot of sense beforehand
+  - parameters `$timeout` and `$method` are now considered deprecated in `Client::send()` and `Client::multicall()`
 
   for library extenders
 
@@ -57,8 +60,6 @@
     and reimplemented the `parse` methods, or wholesale replaced it, you will have to adapt your code
   - also, if you had reimplemented `XMLParser::parse`, be warned that the callers now treat differently results when
     `_xh['isf'] > 3`
-  - parameters `$timeout` and `$method` are now considered deprecated in `Client::send()` and `Client::multicall()`
-  - method `Server::add_to_map` has acquired a 6th parameter: `$parametersType = false`
   - new methods in helper classes: `Charset::knownCharsets`, `Http::parseAcceptHeader`
   - if you had been somehow interacting with private method `Client::_try_multicall`, be warned its returned data has
     changed: it now returns a Response for the cases in which it previously returned false, and an array of Response

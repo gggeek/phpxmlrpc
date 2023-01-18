@@ -1438,21 +1438,28 @@ The guiding principle used to inform the development process and the version num
 * we adhere to strict Semantic Versioning Backward Compatibility rules for __consumers__ of the library.
 * we __strive__ to maintain Semantic Versioning Backward Compatibility for developers __extending__ the library, for
   as long as humanly possible, but do not guarantee it 100%
-The distinction between __consumers__ and __extenders__ is clear-cut: an extender is anyone implementing a subclass
+The distinction between __consumers__ and __extenders__ is defined as: an extender is anyone implementing a subclass
 of any of the PHPXMLRPC classes, or replacing it wholesale with his/her own implementation.
 
 In detail:
-* to avoid breaking compatibility with extenders, the library will not implement strict type declaration. This might
+* to avoid breaking compatibility with extenders, the library will not implement strict type declarations. This might
   include weird practices such as declaring interfaces but not checking or enforcing them at the point of use
-* return types of functions and methods is only allowed to be changed in major versions
+* new classes, interfaces, exceptions, class methods, constants and properties are allowed to be added in minor versions.
+  NB: this includes adding magic methods `\__get`, `\__set`, `\__call`, etc... to classes which did not have them
 * new arguments to functions and methods are allowed to be added in minor versions, provided they have a default value
-* new functions and methods are allowed to be added in minor versions
-* existing class methods and properties might be removed or renamed in minor versions. When that happens, their
-  previous incarnations will be kept working via usage of php magic functions `__get`, `__set`, `__call` and friends;
-  using those will eventually lead to deprecation errors being triggered - but that has not yet been enabled
+* types of function and method arguments are only allowed to be changed in major versions
+* return types of functions and methods are only allowed to be changed in major versions
+* existing function and method arguments, class methods and properties, interfaces, exceptions might be deprecated in
+  minor versions
+* existing class methods and properties might be removed or renamed in minor versions, provided that their previous
+  incarnations are kept working via usage of php magic functions `\__get`, `\__set`, `\__call` and friends
 * exceptions thrown by the library are allowed to be moved to a subclass of their previous class in minor versions
 * exception messages and error messages are not guaranteed to be stable. They mostly get more detailed over time,
   but might occasionally see complete rewording
+* any class, method, property, interface, exception and constant documented using the `@internal` tag is considered not
+  to be part of the library's API and might not follow the rules above
+* using deprecated methods and properties will eventually lead to deprecation errors being triggered - but that has not
+  yet been enabled
 
 Finally, _always read carefully the NEWS file before upgrading_. It is the single most important source of truth
 regarding changes to the API (after the code itself, of course)
