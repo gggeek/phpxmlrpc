@@ -18,6 +18,10 @@ class Client
     const USE_CURL_AUTO = 2;
 
     protected static $logger;
+    /** @var string */
+    protected static $requestClass = '\\PhpXmlRpc\\Request';
+    /** @var string */
+    protected static $responseClass = '\\PhpXmlRpc\\Response';
 
     /// @todo: do these need to be public?
     public $method = 'http';
@@ -579,7 +583,7 @@ class Client
 
             return $r;
         } elseif (is_string($req)) {
-            $n = new Request('');
+            $n = new  static::$requestClass('');
             $n->payload = $req;
             $req = $n;
         }
@@ -903,7 +907,7 @@ class Client
             }
 
             $this->errstr = 'Connect error: ' . $this->errstr;
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
+            $r = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
 
             return $r;
         }
@@ -911,7 +915,7 @@ class Client
         if (!fputs($fp, $op, strlen($op))) {
             fclose($fp);
             $this->errstr = 'Write error';
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
+            $r = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
 
             return $r;
         }
@@ -968,7 +972,7 @@ class Client
     {
         if (!function_exists('curl_init')) {
             $this->errstr = 'CURL unavailable on this install';
-            return new Response(0, PhpXmlRpc::$xmlrpcerr['no_curl'], PhpXmlRpc::$xmlrpcstr['no_curl']);
+            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['no_curl'], PhpXmlRpc::$xmlrpcstr['no_curl']);
         }
         if ($method == 'https' || $method == 'h2') {
             // q: what about installs where we get back a string, but curl is linked to other ssl libs than openssl?
@@ -976,13 +980,13 @@ class Client
                 ((is_string($info) && strpos($info, 'OpenSSL') === null) || (is_array($info) && !isset($info['ssl_version'])))
             ) {
                 $this->errstr = 'SSL unavailable on this install';
-                return new Response(0, PhpXmlRpc::$xmlrpcerr['no_ssl'], PhpXmlRpc::$xmlrpcstr['no_ssl']);
+                return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['no_ssl'], PhpXmlRpc::$xmlrpcstr['no_ssl']);
             }
         }
         if (($method == 'h2' && !defined('CURL_HTTP_VERSION_2_0')) ||
             ($method == 'h2c' && !defined('CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE'))) {
             $this->errstr = 'HTTP/2 unavailable on this install';
-            return new Response(0, PhpXmlRpc::$xmlrpcerr['no_http2'], PhpXmlRpc::$xmlrpcstr['no_http2']);
+            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['no_http2'], PhpXmlRpc::$xmlrpcstr['no_http2']);
         }
 
         $curl = $this->prepareCurlHandle($req, $server, $port, $timeout, $username, $password,
@@ -991,7 +995,7 @@ class Client
             $keyPass, $sslVersion);
 
         if (!$curl) {
-            return new Response(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': error during curl initialization. Check php error log for details');
+            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': error during curl initialization. Check php error log for details');
         }
 
         $result = curl_exec($curl);
@@ -1012,7 +1016,7 @@ class Client
             /// @todo we should use a better check here - what if we get back '' or '0'?
 
             $this->errstr = 'no response';
-            $resp = new Response(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': ' . curl_error($curl));
+            $resp = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': ' . curl_error($curl));
             curl_close($curl);
             if ($keepAlive) {
                 $this->xmlrpc_curl_handle = null;
