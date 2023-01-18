@@ -2,7 +2,7 @@
 
 namespace PhpXmlRpc;
 
-use PhpXmlRpc\Helper\Charset;
+//use PhpXmlRpc\Helper\Charset;
 use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
 

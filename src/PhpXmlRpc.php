@@ -2,6 +2,8 @@
 
 namespace PhpXmlRpc;
 
+use PhpXmlRpc\Helper\Charset;
+
 /**
  * Manages global configuration for operation of the library.
  */
@@ -177,7 +179,7 @@ class PhpXmlRpc
             }
         }
 
-        $charset = Helper\Charset::instance();
+        $charset = Charset::instance();
         $GLOBALS['xml_iso88591_Entities'] = $charset->getEntities('iso88591');
     }
 

@@ -53,7 +53,7 @@ class XMLParser
         'ac' => '',
         'stack' => array(),
         'valuestack' => array(),
-
+        'lv' => 0,
         'isf' => 0,
         'isf_reason' => '',
         'value' => null,
@@ -134,6 +134,8 @@ class XMLParser
      *                       the constructor. String-key options are used independently
      * @return void the caller has to look into $this->_xh to find the results
      * @throws \Exception this can happen if a callback function is set and it does throw (i.e. we do not catch exceptions)
+     *
+     * @todo refactor? we could 1. return the parsed data structure, and 2. move $returnType and $accept into options
      */
     public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3, $options = array())
     {
@@ -141,7 +143,7 @@ class XMLParser
             'ac' => '',
             'stack' => array(),
             'valuestack' => array(),
-
+            'lv' => 0,
             'isf' => 0,
             'isf_reason' => '',
             'value' => null,
@@ -170,7 +172,7 @@ class XMLParser
         }
 
         foreach ($mergedOptions as $key => $val) {
-            if (is_string($key)) {
+            if (is_string($key) && !ctype_digit($key)) {
                 switch($key) {
                     case 'target_charset':
                         if (function_exists('mb_convert_encoding')) {
