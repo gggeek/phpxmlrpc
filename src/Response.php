@@ -27,6 +27,7 @@ class Response
     /** @internal */
     public $errstr = '';
     public $payload;
+    /** @var string */
     public $content_type = 'text/xml';
     protected $httpResponse = array('headers' => array(), 'cookies' => array(), 'raw_data' => '', 'status_code' => null);
 

@@ -26,7 +26,9 @@ class Request
     public $methodname;
     /** @internal */
     public $params = array();
+    /** @var int */
     public $debug = 0;
+    /** @var string */
     public $content_type = 'text/xml';
 
     // holds data while parsing the response. NB: Not a full Response object

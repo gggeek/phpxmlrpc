@@ -26,6 +26,7 @@ class Wrapper
 
     protected static $logger;
 
+    /** @var string */
     protected static $namespace = '\\PhpXmlRpc\\';
 
     public function getLogger()
