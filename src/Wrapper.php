@@ -26,6 +26,8 @@ class Wrapper
 
     protected static $logger;
 
+    protected static $namespace = '\\PhpXmlRpc\\';
+
     public function getLogger()
     {
         if (self::$logger === null) {
@@ -433,10 +435,9 @@ class Wrapper
          */
         $function = function($req) use($callable, $extraOptions, $funcDesc)
         {
-            $nameSpace = '\\PhpXmlRpc\\';
-            $encoderClass = $nameSpace.'Encoder';
-            $responseClass = $nameSpace.'Response';
-            $valueClass = $nameSpace.'Value';
+            $encoderClass = static::$namespace.'Encoder';
+            $responseClass = static::$namespace.'Response';
+            $valueClass = static::$namespace.'Value';
 
             // validate number of parameters received
             // this should be optional really, as we assume the server does the validation
@@ -534,8 +535,6 @@ class Wrapper
      */
     protected function buildWrapFunctionSource($callable, $newFuncName, $extraOptions, $plainFuncName, $funcDesc)
     {
-        $namespace = '\\PhpXmlRpc\\';
-
         $encodePhpObjects = isset($extraOptions['encode_php_objs']) ? (bool)$extraOptions['encode_php_objs'] : false;
         $decodePhpObjects = isset($extraOptions['decode_php_objs']) ? (bool)$extraOptions['decode_php_objs'] : false;
         $catchWarnings = isset($extraOptions['suppress_warnings']) && $extraOptions['suppress_warnings'] ? '@' : '';
@@ -572,9 +571,9 @@ class Wrapper
         // build body of new function
 
         $innerCode = "\$paramCount = \$req->getNumParams();\n";
-        $innerCode .= "if (\$paramCount < $minPars || \$paramCount > $maxPars) return new {$namespace}Response(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcstr['incorrect_params'] . "');\n";
+        $innerCode .= "if (\$paramCount < $minPars || \$paramCount > $maxPars) return new " . static::$namespace . "Response(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcstr['incorrect_params'] . "');\n";
 
-        $innerCode .= "\$encoder = new {$namespace}Encoder();\n";
+        $innerCode .= "\$encoder = new " . static::$namespace . "Encoder();\n";
         if ($decodePhpObjects) {
             $innerCode .= "\$p = \$encoder->decode(\$req, array('decode_php_objs'));\n";
         } else {
@@ -595,14 +594,14 @@ class Wrapper
             if ($i < (count($parsVariations) - 1))
                 $innerCode .= "else\n";
         }
-        $innerCode .= "if (is_a(\$retval, '{$namespace}Response')) return \$retval; else\n";
+        $innerCode .= "if (is_a(\$retval, '" . static::$namespace . "Response')) return \$retval; else\n";
         if ($funcDesc['returns'] == Value::$xmlrpcDateTime || $funcDesc['returns'] == Value::$xmlrpcBase64) {
-            $innerCode .= "return new {$namespace}Response(new {$namespace}Value(\$retval, '{$funcDesc['returns']}'));";
+            $innerCode .= "return new " . static::$namespace . "Response(new " . static::$namespace . "Value(\$retval, '{$funcDesc['returns']}'));";
         } else {
             if ($encodePhpObjects) {
-                $innerCode .= "return new {$namespace}Response(\$encoder->encode(\$retval, array('encode_php_objs')));\n";
+                $innerCode .= "return new " . static::$namespace . "Response(\$encoder->encode(\$retval, array('encode_php_objs')));\n";
             } else {
-                $innerCode .= "return new {$namespace}Response(\$encoder->encode(\$retval));\n";
+                $innerCode .= "return new " . static::$namespace . "Response(\$encoder->encode(\$retval));\n";
             }
         }
         // shall we exclude functions returning by ref?
@@ -751,10 +750,9 @@ class Wrapper
      */
     protected function retrieveMethodSignature($client, $methodName, array $extraOptions = array())
     {
-        $namespace = '\\PhpXmlRpc\\';
-        $reqClass = $namespace . 'Request';
-        $valClass = $namespace . 'Value';
-        $decoderClass = $namespace . 'Encoder';
+        $reqClass = static::$namespace . 'Request';
+        $valClass = static::$namespace . 'Value';
+        $decoderClass = static::$namespace . 'Encoder';
 
         $debug = isset($extraOptions['debug']) ? ($extraOptions['debug']) : 0;
         $timeout = isset($extraOptions['timeout']) ? (int)$extraOptions['timeout'] : 0;
@@ -793,9 +791,8 @@ class Wrapper
      */
     protected function retrieveMethodHelp($client, $methodName, array $extraOptions = array())
     {
-        $namespace = '\\PhpXmlRpc\\';
-        $reqClass = $namespace . 'Request';
-        $valClass = $namespace . 'Value';
+        $reqClass = static::$namespace . 'Request';
+        $valClass = static::$namespace . 'Value';
 
         $debug = isset($extraOptions['debug']) ? ($extraOptions['debug']) : 0;
         $timeout = isset($extraOptions['timeout']) ? (int)$extraOptions['timeout'] : 0;
@@ -843,10 +840,9 @@ class Wrapper
                 $decodeFault = false;
             }
 
-            $namespace = '\\PhpXmlRpc\\';
-            $reqClass = $namespace . 'Request';
-            $encoderClass = $namespace . 'Encoder';
-            $valueClass = $namespace . 'Value';
+            $reqClass = static::$namespace . 'Request';
+            $encoderClass = static::$namespace . 'Encoder';
+            $valueClass = static::$namespace . 'Value';
 
             $encoder = new $encoderClass();
             $encodeOptions = array();
@@ -935,13 +931,11 @@ class Wrapper
             $faultResponse = '';
         }
 
-        $namespace = '\\PhpXmlRpc\\';
-
-        $code = "function $newFuncName (";
+        $code = "function $newFuncName(";
         if ($clientCopyMode < 2) {
             // client copy mode 0 or 1 == full / partial client copy in emitted code
             $verbatimClientCopy = !$clientCopyMode;
-            $innerCode = $this->buildClientWrapperCode($client, $verbatimClientCopy, $prefix, $namespace);
+            $innerCode = '  ' . str_replace("\n", "\n  ", $this->buildClientWrapperCode($client, $verbatimClientCopy, $prefix, static::$namespace));
             $innerCode .= "\$client->setDebug(\$debug);\n";
             $this_ = '';
         } else {
@@ -949,17 +943,18 @@ class Wrapper
             $innerCode = '';
             $this_ = 'this->';
         }
-        $innerCode .= "\$req = new {$namespace}Request('$methodName');\n";
+        $innerCode .= "  \$req = new " . static::$namespace . "Request('$methodName');\n";
 
         if ($mDesc != '') {
             // take care that PHP comment is not terminated unwillingly by method description
-            $mDesc = "/**\n* " . str_replace('*/', '* /', $mDesc) . "\n";
+            /// @todo according to the spec, method desc can have html in it. We should run it through strip_tags...
+            $mDesc = "/**\n * " . str_replace('*/', '* /', $mDesc) . "\n";
         } else {
-            $mDesc = "/**\nFunction $newFuncName\n";
+            $mDesc = "/**\n * Function $newFuncName.\n";
         }
 
         // param parsing
-        $innerCode .= "\$encoder = new {$namespace}Encoder();\n";
+        $innerCode .= "  \$encoder = new " . static::$namespace . "Encoder();\n";
         $plist = array();
         $pCount = count($mSig);
         for ($i = 1; $i < $pCount; $i++) {
@@ -969,25 +964,25 @@ class Wrapper
                 $pType == 'string' || $pType == 'dateTime.iso8601' || $pType == 'base64' || $pType == 'null'
             ) {
                 // only build directly xmlrpc values when type is known and scalar
-                $innerCode .= "\$p$i = new {$namespace}Value(\$p$i, '$pType');\n";
+                $innerCode .= "  \$p$i = new " . static::$namespace . "Value(\$p$i, '$pType');\n";
             } else {
                 if ($encodePhpObjects) {
-                    $innerCode .= "\$p$i = \$encoder->encode(\$p$i, array('encode_php_objs'));\n";
+                    $innerCode .= "  \$p$i = \$encoder->encode(\$p$i, array('encode_php_objs'));\n";
                 } else {
-                    $innerCode .= "\$p$i = \$encoder->encode(\$p$i);\n";
+                    $innerCode .= "  \$p$i = \$encoder->encode(\$p$i);\n";
                 }
             }
-            $innerCode .= "\$req->addparam(\$p$i);\n";
-            $mDesc .= '* @param ' . $this->xmlrpc2PhpType($pType) . " \$p$i\n";
+            $innerCode .= "  \$req->addparam(\$p$i);\n";
+            $mDesc .= ' * @param ' . $this->xmlrpc2PhpType($pType) . " \$p$i\n";
         }
         if ($clientCopyMode < 2) {
-            $plist[] = '$debug=0';
-            $mDesc .= "* @param int \$debug when 1 (or 2) will enable debugging of the underlying {$prefix} call (defaults to 0)\n";
+            $plist[] = '$debug = 0';
+            $mDesc .= " * @param int \$debug when 1 (or 2) will enable debugging of the underlying {$prefix} call (defaults to 0)\n";
         }
         $plist = implode(', ', $plist);
-        $mDesc .= "* @return {$namespace}Response|" . $this->xmlrpc2PhpType($mSig[0]) . " (an {$namespace}Response obj instance if call fails)\n*/\n";
+        $mDesc .= " * @return " . static::$namespace . "Response|" . $this->xmlrpc2PhpType($mSig[0]) . " (a " . static::$namespace . "Response obj instance if call fails)\n */\n";
 
-        $innerCode .= "\$res = \${$this_}client->send(\$req, $timeout, '$protocol');\n";
+        $innerCode .= "  \$res = \${$this_}client->send(\$req, $timeout, '$protocol');\n";
         if ($decodeFault) {
             if (is_string($faultResponse) && ((strpos($faultResponse, '%faultCode%') !== false) || (strpos($faultResponse, '%faultString%') !== false))) {
                 $respCode = "str_replace(array('%faultCode%', '%faultString%'), array(\$res->faultCode(), \$res->faultString()), '" . str_replace("'", "''", $faultResponse) . "')";
@@ -998,12 +993,12 @@ class Wrapper
             $respCode = '$res';
         }
         if ($decodePhpObjects) {
-            $innerCode .= "if (\$res->faultcode()) return $respCode; else return \$encoder->decode(\$res->value(), array('decode_php_objs'));";
+            $innerCode .= "  if (\$res->faultcode()) return $respCode; else return \$encoder->decode(\$res->value(), array('decode_php_objs'));";
         } else {
-            $innerCode .= "if (\$res->faultcode()) return $respCode; else return \$encoder->decode(\$res->value());";
+            $innerCode .= "  if (\$res->faultcode()) return $respCode; else return \$encoder->decode(\$res->value());";
         }
 
-        $code = $code . $plist . ") {\n" . $innerCode . "\n}\n";
+        $code = $code . $plist . ")\n{\n" . $innerCode . "\n}\n";
 
         return array('source' => $code, 'docstring' => $mDesc);
     }
@@ -1038,10 +1033,9 @@ class Wrapper
         $verbatimClientCopy = isset($extraOptions['simple_client_copy']) ? !($extraOptions['simple_client_copy']) : true;
         $buildIt = isset($extraOptions['return_source']) ? !($extraOptions['return_source']) : true;
         $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : 'xmlrpc';
-        $namespace = '\\PhpXmlRpc\\';
 
-        $reqClass = $namespace . 'Request';
-        $decoderClass = $namespace . 'Encoder';
+        $reqClass = static::$namespace . 'Request';
+        $decoderClass = static::$namespace . 'Encoder';
 
         // retrieve the list of methods
         $req = new $reqClass('system.listMethods');
@@ -1077,7 +1071,7 @@ class Wrapper
         /// @todo add method setDebug() to new class, to enable/disable debugging
         $source = "class $xmlrpcClassName\n{\npublic \$client;\n\n";
         $source .= "function __construct()\n{\n";
-        $source .= $this->buildClientWrapperCode($client, $verbatimClientCopy, $prefix, $namespace);
+        $source .= $this->buildClientWrapperCode($client, $verbatimClientCopy, $prefix, static::$namespace);
         $source .= "\$this->client = \$client;\n}\n\n";
         $opts = array(
             'return_source' => true,

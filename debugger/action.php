@@ -25,22 +25,18 @@ header('Content-Type: text/html; charset=utf-8');
             font-family: Verdana, Arial, Helvetica, sans-serif;
             font-size: 8pt;
         }
-
         h3 {
             font-size: 9.5pt;
         }
-
         h2 {
             font-size: 12pt;
         }
-
         .dbginfo {
             padding: 1em;
             background-color: #EEEEEE;
             border: 1px dashed silver;
             font-family: monospace;
         }
-
         #response {
             padding: 1em;
             margin-top: 1em;
@@ -49,41 +45,33 @@ header('Content-Type: text/html; charset=utf-8');
             white-space: pre;
             font-family: monospace;
         }
-
         table {
             padding: 2px;
             margin-top: 1em;
         }
-
         th {
             background-color: navy;
             color: white;
             padding: 0.5em;
         }
-
         td {
             padding: 0.5em;
             font-family: monospace;
         }
-
         td form {
             margin: 0;
         }
-
         .oddrow {
             background-color: #EEEEEE;
         }
-
         .evidence {
             color: blue;
         }
-
         #phpcode {
             background-color: #EEEEEE;
             padding: 1em;
             margin-top: 1em;
         }
-
         -->
     </style>
 </head>
@@ -118,11 +106,11 @@ if ($action) {
             }
             $clientClass = '\PhpXmlRpc\JsonRpc\Client';
             $requestClass = '\PhpXmlRpc\JsonRpc\Request';
-            $protoName = 'JSONRPC';
+            $protoName = 'JSON-RPC';
         } else {
             $clientClass = '\PhpXmlRpc\Client';
             $requestClass = '\PhpXmlRpc\Request';
-            $protoName = 'XMLRPC';
+            $protoName = 'XML-RPC';
         }
 
         if ($port != "") {
@@ -227,7 +215,7 @@ if ($action) {
                     die("Tsk tsk tsk, please stop it or I will have to call in the cops!");
                 }
                 $msg[0] = new $requestClass($method, array(), $id);
-                // hack! build xml payload by hand
+                // hack! build payload by hand
                 if ($wstype == 1) {
                     $msg[0]->payload = "{\n" .
                         '"method": "' . $method . "\",\n\"params\": [" .
@@ -384,7 +372,38 @@ if ($action) {
                                     foreach($x as $k => $y) {
                                         if ($k == 0) continue;
                                         echo htmlspecialchars($y->scalarval(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding);
-                                        if ($wstype != 1) {
+                                        if ($wstype == 1) {
+                                            switch($y->scalarval()) {
+                                                case 'string':
+                                                case 'dateTime.iso8601':
+                                                case 'base64':
+                                                    $payload .= '""';
+                                                    break;
+                                                case 'i4':
+                                                case 'i8':
+                                                case 'int':
+                                                    $payload .= '0';
+                                                    break;
+                                                case 'double':
+                                                    $payload .= '0.0';
+                                                    break;
+                                                case 'bool':
+                                                case 'boolean':
+                                                    $payload .= 'true';
+                                                    break;
+                                                case 'null':
+                                                    $payload .= 'null';
+                                                    break;
+                                                case 'array':
+                                                    $payload .= '[]';
+                                                    break;
+                                                case 'struct':
+                                                    $payload .= '{}';
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        } else {
                                             $type = $y->scalarval();
                                             $payload .= '<param><value>';
                                             switch($type) {
@@ -404,6 +423,9 @@ if ($action) {
                                         $alt_payload .= $y->scalarval();
                                         if ($k < $x->count() - 1) {
                                             $alt_payload .= ';';
+                                            if ($wstype == 1) {
+                                                $payload .= ', ';
+                                            }
                                             echo ", ";
                                         }
                                     }
@@ -440,9 +462,9 @@ if ($action) {
                                 "<input type=\"hidden\" name=\"altmethodpayload\" value=\"" . htmlspecialchars($alt_payload, ENT_COMPAT, $inputcharset) . "\" />" .
                                 "<input type=\"hidden\" name=\"wstype\" value=\"$wstype\" />" .
                                 "<input type=\"hidden\" name=\"action\" value=\"execute\" />";
-                            if ($wstype != 1) {
+                            //if ($wstype != 1) {
                                 echo "<input type=\"submit\" value=\"Load method synopsis\" />";
-                            }
+                            //}
                             echo "</form></td>\n";
 
                             echo "<td$class><form action=\"controller.php\" target=\"frmcontroller\" method=\"get\">" .
@@ -492,8 +514,7 @@ if ($action) {
                         $msig = $msig[$methodsig];
                         $proto = ($protocol == 1) ? 'http11' : ( $protocol == 2 ? 'https' : ( $protocol == 3 ? 'h2' : ( $protocol == 4 ? 'h2c' : '' ) ) );
                         if ($proxy == '' && $username == '' && !$requestcompression && !$responsecompression &&
-                            $clientcookies == ''
-                        ) {
+                            $clientcookies == '') {
                             $opts = 1; // simple client copy in stub code
                         } else {
                             $opts = 0; // complete client copy in stub code
@@ -503,12 +524,16 @@ if ($action) {
                         } else {
                             $prefix = 'xmlrpc';
                         }
-                        $wrapper = new PhpXmlRpc\Wrapper();
+                        if ($wstype == 1) {
+                            $wrapper = new PhpXmlRpc\JsonRpc\Wrapper();
+                        } else {
+                            $wrapper = new PhpXmlRpc\Wrapper();
+                        }
                         $code = $wrapper->buildWrapMethodSource($client, $method, array('timeout' => $timeout, 'protocol' => $proto, 'simple_client_copy' => $opts, 'prefix' => $prefix), str_replace('.', '_', $prefix . '_' . $method), $msig, $mdesc);
                         //if ($code)
                         //{
                         echo "<div id=\"phpcode\">\n";
-                        highlight_string("<?php\n" . $code['docstring'] . $code['source'] . '?>');
+                        highlight_string("<?php\n" . $code['docstring'] . $code['source']);
                         echo "\n</div>";
                         //}
                         //else
