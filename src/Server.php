@@ -547,15 +547,14 @@ class Server
                 arsort($clientAcceptedCharsets);
                 $clientAcceptedCharsets = array_keys($clientAcceptedCharsets);
 
-                // Give preference to internal encoding
-                $knownCharsets = array(PhpXmlRpc::$xmlrpc_internalencoding, 'UTF-8', 'ISO-8859-1', 'US-ASCII');
+                $knownCharsets = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
                 // if mbstring is enabled, we can support other charsets too!
                 /// @todo add a method to the Charset helper to retrieve this list (and remove from it junk entries)
                 if (function_exists('mb_list_encodings')) {
                     $knownCharsets = array_unique(array_merge($knownCharsets, mb_list_encodings()));
                 }
-                foreach ($knownCharsets as $charset) {
-                    foreach ($clientAcceptedCharsets as $accepted) {
+                foreach ($clientAcceptedCharsets as $accepted) {
+                    foreach ($knownCharsets as $charset) {
                         if ($accepted == strtoupper($charset)) {
                             $respEncoding = $charset;
                             break 2;
