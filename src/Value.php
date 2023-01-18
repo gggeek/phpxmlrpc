@@ -177,7 +177,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 return 0;
             case 2:
                 // we're adding a scalar value to an array here
-                $this->me['array'][] = new Value($val, $type);
+                $class = get_class($this);
+                $this->me['array'][] = new $class($val, $type);
 
                 return 1;
             default:
