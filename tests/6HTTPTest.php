@@ -100,6 +100,11 @@ class HTTPTest extends ServerTest
 
     public function testAcceptCharset()
     {
+        if (version_compare(PHP_VERSION, '5.6.0', '<'))
+        {
+            $this->markTestSkipped('cannot test accept-charset on php < 5.6');
+            return;
+        }
         if (!function_exists('mb_list_encodings'))
         {
             $this->markTestSkipped('mbstring missing: cannot test accept-charset');
