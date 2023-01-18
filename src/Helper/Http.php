@@ -7,7 +7,6 @@ use PhpXmlRpc\PhpXmlRpc;
 
 /**
  *
- * @todo allow usage of a custom Logger via the DIC(ish) pattern we use in other classes
  */
 class Http
 {
@@ -282,5 +281,29 @@ class Http
         } // end of 'if needed, de-chunk, re-inflate response'
 
         return $httpResponse;
+    }
+
+    /**
+     * Parses one of the http headers which can have a list of values with quality param.
+     * @see https://www.rfc-editor.org/rfc/rfc7231#section-5.3.1
+     *
+     * @param string $header
+     * @return string[]
+     */
+    public function parseAcceptHeader($header)
+    {
+        $accepted = array();
+        foreach(explode(',', $header) as $c) {
+            if (preg_match('/^([^;]+); *q=([0-9.]+)/', $c, $matches)) {
+                $c = $matches[1];
+                $w = $matches[2];
+            } else {
+                $c = preg_replace('/;.*/', '', $c);
+                $w = 1;
+            }
+            $accepted[(trim($c))] = $w;
+        }
+        arsort($accepted);
+        return array_keys($accepted);
     }
 }

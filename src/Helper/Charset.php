@@ -330,6 +330,23 @@ class Charset
     }
 
     /**
+     * @return string[]
+     */
+    public function knownCharsets()
+    {
+        $knownCharsets = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
+        // Add all charsets which mbstring can handle, but remove junk not found in IANA registry at
+        // http://www.iana.org/assignments/character-sets/character-sets.xhtml
+        if (function_exists('mb_list_encodings')) {
+            $knownCharsets = array_unique(array_merge($knownCharsets, array_diff(mb_list_encodings(), array(
+                'pass', 'auto', 'wchar', 'BASE64', 'UUENCODE', 'ASCII', 'HTML-ENTITIES', 'Quoted-Printable',
+                '7bit','8bit', 'byte2be', 'byte2le', 'byte4be', 'byte4le'
+            ))));
+        }
+        return $knownCharsets;
+    }
+
+    /**
      * Checks if a given charset encoding is present in a list of encodings or if it is a valid subset of any encoding
      * in the list.
      * @deprecated kept around for BC, as it is not in use by the lib

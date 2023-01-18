@@ -4,6 +4,7 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Exception\PhpXmlrpcException;
 use PhpXmlRpc\Helper\Charset;
+use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
 
@@ -526,36 +527,18 @@ class Server
             }
         }
 
-        // check if client specified accepted charsets, and if we know how to fulfill
-        // the request
+        // check if client specified accepted charsets, and if we know how to fulfill the request
         if ($this->response_charset_encoding == 'auto') {
             $respEncoding = '';
             if (isset($_SERVER['HTTP_ACCEPT_CHARSET'])) {
                 // here we check if we can match the client-requested encoding with the encodings we know we can generate.
                 // we parse q=0.x preferences instead of preferring the first charset specified
-                $clientAcceptedCharsets = array();
-                foreach(explode(',', strtoupper($_SERVER['HTTP_ACCEPT_CHARSET'])) as $c) {
-                    if (preg_match('/^([^;]+);Q=([0-9.]+)/', $c, $matches)) {
-                        $c = $matches[1];
-                        $w = $matches[2];
-                    } else {
-                        $c = preg_replace('/;.*/', '', $c);
-                        $w = 1;
-                    }
-                    $clientAcceptedCharsets[(trim($c))] = $w;
-                }
-                arsort($clientAcceptedCharsets);
-                $clientAcceptedCharsets = array_keys($clientAcceptedCharsets);
-
-                $knownCharsets = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
-                // if mbstring is enabled, we can support other charsets too!
-                /// @todo add a method to the Charset helper to retrieve this list (and remove from it junk entries)
-                if (function_exists('mb_list_encodings')) {
-                    $knownCharsets = array_unique(array_merge($knownCharsets, mb_list_encodings()));
-                }
+                $http = new Http();
+                $clientAcceptedCharsets = $http->parseAcceptHeader($_SERVER['HTTP_ACCEPT_CHARSET']);
+                $knownCharsets = $this->getCharsetEncoder()->knownCharsets();
                 foreach ($clientAcceptedCharsets as $accepted) {
                     foreach ($knownCharsets as $charset) {
-                        if ($accepted == strtoupper($charset)) {
+                        if (strtoupper($accepted) == strtoupper($charset)) {
                             $respEncoding = $charset;
                             break 2;
                         }
