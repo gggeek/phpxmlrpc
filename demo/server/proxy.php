@@ -3,6 +3,7 @@
  * XML-RPC server acting as proxy for requests to other servers
  * (useful e.g. for js-originated calls that can only connect back to the originating server because of the same-domain policy).
  * NB: this is an OPEN RELAY. It is meant as a demo, not to be used in production!
+ *
  * For an example of a transparent reverse-proxy, see the ReverseProxy class in package phpxmlrpc/extras.
  *
  * The source code demonstrates:

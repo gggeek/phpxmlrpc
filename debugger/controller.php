@@ -36,13 +36,16 @@ if (defined('JSXMLRPC_BASEURL')) {
         $editorpaths = array(JSXMLRPC_PATH[0] === '/' ? JSXMLRPC_PATH : (__DIR__ . '/' . JSXMLRPC_PATH));
     } else {
         $editorpaths = array(
-            __DIR__ . '/vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via composer in debugger
-            __DIR__ . '/node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via npm in debugger
-            __DIR__ . '/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via taskfile in debugger
+            __DIR__ . '/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via taskfile
+            __DIR__ . '/vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via composer inside the debugger
+            __DIR__ . '/node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via npm inside the debugger
             __DIR__ . '/../vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via composer
             __DIR__ . '/../node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via npm
             __DIR__ . '/../../jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc too
-            __DIR__ . '/../../../../web/node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc installed via npm
+            __DIR__ . '/../../../../debugger/jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc installed in the top-level via taskfile (ie. jsonrpc)
+            __DIR__ . '/../../../../debugger/vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc installed in the top-level debugger via composer
+            __DIR__ . '/../../../../debugger/node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc installed in the top-level debugger via npm
+            __DIR__ . '/../../../../node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc installed via npm in the top-level project
         );
     }
     foreach($editorpaths as $editorpath) {
@@ -54,7 +57,7 @@ if (defined('JSXMLRPC_BASEURL')) {
     if ($haseditor) {
         $controllerRootUrl = str_replace('/controller.php', '', parse_url($_SERVER['REQUEST_URI'],  PHP_URL_PATH));
         $editorurlpath = $controllerRootUrl . '/' . preg_replace('|^' . preg_quote(__DIR__, '|') .'|', '', $editorpath);
-        /// @todo for cases above 4, 5 and up, look at $controllerRootUrl and check if the web root is not pointing directly
+        /// @todo for cases above 4 and up, look at $controllerRootUrl and check if the web root is not pointing directly
         ///       at this folder, as in that case the link to the visualeditor will not
         ///       work, as it will be in the form http(s)://domain/../../jsxmlrpc/debugger/visualeditor.html
     }
