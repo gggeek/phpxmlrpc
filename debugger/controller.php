@@ -91,11 +91,15 @@ if (defined('JSXMLRPC_BASEURL')) {
         h1 {
             font-size: 12pt;
             margin: 0.5em;
+            display: inline-block;
         }
         h2 {
             font-size: 10pt;
             display: inline;
             vertical-align: top;
+        }
+        h3 {
+            display: inline;
         }
         table {
             border: 1px solid gray;
@@ -105,6 +109,9 @@ if (defined('JSXMLRPC_BASEURL')) {
         }
         #methodpayload {
             display: inline;
+        }
+        #idcell {
+            visibility: hidden;
         }
         td {
             vertical-align: top;
@@ -269,8 +276,8 @@ if (defined('JSXMLRPC_BASEURL')) {
     echo ' /></form> / <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>
     JSON-RPC';
 } ?>
-Debugger (based on <a href="https://gggeek.github.io/phpxmlrpc/">PHPXMLRPC</a>, ver. <?php echo htmlspecialchars(\PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion)?>
-<?php if (class_exists('\PhpXmlRpc\JsonRpc\PhpJsonRpc')) echo ' and <a href="https://gggeek.github.io/phpxmlrpc-jsonrpc/">PHPJOSNRPC</a>, ver. ' . htmlspecialchars(\PhpXmlRpc\JsonRpc\PhpJsonRpc::$jsonrpcVersion); ?>)</h1>
+Debugger</h1><h3>(based on <a href="https://gggeek.github.io/phpxmlrpc/">PHPXMLRPC</a>, ver. <?php echo htmlspecialchars(\PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion)?>
+<?php if (class_exists('\PhpXmlRpc\JsonRpc\PhpJsonRpc')) echo ' and <a href="https://gggeek.github.io/phpxmlrpc-jsonrpc/">PHPJOSNRPC</a>, ver. ' . htmlspecialchars(\PhpXmlRpc\JsonRpc\PhpJsonRpc::$jsonrpcVersion); ?>)</h3>
 <form name="frmaction" method="get" action="action.php" target="frmaction" onSubmit="switchFormMethod();">
 
     <table id="serverblock">
