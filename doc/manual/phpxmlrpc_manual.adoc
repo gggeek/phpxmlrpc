@@ -670,7 +670,9 @@ set in `php.ini`, namely `display_errors`. Another way to prevent echoing of err
 facilitate debugging is to use the server's `SetDebug` method with debug level 3 (see <<setdebug>>).
 
 Exceptions thrown during execution of handler functions are caught by default and an XML-RPC error response is generated
-instead. This behaviour can be fine-tuned by usage of the `$exception_handling` server property (see <<exception_handling>>).
+instead. This behaviour can be fine-tuned by usage of the `$exception_handling` server property (see <<exception_handling>>);
+please be aware that allowing publicly accessible servers to return the information from php exceptions as part of
+the xml-rpc response is a sure way to get hacked.
 
 ===== Manual type conversion
 
@@ -761,7 +763,6 @@ $srv = new Server(
     false
 );
 $srv->functions_parameters_type = 'phpvals';
-$srv->exception_handling = 1;
 $srv->service();
 ----
 
@@ -769,7 +770,8 @@ There are a few things to keep in mind when using this calling convention:
 
 * to return an xml-rpc error, the method handler function must return an instance of Response. The only other way for the
   server to know when an error response should be served to the client is to throw an exception and set the server's
-  `exception_handling` member var to 1 (as shown above);
+  `exception_handling` member var to 1 (but please not that this is generally a _very bad idea_ for servers with public
+  access);
 
 * to return a base64 value, the method handler function must encode it on its own, creating an instance of a Value
   object;
@@ -864,7 +866,8 @@ Note that the ZLIB php extension must be installed for this to work. If it is, `
 This property controls the behaviour of the server when an exception is thrown by a method handler php function. Valid
 values: 0,1,2, with 0 being the default. At level 0, the server catches the exception and returns an 'internal error'
 xml-rpc response; at 1 it catches the exception and returns an xml-rpc response with the error code and error message
-corresponding to the exception that was thrown; at 2, the exception is floated to the upper layers in the code.
+corresponding to the exception that was thrown - never enable it for publicly accessible servers!; at 2, the exception
+is floated to the upper layers in the code - which hopefully do not display it to end users.
 
 ===== $response_charset_encoding
 
@@ -1366,7 +1369,7 @@ $srv = new Server($methods);
 
 Please note that similar results to the above, i.e. adding to the server's dispatch map an existing php function which
 is not aware of xml-rpc, can be obtained without the Wrapper class and the need for introspection, simply by setting
-`+$server->unctions_parameters_type = 'phpvals'+` and `+$server->exception_handling = 1+` (see chapter <<autoserver>>).
+`+$server->unctions_parameters_type = 'phpvals'+` (see chapter <<autoserver>>).
 The main difference is that, using the Wrapper class, you get for free the documentation for the xmlrpc-method.
 
 ==== wrapPhpClass

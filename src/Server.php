@@ -37,6 +37,7 @@ class Server
     /**
      * @var int
      * Controls whether the server is going to echo debugging messages back to the client as comments in response body.
+     * SECURITY SENSITIVE!
      * Valid values:
      * 0 =
      * 1 =
@@ -49,7 +50,8 @@ class Server
      * @var int
      * Controls behaviour of server when the invoked method-handler function throws an exception (within the `execute` method):
      * 0 = catch it and return an 'internal error' xmlrpc response (default)
-     * 1 = catch it and return an xmlrpc response with the error corresponding to the exception
+     * 1 = SECURITY SENSITIVE DO NOT ENABLE ON PUBLIC SERVERS!!! catch it and return an xmlrpc response with the error
+     *     corresponding to the exception, both its code and message.
      * 2 = allow the exception to float to the upper layers
      */
     public $exception_handling = 0;
@@ -799,7 +801,7 @@ class Server
                 }
             }
         } catch (\Exception $e) {
-            // (barring errors in the lib) an uncatched exception happened in the called function, we wrap it in a
+            // (barring errors in the lib) an uncaught exception happened in the called function, we wrap it in a
             // proper error-response
             switch ($this->exception_handling) {
                 case 2:
@@ -822,7 +824,7 @@ class Server
                     $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_error'], PhpXmlRpc::$xmlrpcstr['server_error']);
             }
         } catch (\Error $e) {
-            // (barring errors in the lib) an uncatched exception happened in the called function, we wrap it in a
+            // (barring errors in the lib) an uncaught exception happened in the called function, we wrap it in a
             // proper error-response
             switch ($this->exception_handling) {
                 case 2:
