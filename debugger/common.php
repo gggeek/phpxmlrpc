@@ -80,9 +80,9 @@ $run = false;
 $wstype = defined('DEFAULT_WSTYPE') ? DEFAULT_WSTYPE : 0;
 $id = '';
 if (isset($_GET['action'])) {
-    if (isset($_GET['wstype']) && $_GET['wstype'] == '1') {
-        $wstype = 1;
-        if (isset($_GET['id'])) {
+    if (isset($_GET['wstype']) && ($_GET['wstype'] == '1' || $_GET['wstype'] == '0')) {
+        $wstype = (int)$_GET['wstype'];
+        if ($wstype == 1 && isset($_GET['id'])) {
             $id = $_GET['id'];
         }
     }

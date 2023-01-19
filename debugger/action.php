@@ -15,7 +15,7 @@ header('Content-Type: text/html; charset=utf-8');
 <html lang="en">
 <head>
     <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
-    <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSONRPC'; else echo 'XMLRPC'; ?> Debugger</title>
+    <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSON-RPC'; else echo 'XML-RPC'; ?> Debugger</title>
     <meta name="robots" content="index,nofollow"/>
     <style type="text/css">
         <!--

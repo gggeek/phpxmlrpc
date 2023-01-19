@@ -66,7 +66,7 @@ if (defined('JSXMLRPC_BASEURL')) {
 <html lang="en">
 <head>
     <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
-    <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSONRPC'; else echo 'XMLRPC'; ?> Debugger</title>
+    <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSON-RPC'; else echo 'XML-RPC'; ?> Debugger</title>
     <meta name="robots" content="index,nofollow"/>
     <script type="text/javascript" language="Javascript">
         if (window.name != 'frmcontroller')
@@ -259,15 +259,18 @@ if (defined('JSXMLRPC_BASEURL')) {
     </script>
 </head>
 <body
-    onload="switchtransport(<?php echo $wstype; ?>); switchaction(); switchssl(); switchauth(); swicthcainfo();<?php if ($run) {
+    onload="<?php if (class_exists('\PhpXmlRpc\JsonRpc\Client')) echo "switchtransport($wstype); " ?>switchaction(); switchssl(); switchauth(); swicthcainfo();<?php if ($run) {
         echo ' document.forms[2].submit();';
     } ?>">
 <h1>XML-RPC
-    <form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);" <?php if (!class_exists('\PhpXmlRpc\Client')) { echo 'disabled="disabled"';} ?>/></form>
-    /
-    <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);" <?php if (!class_exists('\PhpXmlRpc\JsonRpc\Client')) { echo 'disabled="disabled"';} ?>/></form>
-    JSON-RPC Debugger (based on the <a href="https://gggeek.github.io/phpxmlrpc/">PHPXMLRPC</a> library, ver. <?php echo htmlspecialchars(\PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion)?>)
-</h1>
+<?php if (class_exists('\PhpXmlRpc\JsonRpc\Client')) {
+    echo '<form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);"';
+    if (!class_exists('\PhpXmlRpc\Client')) echo ' disabled="disabled"';
+    echo ' /></form> / <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>
+    JSON-RPC';
+} ?>
+Debugger (based on <a href="https://gggeek.github.io/phpxmlrpc/">PHPXMLRPC</a>, ver. <?php echo htmlspecialchars(\PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion)?>
+<?php if (class_exists('\PhpXmlRpc\JsonRpc\PhpJsonRpc')) echo ' and <a href="https://gggeek.github.io/phpxmlrpc-jsonrpc/">PHPJOSNRPC</a>, ver. ' . htmlspecialchars(\PhpXmlRpc\JsonRpc\PhpJsonRpc::$jsonrpcVersion); ?>)</h1>
 <form name="frmaction" method="get" action="action.php" target="frmaction" onSubmit="switchFormMethod();">
 
     <table id="serverblock">
