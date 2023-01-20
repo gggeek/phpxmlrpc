@@ -267,7 +267,7 @@ if (defined('JSXMLRPC_BASEURL')) {
 </head>
 <body
     onload="<?php if ($hasjsonrpcclient) echo "switchtransport($wstype); " ?>switchaction(); switchssl(); switchauth(); swicthcainfo();<?php if ($run) {
-        echo ' document.forms[2].submit();';
+        echo ' document.frmaction.submit();';
     } ?>">
 <h1>XML-RPC
 <?php if ($hasjsonrpcclient) {
