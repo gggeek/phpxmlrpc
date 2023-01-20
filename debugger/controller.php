@@ -24,13 +24,13 @@ if ($action == '') {
 
 $haseditor = false;
 $editorurlpath = null;
-// @const JSXMLRPC_BASEURL Url to the visual xmlrpc editing dialog's containing folder. We allow to easily configure this
+// @const JSXMLRPC_BASEURL Url to the visual xml-rpc editing dialog's containing folder. We allow to easily configure this
 if (defined('JSXMLRPC_BASEURL')) {
     $editorurlpath = JSXMLRPC_BASEURL;
     $haseditor = true;
 } else {
     /// @deprecated
-    /// @const JSXMLRPC_PATH Path to the visual xmlrpc editing dialog's containing folder. Can be absolute, or
+    /// @const JSXMLRPC_PATH Path to the visual xml-rpc editing dialog's containing folder. Can be absolute, or
     ///         relative to this debugger's folder.
     if (defined('JSXMLRPC_PATH')) {
         $editorpaths = array(JSXMLRPC_PATH[0] === '/' ? JSXMLRPC_PATH : (__DIR__ . '/' . JSXMLRPC_PATH));
@@ -72,7 +72,7 @@ if (defined('JSXMLRPC_BASEURL')) {
         if (window.name != 'frmcontroller')
             top.location.replace('index.php?run=' + escape(self.location));
     </script>
-    <!-- xmlrpc/jsonrpc base library -->
+    <!-- xml-rpc/json-rpc base library -->
     <script type="module">
         import {base64_decode} from 'https://cdn.jsdelivr.net/npm/@jsxmlrpc/jsxmlrpc@0.6/lib/index.js';
         window.base64_decode = base64_decode;
@@ -266,12 +266,13 @@ if (defined('JSXMLRPC_BASEURL')) {
     </script>
 </head>
 <body
-    onload="<?php if (class_exists('\PhpXmlRpc\JsonRpc\Client')) echo "switchtransport($wstype); " ?>switchaction(); switchssl(); switchauth(); swicthcainfo();<?php if ($run) {
+    onload="<?php if ($hasjsonrpcclient) echo "switchtransport($wstype); " ?>switchaction(); switchssl(); switchauth(); swicthcainfo();<?php if ($run) {
         echo ' document.forms[2].submit();';
     } ?>">
 <h1>XML-RPC
-<?php if (class_exists('\PhpXmlRpc\JsonRpc\Client')) {
+<?php if ($hasjsonrpcclient) {
     echo '<form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);"';
+    // q: does this if make sense at all?
     if (!class_exists('\PhpXmlRpc\Client')) echo ' disabled="disabled"';
     echo ' /></form> / <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>
     JSON-RPC';

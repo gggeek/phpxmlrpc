@@ -101,9 +101,6 @@ if ($action) {
         }
 
         if ($wstype == 1) {
-            if (!class_exists('\PhpXmlRpc\JsonRpc\Client')) {
-                die('Error: to debug the jsonrpc protocol the phpxmlrpc/jsonrpc package is needed');
-            }
             $clientClass = '\PhpXmlRpc\JsonRpc\Client';
             $requestClass = '\PhpXmlRpc\JsonRpc\Request';
             $protoName = 'JSON-RPC';
@@ -492,8 +489,8 @@ if ($action) {
                                 "<input type=\"hidden\" name=\"methodpayload\" value=\"" . htmlspecialchars($payload, ENT_COMPAT, $inputcharset) . "\" />" .
                                 "<input type=\"hidden\" name=\"altmethodpayload\" value=\"" . htmlspecialchars($alt_payload, ENT_COMPAT, $inputcharset) . "\" />" .
                                 "<input type=\"hidden\" name=\"wstype\" value=\"$wstype\" />" .
-                                "<input type=\"hidden\" name=\"run\" value=\"now\" />" .
                                 "<input type=\"hidden\" name=\"action\" value=\"wrap\" />" .
+                                "<input type=\"hidden\" name=\"run\" value=\"now\" />" .
                                 "<input type=\"submit\" value=\"Generate method call stub code\" />";
                             echo "</form></td></tr>\n";
                         }
@@ -560,7 +557,7 @@ if ($action) {
         <li>Run a 'list available methods' action against desired server</li>
         <li>If list of methods appears, click on 'describe method' for desired method</li>
         <li>To run method: click on 'load method synopsis' for desired method. This will load a skeleton for method call
-            parameters in the form above. Complete all xmlrpc values with appropriate data and click 'Execute'
+            parameters in the form above. Complete all xml-rpc values with appropriate data and click 'Execute'
         </li>
     </ol>
     <?php
@@ -581,6 +578,7 @@ if ($action) {
 
     <h3>Changelog</h3>
     <ul>
+        <li>2023-XX-YY: display in the top row the version of the libraries in use; fixes for the json-rpc debugger</li>
         <li>2022-12-18: fix XSS vulnerability in the debugger; load jsxmlrpc from CDN; minor improvements</li>
         <li>2022-11-28: allow to use http/2 protocol; two security issues fixed in the underlying library</li>
         <li>2020-12-11: fix problems with running the debugger on php 8</li>
@@ -594,7 +592,7 @@ if ($action) {
         </li>
         <li>2006-04-22: added option for setting custom CA certs to verify peer with in SSLmode</li>
         <li>2006-03-05: added option for setting Basic/Digest/NTLM auth type</li>
-        <li>2006-01-18: added option echoing to screen xmlrpc request before sending it ('More' debug)</li>
+        <li>2006-01-18: added option echoing to screen xml-rpc request before sending it ('More' debug)</li>
         <li>2005-10-01: added option for setting cookies to be sent to server</li>
         <li>2005-08-07: added switches for compression of requests and responses and http 1.1</li>
         <li>2005-06-27: fixed possible security breach in parsing malformed xml</li>

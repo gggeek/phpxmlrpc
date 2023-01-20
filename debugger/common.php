@@ -53,9 +53,7 @@ if (ini_get('register_globals')) {
 if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
     function stripslashes_deep($value)
     {
-        $value = is_array($value) ?
-            array_map('stripslashes_deep', $value) :
-            stripslashes($value);
+        $value = is_array($value) ?  array_map('stripslashes_deep', $value) : stripslashes($value);
 
         return $value;
     }
@@ -63,33 +61,43 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
     $_GET = array_map('stripslashes_deep', $_GET);
 }
 
-$preferredEncodings = 'UTF-8, ASCII, ISO-8859-1, UTF-7, EUC-JP, SJIS, eucJP-win, SJIS-win, JIS, ISO-2022-JP';
-$inputcharset = mb_detect_encoding(urldecode($_SERVER['REQUEST_URI']), $preferredEncodings);
-if (isset($_GET['usepost']) && $_GET['usepost'] === 'true') {
-    $_GET = $_POST;
-    $inputcharset = mb_detect_encoding(implode('', $_GET), $preferredEncodings);
+if (function_exists('mb_detect_encoding')) {
+    $preferredEncodings = 'UTF-8, ASCII, ISO-8859-1, UTF-7, EUC-JP, SJIS, eucJP-win, SJIS-win, JIS, ISO-2022-JP';
+    if (isset($_GET['usepost']) && $_GET['usepost'] === 'true') {
+        $_GET = $_POST;
+        $inputcharset = mb_detect_encoding(implode('', $_GET), $preferredEncodings);
+    } else {
+        $inputcharset = mb_detect_encoding(urldecode($_SERVER['REQUEST_URI']), $preferredEncodings);
+    }
+} else {
+    /// @todo do is there a better strategy? At least for the POST case, there is probably an http header to look at...
+    $inputcharset = 'UTF8';
 }
 
 /// @todo if $inputcharset is not UTF8, we should probably re-encode $_GET to make it UTF-8
 
 // recover input parameters
 /// @todo instead of using globals, move them to an array. Also: use a class for this parsing...
-$debug = false;
+$debug = 0;
 $protocol = 0;
 $run = false;
+$hasjsonrpcclient = class_exists('\PhpXmlRpc\JsonRpc\Client');
 $wstype = defined('DEFAULT_WSTYPE') ? DEFAULT_WSTYPE : 0;
 $id = '';
 if (isset($_GET['action'])) {
     if (isset($_GET['wstype']) && ($_GET['wstype'] == '1' || $_GET['wstype'] == '0')) {
         $wstype = (int)$_GET['wstype'];
-        if ($wstype == 1 && isset($_GET['id'])) {
+        if ($wstype === 1 && !$hasjsonrpcclient) {
+            $wstype = 0;
+        }
+        if ($wstype === 1 && isset($_GET['id'])) {
             $id = $_GET['id'];
         }
     }
-    $host = isset($_GET['host']) ? $_GET['host'] : 'localhost'; // using '' will trigger an xmlrpc error...
+    $host = isset($_GET['host']) ? $_GET['host'] : 'localhost'; // using '' will trigger an xml-rpc error...
     if (isset($_GET['protocol']) && ($_GET['protocol'] == '1' || $_GET['protocol'] == '2' || $_GET['protocol'] == '3'
         || $_GET['protocol'] == '4')) {
-        $protocol = $_GET['protocol'];
+        $protocol = (int)$_GET['protocol'];
     }
     if (strpos($host, 'http://') === 0) {
         // NB: if protocol is https or h2, it will override http://
@@ -101,15 +109,18 @@ if (isset($_GET['action'])) {
             $protocol = 2;
         }
     }
-    $port = isset($_GET['port']) ? $_GET['port'] : '';
+    $port = isset($_GET['port']) ? (int)$_GET['port'] : '';
+    if ($port === 0) {
+        $port = '';
+    }
     $path = isset($_GET['path']) ? $_GET['path'] : '';
-    // in case user forgot initial '/' in xmlrpc server path, add it back
+    // in case user forgot initial '/' in xml-rpc server path, add it back
     if ($path && ($path[0]) != '/') {
         $path = '/' . $path;
     }
 
     if (isset($_GET['debug']) && ($_GET['debug'] == '1' || $_GET['debug'] == '2')) {
-        $debug = $_GET['debug'];
+        $debug = (int)$_GET['debug'];
     }
 
     $verifyhost = (isset($_GET['verifyhost']) && ($_GET['verifyhost'] == '1' || $_GET['verifyhost'] == '2')) ? $_GET['verifyhost'] : 0;
@@ -123,12 +134,10 @@ if (isset($_GET['action'])) {
     if (strpos($proxy, 'http://') === 0) {
         $proxy = substr($proxy, 7);
     }
+    /// @todo what about an https proxy?
     $proxyuser = isset($_GET['proxyuser']) ? $_GET['proxyuser'] : '';
     $proxypwd = isset($_GET['proxypwd']) ? $_GET['proxypwd'] : '';
-    $timeout = isset($_GET['timeout']) ? $_GET['timeout'] : 0;
-    if (!is_numeric($timeout)) {
-        $timeout = 0;
-    }
+    $timeout = isset($_GET['timeout']) ? (int)$_GET['timeout'] : 0;
     $action = $_GET['action'];
 
     $method = isset($_GET['method']) ? $_GET['method'] : '';
@@ -143,15 +152,15 @@ if (isset($_GET['action'])) {
     $username = isset($_GET['username']) ? $_GET['username'] : '';
     $password = isset($_GET['password']) ? $_GET['password'] : '';
 
-    $authtype = (isset($_GET['authtype']) && ($_GET['authtype'] == '2' || $_GET['authtype'] == '8')) ? $_GET['authtype'] : 1;
+    $authtype = (isset($_GET['authtype']) && ($_GET['authtype'] == '2' || $_GET['authtype'] == '8')) ? (int)$_GET['authtype'] : 1;
 
     if (isset($_GET['requestcompression']) && ($_GET['requestcompression'] == '1' || $_GET['requestcompression'] == '2')) {
-        $requestcompression = $_GET['requestcompression'];
+        (int)$requestcompression = $_GET['requestcompression'];
     } else {
         $requestcompression = 0;
     }
     if (isset($_GET['responsecompression']) && ($_GET['responsecompression'] == '1' || $_GET['responsecompression'] == '2' || $_GET['responsecompression'] == '3')) {
-        $responsecompression = $_GET['responsecompression'];
+        $responsecompression = (int)$_GET['responsecompression'];
     } else {
         $responsecompression = 0;
     }
@@ -181,7 +190,7 @@ if (isset($_GET['action'])) {
     $clientcookies = '';
 }
 
-// check input for known XMLRPC attacks against this or other libs
+// check input for known attacks against this or other libs
 function payload_is_safe($input)
 {
     return true;
