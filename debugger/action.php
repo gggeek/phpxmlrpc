@@ -526,7 +526,12 @@ if ($action) {
                         } else {
                             $wrapper = new PhpXmlRpc\Wrapper();
                         }
-                        $code = $wrapper->buildWrapMethodSource($client, $method, array('timeout' => $timeout, 'protocol' => $proto, 'simple_client_copy' => $opts, 'prefix' => $prefix), str_replace('.', '_', $prefix . '_' . $method), $msig, $mdesc);
+                        $code = $wrapper->buildWrapMethodSource(
+                            $client,
+                            $method,
+                            array('timeout' => $timeout, 'protocol' => $proto, 'simple_client_copy' => $opts, 'prefix' => $prefix, 'throw_on_fault' => true),
+                            str_replace('.', '_', $prefix . '_' . $method), $msig, $mdesc
+                        );
                         //if ($code)
                         //{
                         echo "<div id=\"phpcode\">\n";
@@ -578,7 +583,8 @@ if ($action) {
 
     <h3>Changelog</h3>
     <ul>
-        <li>2023-XX-YY: display in the top row the version of the libraries in use; fixes for the json-rpc debugger</li>
+        <li>2023-XX-YY: display in the top row the version of the libraries in use; made the generated code throw instead
+            of returning a Response object on error; fixes for the json-rpc debugger</li>
         <li>2022-12-18: fix XSS vulnerability in the debugger; load jsxmlrpc from CDN; minor improvements</li>
         <li>2022-11-28: allow to use http/2 protocol; two security issues fixed in the underlying library</li>
         <li>2020-12-11: fix problems with running the debugger on php 8</li>

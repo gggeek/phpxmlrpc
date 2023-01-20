@@ -698,12 +698,14 @@ class Wrapper
      * @param array $extraOptions array of options that specify conversion details. Valid options include
      *                            - integer signum              the index of the method signature to use in mapping (if method exposes many sigs)
      *                            - integer timeout             timeout (in secs) to be used when executing function/calling remote method
-     *                            - string  protocol            'http' (default), 'http11' or 'https'
+     *                            - string  protocol            'http' (default), 'http11', 'https', 'h2' or 'h2c'
      *                            - string  new_function_name   the name of php function to create, when return_source is used. If unspecified, lib will pick an appropriate name
      *                            - string  return_source       if true return php code w. function definition instead of function itself (closure)
      *                            - bool    encode_php_objs     let php objects be sent to server using the 'improved' xmlrpc notation, so server can deserialize them as php objects
      *                            - bool    decode_php_objs     --- WARNING !!! possible security hazard. only use it with trusted servers ---
      *                            - mixed   return_on_fault     a php value to be returned when the xmlrpc call fails/returns a fault response (by default the Response object is returned in this case). If a string is used, '%faultCode%' and '%faultString%' tokens will be substituted with actual error values
+     *                            - bool    throw_on_fault      if true, throw an exception instead of returning a Response in case of errors/faults;
+     *                                                          if a string, do the same and assume it is the exception class to throw
      *                            - bool    debug               set it to 1 or 2 to see debug results of querying server for method synopsis
      *                            - int     simple_client_copy  set it to 1 to have a lightweight copy of the $client object made in the generated code (only used when return_source = true)
      * @return \Closure|string[]|false false on failure, closure by default and array for return_source = true
@@ -818,7 +820,7 @@ class Wrapper
     /**
      * @param Client $client
      * @param string $methodName
-     * @param array $extraOptions
+     * @param array $extraOptions @see wrapXmlrpcMethod
      * @param array $mSig
      * @return \Closure
      *
@@ -834,11 +836,14 @@ class Wrapper
             $protocol = isset($extraOptions['protocol']) ? $extraOptions['protocol'] : '';
             $encodePhpObjects = isset($extraOptions['encode_php_objs']) ? (bool)$extraOptions['encode_php_objs'] : false;
             $decodePhpObjects = isset($extraOptions['decode_php_objs']) ? (bool)$extraOptions['decode_php_objs'] : false;
-            if (isset($extraOptions['return_on_fault'])) {
+            $throwFault = false;
+            $decodeFault = false;
+            $faultResponse = null;
+            if (isset($extraOptions['throw_on_fault'])) {
+                $throwFault = $extraOptions['throw_on_fault'];
+            } else if (isset($extraOptions['return_on_fault'])) {
                 $decodeFault = true;
                 $faultResponse = $extraOptions['return_on_fault'];
-            } else {
-                $decodeFault = false;
             }
 
             $reqClass = static::$namespace . 'Request';
@@ -887,7 +892,13 @@ class Wrapper
             $clientClone->return_type = 'xmlrpcvals';
             $resp = $clientClone->send($req, $timeout, $protocol);
             if ($resp->faultcode()) {
-                if ($decodeFault) {
+                if ($throwFault) {
+                    if (is_string($throwFault)) {
+                        throw new $throwFault($resp->faultString(), $resp->faultCode());
+                    } else {
+                        throw new \Exception($resp->faultString(), $resp->faultCode());
+                    }
+                } else if ($decodeFault) {
                     if (is_string($faultResponse) && ((strpos($faultResponse, '%faultCode%') !== false) ||
                             (strpos($faultResponse, '%faultString%') !== false))) {
                         $faultResponse = str_replace(array('%faultCode%', '%faultString%'),
@@ -910,7 +921,7 @@ class Wrapper
      *
      * @param Client $client
      * @param string $methodName
-     * @param array $extraOptions
+     * @param array $extraOptions @see wrapXmlrpcMethod
      * @param string $newFuncName
      * @param array $mSig
      * @param string $mDesc
@@ -924,12 +935,14 @@ class Wrapper
         $decodePhpObjects = isset($extraOptions['decode_php_objs']) ? (bool)$extraOptions['decode_php_objs'] : false;
         $clientCopyMode = isset($extraOptions['simple_client_copy']) ? (int)($extraOptions['simple_client_copy']) : 0;
         $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : 'xmlrpc';
-        if (isset($extraOptions['return_on_fault'])) {
+        $throwFault = false;
+        $decodeFault = false;
+        $faultResponse = null;
+        if (isset($extraOptions['throw_on_fault'])) {
+            $throwFault = $extraOptions['throw_on_fault'];
+        } else if (isset($extraOptions['return_on_fault'])) {
             $decodeFault = true;
             $faultResponse = $extraOptions['return_on_fault'];
-        } else {
-            $decodeFault = false;
-            $faultResponse = '';
         }
 
         $code = "function $newFuncName(";
@@ -981,22 +994,35 @@ class Wrapper
             $mDesc .= " * @param int \$debug when 1 (or 2) will enable debugging of the underlying {$prefix} call (defaults to 0)\n";
         }
         $plist = implode(', ', $plist);
-        $mDesc .= " * @return " . static::$namespace . "Response|" . $this->xmlrpc2PhpType($mSig[0]) . " (a " . static::$namespace . "Response obj instance if call fails)\n */\n";
+        $mDesc .= ' * @return ' . $this->xmlrpc2PhpType($mSig[0]);
+        if ($throwFault) {
+            $mDesc .= "\n * @throws " . (is_string($throwFault) ? $throwFault : '\\Exception');
+        } else if ($decodeFault) {
+            $mDesc .= '|' . gettype($faultResponse) . " (a " . gettype($faultResponse) . " if call fails)";
+        } else {
+            $mDesc .= '|' . static::$namespace . "Response (a " . static::$namespace . "Response obj instance if call fails)";
+        }
+        $mDesc .= "\n */\n";
 
         $innerCode .= "  \$res = \${$this_}client->send(\$req, $timeout, '$protocol');\n";
-        if ($decodeFault) {
+        if ($throwFault) {
+            if (!is_string($throwFault)) {
+                $throwFault = '\\Exception';
+            }
+            $respCode = "throw new $throwFault(\$res->faultString(), \$res->faultCode())";
+        } else if ($decodeFault) {
             if (is_string($faultResponse) && ((strpos($faultResponse, '%faultCode%') !== false) || (strpos($faultResponse, '%faultString%') !== false))) {
-                $respCode = "str_replace(array('%faultCode%', '%faultString%'), array(\$res->faultCode(), \$res->faultString()), '" . str_replace("'", "''", $faultResponse) . "')";
+                $respCode = "return str_replace(array('%faultCode%', '%faultString%'), array(\$res->faultCode(), \$res->faultString()), '" . str_replace("'", "''", $faultResponse) . "')";
             } else {
-                $respCode = var_export($faultResponse, true);
+                $respCode = 'return ' . var_export($faultResponse, true);
             }
         } else {
-            $respCode = '$res';
+            $respCode = 'return $res';
         }
         if ($decodePhpObjects) {
-            $innerCode .= "  if (\$res->faultcode()) return $respCode; else return \$encoder->decode(\$res->value(), array('decode_php_objs'));";
+            $innerCode .= "  if (\$res->faultCode()) $respCode; else return \$encoder->decode(\$res->value(), array('decode_php_objs'));";
         } else {
-            $innerCode .= "  if (\$res->faultcode()) return $respCode; else return \$encoder->decode(\$res->value());";
+            $innerCode .= "  if (\$res->faultCode()) $respCode; else return \$encoder->decode(\$res->value());";
         }
 
         $code = $code . $plist . ")\n{\n" . $innerCode . "\n}\n";
