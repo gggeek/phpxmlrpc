@@ -271,12 +271,13 @@ dateTime.iso8601 value will by default return the string representation of the d
 
 Datetime conversion can't be safely done in a transparent manner as the XML-RPC specification explicitly forbids passing
 of timezone specifiers in ISO8601 format dates. You can, however, use multiple techniques to transform the date string
-into another representation of a time stamp:
-* use the `PhpXmlRpc\Helper\Date` class to decode the date string into a unix timestamp;
+into another representation of a time stamp, and take care of timezones by yourself:
+* use the `PhpXmlRpc\Helper\Date` class to convert the date string into a unix timestamp;
 * set `PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = true` to always get back a php DateTime from received xml (in
   which case the conversion is done using the timezone set in php.ini).
-* use the `PhpXmlRpc\Encoder::decode` method with the 'dates_as_objects' option to get back a php DateTime (in which case
-  the conversion is done using the `strtotime` function, which uses the timezone set in php.ini).
+* use the `PhpXmlRpc\Encoder::decode` method with the 'dates_as_objects' option to get back a php DateTime from a
+  single Value object (in which case the conversion is done using the `strtotime` function, which uses the timezone set
+  in php.ini).
 
 ===== double
 
