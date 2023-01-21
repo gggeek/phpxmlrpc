@@ -51,13 +51,13 @@ class Encoder
     }
 
     /**
-     * Takes an xmlrpc Value in object instance and translates it into native PHP types, recursively.
-     * Works with xmlrpc Request objects as input, too.
+     * Takes an xml-rpc Value in object instance and translates it into native PHP types, recursively.
+     * Works with xml-rpc Request objects as input, too.
      * Xmlrpc dateTime values will be converted to strings or DateTime objects depending on an $options parameter
-     * Supports i8 and NIL xmlrpc values without the need for specific options.
-     * Both xmlrpc arrays and structs are decoded into PHP arrays, with the exception described below:
+     * Supports i8 and NIL xml-rpc values without the need for specific options.
+     * Both xml-rpc arrays and structs are decoded into PHP arrays, with the exception described below:
      * Given proper options parameter, can rebuild generic php object instances (provided those have been encoded to
-     * xmlrpc format using a corresponding option in php_xmlrpc_encode()).
+     * xml-rpc format using a corresponding option in php_xmlrpc_encode()).
      * PLEASE NOTE that rebuilding php objects involves calling their constructor function.
      * This means that the remote communication end can decide which php code will get executed on your server, leaving
      * the door possibly open to 'php-injection' style of attacks (provided you have some classes defined on your server
@@ -68,13 +68,13 @@ class Encoder
      *
      * @param Value|Request $xmlrpcVal
      * @param array $options accepted elements:
-     *                      - 'decode_php_objs': if set in the options array, xmlrpc structs can be decoded into php
+     *                      - 'decode_php_objs': if set in the options array, xml-rpc structs can be decoded into php
      *                         objects, see the details above;
-     *                      - 'dates_as_objects': when set xmlrpc dateTimes are decoded as php DateTime objects
+     *                      - 'dates_as_objects': when set xml-rpc dateTimes are decoded as php DateTime objects
      *                      - 'extension_api': reserved for usage by phpxmlrpc-polyfill
      * @return mixed
      *
-     * Feature creep -- add an option to allow converting xmlrpc dateTime values to unix timestamps (integers)
+     * Feature creep -- add an option to allow converting xml-rpc dateTime values to unix timestamps (integers)
      */
     public function decode($xmlrpcVal, $options = array())
     {
@@ -118,7 +118,7 @@ class Encoder
                     }
                 }
                 if (in_array('dates_as_objects', $options) && $xmlrpcVal->scalartyp() == 'dateTime.iso8601') {
-                    // we return a Datetime object instead of a string since now the constructor of xmlrpc value accepts
+                    // we return a Datetime object instead of a string since now the constructor of xml-rpc value accepts
                     // safely string, int and DateTimeInterface, we cater to all 3 cases here
                     $out = $xmlrpcVal->scalarval();
                     if (is_string($out)) {
@@ -145,7 +145,7 @@ class Encoder
             case 'struct':
                 // If user said so, try to rebuild php objects for specific struct vals.
                 /// @todo should we raise a warning for class not found?
-                // shall we check for proper subclass of xmlrpc value instead of presence of _php_class to detect
+                // shall we check for proper subclass of xml-rpc value instead of presence of _php_class to detect
                 // what we can do?
                 if (in_array('decode_php_objs', $options) && $xmlrpcVal->_php_class != ''
                     && class_exists($xmlrpcVal->_php_class)
@@ -176,29 +176,29 @@ class Encoder
     }
 
     /**
-     * Takes native php types and encodes them into xmlrpc Value objects, recursively.
+     * Takes native php types and encodes them into xml-rpc Value objects, recursively.
      * PHP strings, integers, floats and booleans have a straightforward encoding - note that integers will _not_ be
-     * converted to xmlrpc <i8> elements, even if they exceed the 32-bit range.
-     * PHP arrays will be encoded to either xmlrpc structs or arrays, depending on whether they are hashes
+     * converted to xml-rpc <i8> elements, even if they exceed the 32-bit range.
+     * PHP arrays will be encoded to either xml-rpc structs or arrays, depending on whether they are hashes
      * or plain 0..N integer indexed.
-     * PHP objects will be encoded into xmlrpc structs, except if they implement DateTimeInterface, in which case they
+     * PHP objects will be encoded into xml-rpc structs, except if they implement DateTimeInterface, in which case they
      * will be encoded as dateTime values.
      * PhpXmlRpc\Value objects will not be double-encoded - which makes it possible to pass in a pre-created base64 Value
      * as part of a php array.
-     * If given a proper $options parameter, php object instances will be encoded into 'special' xmlrpc values, that can
+     * If given a proper $options parameter, php object instances will be encoded into 'special' xml-rpc values, that can
      * later be decoded into php object instances by calling php_xmlrpc_decode() with a corresponding option.
      * PHP resource and NULL variables will be converted into uninitialized Value objects (which will lead to invalid
-     * xmlrpc when later serialized); to support encoding of the latter use the appropriate $options parameter.
+     * xml-rpc when later serialized); to support encoding of the latter use the appropriate $options parameter.
      *
      * @author Dan Libby (dan@libby.com)
      *
-     * @param mixed $phpVal the value to be converted into an xmlrpc value object
+     * @param mixed $phpVal the value to be converted into an xml-rpc value object
      * @param array $options can include:
      *                       - 'encode_php_objs' when set, some out-of-band info will be added to the xml produced by
      *                         serializing the built Value, which can later be decoced by this library to rebuild an
      *                         instance of the same php object
-     *                       - 'auto_dates': when set, any string which respects the xmlrpc datetime format will be converted to a dateTime Value
-     *                       - 'null_extension': when set, php NULL values will be converted to an xmlrpc <NIL> (or <EX:NIL>) Value
+     *                       - 'auto_dates': when set, any string which respects the xml-rpc datetime format will be converted to a dateTime Value
+     *                       - 'null_extension': when set, php NULL values will be converted to an xml-rpc <NIL> (or <EX:NIL>) Value
      *                       - 'extension_api': reserved for usage by phpxmlrpc-polyfill
      * @return Value
      *
@@ -276,7 +276,7 @@ class Encoder
                     }
                     $xmlrpcVal = new Value($arr, Value::$xmlrpcStruct);
                     if (in_array('encode_php_objs', $options)) {
-                        // let's save original class name into xmlrpc value: it might be useful later on...
+                        // let's save original class name into xml-rpc value: it might be useful later on...
                         $xmlrpcVal->_php_class = get_class($phpVal);
                     }
                 }
@@ -309,7 +309,7 @@ class Encoder
 
     /**
      * Convert the xml representation of a method response, method request or single
-     * xmlrpc value into the appropriate object (a.k.a. deserialize).
+     * xml-rpc value into the appropriate object (a.k.a. deserialize).
      *
      * @param string $xmlVal
      * @param array $options unused atm

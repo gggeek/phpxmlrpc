@@ -51,7 +51,7 @@ class Response
     }
 
     /**
-     * @param Value|string|mixed $val either a Value object, a php value or the xml serialization of an xmlrpc value (a string)
+     * @param Value|string|mixed $val either a Value object, a php value or the xml serialization of an xml-rpc value (a string)
      * @param integer $fCode set it to anything but 0 to create an error response. In that case, $val is discarded
      * @param string $fString the error string, in case of an error response
      * @param string $valType The type of $val passed in. Either 'xmlrpcvals', 'phpvals' or 'xml'. Leave empty to let
@@ -59,7 +59,7 @@ class Response
      * @param array|null $httpResponse
      *
      * @todo add check that $val / $fCode / $fString is of correct type???
-     *       NB: as of now we do not do it, since it might be either an xmlrpc value or a plain php val, or a complete
+     *       NB: as of now we do not do it, since it might be either an xml-rpc value or a plain php val, or a complete
      *       xml chunk, depending on usage of Client::send() inside which creator is called...
      */
     public function __construct($val, $fCode = 0, $fString = '', $valType = '', $httpResponse = null)

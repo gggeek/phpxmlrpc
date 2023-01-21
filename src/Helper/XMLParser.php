@@ -36,7 +36,7 @@ class XMLParser
      * Quick explanation of components:
      *  private:
      *    ac - used to accumulate values
-     *    stack - array with genealogy of xml elements names, used to validate nesting of xmlrpc elements
+     *    stack - array with genealogy of xml elements names, used to validate nesting of xml-rpc elements
      *    valuestack - array used for parsing arrays and structs
      *    lv - used to indicate "looking for a value": implements the logic to allow values with no types to be strings
      *         (values: 0=not looking, 1=looking, 3=found)
@@ -119,7 +119,8 @@ class XMLParser
     }
 
     /**
-     * @param array $options passed to the xml parser
+     * @param array $options integer keys: options passed to the xml parser
+     *                       string keys: target_charset, methodname_callback, xmlrpc_null_extension, xmlrpc_return_datetimes
      */
     public function __construct(array $options = array())
     {
@@ -130,8 +131,8 @@ class XMLParser
      * @param string $data
      * @param string $returnType self::RETURN_XMLRPCVALS, self::RETURN_PHP, self::RETURN_EPIVALS
      * @param int $accept a bit-combination of self::ACCEPT_REQUEST, self::ACCEPT_RESPONSE, self::ACCEPT_VALUE
-     * @param array $options integer-key options are passed to the xml parser, in addition to the options received in
-     *                       the constructor. String-key options are used independently
+     * @param array $options integer-key options are passed to the xml parser, string-key options are used independently.
+     *                       These options are the options received in the constructor.
      * @return void the caller has to look into $this->_xh to find the results
      * @throws \Exception this can happen if a callback function is set and it does throw (i.e. we do not catch exceptions)
      *
@@ -172,6 +173,7 @@ class XMLParser
         }
 
         foreach ($mergedOptions as $key => $val) {
+            // q: can php be built without ctype? should we use a regexp?
             if (is_string($key) && !ctype_digit($key)) {
                 switch($key) {
                     case 'target_charset':
@@ -193,11 +195,23 @@ class XMLParser
                         }
                         break;
 
+                    case 'xmlrpc_null_extension':
+                    case 'xmlrpc_return_datetimes':
+                        $this->current_parsing_options[$key] = $val;
+                        break;
+
                     default:
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": unsupported option: $key");
                 }
                 unset($mergedOptions[$key]);
             }
+        }
+
+        if (!isset($this->current_parsing_options['xmlrpc_null_extension'])) {
+            $this->current_parsing_options['xmlrpc_null_extension'] = PhpXmlRpc::$xmlrpc_null_extension;
+        }
+        if (!isset($this->current_parsing_options['xmlrpc_return_datetimes'])) {
+            $this->current_parsing_options['xmlrpc_return_datetimes'] = PhpXmlRpc::$xmlrpc_return_datetimes;
         }
 
         // NB: we use '' instead of null to force charset detection from the xml declaration
@@ -274,7 +288,7 @@ class XMLParser
      */
     public function xmlrpc_se($parser, $name, $attrs, $acceptSingleVals = false)
     {
-        // if invalid xmlrpc already detected, skip all processing
+        // if invalid xml-rpc already detected, skip all processing
         if ($this->_xh['isf'] >= 2) {
             return;
         }
@@ -411,7 +425,7 @@ class XMLParser
 
             case 'NIL':
             case 'EX:NIL':
-                if (PhpXmlRpc::$xmlrpc_null_extension) {
+                if ($this->current_parsing_options['xmlrpc_null_extension']) {
                     if ($this->_xh['vt'] != 'value') {
                         // two data elements inside a value: an error occurred!
                         $this->_xh['isf'] = 2;
@@ -445,7 +459,7 @@ class XMLParser
 
     /**
      * xml parser handler function for opening element tags.
-     * Used in decoding xml chunks that might represent single xmlrpc values as well as requests, responses.
+     * Used in decoding xml chunks that might represent single xml-rpc values as well as requests, responses.
      * @deprecated
      *
      * @param resource $parser
@@ -495,7 +509,7 @@ class XMLParser
                 }
 
                 if ($rebuildXmlrpcvals > 0) {
-                    // build the xmlrpc val out of the data received, and substitute it
+                    // build the xml-rpc val out of the data received, and substitute it
                     $temp = new Value($this->_xh['value'], $this->_xh['vt']);
                     // in case we got info about underlying php class, save it in the object we're rebuilding
                     if (isset($this->_xh['php_class'])) {
@@ -549,7 +563,11 @@ class XMLParser
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid value received in DATETIME: ' . $this->_xh['ac']);
                     }
                     $this->_xh['vt'] = Value::$xmlrpcDateTime;
-                    $this->_xh['value'] = $this->_xh['ac'];
+                    if ($this->current_parsing_options['xmlrpc_return_datetimes']) {
+                        $this->_xh['value'] =  new \DateTime($this->_xh['ac']);
+                    } else {
+                        $this->_xh['value'] = $this->_xh['ac'];
+                    }
                 } elseif ($name == 'BASE64') {
                     /// @todo check for failure of base64 decoding / catch warnings
                     $this->_xh['value'] = base64_decode($this->_xh['ac']);
@@ -645,7 +663,7 @@ class XMLParser
 
             case 'NIL':
             case 'EX:NIL':
-                if (PhpXmlRpc::$xmlrpc_null_extension) {
+                if ($this->current_parsing_options['xmlrpc_null_extension']) {
                     $this->_xh['vt'] = 'null';
                     $this->_xh['value'] = null;
                     $this->_xh['lv'] = 3;
@@ -668,7 +686,7 @@ class XMLParser
     }
 
     /**
-     * Used in decoding xmlrpc requests/responses without rebuilding xmlrpc Values.
+     * Used in decoding xml-rpc requests/responses without rebuilding xml-rpc Values.
      * @internal
      *
      * @param resource $parser
@@ -681,7 +699,7 @@ class XMLParser
     }
 
     /**
-     * Used in decoding xmlrpc requests/responses while building xmlrpc-extension Values (plain php for all but base64 and datetime).
+     * Used in decoding xml-rpc requests/responses while building xmlrpc-extension Values (plain php for all but base64 and datetime).
      * @internal
      *
      * @param resource $parser

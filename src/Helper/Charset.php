@@ -195,7 +195,7 @@ class Charset
             case 'UTF-8_ISO-8859-1':
                 // NB: this will choke on invalid UTF-8, going most likely beyond EOF
                 $escapedData = '';
-                // be kind to users creating string xmlrpc values out of different php types
+                // be kind to users creating string xml-rpc values out of different php types
                 $data = (string)$data;
                 $ns = strlen($data);
                 for ($nn = 0; $nn < $ns; $nn++) {

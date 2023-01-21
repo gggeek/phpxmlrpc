@@ -44,7 +44,7 @@ class Date
      * @param string $idate
      * @param bool|int $utc either 0 (assume date is in local time) or 1 (assume date is in UTC)
      *
-     * @return int (timestamp) 0 if the source string does not match the xmlrpc dateTime format
+     * @return int (timestamp) 0 if the source string does not match the xml-rpc dateTime format
      */
     public static function iso8601Decode($idate, $utc = 0)
     {

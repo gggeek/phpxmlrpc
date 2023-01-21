@@ -30,7 +30,8 @@ receive an error message only much further down the code, where it will be diffi
 
 dateTime.iso8601 is supported opaquely, largely for historical reasons. Datetime conversion can't be done transparently
 as the XML-RPC specification explicitly forbids passing of timezone specifiers in ISO8601 format dates. You can, however,
-use the `PhpXmlRpc\Helper\Date` class to do the encoding and decoding for you.
+use the `PhpXmlRpc\Helper\Date` class to do the encoding and decoding for you, or force usage of DateTime objects via
+the `PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes` variable.
 
 Most class members have "public" access, even those only meant for internal usage.
 
@@ -266,13 +267,16 @@ When manually creating Value objects representing an xml-rpc dateTime.iso8601, p
 used as source values. For those, the original value will be returned when calling `+$value->scalarval();+`.
 
 When Value objects are created by the library by parsing some received XML text, all Value objects representing an xml-rpc
-dateTime.iso8601 value will return the string representation of the date when calling `+$value->scalarval();+`.
+dateTime.iso8601 value will by default return the string representation of the date when calling `+$value->scalarval();+`.
 
 Datetime conversion can't be safely done in a transparent manner as the XML-RPC specification explicitly forbids passing
-of timezone specifiers in ISO8601 format dates. You can, however, use the `PhpXmlRpc\Helper\Date` class to decode the date
-string into a unix timestamp, or use the `PhpXmlRpc\Encoder::decode` method with the 'dates_as_objects' option to get
-back a php DateTime (in which case the conversion is done using the `strtotime` function, which uses the timezone set in
-php.ini).
+of timezone specifiers in ISO8601 format dates. You can, however, use multiple techniques to transform the date string
+into another representation of a time stamp:
+* use the `PhpXmlRpc\Helper\Date` class to decode the date string into a unix timestamp;
+* set `PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = true` to always get back a php DateTime from received xml (in
+  which case the conversion is done using the timezone set in php.ini).
+* use the `PhpXmlRpc\Encoder::decode` method with the 'dates_as_objects' option to get back a php DateTime (in which case
+  the conversion is done using the `strtotime` function, which uses the timezone set in php.ini).
 
 ===== double
 

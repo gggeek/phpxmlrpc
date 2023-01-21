@@ -49,8 +49,8 @@ class Server
     /**
      * @var int
      * Controls behaviour of server when the invoked method-handler function throws an exception (within the `execute` method):
-     * 0 = catch it and return an 'internal error' xmlrpc response (default)
-     * 1 = SECURITY SENSITIVE DO NOT ENABLE ON PUBLIC SERVERS!!! catch it and return an xmlrpc response with the error
+     * 0 = catch it and return an 'internal error' xml-rpc response (default)
+     * 1 = SECURITY SENSITIVE DO NOT ENABLE ON PUBLIC SERVERS!!! catch it and return an xml-rpc response with the error
      *     corresponding to the exception, both its code and message.
      * 2 = allow the exception to float to the upper layers
      */
@@ -103,7 +103,7 @@ class Server
     public $user_data = null;
 
     /**
-     * Array defining php functions exposed as xmlrpc methods by this server.
+     * Array defining php functions exposed as xml-rpc methods by this server.
      * @var array[] $dmap
      */
     protected $dmap = array();
@@ -213,15 +213,15 @@ class Server
     /**
      * Set debug level of server.
      *
-     * @param integer $level debug lvl: determines info added to xmlrpc responses (as xml comments)
+     * @param integer $level debug lvl: determines info added to xml-rpc responses (as xml comments)
      *                    0 = no debug info,
      *                    1 = msgs set from user with debugmsg(),
-     *                    2 = add complete xmlrpc request (headers and body),
+     *                    2 = add complete xml-rpc request (headers and body),
      *                    3 = add also all processing warnings happened during method processing
      *                    (NB: this involves setting a custom error handler, and might interfere
      *                    with the standard processing of the php function exposed as method. In
      *                    particular, triggering an USER_ERROR level error will not halt script
-     *                    execution anymore, but just end up logged in the xmlrpc response)
+     *                    execution anymore, but just end up logged in the xml-rpc response)
      *                    Note that info added at level 2 and 3 will be base64 encoded
      * @return $this
      */
@@ -287,7 +287,7 @@ class Server
     }
 
     /**
-     * Execute the xmlrpc request, printing the response.
+     * Execute the xml-rpc request, printing the response.
      *
      * @param string $data the request body. If null, the http POST request will be examined
      * @param bool $returnPayload When true, return the response but do not echo it or any http header
@@ -419,7 +419,7 @@ class Server
     /**
      * Verify type and number of parameters received against a list of known signatures.
      *
-     * @param array|Request $in array of either xmlrpc value objects or xmlrpc type definitions
+     * @param array|Request $in array of either xml-rpc value objects or xml-rpc type definitions
      * @param array $sigs array of known signatures to match against
      * @return array int, string
      */
@@ -468,7 +468,7 @@ class Server
     }
 
     /**
-     * Parse http headers received along with xmlrpc request. If needed, inflate request.
+     * Parse http headers received along with xml-rpc request. If needed, inflate request.
      *
      * @return Response|null null on success or an error Response
      */
@@ -636,7 +636,7 @@ class Server
                 PhpXmlRpc::$xmlrpcstr['invalid_request'] . ' ' . $xmlRpcParser->_xh['isf_reason']);
         } else {
             // small layering violation in favor of speed and memory usage: we should allow the 'execute' method handle
-            // this, but in the most common scenario (xmlrpc values type server with some methods registered as phpvals)
+            // this, but in the most common scenario (xml-rpc values type server with some methods registered as phpvals)
             // that would mean a useless encode+decode pass
             if ($this->functions_parameters_type != 'xmlrpcvals' ||
                 (isset($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type']) &&
@@ -669,7 +669,7 @@ class Server
      *
      * @param Request|string $req either a Request obj or a method name
      * @param mixed[] $params array with method parameters as php types (only if $req is method name)
-     * @param string[] $paramTypes array with xmlrpc types of method parameters (only if $req is method name)
+     * @param string[] $paramTypes array with xml-rpc types of method parameters (only if $req is method name)
      * @return Response
      *
      * @throws \Exception in case the executed method does throw an exception (and depending on server configuration)
@@ -1009,9 +1009,9 @@ class Server
     public function getCapabilities()
     {
         $outAr = array(
-            // xmlrpc spec: always supported
+            // xml-rpc spec: always supported
             'xmlrpc' => array(
-                'specUrl' => 'http://www.xmlrpc.com/spec',
+                'specUrl' => 'http://www.xmlrpc.com/spec', // NB: the spec sits now at http://xmlrpc.com/spec.md
                 'specVersion' => 1
             ),
             // if we support system.xxx functions, we always support multicall, too...
@@ -1091,7 +1091,7 @@ class Server
      */
     public static function _xmlrpcs_methodSignature($server, $req)
     {
-        // let's accept as parameter either an xmlrpc value or string
+        // let's accept as parameter either an xml-rpc value or string
         if (is_object($req)) {
             $methName = $req->getParam(0);
             $methName = $methName->scalarval();
@@ -1135,7 +1135,7 @@ class Server
      */
     public static function _xmlrpcs_methodHelp($server, $req)
     {
-        // let's accept as parameter either an xmlrpc value or string
+        // let's accept as parameter either an xml-rpc value or string
         if (is_object($req)) {
             $methName = $req->getParam(0);
             $methName = $methName->scalarval();
@@ -1292,7 +1292,7 @@ class Server
     public static function _xmlrpcs_multicall($server, $req)
     {
         $result = array();
-        // let accept a plain list of php parameters, beside a single xmlrpc msg object
+        // let accept a plain list of php parameters, beside a single xml-rpc msg object
         if (is_object($req)) {
             $calls = $req->getParam(0);
             foreach ($calls as $call) {
@@ -1311,7 +1311,7 @@ class Server
     /**
      * Error handler used to track errors that occur during server-side execution of PHP code.
      * This allows to report back to the client whether an internal error has occurred or not
-     * using an xmlrpc response object, instead of letting the client deal with the html junk
+     * using an xml-rpc response object, instead of letting the client deal with the html junk
      * that a PHP execution error on the server generally entails.
      *
      * NB: in fact a user defined error handler can only handle WARNING, NOTICE and USER_* errors.

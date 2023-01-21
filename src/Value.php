@@ -88,15 +88,15 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Build an xmlrpc value.
+     * Build an xml-rpc value.
      *
      * When no value or type is passed in, the value is left uninitialized, and the value can be added later.
      *
      * @param Value[]|mixed $val if passing in an array, all array elements should be PhpXmlRpc\Value themselves
-     * @param string $type any valid xmlrpc type name (lowercase): i4, int, boolean, string, double, dateTime.iso8601,
+     * @param string $type any valid xml-rpc type name (lowercase): i4, int, boolean, string, double, dateTime.iso8601,
      *                     base64, array, struct, null.
      *                     If null, 'string' is assumed.
-     *                     You should refer to http://www.xmlrpc.com/spec for more information on what each of these mean.
+     *                     You should refer to http://xmlrpc.com/spec.md for more information on what each of these mean.
      */
     public function __construct($val = -1, $type = '')
     {
@@ -135,11 +135,11 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Add a single php value to an xmlrpc value.
+     * Add a single php value to an xml-rpc value.
      *
-     * If the xmlrpc value is an array, the php value is added as its last element.
-     * If the xmlrpc value is empty (uninitialized), this method makes it a scalar value, and sets that value.
-     * Fails if the xmlrpc value is not an array (i.e. a struct or a scalar) and already initialized.
+     * If the xml-rpc value is an array, the php value is added as its last element.
+     * If the xml-rpc value is empty (uninitialized), this method makes it a scalar value, and sets that value.
+     * Fails if the xml-rpc value is not an array (i.e. a struct or a scalar) and already initialized.
      *
      * @param mixed $val
      * @param string $type allowed values: i4, i8, int, boolean, string, double, dateTime.iso8601, base64, null.
@@ -191,16 +191,16 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Add an array of xmlrpc value objects to an xmlrpc value.
+     * Add an array of xml-rpc value objects to an xml-rpc value.
      *
-     * If the xmlrpc value is an array, the elements are appended to the existing ones.
-     * If the xmlrpc value is empty (uninitialized), this method makes it an array value, and sets that value.
+     * If the xml-rpc value is an array, the elements are appended to the existing ones.
+     * If the xml-rpc value is empty (uninitialized), this method makes it an array value, and sets that value.
      * Fails otherwise.
      *
      * @param Value[] $values
      * @return int 1 or 0 on failure
      *
-     * @todo add some checking for $values to be an array of xmlrpc values?
+     * @todo add some checking for $values to be an array of xml-rpc values?
      */
     public function addArray($values)
     {
@@ -221,10 +221,10 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Merges an array of named xmlrpc value objects into an xmlrpc value.
+     * Merges an array of named xml-rpc value objects into an xml-rpc value.
      *
-     * If the xmlrpc value is a struct, the elements are merged with the existing ones (overwriting existing ones).
-     * If the xmlrpc value is empty (uninitialized), this method makes it a struct value, and sets that value.
+     * If the xml-rpc value is a struct, the elements are merged with the existing ones (overwriting existing ones).
+     * If the xml-rpc value is empty (uninitialized), this method makes it a struct value, and sets that value.
      * Fails otherwise.
      *
      * @param Value[] $values
@@ -303,7 +303,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                         break;
                     case static::$xmlrpcDouble:
                         // avoid using standard conversion of float to string because it is locale-dependent,
-                        // and also because the xmlrpc spec forbids exponential notation.
+                        // and also because the xml-rpc spec forbids exponential notation.
                         // sprintf('%F') could be most likely ok, but it fails e.g. on 2e-14.
                         // The code below tries its best at keeping max precision while avoiding exp notation,
                         // but there is of course no limit in the number of decimal places to be used...
@@ -331,7 +331,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                         break;
                     default:
                         // no standard type value should arrive here, but provide a possibility
-                        // for xmlrpc values of unknown type...
+                        // for xml-rpc values of unknown type...
                         $rs .= "<{$typ}>{$val}</{$typ}>";
                 }
                 break;
@@ -386,7 +386,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Checks whether a struct member with a given name is present.
      *
-     * Works only on xmlrpc values of type struct.
+     * Works only on xml-rpc values of type struct.
      *
      * @param string $key the name of the struct member to be looked up
      * @return boolean
@@ -401,7 +401,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Returns the value of a given struct member (an xmlrpc value object in itself).
+     * Returns the value of a given struct member (an xml-rpc value object in itself).
      * Will raise a php warning if struct member of given name does not exist.
      *
      * @param string $key the name of the struct member to be looked up
@@ -417,7 +417,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Reset internal pointer for xmlrpc values of type struct.
+     * Reset internal pointer for xml-rpc values of type struct.
      * @return void
      *
      * @deprecated iterate directly over the object using foreach instead
@@ -430,7 +430,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Return next member element for xmlrpc values of type struct.
+     * Return next member element for xml-rpc values of type struct.
      *
      * @return Value
      * @throws \Error starting with php 8.0, this function should not be used, as it will always throw
@@ -445,7 +445,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Returns the value of a scalar xmlrpc value (base 64 decoding is automatically handled here)
+     * Returns the value of a scalar xml-rpc value (base 64 decoding is automatically handled here)
      *
      * @return mixed
      */
@@ -457,7 +457,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Returns the type of the xmlrpc value.
+     * Returns the type of the xml-rpc value.
      *
      * For integers, 'int' is always returned in place of 'i4'. 'i8' is considered a separate type and returned as such
      *
@@ -475,7 +475,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Returns the m-th member of an xmlrpc value of array type.
+     * Returns the m-th member of an xml-rpc value of array type.
      *
      * @param integer $key the index of the value to be retrieved (zero based)
      *
@@ -491,7 +491,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Returns the number of members in an xmlrpc value of array type.
+     * Returns the number of members in an xml-rpc value of array type.
      *
      * @return integer
      *
@@ -505,7 +505,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Returns the number of members in an xmlrpc value of struct type.
+     * Returns the number of members in an xml-rpc value of struct type.
      *
      * @return integer
      *
@@ -519,7 +519,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Returns the number of members in an xmlrpc value:
+     * Returns the number of members in an xml-rpc value:
      * - 0 for uninitialized values
      * - 1 for scalar values
      * - the number of elements for struct and array values

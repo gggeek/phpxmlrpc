@@ -69,7 +69,7 @@ class Client
     /**
      * @var bool
      *
-     * This determines whether the multicall() method will try to take advantage of the system.multicall xmlrpc method
+     * This determines whether the multicall() method will try to take advantage of the system.multicall xml-rpc method
      * to dispatch to the server an array of requests in a single http roundtrip or simply execute many consecutive http
      * calls. Defaults to FALSE, but it will be enabled automatically on the first failure of execution of
      * system.multicall.
@@ -141,7 +141,7 @@ class Client
      * Response objects in any case.
      * Note that the 'phpvals' setting will yield faster execution times, but some of the information from the original
      * response will be lost. It will be e.g. impossible to tell whether a particular php string value was sent by the
-     * server as an xmlrpc string or base64 value.
+     * server as an xml-rpc string or base64 value.
      */
     public $return_type = XMLParser::RETURN_XMLRPCVALS;
 
@@ -170,7 +170,7 @@ class Client
     }
 
     /**
-     * @param string $path either the PATH part of the xmlrpc server URL, or complete server URL (in which case you
+     * @param string $path either the PATH part of the xml-rpc server URL, or complete server URL (in which case you
      *                     should use and empty string for all other parameters)
      *                     e.g. /xmlrpc/server.php
      *                     e.g. http://phpxmlrpc.sourceforge.net/server.php
@@ -249,12 +249,12 @@ class Client
     }
 
     /**
-     * Enable/disable the echoing to screen of the xmlrpc responses received. The default is not to output anything.
+     * Enable/disable the echoing to screen of the xml-rpc responses received. The default is not to output anything.
      *
      * The debugging information at level 1 includes the raw data returned from the XML-RPC server it was querying
      * (including bot HTTP headers and the full XML payload), and the PHP value the client attempts to create to
      * represent the value returned by the server.
-     * At level2, the complete payload of the xmlrpc request is also printed, before being sent to the server.
+     * At level2, the complete payload of the xml-rpc request is also printed, before being sent to the server.
      *
      * This option can be very useful when debugging servers as it allows you to see exactly what the client sends and
      * the server returns. Never leave it enabled for production!
@@ -411,12 +411,12 @@ class Client
     }
 
     /**
-     * Enables/disables reception of compressed xmlrpc responses.
+     * Enables/disables reception of compressed xml-rpc responses.
      *
      * This requires the "zlib" extension to be enabled in your php install. If it is, by default xmlrpc_client
      * instances will enable reception of compressed content.
-     * Note that enabling reception of compressed responses merely adds some standard http headers to xmlrpc requests.
-     * It is up to the xmlrpc server to return compressed responses when receiving such requests.
+     * Note that enabling reception of compressed responses merely adds some standard http headers to xml-rpc requests.
+     * It is up to the xml-rpc server to return compressed responses when receiving such requests.
      *
      * @param string $compMethod either 'gzip', 'deflate', 'any' or ''
      * @return $this
@@ -434,7 +434,7 @@ class Client
     }
 
     /**
-     * Enables/disables http compression of xmlrpc request.
+     * Enables/disables http compression of xml-rpc request.
      *
      * This requires the "zlib" extension to be enabled in your php install.
      * Take care when sending compressed requests: servers might not support them (and automatic fallback to
@@ -533,7 +533,7 @@ class Client
     }
 
     /**
-     * Send an xmlrpc request to the server.
+     * Send an xml-rpc request to the server.
      *
      * @param Request|Request[]|string $req The Request object, or an array of requests for using multicall, or the
      *                                      complete xml representation of a request.
@@ -541,13 +541,13 @@ class Client
      *                                      a single 'system.multicall' xml-rpc method call to forward to the server all
      *                                      the requests in a single HTTP round trip, unless $this->no_multicall has
      *                                      been previously set to TRUE (see the multicall method below), in which case
-     *                                      many consecutive xmlrpc requests will be sent. The method will return an
+     *                                      many consecutive xml-rpc requests will be sent. The method will return an
      *                                      array of Response objects in both cases.
      *                                      The third variant allows to build by hand (or any other means) a complete
-     *                                      xmlrpc request message, and send it to the server. $req should be a string
+     *                                      xml-rpc request message, and send it to the server. $req should be a string
      *                                      containing the complete xml representation of the request. It is e.g. useful
      *                                      when, for maximal speed of execution, the request is serialized into a
-     *                                      string using the native php xmlrpc functions (see http://www.php.net/xmlrpc)
+     *                                      string using the native php xml-rpc functions (see http://www.php.net/xmlrpc)
      * @param integer $timeout deprecated. Connection timeout, in seconds, If unspecified, the timeout set with setTimeout
      *                         will be used. If that is 0, a platform specific timeout will apply.
      *                         This timeout value is passed to fsockopen(). It is also used for detecting server
@@ -1255,7 +1255,7 @@ class Client
     /**
      * Send an array of requests and return an array of responses.
      *
-     * Unless $this->no_multicall has been set to true, it will try first to use one single xmlrpc call to server method
+     * Unless $this->no_multicall has been set to true, it will try first to use one single xml-rpc call to server method
      * system.multicall, and revert to sending many successive calls in case of failure.
      * This failure is also stored in $this->no_multicall for subsequent calls.
      * Unfortunately, there is no server error code universally used to denote the fact that multicall is unsupported,

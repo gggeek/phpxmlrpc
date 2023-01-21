@@ -151,7 +151,7 @@ class Request
     }
 
     /**
-     * Gets/sets the xmlrpc method to be invoked.
+     * Gets/sets the xml-rpc method to be invoked.
      *
      * @param string $methodName the method to be set (leave empty not to set it)
      * @return string the method that will be invoked
@@ -187,7 +187,7 @@ class Request
      */
     public function addParam($param)
     {
-        // check: do not add to self params which are not xmlrpc values
+        // check: do not add to self params which are not xml-rpc values
         if (is_object($param) && is_a($param, 'PhpXmlRpc\Value')) {
             $this->params[] = $param;
 
@@ -219,7 +219,7 @@ class Request
     }
 
     /**
-     * Given an open file handle, read all data available and parse it as an xmlrpc response.
+     * Given an open file handle, read all data available and parse it as an xml-rpc response.
      *
      * NB: the file handle is not closed by this function.
      * NNB: might have trouble in rare cases to work on network streams, as we check for a read of 0 bytes instead of
@@ -241,11 +241,11 @@ class Request
     }
 
     /**
-     * Parse the xmlrpc response contained in the string $data and return a Response object.
+     * Parse the xml-rpc response contained in the string $data and return a Response object.
      *
      * When $this->debug has been set to a value greater than 0, will echo debug messages to screen while decoding.
      *
-     * @param string $data the xmlrpc response, possibly including http headers
+     * @param string $data the xml-rpc response, possibly including http headers
      * @param bool $headersProcessed when true prevents parsing HTTP headers for interpretation of content-encoding and
      *                               consequent decoding
      * @param string $returnType decides return type, i.e. content of response->value(). Either 'xmlrpcvals', 'xml' or
@@ -429,7 +429,7 @@ class Request
     }
 
     /**
-     * Enables/disables the echoing to screen of the xmlrpc responses received.
+     * Enables/disables the echoing to screen of the xml-rpc responses received.
      *
      * @param integer $level values 0, 1, 2 are supported
      * @return $this

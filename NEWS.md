@@ -12,6 +12,13 @@
 
   An example of using this feature has been added to demo file `windowscharset.php`
 
+* new: allow the library to pass to the application DateTime objects instead of string for all received dateTime.iso8601
+  xml-rpc values. This includes both client-side, for data with the `$response->value()`, and server-side, for data
+  passed to xml-rpc method handlers, and works both in 'xmlrpcvals' and in 'phpvals' modes.
+  In order to enable this, you can set `PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = true`.
+  NB: since the xml-rpc spec mandates that no Timezone is used on the wire for dateTime values, the DateTime objects
+  created by the library will be set to the default php timzeone, set using the 'date.timezone' ini setting.
+
 * fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, we would be always falling back to
   non-multicall requests
 
