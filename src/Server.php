@@ -99,6 +99,7 @@ class Server
     /**
      * @var mixed
      * Extra data passed at runtime to method handling functions. Used only by EPI layer
+     * @internal
      */
     public $user_data = null;
 
