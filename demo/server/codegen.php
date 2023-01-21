@@ -27,13 +27,13 @@ $autoloader = __DIR__ . "/_prepend.php";
 file_put_contents($targetClassFile,
     "<?php\n\n" .
     "require_once '$autoloader';\n\n" .
-    "class MyServerClass {\n\n"
+    "class MyServerClass\n{\n\n"
 ) || die('uh oh');
 
 // we mangle a bit the code we get from wrapPhpClass to generate a php class instead of a bunch of functions
 
 foreach($code as $methodName => $methodDef) {
-    file_put_contents($targetClassFile, 'public static ' . $methodDef['source'] . "\n\n", FILE_APPEND) || die('uh oh');
+    file_put_contents($targetClassFile, '  public static ' . str_replace("\n", "  \n  ", $methodDef['source']) . "\n\n", FILE_APPEND) || die('uh oh');
     $code[$methodName]['function'] = 'MyServerClass::' . $methodDef['function'];
     unset($code[$methodName]['source']);
 }

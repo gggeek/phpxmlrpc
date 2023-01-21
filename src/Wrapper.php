@@ -571,45 +571,45 @@ class Wrapper
 
         // build body of new function
 
-        $innerCode = "\$paramCount = \$req->getNumParams();\n";
-        $innerCode .= "if (\$paramCount < $minPars || \$paramCount > $maxPars) return new " . static::$namespace . "Response(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcstr['incorrect_params'] . "');\n";
+        $innerCode = "  \$paramCount = \$req->getNumParams();\n";
+        $innerCode .= "  if (\$paramCount < $minPars || \$paramCount > $maxPars) return new " . static::$namespace . "Response(0, " . PhpXmlRpc::$xmlrpcerr['incorrect_params'] . ", '" . PhpXmlRpc::$xmlrpcstr['incorrect_params'] . "');\n";
 
-        $innerCode .= "\$encoder = new " . static::$namespace . "Encoder();\n";
+        $innerCode .= "  \$encoder = new " . static::$namespace . "Encoder();\n";
         if ($decodePhpObjects) {
-            $innerCode .= "\$p = \$encoder->decode(\$req, array('decode_php_objs'));\n";
+            $innerCode .= "  \$p = \$encoder->decode(\$req, array('decode_php_objs'));\n";
         } else {
-            $innerCode .= "\$p = \$encoder->decode(\$req);\n";
+            $innerCode .= "  \$p = \$encoder->decode(\$req);\n";
         }
 
         // since we are building source code for later use, if we are given an object instance,
         // we go out of our way and store a pointer to it in a static class var...
         if (is_array($callable) && is_object($callable[0])) {
             self::$objHolder[$newFuncName] = $callable[0];
-            $innerCode .= "\$obj = PhpXmlRpc\\Wrapper::\$objHolder['$newFuncName'];\n";
+            $innerCode .= "  \$obj = PhpXmlRpc\\Wrapper::\$objHolder['$newFuncName'];\n";
             $realFuncName = '$obj->' . $callable[1];
         } else {
             $realFuncName = $plainFuncName;
         }
         foreach ($parsVariations as $i => $pars) {
-            $innerCode .= "if (\$paramCount == " . count($pars) . ") \$retval = {$catchWarnings}$realFuncName(" . implode(',', $pars) . ");\n";
+            $innerCode .= "  if (\$paramCount == " . count($pars) . ") \$retval = {$catchWarnings}$realFuncName(" . implode(',', $pars) . ");\n";
             if ($i < (count($parsVariations) - 1))
-                $innerCode .= "else\n";
+                $innerCode .= "  else\n";
         }
-        $innerCode .= "if (is_a(\$retval, '" . static::$namespace . "Response')) return \$retval; else\n";
+        $innerCode .= "  if (is_a(\$retval, '" . static::$namespace . "Response'))\n    return \$retval;\n  else\n";
         if ($funcDesc['returns'] == Value::$xmlrpcDateTime || $funcDesc['returns'] == Value::$xmlrpcBase64) {
-            $innerCode .= "return new " . static::$namespace . "Response(new " . static::$namespace . "Value(\$retval, '{$funcDesc['returns']}'));";
+            $innerCode .= "    return new " . static::$namespace . "Response(new " . static::$namespace . "Value(\$retval, '{$funcDesc['returns']}'));";
         } else {
             if ($encodePhpObjects) {
-                $innerCode .= "return new " . static::$namespace . "Response(\$encoder->encode(\$retval, array('encode_php_objs')));\n";
+                $innerCode .= "    return new " . static::$namespace . "Response(\$encoder->encode(\$retval, array('encode_php_objs')));";
             } else {
-                $innerCode .= "return new " . static::$namespace . "Response(\$encoder->encode(\$retval));\n";
+                $innerCode .= "    return new " . static::$namespace . "Response(\$encoder->encode(\$retval));";
             }
         }
         // shall we exclude functions returning by ref?
         // if ($func->returnsReference())
         //     return false;
 
-        $code = "function $newFuncName(\$req) {\n" . $innerCode . "\n}";
+        $code = "function $newFuncName(\$req)\n{\n" . $innerCode . "\n}";
 
         return $code;
     }
@@ -1096,10 +1096,10 @@ class Wrapper
         }
 
         /// @todo add method setDebug() to new class, to enable/disable debugging
-        $source = "class $xmlrpcClassName\n{\npublic \$client;\n\n";
-        $source .= "function __construct()\n{\n";
-        $source .= $this->buildClientWrapperCode($client, $verbatimClientCopy, $prefix, static::$namespace);
-        $source .= "\$this->client = \$client;\n}\n\n";
+        $source = "class $xmlrpcClassName\n{\n  public \$client;\n\n";
+        $source .= "  function __construct()\n  {\n";
+        $source .= '    ' . str_replace("\n", "\n    ", $this->buildClientWrapperCode($client, $verbatimClientCopy, $prefix, static::$namespace));
+        $source .= "\$this->client = \$client;\n  }\n\n";
         $opts = array(
             'return_source' => true,
             'simple_client_copy' => 2, // do not produce code to copy the client object
@@ -1117,10 +1117,14 @@ class Wrapper
                     array('_', ''), $mName);
                 $methodWrap = $this->wrapXmlrpcMethod($client, $mName, $opts);
                 if ($methodWrap) {
-                    if (!$buildIt) {
-                        $source .= $methodWrap['docstring'];
+                    if ($buildIt) {
+                        $source .= $methodWrap['source'] . "\n";
+
+                    } else {
+                        $source .= '  ' . str_replace("\n", "\n  ", $methodWrap['docstring']);
+                        $source .= str_replace("\n", "\n  ", $methodWrap['source']). "\n";
                     }
-                    $source .= $methodWrap['source'] . "\n";
+
                 } else {
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': will not create class method to wrap remote method ' . $mName);
                 }

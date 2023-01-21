@@ -19,6 +19,7 @@ $code = $w->wrapXmlrpcServer(
         'new_class_name' => 'MyClient',
         'method_filter' => '/^examples\./',
         'simple_client_copy' => true,
+        'throw_on_fault' => true,
     )
 );
 
