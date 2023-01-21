@@ -23,46 +23,139 @@ class Client
     /** @var string */
     protected static $responseClass = '\\PhpXmlRpc\\Response';
 
-    /// @todo: do these need to be public?
+    /**
+     * @var int
+     * @deprecated will be removed in the future
+     */
+    public $errno;
+    /**
+     * @var string
+     * @deprecated will be removed in the future
+     */
+    public $errstr;
+
+    /// @todo: do all the ones below need to be public?
+
     public $method = 'http';
     public $server;
     public $port = 0;
     public $path;
 
-    public $errno;
-    public $errstr;
+    /**
+     * @var int
+     * @internal use setDebug
+     */
     public $debug = 0;
 
+    /**
+     * @var string
+     * @internal use setCredentials
+     */
     public $username = '';
+    /**
+     * @var string
+     * @internal use setCredentials
+     */
     public $password = '';
+    /**
+     * @var int
+     * @internal use setCredentials
+     */
     public $authtype = 1;
 
+    /**
+     * @var string
+     * @internal use setCertificate
+     */
     public $cert = '';
+    /**
+     * @var string
+     * @internal use setCertificate
+     */
     public $certpass = '';
+    /**
+     * @var string
+     * @internal use setCaCertificate
+     */
     public $cacert = '';
+    /**
+     * @var string
+     * @internal use setCaCertificate
+     */
     public $cacertdir = '';
+    /**
+     * @var string
+     * @internal use setKey
+     */
     public $key = '';
+    /**
+     * @var string
+     * @internal use setKey
+     */
     public $keypass = '';
+    /**
+     * @var bool
+     * @internal use setSSLVerifyPeer
+     */
     public $verifypeer = true;
+    /**
+     * @var int
+     * @internal use setSSLVerifyHost
+     */
     public $verifyhost = 2;
+    /**
+     * @var int
+     * @internal use setSSLVersion
+     */
     public $sslversion = 0; // corresponds to CURL_SSLVERSION_DEFAULT
 
+    /**
+     * @var string
+     * @internal use setProxy
+     */
     public $proxy = '';
+    /**
+     * @var int
+     * @internal use setProxy
+     */
     public $proxyport = 0;
+    /**
+     * @var string
+     * @internal use setProxy
+     */
     public $proxy_user = '';
+    /**
+     * @var string
+     * @internal use setProxy
+     */
     public $proxy_pass = '';
+    /**
+     * @var int
+     * @internal use setProxy
+     */
     public $proxy_authtype = 1;
 
+    /**
+     * @var array
+     * @internal use setCookie
+     */
     public $cookies = array();
+
+    /**
+     * @var array
+     * @internal use setCurlOptions
+     */
     public $extracurlopts = array();
 
     /**
      * @var int
+     * @internal use setTimeout
      */
     public $timeout = 0;
 
     /**
      * @var int
+     * @internal use setUseCurl
      */
     public $use_curl = self::USE_CURL_AUTO;
 
@@ -85,6 +178,8 @@ class Client
      * NNB: you can set it to any non-empty array for HTTP11 and HTTPS, since in those cases it will be up to CURL to
      * decide the compression methods it supports. You might check for the presence of 'zlib' in the output of
      * curl_version() to determine whether compression is supported or not
+     *
+     * @internal use setAcceptedCompression
      */
     public $accepted_compression = array();
 
@@ -93,14 +188,10 @@ class Client
      *
      * Name of compression scheme to be used for sending requests.
      * Either null, 'gzip' or 'deflate'.
+     *
+     * @internal use setRequestCompression
      */
     public $request_compression = '';
-
-    /**
-     * CURL handle: used for keep-alive
-     * @internal
-     */
-    public $xmlrpc_curl_handle = null;
 
     /**
      * @var bool
@@ -149,8 +240,16 @@ class Client
      * @var string
      *
      * Sent to servers in http headers. Value set at constructor time.
+     *
+     * @internal use setUserAgent
      */
     public $user_agent;
+
+    /**
+     * CURL handle: used for keep-alive
+     * @internal
+     */
+    public $xmlrpc_curl_handle = null;
 
     public function getLogger()
     {
