@@ -8,14 +8,42 @@ use PhpXmlRpc\Helper\XMLParser;
 
 /**
  * Used to represent a client of an XML-RPC server.
- *
- * @todo add a setTimeout method, in the vein of other options which can be set to the Client
  */
 class Client
 {
     const USE_CURL_NEVER = 0;
     const USE_CURL_ALWAYS = 1;
     const USE_CURL_AUTO = 2;
+
+    const OPT_DEBUG = 'debug';
+    const OPT_USERNAME = 'username';
+    const OPT_PASSWORD = 'password';
+    const OPT_AUTH_TYPE = 'authtype';
+    const OPT_CERT = 'cert';
+    const OPT_CERT_PASS = 'certpass';
+    const OPT_CA_CERT = 'cacert';
+    const OPT_CA_CERT_DIR = 'cacertdir';
+    const OPT_KEY = 'key';
+    const OPT_KEY_PASS = 'keypass';
+    const OPT_VERIFY_PEER = 'verifypeer';
+    const OPT_VERIFY_HOST = 'verifyhost';
+    const OPT_SSL_VERSION = 'sslversion';
+    const OPT_PROXY = 'proxy';
+    const OPT_PROXY_PORT = 'proxyport';
+    const OPT_PROXY_USER = 'proxy_user';
+    const OPT_PROXY_PASS = 'proxy_pass';
+    const OPT_PROXY_AUTH_TYPE = 'proxy_authtype';
+    const OPT_COOKIES = 'cookies';
+    const OPT_EXTRA_CURL_OPTS = 'extracurlopts';
+    const OPT_TIMEOUT = 'timeout';
+    const OPT_USE_CURL = 'use_curl';
+    const OPT_NO_MULTICALL = 'no_multicall';
+    const OPT_ACCEPTED_COMPRESSION = 'accepted_compression';
+    const OPT_REQUEST_COMPRESSION = 'request_compression';
+    const OPT_KEEPALIVE = 'keepalive';
+    const OPT_ACCEPTED_CHARSET_ENCODINGS = 'accepted_charset_encodings';
+    const OPT_REQUEST_CHARSET_ENCODING = 'request_charset_encoding';
+    const OPT_USER_AGENT = 'user_agent';
 
     protected static $logger;
     /** @var string */
@@ -29,128 +57,142 @@ class Client
     public $port = 0;
     public $path;
 
+    /**
+     * @var int
+     * @deprecated will be removed in the future
+     */
     public $errno;
+    /**
+     * @var string
+     * @deprecated will be removed in the future
+     */
     public $errstr;
-    public $debug = 0;
-
-    public $username = '';
-    public $password = '';
-    public $authtype = 1;
-
-    public $cert = '';
-    public $certpass = '';
-    public $cacert = '';
-    public $cacertdir = '';
-    public $key = '';
-    public $keypass = '';
-    public $verifypeer = true;
-    public $verifyhost = 2;
-    public $sslversion = 0; // corresponds to CURL_SSLVERSION_DEFAULT
-
-    public $proxy = '';
-    public $proxyport = 0;
-    public $proxy_user = '';
-    public $proxy_pass = '';
-    public $proxy_authtype = 1;
-
-    public $cookies = array();
-    public $extracurlopts = array();
-
-    /**
-     * @var int
-     */
-    public $timeout = 0;
-
-    /**
-     * @var int
-     */
-    public $use_curl = self::USE_CURL_AUTO;
-
-    /**
-     * @var bool
-     *
-     * This determines whether the multicall() method will try to take advantage of the system.multicall xmlrpc method
-     * to dispatch to the server an array of requests in a single http roundtrip or simply execute many consecutive http
-     * calls. Defaults to FALSE, but it will be enabled automatically on the first failure of execution of
-     * system.multicall.
-     */
-    public $no_multicall = false;
 
     /**
      * @var array
-     *
-     * List of http compression methods accepted by the client for responses.
-     * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib.
-     *
-     * NNB: you can set it to any non-empty array for HTTP11 and HTTPS, since in those cases it will be up to CURL to
-     * decide the compression methods it supports. You might check for the presence of 'zlib' in the output of
-     * curl_version() to determine whether compression is supported or not
      */
-    public $accepted_compression = array();
+    protected $options = array(
+        'debug' => 0,
 
-    /**
-     * @var string|null
-     *
-     * Name of compression scheme to be used for sending requests.
-     * Either null, 'gzip' or 'deflate'.
-     */
-    public $request_compression = '';
+        'username' => '',
+        'password' => '',
+        'authtype' => 1,
+
+        'cert' => '',
+        'certpass' => '',
+        'cacert' => '',
+        'cacertdir' => '',
+        'key' => '',
+        'keypass' => '',
+        'verifypeer' => true,
+        'verifyhost' => 2,
+        'sslversion' => 0, // corresponds to CURL_SSLVERSION_DEFAULT
+
+        'proxy' => '',
+        'proxyport' => 0,
+        'proxy_user' => '',
+        'proxy_pass' => '',
+        'proxy_authtype' => 1,
+
+        'cookies' => array(),
+        'extracurlopts' => array(),
+
+        /**
+         * @var int
+         */
+        'timeout' => 0,
+
+        /**
+         * @var int
+         */
+        'use_curl' => self::USE_CURL_AUTO,
+
+        /**
+         * @var bool
+         *
+         * This determines whether the multicall() method will try to take advantage of the system.multicall xmlrpc method
+         * to dispatch to the server an array of requests in a single http roundtrip or simply execute many consecutive http
+         * calls. Defaults to FALSE, but it will be enabled automatically on the first failure of execution of
+         * system.multicall.
+         */
+        'no_multicall' => false,
+
+        /**
+         * @var array
+         *
+         * List of http compression methods accepted by the client for responses.
+         * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib.
+         *
+         * NNB: you can set it to any non-empty array for HTTP11 and HTTPS, since in those cases it will be up to CURL to
+         * decide the compression methods it supports. You might check for the presence of 'zlib' in the output of
+         * curl_version() to determine whether compression is supported or not
+         */
+        'accepted_compression' => array(),
+
+        /**
+         * @var string|null
+         *
+         * Name of compression scheme to be used for sending requests.
+         * Either null, 'gzip' or 'deflate'.
+         */
+        'request_compression' => '',
+
+        /**
+         * @var bool
+         *
+         * Whether to use persistent connections for http 1.1 and https. Value set at constructor time
+         */
+        'keepalive' => false,
+
+        /**
+         * @var string[]
+         *
+         * Charset encodings that can be decoded without problems by the client. Value set at constructor time
+         */
+        'accepted_charset_encodings' => array(),
+
+        /**
+         * @var string
+         *
+         * The charset encoding that will be used for serializing request sent by the client.
+         * It defaults to NULL, which means using US-ASCII and encoding all characters outside the ASCII printable range
+         * using their xml character entity representation (this has the benefit that line end characters will not be mangled
+         * in the transfer, a CR-LF will be preserved as well as a singe LF).
+         * Valid values are 'US-ASCII', 'UTF-8' and 'ISO-8859-1'.
+         * For the fastest mode of operation, set your both your app internal encoding and this to UTF-8.
+         */
+        'request_charset_encoding' => '',
+
+        /**
+         * @var string
+         *
+         * Decides the content of Response objects returned by calls to send() and multicall().
+         * Valid values are 'xmlrpcvals', 'phpvals' or 'xml'.
+         *
+         * Determines whether the value returned inside a Response object as results of calls to the send() and multicall()
+         * methods will be a Value object, a plain php value or a raw xml string.
+         * Allowed values are 'xmlrpcvals' (the default), 'phpvals' and 'xml'.
+         * To allow the user to differentiate between a correct and a faulty response, fault responses will be returned as
+         * Response objects in any case.
+         * Note that the 'phpvals' setting will yield faster execution times, but some of the information from the original
+         * response will be lost. It will be e.g. impossible to tell whether a particular php string value was sent by the
+         * server as an xmlrpc string or base64 value.
+         */
+        'return_type' => XMLParser::RETURN_XMLRPCVALS,
+
+        /**
+         * @var string
+         *
+         * Sent to servers in http headers. Value set at constructor time.
+         */
+        'user_agent' => '',
+    );
 
     /**
      * CURL handle: used for keep-alive
      * @internal
      */
     public $xmlrpc_curl_handle = null;
-
-    /**
-     * @var bool
-     *
-     * Whether to use persistent connections for http 1.1 and https. Value set at constructor time
-     */
-    public $keepalive = false;
-
-    /**
-     * @var string[]
-     *
-     * Charset encodings that can be decoded without problems by the client. Value set at constructor time
-     */
-    public $accepted_charset_encodings = array();
-
-    /**
-     * @var string
-     *
-     * The charset encoding that will be used for serializing request sent by the client.
-     * It defaults to NULL, which means using US-ASCII and encoding all characters outside the ASCII printable range
-     * using their xml character entity representation (this has the benefit that line end characters will not be mangled
-     * in the transfer, a CR-LF will be preserved as well as a singe LF).
-     * Valid values are 'US-ASCII', 'UTF-8' and 'ISO-8859-1'.
-     * For the fastest mode of operation, set your both your app internal encoding and this to UTF-8.
-     */
-    public $request_charset_encoding = '';
-
-    /**
-     * @var string
-     *
-     * Decides the content of Response objects returned by calls to send() and multicall().
-     * Valid values are 'xmlrpcvals', 'phpvals' or 'xml'.
-     *
-     * Determines whether the value returned inside a Response object as results of calls to the send() and multicall()
-     * methods will be a Value object, a plain php value or a raw xml string.
-     * Allowed values are 'xmlrpcvals' (the default), 'phpvals' and 'xml'.
-     * To allow the user to differentiate between a correct and a faulty response, fault responses will be returned as
-     * Response objects in any case.
-     * Note that the 'phpvals' setting will yield faster execution times, but some of the information from the original
-     * response will be lost. It will be e.g. impossible to tell whether a particular php string value was sent by the
-     * server as an xmlrpc string or base64 value.
-     */
-    public $return_type = XMLParser::RETURN_XMLRPCVALS;
-
-    /**
-     * @var string
-     *
-     * Sent to servers in http headers. Value set at constructor time.
-     */
-    public $user_agent;
 
     public function getLogger()
     {
@@ -206,10 +248,10 @@ class Client
                 $method = $parts['scheme'];
             }
             if (isset($parts['user'])) {
-                $this->username = $parts['user'];
+                $this->options['username'] = $parts['user'];
             }
             if (isset($parts['pass'])) {
-                $this->password = $parts['pass'];
+                $this->options['password'] = $parts['pass'];
             }
         }
         if ($path == '' || $path[0] != '/') {
@@ -231,21 +273,21 @@ class Client
                     ((is_string($info) && strpos($info, 'zlib') !== null) || isset($info['libz_version'])))
             )
         ) {
-            $this->accepted_compression = array('gzip', 'deflate');
+            $this->options['accepted_compression'] = array('gzip', 'deflate');
         }
 
         // keepalives: enabled by default
-        $this->keepalive = true;
+        $this->options['keepalive'] = true;
 
         // by default the xml parser can support these 3 charset encodings
-        $this->accepted_charset_encodings = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
+        $this->options['accepted_charset_encodings'] = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
 
         // NB: this is disabled to avoid making all the requests sent huge... mbstring supports more than 80 charsets!
         //$ch = Charset::instance();
-        //$this->accepted_charset_encodings = $ch->knownCharsets();
+        //$this->options['accepted_charset_encodings'] = $ch->knownCharsets();
 
         // initialize user_agent string
-        $this->user_agent = PhpXmlRpc::$xmlrpcName . ' ' . PhpXmlRpc::$xmlrpcVersion;
+        $this->options['user_agent'] = PhpXmlRpc::$xmlrpcName . ' ' . PhpXmlRpc::$xmlrpcVersion;
     }
 
     /**
@@ -261,10 +303,12 @@ class Client
      *
      * @param integer $level values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
      * @return $this
+     *
+     * @deprecated use setOption
      */
     public function setDebug($level)
     {
-        $this->debug = $level;
+        $this->options['debug'] = $level;
         return $this;
     }
 
@@ -285,9 +329,9 @@ class Client
      */
     public function setCredentials($user, $password, $authType = 1)
     {
-        $this->username = $user;
-        $this->password = $password;
-        $this->authtype = $authType;
+        $this->options['username'] = $user;
+        $this->options['password'] = $password;
+        $this->options['authtype'] = $authType;
         return $this;
     }
 
@@ -304,8 +348,8 @@ class Client
      */
     public function setCertificate($cert, $certPass = '')
     {
-        $this->cert = $cert;
-        $this->certpass = $certPass;
+        $this->options['cert'] = $cert;
+        $this->options['certpass'] = $certPass;
         return $this;
     }
 
@@ -321,9 +365,9 @@ class Client
     public function setCaCertificate($caCert, $isDir = false)
     {
         if ($isDir) {
-            $this->cacertdir = $caCert;
+            $this->options['cacertdir'] = $caCert;
         } else {
-            $this->cacert = $caCert;
+            $this->options['cacert'] = $caCert;
         }
         return $this;
     }
@@ -340,8 +384,8 @@ class Client
      */
     public function setKey($key, $keyPass)
     {
-        $this->key = $key;
-        $this->keypass = $keyPass;
+        $this->options['key'] = $key;
+        $this->options['keypass'] = $keyPass;
         return $this;
     }
 
@@ -354,10 +398,12 @@ class Client
      *
      * @param bool $i enable/disable verification of peer certificate
      * @return $this
+     *
+     * @deprecated use setOption
      */
     public function setSSLVerifyPeer($i)
     {
-        $this->verifypeer = $i;
+        $this->options['verifypeer'] = $i;
         return $this;
     }
 
@@ -368,10 +414,12 @@ class Client
      *
      * @param int $i Set to 1 to only the existence of a CN, not that it matches
      * @return $this
+     *
+     * @deprecated use setOption
      */
     public function setSSLVerifyHost($i)
     {
-        $this->verifyhost = $i;
+        $this->options['verifyhost'] = $i;
         return $this;
     }
 
@@ -380,10 +428,12 @@ class Client
      *
      * @param int $i
      * @return $this
+     *
+     * @deprecated use setOption
      */
     public function setSSLVersion($i)
     {
-        $this->sslversion = $i;
+        $this->options['sslversion'] = $i;
         return $this;
     }
 
@@ -402,11 +452,11 @@ class Client
      */
     public function setProxy($proxyHost, $proxyPort, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1)
     {
-        $this->proxy = $proxyHost;
-        $this->proxyport = $proxyPort;
-        $this->proxy_user = $proxyUsername;
-        $this->proxy_pass = $proxyPassword;
-        $this->proxy_authtype = $proxyAuthType;
+        $this->options['proxy'] = $proxyHost;
+        $this->options['proxyport'] = $proxyPort;
+        $this->options['proxy_user'] = $proxyUsername;
+        $this->options['proxy_pass'] = $proxyPassword;
+        $this->options['proxy_authtype'] = $proxyAuthType;
         return $this;
     }
 
@@ -424,11 +474,11 @@ class Client
     public function setAcceptedCompression($compMethod)
     {
         if ($compMethod == 'any') {
-            $this->accepted_compression = array('gzip', 'deflate');
+            $this->options['accepted_compression'] = array('gzip', 'deflate');
         } elseif ($compMethod == false) {
-            $this->accepted_compression = array();
+            $this->options['accepted_compression'] = array();
         } else {
-            $this->accepted_compression = array($compMethod);
+            $this->options['accepted_compression'] = array($compMethod);
         }
         return $this;
     }
@@ -442,10 +492,12 @@ class Client
      *
      * @param string $compMethod either 'gzip', 'deflate' or ''
      * @return $this
+     *
+     * @deprecated use setOption
      */
     public function setRequestCompression($compMethod)
     {
-        $this->request_compression = $compMethod;
+        $this->options['request_compression'] = $compMethod;
         return $this;
     }
 
@@ -471,14 +523,14 @@ class Client
      */
     public function setCookie($name, $value = '', $path = '', $domain = '', $port = null)
     {
-        $this->cookies[$name]['value'] = rawurlencode($value);
+        $this->options['cookies'][$name]['value'] = rawurlencode($value);
         if ($path || $domain || $port) {
-            $this->cookies[$name]['path'] = $path;
-            $this->cookies[$name]['domain'] = $domain;
-            $this->cookies[$name]['port'] = $port;
-            $this->cookies[$name]['version'] = 1;
+            $this->options['cookies'][$name]['path'] = $path;
+            $this->options['cookies'][$name]['domain'] = $domain;
+            $this->options['cookies'][$name]['port'] = $port;
+            $this->options['cookies'][$name]['version'] = 1;
         } else {
-            $this->cookies[$name]['version'] = 0;
+            $this->options['cookies'][$name]['version'] = 0;
         }
         return $this;
     }
@@ -490,23 +542,26 @@ class Client
      *
      * @param array $options
      * @return $this
+     *
+     * @deprecated use setOption
      */
     public function setCurlOptions($options)
     {
-        $this->extracurlopts = $options;
+        $this->options['extracurlopts'] = $options;
         return $this;
     }
 
     /**
      * @param int $useCurlMode self::USE_CURL_ALWAYS, self::USE_CURL_AUTO or self::USE_CURL_NEVER
      * @return $this
+     *
+     * @deprecated use setOption
      */
     public function setUseCurl($useCurlMode)
     {
-        $this->use_curl = $useCurlMode;
+        $this->options['use_curl'] = $useCurlMode;
         return $this;
     }
-
 
     /**
      * Set user-agent string that will be used by this client instance in http headers sent to the server.
@@ -515,20 +570,24 @@ class Client
      *
      * @param string $agentString
      * @return $this
+     *
+     * @deprecated use setOption
      */
     public function setUserAgent($agentString)
     {
-        $this->user_agent = $agentString;
+        $this->options['user_agent'] = $agentString;
         return $this;
     }
 
     /**
      * @param int $timeout
      * @return $this
+     *
+     * @deprecated use setOption
      */
     public function setTimeout($timeout)
     {
-        $this->timeout = $timeout;
+        $this->options['timeout'] = $timeout;
         return $this;
     }
 
@@ -574,7 +633,7 @@ class Client
         }
 
         if ($timeout == 0) {
-            $timeout = $this->timeout;
+            $timeout = $this->options['timeout'];
         }
 
         if (is_array($req)) {
@@ -583,17 +642,17 @@ class Client
 
             return $r;
         } elseif (is_string($req)) {
-            $n = new  static::$requestClass('');
+            $n = new static::$requestClass('');
             $n->payload = $req;
             $req = $n;
         }
 
         // where req is a Request
-        $req->setDebug($this->debug);
+        $req->setDebug($this->options['debug']);
 
         /// @todo we could be smarter about this and force usage of curl in scenarios where it is both available and
         ///       needed, such as digest or ntlm auth. Do not attempt to use it for https if not present
-        $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO &&
+        $useCurl = ($this->options['use_curl'] == self::USE_CURL_ALWAYS) || ($this->options['use_curl'] == self::USE_CURL_AUTO &&
             (in_array($method, array('https', 'http11', 'h2c', 'h2'))));
 
         if ($useCurl) {
@@ -602,24 +661,24 @@ class Client
                 $this->server,
                 $this->port,
                 $timeout,
-                $this->username,
-                $this->password,
-                $this->authtype,
-                $this->cert,
-                $this->certpass,
-                $this->cacert,
-                $this->cacertdir,
-                $this->proxy,
-                $this->proxyport,
-                $this->proxy_user,
-                $this->proxy_pass,
-                $this->proxy_authtype,
+                $this->options['username'],
+                $this->options['password'],
+                $this->options['authtype'],
+                $this->options['cert'],
+                $this->options['certpass'],
+                $this->options['cacert'],
+                $this->options['cacertdir'],
+                $this->options['proxy'],
+                $this->options['proxyport'],
+                $this->options['proxy_user'],
+                $this->options['proxy_pass'],
+                $this->options['proxy_authtype'],
                 // bc
                 $method == 'http11' ? 'http' : $method,
-                $this->keepalive,
-                $this->key,
-                $this->keypass,
-                $this->sslversion
+                $this->options['keepalive'],
+                $this->options['key'],
+                $this->options['keypass'],
+                $this->options['sslversion']
             );
         } else {
             $r = $this->sendPayloadSocket(
@@ -627,22 +686,22 @@ class Client
                 $this->server,
                 $this->port,
                 $timeout,
-                $this->username,
-                $this->password,
-                $this->authtype,
-                $this->cert,
-                $this->certpass,
-                $this->cacert,
-                $this->cacertdir,
-                $this->proxy,
-                $this->proxyport,
-                $this->proxy_user,
-                $this->proxy_pass,
-                $this->proxy_authtype,
+                $this->options['username'],
+                $this->options['password'],
+                $this->options['authtype'],
+                $this->options['cert'],
+                $this->options['certpass'],
+                $this->options['cacert'],
+                $this->options['cacertdir'],
+                $this->options['proxy'],
+                $this->options['proxyport'],
+                $this->options['proxy_user'],
+                $this->options['proxy_pass'],
+                $this->options['proxy_authtype'],
                 $method,
-                $this->key,
-                $this->keypass,
-                $this->sslversion
+                $this->options['key'],
+                $this->options['keypass'],
+                $this->options['sslversion']
             );
         }
 
@@ -753,14 +812,14 @@ class Client
         // Only create the payload if it was not created previously
         /// @todo what if the request's payload was created with a different encoding?
         if (empty($req->payload)) {
-            $req->serialize($this->request_charset_encoding);
+            $req->serialize($this->options['request_charset_encoding']);
         }
 
         $payload = $req->payload;
         // Deflate request body and set appropriate request headers
         $encodingHdr = '';
-        if (function_exists('gzdeflate') && ($this->request_compression == 'gzip' || $this->request_compression == 'deflate')) {
-            if ($this->request_compression == 'gzip') {
+        if (function_exists('gzdeflate') && ($this->options['request_compression'] == 'gzip' || $this->options['request_compression'] == 'deflate')) {
+            if ($this->options['request_compression'] == 'gzip') {
                 $a = @gzencode($payload);
                 if ($a) {
                     $payload = $a;
@@ -786,8 +845,8 @@ class Client
         }
 
         $acceptedEncoding = '';
-        if (is_array($this->accepted_compression) && count($this->accepted_compression)) {
-            $acceptedEncoding = 'Accept-Encoding: ' . implode(', ', $this->accepted_compression) . "\r\n";
+        if (is_array($this->options['accepted_compression']) && count($this->options['accepted_compression'])) {
+            $acceptedEncoding = 'Accept-Encoding: ' . implode(', ', $this->options['accepted_compression']) . "\r\n";
         }
 
         $proxyCredentials = '';
@@ -816,9 +875,9 @@ class Client
 
         // Cookie generation, as per rfc2965 (version 1 cookies) or netscape's rules (version 0 cookies)
         $cookieHeader = '';
-        if (count($this->cookies)) {
+        if (count($this->options['cookies'])) {
             $version = '';
-            foreach ($this->cookies as $name => $cookie) {
+            foreach ($this->options['cookies'] as $name => $cookie) {
                 if ($cookie['version']) {
                     $version = ' $Version="' . $cookie['version'] . '";';
                     $cookieHeader .= ' ' . $name . '="' . $cookie['value'] . '";';
@@ -846,19 +905,19 @@ class Client
         }
 
         $op = 'POST ' . $uri . " HTTP/1.0\r\n" .
-            'User-Agent: ' . $this->user_agent . "\r\n" .
+            'User-Agent: ' . $this->options['user_agent'] . "\r\n" .
             'Host: ' . $server . $port . "\r\n" .
             $credentials .
             $proxyCredentials .
             $acceptedEncoding .
             $encodingHdr .
-            'Accept-Charset: ' . implode(',', $this->accepted_charset_encodings) . "\r\n" .
+            'Accept-Charset: ' . implode(',', $this->options['accepted_charset_encodings']) . "\r\n" .
             $cookieHeader .
             'Content-Type: ' . $req->content_type . "\r\nContent-Length: " .
             strlen($payload) . "\r\n\r\n" .
             $payload;
 
-        if ($this->debug > 1) {
+        if ($this->options['debug'] > 1) {
             $this->getLogger()->debugMessage("---SENDING---\n$op\n---END---");
         }
 
@@ -879,8 +938,8 @@ class Client
             if ($key != '') {
                 $contextOptions['ssl']['local_pk'] = $key;
             }
-            $contextOptions['ssl']['verify_peer'] = $this->verifypeer;
-            $contextOptions['ssl']['verify_peer_name'] = $this->verifypeer;
+            $contextOptions['ssl']['verify_peer'] = $this->options['verifypeer'];
+            $contextOptions['ssl']['verify_peer_name'] = $this->options['verifypeer'];
         }
 
         $context = stream_context_create($contextOptions);
@@ -930,7 +989,7 @@ class Client
         } while (!feof($fp));
         fclose($fp);
 
-        $r = $req->parseResponse($ipd, false, $this->return_type);
+        $r = $req->parseResponse($ipd, false, $this->options['return_type']);
 
         return $r;
     }
@@ -1000,7 +1059,7 @@ class Client
 
         $result = curl_exec($curl);
 
-        if ($this->debug > 1) {
+        if ($this->options['debug'] > 1) {
             $message = "---CURL INFO---\n";
             foreach (curl_getinfo($curl) as $name => $val) {
                 if (is_array($val)) {
@@ -1025,7 +1084,7 @@ class Client
             if (!$keepAlive) {
                 curl_close($curl);
             }
-            $resp = $req->parseResponse($result, true, $this->return_type);
+            $resp = $req->parseResponse($result, true, $this->options['return_type']);
             if ($keepAlive) {
                 /// @todo if we got back a 302 or 308, we should not reuse the curl handle for later calls
                 if ($resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error']) {
@@ -1038,6 +1097,30 @@ class Client
         return $resp;
     }
 
+    /**
+     * @param Request $req
+     * @param string $server
+     * @param int $port
+     * @param int $timeout
+     * @param string $username
+     * @param string $password
+     * @param int $authType
+     * @param string $cert
+     * @param string $certPass
+     * @param string $caCert
+     * @param string $caCertDir
+     * @param string $proxyHost
+     * @param int $proxyPort
+     * @param string $proxyUsername
+     * @param string $proxyPassword
+     * @param $proxyAuthType
+     * @param string $method
+     * @param bool $keepAlive
+     * @param string $key
+     * @param string $keyPass
+     * @param int $sslVersion
+     * @return false|mixed|resource
+     */
     protected function prepareCurlHandle($req, $server, $port, $timeout = 0, $username = '', $password = '',
          $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
          $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'https', $keepAlive = false, $key = '',
@@ -1053,15 +1136,15 @@ class Client
 
         // Only create the payload if it was not created previously
         if (empty($req->payload)) {
-            $req->serialize($this->request_charset_encoding);
+            $req->serialize($this->options['request_charset_encoding']);
         }
 
         // Deflate request body and set appropriate request headers
         $payload = $req->payload;
         $encodingHdr = '';
         /// @todo test for existence of proper function, in case of polyfills
-        if (function_exists('gzdeflate') && ($this->request_compression == 'gzip' || $this->request_compression == 'deflate')) {
-            if ($this->request_compression == 'gzip') {
+        if (function_exists('gzdeflate') && ($this->options['request_compression'] == 'gzip' || $this->options['request_compression'] == 'deflate')) {
+            if ($this->options['request_compression'] == 'gzip') {
                 $a = @gzencode($payload);
                 if ($a) {
                     $payload = $a;
@@ -1105,11 +1188,11 @@ class Client
         // results into variable
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-        if ($this->debug > 1) {
+        if ($this->options['debug'] > 1) {
             curl_setopt($curl, CURLOPT_VERBOSE, true);
             /// @todo allow callers to redirect curlopt_stderr to some stream which can be buffered
         }
-        curl_setopt($curl, CURLOPT_USERAGENT, $this->user_agent);
+        curl_setopt($curl, CURLOPT_USERAGENT, $this->options['user_agent']);
         // required for XMLRPC: post the data
         curl_setopt($curl, CURLOPT_POST, 1);
         // the data
@@ -1120,17 +1203,17 @@ class Client
 
         // NB: if we set an empty string, CURL will add http header indicating
         // ALL methods it is supporting. This is possibly a better option than letting the user tell what curl can / cannot do...
-        if (is_array($this->accepted_compression) && count($this->accepted_compression)) {
-            //curl_setopt($curl, CURLOPT_ENCODING, implode(',', $this->accepted_compression));
+        if (is_array($this->options['accepted_compression']) && count($this->options['accepted_compression'])) {
+            //curl_setopt($curl, CURLOPT_ENCODING, implode(',', $this->options['accepted_compression']));
             // empty string means 'any supported by CURL' (shall we catch errors in case CURLOPT_SSLKEY undefined ?)
-            if (count($this->accepted_compression) == 1) {
-                curl_setopt($curl, CURLOPT_ENCODING, $this->accepted_compression[0]);
+            if (count($this->options['accepted_compression']) == 1) {
+                curl_setopt($curl, CURLOPT_ENCODING, $this->options['accepted_compression'][0]);
             } else {
                 curl_setopt($curl, CURLOPT_ENCODING, '');
             }
         }
         // extra headers
-        $headers = array('Content-Type: ' . $req->content_type, 'Accept-Charset: ' . implode(',', $this->accepted_charset_encodings));
+        $headers = array('Content-Type: ' . $req->content_type, 'Accept-Charset: ' . implode(',', $this->options['accepted_charset_encodings']));
         // if no keepalive is wanted, let the server know it in advance
         if (!$keepAlive) {
             $headers[] = 'Connection: close';
@@ -1191,7 +1274,7 @@ class Client
                 curl_setopt($curl, CURLOPT_SSLCERTPASSWD, $certPass);
             }
             // whether to verify remote host's cert
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->verifypeer);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->options['verifypeer']);
             // set ca certificates file/dir
             if ($caCert) {
                 curl_setopt($curl, CURLOPT_CAINFO, $caCert);
@@ -1209,7 +1292,7 @@ class Client
             }
             // whether to verify cert's common name (CN); 0 for no, 1 to verify that it exists, and 2 to verify that
             // it matches the hostname used
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->verifyhost);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->options['verifyhost']);
             // allow usage of different SSL versions
             curl_setopt($curl, CURLOPT_SSLVERSION, $sslVersion);
         }
@@ -1233,19 +1316,19 @@ class Client
 
         // NB: should we build cookie http headers by hand rather than let CURL do it?
         // the following code does not honour 'expires', 'path' and 'domain' cookie attributes set to client obj the the user...
-        if (count($this->cookies)) {
+        if (count($this->options['cookies'])) {
             $cookieHeader = '';
-            foreach ($this->cookies as $name => $cookie) {
+            foreach ($this->options['cookies'] as $name => $cookie) {
                 $cookieHeader .= $name . '=' . $cookie['value'] . '; ';
             }
             curl_setopt($curl, CURLOPT_COOKIE, substr($cookieHeader, 0, -2));
         }
 
-        foreach ($this->extracurlopts as $opt => $val) {
+        foreach ($this->options['extracurlopts'] as $opt => $val) {
             curl_setopt($curl, $opt, $val);
         }
 
-        if ($this->debug > 1) {
+        if ($this->options['debug'] > 1) {
             $this->getLogger()->debugMessage("---SENDING---\n$payload\n---END---");
         }
 
@@ -1279,9 +1362,9 @@ class Client
             $method = $this->method;
         }
 
-        if (!$this->no_multicall) {
+        if (!$this->options['no_multicall']) {
             $results = $this->_try_multicall($reqs, $timeout, $method);
-            /// @todo how to handle the case of $this->return_type = xml?
+            /// @todo how to handle the case of $this->options['return_type'] = xml?
             if (is_array($results)) {
                 // System.multicall succeeded
                 return $results;
@@ -1290,7 +1373,7 @@ class Client
                 // Feature creep: is there a way to tell apart unsupported multicall from other faults?
                 if ($fallback) {
                     // Don't try it next time...
-                    $this->no_multicall = true;
+                    $this->options['no_multicall'] = true;
                 } else {
                     $result = $results;
                 }
@@ -1357,12 +1440,12 @@ class Client
         $rets = $result->value();
         $response = array();
 
-        if ($this->return_type == 'xml') {
+        if ($this->options['return_type'] == 'xml') {
             for ($i = 0; $i < count($reqs); $i++) {
                 $response[] = new Response($rets, 0, '', 'xml', $result->httpResponse());
             }
 
-        } elseif ($this->return_type == 'phpvals') {
+        } elseif ($this->options['return_type'] == 'phpvals') {
             if (!is_array($rets)) {
                 // bad return type from system.multicall
                 return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
@@ -1475,5 +1558,101 @@ class Client
         }
 
         return $response;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return $this
+     */
+    public function setOption($name, $value)
+    {
+        if (array_key_exists($name, $this->options)) {
+            $this->options[$name] = $value;
+            return $this;
+        }
+/// @todo
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function getOption($name)
+    {
+        if (array_key_exists($name, $this->options)) {
+            return $this->options[$name];
+        }
+/// @todo
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param array $options
+     * @return $this
+     */
+    public function setOptions($options)
+    {
+        foreach($options as $name => $value) {
+            $this->setOption($name, $value);
+        }
+
+        return $this;
+    }
+
+    // BC layer
+
+    public function __get($name)
+    {
+        //trigger_error('getting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
+
+        if (array_key_exists($name, $this->options)) {
+            return $this->options[$name];
+        }
+
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        return null;
+    }
+
+    public function __set($name, $value)
+    {
+        //trigger_error('setting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
+
+        if (array_key_exists($name, $this->options)) {
+            $this->options[$name] = $value;
+            return;
+        }
+
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+    }
+
+    public function __isset($name)
+    {
+        //trigger_error('checking property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
+
+        if (array_key_exists($name, $this->options)) {
+            return isset($this->options[$name]);
+        }
+
+        return false;
+    }
+
+    public function __unset($name)
+    {
+        if (array_key_exists($name, $this->options)) {
+            unset($this->options[$name]);
+        }
+
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
     }
 }
