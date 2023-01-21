@@ -27,8 +27,8 @@
 * new: it is now possible to inject a custom logger into helper classes `Charset`, `Http`, `XMLParser`, inching a step
   closer to supporting DIC patterns
 
-* new: when calling `Wrapper::wrapXmlrpcMethod`, it is possible to pass 'throw_on_fault' as option to argument
-  `$extraOptions`. This will make the generated function throw on errors instead of returning a Response object
+* new: when calling `Wrapper::wrapXmlrpcMethod` and `wrapXmlrpcServer`, it is possible to pass 'throw_on_fault' as option
+  to argument `$extraOptions`. This will make the generated function throw on errors instead of returning a Response object
 
 * improved: all the Client's `setSomething()` methods now return the client object, allowing for usage of fluent style
   calling. The same applies to `Request::setDebug`
