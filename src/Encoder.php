@@ -210,8 +210,7 @@ class Encoder
         $type = gettype($phpVal);
         switch ($type) {
             case 'string':
-                /// @todo should we be stricter in the accepted dates (i.e. reject more of invalid days & times)?
-                if (in_array('auto_dates', $options) && preg_match('/^[0-9]{8}T[0-9]{2}:[0-9]{2}:[0-9]{2}$/', $phpVal)) {
+                if (in_array('auto_dates', $options) && preg_match(PhpXmlRpc::$xmlrpc_datetime_format, $phpVal)) {
                     $xmlrpcVal = new Value($phpVal, Value::$xmlrpcDateTime);
                 } else {
                     $xmlrpcVal = new Value($phpVal, Value::$xmlrpcString);

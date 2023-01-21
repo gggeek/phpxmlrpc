@@ -157,6 +157,13 @@ class PhpXmlRpc
     public static $xmlpc_double_precision = 128;
 
     /**
+     * @var string
+     * Used to validate received date values. Alter this if the server/client you are communicating with uses date
+     * formats non-conformant with the spec
+     */
+    public static $xmlrpc_datetime_format = '/^([0-9]{4})(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9]|60)$/';
+
+    /**
      * A function to be used for compatibility with legacy code: it creates all global variables which used to be declared,
      * such as library version etc...
      * @return void

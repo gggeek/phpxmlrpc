@@ -2,6 +2,8 @@
 
 namespace PhpXmlRpc\Helper;
 
+use PhpXmlRpc\PhpXmlRpc;
+
 /**
  * Helps to convert timestamps to the xml-rpc date format.
  *
@@ -49,7 +51,7 @@ class Date
     public static function iso8601Decode($idate, $utc = 0)
     {
         $t = 0;
-        if (preg_match('/([0-9]{4})([0-1][0-9])([0-3][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])/', $idate, $regs)) {
+        if (preg_match(PhpXmlRpc::$xmlrpc_datetime_format, $idate, $regs)) {
             if ($utc) {
                 $t = gmmktime($regs[4], $regs[5], $regs[6], $regs[2], $regs[3], $regs[1]);
             } else {

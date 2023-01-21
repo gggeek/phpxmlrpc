@@ -559,7 +559,7 @@ class XMLParser
                 if ($name == 'STRING') {
                     $this->_xh['value'] = $this->_xh['ac'];
                 } elseif ($name == 'DATETIME.ISO8601') {
-                    if (!preg_match('/^[0-9]{8}T[0-9]{2}:[0-9]{2}:[0-9]{2}$/', $this->_xh['ac'])) {
+                    if (!preg_match(PhpXmlRpc::$xmlrpc_datetime_format, $this->_xh['ac'])) {
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid value received in DATETIME: ' . $this->_xh['ac']);
                     }
                     $this->_xh['vt'] = Value::$xmlrpcDateTime;
@@ -803,11 +803,11 @@ class XMLParser
         //     in the xml declaration, and verify if they match.
         /// @todo implement check as described above?
         /// @todo implement check for first bytes of string even without a BOM? (It sure looks harder than for cases WITH a BOM)
-        if (preg_match('/^(\x00\x00\xFE\xFF|\xFF\xFE\x00\x00|\x00\x00\xFF\xFE|\xFE\xFF\x00\x00)/', $xmlChunk)) {
+        if (preg_match('/^(?:\x00\x00\xFE\xFF|\xFF\xFE\x00\x00|\x00\x00\xFF\xFE|\xFE\xFF\x00\x00)/', $xmlChunk)) {
             return 'UCS-4';
-        } elseif (preg_match('/^(\xFE\xFF|\xFF\xFE)/', $xmlChunk)) {
+        } elseif (preg_match('/^(?:\xFE\xFF|\xFF\xFE)/', $xmlChunk)) {
             return 'UTF-16';
-        } elseif (preg_match('/^(\xEF\xBB\xBF)/', $xmlChunk)) {
+        } elseif (preg_match('/^(?:\xEF\xBB\xBF)/', $xmlChunk)) {
             return 'UTF-8';
         }
 
@@ -862,11 +862,11 @@ class XMLParser
     {
         // scan the first bytes of the data for a UTF-16 (or other) BOM pattern
         //     (source: http://www.w3.org/TR/2000/REC-xml-20001006)
-        if (preg_match('/^(\x00\x00\xFE\xFF|\xFF\xFE\x00\x00|\x00\x00\xFF\xFE|\xFE\xFF\x00\x00)/', $xmlChunk)) {
+        if (preg_match('/^(?:\x00\x00\xFE\xFF|\xFF\xFE\x00\x00|\x00\x00\xFF\xFE|\xFE\xFF\x00\x00)/', $xmlChunk)) {
             return true;
-        } elseif (preg_match('/^(\xFE\xFF|\xFF\xFE)/', $xmlChunk)) {
+        } elseif (preg_match('/^(?:\xFE\xFF|\xFF\xFE)/', $xmlChunk)) {
             return true;
-        } elseif (preg_match('/^(\xEF\xBB\xBF)/', $xmlChunk)) {
+        } elseif (preg_match('/^(?:\xEF\xBB\xBF)/', $xmlChunk)) {
             return true;
         }
 
@@ -876,7 +876,7 @@ class XMLParser
         // EQ:            SPACE?=SPACE? === [ \x9\xD\xA]*=[ \x9\xD\xA]*
         if (preg_match('/^<\?xml\s+version\s*=\s*' . "((?:\"[a-zA-Z0-9_.:-]+\")|(?:'[a-zA-Z0-9_.:-]+'))" .
             '\s+encoding\s*=\s*' . "((?:\"[A-Za-z][A-Za-z0-9._-]*\")|(?:'[A-Za-z][A-Za-z0-9._-]*'))/",
-            $xmlChunk, $matches)) {
+            $xmlChunk)) {
             return true;
         }
 
