@@ -8,32 +8,61 @@ use PhpXmlRpc\Helper\Charset;
  * This class provides the representation of the response of an XML-RPC server.
  * Server-side, a server method handler will construct a Response and pass it as its return value.
  * An identical Response object will be returned by the result of an invocation of the send() method of the Client class.
+ *
+ * @property array $hdrs deprecated, use $httpResponse['headers']
+ * @property array _cookies deprecated, use $httpResponse['cookies']
+ * @property string $raw_data deprecated, use $httpResponse['raw_data']
  */
 class Response
 {
+    protected static $charsetEncoder;
+
     /// @todo: do these need to be public?
+    /** @internal */
     public $val = 0;
+    /** @internal */
     public $valtyp;
+    /** @internal */
     public $errno = 0;
+    /** @internal */
     public $errstr = '';
     public $payload;
-    public $hdrs = array();
-    public $_cookies = array();
+    /** @var string */
     public $content_type = 'text/xml';
-    public $raw_data = '';
+    protected $httpResponse = array('headers' => array(), 'cookies' => array(), 'raw_data' => '', 'status_code' => null);
+
+    public function getCharsetEncoder()
+    {
+        if (self::$charsetEncoder === null) {
+            self::$charsetEncoder = Charset::instance();
+        }
+        return self::$charsetEncoder;
+    }
 
     /**
-     * @param mixed $val either a Value object, a php value or the xml serialization of an xmlrpc value (a string)
+     * @param $charsetEncoder
+     * @return void
+     *
+     * @todo this should be a static method
+     */
+    public function setCharsetEncoder($charsetEncoder)
+    {
+        self::$charsetEncoder = $charsetEncoder;
+    }
+
+    /**
+     * @param Value|string|mixed $val either a Value object, a php value or the xml serialization of an xmlrpc value (a string)
      * @param integer $fCode set it to anything but 0 to create an error response. In that case, $val is discarded
      * @param string $fString the error string, in case of an error response
      * @param string $valType The type of $val passed in. Either 'xmlrpcvals', 'phpvals' or 'xml'. Leave empty to let
      *                        the code guess the correct type.
+     * @param array|null $httpResponse
      *
      * @todo add check that $val / $fCode / $fString is of correct type???
      *       NB: as of now we do not do it, since it might be either an xmlrpc value or a plain php val, or a complete
      *       xml chunk, depending on usage of Client::send() inside which creator is called...
      */
-    public function __construct($val, $fCode = 0, $fString = '', $valType = '')
+    public function __construct($val, $fCode = 0, $fString = '', $valType = '', $httpResponse = null)
     {
         if ($fCode != 0) {
             // error response
@@ -55,6 +84,10 @@ class Response
                 // user declares type of resp value: believe him
                 $this->valtyp = $valType;
             }
+        }
+
+        if (is_array($httpResponse)) {
+            $this->httpResponse = array_merge(array('headers' => array(), 'cookies' => array(), 'raw_data' => '', 'status_code' => null), $httpResponse);
         }
     }
 
@@ -98,20 +131,26 @@ class Response
      * It is up to the user-defined code to decide how to use the received cookies, and whether they have to be sent back
      * with the next request to the server (using Client::setCookie) or not.
      *
-     * @return array array of cookies received from the server
+     * @return array[] array of cookies received from the server
      */
     public function cookies()
     {
-        return $this->_cookies;
+        return $this->httpResponse['cookies'];
+    }
+
+    /**
+     * @return array array with keys 'headers', 'cookies', 'raw_data' and 'status_code'
+     */
+    public function httpResponse()
+    {
+        return $this->httpResponse;
     }
 
     /**
      * Returns xml representation of the response. XML prologue not included.
      *
      * @param string $charsetEncoding the charset to be used for serialization. If null, US-ASCII is assumed
-     *
      * @return string the xml representation of the response
-     *
      * @throws \Exception
      */
     public function serialize($charsetEncoding = '')
@@ -127,12 +166,11 @@ class Response
             $result = "<methodResponse>\n";
         }
         if ($this->errno) {
-            // G. Giunta 2005/2/13: let non-ASCII response messages be tolerated by clients
-            // by xml-encoding non ascii chars
+            // Let non-ASCII response messages be tolerated by clients by xml-encoding non ascii chars
             $result .= "<fault>\n" .
                 "<value>\n<struct><member><name>faultCode</name>\n<value><int>" . $this->errno .
                 "</int></value>\n</member>\n<member>\n<name>faultString</name>\n<value><string>" .
-                Charset::instance()->encodeEntities($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</string></value>\n</member>\n" .
+                $this->getCharsetEncoder()->encodeEntities($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</string></value>\n</member>\n" .
                 "</struct>\n</value>\n</fault>";
         } else {
             if (!is_object($this->val) || !is_a($this->val, 'PhpXmlRpc\Value')) {
@@ -141,7 +179,7 @@ class Response
                         $this->val .
                         "</param>\n</params>";
                 } else {
-                    /// @todo try to build something serializable?
+                    /// @todo try to build something serializable using the Encoder...
                     throw new \Exception('cannot serialize xmlrpc response objects whose content is native php values');
                 }
             } else {
@@ -154,5 +192,79 @@ class Response
         $this->payload = $result;
 
         return $result;
+    }
+
+    // BC layer
+
+    public function __get($name)
+    {
+        //trigger_error('getting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
+
+        switch ($name) {
+            case 'hdrs':
+                return $this->httpResponse['headers'];
+            case '_cookies':
+                return $this->httpResponse['cookies'];
+            case 'raw_data':
+                return $this->httpResponse['raw_data'];
+            default:
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+                return null;
+        }
+    }
+
+    public function __set($name, $value)
+    {
+        //trigger_error('setting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
+
+        switch ($name) {
+            case 'hdrs':
+                $this->httpResponse['headers'] = $value;
+                break;
+            case '_cookies':
+                $this->httpResponse['cookies'] = $value;
+                break;
+            case 'raw_data':
+                $this->httpResponse['raw_data'] = $value;
+                break;
+            default:
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
+    }
+
+    public function __isset($name)
+    {
+        //trigger_error('checking property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
+
+        switch ($name) {
+            case 'hdrs':
+                return isset($this->httpResponse['headers']);
+            case '_cookies':
+                return isset($this->httpResponse['cookies']);
+            case 'raw_data':
+                return isset($this->httpResponse['raw_data']);
+            default:
+                return false;
+        }
+    }
+
+    public function __unset($name)
+    {
+        switch ($name) {
+            case 'hdrs':
+                unset($this->httpResponse['headers']);
+                break;
+            case '_cookies':
+                unset($this->httpResponse['cookies']);
+                break;
+            case 'raw_data':
+                unset($this->httpResponse['raw_data']);
+                break;
+            default:
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
     }
 }

@@ -41,21 +41,36 @@
  * This file is only used to insure backwards compatibility
  * with the API of the library <= rev. 3
  *
- * If it is included, the library will work without any further autoloading
+ * If it is included, the library will work without any further autoloading.
+ *
+ * NB: including this file will also alter the library configuration setting the
+ * expected charset encoding used by the app to ISO-8859-1. Please see the
+ * file api_changes_v4.md for how to change this if required.
  *****************************************************************************/
 
-include_once(__DIR__.'/../src/PhpXmlRpc.php');
-include_once(__DIR__.'/../src/Value.php');
-include_once(__DIR__.'/../src/Request.php');
-include_once(__DIR__.'/../src/Response.php');
 include_once(__DIR__.'/../src/Client.php');
 include_once(__DIR__.'/../src/Encoder.php');
+include_once(__DIR__.'/../src/PhpXmlRpc.php');
+include_once(__DIR__.'/../src/Request.php');
+include_once(__DIR__.'/../src/Response.php');
+include_once(__DIR__.'/../src/Value.php');
+include_once(__DIR__.'/../src/Exception/PhpXmlrpcException.php');
+include_once(__DIR__.'/../src/Exception/HttpException.php');
 include_once(__DIR__.'/../src/Helper/Charset.php');
 include_once(__DIR__.'/../src/Helper/Date.php');
 include_once(__DIR__.'/../src/Helper/Http.php');
 include_once(__DIR__.'/../src/Helper/Logger.php');
 include_once(__DIR__.'/../src/Helper/XMLParser.php');
 
+use PhpXmlRpc\Client;
+use PhpXmlRpc\Encoder;
+use PhpXmlRpc\Request;
+use PhpXmlRpc\Response;
+use PhpXmlRpc\Value;
+use PhpXmlRpc\Helper\Charset;
+use PhpXmlRpc\Helper\Date;
+use PhpXmlRpc\Helper\Http;
+use PhpXmlRpc\Helper\XMLParser;
 
 /* Expose the global variables which used to be defined */
 PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1'; // old default
@@ -79,7 +94,10 @@ $GLOBALS['xmlrpc_backslash'] = chr(92).chr(92);
 
 /* Expose with the old names the classes which have been namespaced */
 
-class xmlrpcval extends PhpXmlRpc\Value
+/**
+ * @todo reinstate access to method serializedata ?
+ */
+class xmlrpcval extends Value
 {
     /**
      * @deprecated
@@ -140,20 +158,27 @@ class xmlrpcval extends PhpXmlRpc\Value
     }
 
     /// reset functionality added by parent class: same as it would happen if no interface was declared
-    public function getIterator() {
+    public function getIterator()
+    {
         return new ArrayIterator($this);
     }
 }
 
-class xmlrpcmsg extends PhpXmlRpc\Request
+/**
+ * @todo reinstate access to method parseResponseHeaders ?
+ */
+class xmlrpcmsg extends Request
 {
 }
 
-class xmlrpcresp extends PhpXmlRpc\Response
+class xmlrpcresp extends Response
 {
 }
 
-class xmlrpc_client extends PhpXmlRpc\Client
+/**
+ * @todo reinstate access to methods sendPayloadHTTP10, sendPayloadHTTPS, sendPayloadCURL, _try_multicall ?
+ */
+class xmlrpc_client extends Client
 {
 }
 
@@ -162,53 +187,53 @@ class xmlrpc_client extends PhpXmlRpc\Client
 /// Wrong speling, but we are adamant on backwards compatibility!
 function xmlrpc_encode_entitites($data, $srcEncoding='', $destEncoding='')
 {
-    return PhpXmlRpc\Helper\Charset::instance()->encodeEntitites($data, $srcEncoding, $destEncoding);
+    return Charset::instance()->encodeEntities($data, $srcEncoding, $destEncoding);
 }
 
 function iso8601_encode($timeT, $utc=0)
 {
-    return PhpXmlRpc\Helper\Date::iso8601Encode($timeT, $utc);
+    return Date::iso8601Encode($timeT, $utc);
 }
 
 function iso8601_decode($iDate, $utc=0)
 {
-    return PhpXmlRpc\Helper\Date::iso8601Decode($iDate, $utc);
+    return Date::iso8601Decode($iDate, $utc);
 }
 
 function decode_chunked($buffer)
 {
-    return PhpXmlRpc\Helper\Http::decodeChunked($buffer);
+    return Http::decodeChunked($buffer);
 }
 
 function php_xmlrpc_decode($xmlrpcVal, $options=array())
 {
-    $encoder = new PhpXmlRpc\Encoder();
+    $encoder = new Encoder();
     return $encoder->decode($xmlrpcVal, $options);
 }
 
 function php_xmlrpc_encode($phpVal, $options=array())
 {
-    $encoder = new PhpXmlRpc\Encoder();
+    $encoder = new Encoder();
     return $encoder->encode($phpVal, $options);
 }
 
 function php_xmlrpc_decode_xml($xmlVal, $options=array())
 {
-    $encoder = new PhpXmlRpc\Encoder();
+    $encoder = new Encoder();
     return $encoder->decodeXml($xmlVal, $options);
 }
 
 function guess_encoding($httpHeader='', $xmlChunk='', $encodingPrefs=null)
 {
-    return PhpXmlRpc\Helper\XMLParser::guessEncoding($httpHeader, $xmlChunk, $encodingPrefs);
+    return XMLParser::guessEncoding($httpHeader, $xmlChunk, $encodingPrefs);
 }
 
 function has_encoding($xmlChunk)
 {
-    return PhpXmlRpc\Helper\XMLParser::hasEncoding($xmlChunk);
+    return XMLParser::hasEncoding($xmlChunk);
 }
 
 function is_valid_charset($encoding, $validList)
 {
-    return PhpXmlRpc\Helper\Charset::instance()->isValidCharset($encoding, $validList);
+    return Charset::instance()->isValidCharset($encoding, $validList);
 }

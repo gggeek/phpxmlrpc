@@ -1,99 +1,54 @@
 <?php
+/**
+ * A basic comment server. Given an ID it will store a list of names and comment texts against it.
+ *
+ * The source code demonstrates:
+ * - registration of php class methods as xml-rpc method handlers
+ * - usage as method handlers of php code which is completely unaware of xml-rpc, via the Server's properties
+ *   `$functions_parameters_type` and `$exception_handling`
+ */
 
-include_once __DIR__ . "/../../vendor/autoload.php";
+require_once __DIR__ . "/_prepend.php";
 
+require_once __DIR__.'/methodProviders/CommentManager.php';
+
+use PhpXmlRpc\Server;
 use PhpXmlRpc\Value;
+
+$manager = new CommentManager();
 
 $addComment_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcString, Value::$xmlrpcString, Value::$xmlrpcString));
 
-$addComment_doc = 'Adds a comment to an item. The first parameter
-is the item ID, the second the name of the commenter, and the third
-is the comment itself. Returns the number of comments against that
-ID.';
-
-function addComment($req)
-{
-    $err = "";
-    // since validation has already been carried out for us,
-    // we know we got exactly 3 string values
-    $encoder = new PhpXmlRpc\Encoder();
-    $n = $encoder->decode($req);
-    $msgID = $n[0];
-    $name = $n[1];
-    $comment = $n[2];
-
-    $dbh = dba_open("/tmp/comments.db", "c", "db2");
-    if ($dbh) {
-        $countID = "${msgID}_count";
-        if (dba_exists($countID, $dbh)) {
-            $count = dba_fetch($countID, $dbh);
-        } else {
-            $count = 0;
-        }
-        // add the new comment in
-        dba_insert($msgID . "_comment_${count}", $comment, $dbh);
-        dba_insert($msgID . "_name_${count}", $name, $dbh);
-        $count++;
-        dba_replace($countID, $count, $dbh);
-        dba_close($dbh);
-    } else {
-        $err = "Unable to open comments database.";
-    }
-    // if we generated an error, create an error return response
-    if ($err) {
-        return new PhpXmlRpc\Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
-    } else {
-        // otherwise, we create the right response
-        return new PhpXmlRpc\Response(new PhpXmlRpc\Value($count, "int"));
-    }
-}
+$addComment_doc = 'Adds a comment to an item. The first parameter is the item ID, the second the name of the commenter, ' .
+    'and the third is the comment itself. Returns the number of comments against that ID.';
 
 $getComments_sig = array(array(Value::$xmlrpcArray, Value::$xmlrpcString));
 
-$getComments_doc = 'Returns an array of comments for a given ID, which
-is the sole argument. Each array item is a struct containing name
-and comment text.';
+$getComments_doc = 'Returns an array of comments for a given ID, which is the sole argument. Each array item is a struct ' .
+    'containing name and comment text.';
 
-function getComments($req)
-{
-    $err = "";
-    $ra = array();
-    $encoder = new PhpXmlRpc\Encoder();
-    $msgID = $encoder->decode($req->getParam(0));
-    $dbh = dba_open("/tmp/comments.db", "r", "db2");
-    if ($dbh) {
-        $countID = "${msgID}_count";
-        if (dba_exists($countID, $dbh)) {
-            $count = dba_fetch($countID, $dbh);
-            for ($i = 0; $i < $count; $i++) {
-                $name = dba_fetch("${msgID}_name_${i}", $dbh);
-                $comment = dba_fetch("${msgID}_comment_${i}", $dbh);
-                // push a new struct onto the return array
-                $ra[] = array(
-                    "name" => $name,
-                    "comment" => $comment,
-                );
-            }
-        }
-    }
-    // if we generated an error, create an error return response
-    if ($err) {
-        return new PhpXmlRpc\Response(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerruser, $err);
-    } else {
-        // otherwise, we create the right response
-        return new PhpXmlRpc\Response($encoder->encode($ra));
-    }
-}
+$srv = new Server();
 
-$srv = new PhpXmlRpc\Server(array(
+$srv->setDispatchMap(array(
     "discuss.addComment" => array(
-        "function" => "addComment",
+        "function" => array($manager, "addComment"),
         "signature" => $addComment_sig,
         "docstring" => $addComment_doc,
     ),
     "discuss.getComments" => array(
-        "function" => "getComments",
+        "function" => array($manager, "getComments"),
         "signature" => $getComments_sig,
         "docstring" => $getComments_doc,
     ),
 ));
+
+// let the xml-rpc server know that the method-handler functions expect plain php values
+$srv->functions_parameters_type = 'phpvals';
+
+// let code exceptions float all the way to the remote caller as xml-rpc faults - it helps debugging.
+// At the same time, it opens a wide security hole, and should never be enabled on public or production servers...
+//$srv->exception_handling = 1;
+
+// NB: take care not to output anything else after this call, as it will mess up the responses and it will be hard to
+// debug. In case you have to do so, at least re-emit a correct Content-Length http header (requires output buffering)
+$srv->service();

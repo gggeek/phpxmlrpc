@@ -1,30 +1,65 @@
-<html>
-<head><title>xmlrpc - Which toolkit demo</title></head>
+<?php
+require_once __DIR__ . "/_prepend.php";
+
+output('<html lang="en">
+<head><title>phpxmlrpc - Which toolkit demo</title></head>
 <body>
 <h1>Which toolkit demo</h1>
 <h2>Query server for toolkit information</h2>
-<h3>The code demonstrates usage of the PhpXmlRpc\Encoder class</h3>
-<?php
+<h3>The code demonstrates support for http redirects, the `interopEchoTests.whichToolkit` xml-rpc methods, request compression and use of pre-built xml</h3>
+<p>You can see the source to this page here: <a href="which.php?showSource=1">which.php</a></p>
+');
 
-include_once __DIR__ . "/../../src/Autoloader.php";
-PhpXmlRpc\Autoloader::register();
+use PhpXmlRpc\Client;
+use PhpXmlRpc\Encoder;
 
-$req = new PhpXmlRpc\Request('interopEchoTests.whichToolkit', array());
-$client = new PhpXmlRpc\Client("http://phpxmlrpc.sourceforge.net/server.php");
-$resp = $client->send($req);
+// use a pre-built request payload
+$payload = '<?xml version="1.0"?>
+<methodCall>
+    <methodName>interopEchoTests.whichToolkit</methodName>
+    <params/>
+</methodCall>';
+output("XML custom request:<br/><pre>" . htmlspecialchars($payload) . "</pre>\n");
+
+$client = new Client(XMLRPCSERVER);
+
+// to support http redirects we have to force usage of cURL even for http 1.0 requests
+$client->setUseCurl(Client::USE_CURL_ALWAYS);
+$client->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
+
+// if we know that the server supports them, we can enable sending of compressed requests
+$client->setRequestCompression('gzip');
+
+// ask the client to give us back xml
+$client->return_type = 'xml';
+
+$client->setDebug(1);
+
+$resp = $client->send($payload);
+
 if (!$resp->faultCode()) {
-    $encoder = new PhpXmlRpc\Encoder();
-    $value = $encoder->decode($resp->value());
-    print "<pre>";
-    print "name: " . htmlspecialchars($value["toolkitName"]) . "\n";
-    print "version: " . htmlspecialchars($value["toolkitVersion"]) . "\n";
-    print "docs: " . htmlspecialchars($value["toolkitDocsUrl"]) . "\n";
-    print "os: " . htmlspecialchars($value["toolkitOperatingSystem"]) . "\n";
-    print "</pre>";
+
+    $xml = $resp->value();
+    output("XML response:<br/><pre>" . htmlspecialchars($xml) . "</pre>\n");
+
+    $encoder = new Encoder();
+    // from xml to xml-rpc Response
+    $response = $encoder->decodeXml($xml);
+    // from Response to Value
+    $value = $response->value();
+    // from Value to php
+    $value = $encoder->decode($value);
+
+    output("Toolkit info:<br/>\n");
+    output("<pre>");
+    output("name: " . htmlspecialchars($value["toolkitName"]) . "\n");
+    output("version: " . htmlspecialchars($value["toolkitVersion"]) . "\n");
+    output("docs: " . htmlspecialchars($value["toolkitDocsUrl"]) . "\n");
+    output("os: " . htmlspecialchars($value["toolkitOperatingSystem"]) . "\n");
+    output("</pre>");
 } else {
-    print "An error occurred: ";
-    print "Code: " . htmlspecialchars($resp->faultCode()) . " Reason: '" . htmlspecialchars($resp->faultString()) . "'\n";
+    output("An error occurred: ");
+    output("Code: " . htmlspecialchars($resp->faultCode()) . " Reason: '" . htmlspecialchars($resp->faultString()) . "'\n");
 }
-?>
-</body>
-</html>
+
+output("</body></html>\n");

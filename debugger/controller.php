@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Gaetano Giunta
- * @copyright (C) 2005-2015 G. Giunta
+ * @copyright (C) 2005-2023 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  *
  * @todo add links to documentation from every option caption
@@ -10,9 +10,11 @@
  * @todo add support for more options, such as ntlm auth to proxy, or request charset encoding
  * @todo parse content of payload textarea to be fed to visual editor
  * @todo add http no-cache headers
+ * @todo if jsonrpc php classes are not available, gray out or hide altogether the JSONRPC option & title
+ * @todo if js libs are not available, do not try to load them
  **/
 
-// make sure we set the correct charset type for output, so that we can display all characters
+// Make sure we set the correct charset type for output, so that we can display all characters
 header('Content-Type: text/html; charset=utf-8');
 
 include __DIR__ . '/common.php';
@@ -20,72 +22,108 @@ if ($action == '') {
     $action = 'list';
 }
 
-// relative path to the visual xmlrpc editing dialog
-$editorpath = '../../phpjsrpc/debugger/';
-$editorlibs = '../../phpjsrpc/lib/';
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+$haseditor = false;
+$editorurlpath = null;
+// @const JSXMLRPC_BASEURL Url to the visual xml-rpc editing dialog's containing folder. We allow to easily configure this
+if (defined('JSXMLRPC_BASEURL')) {
+    $editorurlpath = JSXMLRPC_BASEURL;
+    $haseditor = true;
+} else {
+    /// @deprecated
+    /// @const JSXMLRPC_PATH Path to the visual xml-rpc editing dialog's containing folder. Can be absolute, or
+    ///         relative to this debugger's folder.
+    if (defined('JSXMLRPC_PATH')) {
+        $editorpaths = array(JSXMLRPC_PATH[0] === '/' ? JSXMLRPC_PATH : (__DIR__ . '/' . JSXMLRPC_PATH));
+    } else {
+        $editorpaths = array(
+            __DIR__ . '/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via taskfile
+            __DIR__ . '/vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via composer inside the debugger
+            __DIR__ . '/node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via npm inside the debugger
+            __DIR__ . '/../vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via composer
+            __DIR__ . '/../node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is top-level, jsxmlrpc installed via npm
+            __DIR__ . '/../../jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc too
+            __DIR__ . '/../../../../debugger/jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc installed in the top-level via taskfile (ie. jsonrpc)
+            __DIR__ . '/../../../../debugger/vendor/phpxmlrpc/jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc installed in the top-level debugger via composer
+            __DIR__ . '/../../../../debugger/node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc installed in the top-level debugger via npm
+            __DIR__ . '/../../../../node_modules/@jsxmlrpc/jsxmlrpc/debugger/', // this package is a composer dependency, jsxmlrpc installed via npm in the top-level project
+        );
+    }
+    foreach($editorpaths as $editorpath) {
+        if (is_file(realpath($editorpath . 'visualeditor.html'))) {
+            $haseditor = true;
+            break;
+        }
+    }
+    if ($haseditor) {
+        $controllerRootUrl = str_replace('/controller.php', '', parse_url($_SERVER['REQUEST_URI'],  PHP_URL_PATH));
+        $editorurlpath = $controllerRootUrl . '/' . preg_replace('|^' . preg_quote(__DIR__, '|') .'|', '', $editorpath);
+        /// @todo for cases above 4 and up, look at $controllerRootUrl and check if the web root is not pointing directly
+        ///       at this folder, as in that case the link to the visualeditor will not
+        ///       work, as it will be in the form http(s)://domain/../../jsxmlrpc/debugger/visualeditor.html
+    }
+}
+?><!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>XMLRPC Debugger</title>
+    <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
+    <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSON-RPC'; else echo 'XML-RPC'; ?> Debugger</title>
     <meta name="robots" content="index,nofollow"/>
     <script type="text/javascript" language="Javascript">
         if (window.name != 'frmcontroller')
             top.location.replace('index.php?run=' + escape(self.location));
     </script>
-    <!-- xmlrpc/jsonrpc base library -->
-    <script type="text/javascript" src="<?php echo $editorlibs; ?>xmlrpc_lib.js"></script>
-    <script type="text/javascript" src="<?php echo $editorlibs; ?>jsonrpc_lib.js"></script>
-    <style type="text/css">
+    <!-- xml-rpc/json-rpc base library -->
+    <script type="module">
+        import {base64_decode} from 'https://cdn.jsdelivr.net/npm/@jsxmlrpc/jsxmlrpc@0.6/lib/index.js';
+        window.base64_decode = base64_decode;
+    </script>
+    <style>
         <!--
         html {
             overflow: -moz-scrollbars-vertical;
         }
-
         body {
             padding: 0.5em;
             background-color: #EEEEEE;
-            font-family: Verdana, Arial, Helvetica;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
             font-size: 8pt;
         }
-
         h1 {
             font-size: 12pt;
             margin: 0.5em;
+            display: inline-block;
         }
-
         h2 {
             font-size: 10pt;
             display: inline;
             vertical-align: top;
         }
-
+        h3 {
+            display: inline;
+        }
         table {
             border: 1px solid gray;
             margin-bottom: 0.5em;
             padding: 0.25em;
             width: 100%;
         }
-
         #methodpayload {
             display: inline;
         }
-
+        #idcell {
+            visibility: hidden;
+        }
         td {
             vertical-align: top;
-            font-family: Verdana, Arial, Helvetica;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
             font-size: 8pt;
         }
-
         .labelcell {
             text-align: right;
         }
-
         -->
     </style>
-    <script language="JavaScript" type="text/javascript">
-        <!--
+    <script type="text/javascript">
         function verifyserver() {
             if (document.frmaction.host.value == '') {
                 alert('Please insert a server name or address');
@@ -105,6 +143,7 @@ $editorlibs = '../../phpjsrpc/lib/';
             if (document.frmaction.authtype.value != '1' && document.frmaction.username.value == '') {
                 alert('No username for authenticating to server: authentication disabled');
             }
+
             return true;
         }
 
@@ -138,7 +177,7 @@ $editorlibs = '../../phpjsrpc/lib/';
         }
 
         function switchssl() {
-            if (document.frmaction.protocol.value != '2') {
+            if (document.frmaction.protocol.value != '2' && document.frmaction.protocol.value != '3') {
                 document.frmaction.verifypeer.disabled = true;
                 document.frmaction.verifyhost.disabled = true;
                 document.frmaction.cainfo.disabled = true;
@@ -185,7 +224,7 @@ $editorlibs = '../../phpjsrpc/lib/';
         }
 
         function displaydialogeditorbtn(show) {
-            if (show && ((typeof base64_decode) == 'function')) {
+            if (show && <?php echo $haseditor ? 'true' : 'false'; ?>) {
                 document.getElementById('methodpayloadbtn').innerHTML = '[<a href="#" onclick="activateeditor(); return false;">Edit</a>]';
             }
             else {
@@ -194,7 +233,7 @@ $editorlibs = '../../phpjsrpc/lib/';
         }
 
         function activateeditor() {
-            var url = '<?php echo $editorpath; ?>visualeditor.php?params=<?php echo $alt_payload; ?>';
+            var url = '<?php echo $editorurlpath; ?>visualeditor.html?params=<?php echo str_replace(array("\\", "'"), array( "\\\\", "\\'"), $alt_payload); ?>';
             if (document.frmaction.wstype.value == "1")
                 url += '&type=jsonrpc';
             var wnd = window.open(url, '_blank', 'width=750, height=400, location=0, resizable=1, menubar=0, scrollbars=1');
@@ -212,31 +251,47 @@ $editorlibs = '../../phpjsrpc/lib/';
 
         // use GET for ease of refresh, switch to POST when payload is too big to fit in url (in IE: 2048 bytes! see http://support.microsoft.com/kb/q208427/)
         function switchFormMethod() {
-            /// @todo use a more precise calculation, adding the rest of the fields to the actual generated url lenght
+            /// @todo use a more precise calculation, adding the rest of the fields to the actual generated url length -
+            ///       retrieve first max url length for current browsers and webservers
             if (document.frmaction.methodpayload.value.length > 1536) {
                 document.frmaction.action = 'action.php?usepost=true';
                 document.frmaction.method = 'post';
             }
+            /*let form = document.forms[0];
+            let formData = new FormData(form);
+            let search = new URLSearchParams(formData);
+            let queryString = search.toString();
+            alert(queryString);alert(queryString.length);*/
         }
-
-        //-->
     </script>
 </head>
 <body
-    onload="switchtransport(<?php echo $wstype; ?>); switchaction(); switchssl(); switchauth(); swicthcainfo();<?php if ($run) {
-        echo ' document.forms[2].submit();';
+    onload="<?php if ($hasjsonrpcclient) echo "switchtransport($wstype); " ?>switchaction(); switchssl(); switchauth(); swicthcainfo();<?php if ($run) {
+        echo ' document.frmaction.submit();';
     } ?>">
-<h1>XMLRPC
-    <form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);"/></form>
-    /
-    <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>
-    JSONRPC Debugger (based on the <a href="http://gggeek.github.io/phpxmlrpc/">PHP-XMLRPC</a> library)
-</h1>
+<h1>XML-RPC
+<?php if ($hasjsonrpcclient) {
+    echo '<form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);"';
+    // q: does this if make sense at all?
+    if (!class_exists('\PhpXmlRpc\Client')) echo ' disabled="disabled"';
+    echo ' /></form> / <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>
+    JSON-RPC';
+} ?>
+Debugger</h1><h3>(based on <a href="https://gggeek.github.io/phpxmlrpc/">PHPXMLRPC</a>, ver. <?php echo htmlspecialchars(\PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion)?>
+<?php if (class_exists('\PhpXmlRpc\JsonRpc\PhpJsonRpc')) echo ' and <a href="https://gggeek.github.io/phpxmlrpc-jsonrpc/">PHPJOSNRPC</a>, ver. ' . htmlspecialchars(\PhpXmlRpc\JsonRpc\PhpJsonRpc::$jsonrpcVersion); ?>)</h3>
 <form name="frmaction" method="get" action="action.php" target="frmaction" onSubmit="switchFormMethod();">
 
     <table id="serverblock">
         <tr>
             <td><h2>Target server</h2></td>
+            <td class="labelcell">Protocol:</td>
+            <td><select name="protocol" onchange="switchssl(); switchauth(); swicthcainfo();">
+                <option value="0"<?php if ($protocol == 0) { echo ' selected="selected"'; } ?>>HTTP 1.0</option>
+                <option value="1"<?php if ($protocol == 1) { echo ' selected="selected"'; } ?>>HTTP 1.1</option>
+                <option value="2"<?php if ($protocol == 2) { echo ' selected="selected"'; } ?>>HTTPS</option>
+                <option value="3"<?php if ($protocol == 3) { echo ' selected="selected"'; } ?>>HTTP2</option>
+                <option value="4"<?php if ($protocol == 3) { echo ' selected="selected"'; } ?>>HTTP2 no TLS</option>
+            </select></td>
             <td class="labelcell">Address:</td>
             <td><input type="text" name="host" value="<?php echo htmlspecialchars($host, ENT_COMPAT, $inputcharset); ?>"/></td>
             <td class="labelcell">Port:</td>
@@ -285,12 +340,8 @@ $editorlibs = '../../phpjsrpc/lib/';
             </td>
             <td class="labelcell">Timeout:</td>
             <td><input type="text" name="timeout" size="3" value="<?php if ($timeout > 0) { echo $timeout; } ?>"/></td>
-            <td class="labelcell">Protocol:</td>
-            <td><select name="protocol" onchange="switchssl(); switchauth(); swicthcainfo();">
-                    <option value="0"<?php if ($protocol == 0) { echo ' selected="selected"'; } ?>>HTTP 1.0</option>
-                    <option value="1"<?php if ($protocol == 1) { echo ' selected="selected"'; } ?>>HTTP 1.1</option>
-                    <option value="2"<?php if ($protocol == 2) { echo ' selected="selected"'; } ?>>HTTPS</option>
-                </select></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td class="labelcell">AUTH:</td>

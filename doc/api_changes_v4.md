@@ -116,7 +116,7 @@ Character sets and encoding
 The default character set used by the library to deliver data to your app is now UTF8.
 It is also the character set that the library expects data from your app to be in (including method names).
 The value can be changed (to either US-ASCII or ISO-8859-1) by setting the desired value to
-    PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding
+    `PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding`
 
 Usage of closures for wrapping
 ------------------------------
@@ -127,14 +127,14 @@ Usage of closures for wrapping
 Differences in server behaviour
 -------------------------------
 
-The results for calls to system.listMethods and system.getCapabilities can not be set anymore via changes to
+The results for calls to `system.listMethods` and `system.getCapabilities` can not be set anymore via changes to
 global variables.
 
 
 Other
 -----
 
-* when serialize() is invoked on a response and its payload can not be serialized, an exception is thrown instead of
+* when `serialize()` is invoked on a response and its payload can not be serialized, an exception is thrown instead of
   ending all execution
 
 * all error messages now mention the class and method which generated them
@@ -148,10 +148,10 @@ Enabling compatibility with legacy code
 ---------------------------------------
 
 If you have code which relies on version 3 of the phpxmlrpc API, you *should* be able to use version 4 as a drop-in
-replacement, regardless of all of the changes mentioned above.
+replacement, regardless of all the changes mentioned above.
 
-The magic happens via the xmlrpc.inc, xmlrpcs.inc and xmlrpc_wrappers.inc files, which have been kept solely for
-the purpose of backwards compatibility (you might notice that they are still in the 'lib' directory, whereas all of
+The magic happens via the `xmlrpc.inc`, `xmlrpcs.inc` and `xmlrpc_wrappers.inc` files, which have been kept solely for
+the purpose of backwards compatibility (you might notice that they are still in the 'lib' directory, whereas all
 the refactored code now sits in the 'src' directory).
 
 Of course, some minor changes where inevitable, and backwards compatibility can not be guaranteed at 100%.
@@ -159,7 +159,7 @@ Below is the list of all known changes and possible pitfalls when enabling 'comp
 
 ### Default character set used for application data
 
-* when including the xmlrpc.inc file, the defalt character set used by the lib to give data to your app gets switched
+* when including the xmlrpc.inc file, the default character set used by the lib to give data to your app gets switched
   back to ISO-8859-1, as it was in previous versions
 
 * if yor app used to change that value, you will need to add one line to your code, to make sure it is properly used
@@ -212,14 +212,14 @@ Below is the list of all known changes and possible pitfalls when enabling 'comp
 
 * Not all variables which existed after including xmlrpcs.inc in version 3 are available
 
-    - $GLOBALS['_xmlrpcs_prev_ehandler'] has been replaced with protected static var PhpXmlRpc\Server::$_xmlrpcs_prev_ehandler
+    - `$GLOBALS['_xmlrpcs_prev_ehandler']` has been replaced with protected static var `PhpXmlRpc\Server::$_xmlrpcs_prev_ehandler`
         and is thus not available any more
 
-    - same for $GLOBALS['_xmlrpcs_occurred_errors']
+    - same for `$GLOBALS['_xmlrpcs_occurred_errors']`
 
-    - same for $GLOBALS['_xmlrpc_debuginfo']
+    - same for `$GLOBALS['_xmlrpc_debuginfo']`
 
-    - $GLOBALS['_xmlrpcs_capabilities'] and $GLOBALS['_xmlrpcs_dmap'] have been removed
+    - `$GLOBALS['_xmlrpcs_capabilities']` and `$GLOBALS['_xmlrpcs_dmap']` have been removed
 
 ### Using typeof/class-name checks in your code
 

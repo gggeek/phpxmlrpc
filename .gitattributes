@@ -1,0 +1,15 @@
+*.inc	diff=php
+
+/.githooks/ export-ignore
+/.github/ export-ignore
+/demo/ export-ignore
+/doc/api_changes_v4.md export-ignore
+/doc/build/ export-ignore
+/doc/Changelog
+/extras/ export-ignore
+/tests/ export-ignore
+
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/phpunit.xml.dist export-ignore

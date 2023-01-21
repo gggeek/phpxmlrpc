@@ -1,26 +1,32 @@
-<html>
-<head><title>xmlrpc - Introspect demo</title></head>
+<?php
+require_once __DIR__ . "/_prepend.php";
+
+output('<html lang="en">
+<head><title>phpxmlrpc - Introspect demo</title></head>
 <body>
 <h1>Introspect demo</h1>
-<h2>Query server for available methods and their description</h2>
-<h3>The code demonstrates usage of multicall and introspection methods</h3>
-<?php
+<h2>Query server for available methods, their description and their signatures</h2>
+<h3>The code demonstrates usage of multicall, introspection methods `system.listMethods` and co., and `$client->return_type`</h3>
+<p>You can see the source to this page here: <a href="introspect.php?showSource=1">introspect.php</a></p>
+');
 
-include_once __DIR__ . "/../../src/Autoloader.php";
-PhpXmlRpc\Autoloader::register();
+use PhpXmlRpc\Client;
+use PhpXmlRpc\Helper\XMLParser as XMLRPCParser;
+use PhpXmlRpc\Request;
 
 function display_error($r)
 {
-    print "An error occurred: ";
-    print "Code: " . $r->faultCode()
-        . " Reason: '" . $r->faultString() . "'<br/>";
+    output("An error occurred: ");
+    output("Code: " . $r->faultCode() . " Reason: '" . $r->faultString() . "'<br/>");
 }
 
-$client = new PhpXmlRpc\Client("http://phpxmlrpc.sourceforge.net/server.php");
+$client = new Client(XMLRPCSERVER);
+// tell the client we want back plain php values
+$client->return_type = XMLRPCParser::RETURN_PHP;
 
 // First off, let's retrieve the list of methods available on the remote server
-print "<h3>methods available at http://" . $client->server . $client->path . "</h3>\n";
-$req = new PhpXmlRpc\Request('system.listMethods');
+output("<h3>methods available at http://" . $client->server . $client->path . "</h3>\n");
+$req = new Request('system.listMethods');
 $resp = $client->send($req);
 
 if ($resp->faultCode()) {
@@ -28,59 +34,73 @@ if ($resp->faultCode()) {
 } else {
     $v = $resp->value();
 
+    // check if the server supports 'system.multicall', and configure the client accordingly
+    $avoidMulticall = true;
+    foreach ($v as $methodName) {
+        if ($methodName == 'system.multicall') {
+            $avoidMulticall = false;
+            break;
+        }
+    }
+
+    $client->no_multicall = $avoidMulticall;
+
     // Then, retrieve the signature and help text of each available method
     foreach ($v as $methodName) {
-        print "<h4>" . $methodName->scalarval() . "</h4>\n";
-        // build messages first, add params later
-        $m1 = new PhpXmlRpc\Request('system.methodHelp');
-        $m2 = new PhpXmlRpc\Request('system.methodSignature');
-        $val = new PhpXmlRpc\Value($methodName->scalarval(), "string");
-        $m1->addParam($val);
-        $m2->addParam($val);
-        // Send multiple requests in one http call.
-        // If server does not support multicall, client will automatically fall back to 2 separate calls
-        $ms = array($m1, $m2);
-        $rs = $client->send($ms);
-        if ($rs[0]->faultCode()) {
-            display_error($rs[0]);
+        output("<h4>" . htmlspecialchars($methodName) . "</h4>\n");
+        // build requests first, add params later
+        $r1 = new PhpXmlRpc\Request('system.methodHelp');
+        $r2 = new PhpXmlRpc\Request('system.methodSignature');
+        $val = new PhpXmlRpc\Value($methodName, "string");
+        $r1->addParam($val);
+        $r2->addParam($val);
+        // Send multiple requests in one/many http calls.
+        $reqs = array($r1, $r2);
+        $resps = $client->send($reqs);
+        if ($resps[0]->faultCode()) {
+            display_error($resps[0]);
         } else {
-            $val = $rs[0]->value();
-            $txt = $val->scalarval();
+            output("<h5>Documentation</h5><p>\n");
+            $txt = $resps[0]->value();
             if ($txt != "") {
-                print "<h4>Documentation</h4><p>${txt}</p>\n";
+                // NB: we explicitly avoid escaping the received data because the spec says that html _can be_ in methodHelp.
+                // That is not a very good practice nevertheless!
+                output("<p>$txt</p>\n");
             } else {
-                print "<p>No documentation available.</p>\n";
+                output("<p>No documentation available.</p>\n");
             }
         }
-        if ($rs[1]->faultCode()) {
-            display_error($rs[1]);
+        if ($resps[1]->faultCode()) {
+            display_error($resps[1]);
         } else {
-            print "<h4>Signature</h4><p>\n";
-            // note: using PhpXmlRpc\Encoder::decode() here would lead to cleaner code
-            $val = $rs[1]->value();
-            if ($val->kindOf() == "array") {
-                foreach ($val as $x) {
-                    $ret = $x[0];
-                    print "<code>" . $ret->scalarval() . " "
-                        . $methodName->scalarval() . "(";
-                    if ($x->count() > 1) {
-                        for ($k = 1; $k < $x->count(); $k++) {
-                            $y = $x[$k];
-                            print $y->scalarval();
-                            if ($k < $x->count() - 1) {
-                                print ", ";
+            output("<h5>Signature(s)</h5><p>\n");
+            $sigs = $resps[1]->value();
+            if (is_array($sigs)) {
+                foreach ($sigs as $sn => $sig) {
+                    // can we trust the server to be fully compliant with the spec?
+                    if (!is_array($sig)) {
+                        output("Signature $sn: unknown\n");
+                        continue;
+                    }
+                    $ret = $sig[0];
+                    output("<code>" . htmlspecialchars($ret) . " "
+                        . htmlspecialchars($methodName) . "(");
+                    if (count($sig) > 1) {
+                        for ($k = 1; $k < count($sig); $k++) {
+                            output(htmlspecialchars($sig[$k]));
+                            if ($k < count($sig) - 1) {
+                                output(", ");
                             }
                         }
                     }
-                    print ")</code><br/>\n";
+                    output(")</code><br/>\n");
                 }
             } else {
-                print "Signature unknown\n";
+                output("Signature unknown\n");
             }
-            print "</p>\n";
+            output("</p>\n");
         }
     }
 }
-?>
-</body>
-</html>
+
+output("</body></html>\n");
