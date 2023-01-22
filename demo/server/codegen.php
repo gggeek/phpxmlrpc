@@ -18,7 +18,8 @@ $code = $w->wrapPhpClass(
 );
 
 $targetClassFile = '/tmp/MyServerClass.php';
-$targetServerFile = '/tmp/myServer.php';
+$targetDispatchMapFile = '/tmp/myServerDispatchMap.php';
+$targetControllerFile = '/tmp/myServerController.php';
 
 // generate a file with a class definition
 
@@ -40,9 +41,11 @@ foreach($code as $methodName => $methodDef) {
 }
 file_put_contents($targetClassFile, "}\n", FILE_APPEND) || die('uh oh');
 
-// generate a separate file with the xml-rpc server instantiation and its dispatch map
+// generate separate files with the xml-rpc server instantiation and its dispatch map
 
-file_put_contents($targetServerFile,
+file_put_contents($targetDispatchMapFile, "<?php\n\nreturn " . var_export($code, true) . ";\n");
+
+file_put_contents($targetControllerFile,
     "<?php\n\n" .
 
     "require_once '$autoloader';\n\n" .
@@ -57,7 +60,7 @@ file_put_contents($targetServerFile,
     //     Wrapper::holdObject('xmlrpc_CommentManager_addComment', $cm);
     //     Wrapper::holdObject('xmlrpc_CommentManager_getComments', $cm);
 
-    '$dm = ' . var_export($code, true) . ";\n" .
+    "\$dm = require_once '$targetDispatchMapFile';\n" .
     '$s = new \PhpXmlRpc\Server($dm, false);' . "\n" .
     '// NB: do not leave these 2 debug lines enabled on publicly accessible servers!' . "\n" .
     '$s->setDebug(2);' . "\n" .
@@ -70,4 +73,4 @@ file_put_contents($targetServerFile,
 
 // *** NB do not do this in prod! The whole concept of code-generation is to do it offline using console scripts/ci/cd ***
 
-include $targetServerFile;
+include $targetControllerFile;
