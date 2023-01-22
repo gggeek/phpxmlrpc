@@ -160,6 +160,7 @@ class PhpXmlRpc
      * @var string
      * Used to validate received date values. Alter this if the server/client you are communicating with uses date
      * formats non-conformant with the spec
+     * NB: atm, the Date helper uses this regexp and expects to find matches in a specific order
      */
     public static $xmlrpc_datetime_format = '/^([0-9]{4})(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9]|60)$/';
 
