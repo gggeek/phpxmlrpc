@@ -21,7 +21,11 @@ use PhpXmlRpc\Helper\Logger;
  */
 class Wrapper
 {
-    /// used to hold a reference to object instances whose methods get wrapped by wrapPhpFunction(), in 'create source' mode
+    /**
+     * @var object[]
+     * Used to hold a reference to object instances whose methods get wrapped by wrapPhpFunction(), in 'create source' mode
+     * @internal this property will become protected in the future
+     */
     public static $objHolder = array();
 
     protected static $logger;
@@ -162,6 +166,7 @@ class Wrapper
      * @param string $newFuncName (optional) name for function to be created. Used only when return_source in $extraOptions is true
      * @param array $extraOptions (optional) array of options for conversion. valid values include:
      *                            - bool return_source     when true, php code w. function definition will be returned, instead of a closure
+     *                            - bool encode_nulls      let php objects be sent to server using <nil> elements instead of empty strings
      *                            - bool encode_php_objs   let php objects be sent to server using the 'improved' xml-rpc notation, so server can deserialize them as php objects
      *                            - bool decode_php_objs   --- WARNING !!! possible security hazard. only use it with trusted servers ---
      *                            - bool suppress_warnings remove from produced xml any warnings generated at runtime by the php function being invoked
@@ -466,12 +471,16 @@ class Wrapper
             $result = call_user_func_array($callable, $params);
 
             if (! is_a($result, $responseClass)) {
+                // q: why not do the same for int, float, bool, string?
                 if ($funcDesc['returns'] == Value::$xmlrpcDateTime || $funcDesc['returns'] == Value::$xmlrpcBase64) {
                     $result = new $valueClass($result, $funcDesc['returns']);
                 } else {
                     $options = array();
                     if (isset($extraOptions['encode_php_objs']) && $extraOptions['encode_php_objs']) {
                         $options[] = 'encode_php_objs';
+                    }
+                    if (isset($extraOptions['encode_nulls']) && $extraOptions['encode_nulls']) {
+                        $options[] = 'null_extension';
                     }
 
                     $result = $encoder->encode($result, $options);
@@ -531,11 +540,10 @@ class Wrapper
      * @param string $plainFuncName
      * @param array $funcDesc
      * @return string
-     *
-     * @todo add a nice phpdoc block in the generated source
      */
     protected function buildWrapFunctionSource($callable, $newFuncName, $extraOptions, $plainFuncName, $funcDesc)
     {
+        $encodeNulls = isset($extraOptions['encode_nulls']) ? (bool)$extraOptions['encode_nulls'] : false;
         $encodePhpObjects = isset($extraOptions['encode_php_objs']) ? (bool)$extraOptions['encode_php_objs'] : false;
         $decodePhpObjects = isset($extraOptions['decode_php_objs']) ? (bool)$extraOptions['decode_php_objs'] : false;
         $catchWarnings = isset($extraOptions['suppress_warnings']) && $extraOptions['suppress_warnings'] ? '@' : '';
@@ -551,7 +559,7 @@ class Wrapper
                 $parsVariations[] = $pars;
             }
 
-            $pars[] = "\$p[$i]";
+            $pars[] = "\$params[$i]";
             $i++;
             if ($i == $pNum) {
                 // last allowed parameters combination
@@ -576,40 +584,56 @@ class Wrapper
 
         $innerCode .= "  \$encoder = new " . static::$namespace . "Encoder();\n";
         if ($decodePhpObjects) {
-            $innerCode .= "  \$p = \$encoder->decode(\$req, array('decode_php_objs'));\n";
+            $innerCode .= "  \$params = \$encoder->decode(\$req, array('decode_php_objs'));\n";
         } else {
-            $innerCode .= "  \$p = \$encoder->decode(\$req);\n";
+            $innerCode .= "  \$params = \$encoder->decode(\$req);\n";
         }
 
         // since we are building source code for later use, if we are given an object instance,
         // we go out of our way and store a pointer to it in a static class var...
         if (is_array($callable) && is_object($callable[0])) {
-            self::$objHolder[$newFuncName] = $callable[0];
-            $innerCode .= "  \$obj = PhpXmlRpc\\Wrapper::\$objHolder['$newFuncName'];\n";
+            static::holdObject($newFuncName, $callable[0]);
+            $class = get_class($callable[0]);
+            if ($class[0] !== '\\') {
+                $class = '\\' . $class;
+            }
+            $innerCode .= "  /// @var $class \$obj\n";
+            $innerCode .= "  \$obj = PhpXmlRpc\\Wrapper::getHeldObject('$newFuncName');\n";
             $realFuncName = '$obj->' . $callable[1];
         } else {
             $realFuncName = $plainFuncName;
         }
         foreach ($parsVariations as $i => $pars) {
-            $innerCode .= "  if (\$paramCount == " . count($pars) . ") \$retval = {$catchWarnings}$realFuncName(" . implode(',', $pars) . ");\n";
+            $innerCode .= "  if (\$paramCount == " . count($pars) . ") \$retVal = {$catchWarnings}$realFuncName(" . implode(',', $pars) . ");\n";
             if ($i < (count($parsVariations) - 1))
                 $innerCode .= "  else\n";
         }
-        $innerCode .= "  if (is_a(\$retval, '" . static::$namespace . "Response'))\n    return \$retval;\n  else\n";
+        $innerCode .= "  if (is_a(\$retVal, '" . static::$namespace . "Response'))\n    return \$retVal;\n  else\n";
+        /// q: why not do the same for int, float, bool, string?
         if ($funcDesc['returns'] == Value::$xmlrpcDateTime || $funcDesc['returns'] == Value::$xmlrpcBase64) {
-            $innerCode .= "    return new " . static::$namespace . "Response(new " . static::$namespace . "Value(\$retval, '{$funcDesc['returns']}'));";
+            $innerCode .= "    return new " . static::$namespace . "Response(new " . static::$namespace . "Value(\$retVal, '{$funcDesc['returns']}'));";
         } else {
+            $encodeOptions = array();
+            if ($encodeNulls) {
+                $encodeOptions[] = 'null_extension';
+            }
             if ($encodePhpObjects) {
-                $innerCode .= "    return new " . static::$namespace . "Response(\$encoder->encode(\$retval, array('encode_php_objs')));";
+                $encodeOptions[] = 'encode_php_objs';
+            }
+
+            if ($encodeOptions) {
+                $innerCode .= "    return new " . static::$namespace . "Response(\$encoder->encode(\$retVal, array('" .
+                    implode("', '", $encodeOptions) . "')));";
             } else {
-                $innerCode .= "    return new " . static::$namespace . "Response(\$encoder->encode(\$retval));";
+                $innerCode .= "    return new " . static::$namespace . "Response(\$encoder->encode(\$retVal));";
             }
         }
         // shall we exclude functions returning by ref?
         // if ($func->returnsReference())
         //     return false;
 
-        $code = "function $newFuncName(\$req)\n{\n" . $innerCode . "\n}";
+        $code = "/**\n * @param \PhpXmlRpc\Request \$req\n * @return \PhpXmlRpc\Response\n * @throws \\Exception\n */\n" .
+            "function $newFuncName(\$req)\n{\n" . $innerCode . "\n}";
 
         return $code;
     }
@@ -620,7 +644,7 @@ class Wrapper
      * object and called from remote clients (as well as their corresponding signature info).
      *
      * @param string|object $className the name of the class whose methods are to be exposed as xml-rpc methods, or an object instance of that class
-     * @param array $extraOptions see the docs for wrapPhpMethod for basic options, plus
+     * @param array $extraOptions see the docs for wrapPhpFunction for basic options, plus
      *                            - string method_type    'static', 'nonstatic', 'all' and 'auto' (default); the latter will switch between static and non-static depending on whether $className is a class name or object instance
      *                            - string method_filter  a regexp used to filter methods to wrap based on their names
      *                            - string prefix         used for the names of the xml-rpc methods created.
@@ -701,6 +725,7 @@ class Wrapper
      *                            - string  protocol            'http' (default), 'http11', 'https', 'h2' or 'h2c'
      *                            - string  new_function_name   the name of php function to create, when return_source is used. If unspecified, lib will pick an appropriate name
      *                            - string  return_source       if true return php code w. function definition instead of function itself (closure)
+     *                            - bool    encode_nulls        if true, use `<nil>` elements instead of empty string xml-rpc values for php null values
      *                            - bool    encode_php_objs     let php objects be sent to server using the 'improved' xml-rpc notation, so server can deserialize them as php objects
      *                            - bool    decode_php_objs     --- WARNING !!! possible security hazard. only use it with trusted servers ---
      *                            - mixed   return_on_fault     a php value to be returned when the xml-rpc call fails/returns a fault response (by default the Response object is returned in this case). If a string is used, '%faultCode%' and '%faultString%' tokens will be substituted with actual error values
@@ -836,6 +861,7 @@ class Wrapper
             $protocol = isset($extraOptions['protocol']) ? $extraOptions['protocol'] : '';
             $encodePhpObjects = isset($extraOptions['encode_php_objs']) ? (bool)$extraOptions['encode_php_objs'] : false;
             $decodePhpObjects = isset($extraOptions['decode_php_objs']) ? (bool)$extraOptions['decode_php_objs'] : false;
+            $encodeNulls = isset($extraOptions['encode_nulls']) ? (bool)$extraOptions['encode_nulls'] : false;
             $throwFault = false;
             $decodeFault = false;
             $faultResponse = null;
@@ -854,6 +880,9 @@ class Wrapper
             $encodeOptions = array();
             if ($encodePhpObjects) {
                 $encodeOptions[] = 'encode_php_objs';
+            }
+            if ($encodeNulls) {
+                $encodeOptions[] = 'null_extension';
             }
             $decodeOptions = array();
             if ($decodePhpObjects) {
@@ -933,6 +962,7 @@ class Wrapper
         $protocol = isset($extraOptions['protocol']) ? $extraOptions['protocol'] : '';
         $encodePhpObjects = isset($extraOptions['encode_php_objs']) ? (bool)$extraOptions['encode_php_objs'] : false;
         $decodePhpObjects = isset($extraOptions['decode_php_objs']) ? (bool)$extraOptions['decode_php_objs'] : false;
+        $encodeNulls = isset($extraOptions['encode_nulls']) ? (bool)$extraOptions['encode_nulls'] : false;
         $clientCopyMode = isset($extraOptions['simple_client_copy']) ? (int)($extraOptions['simple_client_copy']) : 0;
         $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : 'xmlrpc';
         $throwFault = false;
@@ -962,7 +992,7 @@ class Wrapper
         if ($mDesc != '') {
             // take care that PHP comment is not terminated unwillingly by method description
             /// @todo according to the spec, method desc can have html in it. We should run it through strip_tags...
-            $mDesc = "/**\n * " . str_replace('*/', '* /', $mDesc) . "\n";
+            $mDesc = "/**\n * " . str_replace(array("\n", '*/'), array("\n * ", '* /'), $mDesc) . "\n";
         } else {
             $mDesc = "/**\n * Function $newFuncName.\n";
         }
@@ -980,14 +1010,22 @@ class Wrapper
                 // only build directly xml-rpc values when type is known and scalar
                 $innerCode .= "  \$p$i = new " . static::$namespace . "Value(\$p$i, '$pType');\n";
             } else {
-                if ($encodePhpObjects) {
-                    $innerCode .= "  \$p$i = \$encoder->encode(\$p$i, array('encode_php_objs'));\n";
+                if ($encodePhpObjects || $encodeNulls) {
+                    $encOpts = array();
+                    if ($encodePhpObjects) {
+                        $encOpts[] = 'encode_php_objs';
+                    }
+                    if ($encodeNulls) {
+                        $encOpts[] = 'null_extension';
+                    }
+
+                    $innerCode .= "  \$p$i = \$encoder->encode(\$p$i, array( '" . implode("', '", $encOpts) . "'));\n";
                 } else {
                     $innerCode .= "  \$p$i = \$encoder->encode(\$p$i);\n";
                 }
             }
             $innerCode .= "  \$req->addparam(\$p$i);\n";
-            $mDesc .= ' * @param ' . $this->xmlrpc2PhpType($pType) . " \$p$i\n";
+            $mDesc .= " * @param " . $this->xmlrpc2PhpType($pType) . " \$p$i\n";
         }
         if ($clientCopyMode < 2) {
             $plist[] = '$debug = 0';
@@ -1055,9 +1093,11 @@ class Wrapper
         $timeout = isset($extraOptions['timeout']) ? (int)$extraOptions['timeout'] : 0;
         $protocol = isset($extraOptions['protocol']) ? $extraOptions['protocol'] : '';
         $newClassName = isset($extraOptions['new_class_name']) ? $extraOptions['new_class_name'] : '';
+        $encodeNulls = isset($extraOptions['encode_nulls']) ? (bool)$extraOptions['encode_nulls'] : false;
         $encodePhpObjects = isset($extraOptions['encode_php_objs']) ? (bool)$extraOptions['encode_php_objs'] : false;
         $decodePhpObjects = isset($extraOptions['decode_php_objs']) ? (bool)$extraOptions['decode_php_objs'] : false;
         $verbatimClientCopy = isset($extraOptions['simple_client_copy']) ? !($extraOptions['simple_client_copy']) : true;
+        $throwOnFault = isset($extraOptions['throw_on_fault']) ? (bool)$extraOptions['throw_on_fault'] : false;
         $buildIt = isset($extraOptions['return_source']) ? !($extraOptions['return_source']) : true;
         $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : 'xmlrpc';
 
@@ -1105,10 +1145,13 @@ class Wrapper
             'simple_client_copy' => 2, // do not produce code to copy the client object
             'timeout' => $timeout,
             'protocol' => $protocol,
+            'encode_nulls' => $encodeNulls,
             'encode_php_objs' => $encodePhpObjects,
             'decode_php_objs' => $decodePhpObjects,
+            'throw_on_fault' => $throwOnFault,
             'prefix' => $prefix,
         );
+
         /// @todo build phpdoc for class definition, too
         foreach ($mList as $mName) {
             if ($methodFilter == '' || preg_match($methodFilter, $mName)) {
@@ -1178,5 +1221,29 @@ class Wrapper
         $code .= "\$client->return_type = '{$prefix}vals';\n";
         //$code .= "\$client->setDebug(\$debug);\n";
         return $code;
+    }
+
+    /**
+     * @param string $index
+     * @param object $object
+     * @return void
+     */
+    public static function holdObject($index, $object)
+    {
+        self::$objHolder[$index] = $object;
+    }
+
+    /**
+     * @param string $index
+     * @return object
+     * @throws \Exception
+     */
+    public static function getHeldObject($index)
+    {
+        if (isset(self::$objHolder[$index])) {
+            return self::$objHolder[$index];
+        }
+
+        throw new \Exception("No object held for index '$index'");
     }
 }

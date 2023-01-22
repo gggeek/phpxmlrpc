@@ -13,6 +13,7 @@ $code = $w->wrapPhpClass(
     array(
         'method_type' => 'nonstatic',
         'return_source' => true,
+        'encode_nulls' => true,
     )
 );
 
@@ -33,13 +34,13 @@ file_put_contents($targetClassFile,
 // we mangle a bit the code we get from wrapPhpClass to generate a php class instead of a bunch of functions
 
 foreach($code as $methodName => $methodDef) {
-    file_put_contents($targetClassFile, '  public static ' . str_replace("\n", "  \n  ", $methodDef['source']) . "\n\n", FILE_APPEND) || die('uh oh');
+    file_put_contents($targetClassFile, '  ' . str_replace(array('function ', "\n"), array('public static function ', "\n  "), $methodDef['source']) . "\n\n", FILE_APPEND) || die('uh oh');
     $code[$methodName]['function'] = 'MyServerClass::' . $methodDef['function'];
     unset($code[$methodName]['source']);
 }
 file_put_contents($targetClassFile, "}\n", FILE_APPEND) || die('uh oh');
 
-// generate the separate file with the xml-rpc server and dispatch map
+// generate a separate file with the xml-rpc server instantiation and its dispatch map
 
 file_put_contents($targetServerFile,
     "<?php\n\n" .
@@ -53,17 +54,20 @@ file_put_contents($targetServerFile,
     // but if you are generating a php file for later use, it is up to you to initialize that variables with a
     // CommentManager instance:
     //     $cm = new CommentManager();
-    //     Wrapper::$objHolder['xmlrpc_CommentManager_addComment'] = $cm;
-    //     Wrapper::$objHolder['xmlrpc_CommentManager_getComments'] = $cm;
+    //     Wrapper::holdObject('xmlrpc_CommentManager_addComment', $cm);
+    //     Wrapper::holdObject('xmlrpc_CommentManager_getComments', $cm);
 
     '$dm = ' . var_export($code, true) . ";\n" .
     '$s = new \PhpXmlRpc\Server($dm, false);' . "\n" .
+    '// NB: do not leave these 2 debug lines enabled on publicly accessible servers!' . "\n" .
     '$s->setDebug(2);' . "\n" .
     '$s->exception_handling = 1;' . "\n" .
     '$s->service();' . "\n"
 ) || die('uh oh');
 
-// test that everything worked by running it in realtime
+// test that everything worked by running it in realtime (note that this will return an xml-rpc error message if run
+// from the command line, as the server will find no xml-rpc payload to operate on)
+
 // *** NB do not do this in prod! The whole concept of code-generation is to do it offline using console scripts/ci/cd ***
 
 include $targetServerFile;
