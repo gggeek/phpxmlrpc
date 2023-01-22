@@ -137,9 +137,18 @@ class PhpXmlRpc
 
     /**
      * @var bool
-     * Set to TRUE to make the library use DateTime objects instead of strings for all values parsed from incoming XML
+     * Set to TRUE to make the library use DateTime objects instead of strings for all values parsed from incoming XML.
+     * NB: if the received strings are not parseable as dates, NULL will be returned!
      */
     public static $xmlrpc_return_datetimes = false;
+
+    /**
+     * @var bool
+     * Set to TRUE to make the library reject incoming xml which uses invalid data from xml-rpc Value elements, such
+     * as base64 strings which can not be decoded, dateTime strings which do not represent a valid date, invalid bools,
+     * floats and inteers
+     */
+    public static $xmlrpc_reject_invalid_values = false;
 
     /**
      * @var bool
