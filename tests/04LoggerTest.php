@@ -51,7 +51,7 @@ class LoggerTest extends PhpXmlRpc_PolyfillTestCase
         $l = $xp->getLogger();
         XMLParser::setLogger($this);
 
-        $xp->parse('<?xml version="1.0" ?><methodResponse><params><param><value><boolean> 1 </boolean></value></param></params></methodResponse>');
+        $xp->parse('<?xml version="1.0" ?><methodResponse><params><param><value><boolean>x</boolean></value></param></params></methodResponse>');
         $this->assertStringContainsString("invalid data received in BOOLEAN value", $this->errorBuffer);
 
         XMLParser::setLogger($l);

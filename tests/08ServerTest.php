@@ -709,6 +709,12 @@ And turned it into nylon';
 
     public function testCatchErrors()
     {
+        if (version_compare(PHP_VERSION, '7.0.0', '<'))
+        {
+            $this->markTestSkipped('cannot test php Error on php < 7.0');
+            return;
+        }
+
         // these test for the different server error catching modes
         $m = new xmlrpcmsg('tests.raiseError');
         $v = $this->send($m, $GLOBALS['xmlrpcerr']['server_error']);
