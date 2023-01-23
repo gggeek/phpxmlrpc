@@ -12,7 +12,7 @@ class Http
 {
     protected static $logger;
 
-    public function getLogger()
+    public static function getLogger()
     {
         if (self::$logger === null) {
             self::$logger = Logger::instance();
