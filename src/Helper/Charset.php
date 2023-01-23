@@ -308,7 +308,12 @@ class Charset
                         $data = htmlspecialchars($data,  defined('ENT_XML1') ? ENT_XML1 | ENT_QUOTES : ENT_QUOTES, 'UTF-8');
                     }
                     if ($srcEncoding !== $destEncoding) {
-                        $data = @mb_convert_encoding($data, str_replace('US-ASCII', 'ASCII', $destEncoding), str_replace('US-ASCII', 'ASCII', $srcEncoding));
+                        try {
+                            // php 7.4 and lower: a warning is generated. php 8.0 and up: an Error is thrown. So much for BC...
+                            $data = @mb_convert_encoding($data, str_replace('US-ASCII', 'ASCII', $destEncoding), str_replace('US-ASCII', 'ASCII', $srcEncoding));
+                        } catch (\ValueError $e) {
+                            $data = false;
+                        }
                     }
                     if ($data === false) {
                         $escapedData = '';

@@ -145,9 +145,9 @@ class PhpXmlRpc
 
     /**
      * @var bool
-     * Set to TRUE to make the library reject incoming xml which uses invalid data from xml-rpc Value elements, such
+     * Set to TRUE to make the library reject incoming xml which uses invalid data for xml-rpc elements, such
      * as base64 strings which can not be decoded, dateTime strings which do not represent a valid date, invalid bools,
-     * floats and integers
+     * floats and integers, method names with forbidden characters, or struct members missing the value or name
      */
     public static $xmlrpc_reject_invalid_values = false;
 
@@ -191,6 +191,15 @@ class PhpXmlRpc
      * NB: the string should not match any data which php can not successfully cast to a float
      */
     public static $xmlrpc_double_format = '/^[ \t]*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?[ \t]*$/';
+
+    /**
+     * @var string
+     * Used to validate received methodname values.
+     * According to the spec: "The string may only contain identifier characters, upper and lower-case A-Z, the numeric
+     * characters, 0-9, underscore, dot, colon and slash".
+     * We keep in spaces for BC, even though they are forbidden by the spec.
+     */
+    public static $xmlrpc_methodname_format = '|^[ \t]*[a-zA-Z0-9_.:/]+[ \t]*$|';
 
     /**
      * A function to be used for compatibility with legacy code: it creates all global variables which used to be declared,
