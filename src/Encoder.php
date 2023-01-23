@@ -118,11 +118,14 @@ class Encoder
                     }
                 }
                 if (in_array('dates_as_objects', $options) && $xmlrpcVal->scalartyp() == 'dateTime.iso8601') {
-                    // we return a Datetime object instead of a string since now the constructor of xml-rpc value accepts
+                    // we return a Datetime object instead of a string; since now the constructor of xml-rpc value accepts
                     // safely string, int and DateTimeInterface, we cater to all 3 cases here
                     $out = $xmlrpcVal->scalarval();
                     if (is_string($out)) {
                         $out = strtotime($out);
+                        // NB: if the string does not convert into a timestamp, this will return false.
+                        // We avoid logging an error here, as we presume it was already done when parsing the xml
+                        /// @todo we could return null, to be more in line with what the XMLParser does...
                     }
                     if (is_int($out)) {
                         $result = new \DateTime();

@@ -19,6 +19,7 @@ $code = $w->wrapXmlrpcServer(
         'new_class_name' => 'MyClient',
         'method_filter' => '/^examples\./',
         'simple_client_copy' => true,
+        // this is used to encode php NULL values into xml-rpc <NIL/> elements. If the partner does not support that, disable it
         'encode_nulls' => true,
         'throw_on_fault' => true,
     )

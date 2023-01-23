@@ -13,6 +13,7 @@ $code = $w->wrapPhpClass(
     array(
         'method_type' => 'nonstatic',
         'return_source' => true,
+        // this is used to encode php NULL values into xml-rpc <NIL/> elements. If the partner does not support that, disable it
         'encode_nulls' => true,
     )
 );

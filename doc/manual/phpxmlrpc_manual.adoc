@@ -251,6 +251,16 @@ for `PhpXmlRpc\Encoder::decode` for the full details of the decoding process.
 
 ==== Notes on types
 
+==== strict parsing vs. lenient parsing
+
+When Value objects are created by the library by parsing some received XML text, the parsing code is lenient with invalid
+data. This means that if the other party is sending some junk, the library will, by default:
+- log error messages pinpointing the exact source of the problem, and
+- feed to your application "error values", which include `false` for bad base64 data, the string 'ERROR_NON_NUMERIC_FOUND'
+  for integers and doubles, `false` for invalid booleans and the received string for invalid datetimes.
+This behaviour can be changed to make the parsing code more strict and produce an error instead of letting through invalid
+data, by setting `PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = true`.
+
 ===== base64
 
 Base 64 encoding is performed transparently to the caller when using this type. Decoding is also transparent.
@@ -259,12 +269,13 @@ Therefore, you ought to consider it as a "binary" data type, for use when you wa
 ===== boolean
 
 All php values which would be converted to a boolean TRUE via typecasting are mapped to an xml-rpc `true`. All other
-values (including the empty string) are converted to `false`.
+values (including the empty string) are converted to an xml-rpc `false`.
 
-===== dateTime
+===== dateTime.iso8601
 
-When manually creating Value objects representing an xml-rpc dateTime.iso8601, php integers, strings and DateTimes can be
-used as source values. For those, the original value will be returned when calling `+$value->scalarval();+`.
+When manually creating Value objects representing an xml-rpc dateTime.iso8601, php DateTimes, integers (unix timestamps)
+and strings (representing dates in the specific xml-rpc ISO-8601 format) can be used as source values. For those, the
+original value will be returned when calling `+$value->scalarval();+`.
 
 When Value objects are created by the library by parsing some received XML text, all Value objects representing an xml-rpc
 dateTime.iso8601 value will by default return the string representation of the date when calling `+$value->scalarval();+`.
@@ -274,10 +285,14 @@ of timezone specifiers in ISO8601 format dates. You can, however, use multiple t
 into another representation of a time stamp, and take care of timezones by yourself:
 * use the `PhpXmlRpc\Helper\Date` class to convert the date string into a unix timestamp;
 * set `PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = true` to always get back a php DateTime from received xml (in
-  which case the conversion is done using the timezone set in php.ini).
+  which case the conversion is done using the timezone set in php.ini)
 * use the `PhpXmlRpc\Encoder::decode` method with the 'dates_as_objects' option to get back a php DateTime from a
-  single Value object (in which case the conversion is done using the `strtotime` function, which uses the timezone set
-  in php.ini).
+  single or nested Value object (in which case the conversion is done using the `strtotime` function, which uses the
+  timezone set in php.ini).
+Note that, when using `$xmlrpc_return_datetimes` or 'dates_as_objects', you might still get back a php `false` or `null`
+instead of a DateTime if the data received via xml does not represent a valid date and time. You can configure the library
+to outright reject such cases and avoid having to explicitly check for them in your own code, by setting
+`PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = true`.
 
 ===== double
 

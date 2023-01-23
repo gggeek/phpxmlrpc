@@ -37,6 +37,8 @@
   a method handler in the dispatch was defined with `'parameters_type' = 'phpvals'`, the handler would be passed a
   Request object instead of plain php values.
 
+* fixed: receiving integers which use the '<EX:I8>' xml tag
+
 * new: added the `Client::setTimeout` method, meant to replace usage of the `$timeout` argument in calls to `send`
   and `multicall`
 
