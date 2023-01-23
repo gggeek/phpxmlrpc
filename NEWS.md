@@ -16,22 +16,34 @@
   xml-rpc values. This includes both client-side, for data within the `$response->value()`, and server-side, for data
   passed to xml-rpc method handlers, and works for both 'xmlrpcvals' and 'phpvals' modes.
   In order to enable this, you should set `PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = true`.
+
   NB: since the xml-rpc spec mandates that no Timezone is used on the wire for dateTime values, the DateTime objects
   created by the library will be set to the default php timzeone, set using the 'date.timezone' ini setting.
-  NB: if the received strings are not parseable as dates, NULL will be returned instead of an object.
+
+  NB: if the received strings are not parseable as dates, NULL will be returned instead of an object (but that can
+  be avoided by setting `PhpXmlRpc\PhpXmlRpc::$xmlrpc_reject_invalid_values = true`, see below).
+
+* improved: be more strict in the data accepted as valid for dateTime xml-rpc values. Clearly invalid dates such as a
+  month '13', day '32' or hour '25' will cause an error message to be logged or the value to be rejected, depending
+  on configuration
+
+* improved: be more strict in the data accepted as valid for 'float' and 'int' xml-rpc values. If you need to allow
+  different formats for numbers, you can set a custom value to `PhpXmlRpc\PhpXmlRpc::$xmlrpc_double_format` and
+  `PhpXmlRpc\PhpXmlRpc::$xmlrpc_int_format`
 
 * new: allow the library to be stricter in parsing the received xml: by setting
   `PhpXmlRpc\PhpXmlRpc::$xmlrpc_reject_invalid_values = true`, incoming xml which has data not conforming to the expected
-  format for value elements of type date, int, float, double, base64 will be rejected instead of passed on to the application
-
-* improved: be more strict in the data accepted as valid for 'float' xml-rpc values. If you need to allow different
-  formats for numbers, you can set a custom value to `PhpXmlRpc\PhpXmlRpc::$xmlrpc_double_format`
+  format for value elements of type date, int, float, double, base64 and methodname will be rejected instead of passed
+  on to the application. The same will apply for elements of type struct-member which miss either the name or the value
 
 * new: it is now possible to tell the library to allow non-standard formats for received datetime value, such as f.e.
   datetimes with a timezone specifier, by setting a custom value to `PhpXmlRpc\PhpXmlRpc::$xmlrpc_datetime_format`.
-  Note that the regex used by default to validate the incoming date strings has been tightened not to accept clearly
-  invalid dates such as a month '13', day '32' or hour '25'. The value '60' is now allowed for seconds, as required for
-  leap seconds by the ISO 8601 standard.
+
+* new: it is now possible to tell the library to allow non-standard formats for received int and float values, as well
+  as for methdoname elements. See the api docs for `PhpXmlRpc\PhpXmlRpc` static variables.
+
+* improved: limit the size of incoming data which will be used in error responses and logged error messages, making
+  it slightly harder to carry out DOS attacks against the library
 
 * fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, we would be always falling back to
   non-multicall requests
@@ -94,11 +106,14 @@
     to a custom character set and the mbstring extension is enabled. It will be encoded instead in the specified character
     set. We expect this to affect few users, as setting `PhpXmlRpc::$internal_encoding` to a custom character set did
     not make a lot of sense beforehand
-  - the regular expression used to check if incoming double values are valid has been tightened. That can be tweaked via
-    use of `PhpXmlRpc\PhpXmlRpc::$xmlrpc_double_format`
+  - the regular expression used to check if incoming int and double values are valid has been tightened. That can be
+    tweaked via use of `PhpXmlRpc\PhpXmlRpc::$xmlrpc_double_format` and `PhpXmlRpc\PhpXmlRpc::$xmlrpc_int_format`
   - the regular expression used to check if incoming datetime values are valid has been tightened to reject clearly
     invalid dates. It has been widened as well, to allow leap seconds. That can be tweaked via use of
     `PhpXmlRpc\PhpXmlRpc::$xmlrpc_datetime_format`
+  - a regular expression has been introduced to check incoming methodname elements. In the default configuration it
+    will trigger error messages in the logs, but not reject the calls. It can be tweaked via use of
+    `PhpXmlRpc\PhpXmlRpc::$xmlrpc_methodname_format`
   - parameters `$timeout` and `$method` are now considered deprecated in `Client::send()` and `Client::multicall()`
   - Client properties `$errno` and `$errstring` are now deprecated
   - direct access to `Wrapper::$objHolder` is now deprecated
@@ -112,7 +127,7 @@
     and reimplemented the `parse` methods, or wholesale replaced it, you will have to adapt your code
   - also, if you had reimplemented `XMLParser::parse`, be warned that the callers now treat differently results when
     `_xh['isf'] > 3`
-  - new methods in helper classes: `Charset::knownCharsets`, `Http::parseAcceptHeader`
+  - new methods in helper classes: `Charset::knownCharsets`, `Http::parseAcceptHeader`, `XMLParser::truncateForLog`
   - if you had been somehow interacting with private method `Client::_try_multicall`, be warned its returned data has
     changed: it now returns a Response for the cases in which it previously returned false, and an array of Response
     objects for the cases in which it previously returned a string
