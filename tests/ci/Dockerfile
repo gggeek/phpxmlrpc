@@ -13,6 +13,7 @@ RUN mkdir -p /usr/share/man/man1 && \
   cd /root/setup && \
   ./install_packages.sh && \
   ./create_user.sh && \
+  ./setup_perl.sh && \
   ./setup_apache.sh && \
   ./setup_privoxy.sh && \
   ./setup_php.sh "${PHP_VERSION}" && \

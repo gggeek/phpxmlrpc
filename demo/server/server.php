@@ -85,6 +85,12 @@ if (defined('TESTMODE')) {
             }
         }
     }
+    if (isset($_GET['FORCE_REDIRECT'])) {
+        header('HTTP/1.0 302 Found');
+        unset($_GET['FORCE_REDIRECT']);
+        header('Location: ' . $_SERVER['REQUEST_URI'] . (count($_GET) ? '?' . http_build_query($_GET) : ''));
+        die();
+    }
 }
 
 $s->service();

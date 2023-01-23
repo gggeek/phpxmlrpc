@@ -98,6 +98,24 @@ class HTTPTest extends ServerTest
         }
     }
 
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
+    public function testRedirects($method)
+    {
+        if (!function_exists('curl_init'))
+        {
+            $this->markTestSkipped('CURL missing: cannot test redirects');
+            return;
+        }
+
+        $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_ALWAYS);
+        $this->client->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
+
+        $this->$method();
+    }
+
     public function testAcceptCharset()
     {
         if (version_compare(PHP_VERSION, '5.6.0', '<'))

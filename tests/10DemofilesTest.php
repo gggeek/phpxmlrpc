@@ -4,6 +4,8 @@ include_once __DIR__ . '/WebTestCase.php';
 
 /**
  * Tests for php files in the 'demo' directory.
+ *
+ * @todo add execution of perl and python demos via usage of 'exec'
  */
 class DemoFilesTest extends PhpXmlRpc_WebTestCase
 {

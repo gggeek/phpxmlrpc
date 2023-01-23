@@ -570,12 +570,14 @@ class XMLParser
                 // NB: this simple checks helps a lot sanitizing input, i.e. no security problems around here
                 // Note the non-strict type check: it will allow ' 1 '
                 /// @todo feature-creep: use a flexible regexp, the same as we do with int, double and datetime.
-                ///       Note that using a regexp would also make this test less sensitive to phpunit shenanigans
+                ///       Note that using a regexp would also make this test less sensitive to phpunit shenanigans, and
+                ///       to changes in the way php compares strings (since 8.0, leading and trailing newlines are
+                ///       accepted when deciding if a string numeric...)
                 if ($this->_xh['ac'] == '1' || strcasecmp($this->_xh['ac'], 'true') === 0) {
                     $this->_xh['value'] = true;
                 } else {
                     // log if receiving something strange, even though we set the value to false anyway
-                    /// @todo to be consistent with the other types, we should use a value outside the good-value domain, e.g. NULL
+                    /// @todo to be consistent with the other types, we should return a value outside the good-value domain, e.g. NULL
                     if ($this->_xh['ac'] != '0' && strcasecmp($this->_xh['ac'], 'false') !== 0) {
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BOOLEAN value: ' . $this->_xh['ac']);
                         if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])

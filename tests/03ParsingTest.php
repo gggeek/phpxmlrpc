@@ -389,7 +389,7 @@ aGk=
 <member>
 <name>bool</name>
 <value><boolean>
-1
+yes
 </boolean></value>
 </member>
 <member>

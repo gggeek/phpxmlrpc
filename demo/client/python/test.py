@@ -3,7 +3,7 @@
 
 import xmlrpc.client
 import base64
-#import sys
+import sys
 
 server = xmlrpc.client.ServerProxy("http://localhost/demo/server/server.php")
 
@@ -29,3 +29,6 @@ except xmlrpc.client.Fault as err:
     print("A fault occurred")
     print("Fault code: %d" % err.faultCode)
     print("Fault string: %s" % err.faultString)
+
+    # let the test suite know that here was a fault
+    sys.exit(err.faultCode)
