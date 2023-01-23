@@ -308,7 +308,7 @@ class Charset
                         $data = htmlspecialchars($data,  defined('ENT_XML1') ? ENT_XML1 | ENT_QUOTES : ENT_QUOTES, 'UTF-8');
                     }
                     if ($srcEncoding !== $destEncoding) {
-                        $data = mb_convert_encoding($data, str_replace('US-ASCII', 'ASCII', $destEncoding), str_replace('US-ASCII', 'ASCII', $srcEncoding));
+                        $data = @mb_convert_encoding($data, str_replace('US-ASCII', 'ASCII', $destEncoding), str_replace('US-ASCII', 'ASCII', $srcEncoding));
                     }
                     if ($data === false) {
                         $escapedData = '';
