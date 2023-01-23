@@ -133,6 +133,9 @@ class XMLParser
     }
 
     /**
+     * Parses an xml-rpc xml string. Results of the parsing are found in $this->['_xh'].
+     * Logs to the error log any issues which do not cause the parsing to fail.
+     *
      * @param string $data
      * @param string $returnType self::RETURN_XMLRPCVALS, self::RETURN_PHP, self::RETURN_EPIVALS
      * @param int $accept a bit-combination of self::ACCEPT_REQUEST, self::ACCEPT_RESPONSE, self::ACCEPT_VALUE
@@ -425,8 +428,7 @@ class XMLParser
 
             case 'MEMBER':
                 // set member name to null, in case we do not find in the xml later on
-                /// @todo we could reject structs missing a NAME in the MEMBER element
-                $this->_xh['valuestack'][count($this->_xh['valuestack']) - 1]['name'] = '';
+                $this->_xh['valuestack'][count($this->_xh['valuestack']) - 1]['name'] = null;
                 //$this->_xh['ac']='';
                 // Drop trough intentionally
 
@@ -579,12 +581,12 @@ class XMLParser
                     // log if receiving something strange, even though we set the value to false anyway
                     /// @todo to be consistent with the other types, we should return a value outside the good-value domain, e.g. NULL
                     if ($this->_xh['ac'] != '0' && strcasecmp($this->_xh['ac'], 'false') !== 0) {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BOOLEAN value: ' . $this->_xh['ac']);
-                        if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
-                        {
+                        if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
                             $this->_xh['isf'] = 2;
                             $this->_xh['isf_reason'] = 'Invalid data received in BOOLEAN value: ' . $this->_xh['ac'];
                             return;
+                        } else {
+                            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BOOLEAN value: ' . $this->_xh['ac']);
                         }
                     }
                     $this->_xh['value'] = false;
@@ -602,12 +604,13 @@ class XMLParser
                 $this->_xh['vt'] = strtolower($name);
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 if (!preg_match(PhpXmlRpc::$xmlrpc_int_format, $this->_xh['ac'])) {
-                    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': non numeric data received in INT: ' . $this->_xh['ac']);
                     if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
                     {
                         $this->_xh['isf'] = 2;
                         $this->_xh['isf_reason'] = 'Non numeric data received in INT value: ' . $this->_xh['ac'];
                         return;
+                    } else {
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': non numeric data received in INT: ' . $this->_xh['ac']);
                     }
                     /// @todo: find a better way of reporting an error value than this! Use NaN?
                     $this->_xh['value'] = 'ERROR_NON_NUMERIC_FOUND';
@@ -621,12 +624,12 @@ class XMLParser
                 $this->_xh['vt'] = Value::$xmlrpcDouble;
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 if (!preg_match(PhpXmlRpc::$xmlrpc_double_format, $this->_xh['ac'])) {
-                    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': non numeric data received in DOUBLE value: ' . $this->_xh['ac']);
-                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
-                    {
+                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
                         $this->_xh['isf'] = 2;
                         $this->_xh['isf_reason'] = 'Non numeric data received in DOUBLE value: ' . $this->_xh['ac'];
                         return;
+                    } else {
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': non numeric data received in DOUBLE value: ' . $this->_xh['ac']);
                     }
 
                     $this->_xh['value'] = 'ERROR_NON_NUMERIC_FOUND';
@@ -640,12 +643,12 @@ class XMLParser
                 $this->_xh['vt'] = Value::$xmlrpcDateTime;
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 if (!preg_match(PhpXmlRpc::$xmlrpc_datetime_format, $this->_xh['ac'])) {
-                    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in DATETIME value: ' . $this->_xh['ac']);
-                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
-                    {
+                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
                         $this->_xh['isf'] = 2;
                         $this->_xh['isf_reason'] = 'Invalid data received in DATETIME value: ' . $this->_xh['ac'];
                         return;
+                    } else {
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in DATETIME value: ' . $this->_xh['ac']);
                     }
                 }
                 if ($this->current_parsing_options['xmlrpc_return_datetimes']) {
@@ -667,7 +670,6 @@ class XMLParser
                 if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
                     $v = base64_decode($this->_xh['ac'], true);
                     if ($v === false) {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BASE64 value');
                         $this->_xh['isf'] = 2;
                         $this->_xh['isf_reason'] = 'Invalid data received in BASE64 value';
                         return;
@@ -687,19 +689,17 @@ class XMLParser
                 break;
 
             case 'MEMBER':
-                // add to array in the stack the last element built, unless no VALUE was found
+                // add to array in the stack the last element built, unless no VALUE or no NAME were found
                 if ($this->_xh['vt']) {
                     $vscount = count($this->_xh['valuestack']);
-                    // NB: atm we always initialize members with an empty name in xmlrpc__ee, so no need for this check.
-                    // We could make parsing stricter though...
-                    //if (isset($this->_xh['valuestack'][$vscount - 1]['name'])) {
-                        $this->_xh['valuestack'][$vscount - 1]['values'][$this->_xh['valuestack'][$vscount - 1]['name']] = $this->_xh['value'];
-                    //} else {
-                    //    /// @todo return a parsing error if $this->current_parsing_options['xmlrpc_reject_invalid_values']?
-                    //    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing NAME inside STRUCT in received xml');
-                    //}
+                    if ($this->_xh['valuestack'][$vscount - 1]['name'] === null) {
+                        /// @todo return a parsing error if $this->current_parsing_options['xmlrpc_reject_invalid_values']
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing NAME inside STRUCT in received xml');
+                        $this->_xh['valuestack'][$vscount - 1]['name'] = '';
+                    }
+                    $this->_xh['valuestack'][$vscount - 1]['values'][$this->_xh['valuestack'][$vscount - 1]['name']] = $this->_xh['value'];
                 } else {
-                    /// @todo return a parsing error $this->current_parsing_options['xmlrpc_reject_invalid_values']?
+                    /// @todo return a parsing error $this->current_parsing_options['xmlrpc_reject_invalid_values']
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing VALUE inside STRUCT in received xml');
                 }
                 break;
@@ -725,14 +725,18 @@ class XMLParser
                     $this->_xh['params'][] = $this->_xh['value'];
                     $this->_xh['pt'][] = $this->_xh['vt'];
                 } else {
-                    /// @todo return a parsing error? esp. if if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
+                    /// @todo return a parsing error when ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing VALUE inside PARAM in received xml');
                 }
                 break;
 
             case 'METHODNAME':
                 /// @todo why do we strip leading whitespace in method names, but not trailing whitespace?
-                $methodname = preg_replace('/^[\n\r\t ]+/', '', $this->_xh['ac']);
+                /// @todo when $this->current_parsing_options['xmlrpc_reject_invalid_values'], we should validate the
+                ///       methodname according to the spec:
+                ///       "The string may only contain identifier characters, upper and lower-case A-Z, the numeric
+                ///       characters, 0-9, underscore, dot, colon and slash"
+                $methodname = trim($this->_xh['ac']);
                 $this->_xh['method'] = $methodname;
                 // we allow the callback to f.e. give us back a mangled method name by manipulating $this
                 if (isset($this->current_parsing_options['methodname_callback'])) {
