@@ -11,8 +11,7 @@ use PhpXmlRpc\Helper\Charset;
  * Test conversion between encodings via usage of the Charset class.
  * Note that quite a few other tests testing different classes also test character set conversion.
  *
- * For Windows if you want to test the output use Consolas font
- * and run the following in cmd:
+ * For Windows if you want to test the output use Consolas font and run the following in cmd:
  *     chcp 28591 (latin1)
  *     chcp 65001 (utf8)
  *

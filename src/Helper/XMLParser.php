@@ -425,6 +425,7 @@ class XMLParser
 
             case 'MEMBER':
                 // set member name to null, in case we do not find in the xml later on
+                /// @todo we could reject structs missing a NAME in the MEMBER element
                 $this->_xh['valuestack'][count($this->_xh['valuestack']) - 1]['name'] = '';
                 //$this->_xh['ac']='';
                 // Drop trough intentionally
@@ -567,12 +568,15 @@ class XMLParser
                 // We translate boolean 1 or 0 into PHP constants true or false. Strings 'true' and 'false' are accepted,
                 // even though the spec never mentions them (see e.g. Blogger api docs)
                 // NB: this simple checks helps a lot sanitizing input, i.e. no security problems around here
-                if ($this->_xh['ac'] == '1' || strcasecmp($this->_xh['ac'], 'true') == 0) {
+                // Note the non-strict type check: it will allow ' 1 '
+                /// @todo feature-creep: use a flexible regexp, the same as we do with int, double and datetime.
+                ///       Note that using a regexp would also make this test less sensitive to phpunit shenanigans
+                if ($this->_xh['ac'] == '1' || strcasecmp($this->_xh['ac'], 'true') === 0) {
                     $this->_xh['value'] = true;
                 } else {
                     // log if receiving something strange, even though we set the value to false anyway
                     /// @todo to be consistent with the other types, we should use a value outside the good-value domain, e.g. NULL
-                    if ($this->_xh['ac'] != '0' && strcasecmp($this->_xh['ac'], 'false') != 0) {
+                    if ($this->_xh['ac'] != '0' && strcasecmp($this->_xh['ac'], 'false') !== 0) {
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BOOLEAN value: ' . $this->_xh['ac']);
                         if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
                         {
@@ -595,8 +599,7 @@ class XMLParser
                 // `Value::scalartyp()` function will do some normalization of the data
                 $this->_xh['vt'] = strtolower($name);
                 $this->_xh['lv'] = 3; // indicate we've found a value
-                // we must check that only 0123456789-<space> are characters here
-                if (!preg_match('/^[+-]?[0123456789 \t]+$/', $this->_xh['ac'])) {
+                if (!preg_match(PhpXmlRpc::$xmlrpc_int_format, $this->_xh['ac'])) {
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': non numeric data received in INT: ' . $this->_xh['ac']);
                     if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
                     {
@@ -615,9 +618,7 @@ class XMLParser
             case 'DOUBLE':
                 $this->_xh['vt'] = Value::$xmlrpcDouble;
                 $this->_xh['lv'] = 3; // indicate we've found a value
-                // we must check that only 0123456789-.<space> are characters here
-                // NOTE: regexp could be much stricter than this...
-                if (!preg_match('/^[+-eE0123456789 \t.]+$/', $this->_xh['ac'])) {
+                if (!preg_match(PhpXmlRpc::$xmlrpc_double_format, $this->_xh['ac'])) {
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': non numeric data received in DOUBLE value: ' . $this->_xh['ac']);
                     if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
                     {
@@ -661,14 +662,19 @@ class XMLParser
             case 'BASE64':
                 $this->_xh['vt'] = Value::$xmlrpcBase64;
                 $this->_xh['lv'] = 3; // indicate we've found a value
-                /// @todo check: should we silence warnings here?
-                $v = base64_decode($this->_xh['ac']);
-                if ($v === false) {
-                    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BASE64 value');
-                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
+                if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
+                    $v = base64_decode($this->_xh['ac'], true);
+                    if ($v === false) {
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BASE64 value');
                         $this->_xh['isf'] = 2;
                         $this->_xh['isf_reason'] = 'Invalid data received in BASE64 value';
                         return;
+                    }
+                } else {
+                    $v = base64_decode($this->_xh['ac']);
+                    if ($v === '' && $this->_xh['ac'] !== '') {
+                        // only the empty string should decode to the empty string
+                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BASE64 value');
                     }
                 }
                 $this->_xh['value'] = $v;
@@ -682,13 +688,16 @@ class XMLParser
                 // add to array in the stack the last element built, unless no VALUE was found
                 if ($this->_xh['vt']) {
                     $vscount = count($this->_xh['valuestack']);
-                    if (!isset($this->_xh['valuestack'][$vscount - 1]['name'])) {
-                        /// @todo handle the case of the NAME element actually following the VALUE in the xml!!!
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing NAME inside STRUCT in received xml');
-                    }
-                    $this->_xh['valuestack'][$vscount - 1]['values'][$this->_xh['valuestack'][$vscount - 1]['name']] = $this->_xh['value'];
+                    // NB: atm we always initialize members with an empty name in xmlrpc__ee, so no need for this check.
+                    // We could make parsing stricter though...
+                    //if (isset($this->_xh['valuestack'][$vscount - 1]['name'])) {
+                        $this->_xh['valuestack'][$vscount - 1]['values'][$this->_xh['valuestack'][$vscount - 1]['name']] = $this->_xh['value'];
+                    //} else {
+                    //    /// @todo return a parsing error if $this->current_parsing_options['xmlrpc_reject_invalid_values']?
+                    //    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing NAME inside STRUCT in received xml');
+                    //}
                 } else {
-                    /// @todo return a parsing error?
+                    /// @todo return a parsing error $this->current_parsing_options['xmlrpc_reject_invalid_values']?
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing VALUE inside STRUCT in received xml');
                 }
                 break;

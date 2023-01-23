@@ -5,7 +5,7 @@ include_once __DIR__ . '/../lib/xmlrpc_wrappers.inc';
 
 include_once __DIR__ . '/parse_args.php';
 
-include_once __DIR__ . '/5ServerTest.php';
+include_once __DIR__ . '/08ServerTest.php';
 
 /**
  * Tests which stress http features of the library.

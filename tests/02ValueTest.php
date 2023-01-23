@@ -11,6 +11,7 @@ use PHPUnit\Runner\BaseTestRunner;
 
 /**
  * Tests involving the Value class.
+ * NB: these tests do not involve the parsing of xml into Value objects - look in 03ParsingTest for that
  */
 class ValueTests extends PhpXmlRpc_PolyfillTestCase
 {
@@ -80,11 +81,26 @@ class ValueTests extends PhpXmlRpc_PolyfillTestCase
         $this->assertEquals(1, $r);
     }
 
+    /// @todo does this test check something useful at all?
     public function testUTF8IntString()
     {
         $v = new xmlrpcval(100, 'int');
         $s = $v->serialize('UTF-8');
         $this->assertequals("<value><int>100</int></value>\n", $s);
+    }
+
+    public function testUTF8String()
+    {
+        $sendstring = 'κόσμε'; // Greek word 'kosme'
+        $GLOBALS['xmlrpc_internalencoding'] = 'UTF-8';
+        \PhpXmlRpc\PhpXmlRpc::importGlobals();
+        $f = new xmlrpcval($sendstring, 'string');
+        $v = $f->serialize();
+        $this->assertEquals("<value><string>&#954;&#8057;&#963;&#956;&#949;</string></value>\n", $v);
+        $v = $f->serialize('UTF-8');
+        $this->assertEquals("<value><string>$sendstring</string></value>\n", $v);
+        $GLOBALS['xmlrpc_internalencoding'] = 'ISO-8859-1';
+        \PhpXmlRpc\PhpXmlRpc::importGlobals();
     }
 
     public function testStringInt()
@@ -98,9 +114,26 @@ class ValueTests extends PhpXmlRpc_PolyfillTestCase
     {
         $tz = date_default_timezone_get();
         date_default_timezone_set('UTC');
+
+        $ts = 86401;
+        $dt = new DateTime('@86401');
+
         $v = new xmlrpcval(86401, 'dateTime.iso8601');
         $s = $v->serialize();
         $this->assertequals("<value><dateTime.iso8601>19700102T00:00:01</dateTime.iso8601></value>\n", $s);
+
+        $v = new xmlrpcval($dt, 'dateTime.iso8601');
+        $s = $v->serialize();
+        $this->assertequals("<value><dateTime.iso8601>19700102T00:00:01</dateTime.iso8601></value>\n", $s);
+
+        $v = new xmlrpcval(\PhpXmlRpc\Helper\Date::iso8601Encode($ts), 'dateTime.iso8601');
+        $s = $v->serialize();
+        $this->assertequals("<value><dateTime.iso8601>19700102T00:00:01</dateTime.iso8601></value>\n", $s);
+
+        $v = new xmlrpcval(\PhpXmlRpc\Helper\Date::iso8601Encode($dt), 'dateTime.iso8601');
+        $s = $v->serialize();
+        $this->assertequals("<value><dateTime.iso8601>19700102T00:00:01</dateTime.iso8601></value>\n", $s);
+
         date_default_timezone_set($tz);
     }
 

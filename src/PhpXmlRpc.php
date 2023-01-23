@@ -175,6 +175,24 @@ class PhpXmlRpc
     public static $xmlrpc_datetime_format = '/^([0-9]{4})(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9]|60)$/';
 
     /**
+     * @var string
+     * Used to validate received integer values. Alter this if the server/client you are communicating with uses
+     * formats non-conformant with the spec.
+     * We keep in spaces for BC, even though they are forbidden by the spec.
+     * NB: the string should not match any data which php can not successfully cast to an integer
+     */
+    public static $xmlrpc_int_format = '/^[ \t]*[+-]?[0-9]+[ \t]*$/';
+
+    /**
+     * @var string
+     * Used to validate received double values. Alter this if the server/client you are communicating with uses
+     * formats non-conformant with the spec, e.g. with leading/trailing spaces/tabs/newlines.
+     * We keep in spaces for BC, even though they are forbidden by the spec.
+     * NB: the string should not match any data which php can not successfully cast to a float
+     */
+    public static $xmlrpc_double_format = '/^[ \t]*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?[ \t]*$/';
+
+    /**
      * A function to be used for compatibility with legacy code: it creates all global variables which used to be declared,
      * such as library version etc...
      * @return void
