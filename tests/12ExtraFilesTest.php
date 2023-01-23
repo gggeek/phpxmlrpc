@@ -12,7 +12,7 @@ class ExtraFilesTest extends PhpXmlRpc_WebTestCase
         $this->args = argParser::getArgs();
 
         // assumes HTTPURI to be in the form /tests/index.php?etc...
-        $this->baseUrl = $this->args['HTTPSERVER'] . preg_replace('|\?.+|', '', $this->args['HTTPURI']);
+        $this->baseUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|\?.+|', '', $this->args['HTTPURI']);
         $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|/tests/index\.php(\?.*)?|', '/tests/phpunit_coverage.php', $this->args['HTTPURI']);
     }
 

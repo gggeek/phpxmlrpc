@@ -21,13 +21,14 @@ class ParsingTests extends PhpXmlRpc_PolyfillTestCase
     protected function set_up()
     {
         $this->args = argParser::getArgs();
-        if ($this->args['DEBUG'] == 1)
+        // hide parsing errors unless in debug mode
+        if ($this->args['DEBUG'] < 1)
             ob_start();
     }
 
     protected function tear_down()
     {
-        if ($this->args['DEBUG'] != 1)
+        if ($this->args['DEBUG'] >= 1)
             return;
         $out = ob_get_clean();
         $status = $this->getStatus();

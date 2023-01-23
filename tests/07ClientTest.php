@@ -25,13 +25,14 @@ class ClientTest extends PhpXmlRpc_PolyfillTestCase
         $this->client = new xmlrpc_client('/NOTEXIST.php', $this->args['HTTPSERVER'], 80);
         $this->client->setDebug($this->args['DEBUG']);
 
-        if ($this->args['DEBUG'] == 1)
+        // in debug mode, the client will be very verbose. Avoid showing its output unless there are errors
+        if ($this->args['DEBUG'] >= 1)
             ob_start();
     }
 
     protected function tear_down()
     {
-        if ($this->args['DEBUG'] != 1)
+        if ($this->args['DEBUG'] < 1)
             return;
         $out = ob_get_clean();
         $status = $this->getStatus();

@@ -108,13 +108,14 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
 
         $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|/tests/index\.php(\?.*)?|', '/tests/phpunit_coverage.php', $this->args['HTTPURI']);
 
-        if ($this->args['DEBUG'] == 1)
+        // in debug mode, the client will be very verbose. Avoid showing its output unless there are errors
+        if ($this->args['DEBUG'] >= 1)
             ob_start();
     }
 
     protected function tear_down()
     {
-        if ($this->args['DEBUG'] != 1)
+        if ($this->args['DEBUG'] < 1)
             return;
         $out = ob_get_clean();
         $status = $this->getStatus();

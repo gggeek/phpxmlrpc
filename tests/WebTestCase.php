@@ -100,8 +100,9 @@ abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_PolyfillTestCase
         if ($this->collectCodeCoverageInformation) {
             $client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);
         }
-        $client->setAcceptedCompression(false);
-        $client->setDebug($this->args['DEBUG']);
+        // let's just assume that the client works fine for these tests, and avoid polluting output
+        //$client->setAcceptedCompression(false);
+        //$client->setDebug($this->args['DEBUG']);
         return $client;
     }
 }

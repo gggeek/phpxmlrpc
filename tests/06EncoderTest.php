@@ -22,6 +22,7 @@ class EncoderTests extends PhpXmlRpc_PolyfillTestCase
     protected function set_up()
     {
         $this->args = argParser::getArgs();
+        // hide parsing errors unless in debug mode
         if ($this->args['DEBUG'] == 1)
             ob_start();
     }
