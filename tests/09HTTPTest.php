@@ -24,7 +24,7 @@ class HTTPTest extends ServerTest
     public function getSingleHttpTestMethods()
     {
         $unsafeMethods = array(
-            'testCatchExceptions', 'testUtf8Method', 'testServerComments',
+            'testCatchExceptions', 'testCatchErrors', 'testUtf8Method', 'testServerComments',
             'testExoticCharsetsRequests', 'testExoticCharsetsRequests2', 'testExoticCharsetsRequests3',
             'testWrapInexistentUrl',
         );

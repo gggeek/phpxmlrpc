@@ -22,7 +22,9 @@ $v = new PhpXmlRpc\Value(1234.5678, 'double');
 output("Double: <PRE>" . htmlentities($v->serialize()) . "</PRE>");
 
 $v = new PhpXmlRpc\Value(time(), 'dateTime.iso8601');
-output("Datetime: <PRE>" . htmlentities($v->serialize()) . "</PRE>");
+output("Datetime (from timestamp): <PRE>" . htmlentities($v->serialize()) . "</PRE>");
+$v = new PhpXmlRpc\Value(new DateTime(), 'dateTime.iso8601');
+output("Datetime (from php DateTime): <PRE>" . htmlentities($v->serialize()) . "</PRE>");
 
 $v = new PhpXmlRpc\Value('hello world', 'base64');
 output("Base64: <PRE>" . htmlentities($v->serialize()) . "</PRE>");

@@ -687,9 +687,29 @@ And turned it into nylon';
 
     public function testCatchExceptions()
     {
+        // this tests for the server to catch exceptions with erro  code 0
         $m = new xmlrpcmsg('tests.raiseException', array(
-            new xmlrpcval('whatever', 'string'),
+            new xmlrpcval(0, 'int'),
         ));
+        $v = $this->send($m, $GLOBALS['xmlrpcerr']['server_error']);
+
+        // these test for the different server exception catching modes
+        $m = new xmlrpcmsg('tests.raiseException', array(
+            new xmlrpcval(3, 'int'),
+        ));
+        $v = $this->send($m, $GLOBALS['xmlrpcerr']['server_error']);
+        $this->addQueryParams(array('EXCEPTION_HANDLING' => 1));
+        $v = $this->send($m, 3); // the error code of the expected exception
+        $this->addQueryParams(array('EXCEPTION_HANDLING' => 2));
+        // depending on whether display_errors is ON or OFF on the server, we will get back a different error here,
+        // as php will generate an http status code of either 200 or 500...
+        $v = $this->send($m, array($GLOBALS['xmlrpcerr']['invalid_return'], $GLOBALS['xmlrpcerr']['http_error']));
+    }
+
+    public function testCatchErrors()
+    {
+        // these test for the different server error catching modes
+        $m = new xmlrpcmsg('tests.raiseError');
         $v = $this->send($m, $GLOBALS['xmlrpcerr']['server_error']);
         $this->addQueryParams(array('EXCEPTION_HANDLING' => 1));
         $v = $this->send($m, 1); // the error code of the expected exception

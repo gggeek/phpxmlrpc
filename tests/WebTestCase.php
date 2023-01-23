@@ -93,4 +93,15 @@ abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_PolyfillTestCase
 
         return $page;
     }
+
+    protected function getClient($path)
+    {
+        $client = new xmlrpc_client($this->baseUrl . $path);
+        if ($this->collectCodeCoverageInformation) {
+            $client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);
+        }
+        $client->setAcceptedCompression(false);
+        $client->setDebug($this->args['DEBUG']);
+        return $client;
+    }
 }

@@ -65,7 +65,24 @@ class handlersContainer
      */
     public function exceptionGenerator($req)
     {
-        throw new Exception("it's just a test", 1);
+        $errNum = 1;
+        if ($req->getNumParams()) {
+            $p1 = $req->getParam(0);
+            if ($p1->kindOf() === 'scalar') {
+                $errNum = (int)$p1->scalarval();
+            }
+        }
+        throw new Exception("it's just a test", $errNum);
+    }
+
+    /**
+     * Method used to test catching of errors in the server.
+     * @param PhpXmlRpc\Request $req
+     * @throws Exception
+     */
+    public function errorGenerator($req)
+    {
+        throw new Error("it's just a test", 1);
     }
 
     /**
@@ -166,6 +183,9 @@ return array_merge(
         // signature omitted on purpose
         "tests.raiseException" => array(
             "function" => array($instance, "exceptionGenerator"),
+        ),
+        "tests.raiseError" => array(
+            "function" => array($instance, "errorGenerator"),
         ),
     )
 );

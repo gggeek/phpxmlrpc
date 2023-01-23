@@ -14,7 +14,7 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
         $this->args = argParser::getArgs();
 
         // assumes HTTPURI to be in the form /tests/index.php?etc...
-        $this->baseUrl = $this->args['HTTPSERVER'] . preg_replace('|\?.+|', '', $this->args['HTTPURI']);
+        $this->baseUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|\?.+|', '', $this->args['HTTPURI']);
         $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|/tests/index\.php(\?.*)?|', '/tests/phpunit_coverage.php', $this->args['HTTPURI']);
     }
 
@@ -75,18 +75,39 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
 
     public function testCodegenServer()
     {
-        /// @todo add a couple of proper xmlrpc calls, too
         $page = $this->request('?demo=server/codegen.php');
         $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
+
+        $c = $this->getClient('?demo=server/codegen.php');
+        $r = $c->send(new \PhpXmlRpc\Request('CommentManager.getComments', array(
+            new \PhpXmlRpc\Value('aCommentId')
+        )));
+        $this->assertEquals(0, $r->faultCode());
     }
 
     public function testDiscussServer()
     {
-        /// @todo add a couple of proper xmlrpc calls, too
         $page = $this->request('?demo=server/discuss.php');
         $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
+
+        $c = $this->getClient('?demo=server/discuss.php');
+
+        $r = $c->send(new \PhpXmlRpc\Request('discuss.addComment', array(
+            new \PhpXmlRpc\Value('aCommentId'),
+            new \PhpXmlRpc\Value('aCommentUser'),
+            new \PhpXmlRpc\Value('a Comment')
+        )));
+        $this->assertEquals(0, $r->faultCode());
+        $this->assertGreaterThanOrEqual(1, $r->value()->scalarval());
+
+        $r = $c->send(new \PhpXmlRpc\Request('discuss.getComments', array(
+            new \PhpXmlRpc\Value('aCommentId')
+        )));
+        $this->assertEquals(0, $r->faultCode());
+        $this->assertEquals(0, $r->faultCode());
+        $this->assertGreaterThanOrEqual(1, count($r->value()));
     }
 
     public function testProxyServer()
