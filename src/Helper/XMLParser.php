@@ -508,7 +508,7 @@ class XMLParser
 
         switch ($name) {
             case 'VALUE':
-                // This if() detects if no scalar was inside <VALUE></VALUE>
+                // If no scalar was inside <VALUE></VALUE>, it was a string value
                 if ($this->_xh['vt'] == 'value') {
                     $this->_xh['value'] = $this->_xh['ac'];
                     $this->_xh['vt'] = Value::$xmlrpcString;
@@ -542,7 +542,7 @@ class XMLParser
                     }
                 } else {
                     /// @todo this should handle php-serialized objects, since std deserializing is done
-                    ///  by php_xmlrpc_decode, which we will not be calling...
+                    ///       by php_xmlrpc_decode, which we will not be calling...
                     //if (isset($this->_xh['php_class'])) {
                     //}
                 }
@@ -556,13 +556,13 @@ class XMLParser
                 break;
 
             case 'STRING':
-                $this->_xh['vt'] = strtolower($name);
+                $this->_xh['vt'] = Value::$xmlrpcString;
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 $this->_xh['value'] = $this->_xh['ac'];
                 break;
 
             case 'BOOLEAN':
-                $this->_xh['vt'] = strtolower($name);
+                $this->_xh['vt'] = Value::$xmlrpcBoolean;
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 // We translate boolean 1 or 0 into PHP constants true or false. Strings 'true' and 'false' are accepted,
                 // even though the spec never mentions them (see e.g. Blogger api docs)
@@ -571,6 +571,7 @@ class XMLParser
                     $this->_xh['value'] = true;
                 } else {
                     // log if receiving something strange, even though we set the value to false anyway
+                    /// @todo to be consistent with the other types, we should use a value outside the good-value domain, e.g. NULL
                     if ($this->_xh['ac'] != '0' && strcasecmp($this->_xh['ac'], 'false') != 0) {
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BOOLEAN value: ' . $this->_xh['ac']);
                         if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
@@ -584,10 +585,14 @@ class XMLParser
                 }
                 break;
 
+            case 'EX:I8':
+                $name = 'i8';
+                // fall through voluntarily
             case 'I4':
             case 'I8':
-            case 'EX:I8':
             case 'INT':
+                // NB: we build the Value object with the original xml element name found, except for ex:i8. The
+                // `Value::scalartyp()` function will do some normalization of the data
                 $this->_xh['vt'] = strtolower($name);
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 // we must check that only 0123456789-<space> are characters here
@@ -608,7 +613,7 @@ class XMLParser
                 break;
 
             case 'DOUBLE':
-                $this->_xh['vt'] = strtolower($name);
+                $this->_xh['vt'] = Value::$xmlrpcDouble;
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 // we must check that only 0123456789-.<space> are characters here
                 // NOTE: regexp could be much stricter than this...
@@ -629,7 +634,7 @@ class XMLParser
                 break;
 
             case 'DATETIME.ISO8601':
-                $this->_xh['vt'] = strtolower($name);
+                $this->_xh['vt'] = Value::$xmlrpcDateTime;
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 if (!preg_match(PhpXmlRpc::$xmlrpc_datetime_format, $this->_xh['ac'])) {
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in DATETIME value: ' . $this->_xh['ac']);
@@ -640,7 +645,6 @@ class XMLParser
                         return;
                     }
                 }
-                $this->_xh['vt'] = Value::$xmlrpcDateTime;
                 if ($this->current_parsing_options['xmlrpc_return_datetimes']) {
                     try {
                         $this->_xh['value'] = new \DateTime($this->_xh['ac']);
@@ -655,7 +659,7 @@ class XMLParser
                 break;
 
             case 'BASE64':
-                $this->_xh['vt'] = strtolower($name);
+                $this->_xh['vt'] = Value::$xmlrpcBase64;
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 /// @todo check: should we silence warnings here?
                 $v = base64_decode($this->_xh['ac']);
@@ -710,7 +714,7 @@ class XMLParser
                     $this->_xh['params'][] = $this->_xh['value'];
                     $this->_xh['pt'][] = $this->_xh['vt'];
                 } else {
-                    /// @todo return a parsing error?
+                    /// @todo return a parsing error? esp. if if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
                     $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing VALUE inside PARAM in received xml');
                 }
                 break;
