@@ -34,7 +34,7 @@ class XMLParser
      * @var int
      * The max length beyond which data will get truncated in error messages
      */
-    protected $maxDebugValueLength = 100;
+    protected $maxLogValueLength = 100;
 
     /**
      * @var array
@@ -591,11 +591,11 @@ class XMLParser
                     if ($this->_xh['ac'] != '0' && strcasecmp($this->_xh['ac'], 'false') !== 0) {
                         if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
                             $this->_xh['isf'] = 2;
-                            $this->_xh['isf_reason'] = 'Invalid data received in BOOLEAN value: ' . $this->truncateForDebug($this->_xh['ac']);
+                            $this->_xh['isf_reason'] = 'Invalid data received in BOOLEAN value: ' . $this->truncateForLog($this->_xh['ac']);
                             return;
                         } else {
                             $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BOOLEAN value: ' .
-                                $this->truncateForDebug($this->_xh['ac']));
+                                $this->truncateForLog($this->_xh['ac']));
                         }
                     }
                     $this->_xh['value'] = false;
@@ -616,11 +616,11 @@ class XMLParser
                     if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
                     {
                         $this->_xh['isf'] = 2;
-                        $this->_xh['isf_reason'] = 'Non numeric data received in INT value: ' . $this->truncateForDebug($this->_xh['ac']);
+                        $this->_xh['isf_reason'] = 'Non numeric data received in INT value: ' . $this->truncateForLog($this->_xh['ac']);
                         return;
                     } else {
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': non numeric data received in INT: ' .
-                            $this->truncateForDebug($this->_xh['ac']));
+                            $this->truncateForLog($this->_xh['ac']));
                     }
                     /// @todo: find a better way of reporting an error value than this! Use NaN?
                     $this->_xh['value'] = 'ERROR_NON_NUMERIC_FOUND';
@@ -637,11 +637,11 @@ class XMLParser
                     if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
                         $this->_xh['isf'] = 2;
                         $this->_xh['isf_reason'] = 'Non numeric data received in DOUBLE value: ' .
-                            $this->truncateForDebug($this->_xh['ac']);
+                            $this->truncateForLog($this->_xh['ac']);
                         return;
                     } else {
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': non numeric data received in DOUBLE value: ' .
-                            $this->truncateForDebug($this->_xh['ac']));
+                            $this->truncateForLog($this->_xh['ac']));
                     }
 
                     $this->_xh['value'] = 'ERROR_NON_NUMERIC_FOUND';
@@ -657,11 +657,11 @@ class XMLParser
                 if (!preg_match(PhpXmlRpc::$xmlrpc_datetime_format, $this->_xh['ac'])) {
                     if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
                         $this->_xh['isf'] = 2;
-                        $this->_xh['isf_reason'] = 'Invalid data received in DATETIME value: ' . $this->truncateForDebug($this->_xh['ac']);
+                        $this->_xh['isf_reason'] = 'Invalid data received in DATETIME value: ' . $this->truncateForLog($this->_xh['ac']);
                         return;
                     } else {
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in DATETIME value: ' .
-                            $this->truncateForDebug($this->_xh['ac']));
+                            $this->truncateForLog($this->_xh['ac']));
                     }
                 }
                 if ($this->current_parsing_options['xmlrpc_return_datetimes']) {
@@ -684,7 +684,7 @@ class XMLParser
                     $v = base64_decode($this->_xh['ac'], true);
                     if ($v === false) {
                         $this->_xh['isf'] = 2;
-                        $this->_xh['isf_reason'] = 'Invalid data received in BASE64 value: '. $this->truncateForDebug($this->_xh['ac']);
+                        $this->_xh['isf_reason'] = 'Invalid data received in BASE64 value: '. $this->truncateForLog($this->_xh['ac']);
                         return;
                     }
                 } else {
@@ -692,7 +692,7 @@ class XMLParser
                     if ($v === '' && $this->_xh['ac'] !== '') {
                         // only the empty string should decode to the empty string
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BASE64 value: ' .
-                            $this->truncateForDebug($this->_xh['ac']));
+                            $this->truncateForLog($this->_xh['ac']));
                     }
                 }
                 $this->_xh['value'] = $v;
@@ -763,11 +763,11 @@ class XMLParser
                 if (!preg_match(PhpXmlRpc::$xmlrpc_methodname_format, $this->_xh['ac'])) {
                     if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
                         $this->_xh['isf'] = 2;
-                        $this->_xh['isf_reason'] = 'Invalid data received in METHODNAME: '. $this->truncateForDebug($this->_xh['ac']);
+                        $this->_xh['isf_reason'] = 'Invalid data received in METHODNAME: '. $this->truncateForLog($this->_xh['ac']);
                         return;
                     } else {
                         $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in METHODNAME: '.
-                            $this->truncateForDebug($this->_xh['ac']));
+                            $this->truncateForLog($this->_xh['ac']));
                     }
                 }
                 $methodName = trim($this->_xh['ac']);
@@ -1040,10 +1040,15 @@ class XMLParser
         }
     }
 
-    protected function truncateForDebug($data)
+    /**
+     * Truncates unsafe data
+     * @param string $data
+     * @return string
+     */
+    protected function truncateForLog($data)
     {
-        if (strlen($data) > $this->maxDebugValueLength) {
-            return substr($data, 0, $this->maxDebugValueLength - 3) . '...';
+        if (strlen($data) > $this->maxLogValueLength) {
+            return substr($data, 0, $this->maxLogValueLength - 3) . '...';
         }
 
         return $data;
