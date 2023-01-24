@@ -56,11 +56,13 @@ class Response
      * @param string $fString the error string, in case of an error response
      * @param string $valType The type of $val passed in. Either 'xmlrpcvals', 'phpvals' or 'xml'. Leave empty to let
      *                        the code guess the correct type.
-     * @param array|null $httpResponse
+     * @param array|null $httpResponse this should be set when the response is being built out of data received from
+     *                                 http (i.e. not when programmatically building a Response server-side). Array
+     *                                 keys should include, if known: headers, cookies, raw_data, status_code
      *
      * @todo add check that $val / $fCode / $fString is of correct type???
      *       NB: as of now we do not do it, since it might be either an xml-rpc value or a plain php val, or a complete
-     *       xml chunk, depending on usage of Client::send() inside which creator is called...
+     *       xml chunk, depending on usage of Client::send() inside which the constructor is called...
      */
     public function __construct($val, $fCode = 0, $fString = '', $valType = '', $httpResponse = null)
     {
@@ -129,7 +131,8 @@ class Response
      * with attributes being e.g. 'expires', 'path', domain'.
      * NB: cookies sent as 'expired' by the server (i.e. with an expiry date in the past) are still present in the array.
      * It is up to the user-defined code to decide how to use the received cookies, and whether they have to be sent back
-     * with the next request to the server (using Client::setCookie) or not.
+     * with the next request to the server (using $client->setCookie) or not.
+     * The values are filled in at constructor time, and might not be set for specific debug values used.
      *
      * @return array[] array of cookies received from the server
      */
@@ -139,7 +142,10 @@ class Response
     }
 
     /**
-     * @return array array with keys 'headers', 'cookies', 'raw_data' and 'status_code'
+     * Returns an array with info about the http response received from the server.
+     * The values are filled in at constructor time, and might not be set for specific debug values used.
+     *
+     * @return array array with keys 'headers', 'cookies', 'raw_data' and 'status_code'.
      */
     public function httpResponse()
     {

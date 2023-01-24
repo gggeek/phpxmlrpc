@@ -87,12 +87,12 @@ class Http
      *
      * @param string $data the http response, headers and body. It will be stripped of headers
      * @param bool $headersProcessed when true, we assume that response inflating and dechunking has been already carried out
-     * @param int $debug when != 0, logs to screen messages detailing info about the parsed data
+     * @param int $debug when > 0, logs to screen messages detailing info about the parsed data
      * @return array with keys 'headers', 'cookies', 'raw_data' and 'status_code'
      * @throws HttpException
      *
-     * @todo if $debug is 0, we could avoid populating 'raw_data' and 'headers' in the returned value - even better, have
-     *       2 debug levels
+     * @todo if $debug is < 0, we could avoid populating 'raw_data' and 'headers' in the returned value - but that would
+     *       be a weird API...
      */
     public function parseResponseHeaders(&$data, $headersProcessed = false, $debug = 0)
     {

@@ -258,11 +258,12 @@ class Request
      */
     public function parseResponse($data = '', $headersProcessed = false, $returnType = XMLParser::RETURN_XMLRPCVALS)
     {
-        if ($this->debug) {
+        if ($this->debug > 0) {
             $this->getLogger()->debugMessage("---GOT---\n$data\n---END---");
         }
 
-        $this->httpResponse = array('raw_data' => $data, 'headers' => array(), 'cookies' => array());
+        $httpResponse = array('raw_data' => $data, 'headers' => array(), 'cookies' => array());
+        $this->httpResponse = $httpResponse;
 
         if ($data == '') {
             $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': no response received from server.');
@@ -273,7 +274,7 @@ class Request
         if (substr($data, 0, 4) == 'HTTP') {
             $httpParser = new Http();
             try {
-                $this->httpResponse = $httpParser->parseResponseHeaders($data, $headersProcessed, $this->debug);
+                $httpResponse = $httpParser->parseResponseHeaders($data, $headersProcessed, $this->debug > 0);
             } catch (HttpException $e) {
                 // failed processing of HTTP response headers
                 // save into response obj the full payload received, for debugging
@@ -297,11 +298,17 @@ class Request
 
         // try to 'guestimate' the character encoding of the received response
         $respEncoding = XMLParser::guessEncoding(
-            isset($this->httpResponse['headers']['content-type']) ? $this->httpResponse['headers']['content-type'] : '',
+            isset($httpResponse['headers']['content-type']) ? $httpResponse['headers']['content-type'] : '',
             $data
         );
 
-        if ($this->debug) {
+        if ($this->debug >= 0) {
+            $this->httpResponse = $httpResponse;
+        } else {
+            $httpResponse = null;
+        }
+
+        if ($this->debug > 0) {
             $start = strpos($data, '<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
             if ($start) {
                 $start += strlen('<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
@@ -314,7 +321,7 @@ class Request
 
         // if the user wants back raw xml, give it to her
         if ($returnType == 'xml') {
-            return new Response($data, 0, '', 'xml', $this->httpResponse);
+            return new Response($data, 0, '', 'xml', $httpResponse);
         }
 
         /// @todo move this block of code into the XMLParser
@@ -357,10 +364,10 @@ class Request
 
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_xml'],
                 PhpXmlRpc::$xmlrpcstr['invalid_xml'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '',
-                $this->httpResponse
+                $httpResponse
             );
 
-            if ($this->debug) {
+            if ($this->debug > 0) {
                 $this->getLogger()->debugMessage($xmlRpcParser->_xh['isf_reason']);
             }
         }
@@ -368,20 +375,23 @@ class Request
         elseif ($xmlRpcParser->_xh['isf'] == 2) {
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['xml_not_compliant'],
                 PhpXmlRpc::$xmlrpcstr['xml_not_compliant'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '',
-                $this->httpResponse
+                $httpResponse
             );
 
-            if ($this->debug) {
-                /// @todo echo something for user?
-            }
+            /// @todo echo something for the user? check if this was already done by the parser...
+            //if ($this->debug > 0) {
+            //    $this->getLogger()->debugMessage($xmlRpcParser->_xh['isf_reason']);
+            //}
         }
         // third error check: parsing of the response has somehow gone boink.
         /// @todo shall we omit this check, since we trust the parsing code?
         elseif ($xmlRpcParser->_xh['isf'] > 3 || $returnType == XMLParser::RETURN_XMLRPCVALS && !is_object($xmlRpcParser->_xh['value'])) {
             // something odd has happened and it's time to generate a client side error indicating something odd went on
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['xml_parsing_error'], PhpXmlRpc::$xmlrpcstr['xml_parsing_error'],
-                '', $this->httpResponse
+                '', $httpResponse
             );
+
+            /// @todo echo something for the user?
         } else {
             if ($this->debug > 1) {
                 $this->getLogger()->debugMessage(
@@ -409,9 +419,9 @@ class Request
                     $errNo = -1;
                 }
 
-                $r = new Response(0, $errNo, $errStr, '', $this->httpResponse);
+                $r = new Response(0, $errNo, $errStr, '', $httpResponse);
             } else {
-                $r = new Response($v, 0, '', $returnType, $this->httpResponse);
+                $r = new Response($v, 0, '', $returnType, $httpResponse);
             }
         }
 
@@ -431,7 +441,7 @@ class Request
     /**
      * Enables/disables the echoing to screen of the xml-rpc responses received.
      *
-     * @param integer $level values 0, 1, 2 are supported
+     * @param integer $level values <0, 0, 1, >1 are supported
      * @return $this
      */
     public function setDebug($level)

@@ -221,7 +221,7 @@ class Server
      *                    3 = add also all processing warnings happened during method processing
      *                    (NB: this involves setting a custom error handler, and might interfere
      *                    with the standard processing of the php function exposed as method. In
-     *                    particular, triggering an USER_ERROR level error will not halt script
+     *                    particular, triggering a USER_ERROR level error will not halt script
      *                    execution anymore, but just end up logged in the xml-rpc response)
      *                    Note that info added at level 2 and 3 will be base64 encoded
      * @return $this

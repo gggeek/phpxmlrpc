@@ -353,12 +353,14 @@ class Client
      * The debugging information at level 1 includes the raw data returned from the XML-RPC server it was querying
      * (including bot HTTP headers and the full XML payload), and the PHP value the client attempts to create to
      * represent the value returned by the server.
-     * At level2, the complete payload of the xml-rpc request is also printed, before being sent to the server.
+     * At level 2, the complete payload of the xml-rpc request is also printed, before being sent to the server.
+     * At level -1, the Response objects returned by send() calls will not carry information about the http response's
+     * cookies, headers and body, which might save some memory
      *
      * This option can be very useful when debugging servers as it allows you to see exactly what the client sends and
      * the server returns. Never leave it enabled for production!
      *
-     * @param integer $level values 0, 1 and 2 are supported (2 = echo sent msg too, before received response)
+     * @param integer $level values -1, 0, 1 and 2 are supported
      * @return $this
      */
     public function setDebug($level)
@@ -1206,7 +1208,7 @@ class Client
 
         if ($this->debug > 1) {
             curl_setopt($curl, CURLOPT_VERBOSE, true);
-            /// @todo allow callers to redirect curlopt_stderr to some stream which can be buffered
+            /// @todo redirect curlopt_stderr to some stream which can be piped to the logger
         }
         curl_setopt($curl, CURLOPT_USERAGENT, $this->user_agent);
         // required for XMLRPC: post the data
