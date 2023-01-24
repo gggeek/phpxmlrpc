@@ -201,8 +201,10 @@ class Request
      * @return Response
      *
      * @todo parsing Responses is not really the responsibility of the Request class. Maybe of the Client...
-     * @todo what about only populating 'raw_data' and 'headers' in httpResponse when debug mode is on? Even better, have
-     *       3 debug levels: data only, echo messages, echo more messages
+     * @todo what about only populating 'raw_data' in httpResponse when debug mode is > 0?
+     * @todo feature creep - allow parsing data gotten from a stream pointer instead of a string: read it piecewise,
+     *       looking first for separation between headers and body, then for charset indicators, server debug info and
+     *       </methodResponse>. That would require a notable increase in code complexity...
      */
     public function parseResponse($data = '', $headersProcessed = false, $returnType = XMLParser::RETURN_XMLRPCVALS)
     {
@@ -210,8 +212,7 @@ class Request
             $this->getLogger()->debug("---GOT---\n$data\n---END---");
         }
 
-        $httpResponse = array('raw_data' => $data, 'headers' => array(), 'cookies' => array());
-        $this->httpResponse = $httpResponse;
+        $this->httpResponse = array('raw_data' => $data, 'headers' => array(), 'cookies' => array());
 
         if ($data == '') {
             $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': no response received from server.');
@@ -230,6 +231,8 @@ class Request
             } catch(\Exception $e) {
                 return new Response(0, $e->getCode(), $e->getMessage(), '', array('raw_data' => $data));
             }
+        } else {
+            $httpResponse = $this->httpResponse;
         }
 
         // be tolerant of extra whitespace in response body
@@ -260,6 +263,7 @@ class Request
             $start = strpos($data, '<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
             if ($start) {
                 $start += strlen('<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
+                /// @todo what if there is no end tag?
                 $end = strpos($data, '-->', $start);
                 $comments = substr($data, $start, $end - $start);
                 $this->getLogger()->debug("---SERVER DEBUG INFO (DECODED) ---\n\t" .
@@ -311,9 +315,7 @@ class Request
             //    there could be proxies meddling with the request, or network data corruption...
 
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_xml'],
-                PhpXmlRpc::$xmlrpcstr['invalid_xml'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '',
-                $httpResponse
-            );
+                PhpXmlRpc::$xmlrpcstr['invalid_xml'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '', $httpResponse);
 
             if ($this->debug > 0) {
                 $this->getLogger()->debug($xmlRpcParser->_xh['isf_reason']);
@@ -322,11 +324,9 @@ class Request
         // second error check: xml well-formed but not xml-rpc compliant
         elseif ($xmlRpcParser->_xh['isf'] == 2) {
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['xml_not_compliant'],
-                PhpXmlRpc::$xmlrpcstr['xml_not_compliant'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '',
-                $httpResponse
-            );
+                PhpXmlRpc::$xmlrpcstr['xml_not_compliant'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '', $httpResponse);
 
-            /// @todo echo something for the user? check if this was already done by the parser...
+            /// @todo echo something for the user? check if it was already done by the parser...
             //if ($this->debug > 0) {
             //    $this->getLogger()->debug($xmlRpcParser->_xh['isf_reason']);
             //}
@@ -363,7 +363,8 @@ class Request
 
                 if ($errNo == 0) {
                     // FAULT returned, errno needs to reflect that
-                    /// @todo we should signal somehow that the server returned a fault with code 0?
+                    /// @todo feature creep - add this code to PhpXmlRpc::$xmlrpcerr
+                    $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': fault response received with faultCode 0. Converted it to -1');
                     $errNo = -1;
                 }
 
