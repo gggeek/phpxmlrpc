@@ -361,7 +361,7 @@ class Request
             );
 
             if ($this->debug) {
-                print $xmlRpcParser->_xh['isf_reason'];
+                $this->getLogger()->debugMessage($xmlRpcParser->_xh['isf_reason']);
             }
         }
         // second error check: xml well-formed but not xml-rpc compliant
@@ -419,7 +419,7 @@ class Request
     }
 
     /**
-     * Kept the old name even if Request class was renamed, for compatibility.
+     * Kept the old name even if Request class was renamed, for BC.
      *
      * @return string
      */
