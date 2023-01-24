@@ -56,6 +56,9 @@
 
 * fixed: receiving integers which use the '<EX:I8>' xml tag
 
+* new: method `PhpXmlRpc::useInteropFaults()` can be used to make the library change the error codes it generates to
+  match the spec described at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
+
 * new: added the `Client::setTimeout` method, meant to replace usage of the `$timeout` argument in calls to `send`
   and `multicall`
 

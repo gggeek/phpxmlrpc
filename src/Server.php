@@ -578,7 +578,7 @@ class Server
                 PhpXmlRpc::$xmlrpcerrxml + (int)$matches[1],
                 $xmlRpcParser->_xh['isf_reason']);
         } elseif ($xmlRpcParser->_xh['isf']) {
-            /// @todo separate better the various cases, as we have done in Request::parseResponse: invalid xml-rpc,
+            /// @todo separate better the various cases, as we have done in Request::parseResponse: invalid xml-rpc vs.
             ///       parsing error
             return new Response(
                 0,
@@ -988,13 +988,13 @@ class Server
             );
         }
 
-        /// @todo add support for "standard" error codes
-        //if (...) {
-        //    $outAr['faults_interop'] = array(
-        //        'specUrl' => 'http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php',
-        //        'specVersion' => 20010516
-        //    );
-        //}
+        // support for "standard" error codes
+        if (PhpXmlRpc::$xmlrpcerr['unknown_method'] == -32601) {
+            $outAr['faults_interop'] = array(
+                'specUrl' => 'http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php',
+                'specVersion' => 20010516
+            );
+        }
 
         return $outAr;
     }

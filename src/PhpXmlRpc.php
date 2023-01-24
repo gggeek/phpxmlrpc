@@ -203,6 +203,37 @@ class PhpXmlRpc
      */
     public static $xmlrpc_methodname_format = '|^[ \t]*[a-zA-Z0-9_.:/]+[ \t]*$|';
 
+    /// @todo review - should we use the range -32099 .. -32000 for some server erors?
+    public static $xmlrpcerr_interop = array(
+        'unknown_method' => -32601,
+        'invalid_return' => 2,
+        'incorrect_params' => -32602,
+        'introspect_unknown' => -32601, // this shares the same code but has a separate meaning from 'unknown_method'...
+        'http_error' => 32300,
+        'no_data' => -32700,
+        'no_ssl' => -32400,
+        'curl_fail' => -32400,
+        'invalid_request' => -32600,
+        'no_curl' => -32400,
+        'server_error' => -32500,
+        'multicall_error' => -32700,
+        'multicall_notstruct' => -32600,
+        'multicall_nomethod' => -32601,
+        'multicall_notstring' => -32600,
+        'multicall_recursion' => -32603,
+        'multicall_noparams' => -32602,
+        'multicall_notarray' => -32600,
+        'no_http2' => -32400,
+        'invalid_xml' => -32700,
+        'xml_not_compliant' => -32700,
+        'xml_parsing_error' => -32700,
+        'cannot_decompress' => -32400,
+        'decompress_fail' => -32300,
+        'dechunk_fail' => -32300,
+        'server_cannot_decompress' => -32300,
+        'server_decompress_fail' => -32300,
+    );
+
     /**
      * A function to be used for compatibility with legacy code: it creates all global variables which used to be declared,
      * such as library version etc...
@@ -278,5 +309,19 @@ class PhpXmlRpc
         Value::setLogger($logger);
         Wrapper::setLogger($logger);
         XMLParser::setLogger($logger);
+    }
+
+    /**
+     * Makes the library use the error codes detailed at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
+     *
+     * @return void
+     *
+     * @tofo feature creep - allow switching back to the original set of codes; querying the current mode
+     */
+    public static function useInteropFaults()
+    {
+        self::$xmlrpcerr = self::$xmlrpcerr_interop;
+
+        self::$xmlrpcerruser = -32000;
     }
 }
