@@ -3,6 +3,7 @@
 namespace PhpXmlRpc\Helper;
 
 use PhpXmlRpc\PhpXmlRpc;
+use PhpXmlRpc\Traits\LoggerAware;
 use PhpXmlRpc\Value;
 
 /**
@@ -19,6 +20,8 @@ use PhpXmlRpc\Value;
  */
 class XMLParser
 {
+    use LoggerAware;
+
     const RETURN_XMLRPCVALS = 'xmlrpcvals';
     const RETURN_EPIVALS = 'epivals';
     const RETURN_PHP = 'phpvals';
@@ -27,8 +30,6 @@ class XMLParser
     const ACCEPT_RESPONSE = 2;
     const ACCEPT_VALUE = 4;
     const ACCEPT_FAULT = 8;
-
-    protected static $logger;
 
     /**
      * @var int
@@ -106,23 +107,6 @@ class XMLParser
     protected $maxChunkLength = 4194304;
     /** @var array supported keys: accept, target_charset, methodname_callback, xmlrpc_null_extension, xmlrpc_return_datetimes */
     protected $current_parsing_options = array();
-
-    public function getLogger()
-    {
-        if (self::$logger === null) {
-            self::$logger = Logger::instance();
-        }
-        return self::$logger;
-    }
-
-    /**
-     * @param $logger
-     * @return void
-     */
-    public static function setLogger($logger)
-    {
-        self::$logger = $logger;
-    }
 
     /**
      * @param array $options integer keys: options passed to the xml parser

@@ -3,10 +3,11 @@
 namespace PhpXmlRpc;
 
 use PhpXmlRpc\Exception\HttpException;
-use PhpXmlRpc\Helper\Charset;
 use PhpXmlRpc\Helper\Http;
-use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Traits\CharsetEncoderAware;
+use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\ParserAware;
 
 /**
  * This class provides the representation of a request to an XML-RPC server.
@@ -16,9 +17,9 @@ use PhpXmlRpc\Helper\XMLParser;
  */
 class Request
 {
-    protected static $logger;
-    protected static $parser;
-    protected static $charsetEncoder;
+    use CharsetEncoderAware;
+    use LoggerAware;
+    use ParserAware;
 
     /// @todo: do these need to be public?
     public $payload;
@@ -34,59 +35,6 @@ class Request
     // holds data while parsing the response. NB: Not a full Response object
     /** @deprecated will be removed in a future release */
     protected $httpResponse = array();
-
-    public function getLogger()
-    {
-        if (self::$logger === null) {
-            self::$logger = Logger::instance();
-        }
-        return self::$logger;
-    }
-
-    /**
-     * @param $logger
-     * @return void
-     */
-    public static function setLogger($logger)
-    {
-        self::$logger = $logger;
-    }
-
-    public function getParser()
-    {
-        if (self::$parser === null) {
-            self::$parser = new XMLParser();
-        }
-        return self::$parser;
-    }
-
-    /**
-     * @param $parser
-     * @return void
-     */
-    public static function setParser($parser)
-    {
-        self::$parser = $parser;
-    }
-
-    public function getCharsetEncoder()
-    {
-        if (self::$charsetEncoder === null) {
-            self::$charsetEncoder = Charset::instance();
-        }
-        return self::$charsetEncoder;
-    }
-
-    /**
-     * @param $charsetEncoder
-     * @return void
-     *
-     * @todo this should be a static method
-     */
-    public function setCharsetEncoder($charsetEncoder)
-    {
-        self::$charsetEncoder = $charsetEncoder;
-    }
 
     /**
      * @param string $methodName the name of the method to invoke

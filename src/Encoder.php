@@ -2,8 +2,9 @@
 
 namespace PhpXmlRpc;
 
-use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\ParserAware;
 
 /**
  * A helper class to easily convert between Value objects and php native values.
@@ -13,42 +14,8 @@ use PhpXmlRpc\Helper\XMLParser;
  */
 class Encoder
 {
-    protected static $logger;
-    protected static $parser;
-
-    public function getLogger()
-    {
-        if (self::$logger === null) {
-            self::$logger = Logger::instance();
-        }
-        return self::$logger;
-    }
-
-    /**
-     * @param $logger
-     * @return void
-     */
-    public static function setLogger($logger)
-    {
-        self::$logger = $logger;
-    }
-
-    public function getParser()
-    {
-        if (self::$parser === null) {
-            self::$parser = new XMLParser();
-        }
-        return self::$parser;
-    }
-
-    /**
-     * @param $parser
-     * @return void
-     */
-    public static function setParser($parser)
-    {
-        self::$parser = $parser;
-    }
+    use LoggerAware;
+    use ParserAware;
 
     /**
      * Takes an xml-rpc Value in object instance and translates it into native PHP types, recursively.

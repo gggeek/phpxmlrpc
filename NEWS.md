@@ -1,5 +1,7 @@
 ## XML-RPC for PHP version 4.xx - unreleased
 
+* changed: the minimum php version required has increased to 5.4
+
 * new: allow to specify other charsets than the canonical three (UTF-8, ISO-8859-1, ASCII), when mbstring is
   available, both for outgoing and incoming data.
 
@@ -137,7 +139,8 @@
     changed: it now returns a Response for the cases in which it previously returned false, and an array of Response
     objects for the cases in which it previously returned a string
   - if you subclassed the `Client` class, take care of new static variables `$requestClass` and `$responseClass`
-
+  - traits have been introduced for all classes dealing with Logger, XMLParser and CharsetEncoder; method `setCharsetEncoder`
+    is now static
 
 ## XML-RPC for PHP version 4.9.5 - 2023/01/11
 

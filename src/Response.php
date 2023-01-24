@@ -2,7 +2,7 @@
 
 namespace PhpXmlRpc;
 
-use PhpXmlRpc\Helper\Charset;
+use PhpXmlRpc\Traits\CharsetEncoderAware;
 
 /**
  * This class provides the representation of the response of an XML-RPC server.
@@ -15,7 +15,7 @@ use PhpXmlRpc\Helper\Charset;
  */
 class Response
 {
-    protected static $charsetEncoder;
+    use CharsetEncoderAware;
 
     /// @todo: do these need to be public?
     /** @internal */
@@ -30,25 +30,6 @@ class Response
     /** @var string */
     public $content_type = 'text/xml';
     protected $httpResponse = array('headers' => array(), 'cookies' => array(), 'raw_data' => '', 'status_code' => null);
-
-    public function getCharsetEncoder()
-    {
-        if (self::$charsetEncoder === null) {
-            self::$charsetEncoder = Charset::instance();
-        }
-        return self::$charsetEncoder;
-    }
-
-    /**
-     * @param $charsetEncoder
-     * @return void
-     *
-     * @todo this should be a static method
-     */
-    public function setCharsetEncoder($charsetEncoder)
-    {
-        self::$charsetEncoder = $charsetEncoder;
-    }
 
     /**
      * @param Value|string|mixed $val either a Value object, a php value or the xml serialization of an xml-rpc value (a string)

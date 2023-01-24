@@ -5,7 +5,7 @@
     "homepage": "https://gggeek.github.io/phpxmlrpc/",
     "keywords": [ "xmlrpc", "xml-rpc","webservices" ],
     "require": {
-        "php": "^5.3.0 || ^7.0 || ^8.0",
+        "php": "^5.4.0 || ^7.0 || ^8.0",
         "ext-xml": "*"
     },
     "_comment::tests": "The dev packages below require a minimum of php 5.4, even though we support php 5.3. Can we manage to do better?",

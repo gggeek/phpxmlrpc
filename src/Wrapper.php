@@ -7,7 +7,7 @@
 
 namespace PhpXmlRpc;
 
-use PhpXmlRpc\Helper\Logger;
+use PhpXmlRpc\Traits\LoggerAware;
 
 /**
  * PHPXMLRPC "wrapper" class - generate stubs to transparently access xml-rpc methods as php functions and vice-versa.
@@ -21,6 +21,8 @@ use PhpXmlRpc\Helper\Logger;
  */
 class Wrapper
 {
+    use LoggerAware;
+
     /**
      * @var object[]
      * Used to hold a reference to object instances whose methods get wrapped by wrapPhpFunction(), in 'create source' mode
@@ -28,27 +30,8 @@ class Wrapper
      */
     public static $objHolder = array();
 
-    protected static $logger;
-
     /** @var string */
     protected static $namespace = '\\PhpXmlRpc\\';
-
-    public function getLogger()
-    {
-        if (self::$logger === null) {
-            self::$logger = Logger::instance();
-        }
-        return self::$logger;
-    }
-
-    /**
-     * @param $logger
-     * @return void
-     */
-    public static function setLogger($logger)
-    {
-        self::$logger = $logger;
-    }
 
     /**
      * Given a string defining a php type or phpxmlrpc type (loosely defined: strings

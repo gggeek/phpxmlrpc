@@ -3,8 +3,8 @@
 namespace PhpXmlRpc;
 
 //use PhpXmlRpc\Helper\Charset;
-use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Traits\LoggerAware;
 
 /**
  * Used to represent a client of an XML-RPC server.
@@ -13,11 +13,12 @@ use PhpXmlRpc\Helper\XMLParser;
  */
 class Client
 {
+    use LoggerAware;
+
     const USE_CURL_NEVER = 0;
     const USE_CURL_ALWAYS = 1;
     const USE_CURL_AUTO = 2;
 
-    protected static $logger;
     /** @var string */
     protected static $requestClass = '\\PhpXmlRpc\\Request';
     /** @var string */
@@ -250,23 +251,6 @@ class Client
      * @internal
      */
     public $xmlrpc_curl_handle = null;
-
-    public function getLogger()
-    {
-        if (self::$logger === null) {
-            self::$logger = Logger::instance();
-        }
-        return self::$logger;
-    }
-
-    /**
-     * @param $logger
-     * @return void
-     */
-    public static function setLogger($logger)
-    {
-        self::$logger = $logger;
-    }
 
     /**
      * @param string $path either the PATH part of the xml-rpc server URL, or complete server URL (in which case you

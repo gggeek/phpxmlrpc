@@ -4,30 +4,11 @@ namespace PhpXmlRpc\Helper;
 
 use PhpXmlRpc\Exception\HttpException;
 use PhpXmlRpc\PhpXmlRpc;
+use PhpXmlRpc\Traits\LoggerAware;
 
-/**
- *
- */
 class Http
 {
-    protected static $logger;
-
-    public static function getLogger()
-    {
-        if (self::$logger === null) {
-            self::$logger = Logger::instance();
-        }
-        return self::$logger;
-    }
-
-    /**
-     * @param $logger
-     * @return void
-     */
-    public static function setLogger($logger)
-    {
-        self::$logger = $logger;
-    }
+    use LoggerAware;
 
     /**
      * Decode a string that is encoded with "chunked" transfer encoding as defined in rfc2068 par. 19.4.6.

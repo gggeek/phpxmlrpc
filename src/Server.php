@@ -3,19 +3,21 @@
 namespace PhpXmlRpc;
 
 use PhpXmlRpc\Exception\PhpXmlrpcException;
-use PhpXmlRpc\Helper\Charset;
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Traits\CharsetEncoderAware;
+use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\ParserAware;
 
 /**
  * Allows effortless implementation of XML-RPC servers
  */
 class Server
 {
-    protected static $logger;
-    protected static $parser;
-    protected static $charsetEncoder;
+    use CharsetEncoderAware;
+    use LoggerAware;
+    use ParserAware;
 
     /**
      * @var string
@@ -117,59 +119,6 @@ class Server
     protected static $_xmlrpc_debuginfo = '';
     protected static $_xmlrpcs_occurred_errors = '';
     protected static $_xmlrpcs_prev_ehandler = '';
-
-    public function getLogger()
-    {
-        if (self::$logger === null) {
-            self::$logger = Logger::instance();
-        }
-        return self::$logger;
-    }
-
-    /**
-     * @param $logger
-     * @return void
-     */
-    public static function setLogger($logger)
-    {
-        self::$logger = $logger;
-    }
-
-    public function getParser()
-    {
-        if (self::$parser === null) {
-            self::$parser = new XMLParser();
-        }
-        return self::$parser;
-    }
-
-    /**
-     * @param $parser
-     * @return void
-     */
-    public static function setParser($parser)
-    {
-        self::$parser = $parser;
-    }
-
-    public function getCharsetEncoder()
-    {
-        if (self::$charsetEncoder === null) {
-            self::$charsetEncoder = Charset::instance();
-        }
-        return self::$charsetEncoder;
-    }
-
-    /**
-     * @param $charsetEncoder
-     * @return void
-     *
-     * @todo this should be a static method
-     */
-    public function setCharsetEncoder($charsetEncoder)
-    {
-        self::$charsetEncoder = $charsetEncoder;
-    }
 
     /**
      * @param array[] $dispatchMap the dispatch map with definition of exposed services

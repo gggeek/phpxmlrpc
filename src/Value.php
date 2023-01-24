@@ -2,14 +2,17 @@
 
 namespace PhpXmlRpc;
 
-use PhpXmlRpc\Helper\Charset;
-use PhpXmlRpc\Helper\Logger;
+use PhpXmlRpc\Traits\CharsetEncoderAware;
+use PhpXmlRpc\Traits\LoggerAware;
 
 /**
  * This class enables the creation of values for XML-RPC, by encapsulating plain php values.
  */
 class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 {
+    use CharsetEncoderAware;
+    use LoggerAware;
+
     public static $xmlrpcI4 = "i4";
     public static $xmlrpcI8 = "i8";
     public static $xmlrpcInt = "int";
@@ -37,9 +40,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         "null" => 1,
     );
 
-    protected static $logger;
-    protected static $charsetEncoder;
-
     /// @todo: do these need to be public?
     /** @var Value[]|mixed */
     public $me = array();
@@ -50,42 +50,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     public $mytype = 0;
     /** @var string|null */
     public $_php_class = null;
-
-    public function getLogger()
-    {
-        if (self::$logger === null) {
-            self::$logger = Logger::instance();
-        }
-        return self::$logger;
-    }
-
-    /**
-     * @param $logger
-     * @return void
-     */
-    public static function setLogger($logger)
-    {
-        self::$logger = $logger;
-    }
-
-    public function getCharsetEncoder()
-    {
-        if (self::$charsetEncoder === null) {
-            self::$charsetEncoder = Charset::instance();
-        }
-        return self::$charsetEncoder;
-    }
-
-    /**
-     * @param $charsetEncoder
-     * @return void
-     *
-     * @todo this should be a static method
-     */
-    public function setCharsetEncoder($charsetEncoder)
-    {
-        self::$charsetEncoder = $charsetEncoder;
-    }
 
     /**
      * Build an xml-rpc value.
