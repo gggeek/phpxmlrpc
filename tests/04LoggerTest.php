@@ -67,12 +67,12 @@ class LoggerTest extends PhpXmlRpc_PolyfillTestCase
 
     // logger API
 
-    public function debugMessage($message, $encoding = null)
+    public function debug($message, $context = array())
     {
         $this->debugBuffer .= $message;
     }
 
-    public function errorLog($message)
+    public function error($message, $context = array())
     {
         $this->errorBuffer .= $message;
     }

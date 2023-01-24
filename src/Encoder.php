@@ -310,7 +310,7 @@ class Encoder
                     if ($valEncoding == 'ISO-8859-1') {
                         $xmlVal = utf8_encode($xmlVal);
                     } else {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of xml text: ' . $valEncoding);
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of xml text: ' . $valEncoding);
                     }
                 }
             }
@@ -335,7 +335,7 @@ class Encoder
         if ($xmlRpcParser->_xh['isf'] > 1) {
             // test that $xmlrpc->_xh['value'] is an obj, too???
 
-            $this->getLogger()->errorLog($xmlRpcParser->_xh['isf_reason']);
+            $this->getLogger()->error($xmlRpcParser->_xh['isf_reason']);
 
             return false;
         }

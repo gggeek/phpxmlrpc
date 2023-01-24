@@ -180,7 +180,7 @@ class XMLParser
                         if (function_exists('mb_convert_encoding')) {
                             $this->current_parsing_options['target_charset'] = $val;
                         } else {
-                            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": 'target_charset' option is unsupported without mbstring");
+                            $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ": 'target_charset' option is unsupported without mbstring");
                         }
                         break;
 
@@ -191,7 +191,7 @@ class XMLParser
                             //$this->_xh['isf'] = 4;
                             //$this->_xh['isf_reason'] = "Callback passed as 'methodname_callback' is not callable";
                             //return;
-                            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": Callback passed as 'methodname_callback' is not callable");
+                            $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ": Callback passed as 'methodname_callback' is not callable");
                         }
                         break;
 
@@ -202,7 +202,7 @@ class XMLParser
                         break;
 
                     default:
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": unsupported option: $key");
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ": unsupported option: $key");
                 }
                 unset($mergedOptions[$key]);
             }
@@ -578,7 +578,7 @@ class XMLParser
                             $this->_xh['isf_reason'] = 'Invalid data received in BOOLEAN value: ' . $this->truncateForLog($this->_xh['ac']);
                             return;
                         } else {
-                            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BOOLEAN value: ' .
+                            $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': invalid data received in BOOLEAN value: ' .
                                 $this->truncateForLog($this->_xh['ac']));
                         }
                     }
@@ -603,7 +603,7 @@ class XMLParser
                         $this->_xh['isf_reason'] = 'Non numeric data received in INT value: ' . $this->truncateForLog($this->_xh['ac']);
                         return;
                     } else {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': non numeric data received in INT: ' .
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': non numeric data received in INT: ' .
                             $this->truncateForLog($this->_xh['ac']));
                     }
                     /// @todo: find a better way of reporting an error value than this! Use NaN?
@@ -624,7 +624,7 @@ class XMLParser
                             $this->truncateForLog($this->_xh['ac']);
                         return;
                     } else {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': non numeric data received in DOUBLE value: ' .
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': non numeric data received in DOUBLE value: ' .
                             $this->truncateForLog($this->_xh['ac']));
                     }
 
@@ -644,7 +644,7 @@ class XMLParser
                         $this->_xh['isf_reason'] = 'Invalid data received in DATETIME value: ' . $this->truncateForLog($this->_xh['ac']);
                         return;
                     } else {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in DATETIME value: ' .
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': invalid data received in DATETIME value: ' .
                             $this->truncateForLog($this->_xh['ac']));
                     }
                 }
@@ -653,7 +653,7 @@ class XMLParser
                         $this->_xh['value'] = new \DateTime($this->_xh['ac']);
                     } catch(\Exception $e) {
                         // q: what to do? we can not guarantee that a valid date can be created. Return null or throw?
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': ' . $e->getMessage());
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': ' . $e->getMessage());
                         $this->_xh['value'] = null;
                     }
                 } else {
@@ -675,7 +675,7 @@ class XMLParser
                     $v = base64_decode($this->_xh['ac']);
                     if ($v === '' && $this->_xh['ac'] !== '') {
                         // only the empty string should decode to the empty string
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in BASE64 value: ' .
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': invalid data received in BASE64 value: ' .
                             $this->truncateForLog($this->_xh['ac']));
                     }
                 }
@@ -696,7 +696,7 @@ class XMLParser
                             $this->_xh['isf_reason'] = 'Missing NAME inside STRUCT in received xml';
                             return;
                         } else {
-                            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing NAME inside STRUCT in received xml');
+                            $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': missing NAME inside STRUCT in received xml');
                         }
                         $this->_xh['valuestack'][$vscount - 1]['name'] = '';
                     }
@@ -707,7 +707,7 @@ class XMLParser
                         $this->_xh['isf_reason'] = 'Missing VALUE inside STRUCT in received xml';
                         return;
                     } else {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing VALUE inside STRUCT in received xml');
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': missing VALUE inside STRUCT in received xml');
                     }
                 }
                 break;
@@ -738,7 +738,7 @@ class XMLParser
                         $this->_xh['isf_reason'] = 'Missing VALUE inside PARAM in received xml';
                         return;
                     } else {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': missing VALUE inside PARAM in received xml');
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': missing VALUE inside PARAM in received xml');
                     }
                 }
                 break;
@@ -750,7 +750,7 @@ class XMLParser
                         $this->_xh['isf_reason'] = 'Invalid data received in METHODNAME: '. $this->truncateForLog($this->_xh['ac']);
                         return;
                     } else {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': invalid data received in METHODNAME: '.
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': invalid data received in METHODNAME: '.
                             $this->truncateForLog($this->_xh['ac']));
                     }
                 }

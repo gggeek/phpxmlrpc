@@ -93,7 +93,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                     $this->me['struct'] = $val;
                     break;
                 default:
-                    $this->getLogger()->errorLog("XML-RPC: " . __METHOD__ . ": not a known type ($type)");
+                    $this->getLogger()->error("XML-RPC: " . __METHOD__ . ": not a known type ($type)");
             }
         }
     }
@@ -117,7 +117,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         if ($typeOf !== 1) {
-            $this->getLogger()->errorLog("XML-RPC: " . __METHOD__ . ": not a scalar type ($type)");
+            $this->getLogger()->error("XML-RPC: " . __METHOD__ . ": not a scalar type ($type)");
             return 0;
         }
 
@@ -134,10 +134,10 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
         switch ($this->mytype) {
             case 1:
-                $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': scalar xmlrpc value can have only one value');
+                $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': scalar xmlrpc value can have only one value');
                 return 0;
             case 3:
-                $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': cannot add anonymous scalar to struct xmlrpc value');
+                $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': cannot add anonymous scalar to struct xmlrpc value');
                 return 0;
             case 2:
                 // we're adding a scalar value to an array here
@@ -179,7 +179,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
             return 1;
         } else {
-            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': already initialized as a [' . $this->kindOf() . ']');
+            $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': already initialized as a [' . $this->kindOf() . ']');
             return 0;
         }
     }
@@ -209,7 +209,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 
             return 1;
         } else {
-            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': already initialized as a [' . $this->kindOf() . ']');
+            $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': already initialized as a [' . $this->kindOf() . ']');
             return 0;
         }
     }

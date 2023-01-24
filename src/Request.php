@@ -207,14 +207,14 @@ class Request
     public function parseResponse($data = '', $headersProcessed = false, $returnType = XMLParser::RETURN_XMLRPCVALS)
     {
         if ($this->debug > 0) {
-            $this->getLogger()->debugMessage("---GOT---\n$data\n---END---");
+            $this->getLogger()->debug("---GOT---\n$data\n---END---");
         }
 
         $httpResponse = array('raw_data' => $data, 'headers' => array(), 'cookies' => array());
         $this->httpResponse = $httpResponse;
 
         if ($data == '') {
-            $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': no response received from server.');
+            $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': no response received from server.');
             return new Response(0, PhpXmlRpc::$xmlrpcerr['no_data'], PhpXmlRpc::$xmlrpcstr['no_data']);
         }
 
@@ -262,8 +262,8 @@ class Request
                 $start += strlen('<!-- SERVER DEBUG INFO (BASE64 ENCODED):');
                 $end = strpos($data, '-->', $start);
                 $comments = substr($data, $start, $end - $start);
-                $this->getLogger()->debugMessage("---SERVER DEBUG INFO (DECODED) ---\n\t" .
-                    str_replace("\n", "\n\t", base64_decode($comments)) . "\n---END---", $respEncoding);
+                $this->getLogger()->debug("---SERVER DEBUG INFO (DECODED) ---\n\t" .
+                    str_replace("\n", "\n\t", base64_decode($comments)) . "\n---END---", array('encoding' => $respEncoding));
             }
         }
 
@@ -285,7 +285,7 @@ class Request
                     if ($respEncoding == 'ISO-8859-1') {
                         $data = utf8_encode($data);
                     } else {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': unsupported charset encoding of received response: ' . $respEncoding);
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': unsupported charset encoding of received response: ' . $respEncoding);
                     }
                 }
             }
@@ -316,7 +316,7 @@ class Request
             );
 
             if ($this->debug > 0) {
-                $this->getLogger()->debugMessage($xmlRpcParser->_xh['isf_reason']);
+                $this->getLogger()->debug($xmlRpcParser->_xh['isf_reason']);
             }
         }
         // second error check: xml well-formed but not xml-rpc compliant
@@ -328,7 +328,7 @@ class Request
 
             /// @todo echo something for the user? check if this was already done by the parser...
             //if ($this->debug > 0) {
-            //    $this->getLogger()->debugMessage($xmlRpcParser->_xh['isf_reason']);
+            //    $this->getLogger()->debug($xmlRpcParser->_xh['isf_reason']);
             //}
         }
         // third error check: parsing of the response has somehow gone boink.
@@ -342,7 +342,7 @@ class Request
             /// @todo echo something for the user?
         } else {
             if ($this->debug > 1) {
-                $this->getLogger()->debugMessage(
+                $this->getLogger()->debug(
                     "---PARSED---\n".var_export($xmlRpcParser->_xh['value'], true)."\n---END---"
                 );
             }

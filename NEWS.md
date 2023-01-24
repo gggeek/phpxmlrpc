@@ -78,6 +78,8 @@
 * new: methods `Wrapper::holdObject()` and `Wrapper::getheldObject()`, allowing flexibility in storing object instances
   for code-generation scenarios involving `Wrapper::wrapPhpClass` and `Wrapper::wrapPhpFunction`
 
+* improved: the `Logger` class now sports methods adhering to Psr\Log\LoggerInterface
+
 * improved: made sure all debug output goes through the logger at response parsing time (there was one printf call left)
 
 * improved: all the Client's `setSomething()` methods now return the client object, allowing for usage of fluent style
@@ -139,6 +141,7 @@
     changed: it now returns a Response for the cases in which it previously returned false, and an array of Response
     objects for the cases in which it previously returned a string
   - if you subclassed the `Client` class, take care of new static variables `$requestClass` and `$responseClass`
+  - if you replaced the Logger class, take care that you will have to implement methods `error` and `debug`
   - traits have been introduced for all classes dealing with Logger, XMLParser and CharsetEncoder; method `setCharsetEncoder`
     is now static
 

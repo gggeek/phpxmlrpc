@@ -866,7 +866,7 @@ class Client
             $credentials = 'Authorization: Basic ' . base64_encode($username . ':' . $password) . "\r\n";
             if ($authType != 1) {
                 /// @todo make this a proper error, i.e. return a failure
-                $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported with HTTP 1.0');
+                $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported with HTTP 1.0');
             }
         }
 
@@ -888,7 +888,7 @@ class Client
             if ($proxyUsername != '') {
                 if ($proxyAuthType != 1) {
                     /// @todo make this a proper error, i.e. return a failure
-                    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported with HTTP 1.0');
+                    $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported with HTTP 1.0');
                 }
                 $proxyCredentials = 'Proxy-Authorization: Basic ' . base64_encode($proxyUsername . ':' . $proxyPassword) . "\r\n";
             }
@@ -944,7 +944,7 @@ class Client
             $payload;
 
         if ($this->debug > 1) {
-            $this->getLogger()->debugMessage("---SENDING---\n$op\n---END---");
+            $this->getLogger()->debug("---SENDING---\n$op\n---END---");
         }
 
         $contextOptions = array();
@@ -1094,7 +1094,7 @@ class Client
                 $message .= $name . ': ' . $val . "\n";
             }
             $message .= '---END---';
-            $this->getLogger()->debugMessage($message);
+            $this->getLogger()->debug($message);
         }
 
         if (!$result) {
@@ -1171,7 +1171,7 @@ class Client
                     // http, https
                     $protocol = $method;
                     if (strpos($protocol, ':') !== false) {
-                        $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ": warning - attempted hacking attempt?. The curl protocol requested for the call is: '$protocol'");
+                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ": warning - attempted hacking attempt?. The curl protocol requested for the call is: '$protocol'");
                         return false;
                     }
                 }
@@ -1247,7 +1247,7 @@ class Client
                     curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
                 } else {
                     /// @todo make this a proper error, i.e. return a failure
-                    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. HTTP2 is not supported by the current PHP/curl install');
+                    $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. HTTP2 is not supported by the current PHP/curl install');
                 }
                 break;
             case 'h2':
@@ -1261,7 +1261,7 @@ class Client
                 curl_setopt($curl, CURLOPT_HTTPAUTH, $authType);
             } elseif ($authType != 1) {
                 /// @todo make this a proper error, i.e. return a failure
-                $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported by the current PHP/curl install');
+                $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported by the current PHP/curl install');
             }
         }
 
@@ -1311,7 +1311,7 @@ class Client
                     curl_setopt($curl, CURLOPT_PROXYAUTH, $proxyAuthType);
                 } elseif ($proxyAuthType != 1) {
                     /// @todo make this a proper error, i.e. return a failure
-                    $this->getLogger()->errorLog('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported by the current PHP/curl install');
+                    $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported by the current PHP/curl install');
                 }
             }
         }
@@ -1331,7 +1331,7 @@ class Client
         }
 
         if ($this->debug > 1) {
-            $this->getLogger()->debugMessage("---SENDING---\n$payload\n---END---");
+            $this->getLogger()->debug("---SENDING---\n$payload\n---END---");
         }
 
         return $curl;

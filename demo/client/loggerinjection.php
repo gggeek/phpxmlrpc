@@ -20,13 +20,13 @@ class MyLogger
     protected $errorBuffer = '';
 
     // logger API
-    public function debugMessage($message, $encoding = null)
+    public function debug($message, $context = array())
     {
         $this->debugBuffer .= $message . "\n";
     }
 
     // logger API
-    public function errorLog($message)
+    public function error($message, $context = array())
     {
         $this->errorBuffer .= $message . "\n";
     }
