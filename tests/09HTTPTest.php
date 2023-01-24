@@ -26,7 +26,7 @@ class HTTPTest extends ServerTest
         $unsafeMethods = array(
             'testCatchExceptions', 'testCatchErrors', 'testUtf8Method', 'testServerComments',
             'testExoticCharsetsRequests', 'testExoticCharsetsRequests2', 'testExoticCharsetsRequests3',
-            'testWrapInexistentUrl',
+            'testWrapInexistentUrl', 'testNegativeDebug'
         );
 
         $methods = array();

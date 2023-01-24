@@ -62,6 +62,9 @@
 * new: it is now possible to inject a custom logger into helper classes `Charset`, `Http`, `XMLParser`, inching a step
   closer to supporting DIC patterns
 
+* new: passing value -1 to `$client->setDebug` will avoid storing the full http response data in the returned Response
+  object when executing `call`. This could be useful in reducing memory usage for big responses
+
 * new: when calling `Wrapper::wrapXmlrpcMethod` and `wrapXmlrpcServer`, it is possible to pass 'throw_on_fault' as option
   to argument `$extraOptions`. This will make the generated function throw on http errors and xml-rpc faults instead of
   returning a Response object
@@ -78,9 +81,9 @@
 
 * improved: when calling `Client::multicall()`, the returned `Response` objects did not have any data in their `httpResponse`
 
-* improved: method `Helper\Date::iso8601Encode` now accepts a DateTime input beside a timestamp
+* new: method `Helper\Date::iso8601Encode` now accepts a DateTime input beside a timestamp
 
-* improved: method `Server::add_to_map` has acquired a 6th parameter: `$parametersType = false`
+* new: method `Server::add_to_map` has acquired a 6th parameter: `$parametersType = false`
 
 * improved: the `XMLParser` accepts more options in its constructor (see phpdocs for details)
 

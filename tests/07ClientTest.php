@@ -9,8 +9,7 @@ include_once __DIR__ . '/PolyfillTestCase.php';
 use PHPUnit\Runner\BaseTestRunner;
 
 /**
- * Tests involving the Client class.
- * So far: only tests requests sent to non-existing servers
+ * Tests involving the Client class (and no server).
  */
 class ClientTest extends PhpXmlRpc_PolyfillTestCase
 {

@@ -137,6 +137,18 @@ class ValueTests extends PhpXmlRpc_PolyfillTestCase
         date_default_timezone_set($tz);
     }
 
+    /// @todo is this included in the above?
+    public function testDateTime()
+    {
+        $time = time();
+        $t1 = new xmlrpcval($time, 'dateTime.iso8601');
+        $t2 = new xmlrpcval(iso8601_encode($time), 'dateTime.iso8601');
+        $this->assertEquals($t1->serialize(), $t2->serialize());
+        $datetime = new DateTime();
+        $t3 = new xmlrpcval($datetime->setTimestamp($time), 'dateTime.iso8601');
+        $this->assertEquals($t1->serialize(), $t3->serialize());
+    }
+
     public function testStructMemExists()
     {
         $v = new xmlrpcval(array('hello' => new xmlrpcval('world')), 'struct');

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestResult;
 use PHPUnit\Runner\BaseTestRunner;
 
 /**
- * Tests which involve interaction between the client and the server.
+ * Tests which involve interaction with the server - carried out via the client.
  * They are run against the server found in demo/server.php.
  * Includes testing of (some of) the Wrapper class
  */
@@ -328,8 +328,7 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
 
     public function testAddingDoubles()
     {
-        // note that rounding errors mean we
-        // keep precision to sensible levels here ;-)
+        // note that rounding errors mean we keep precision to sensible levels here ;-)
         $a = 12.13;
         $b = -23.98;
         $m = new xmlrpcmsg('examples.addtwodouble', array(
@@ -425,22 +424,6 @@ And turned it into nylon';
         }
     }
 
-    public function testDateTime()
-    {
-        $time = time();
-        $t1 = new xmlrpcval($time, 'dateTime.iso8601');
-        $t2 = new xmlrpcval(iso8601_encode($time), 'dateTime.iso8601');
-        $this->assertEquals($t1->serialize(), $t2->serialize());
-        if (class_exists('DateTime')) {
-            $datetime = new DateTime();
-            // skip this test for php 5.2. It is a bit harder there to build a DateTime from unix timestamp with proper TZ info
-            if (is_callable(array($datetime, 'setTimestamp'))) {
-                $t3 = new xmlrpcval($datetime->setTimestamp($time), 'dateTime.iso8601');
-                $this->assertEquals($t1->serialize(), $t3->serialize());
-            }
-        }
-    }
-
     public function testCountEntities()
     {
         $sendString = "h'fd>onc>>l>>rw&bpu>q>e<v&gxs<ytjzkami<";
@@ -460,8 +443,9 @@ And turned it into nylon';
         }
     }
 
-    public function _multicall_msg($method, $params)
+    protected function _multicall_msg($method, $params)
     {
+        $struct = array();
         $struct['methodName'] = new xmlrpcval($method, 'string');
         $struct['params'] = new xmlrpcval($params, 'array');
 
@@ -688,7 +672,7 @@ And turned it into nylon';
 
     public function testCatchExceptions()
     {
-        // this tests for the server to catch exceptions with erro  code 0
+        // this tests for the server to catch exceptions with error code 0
         $m = new xmlrpcmsg('tests.raiseException', array(
             new xmlrpcval(0, 'int'),
         ));
@@ -1079,5 +1063,24 @@ And turned it into nylon';
         if ($v1 && $v2) {
             $this->assertEquals($v1, $v2);
         }
+    }
+
+    public function testNegativeDebug()
+    {
+        $m = new xmlrpcmsg('examples.stringecho', array(
+            new xmlrpcval('hello world', 'string'),
+        ));
+        $v1 = $this->send($m, 0, true);
+        $h = $v1->httpResponse();
+        $this->assertEquals('200', $h['status_code']);
+        $this->assertNotEmpty($h['headers']);
+
+        $d = $this->client->debug;
+        $this->client->setDebug(-1);
+        $v2 = $this->send($m, 0, true);
+        $this->client->setDebug($d);
+        $h = $v2->httpResponse();
+        $this->assertEmpty($h['headers']);
+        $this->assertEmpty($h['raw_data']);
     }
 }
