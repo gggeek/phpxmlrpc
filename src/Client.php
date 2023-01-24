@@ -37,9 +37,25 @@ class Client
 
     /// @todo: do all the ones below need to be public?
 
+    /**
+     * @var string
+     * @internal use getUrl
+     */
     public $method = 'http';
+    /**
+     * @var string
+     * @internal use getUrl
+     */
     public $server;
+    /**
+     * @var int
+     * @internal use getUrl
+     */
     public $port = 0;
+    /**
+     * @var string
+     * @internal use getUrl
+     */
     public $path;
 
     /**
@@ -615,6 +631,20 @@ class Client
     {
         $this->timeout = $timeout;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        $url = $this->method . '://' . $this->server;
+        if (($this->port = 80 && in_array($this->method, array('http', 'http10', 'http11', 'h2c'))) &&
+            ($this->port = 443 && in_array($this->method, array('https', 'h2')))) {
+            return $url . $this->path;
+        } else {
+            return $url . ':' . $this->port . $this->path;
+        }
     }
 
     /**

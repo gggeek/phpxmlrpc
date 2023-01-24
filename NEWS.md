@@ -59,6 +59,8 @@
 * new: added the `Client::setTimeout` method, meant to replace usage of the `$timeout` argument in calls to `send`
   and `multicall`
 
+* new: method `Client::getUrl()`
+
 * new: method `Server::setDispatchMap()`
 
 * new: it is now possible to inject a custom logger into helper classes `Charset`, `Http`, `XMLParser`, inching a step
