@@ -66,6 +66,8 @@
 * new: it is now possible to inject a custom logger into helper classes `Charset`, `Http`, `XMLParser`, inching a step
   closer to supporting DIC patterns
 
+* new: method `PhpXmlRpc::setLogger()`, to simplify injecting the logger into all classes of the library in one step
+
 * new: passing value -1 to `$client->setDebug` will avoid storing the full http response data in the returned Response
   object when executing `call`. This could be useful in reducing memory usage for big responses
 

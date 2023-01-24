@@ -3,6 +3,8 @@
 namespace PhpXmlRpc;
 
 use PhpXmlRpc\Helper\Charset;
+use PhpXmlRpc\Helper\Http;
+use PhpXmlRpc\Helper\XMLParser;
 
 /**
  * Manages global configuration for operation of the library.
@@ -257,5 +259,24 @@ class PhpXmlRpc
                 self::$$name = $GLOBALS[$name];
             }
         }
+    }
+
+    /**
+     * Inject a logger into all classes of the PhpXmlRpc library which use one
+     *
+     * @param $logger
+     * @return void
+     */
+    public static function setLogger($logger)
+    {
+        Charset::setLogger($logger);
+        Client::setLogger($logger);
+        Encoder::setLogger($logger);
+        Http::setLogger($logger);
+        Request::setLogger($logger);
+        Server::setLogger($logger);
+        Value::setLogger($logger);
+        Wrapper::setLogger($logger);
+        XMLParser::setLogger($logger);
     }
 }

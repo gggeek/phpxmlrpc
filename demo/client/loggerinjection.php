@@ -7,9 +7,7 @@ require_once __DIR__ . "/_prepend.php";
 
 use PhpXmlRpc\Client;
 use PhpXmlRpc\Encoder;
-use PhpXmlRpc\Helper\Charset;
-use PhpXmlRpc\Helper\Http;
-use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\PhpXmlRpc;
 use PhpXmlRpc\Request;
 
 // Definition of a custom logger implementing the same API as the default one
@@ -48,12 +46,7 @@ $logger = new MyLogger();
 
 // inject it into all the classes (possibly) involved
 
-Charset::setLogger($logger);
-Client::setLogger($logger);
-Encoder::setLogger($logger);
-Http::setLogger($logger);
-Request::setLogger($logger);
-XMLParser::setLogger($logger);
+PhpXmlRpc::setLogger($logger);
 
 // then send a request
 
