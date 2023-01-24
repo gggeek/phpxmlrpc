@@ -45,12 +45,12 @@
 * improved: limit the size of incoming data which will be used in error responses and logged error messages, making
   it slightly harder to carry out DOS attacks against the library
 
-* fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, we would be always falling back to
-  non-multicall requests
-
 * fixed: when a server is configured with its default value of 'xmlrpcvals' for `$functions_parameters_type`, and
   a method handler in the dispatch was defined with `'parameters_type' = 'phpvals'`, the handler would be passed a
   Request object instead of plain php values.
+
+* fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, we would be always falling back to
+  non-multicall requests
 
 * fixed: receiving integers which use the '<EX:I8>' xml tag
 
@@ -76,6 +76,8 @@
 * new: methods `Wrapper::holdObject()` and `Wrapper::getheldObject()`, allowing flexibility in storing object instances
   for code-generation scenarios involving `Wrapper::wrapPhpClass` and `Wrapper::wrapPhpFunction`
 
+* improved: made sure all debug output goes through the logger at response parsing time (there was one printf call left)
+
 * improved: all the Client's `setSomething()` methods now return the client object, allowing for usage of fluent style
   calling. The same applies to `Request::setDebug`
 
@@ -99,7 +101,7 @@
 
 * improved: the debugger will now sport the "load method synopsis" button when interacting with json-rpc servers
 
-* improved: made sure the test container has at least one locale with comma as decimal separator
+* improved: made sure the test container and gha test runners have at least one locale with comma as decimal separator
 
 * BC notes:
 

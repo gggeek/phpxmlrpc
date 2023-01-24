@@ -23,7 +23,6 @@ class LoggerTest extends PhpXmlRpc_PolyfillTestCase
         $l = $ch->getLogger();
         Charset::setLogger($this);
 
-        // silence the mbstring warning
         $ch->encodeEntities('hello world', 'UTF-8', 'NOT-A-CHARSET');
         $this->assertStringContainsString("via mbstring: failed", $this->errorBuffer);
 

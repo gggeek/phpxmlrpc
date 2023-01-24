@@ -41,6 +41,11 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
         $page = $this->request('?demo=client/getstatename.php', 'POST', array('stateno' => '1'));
     }
 
+    public function testLoggerInjection()
+    {
+        $page = $this->request('?demo=client/loggerinjection.php');
+    }
+
     public function testIntrospect()
     {
         $page = $this->request('?demo=client/introspect.php');

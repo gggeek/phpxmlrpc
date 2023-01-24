@@ -21,5 +21,6 @@ if (isset($_SERVER['HTTPSERVER'])) {
 // A helper for cli vs web output:
 function output($text)
 {
-    echo PHP_SAPI == 'cli' ? strip_tags(str_replace('<br/>', "\n", $text)) : $text;
+    /// @todo we should only strip html tags, and let through all xml tags
+    echo PHP_SAPI == 'cli' ? strip_tags(str_replace(array('<br/>','<br>'), "\n", $text)) : $text;
 }
