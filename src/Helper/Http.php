@@ -156,54 +156,47 @@ class Http
         $ar = preg_split("/\r?\n/", trim(substr($data, 0, $pos)));
 
         foreach ($ar as $line) {
-            // take care of multi-line headers and cookies
+            // take care of (multi-line) headers and cookies
             $arr = explode(':', $line, 2);
             if (count($arr) > 1) {
+                /// @todo according to https://www.rfc-editor.org/rfc/rfc7230#section-3.2.4, we should reject with error
+                ///       400 any messages where a space is present between the header name and colon
                 $headerName = strtolower(trim($arr[0]));
-                /// @todo some other headers (the ones that allow a CSV list of values) do allow many values to be
-                ///       passed using multiple header lines.
-                ///       We should add content to $xmlrpc->_xh['headers'][$headerName] instead of replacing it for those...
-                /// @todo should we drop support for rfc2965 (set-cookie2) cookies? It has been obsoleted since 2011
-                if ($headerName == 'set-cookie' || $headerName == 'set-cookie2') {
-                    if ($headerName == 'set-cookie2') {
-                        // version 2 cookies:
-                        // there could be many cookies on one line, comma separated
-                        $cookies = explode(',', $arr[1]);
+                if ($headerName == 'set-cookie') {
+                    $cookie = $arr[1];
+                    // glue together all received cookies, using a comma to separate them (same as php does with getallheaders())
+                    if (isset($httpResponse['headers'][$headerName])) {
+                        $httpResponse['headers'][$headerName] .= ', ' . trim($cookie);
                     } else {
-                        $cookies = array($arr[1]);
+                        $httpResponse['headers'][$headerName] = trim($cookie);
                     }
-                    foreach ($cookies as $cookie) {
-                        // glue together all received cookies, using a comma to separate them (same as php does with getallheaders())
-                        if (isset($httpResponse['headers'][$headerName])) {
-                            $httpResponse['headers'][$headerName] .= ', ' . trim($cookie);
-                        } else {
-                            $httpResponse['headers'][$headerName] = trim($cookie);
-                        }
-                        // parse cookie attributes, in case user wants to correctly honour them
-                        // feature creep: only allow rfc-compliant cookie attributes?
-                        // @todo support for server sending multiple time cookie with same name, but using different PATHs
-                        $cookie = explode(';', $cookie);
-                        foreach ($cookie as $pos => $val) {
-                            $val = explode('=', $val, 2);
-                            $tag = trim($val[0]);
-                            $val = isset($val[1]) ? trim($val[1]) : '';
-                            /// @todo with version 1 cookies, we should strip leading and trailing " chars
-                            if ($pos == 0) {
-                                $cookiename = $tag;
-                                $httpResponse['cookies'][$tag] = array();
-                                $httpResponse['cookies'][$cookiename]['value'] = urldecode($val);
-                            } else {
-                                if ($tag != 'value') {
-                                    $httpResponse['cookies'][$cookiename][$tag] = $val;
-                                }
+                    // parse cookie attributes, in case user wants to correctly honour them
+                    // @todo support for server sending multiple time cookie with same name, but using different PATHs
+                    $cookie = explode(';', $cookie);
+                    foreach ($cookie as $pos => $val) {
+                        $val = explode('=', $val, 2);
+                        $tag = trim($val[0]);
+                        $val = isset($val[1]) ? trim($val[1]) : '';
+                        if ($pos === 0) {
+                            $cookieName = $tag;
+                            // if present, we have strip leading and trailing " chars from $val
+                            if (preg_match('/^"(.*)"$/', $val, $matches)) {
+                                $val = $matches[1];
                             }
+                            $httpResponse['cookies'][$cookieName] = array('value' => urldecode($val));
+                        } else {
+                            $httpResponse['cookies'][$cookieName][$tag] = $val;
                         }
                     }
                 } else {
+                    /// @todo some other headers (the ones that allow a CSV list of values) do allow many values to be
+                    ///       passed using multiple header lines.
+                    ///       We should add content to $xmlrpc->_xh['headers'][$headerName] instead of replacing it for those...
                     $httpResponse['headers'][$headerName] = trim($arr[1]);
                 }
             } elseif (isset($headerName)) {
-                /// @todo version1 cookies might span multiple lines, thus breaking the parsing above
+                /// @todo improve this: 1. check that the line starts with a space or tab; 2. according to
+                ///       https://www.rfc-editor.org/rfc/rfc7230#section-3.2.4, we should flat out refuse these messages
                 $httpResponse['headers'][$headerName] .= ' ' . trim($line);
             }
         }

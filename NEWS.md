@@ -105,6 +105,8 @@
 
 * improved: the `XMLParser` accepts more options in its constructor (see phpdocs for details)
 
+* improved: dropped support for parsing cookie headers which follow the obsolete "version 2" specification
+
 * improved: removed usage of `extension_loaded` in favour of `function_exists` when checking for mbstring. This allows
   for mbstring functions to be polyfilled
 
