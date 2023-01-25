@@ -15,7 +15,7 @@ use PHPUnit\Runner\BaseTestRunner;
  * @todo add tests for encoding options: 'encode_php_objs', 'auto_dates', 'null_extension' and 'extension_api'
  * @todo add tests for php_xmlrpc_decode options
  */
-class EncoderTests extends PhpXmlRpc_PolyfillTestCase
+class EncoderTest extends PhpXmlRpc_PolyfillTestCase
 {
     public $args = array();
 

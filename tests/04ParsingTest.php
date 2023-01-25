@@ -14,7 +14,7 @@ use PHPUnit\Runner\BaseTestRunner;
  *
  * @todo some tests are here even though they logically belong elsewhere...
  */
-class ParsingTests extends PhpXmlRpc_PolyfillTestCase
+class ParsingTest extends PhpXmlRpc_PolyfillTestCase
 {
     public $args = array();
 

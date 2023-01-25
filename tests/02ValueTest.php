@@ -13,7 +13,7 @@ use PHPUnit\Runner\BaseTestRunner;
  * Tests involving the Value class.
  * NB: these tests do not involve the parsing of xml into Value objects - look in 03ParsingTest for that
  */
-class ValueTests extends PhpXmlRpc_PolyfillTestCase
+class ValueTest extends PhpXmlRpc_PolyfillTestCase
 {
     public $args = array();
 

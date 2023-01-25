@@ -11,7 +11,7 @@ use PHPUnit\Runner\BaseTestRunner;
 /**
  * Tests involving the Client class (and no server).
  */
-class ClientTest extends PhpXmlRpc_PolyfillTestCase
+class ClientTes extends PhpXmlRpc_PolyfillTestCase
 {
     /** @var xmlrpc_client $client */
     public $client = null;
