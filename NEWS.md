@@ -130,6 +130,7 @@
   - a regular expression has been introduced to check incoming methodname elements. In the default configuration it
     will trigger error messages in the logs, but not reject the calls. It can be tweaked via use of
     `PhpXmlRpc\PhpXmlRpc::$xmlrpc_methodname_format`
+  - an error message will now be generated if, in incoming data, a STRUCT element has no NAME
   - parameters `$timeout` and `$method` are now considered deprecated in `Client::send()` and `Client::multicall()`
   - Client properties `$errno` and `$errstring` are now deprecated
   - direct access to `Wrapper::$objHolder` is now deprecated
@@ -140,15 +141,19 @@
 
   - the `$options` argument passed to `XMLParser::parse` will now contain both options intended to be passed down to
     the php xml parser, and further options used to tweak the parsing results. If you have subclassed `XMLParser`
-    and reimplemented the `parse` methods, or wholesale replaced it, you will have to adapt your code
+    and reimplemented the `parse` methods, or wholesale replaced it, you will have to adapt your code: both for that,
+    and for making sure that it sets `$this->current_parsing_options['xmlrpc_null_extension']` from
+    `PhpXmlRpc::$xmlrpc_null_extension`
   - also, if you had reimplemented `XMLParser::parse`, be warned that the callers now treat differently results when
     `_xh['isf'] > 3`
-  - new methods in helper classes: `Charset::knownCharsets`, `Http::parseAcceptHeader`, `XMLParser::truncateForLog`
+  - new methods in helper classes: `Charset::knownCharsets`, `Http::parseAcceptHeader`, `XMLParser::truncateValueForLog`
   - if you had been somehow interacting with private method `Client::_try_multicall`, be warned its returned data has
     changed: it now returns a Response for the cases in which it previously returned false, and an array of Response
     objects for the cases in which it previously returned a string
-  - if you subclassed the `Client` class, take care of new static variables `$requestClass` and `$responseClass`
-  - if you replaced the Logger class, take care that you will have to implement methods `error` and `debug`
+  - if you subclassed the `Client` class, take care of new static variables `$requestClass` and `$responseClass`,
+    which should be used to instantiate requests and responses
+  - if you replaced the Logger class, take care that you will have to implement methods `error` and `debug` (all is ok
+    if you subclassed id)
   - traits have been introduced for all classes dealing with Logger, XMLParser and CharsetEncoder; method `setCharsetEncoder`
     is now static
 
