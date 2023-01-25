@@ -178,10 +178,14 @@ class Request
      * @param bool $headersProcessed
      * @param string $returnType
      * @return Response
+     *
+     * @todo arsing Responses is not really the responsibility of the Request class. Maybe of the Client...
+     * @todo feature creep - add a flag to disable trying to parse the http headers
      */
     public function parseResponseFile($fp, $headersProcessed = false, $returnType = 'xmlrpcvals')
     {
         $ipd = '';
+        // q: is there an optimal buffer size? Is there any value in making the buffer size a tuneable?
         while ($data = fread($fp, 32768)) {
             $ipd .= $data;
         }
@@ -350,7 +354,8 @@ class Request
             $v = $xmlRpcParser->_xh['value'];
 
             if ($xmlRpcParser->_xh['isf']) {
-                /// @todo we should test here if server sent an int and a string, and/or coerce them into such...
+                /// @todo we should test (here or preferably in the parser) if server sent an int and a string, and/or
+                ///       coerce them into such...
                 if ($returnType == XMLParser::RETURN_XMLRPCVALS) {
                     $errNo_v = $v['faultCode'];
                     $errStr_v = $v['faultString'];
@@ -364,7 +369,7 @@ class Request
                 if ($errNo == 0) {
                     // FAULT returned, errno needs to reflect that
                     /// @todo feature creep - add this code to PhpXmlRpc::$xmlrpcerr
-                    $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': fault response received with faultCode 0. Converted it to -1');
+                    $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': fault response received with faultCode 0 or null. Converted it to -1');
                     $errNo = -1;
                 }
 

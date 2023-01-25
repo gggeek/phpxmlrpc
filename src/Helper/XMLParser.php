@@ -16,7 +16,7 @@ use PhpXmlRpc\Value;
  *       - add parseRequest, parseResponse, parseValue methods
  * @todo if iconv() or mb_string() are available, we could allow to convert the received xml to a custom charset encoding
  *       while parsing, which is faster than doing it later by going over the rebuilt data structure
- * @todo allow to parse data from a stream, to avoid having to copy first the whole xml to memory
+ * @todo rename? This is an xml-rpc parser, not a generic xml parser...
  */
 class XMLParser
 {
@@ -103,13 +103,14 @@ class XMLParser
 
     /** @var int $accept self::ACCEPT_REQUEST | self::ACCEPT_RESPONSE by default */
     //protected $accept = 3;
+
     /** @var int $maxChunkLength 4 MB by default. Any value below 10MB should be good */
     protected $maxChunkLength = 4194304;
-    /** @var array supported keys: accept, target_charset, methodname_callback, xmlrpc_null_extension, xmlrpc_return_datetimes */
+    /** @var array used keys: accept, target_charset, methodname_callback, xmlrpc_null_extension, xmlrpc_return_datetimes */
     protected $current_parsing_options = array();
 
     /**
-     * @param array $options integer keys: options passed to the xml parser
+     * @param array $options integer keys: options passed to the inner xml parser
      *                       string keys:
      *                       - target_charset (string)
      *                       - methodname_callback (callable)
@@ -175,6 +176,7 @@ class XMLParser
         foreach ($mergedOptions as $key => $val) {
             // q: can php be built without ctype? should we use a regexp?
             if (is_string($key) && !ctype_digit($key)) {
+                /// @todo on invalid options, throw/error-out instead of logging an error message?
                 switch($key) {
                     case 'target_charset':
                         if (function_exists('mb_convert_encoding')) {
@@ -188,9 +190,6 @@ class XMLParser
                         if (is_callable($val)) {
                             $this->current_parsing_options['methodname_callback'] = $val;
                         } else {
-                            //$this->_xh['isf'] = 4;
-                            //$this->_xh['isf_reason'] = "Callback passed as 'methodname_callback' is not callable";
-                            //return;
                             $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ": Callback passed as 'methodname_callback' is not callable");
                         }
                         break;
@@ -237,7 +236,7 @@ class XMLParser
             case self::RETURN_EPIVALS:
                 xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_epi');
                 break;
-            /// @todo log a warning on unsupported return type
+            /// @todo log an error / throw / error-out on unsupported return type
             case XMLParser::RETURN_XMLRPCVALS:
             default:
                 xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee');
@@ -288,7 +287,8 @@ class XMLParser
      * @param bool $acceptSingleVals DEPRECATED use the $accept parameter instead
      * @return void
      *
-     * @todo optimization: throw when setting $this->_xh['isf'] > 1, to completely avoid further xml parsing
+     * @todo optimization creep: throw when setting $this->_xh['isf'] > 1, to completely avoid further xml parsing
+     *       and remove the checking for $this->_xh['isf'] >= 2 everywhere
      */
     public function xmlrpc_se($parser, $name, $attrs, $acceptSingleVals = false)
     {
@@ -443,6 +443,8 @@ class XMLParser
                 } else {
                     $this->_xh['isf'] = 2;
                     $this->_xh['isf_reason'] = 'Invalid NIL value received. Support for NIL can be enabled via \\PhpXmlRpc\\PhpXmlRpc::$xmlrpc_null_extension';
+
+                    return;
                 }
                 break;
 
@@ -451,7 +453,8 @@ class XMLParser
                 /// @todo feature creep = allow a callback instead
                 $this->_xh['isf'] = 2;
                 $this->_xh['isf_reason'] = "found not-xmlrpc xml element $name";
-                break;
+
+                return;
         }
 
         // Save current element name to stack, to validate nesting
@@ -489,13 +492,16 @@ class XMLParser
      * @param int $rebuildXmlrpcvals >1 for rebuilding xmlrpcvals, 0 for rebuilding php values, -1 for xmlrpc-extension compatibility
      * @return void
      * @throws \Exception this can happen if a callback function is set and it does throw (i.e. we do not catch exceptions)
+     *
+     * @todo optimization creep: throw when setting $this->_xh['isf'] > 1, to completely avoid further xml parsing
+     *       and remove the checking for $this->_xh['isf'] >= 2 everywhere
      */
     public function xmlrpc_ee($parser, $name, $rebuildXmlrpcvals = 1)
     {
         if ($this->_xh['isf'] >= 2) {
             return;
-
         }
+
         // push this element name from stack
         // NB: if XML validates, correct opening/closing is guaranteed and we do not have to check for $name == $currElem.
         // we also checked for proper nesting at start of elements...
@@ -729,6 +735,7 @@ class XMLParser
 
             case 'PARAM':
                 // add to array of params the current value, unless no VALUE was found
+                /// @todo should we also check if there were two VALUE inside the PARAM?
                 if ($this->_xh['vt']) {
                     $this->_xh['params'][] = $this->_xh['value'];
                     $this->_xh['pt'][] = $this->_xh['vt'];
@@ -772,16 +779,20 @@ class XMLParser
                 //}
                 break;
 
+            /// @todo add extra checking:
+            ///       - METHODRESPONSE should contain either a PARAMS with a single PARAM, or a FAULT
+            ///       - FAULT should contain a single struct with the 2 expected members (check their name and type)
+            ///       - METHODCALL should contain a methodname
             case 'PARAMS':
             case 'FAULT':
             case 'METHODCALL':
-            case 'METHORESPONSE':
+            case 'METHODRESPONSE':
                 break;
 
             default:
                 // End of INVALID ELEMENT
                 // Should we add an assert here for unreachable code? When an invalid element is found in xmlrpc_se,
-                // $this->_xh['isf'] is set to 2
+                // $this->_xh['isf'] is set to 2...
                 break;
         }
     }

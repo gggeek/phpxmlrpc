@@ -119,7 +119,7 @@ class ParsingTests extends PhpXmlRpc_PolyfillTestCase
         $y = $v->structmem('b5');
         $z = $v->structmem('b6');
 
-        /// @todo this test fails with phpunit, but the same code works elsewhere!
+        /// @todo this test fails with phpunit, but the same code works elsewhere! It makes string-int casting stricter??
         $this->assertEquals(true, $s->scalarval());
         //$this->assertEquals(true, $t->scalarval());
         $this->assertEquals(true, $u->scalarval());

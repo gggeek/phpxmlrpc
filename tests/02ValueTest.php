@@ -161,7 +161,7 @@ class ValueTests extends PhpXmlRpc_PolyfillTestCase
     public function testLocale()
     {
         $locale = setlocale(LC_NUMERIC, 0);
-        /// @todo on php 5.3/win setting locale to german does not seem to set decimal separator to comma...
+        /// @todo on php 5.3/win, possibly later versions, setting locale to german does not seem to set decimal separator to comma...
         if (setlocale(LC_NUMERIC, 'deu', 'de_DE@euro', 'de_DE', 'de', 'ge') !== false) {
             $v = new xmlrpcval(1.1, 'double');
             if (strpos($v->scalarval(), ',') == 1) {
