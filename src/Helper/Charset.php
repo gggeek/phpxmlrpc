@@ -2,6 +2,7 @@
 
 namespace PhpXmlRpc\Helper;
 
+use PhpXmlRpc\Exception\ValueErrorException;
 use PhpXmlRpc\PhpXmlRpc;
 use PhpXmlRpc\Traits\LoggerAware;
 
@@ -55,7 +56,7 @@ class Charset
      * @param string $tableName
      * @return void
      *
-     * @throws \Exception for unsupported $tableName
+     * @throws ValueErrorException for unsupported $tableName
      *
      * @todo add support for cp1252 as well as latin-2 .. latin-10
      *       Optimization creep: instead of building all those tables on load, keep them ready-made php files
@@ -110,7 +111,7 @@ class Charset
                 break;*/
 
             default:
-                throw new \Exception('Unsupported table: ' . $tableName);
+                throw new ValueErrorException('Unsupported table: ' . $tableName);
         }
     }
 
@@ -372,7 +373,7 @@ class Charset
      *
      * @param string $charset
      * @return array
-     * @throws \Exception for unknown/unsupported charsets
+     * @throws ValueErrorException for unknown/unsupported charsets
      */
     public function getEntities($charset)
     {
@@ -383,7 +384,7 @@ class Charset
             case 'iso88591':
                 return $this->xml_iso88591_Entities;
             default:
-                throw new \Exception('Unsupported charset: ' . $charset);
+                throw new ValueErrorException('Unsupported charset: ' . $charset);
         }
     }
 }

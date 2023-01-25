@@ -2,7 +2,7 @@
 
 namespace PhpXmlRpc;
 
-use PhpXmlRpc\Exception\PhpXmlrpcException;
+use PhpXmlRpc\Exception\NoSuchMethodException;
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\Interop;
 use PhpXmlRpc\Helper\Logger;
@@ -567,7 +567,7 @@ class Server
         $xmlRpcParser = $this->getParser();
         try {
             $xmlRpcParser->parse($data, $this->functions_parameters_type, XMLParser::ACCEPT_REQUEST, $options);
-        } catch (PhpXmlrpcException $e) {
+        } catch (NoSuchMethodException $e) {
             return new Response(0, $e->getCode(), $e->getMessage());
         }
 
@@ -751,6 +751,7 @@ class Server
                     $r = new Response($encoder->encode($r, $this->phpvals_encoding_options));
                 }
             }
+        /// @todo bump minimum php version to 7.1 and use a single catch clause instead of the duplicate blocks
         } catch (\Exception $e) {
             // (barring errors in the lib) an uncaught exception happened in the called function, we wrap it in a
             // proper error-response
@@ -822,7 +823,7 @@ class Server
      * @param XMLParser $xmlParser
      * @param resource $parser
      * @return void
-     * @throws PhpXmlrpcException
+     * @throws NoSuchMethodException
      *
      * @todo feature creep - we could validate here that the method in the dispatch map is valid, but that would mean
      *       dirtying a lot the logic, as we would have back to both parseRequest() and execute() methods the info
@@ -835,7 +836,7 @@ class Server
 
         if (!isset($dmap[$methodName]['function'])) {
             // No such method
-            throw new PhpXmlrpcException(PhpXmlRpc::$xmlrpcstr['unknown_method'], PhpXmlRpc::$xmlrpcerr['unknown_method']);
+            throw new NoSuchMethodException(PhpXmlRpc::$xmlrpcstr['unknown_method'], PhpXmlRpc::$xmlrpcerr['unknown_method']);
         }
 
         // alter on-the-fly the config of the xml parser if needed

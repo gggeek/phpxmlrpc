@@ -7,6 +7,7 @@
 
 namespace PhpXmlRpc;
 
+use PhpXmlRpc\Exception\ValueErrorException;
 use PhpXmlRpc\Traits\LoggerAware;
 
 /**
@@ -908,7 +909,7 @@ class Wrapper
                     if (is_string($throwFault)) {
                         throw new $throwFault($resp->faultString(), $resp->faultCode());
                     } else {
-                        throw new \Exception($resp->faultString(), $resp->faultCode());
+                        throw new \PhpXmlRpc\Exception($resp->faultString(), $resp->faultCode());
                     }
                 } else if ($decodeFault) {
                     if (is_string($faultResponse) && ((strpos($faultResponse, '%faultCode%') !== false) ||
@@ -1017,7 +1018,7 @@ class Wrapper
         $plist = implode(', ', $plist);
         $mDesc .= ' * @return ' . $this->xmlrpc2PhpType($mSig[0]);
         if ($throwFault) {
-            $mDesc .= "\n * @throws " . (is_string($throwFault) ? $throwFault : '\\Exception');
+            $mDesc .= "\n * @throws " . (is_string($throwFault) ? $throwFault : '\\PhpXmlRpc\\Exception');
         } else if ($decodeFault) {
             $mDesc .= '|' . gettype($faultResponse) . " (a " . gettype($faultResponse) . " if call fails)";
         } else {
@@ -1028,7 +1029,7 @@ class Wrapper
         $innerCode .= "  \$res = \${$this_}client->send(\$req, $timeout, '$protocol');\n";
         if ($throwFault) {
             if (!is_string($throwFault)) {
-                $throwFault = '\\Exception';
+                $throwFault = '\\PhpXmlRpc\\Exception';
             }
             $respCode = "throw new $throwFault(\$res->faultString(), \$res->faultCode())";
         } else if ($decodeFault) {
@@ -1219,7 +1220,7 @@ class Wrapper
     /**
      * @param string $index
      * @return object
-     * @throws \Exception
+     * @throws ValueErrorException
      */
     public static function getHeldObject($index)
     {
@@ -1227,6 +1228,6 @@ class Wrapper
             return self::$objHolder[$index];
         }
 
-        throw new \Exception("No object held for index '$index'");
+        throw new ValueErrorException("No object held for index '$index'");
     }
 }

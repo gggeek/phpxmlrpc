@@ -2,6 +2,9 @@
 
 namespace PhpXmlRpc;
 
+use PhpXmlRpc\Exception\StateErrorException;
+use PhpXmlRpc\Exception\TypeErrorException;
+use PhpXmlRpc\Exception\ValueErrorException;
 use PhpXmlRpc\Traits\CharsetEncoderAware;
 use PhpXmlRpc\Traits\LoggerAware;
 
@@ -533,26 +536,26 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @param mixed $value
      * @return void
      *
-     * @throws \Exception
+     * @throws ValueErrorException|TypeErrorException
      */
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         switch ($this->mytype) {
             case 3:
-                if (!($value instanceof \PhpXmlRpc\Value)) {
-                    throw new \Exception('It is only possible to add Value objects to an XML-RPC Struct');
+                if (!($value instanceof Value)) {
+                    throw new TypeErrorException('It is only possible to add Value objects to an XML-RPC Struct');
                 }
                 if (is_null($offset)) {
                     // disallow struct members with empty names
-                    throw new \Exception('It is not possible to add anonymous members to an XML-RPC Struct');
+                    throw new ValueErrorException('It is not possible to add anonymous members to an XML-RPC Struct');
                 } else {
                     $this->me['struct'][$offset] = $value;
                 }
                 return;
             case 2:
-                if (!($value instanceof \PhpXmlRpc\Value)) {
-                    throw new \Exception('It is only possible to add Value objects to an XML-RPC Array');
+                if (!($value instanceof Value)) {
+                    throw new TypeErrorException('It is only possible to add Value objects to an XML-RPC Array');
                 }
                 if (is_null($offset)) {
                     $this->me['array'][] = $value;
@@ -566,13 +569,13 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 reset($this->me);
                 $type = key($this->me);
                 if ($type != $offset) {
-                    throw new \Exception('');
+                    throw new ValueErrorException('');
                 }
                 $this->me[$type] = $value;
                 return;
             default:
                 // it would be nice to allow empty values to be turned into non-empty ones this way, but we miss info to do so
-                throw new \Exception("XML-RPC Value is of type 'undef' and its value can not be set using array index");
+                throw new ValueErrorException("XML-RPC Value is of type 'undef' and its value can not be set using array index");
         }
     }
 
@@ -604,7 +607,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @param mixed $offset
      * @return void
      *
-     * @throws \Exception
+     * @throws ValueErrorException|StateErrorException
      */
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
@@ -618,9 +621,9 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 return;
             case 1:
                 // can not remove value from a scalar
-                throw new \Exception("XML-RPC Value is of type 'scalar' and its value can not be unset using array index");
+                throw new StateErrorException("XML-RPC Value is of type 'scalar' and its value can not be unset using array index");
             default:
-                throw new \Exception("XML-RPC Value is of type 'undef' and its value can not be unset using array index");
+                throw new StateErrorException("XML-RPC Value is of type 'undef' and its value can not be unset using array index");
         }
     }
 
@@ -629,7 +632,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @param mixed $offset
      * @return mixed|Value|null
-     * @throws \Exception
+     * @throws StateErrorException
      */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
@@ -646,7 +649,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 return $type == $offset ? $value : null;
             default:
 // return null or exception?
-                throw new \Exception("XML-RPC Value is of type 'undef' and can not be accessed using array index");
+                throw new StateErrorException("XML-RPC Value is of type 'undef' and can not be accessed using array index");
         }
     }
 }

@@ -141,6 +141,7 @@ class Request
 
             return true;
         } else {
+            $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': value passed in must be a PhpXmlRpc\Value');
             return false;
         }
     }

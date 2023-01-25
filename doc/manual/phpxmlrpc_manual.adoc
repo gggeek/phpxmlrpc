@@ -1880,3 +1880,21 @@ the demo files are also available for download as a separate tarball from the re
 
 *Note* when downloading the demo files, make sure that the demo folder is not directly accessible from the internet, i.e.
 it is not within the webserver root directory.
+
+== Exception hierarchy
+
+    Exception
+    `-PhpXmlRpc/Exception
+      |-PhpXmlRpc/Exception/FaultResponseException.php
+      |-PhpXmlRpc/Exception/ParsingException.php
+      | |-PhpXmlRpc/Exception/XmlException.php
+      | `-PhpXmlRpc/Exception/XmlRpcException.php
+      |-PhpXmlRpc/Exception/TransportException.php
+      | `-PhpXmlRpc/Exception/HttpException.php
+      |-PhpXmlRpc/Exception/ServerException.php
+      | `-PhpXmlRpc/Exception/NoSuchMethodException.php
+      |-PhpXmlRpc/Exception/StateErrorException.php
+      |-PhpXmlRpc/Exception/TypeErrorException.php
+      `-PhpXmlRpc/Exception/ValueErrorException.php
+
+*Note* not all of the above exceptions are in use at the moment, but they might be in the future

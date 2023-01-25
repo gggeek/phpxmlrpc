@@ -25,6 +25,9 @@
   NB: if the received strings are not parseable as dates, NULL will be returned instead of an object (but that can
   be avoided by setting `PhpXmlRpc\PhpXmlRpc::$xmlrpc_reject_invalid_values = true`, see below).
 
+* improved: be more strict in the `Response` constructor and in `Request::addParam`: both of those will now generate
+  an error message in the log if passed unexpected values
+
 * improved: be more strict in the data accepted as valid for dateTime xml-rpc values. Clearly invalid dates such as a
   month '13', day '32' or hour '25' will cause an error message to be logged or the value to be rejected, depending
   on configuration
@@ -88,6 +91,8 @@
 * improved: the `Logger` class now sports methods adhering to Psr\Log\LoggerInterface
 
 * improved: made sure all debug output goes through the logger at response parsing time (there was one printf call left)
+
+* improved: all the Exceptions thrown by the library are now `\PhpXmlRpc\Exception` or subclasses thereof
 
 * improved: all the Client's `setSomething()` methods now return the client object, allowing for usage of fluent style
   calling. The same applies to `Request::setDebug`
@@ -156,6 +161,7 @@
     if you subclassed id)
   - traits have been introduced for all classes dealing with Logger, XMLParser and CharsetEncoder; method `setCharsetEncoder`
     is now static
+  - exception `\PhpXmlRpc\Exception\PhpXmlRpcException` is deprecated. Use `\PhpXmlRpc\Exception` instead
 
 ## XML-RPC for PHP version 4.9.5 - 2023/01/11
 

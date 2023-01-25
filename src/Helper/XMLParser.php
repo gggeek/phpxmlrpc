@@ -172,8 +172,6 @@ class XMLParser
             return;
         }
 
-        //$prevAccept = $this->accept;
-        //$this->accept = $accept;
         $this->current_parsing_options = array('accept' => $accept);
 
         $mergedOptions = $this->parsing_options;
@@ -272,17 +270,22 @@ class XMLParser
                     break;
                 }
             }
+        /// @todo bump minimum php version to 5.5 and use a finally clause instead of doing cleanup 3 times
         } catch (\Exception $e) {
             xml_parser_free($parser);
             $this->current_parsing_options = array();
-            //$this->accept = $prevAccept;
             /// @todo should we set $this->_xh['isf'] and $this->_xh['isf_reason'] ?
+            throw $e;
+        } catch (\Error $e) {
+            xml_parser_free($parser);
+            $this->current_parsing_options = array();
+                //$this->accept = $prevAccept;
+                /// @todo should we set $this->_xh['isf'] and $this->_xh['isf_reason'] ?
             throw $e;
         }
 
         xml_parser_free($parser);
         $this->current_parsing_options = array();
-        //$this->accept = $prevAccept;
     }
 
     /**

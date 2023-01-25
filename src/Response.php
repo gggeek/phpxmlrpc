@@ -2,7 +2,9 @@
 
 namespace PhpXmlRpc;
 
+use PhpXmlRpc\Exception\StateErrorException;
 use PhpXmlRpc\Traits\CharsetEncoderAware;
+use PhpXmlRpc\Traits\LoggerAware;
 
 /**
  * This class provides the representation of the response of an XML-RPC server.
@@ -16,6 +18,7 @@ use PhpXmlRpc\Traits\CharsetEncoderAware;
 class Response
 {
     use CharsetEncoderAware;
+    use LoggerAware;
 
     /// @todo: do these need to be public?
     /** @internal */
@@ -32,18 +35,20 @@ class Response
     protected $httpResponse = array('headers' => array(), 'cookies' => array(), 'raw_data' => '', 'status_code' => null);
 
     /**
-     * @param Value|string|mixed $val either a Value object, a php value or the xml serialization of an xml-rpc value (a string)
+     * @param Value|string|mixed $val either a Value object, a php value or the xml serialization of an xml-rpc value (a string).
+     *                                Note that using anything other than a Value object wll have an impact on serialization.
      * @param integer $fCode set it to anything but 0 to create an error response. In that case, $val is discarded
      * @param string $fString the error string, in case of an error response
      * @param string $valType The type of $val passed in. Either 'xmlrpcvals', 'phpvals' or 'xml'. Leave empty to let
-     *                        the code guess the correct type.
+     *                        the code guess the correct type by looking at $val - in which case strings are assumed
+     *                        to be serialized xml
      * @param array|null $httpResponse this should be set when the response is being built out of data received from
      *                                 http (i.e. not when programmatically building a Response server-side). Array
      *                                 keys should include, if known: headers, cookies, raw_data, status_code
      *
-     * @todo add check that $val / $fCode / $fString is of correct type???
+     * @todo add check that $val / $fCode / $fString is of correct type? We could at least log a warning for fishy cases...
      *       NB: as of now we do not do it, since it might be either an xml-rpc value or a plain php val, or a complete
-     *       xml chunk, depending on usage of Client::send() inside which the constructor is called...
+     *       xml chunk, depending on usage of Client::send() inside which the constructor is called.
      */
     public function __construct($val, $fCode = 0, $fString = '', $valType = '', $httpResponse = null)
     {
@@ -64,8 +69,12 @@ class Response
                     $this->valtyp = 'phpvals';
                 }
             } else {
-                // user declares type of resp value: believe him
                 $this->valtyp = $valType;
+                // user declares the type of resp value: we "almost" trust it... but log errors just in case
+                if (($this->valtyp == 'xmlrpcvals' && (!is_a($this->val, 'PhpXmlRpc\Value'))) ||
+                    ($this->valtyp == 'xml' && (!is_string($this->val)))) {
+                    $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': value passed in does not match type ' . $valType);
+                }
             }
         }
 
@@ -138,7 +147,7 @@ class Response
      *
      * @param string $charsetEncoding the charset to be used for serialization. If null, US-ASCII is assumed
      * @return string the xml representation of the response
-     * @throws \Exception
+     * @throws StateErrorException if the response was built out of a value of an unsupported type
      */
     public function serialize($charsetEncoding = '')
     {
@@ -157,22 +166,21 @@ class Response
             $result .= "<fault>\n" .
                 "<value>\n<struct><member><name>faultCode</name>\n<value><int>" . $this->errno .
                 "</int></value>\n</member>\n<member>\n<name>faultString</name>\n<value><string>" .
-                $this->getCharsetEncoder()->encodeEntities($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</string></value>\n</member>\n" .
-                "</struct>\n</value>\n</fault>";
+                $this->getCharsetEncoder()->encodeEntities($this->errstr, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) .
+                "</string></value>\n</member>\n</struct>\n</value>\n</fault>";
         } else {
-            if (!is_object($this->val) || !is_a($this->val, 'PhpXmlRpc\Value')) {
-                if (is_string($this->val) && $this->valtyp == 'xml') {
-                    $result .= "<params>\n<param>\n" .
-                        $this->val .
-                        "</param>\n</params>";
-                } else {
-                    /// @todo try to build something serializable using the Encoder...
-                    throw new \Exception('cannot serialize xmlrpc response objects whose content is native php values');
-                }
-            } else {
+            if (is_object($this->val) && is_a($this->val, 'PhpXmlRpc\Value')) {
+                $result .= "<params>\n<param>\n" . $this->val->serialize($charsetEncoding) . "</param>\n</params>";
+            } else if (is_string($this->val) && $this->valtyp == 'xml') {
                 $result .= "<params>\n<param>\n" .
-                    $this->val->serialize($charsetEncoding) .
+                    $this->val .
                     "</param>\n</params>";
+            } else if ($this->valtyp == 'phpvals') {
+                    $encoder = new Encoder();
+                    $val = $encoder->encode($this->val);
+                    $result .= "<params>\n<param>\n" . $val->serialize($charsetEncoding) . "</param>\n</params>";
+            } else {
+                throw new StateErrorException('cannot serialize xmlrpc response objects whose content is native php values');
             }
         }
         $result .= "\n</methodResponse>";
