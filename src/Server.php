@@ -4,6 +4,7 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Exception\PhpXmlrpcException;
 use PhpXmlRpc\Helper\Http;
+use PhpXmlRpc\Helper\Interop;
 use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
 use PhpXmlRpc\Traits\CharsetEncoderAware;
@@ -989,7 +990,7 @@ class Server
         }
 
         // support for "standard" error codes
-        if (PhpXmlRpc::$xmlrpcerr['unknown_method'] == -32601) {
+        if (PhpXmlRpc::$xmlrpcerr['unknown_method'] === Interop::$xmlrpcerr['unknown_method']) {
             $outAr['faults_interop'] = array(
                 'specUrl' => 'http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php',
                 'specVersion' => 20010516
