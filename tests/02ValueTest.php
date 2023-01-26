@@ -1,41 +1,13 @@
 <?php
 
-include_once __DIR__ . '/../lib/xmlrpc.inc';
-include_once __DIR__ . '/../lib/xmlrpcs.inc';
-
-include_once __DIR__ . '/parse_args.php';
-
-include_once __DIR__ . '/PolyfillTestCase.php';
-
-use PHPUnit\Runner\BaseTestRunner;
+include_once __DIR__ . '/LogAwareTestCase.php';
 
 /**
  * Tests involving the Value class.
  * NB: these tests do not involve the parsing of xml into Value objects - look in 03ParsingTest for that
  */
-class ValueTest extends PhpXmlRpc_PolyfillTestCase
+class ValueTest extends PhpXmlRpc_LogAwareTestCase
 {
-    public $args = array();
-
-    protected function set_up()
-    {
-        $this->args = argParser::getArgs();
-        if ($this->args['DEBUG'] == 1)
-            ob_start();
-    }
-
-    protected function tear_down()
-    {
-        if ($this->args['DEBUG'] != 1)
-            return;
-        $out = ob_get_clean();
-        $status = $this->getStatus();
-        if ($status == BaseTestRunner::STATUS_ERROR
-            || $status == BaseTestRunner::STATUS_FAILURE) {
-            echo $out;
-        }
-    }
-
     public function testMinusOneString()
     {
         $v = new xmlrpcval('-1');

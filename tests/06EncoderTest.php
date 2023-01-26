@@ -1,13 +1,6 @@
 <?php
 
-include_once __DIR__ . '/../lib/xmlrpc.inc';
-include_once __DIR__ . '/../lib/xmlrpcs.inc';
-
-include_once __DIR__ . '/parse_args.php';
-
-include_once __DIR__ . '/PolyfillTestCase.php';
-
-use PHPUnit\Runner\BaseTestRunner;
+include_once __DIR__ . '/LogAwareTestCase.php';
 
 /**
  * Tests involving automatic encoding/decoding of php values into xmlrpc values (the Encoder class).
@@ -15,30 +8,8 @@ use PHPUnit\Runner\BaseTestRunner;
  * @todo add tests for encoding options: 'encode_php_objs', 'auto_dates', 'null_extension' and 'extension_api'
  * @todo add tests for php_xmlrpc_decode options
  */
-class EncoderTest extends PhpXmlRpc_PolyfillTestCase
+class EncoderTest extends PhpXmlRpc_LogAwareTestCase
 {
-    public $args = array();
-
-    protected function set_up()
-    {
-        $this->args = argParser::getArgs();
-        // hide parsing errors unless in debug mode
-        if ($this->args['DEBUG'] == 1)
-            ob_start();
-    }
-
-    protected function tear_down()
-    {
-        if ($this->args['DEBUG'] != 1)
-            return;
-        $out = ob_get_clean();
-        $status = $this->getStatus();
-        if ($status == BaseTestRunner::STATUS_ERROR
-            || $status == BaseTestRunner::STATUS_FAILURE) {
-            echo $out;
-        }
-    }
-
     public function testEncodeArray()
     {
         $v = php_xmlrpc_encode(array());

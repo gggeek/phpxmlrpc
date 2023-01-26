@@ -21,26 +21,11 @@ use PhpXmlRpc\Helper\Charset;
  */
 class CharsetTest extends PhpXmlRpc_PolyfillTestCase
 {
-    // Consolas font should render these properly
+    // Consolas font should render these properly. Of course this file is encoded in UTF-8
     protected $runes = "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ";
     protected $greek = "Τὴ γλῶσσα μοῦ ἔδωσαν ἑλληνικὴ";
     protected $russian = "Река неслася; бедный чёлн";
     protected $chinese = "我能吞下玻璃而不伤身体。";
-
-    protected $latinString;
-
-    /// @todo move to usage of a dataProvider and create the latinString there
-    protected function set_up()
-    {
-        // construct a latin string with all chars (except control ones)
-        $this->latinString = "\n\r\t";
-        for($i = 32; $i < 127; $i++) {
-            $this->latinString .= chr($i);
-        }
-        for($i = 160; $i < 256; $i++) {
-            $this->latinString .= chr($i);
-        }
-    }
 
     protected function utf8ToLatin1($data)
     {
@@ -62,10 +47,18 @@ class CharsetTest extends PhpXmlRpc_PolyfillTestCase
 
     public function testUtf8ToLatin1All()
     {
+        $latinString = "\n\r\t";
+        for($i = 32; $i < 127; $i++) {
+            $latinString .= chr($i);
+        }
+        for($i = 160; $i < 256; $i++) {
+            $latinString .= chr($i);
+        }
+
         // the warning suppression is due to utf8_encode being deprecated in php 8.2
-        $string = @utf8_encode($this->latinString);
+        $string = @utf8_encode($latinString);
         $encoded = $this->utf8ToLatin1($string);
-        $this->assertEquals(str_replace(array('&', '"', "'", '<', '>'), array('&amp;', '&quot;', '&apos;', '&lt;', '&gt;'), $this->latinString), $encoded);
+        $this->assertEquals(str_replace(array('&', '"', "'", '<', '>'), array('&amp;', '&quot;', '&apos;', '&lt;', '&gt;'), $latinString), $encoded);
     }
 
     public function testUtf8ToLatin1EuroSymbol()

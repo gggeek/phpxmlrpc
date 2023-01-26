@@ -1,44 +1,21 @@
 <?php
 
-include_once __DIR__ . '/../lib/xmlrpc.inc';
-
-include_once __DIR__ . '/parse_args.php';
-
-include_once __DIR__ . '/PolyfillTestCase.php';
-
-use PHPUnit\Runner\BaseTestRunner;
+include_once __DIR__ . '/LogAwareTestCase.php';
 
 /**
  * Tests involving the Client class (and no server).
  */
-class ClientTes extends PhpXmlRpc_PolyfillTestCase
+class ClientTes extends PhpXmlRpc_LogAwareTestCase
 {
     /** @var xmlrpc_client $client */
     public $client = null;
-    public $args = array();
 
     public function set_up()
     {
-        $this->args = argParser::getArgs();
+        parent::set_up();
 
         $this->client = new xmlrpc_client('/NOTEXIST.php', $this->args['HTTPSERVER'], 80);
         $this->client->setDebug($this->args['DEBUG']);
-
-        // in debug mode, the client will be very verbose. Avoid showing its output unless there are errors
-        if ($this->args['DEBUG'] >= 1)
-            ob_start();
-    }
-
-    protected function tear_down()
-    {
-        if ($this->args['DEBUG'] < 1)
-            return;
-        $out = ob_get_clean();
-        $status = $this->getStatus();
-        if ($status == BaseTestRunner::STATUS_ERROR
-            || $status == BaseTestRunner::STATUS_FAILURE) {
-            echo $out;
-        }
     }
 
     public function test404()

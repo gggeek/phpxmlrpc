@@ -1,22 +1,15 @@
 <?php
 
-include_once __DIR__ . '/../lib/xmlrpc.inc';
 include_once __DIR__ . '/../lib/xmlrpc_wrappers.inc';
 
-include_once __DIR__ . '/parse_args.php';
-
-include_once __DIR__ . '/PolyfillTestCase.php';
-
-use PHPUnit\Extensions\SeleniumCommon\RemoteCoverage;
-use PHPUnit\Framework\TestResult;
-use PHPUnit\Runner\BaseTestRunner;
+include_once __DIR__ . '/ServerAwareTestCase.php';
 
 /**
  * Tests which involve interaction with the server - carried out via the client.
  * They are run against the server found in demo/server.php.
  * Includes testing of (some of) the Wrapper class
  */
-class ServerTest extends PhpXmlRpc_PolyfillTestCase
+class ServerTest extends PhpXmlRpc_ServerAwareTestCase
 {
     /** @var xmlrpc_client $client */
     protected $client = null;
@@ -24,14 +17,8 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
     protected $timeout = 10;
     protected $request_compression = null;
     protected $accepted_compression = '';
-    protected $args = array();
 
     protected static $failed_tests = array();
-
-    protected $testId;
-    /** @var boolean $collectCodeCoverageInformation */
-    protected $collectCodeCoverageInformation;
-    protected $coverageScriptUrl;
 
     /**
      * @todo instead of overriding fail via _fail, implement Yoast\PHPUnitPolyfills\TestListeners\TestListenerDefaultImplementation
@@ -53,47 +40,9 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
         parent::_fail($message);
     }
 
-    /**
-     * Reimplemented to allow us to collect code coverage info from the target server.
-     * Code taken from PHPUnit_Extensions_Selenium2TestCase
-     *
-     * @param TestResult $result
-     * @return TestResult
-     * @throws Exception
-     *
-     * @todo instead of overriding run via _run, try to achieve this by implementing Yoast\PHPUnitPolyfills\TestListeners\TestListenerDefaultImplementation
-     */
-    public function _run($result = NULL)
-    {
-        $this->testId = get_class($this) . '__' . $this->getName();
-
-        if ($result === NULL) {
-            $result = $this->createResult();
-        }
-
-        $this->collectCodeCoverageInformation = $result->getCollectCodeCoverageInformation();
-
-        parent::_run($result);
-
-        if ($this->collectCodeCoverageInformation) {
-            $coverage = new RemoteCoverage(
-                $this->coverageScriptUrl,
-                $this->testId
-            );
-            $result->getCodeCoverage()->append(
-                $coverage->get(), $this
-            );
-        }
-
-        // do not call this before to give the time to the Listeners to run
-        //$this->getStrategy()->endOfTest($this->session);
-
-        return $result;
-    }
-
     public function set_up()
     {
-        $this->args = argParser::getArgs();
+        parent::set_up();
 
         $server = explode(':', $this->args['HTTPSERVER']);
         if (count($server) > 1) {
@@ -105,24 +54,6 @@ class ServerTest extends PhpXmlRpc_PolyfillTestCase
         $this->client->setDebug($this->args['DEBUG']);
         $this->client->request_compression = $this->request_compression;
         $this->client->accepted_compression = $this->accepted_compression;
-
-        $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|/tests/index\.php(\?.*)?|', '/tests/phpunit_coverage.php', $this->args['HTTPURI']);
-
-        // in debug mode, the client will be very verbose. Avoid showing its output unless there are errors
-        if ($this->args['DEBUG'] >= 1)
-            ob_start();
-    }
-
-    protected function tear_down()
-    {
-        if ($this->args['DEBUG'] < 1)
-            return;
-        $out = ob_get_clean();
-        $status = $this->getStatus();
-        if ($status == BaseTestRunner::STATUS_ERROR
-            || $status == BaseTestRunner::STATUS_FAILURE) {
-            echo $out;
-        }
     }
 
     /**

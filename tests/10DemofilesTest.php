@@ -9,15 +9,6 @@ include_once __DIR__ . '/WebTestCase.php';
  */
 class DemoFilesTest extends PhpXmlRpc_WebTestCase
 {
-    public function set_up()
-    {
-        $this->args = argParser::getArgs();
-
-        // assumes HTTPURI to be in the form /tests/index.php?etc...
-        $this->baseUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|\?.+|', '', $this->args['HTTPURI']);
-        $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|/tests/index\.php(\?.*)?|', '/tests/phpunit_coverage.php', $this->args['HTTPURI']);
-    }
-
     public function testVardemo()
     {
         $page = $this->request('?demo=vardemo.php');
@@ -84,7 +75,7 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
         $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
 
-        $c = $this->getClient('?demo=server/codegen.php');
+        $c = $this->newClient('?demo=server/codegen.php');
         $r = $c->send(new \PhpXmlRpc\Request('CommentManager.getComments', array(
             new \PhpXmlRpc\Value('aCommentId')
         )));
@@ -97,7 +88,7 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
         $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
 
-        $c = $this->getClient('?demo=server/discuss.php');
+        $c = $this->newClient('?demo=server/discuss.php');
 
         $r = $c->send(new \PhpXmlRpc\Request('discuss.addComment', array(
             new \PhpXmlRpc\Value('aCommentId'),
