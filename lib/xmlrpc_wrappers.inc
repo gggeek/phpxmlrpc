@@ -108,7 +108,7 @@ function wrap_xmlrpc_method($client, $methodName, $extraOptions=0, $timeout=0, $
 
     $wrapper = new PhpXmlRpc\Wrapper();
 
-    if (!isset($extraOptions['return_source'])  || $extraOptions['return_source'] == false) {
+    if (!isset($extraOptions['return_source']) || $extraOptions['return_source'] == false) {
         // backwards compat: return string instead of callable
         $extraOptions['return_source'] = true;
         $wrapped = $wrapper->wrapXmlrpcMethod($client, $methodName, $extraOptions);
