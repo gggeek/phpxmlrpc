@@ -165,7 +165,7 @@ class XMLParser
 
         $len = strlen($data);
 
-        // we test for empty documents here to save on resource allocation and simply the chunked-parsing loop below
+        // we test for empty documents here to save on resource allocation and simplify the chunked-parsing loop below
         if ($len == 0) {
             $this->_xh['isf'] = 3;
             $this->_xh['isf_reason'] = 'XML error 5: empty document';
@@ -263,7 +263,6 @@ class XMLParser
 
                     $this->_xh['isf'] = 3;
                     $this->_xh['isf_reason'] = $errStr;
-                    break;
                 }
                 // no need to parse further if we already have a fatal error
                 if ($this->_xh['isf'] >= 2) {
@@ -591,13 +590,9 @@ class XMLParser
                     // log if receiving something strange, even though we set the value to false anyway
                     /// @todo to be consistent with the other types, we should return a value outside the good-value domain, e.g. NULL
                     if ($this->_xh['ac'] != '0' && strcasecmp($this->_xh['ac'], 'false') !== 0) {
-                        if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
-                            $this->_xh['isf'] = 2;
-                            $this->_xh['isf_reason'] = 'Invalid data received in BOOLEAN value: ' . $this->truncateValueForLog($this->_xh['ac']);
+                        if (!$this->handleParsingError('invalid data received in BOOLEAN value: ' .
+                            $this->truncateValueForLog($this->_xh['ac']), __METHOD__)) {
                             return;
-                        } else {
-                            $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': invalid data received in BOOLEAN value: ' .
-                                $this->truncateValueForLog($this->_xh['ac']));
                         }
                     }
                     $this->_xh['value'] = false;
@@ -615,14 +610,9 @@ class XMLParser
                 $this->_xh['vt'] = strtolower($name);
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 if (!preg_match(PhpXmlRpc::$xmlrpc_int_format, $this->_xh['ac'])) {
-                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values'])
-                    {
-                        $this->_xh['isf'] = 2;
-                        $this->_xh['isf_reason'] = 'Non numeric data received in INT value: ' . $this->truncateValueForLog($this->_xh['ac']);
+                    if (!$this->handleParsingError('non numeric data received in INT value: ' .
+                        $this->truncateValueForLog($this->_xh['ac']), __METHOD__)) {
                         return;
-                    } else {
-                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': non numeric data received in INT: ' .
-                            $this->truncateValueForLog($this->_xh['ac']));
                     }
                     /// @todo: find a better way of reporting an error value than this! Use NaN?
                     $this->_xh['value'] = 'ERROR_NON_NUMERIC_FOUND';
@@ -636,14 +626,9 @@ class XMLParser
                 $this->_xh['vt'] = Value::$xmlrpcDouble;
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 if (!preg_match(PhpXmlRpc::$xmlrpc_double_format, $this->_xh['ac'])) {
-                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
-                        $this->_xh['isf'] = 2;
-                        $this->_xh['isf_reason'] = 'Non numeric data received in DOUBLE value: ' .
-                            $this->truncateValueForLog($this->_xh['ac']);
+                    if (!$this->handleParsingError('non numeric data received in DOUBLE value: ' .
+                        $this->truncateValueForLog($this->_xh['ac']), __METHOD__)) {
                         return;
-                    } else {
-                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': non numeric data received in DOUBLE value: ' .
-                            $this->truncateValueForLog($this->_xh['ac']));
                     }
 
                     $this->_xh['value'] = 'ERROR_NON_NUMERIC_FOUND';
@@ -657,22 +642,23 @@ class XMLParser
                 $this->_xh['vt'] = Value::$xmlrpcDateTime;
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 if (!preg_match(PhpXmlRpc::$xmlrpc_datetime_format, $this->_xh['ac'])) {
-                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
-                        $this->_xh['isf'] = 2;
-                        $this->_xh['isf_reason'] = 'Invalid data received in DATETIME value: ' . $this->truncateValueForLog($this->_xh['ac']);
+                    if (!$this->handleParsingError('invalid data received in DATETIME value: ' .
+                        $this->truncateValueForLog($this->_xh['ac']), __METHOD__)) {
                         return;
-                    } else {
-                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': invalid data received in DATETIME value: ' .
-                            $this->truncateValueForLog($this->_xh['ac']));
                     }
                 }
                 if ($this->current_parsing_options['xmlrpc_return_datetimes']) {
                     try {
                         $this->_xh['value'] = new \DateTime($this->_xh['ac']);
+
+                    // the default regex used to validate the date string a few lines above should make this case impossible,
+                    // but one never knows...
                     } catch(\Exception $e) {
-                        // q: what to do? we can not guarantee that a valid date can be created. Return null or throw?
-                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': ' . $e->getMessage());
-                        $this->_xh['value'] = null;
+                        // what to do? We can not guarantee that a valid date can be created. We return null...
+                        if (!$this->handleParsingError('invalid data received in DATETIME value. Error ' .
+                            $e->getMessage(), __METHOD__)) {
+                            return;
+                        }
                     }
                 } else {
                     $this->_xh['value'] = $this->_xh['ac'];
@@ -709,23 +695,15 @@ class XMLParser
                 if ($this->_xh['vt']) {
                     $vscount = count($this->_xh['valuestack']);
                     if ($this->_xh['valuestack'][$vscount - 1]['name'] === null) {
-                        if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
-                            $this->_xh['isf'] = 2;
-                            $this->_xh['isf_reason'] = 'Missing NAME inside STRUCT in received xml';
+                        if (!$this->handleParsingError('missing NAME inside STRUCT in received xml', __METHOD__)) {
                             return;
-                        } else {
-                            $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': missing NAME inside STRUCT in received xml');
                         }
                         $this->_xh['valuestack'][$vscount - 1]['name'] = '';
                     }
                     $this->_xh['valuestack'][$vscount - 1]['values'][$this->_xh['valuestack'][$vscount - 1]['name']] = $this->_xh['value'];
                 } else {
-                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
-                        $this->_xh['isf'] = 2;
-                        $this->_xh['isf_reason'] = 'Missing VALUE inside STRUCT in received xml';
+                    if (!$this->handleParsingError('missing VALUE inside STRUCT in received xml', __METHOD__)) {
                         return;
-                    } else {
-                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': missing VALUE inside STRUCT in received xml');
                     }
                 }
                 break;
@@ -752,25 +730,17 @@ class XMLParser
                     $this->_xh['params'][] = $this->_xh['value'];
                     $this->_xh['pt'][] = $this->_xh['vt'];
                 } else {
-                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
-                        $this->_xh['isf'] = 2;
-                        $this->_xh['isf_reason'] = 'Missing VALUE inside PARAM in received xml';
+                    if (!$this->handleParsingError('missing VALUE inside PARAM in received xml', __METHOD__)) {
                         return;
-                    } else {
-                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': missing VALUE inside PARAM in received xml');
                     }
                 }
                 break;
 
             case 'METHODNAME':
                 if (!preg_match(PhpXmlRpc::$xmlrpc_methodname_format, $this->_xh['ac'])) {
-                    if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
-                        $this->_xh['isf'] = 2;
-                        $this->_xh['isf_reason'] = 'Invalid data received in METHODNAME: '. $this->truncateValueForLog($this->_xh['ac']);
+                    if (!$this->handleParsingError('invalid data received in METHODNAME: '.
+                        $this->truncateValueForLog($this->_xh['ac']), __METHOD__)) {
                         return;
-                    } else {
-                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': invalid data received in METHODNAME: '.
-                            $this->truncateValueForLog($this->_xh['ac']));
                     }
                 }
                 $methodName = trim($this->_xh['ac']);
@@ -1005,6 +975,23 @@ class XMLParser
         }
 
         return false;
+    }
+
+    /**
+     * @param string $message
+     * @param string $method method/file/line info
+     * @return bool false if the caller has to stop parsing
+     */
+    protected function handleParsingError($message, $method = '')
+    {
+        if ($this->current_parsing_options['xmlrpc_reject_invalid_values']) {
+            $this->_xh['isf'] = 2;
+            $this->_xh['isf_reason'] = ucfirst($message);
+            return false;
+        } else {
+            $this->getLogger()->error('XML-RPC: ' . ($method != '' ? $method . ': ' : '') . $message);
+            return true;
+        }
     }
 
     /**
