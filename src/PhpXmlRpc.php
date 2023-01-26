@@ -173,6 +173,7 @@ class PhpXmlRpc
      * @var string
      * Used to validate received date values. Alter this if the server/client you are communicating with uses date
      * formats non-conformant with the spec
+     * NB: the string should not match any data which php can not successfully use in a DateTime object constructor call
      * NB: atm, the Date helper uses this regexp and expects to find matches in a specific order
      */
     public static $xmlrpc_datetime_format = '/^([0-9]{4})(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9]|60)$/';
@@ -200,7 +201,11 @@ class PhpXmlRpc
      * Used to validate received methodname values.
      * According to the spec: "The string may only contain identifier characters, upper and lower-case A-Z, the numeric
      * characters, 0-9, underscore, dot, colon and slash".
-     * We keep in spaces for BC, even though they are forbidden by the spec.
+     * We keep in leading and trailing spaces for BC, even though they are forbidden by the spec.
+     * But what about "identifier characters"? Is that meant to be 'identifier characters: upper and lower-case A-Z, ...'
+     * or something else? If the latter, there is no consensus across programming languages about what is a valid
+     * identifier character. PHP has one of the most crazy definitions of what is a valid identifier character, allowing
+     * _bytes_ in range x80-xff, without even specifying a character set (and then lowercasing anyway in some cases)...
      */
     public static $xmlrpc_methodname_format = '|^[ \t]*[a-zA-Z0-9_.:/]+[ \t]*$|';
 
