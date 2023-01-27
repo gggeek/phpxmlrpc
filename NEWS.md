@@ -59,6 +59,9 @@
 
 * fixed: receiving integers which use the '<EX:I8>' xml tag
 
+* fixed: setting values to deprecated Response property `cookies` would trigger a PHP notice (introduced in 4.6.0), ex:
+  `$response->_cookies['name'] = ['value' => 'something'];`
+
 * new: method `PhpXmlRpc::useInteropFaults()` can be used to make the library change the error codes it generates to
   match the spec described at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
 

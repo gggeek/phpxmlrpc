@@ -667,6 +667,9 @@ class Wrapper
      * @param string $classMethod
      * @param array $extraOptions
      * @return string
+     *
+     * @todo php allows many more characters in identifiers than the xml-rpc spec does. We should make sure to
+     *       replace those (while trying to make sure we are not running in collisions)
      */
     protected function generateMethodNameForClassMethod($className, $classMethod, $extraOptions = array())
     {

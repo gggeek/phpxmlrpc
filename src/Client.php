@@ -682,6 +682,10 @@ class Client
      */
     public function send($req, $timeout = 0, $method = '')
     {
+        //if ($method !== '' || $timeout !== 0) {
+        //    trigger_error("Using non-default values for arguments 'method' and 'timeout' when calling method " . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        //}
+
         // if user does not specify http protocol, use native method of this client
         // (i.e. method set during call to constructor)
         if ($method == '') {
