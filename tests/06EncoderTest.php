@@ -1,6 +1,6 @@
 <?php
 
-include_once __DIR__ . '/LogAwareTestCase.php';
+include_once __DIR__ . '/LoggerAwareTestCase.php';
 
 /**
  * Tests involving automatic encoding/decoding of php values into xmlrpc values (the Encoder class).
@@ -8,7 +8,7 @@ include_once __DIR__ . '/LogAwareTestCase.php';
  * @todo add tests for encoding options: 'encode_php_objs', 'auto_dates', 'null_extension' and 'extension_api'
  * @todo add tests for php_xmlrpc_decode options
  */
-class EncoderTest extends PhpXmlRpc_LogAwareTestCase
+class EncoderTest extends PhpXmlRpc_LoggerAwareTestCase
 {
     public function testEncodeArray()
     {

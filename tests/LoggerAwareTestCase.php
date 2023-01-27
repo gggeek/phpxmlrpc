@@ -9,7 +9,7 @@ include_once __DIR__ . '/PolyfillTestCase.php';
 
 use PHPUnit\Runner\BaseTestRunner;
 
-abstract class PhpXmlRpc_LogAwareTestCase extends PhpXmlRpc_PolyfillTestCase
+abstract class PhpXmlRpc_LoggerAwareTestCase extends PhpXmlRpc_PolyfillTestCase
 {
     protected $args = array();
 

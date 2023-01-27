@@ -1,13 +1,13 @@
 <?php
 
-include_once __DIR__ . '/LogAwareTestCase.php';
+include_once __DIR__ . '/LoggerAwareTestCase.php';
 
 /**
  * Tests involving xml parsing.
  *
  * @todo some tests are here even though they logically belong elsewhere...
  */
-class ParsingTest extends PhpXmlRpc_LogAwareTestCase
+class ParsingTest extends PhpXmlRpc_LoggerAwareTestCase
 {
     protected function newRequest($methodName, $params = array())
     {

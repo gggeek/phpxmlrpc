@@ -1,12 +1,12 @@
 <?php
 
-include_once __DIR__ . '/LogAwareTestCase.php';
+include_once __DIR__ . '/LoggerAwareTestCase.php';
 
 /**
  * Tests involving the Value class.
  * NB: these tests do not involve the parsing of xml into Value objects - look in 03ParsingTest for that
  */
-class ValueTest extends PhpXmlRpc_LogAwareTestCase
+class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
 {
     public function testMinusOneString()
     {

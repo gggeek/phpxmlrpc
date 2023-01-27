@@ -1,11 +1,11 @@
 <?php
 
-include_once __DIR__ . '/LogAwareTestCase.php';
+include_once __DIR__ . '/LoggerAwareTestCase.php';
 
 use PHPUnit\Extensions\SeleniumCommon\RemoteCoverage;
 use PHPUnit\Framework\TestResult;
 
-abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LogAwareTestCase
+abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LoggerAwareTestCase
 {
     /** @var string */
     protected $baseUrl;

@@ -1,11 +1,11 @@
 <?php
 
-include_once __DIR__ . '/LogAwareTestCase.php';
+include_once __DIR__ . '/LoggerAwareTestCase.php';
 
 /**
  * Tests involving the Client class (and no server).
  */
-class ClientTes extends PhpXmlRpc_LogAwareTestCase
+class ClientTes extends PhpXmlRpc_LoggerAwareTestCase
 {
     /** @var xmlrpc_client $client */
     public $client = null;

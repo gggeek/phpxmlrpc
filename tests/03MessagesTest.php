@@ -1,11 +1,11 @@
 <?php
 
-include_once __DIR__ . '/LogAwareTestCase.php';
+include_once __DIR__ . '/LoggerAwareTestCase.php';
 
 /**
  * Tests involving Requests and Responses, except for the parsing part
  */
-class MessagesTest extends PhpXmlRpc_LogAwareTestCase
+class MessagesTest extends PhpXmlRpc_LoggerAwareTestCase
 {
     public function testSerializePHPValResponse()
     {
