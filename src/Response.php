@@ -191,7 +191,8 @@ class Response
 
     // BC layer
 
-    public function __get($name)
+    // we have to make this return by ref in order to allow calls such as `$resp->_cookies['name'] = ['value' => 'something'];`
+    public function &__get($name)
     {
         //trigger_error('getting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
 
