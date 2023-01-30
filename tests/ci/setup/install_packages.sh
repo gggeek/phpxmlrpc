@@ -6,6 +6,8 @@ set -e
 
 echo "Installing base software packages..."
 
+apt-get update
+
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
     locales sudo unzip wget
 
