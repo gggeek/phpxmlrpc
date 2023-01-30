@@ -68,8 +68,8 @@
 * new: method `PhpXmlRpc::useInteropFaults()` can be used to make the library change the error codes it generates to
   match the spec described at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
 
-* new: added the `Client::setTimeout` method, meant to replace usage of the `$timeout` argument in calls to `send`
-  and `multicall`
+* new: added methods `getOption`, `setOption`, `setOptions` and `getOptions` to both Client and Server, meant to replace
+  direct access to _all public properties_ as well as the `$timeout` argument in calls to `Client::send` and `Client::multicall`
 
 * new: method `Client::getUrl()`
 

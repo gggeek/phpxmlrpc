@@ -3,6 +3,7 @@
 namespace PhpXmlRpc;
 
 use PhpXmlRpc\Exception\NoSuchMethodException;
+use PhpXmlRpc\Exception\ValueErrorException;
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\Interop;
 use PhpXmlRpc\Helper\Logger;
@@ -19,6 +20,15 @@ class Server
     use CharsetEncoderAware;
     use LoggerAware;
     use ParserAware;
+
+    const OPT_ACCEPTED_COMPRESSION = 'accepted_compression';
+    const OPT_ALLOW_SYSTEM_FUNCS = 'allow_system_funcs';
+    const OPT_COMPRESS_RESPONSE = 'compress_response';
+    const OPT_DEBUG = 'debug';
+    const OPT_EXCEPTION_HANDLING = 'exception_handling';
+    const OPT_FUNCTIONS_PARAMETERS_TYPE = 'functions_parameters_type';
+    const OPT_PHPVALS_ENCODING_OPTIONS = 'phpvals_encoding_options';
+    const OPT_RESPONSE_CHARSET_ENCODING = 'response_charset_encoding';
 
     /**
      * @var string
@@ -113,6 +123,17 @@ class Server
      */
     protected $dmap = array();
 
+    protected $options = array(
+        self::OPT_ACCEPTED_COMPRESSION,
+        self::OPT_ALLOW_SYSTEM_FUNCS,
+        self::OPT_COMPRESS_RESPONSE,
+        self::OPT_DEBUG,
+        self::OPT_EXCEPTION_HANDLING,
+        self::OPT_FUNCTIONS_PARAMETERS_TYPE,
+        self::OPT_PHPVALS_ENCODING_OPTIONS,
+        self::OPT_RESPONSE_CHARSET_ENCODING,
+    );
+
     /**
      * Storage for internal debug info.
      */
@@ -164,6 +185,102 @@ class Server
     }
 
     /**
+     * @param string $name
+     * @param mixed $value
+     * @return $this
+     * @throws ValueErrorException on unsupported option
+     */
+    public function setOption($name, $value)
+    {
+        switch ($name) {
+            case self::OPT_ACCEPTED_COMPRESSION :
+                $this->accepted_charset_encodings = $value;
+                break;
+            case self::OPT_ALLOW_SYSTEM_FUNCS:
+                $this->allow_system_funcs = $value;
+                break;
+            case self::OPT_COMPRESS_RESPONSE:
+                $this->compress_response = $value;
+                break;
+            case self::OPT_DEBUG:
+                $this->debug = $value;
+                break;
+            case self::OPT_EXCEPTION_HANDLING:
+                $this->exception_handling = $value;
+                break;
+            case self::OPT_FUNCTIONS_PARAMETERS_TYPE:
+                $this->functions_parameters_type = $value;
+                break;
+            case self::OPT_PHPVALS_ENCODING_OPTIONS:
+                $this->phpvals_encoding_options = $value;
+                break;
+            case self::OPT_RESPONSE_CHARSET_ENCODING:
+                $this->response_charset_encoding = $value;
+                break;
+            default:
+                throw new ValueErrorException("Unsupported option '$name'");
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws ValueErrorException on unsupported option
+     */
+    public function getOption($name)
+    {
+        switch ($name) {
+            case self::OPT_ACCEPTED_COMPRESSION:
+                return $this->accepted_compression;
+            case self::OPT_ALLOW_SYSTEM_FUNCS:
+                return $this->allow_system_funcs;
+            case self::OPT_COMPRESS_RESPONSE:
+                return $this->compress_response;
+            case self::OPT_DEBUG:
+                return $this->debug;
+            case self::OPT_EXCEPTION_HANDLING:
+                return $this->exception_handling;
+            case self::OPT_FUNCTIONS_PARAMETERS_TYPE:
+                return $this->functions_parameters_type;
+            case self::OPT_PHPVALS_ENCODING_OPTIONS:
+                return $this->phpvals_encoding_options;
+            case self::OPT_RESPONSE_CHARSET_ENCODING:
+                return $this->response_charset_encoding;
+            default:
+                throw new ValueErrorException("Unsupported option '$name'");
+        }
+    }
+
+    /**
+     * Returns the complete list of Client options.
+     * @return array
+     */
+    public function getOptions()
+    {
+        $values = array();
+        foreach($this->options as $opt) {
+            $values[$opt] = $this->getOption($opt);
+        }
+        return $values;
+    }
+
+    /**
+     * @param array $options
+     * @return $this
+     * @throws ValueErrorException on unsupported option
+     */
+    public function setOptions($options)
+    {
+        foreach($options as $name => $value) {
+            $this->setOption($name, $value);
+        }
+
+        return $this;
+    }
+
+    /**
      * Set debug level of server.
      *
      * @param integer $level debug lvl: determines info added to xml-rpc responses (as xml comments)
@@ -177,6 +294,7 @@ class Server
      *                    execution anymore, but just end up logged in the xml-rpc response)
      *                    Note that info added at level 2 and 3 will be base64 encoded
      * @return $this
+     * @deprecated use setOption
      */
     public function setDebug($level)
     {
