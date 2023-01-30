@@ -294,7 +294,6 @@ class Server
      *                    execution anymore, but just end up logged in the xml-rpc response)
      *                    Note that info added at level 2 and 3 will be base64 encoded
      * @return $this
-     * @deprecated use setOption
      */
     public function setDebug($level)
     {

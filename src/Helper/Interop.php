@@ -13,7 +13,7 @@ class Interop
         'invalid_return' => 2,
         'incorrect_params' => -32602,
         'introspect_unknown' => -32601, // this shares the same code but has a separate meaning from 'unknown_method'...
-        'http_error' => 32300,
+        'http_error' => -32300,
         'no_data' => -32700,
         'no_ssl' => -32400,
         'curl_fail' => -32400,

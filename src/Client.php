@@ -629,7 +629,6 @@ class Client
      *
      * @param integer $level values -1, 0, 1 and 2 are supported
      * @return $this
-     * @deprecated use setOption
      */
     public function setDebug($level)
     {
