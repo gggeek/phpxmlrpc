@@ -64,7 +64,7 @@ $client = new Client(XMLRPCSERVER);
 $client->setDebug(2);
 
 // avid compressed responses, as they mess up the output if echoed on the command-line
-$client->setAcceptedCompression('');
+$client->setOption(Client::OPT_ACCEPTED_COMPRESSION, '');
 
 // send request
 output("Sending the request. No output debug should appear below...<br>");

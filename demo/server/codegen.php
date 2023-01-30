@@ -64,8 +64,8 @@ file_put_contents($targetControllerFile,
     "\$dm = require_once '$targetDispatchMapFile';\n" .
     '$s = new \PhpXmlRpc\Server($dm, false);' . "\n" .
     '// NB: do not leave these 2 debug lines enabled on publicly accessible servers!' . "\n" .
-    '$s->setDebug(2);' . "\n" .
-    '$s->exception_handling = 1;' . "\n" .
+    '$s->setOption(\PhpXmlRpc\Server::OPT_DEBUG, 2);' . "\n" .
+    '$s->setOption(\PhpXmlRpc\Server::OPT_EXCEPTION_HANDLING, 1);' . "\n" .
     '$s->service();' . "\n"
 ) || die('uh oh');
 

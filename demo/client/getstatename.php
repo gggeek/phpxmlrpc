@@ -26,7 +26,7 @@ if (isset($_POST['stateno']) && $_POST['stateno'] != "") {
     output("Sending the following request:<pre>\n\n" . htmlentities($req->serialize()) .
         "\n\n</pre>Debug info of server data follows...\n\n");
     $client = new Client(XMLRPCSERVER);
-    $client->setDebug(1);
+    $client->setOption(Client::OPT_DEBUG, 1);
     $resp = $client->send($req);
     if (!$resp->faultCode()) {
         $val = $resp->value();

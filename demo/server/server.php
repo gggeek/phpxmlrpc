@@ -56,19 +56,19 @@ if (defined('TESTMODE')) {
 PhpXmlRpc::$xmlrpc_null_extension = true;
 
 $s = new Server($signatures, false);
-$s->setDebug(3);
+$s->setOption(Server::OPT_DEBUG, 3);
 
 // Out-of-band information: let the client manipulate the server operations.
 // We do this to help the testsuite script: *** do not reproduce in production or public environments! ***
 if (defined('TESTMODE')) {
     if (isset($_GET['RESPONSE_ENCODING'])) {
-        $s->response_charset_encoding = $_GET['RESPONSE_ENCODING'];
+        $s->setOption(Server::OPT_RESPONSE_CHARSET_ENCODING, $_GET['RESPONSE_ENCODING']);
     }
     if (isset($_GET['DETECT_ENCODINGS'])) {
         PhpXmlRpc::$xmlrpc_detectencodings = $_GET['DETECT_ENCODINGS'];
     }
     if (isset($_GET['EXCEPTION_HANDLING'])) {
-        $s->exception_handling = $_GET['EXCEPTION_HANDLING'];
+        $s->setOption(Server::OPT_EXCEPTION_HANDLING, $_GET['EXCEPTION_HANDLING']);
     }
     if (isset($_GET['FORCE_AUTH'])) {
         // We implement both  Basic and Digest auth in php to avoid having to set it up in a vhost.
