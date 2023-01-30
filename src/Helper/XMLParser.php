@@ -317,7 +317,7 @@ class XMLParser
             if ($acceptSingleVals === false) {
                 $accept = $this->current_parsing_options['accept'];
             } else {
-                //trigger_error('using argument $acceptSingleVals is deprecated', E_USER_DEPRECATED);
+                $this->logDeprecation('Using argument $acceptSingleVals for method ' . __METHOD__ . ' is deprecated');
                 $accept = self::ACCEPT_REQUEST | self::ACCEPT_RESPONSE | self::ACCEPT_VALUE;
             }
             if (($name == 'METHODCALL' && ($accept & self::ACCEPT_REQUEST)) ||
@@ -489,7 +489,8 @@ class XMLParser
      */
     public function xmlrpc_se_any($parser, $name, $attrs)
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        // avoid spamming the log with warnings in case this is in use...
+        //$this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         $this->xmlrpc_se($parser, $name, $attrs, true);
     }

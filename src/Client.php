@@ -726,6 +726,8 @@ class Client
      */
     public function setSSLVerifyPeer($i)
     {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
         $this->verifypeer = $i;
         return $this;
     }
@@ -741,6 +743,8 @@ class Client
      */
     public function setSSLVerifyHost($i)
     {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
         $this->verifyhost = $i;
         return $this;
     }
@@ -754,6 +758,8 @@ class Client
      */
     public function setSSLVersion($i)
     {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
         $this->sslversion = $i;
         return $this;
     }
@@ -817,6 +823,8 @@ class Client
      */
     public function setRequestCompression($compMethod)
     {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
         $this->request_compression = $compMethod;
         return $this;
     }
@@ -866,6 +874,8 @@ class Client
      */
     public function setCurlOptions($options)
     {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
         $this->extracurlopts = $options;
         return $this;
     }
@@ -877,6 +887,8 @@ class Client
      */
     public function setUseCurl($useCurlMode)
     {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
         $this->use_curl = $useCurlMode;
         return $this;
     }
@@ -893,6 +905,8 @@ class Client
      */
     public function setUserAgent($agentString)
     {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
         $this->user_agent = $agentString;
         return $this;
     }
