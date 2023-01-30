@@ -10,11 +10,13 @@ class LoggerTest extends PhpXmlRpc_PolyfillTestCase
 {
     protected $debugBuffer = '';
     protected $errorBuffer = '';
+    protected $warningBuffer = '';
 
     protected function set_up()
     {
         $this->debugBuffer = '';
         $this->errorBuffer = '';
+        $this->warningBuffer = '';
     }
 
     public function testCharsetAltLogger()
@@ -65,6 +67,18 @@ class LoggerTest extends PhpXmlRpc_PolyfillTestCase
         XMLParser::setLogger($l);
     }
 
+    public function testDeprecations()
+    {
+        $v = new \PhpXmlRpc\Value(array(), \PhpXmlRpc\Value::$xmlrpcStruct);
+        $l = $v->getLogger();
+        \PhpXmlRpc\Value::setLogger($this);
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_silence_deprecations = false;
+        $c = $v->structSize();
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_silence_deprecations = true;
+        \PhpXmlRpc\Value::setLogger($l);
+        $this->assertStringContainsString("Method PhpXmlRpc\Value::structSize is deprecated", $this->warningBuffer);
+    }
+
     // logger API
 
     public function debug($message, $context = array())
@@ -75,5 +89,10 @@ class LoggerTest extends PhpXmlRpc_PolyfillTestCase
     public function error($message, $context = array())
     {
         $this->errorBuffer .= $message;
+    }
+
+    public function warning($message, $context = array())
+    {
+        $this->warningBuffer .= $message;
     }
 }
