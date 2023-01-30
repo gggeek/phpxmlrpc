@@ -6,7 +6,7 @@ use PhpXmlRpc\Exception\StateErrorException;
 use PhpXmlRpc\Exception\TypeErrorException;
 use PhpXmlRpc\Exception\ValueErrorException;
 use PhpXmlRpc\Traits\CharsetEncoderAware;
-use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\DeprecationLogger;
 
 /**
  * This class enables the creation of values for XML-RPC, by encapsulating plain php values.
@@ -14,7 +14,7 @@ use PhpXmlRpc\Traits\LoggerAware;
 class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 {
     use CharsetEncoderAware;
-    use LoggerAware;
+    use DeprecationLogger;
 
     public static $xmlrpcI4 = "i4";
     public static $xmlrpcI8 = "i8";
@@ -373,7 +373,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function structMemExists($key)
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         return array_key_exists($key, $this->me['struct']);
     }
@@ -389,7 +389,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function structMem($key)
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         return $this->me['struct'][$key];
     }
@@ -402,7 +402,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function structReset()
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         reset($this->me['struct']);
     }
@@ -417,7 +417,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function structEach()
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         return @each($this->me['struct']);
     }
@@ -462,7 +462,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function arrayMem($key)
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         return $this->me['array'][$key];
     }
@@ -476,7 +476,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function arraySize()
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         return count($this->me['array']);
     }
@@ -490,7 +490,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function structSize()
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         return count($this->me['struct']);
     }

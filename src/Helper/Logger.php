@@ -43,6 +43,18 @@ class Logger
     }
 
     /**
+     * Following the general principle of 'never break stdout', the default behaviour
+     *
+     * @param string $message
+     * @param $context
+     * @return void
+     */
+    public function warning($message, $context = array())
+    {
+        $this->errorLog(preg_replace('/^XML-RPC :/', 'XML-RPC Warning: ', $message));
+    }
+
+    /**
      * Triggers the writing of a message to php's error log
      *
      * @param string $message
@@ -51,7 +63,7 @@ class Logger
      */
     public function error($message, $context = array())
     {
-        $this->errorLog($message);
+        $this->errorLog(preg_replace('/^XML-RPC :/', 'XML-RPC Error: ', $message));
     }
 
     // BC interface

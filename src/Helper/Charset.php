@@ -4,14 +4,14 @@ namespace PhpXmlRpc\Helper;
 
 use PhpXmlRpc\Exception\ValueErrorException;
 use PhpXmlRpc\PhpXmlRpc;
-use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\DeprecationLogger;
 
 /**
  * @todo implement an interface
  */
 class Charset
 {
-    use LoggerAware;
+    use DeprecationLogger;
 
     // tables used for transcoding different charsets into us-ascii xml
     protected $xml_iso88591_Entities = array("in" => array(), "out" => array());
@@ -347,7 +347,7 @@ class Charset
      */
     public function isValidCharset($encoding, $validList)
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         if (is_string($validList)) {
             $validList = explode(',', $validList);
@@ -377,7 +377,7 @@ class Charset
      */
     public function getEntities($charset)
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         switch ($charset)
         {

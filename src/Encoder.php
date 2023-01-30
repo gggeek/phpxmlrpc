@@ -335,7 +335,7 @@ class Encoder
         if ($xmlRpcParser->_xh['isf'] > 1) {
             // test that $xmlrpc->_xh['value'] is an obj, too???
 
-            $this->getLogger()->error($xmlRpcParser->_xh['isf_reason']);
+            $this->getLogger()->error('XML-RPC: ' . $xmlRpcParser->_xh['isf_reason']);
 
             return false;
         }

@@ -6,7 +6,7 @@ use PhpXmlRpc\Exception\HttpException;
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\XMLParser;
 use PhpXmlRpc\Traits\CharsetEncoderAware;
-use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\DeprecationLogger;
 use PhpXmlRpc\Traits\ParserAware;
 
 /**
@@ -18,7 +18,7 @@ use PhpXmlRpc\Traits\ParserAware;
 class Request
 {
     use CharsetEncoderAware;
-    use LoggerAware;
+    use DeprecationLogger;
     use ParserAware;
 
     /// @todo: do these need to be public?

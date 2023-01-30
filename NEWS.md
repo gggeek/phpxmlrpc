@@ -172,8 +172,8 @@
     objects for the cases in which it previously returned a string
   - if you subclassed the `Client` class, take care of new static variables `$requestClass` and `$responseClass`,
     which should be used to instantiate requests and responses
-  - if you replaced the Logger class, take care that you will have to implement methods `error` and `debug` (all is ok
-    if you subclassed id)
+  - if you replaced the Logger class, take care that you will have to implement methods `error`, `warning` and `debug`
+    (all is ok if you subclassed it)
   - traits have been introduced for all classes dealing with Logger, XMLParser and CharsetEncoder; method `setCharsetEncoder`
     is now static
   - exception `\PhpXmlRpc\Exception\PhpXmlRpcException` is deprecated. Use `\PhpXmlRpc\Exception` instead

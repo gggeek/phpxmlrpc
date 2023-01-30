@@ -5,14 +5,14 @@ namespace PhpXmlRpc;
 //use PhpXmlRpc\Helper\Charset;
 use PhpXmlRpc\Exception\ValueErrorException;
 use PhpXmlRpc\Helper\XMLParser;
-use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\DeprecationLogger;
 
 /**
  * Used to represent a client of an XML-RPC server.
  */
 class Client
 {
-    use LoggerAware;
+    use DeprecationLogger;
 
     const USE_CURL_NEVER = 0;
     const USE_CURL_ALWAYS = 1;
@@ -946,9 +946,9 @@ class Client
      */
     public function send($req, $timeout = 0, $method = '')
     {
-        //if ($method !== '' || $timeout !== 0) {
-        //    trigger_error("Using non-default values for arguments 'method' and 'timeout' when calling method " . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
-        //}
+        if ($method !== '' || $timeout !== 0) {
+            $this->logDeprecation("Using non-default values for arguments 'method' and 'timeout' when calling method " . __METHOD__ . ' is deprecated');
+        }
 
         // if user does not specify http protocol, use native method of this client
         // (i.e. method set during call to constructor)
@@ -1054,7 +1054,7 @@ class Client
         $authType = 1, $proxyHost = '', $proxyPort = 0, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1,
         $method='http')
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         return $this->sendPayloadSocket($req, $server, $port, $timeout, $username, $password, $authType, null, null,
             null, null, $proxyHost, $proxyPort, $proxyUsername, $proxyPassword, $proxyAuthType, $method);
@@ -1090,7 +1090,7 @@ class Client
         $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $keepAlive = false, $key = '', $keyPass = '',
         $sslVersion = 0)
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         return $this->sendPayloadCURL($req, $server, $port, $timeout, $username,
             $password, $authType, $cert, $certPass, $caCert, $caCertDir, $proxyHost, $proxyPort,
