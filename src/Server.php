@@ -56,6 +56,7 @@ class Server
      * 1 = SECURITY SENSITIVE DO NOT ENABLE ON PUBLIC SERVERS!!! catch it and return an xml-rpc response with the error
      *     corresponding to the exception, both its code and message.
      * 2 = allow the exception to float to the upper layers
+     * Can be overridden per-method-handler in the dispatch map
      */
     public $exception_handling = 0;
 
@@ -130,7 +131,8 @@ class Server
      *                             - signature (array, optional)
      *                             - signature_docs (array, optional)
      *                             - parameters_type (string, optional)
-     * @param boolean $serviceNow set to false to prevent the server from running upon construction
+     *                             - exception_handling (int, optional)
+     * @param boolean $serviceNow set to false in order to prevent the server from running upon construction
      */
     public function __construct($dispatchMap = null, $serviceNow = true)
     {
@@ -197,7 +199,7 @@ class Server
 
     /**
      * Add a string to the debug info that will be later serialized by the server as part of the response message
-     * (base64 encoded, only when debug level >= 2)
+     * (base64 encoded) when debug level >= 2
      *
      * @param string $msg
      * @return void
@@ -346,11 +348,13 @@ class Server
      * @param array[] $sigDoc the array of valid method signatures docs, following the format of $sig but with
      *                        descriptions instead of types (one string for return type, one per param)
      * @param string $parametersType to allow single method handlers to receive php values instead of a Request, or vice-versa
+     * @param int $exceptionHandling @see $this->exception_handling
      * @return void
      *
      * @todo raise a warning if the user tries to register a 'system.' method
      */
-    public function add_to_map($methodName, $function, $sig = null, $doc = false, $sigDoc = false, $parametersType = false)
+    public function add_to_map($methodName, $function, $sig = null, $doc = false, $sigDoc = false, $parametersType = false,
+        $exceptionHandling = false)
     {
         $this->dmap[$methodName] = array(
             'function' => $function,
@@ -364,6 +368,9 @@ class Server
         }
         if ($parametersType) {
             $this->dmap[$methodName]['parameters_type'] = $parametersType;
+        }
+        if ($exceptionHandling !== false) {
+            $this->dmap[$methodName]['exception_handling'] = $exceptionHandling;
         }
     }
 
@@ -694,6 +701,12 @@ class Server
             );
         }
 
+        if (isset($dmap[$methodName]['exception_handling'])) {
+            $exception_handling = (int)$dmap[$methodName]['exception_handling'];
+        } else {
+            $exception_handling = $this->exception_handling;
+        }
+
         // If debug level is 3, we should catch all errors generated during processing of user function, and log them
         // as part of response
         if ($this->debug > 2) {
@@ -755,7 +768,7 @@ class Server
         } catch (\Exception $e) {
             // (barring errors in the lib) an uncaught exception happened in the called function, we wrap it in a
             // proper error-response
-            switch ($this->exception_handling) {
+            switch ($exception_handling) {
                 case 2:
                     if ($this->debug > 2) {
                         if (self::$_xmlrpcs_prev_ehandler) {
@@ -778,7 +791,7 @@ class Server
         } catch (\Error $e) {
             // (barring errors in the lib) an uncaught exception happened in the called function, we wrap it in a
             // proper error-response
-            switch ($this->exception_handling) {
+            switch ($exception_handling) {
                 case 2:
                     if ($this->debug > 2) {
                         if (self::$_xmlrpcs_prev_ehandler) {
@@ -1281,13 +1294,13 @@ class Server
         if ($errCode != E_STRICT) {
             static::error_occurred($errString);
         }
-        // Try to avoid as much as possible disruption to the previous error handling
-        // mechanism in place
+
+        // Try to avoid as much as possible disruption to the previous error handling mechanism in place
         if (self::$_xmlrpcs_prev_ehandler == '') {
-            // The previous error handler was the default: all we should do is log error
-            // to the default error log (if level high enough)
+            // The previous error handler was the default: all we should do is log error to the default error log
+            // (if level high enough)
             if (ini_get('log_errors') && (intval(ini_get('error_reporting')) & $errCode)) {
-                // sadly we can't use the functionality of LoggerAware, because this is a static method
+                // we can't use the functionality of LoggerAware, because this is a static method
                 if (self::$logger === null) {
                     self::$logger = Logger::instance();
                 }

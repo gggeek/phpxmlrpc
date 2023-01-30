@@ -107,7 +107,9 @@
 
 * new: method `Helper\Date::iso8601Encode` now accepts a DateTime input beside a timestamp
 
-* new: method `Server::add_to_map` has acquired a 6th parameter: `$parametersType = false`
+* new: in the dispatch map, it is now possible to set different exception handling modes for each expose xml-rpc method
+
+* new: method `Server::add_to_map` has acquired new parameters: `$parametersType = false, $exceptionHandling = false`
 
 * improved: the `XMLParser` accepts more options in its constructor (see phpdocs for details)
 
