@@ -1203,21 +1203,8 @@ class Client
         if (count($this->cookies)) {
             $version = '';
             foreach ($this->cookies as $name => $cookie) {
-                if ($cookie['version']) {
-                    $version = ' $Version="' . $cookie['version'] . '";';
-                    $cookieHeader .= ' ' . $name . '="' . $cookie['value'] . '";';
-                    if ($cookie['path']) {
-                        $cookieHeader .= ' $Path="' . $cookie['path'] . '";';
-                    }
-                    if ($cookie['domain']) {
-                        $cookieHeader .= ' $Domain="' . $cookie['domain'] . '";';
-                    }
-                    if ($cookie['port']) {
-                        $cookieHeader .= ' $Port="' . $cookie['port'] . '";';
-                    }
-                } else {
-                    $cookieHeader .= ' ' . $name . '=' . $cookie['value'] . ";";
-                }
+                /// @todo should we sanitize the cookie name/value on behalf of the user?
+                $cookieHeader .= ' ' . $name . '=' . $cookie['value'] . ";";
             }
             $cookieHeader = 'Cookie:' . $version . substr($cookieHeader, 0, -1) . "\r\n";
         }
