@@ -307,11 +307,7 @@ class Encoder
                 if (function_exists('mb_convert_encoding')) {
                     $xmlVal = mb_convert_encoding($xmlVal, 'UTF-8', $valEncoding);
                 } else {
-                    if ($valEncoding == 'ISO-8859-1') {
-                        $xmlVal = utf8_encode($xmlVal);
-                    } else {
-                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of xml text: ' . $valEncoding);
-                    }
+                    $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': invalid charset encoding of xml text: ' . $valEncoding);
                 }
             }
         }

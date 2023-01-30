@@ -553,11 +553,7 @@ class Server
                 if (function_exists('mb_convert_encoding')) {
                     $data = mb_convert_encoding($data, 'UTF-8', $reqEncoding);
                 } else {
-                    if ($reqEncoding == 'ISO-8859-1') {
-                        $data = utf8_encode($data);
-                    } else {
-                        $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': unsupported charset encoding of received request: ' . $reqEncoding);
-                    }
+                    $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': unsupported charset encoding of received request: ' . $reqEncoding);
                 }
             }
         }
