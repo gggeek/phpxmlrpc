@@ -59,6 +59,9 @@
 
 * fixed: receiving integers which use the '<EX:I8>' xml tag
 
+* fixed: setting/retrieving the php value from a Value object using array notation would fail if the object was created
+  using `i4` then accessed using `int`, eg: `$v = new Value(1, 'i4'); $v[$v->scalrtyp()] = 2;`
+
 * fixed: setting values to deprecated Response property `cookies` would trigger a PHP notice (introduced in 4.6.0), ex:
   `$response->_cookies['name'] = ['value' => 'something'];`
 

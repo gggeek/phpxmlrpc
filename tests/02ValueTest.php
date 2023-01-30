@@ -30,8 +30,7 @@ class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
     public function testAddScalarToStruct()
     {
         $v = new xmlrpcval(array('a' => 'b'), 'struct');
-        // use @ operator in case error_log gets on screen
-        $r = @$v->addscalar('c');
+        $r = $v->addscalar('c');
         $this->assertEquals(0, $r);
     }
 
@@ -177,6 +176,19 @@ class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
             $this->assertequals($expected['value'], gettype($val));
             $i++;
         }
+
+        $v3 = new \PhpXmlRpc\Value(10, 'i4');
+        $this->assertEquals(1, count($v3));
+        $this->assertEquals(true, isset($v3['int']));
+        $this->assertEquals(true, isset($v3['i4']));
+        $this->assertEquals(10, $v3['int']);
+        $this->assertEquals(10, $v3['i4']);
+        $v3['int'] = 100;
+        $this->assertEquals(100, $v3['int']);
+        $this->assertEquals(100, $v3['i4']);
+        $v3['i4'] = 1000;
+        $this->assertEquals(1000, $v3['int']);
+        $this->assertEquals(1000, $v3['i4']);
     }
 
     /// @todo do not use \PhpXmlRpc\Encoder for this test

@@ -111,6 +111,12 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @param mixed $val
      * @param string $type allowed values: i4, i8, int, boolean, string, double, dateTime.iso8601, base64, null.
      * @return int 1 or 0 on failure
+     *
+     * @todo arguably, as we have addArray to add elements to an Array value, and addStruct to add elements to a Struct
+     *       value, we should not allow this method to add values to an Array. The 'scalar' in the method name refers to
+     *       the expected state of the target object, not to the type of $val. Also, this works differently from
+     *       addScalar/addStruct in that, when adding an element to an array, it wraps it into a new Value
+     * @todo rename?
      */
     public function addScalar($val, $type = 'string')
     {
@@ -125,8 +131,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         // coerce booleans into correct values
-        /// @todo we should either do it for datetimes, integers, i8 and doubles, too,
-        ///       or just plain remove this check, implemented on booleans only...
+        /// @todo we should either do it for datetimes, integers, i8 and doubles, too, or just plain remove this check,
+        ///       implemented on booleans only...
         if ($type == static::$xmlrpcBoolean) {
             if (strcasecmp($val, 'true') == 0 || $val == 1 || ($val == true && strcasecmp($val, 'false'))) {
                 $val = true;
@@ -144,6 +150,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 return 0;
             case 2:
                 // we're adding a scalar value to an array here
+/// @todo do not re-wrap Value objects
                 $class = get_class($this);
                 $this->me['array'][] = new $class($val, $type);
 
@@ -168,6 +175,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @return int 1 or 0 on failure
      *
      * @todo add some checking for $values to be an array of xml-rpc values?
+     * @todo rename to addToArray?
      */
     public function addArray($values)
     {
@@ -197,7 +205,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @param Value[] $values
      * @return int 1 or 0 on failure
      *
-     * @todo add some checking for $values to be an array?
+     * @todo add some checking for $values to be an array of xml-rpc values?
+     * @todo rename to addToStruct?
      */
     public function addStruct($values)
     {
@@ -218,9 +227,9 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Returns a string containing either "struct", "array", "scalar" or "undef", describing the base type of the value.
+     * Returns a string describing the base type of the value.
      *
-     * @return string
+     * @return string either "struct", "array", "scalar" or "undef"
      */
     public function kindOf()
     {
@@ -241,6 +250,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @param Value[]|mixed $val
      * @param string $charsetEncoding
      * @return string
+     *
+     * @deprecated this should be folded back into serialize()
      */
     protected function serializedata($typ, $val, $charsetEncoding = '')
     {
@@ -426,9 +437,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Returns the type of the xml-rpc value.
      *
-     * For integers, 'int' is always returned in place of 'i4'. 'i8' is considered a separate type and returned as such
-     *
-     * @return string
+     * @return string For integers, 'int' is always returned in place of 'i4'. 'i8' is considered a separate type and
+     *                returned as such
      */
     public function scalartyp()
     {
@@ -565,11 +575,12 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 }
                 return;
             case 1:
-// todo: handle i4 vs int
+                /// @todo: should we handle usage of i4 to retrieve int (in both set/unset/isset)? After all we consider
+                ///        'int' to be the preferred form, as evidenced in scalartyp()
                 reset($this->me);
                 $type = key($this->me);
-                if ($type != $offset) {
-                    throw new ValueErrorException('');
+                if ($type != $offset && ($type != 'i4' || $offset != 'int')) {
+                    throw new ValueErrorException('...');
                 }
                 $this->me[$type] = $value;
                 return;
@@ -594,8 +605,14 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
             case 2:
                 return isset($this->me['array'][$offset]);
             case 1:
-// todo: handle i4 vs int
-                return $offset == $this->scalartyp();
+                // handle i4 vs int
+                if ($offset == 'i4') {
+                    // to be consistent with set and unset, we disallow usage of i4 to check for int
+                    reset($this->me);
+                    return $offset == key($this->me);
+                } else {
+                    return $offset == $this->scalartyp();
+                }
             default:
                 return false;
         }
@@ -621,6 +638,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 return;
             case 1:
                 // can not remove value from a scalar
+                /// @todo feature creep - allow this to move back the value to 'undef' state?
                 throw new StateErrorException("XML-RPC Value is of type 'scalar' and its value can not be unset using array index");
             default:
                 throw new StateErrorException("XML-RPC Value is of type 'undef' and its value can not be unset using array index");
@@ -643,12 +661,12 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
             case 2:
                 return isset($this->me['array'][$offset]) ? $this->me['array'][$offset] : null;
             case 1:
-// on bad type: null or exception?
+                /// @todo what to return on bad type: null or exception?
                 $value = reset($this->me);
                 $type = key($this->me);
-                return $type == $offset ? $value : null;
+                return $type == $offset ? $value : (($type == 'i4' && $offset == 'int') ? $value : null);
             default:
-// return null or exception?
+                // return null or exception?
                 throw new StateErrorException("XML-RPC Value is of type 'undef' and can not be accessed using array index");
         }
     }
