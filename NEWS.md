@@ -2,8 +2,10 @@
 
 * changed: the minimum php version required has increased to 5.4
 
+* changed: dropped support for parsing cookie headers which follow the obsolete "version 2" specification
+
 * new: allow to specify other charsets than the canonical three (UTF-8, ISO-8859-1, ASCII), when mbstring is
-  available, both for outgoing and incoming data.
+  available, both for outgoing and incoming data (issue #42).
 
   For outgoing data, this can be set in `$client->request_charset_encoding` and `$server->response_charset_encoding`.
   The library will then transcode the data fed to it by the application into the desired charset when serializing
@@ -42,13 +44,11 @@
   on to the application. The same will apply for elements of type struct-member which miss either the name or the value
 
 * new: it is now possible to tell the library to allow non-standard formats for received datetime value, such as f.e.
-  datetimes with a timezone specifier, by setting a custom value to `PhpXmlRpc\PhpXmlRpc::$xmlrpc_datetime_format`.
+  datetimes with a timezone specifier, by setting a custom value to `PhpXmlRpc\PhpXmlRpc::$xmlrpc_datetime_format`
+  (issue #46).
 
 * new: it is now possible to tell the library to allow non-standard formats for received int and float values, as well
   as for methdoname elements. See the api docs for `PhpXmlRpc\PhpXmlRpc` static variables.
-
-* improved: limit the size of incoming data which will be used in error responses and logged error messages, making
-  it slightly harder to carry out DOS attacks against the library
 
 * fixed: when a server is configured with its default value of 'xmlrpcvals' for `$functions_parameters_type`, and
   a method handler in the dispatch was defined with `'parameters_type' = 'phpvals'`, the handler would be passed a
@@ -76,9 +76,16 @@
 * new: method `Server::setDispatchMap()`
 
 * new: it is now possible to inject a custom logger into helper classes `Charset`, `Http`, `XMLParser`, inching a step
-  closer to supporting DIC patterns
+  closer to supporting DIC patterns (issue #78)
 
 * new: method `PhpXmlRpc::setLogger()`, to simplify injecting the logger into all classes of the library in one step
+
+* improved: the `Logger` class now sports methods adhering to Psr\Log\LoggerInterface
+
+* improved: made sure all debug output goes through the logger at response parsing time (there was one printf call left)
+
+* improved: limit the size of incoming data which will be used in error responses and logged error messages, making
+  it slightly harder to carry out DOS attacks against the library
 
 * new: passing value -1 to `$client->setDebug` will avoid storing the full http response data in the returned Response
   object when executing `call`. This could be useful in reducing memory usage for big responses
@@ -94,9 +101,7 @@
 * new: methods `Wrapper::holdObject()` and `Wrapper::getheldObject()`, allowing flexibility in storing object instances
   for code-generation scenarios involving `Wrapper::wrapPhpClass` and `Wrapper::wrapPhpFunction`
 
-* improved: the `Logger` class now sports methods adhering to Psr\Log\LoggerInterface
-
-* improved: made sure all debug output goes through the logger at response parsing time (there was one printf call left)
+* improved: all `Value` methods now follow snakeCase convention
 
 * improved: all the Exceptions thrown by the library are now `\PhpXmlRpc\Exception` or subclasses thereof
 
@@ -107,13 +112,11 @@
 
 * new: method `Helper\Date::iso8601Encode` now accepts a DateTime input beside a timestamp
 
-* new: in the dispatch map, it is now possible to set different exception handling modes for each expose xml-rpc method
+* new: in the dispatch map, it is now possible to set different exception handling modes for each exposed xml-rpc method
 
 * new: method `Server::add_to_map` has acquired new parameters: `$parametersType = false, $exceptionHandling = false`
 
 * improved: the `XMLParser` accepts more options in its constructor (see phpdocs for details)
-
-* improved: dropped support for parsing cookie headers which follow the obsolete "version 2" specification
 
 * improved: removed usage of `extension_loaded` in favour of `function_exists` when checking for mbstring. This allows
   for mbstring functions to be polyfilled
@@ -129,7 +132,7 @@
 
 * improved: made sure the test container and gha test runners have at least one locale with comma as decimal separator
 
-* BC notes:
+* BC notes (besides what can be inferred from the changes listed above):
 
   for library users
 
@@ -148,6 +151,8 @@
   - an error message will now be generated if, in incoming data, a STRUCT element has no NAME
   - parameters `$timeout` and `$method` are now considered deprecated in `Client::send()` and `Client::multicall()`
   - Client properties `$errno` and `$errstring` are now deprecated
+  - direct access to all properties of Client and Server is now deprecated and should be replaced by calls to
+    `setOption` and `getOption`. The same applies to a few "setter" methods of the Client
   - direct access to `Wrapper::$objHolder` is now deprecated
   - the code generated by the debugger when using "Generate stub for method call" will throw on errors instead of
     returning a Response object

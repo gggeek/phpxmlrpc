@@ -150,7 +150,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 return 0;
             case 2:
                 // we're adding a scalar value to an array here
-/// @todo do not re-wrap Value objects
+                /// @todo should we try avoiding re-wrapping Value objects?
                 $class = get_class($this);
                 $this->me['array'][] = new $class($val, $type);
 
@@ -253,7 +253,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @deprecated this should be folded back into serialize()
      */
-    protected function serializedata($typ, $val, $charsetEncoding = '')
+    protected function serializeData($typ, $val, $charsetEncoding = '')
     {
         $rs = '';
 
@@ -358,7 +358,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         $val = reset($this->me);
         $typ = key($this->me);
 
-        return '<value>' . $this->serializedata($typ, $val, $charsetEncoding) . "</value>\n";
+        return '<value>' . $this->serializeData($typ, $val, $charsetEncoding) . "</value>\n";
     }
 
     /**
@@ -371,7 +371,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @deprecated use array access, e.g. isset($val[$key])
      */
-    public function structmemexists($key)
+    public function structMemExists($key)
     {
         //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
@@ -387,7 +387,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @deprecated use array access, e.g. $val[$key]
      */
-    public function structmem($key)
+    public function structMem($key)
     {
         //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
@@ -400,7 +400,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @deprecated iterate directly over the object using foreach instead
      */
-    public function structreset()
+    public function structReset()
     {
         //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
@@ -415,7 +415,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @deprecated iterate directly over the object using foreach instead
      */
-    public function structeach()
+    public function structEach()
     {
         //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
@@ -427,7 +427,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @return mixed
      */
-    public function scalarval()
+    public function scalarVal()
     {
         $b = reset($this->me);
 
@@ -440,7 +440,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @return string For integers, 'int' is always returned in place of 'i4'. 'i8' is considered a separate type and
      *                returned as such
      */
-    public function scalartyp()
+    public function scalarTyp()
     {
         reset($this->me);
         $a = key($this->me);
@@ -460,7 +460,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @deprecated use array access, e.g. $val[$key]
      */
-    public function arraymem($key)
+    public function arrayMem($key)
     {
         //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
@@ -474,7 +474,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @deprecated use count() instead
      */
-    public function arraysize()
+    public function arraySize()
     {
         //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
@@ -488,7 +488,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      *
      * @deprecated use count() instead
      */
-    public function structsize()
+    public function structSize()
     {
         //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
 
@@ -576,7 +576,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 return;
             case 1:
                 /// @todo: should we handle usage of i4 to retrieve int (in both set/unset/isset)? After all we consider
-                ///        'int' to be the preferred form, as evidenced in scalartyp()
+                ///        'int' to be the preferred form, as evidenced in scalarTyp()
                 reset($this->me);
                 $type = key($this->me);
                 if ($type != $offset && ($type != 'i4' || $offset != 'int')) {
@@ -611,7 +611,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                     reset($this->me);
                     return $offset == key($this->me);
                 } else {
-                    return $offset == $this->scalartyp();
+                    return $offset == $this->scalarTyp();
                 }
             default:
                 return false;

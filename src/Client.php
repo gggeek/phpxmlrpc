@@ -331,7 +331,7 @@ class Client
 
     /**
      * @param string $path either the PATH part of the xml-rpc server URL, or complete server URL (in which case you
-     *                     should use and empty string for all other parameters)
+     *                     should use an empty string for all other parameters)
      *                     e.g. /xmlrpc/server.php
      *                     e.g. http://phpxmlrpc.sourceforge.net/server.php
      *                     e.g. https://james:bond@secret.service.com:444/xmlrpcserver?agent=007
@@ -1130,17 +1130,13 @@ class Client
     {
         /// @todo log a warning if passed an unsupported method
 
-        if ($port == 0) {
-            $port = ($method === 'https') ? 443 : 80;
-        }
-
         // Only create the payload if it was not created previously
         /// @todo what if the request's payload was created with a different encoding?
         if (empty($req->payload)) {
             $req->serialize($this->request_charset_encoding);
         }
-
         $payload = $req->payload;
+
         // Deflate request body and set appropriate request headers
         $encodingHdr = '';
         if (function_exists('gzdeflate') && ($this->request_compression == 'gzip' || $this->request_compression == 'deflate')) {
@@ -1172,6 +1168,10 @@ class Client
         $acceptedEncoding = '';
         if (is_array($this->accepted_compression) && count($this->accepted_compression)) {
             $acceptedEncoding = 'Accept-Encoding: ' . implode(', ', $this->accepted_compression) . "\r\n";
+        }
+
+        if ($port == 0) {
+            $port = ($method === 'https') ? 443 : 80;
         }
 
         $proxyCredentials = '';
@@ -1836,19 +1836,19 @@ class Client
                         }
                         /** @var Value $code */
                         $code = $val['faultCode'];
-                        if ($code->kindOf() != 'scalar' || $code->scalartyp() != 'int') {
+                        if ($code->kindOf() != 'scalar' || $code->scalarTyp() != 'int') {
                             return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
                                 PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has invalid or no faultCode",
                                 'xmlrpcvals', $result->httpResponse());
                         }
                         /** @var Value $str */
                         $str = $val['faultString'];
-                        if ($str->kindOf() != 'scalar' || $str->scalartyp() != 'string') {
+                        if ($str->kindOf() != 'scalar' || $str->scalarTyp() != 'string') {
                             return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
                                 PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has invalid or no faultCode",
                                 'xmlrpcvals', $result->httpResponse());
                         }
-                        $response[] = new Response(0, $code->scalarval(), $str->scalarval(), 'xmlrpcvals', $result->httpResponse());
+                        $response[] = new Response(0, $code->scalarVal(), $str->scalarVal(), 'xmlrpcvals', $result->httpResponse());
                         break;
                     default:
                         return new Response(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],

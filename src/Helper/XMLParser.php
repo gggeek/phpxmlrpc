@@ -606,7 +606,7 @@ class XMLParser
             case 'I8':
             case 'INT':
                 // NB: we build the Value object with the original xml element name found, except for ex:i8. The
-                // `Value::scalartyp()` function will do some normalization of the data
+                // `Value::scalarTyp()` function will do some normalization of the data
                 $this->_xh['vt'] = strtolower($name);
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 if (!preg_match(PhpXmlRpc::$xmlrpc_int_format, $this->_xh['ac'])) {

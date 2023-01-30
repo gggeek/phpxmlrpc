@@ -84,10 +84,10 @@ class Encoder
                             return $val;
                     }
                 }
-                if (in_array('dates_as_objects', $options) && $xmlrpcVal->scalartyp() == 'dateTime.iso8601') {
+                if (in_array('dates_as_objects', $options) && $xmlrpcVal->scalarTyp() == 'dateTime.iso8601') {
                     // we return a Datetime object instead of a string; since now the constructor of xml-rpc value accepts
                     // safely string, int and DateTimeInterface, we cater to all 3 cases here
-                    $out = $xmlrpcVal->scalarval();
+                    $out = $xmlrpcVal->scalarVal();
                     if (is_string($out)) {
                         $out = strtotime($out);
                         // NB: if the string does not convert into a timestamp, this will return false.
@@ -103,7 +103,7 @@ class Encoder
                         return $out;
                     }
                 }
-                return $xmlrpcVal->scalarval();
+                return $xmlrpcVal->scalarVal();
 
             case 'array':
                 $arr = array();
@@ -348,7 +348,7 @@ class Encoder
                     $vc = $v['faultCode'];
                     /** @var Value $vs */
                     $vs = $v['faultString'];
-                    $r = new Response(0, $vc->scalarval(), $vs->scalarval());
+                    $r = new Response(0, $vc->scalarVal(), $vs->scalarVal());
                 } else {
                     $r = new Response($v);
                 }
@@ -369,9 +369,9 @@ class Encoder
                 $v = $xmlRpcParser->_xh['value'];
                 // use a known error code
                 /** @var Value $vc */
-                $vc = isset($v['faultCode']) ? $v['faultCode']->scalarval() : PhpXmlRpc::$xmlrpcerr['invalid_return'];
+                $vc = isset($v['faultCode']) ? $v['faultCode']->scalarVal() : PhpXmlRpc::$xmlrpcerr['invalid_return'];
                 /** @var Value $vs */
-                $vs = isset($v['faultString']) ? $v['faultString']->scalarval() : '';
+                $vs = isset($v['faultString']) ? $v['faultString']->scalarVal() : '';
                 if (!is_int($vc) || $vc == 0) {
                     $vc = PhpXmlRpc::$xmlrpcerr['invalid_return'];
                 }

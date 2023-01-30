@@ -822,7 +822,7 @@ class Wrapper
         if (!$response->faultCode()) {
             $mDesc = $response->value();
             if ($client->return_type != 'phpvals') {
-                $mDesc = $mDesc->scalarval();
+                $mDesc = $mDesc->scalarVal();
             }
         }
 

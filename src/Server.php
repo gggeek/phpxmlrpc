@@ -514,7 +514,7 @@ class Server
                     if (is_object($in)) {
                         $p = $in->getParam($n);
                         if ($p->kindOf() == 'scalar') {
-                            $pt = $p->scalartyp();
+                            $pt = $p->scalarTyp();
                         } else {
                             $pt = $p->kindOf();
                         }
@@ -1177,7 +1177,7 @@ class Server
         // let's accept as parameter either an xml-rpc value or string
         if (is_object($req)) {
             $methName = $req->getParam(0);
-            $methName = $methName->scalarval();
+            $methName = $methName->scalarVal();
         } else {
             $methName = $req;
         }
@@ -1221,7 +1221,7 @@ class Server
         // let's accept as parameter either an xml-rpc value or string
         if (is_object($req)) {
             $methName = $req->getParam(0);
-            $methName = $methName->scalarval();
+            $methName = $methName->scalarVal();
         } else {
             $methName = $req;
         }
@@ -1281,10 +1281,10 @@ class Server
         if (!$methName) {
             return static::_xmlrpcs_multicall_error('nomethod');
         }
-        if ($methName->kindOf() != 'scalar' || $methName->scalartyp() != 'string') {
+        if ($methName->kindOf() != 'scalar' || $methName->scalarTyp() != 'string') {
             return static::_xmlrpcs_multicall_error('notstring');
         }
-        if ($methName->scalarval() == 'system.multicall') {
+        if ($methName->scalarVal() == 'system.multicall') {
             return static::_xmlrpcs_multicall_error('recursion');
         }
 
@@ -1296,7 +1296,7 @@ class Server
             return static::_xmlrpcs_multicall_error('notarray');
         }
 
-        $req = new Request($methName->scalarval());
+        $req = new Request($methName->scalarVal());
         foreach ($params as $i => $param) {
             if (!$req->addParam($param)) {
                 $i++; // for error message, we count params from 1

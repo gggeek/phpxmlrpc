@@ -360,8 +360,8 @@ class Request
                 if ($returnType == XMLParser::RETURN_XMLRPCVALS) {
                     $errNo_v = $v['faultCode'];
                     $errStr_v = $v['faultString'];
-                    $errNo = $errNo_v->scalarval();
-                    $errStr = $errStr_v->scalarval();
+                    $errNo = $errNo_v->scalarVal();
+                    $errStr = $errStr_v->scalarVal();
                 } else {
                     $errNo = $v['faultCode'];
                     $errStr = $v['faultString'];
