@@ -831,23 +831,24 @@ class Client
 
     /**
      * Adds a cookie to list of cookies that will be sent to server with every further request (useful e.g. for keeping
-     * session info outside of the xml-rpc payload).
+     * session info outside the xml-rpc payload).
      *
-     * NB: By default cookies are sent using the 'original/netscape' format, which is also the same as the RFC 2965;
-     * setting any param but name and value will turn the cookie into a 'version 1' cookie (i.e. RFC 2109 cookie) that
-     * might not be fully supported by the server. Note that RFC 2109 has currently 'historic' status...
+     * NB: by default all cookies set via this method are sent to the server, regardless of path/domain/port. Taking
+     * advantage of those values is left to the single developer.
      *
      * @param string $name nb: will not be escaped in the request's http headers. Take care not to use CTL chars or
      *                     separators!
      * @param string $value
-     * @param string $path leave this empty unless the xml-rpc server only accepts RFC 2109 cookies
-     * @param string $domain leave this empty unless the xml-rpc server only accepts RFC 2109 cookies
-     * @param int $port leave this empty unless the xml-rpc server only accepts RFC 2109 cookies
+     * @param string $path
+     * @param string $domain
+     * @param int $port do not use! Cookies are not separated by port
      * @return $this
      *
      * @todo check correctness of urlencoding cookie value (copied from php way of doing it, but php is generally sending
      *       response not requests. We do the opposite...)
      * @todo strip invalid chars from cookie name? As per RFC6265, we should follow RFC2616, Section 2.2
+     * @todo drop/rename $port parameter. Cookies are not isolated by port!
+     * @todo feature-creep allow storing 'expires', 'secure', 'httponly' and 'samesite' cookie attributes
      */
     public function setCookie($name, $value = '', $path = '', $domain = '', $port = null)
     {
@@ -856,9 +857,6 @@ class Client
             $this->cookies[$name]['path'] = $path;
             $this->cookies[$name]['domain'] = $domain;
             $this->cookies[$name]['port'] = $port;
-            $this->cookies[$name]['version'] = 1;
-        } else {
-            $this->cookies[$name]['version'] = 0;
         }
         return $this;
     }
@@ -1211,12 +1209,13 @@ class Client
             $uri = $this->path;
         }
 
-        // Cookie generation, as per rfc2965
+        // Cookie generation, as per RFC6265
+        // NB: the following code does not honour 'expires', 'path' and 'domain' cookie attributes set to client obj by the user...
         $cookieHeader = '';
         if (count($this->cookies)) {
             $version = '';
             foreach ($this->cookies as $name => $cookie) {
-                /// @todo should we sanitize the cookie name/value on behalf of the user?
+                /// @todo should we sanitize the cookie value on behalf of the user? See setCookie comments
                 $cookieHeader .= ' ' . $name . '=' . $cookie['value'] . ";";
             }
             $cookieHeader = 'Cookie:' . $version . substr($cookieHeader, 0, -1) . "\r\n";
@@ -1422,6 +1421,32 @@ class Client
         return $resp;
     }
 
+    /**
+     * @param $req
+     * @param $server
+     * @param $port
+     * @param $timeout
+     * @param $username
+     * @param $password
+     * @param $authType
+     * @param $cert
+     * @param $certPass
+     * @param $caCert
+     * @param $caCertDir
+     * @param $proxyHost
+     * @param $proxyPort
+     * @param $proxyUsername
+     * @param $proxyPassword
+     * @param $proxyAuthType
+     * @param $method
+     * @param $keepAlive
+     * @param $key
+     * @param $keyPass
+     * @param $sslVersion
+     * @return false|\CurlHandle|resource
+     *
+     * @todo refactor: we get many options for the call passed in, but some we use from $this. We should clean that up
+     */
     protected function prepareCurlHandle($req, $server, $port, $timeout = 0, $username = '', $password = '',
          $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
          $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'https', $keepAlive = false, $key = '',
@@ -1616,7 +1641,7 @@ class Client
         }
 
         // NB: should we build cookie http headers by hand rather than let CURL do it?
-        // the following code does not honour 'expires', 'path' and 'domain' cookie attributes set to client obj the the user...
+        // NB: the following code does not honour 'expires', 'path' and 'domain' cookie attributes set to client obj by the user...
         if (count($this->cookies)) {
             $cookieHeader = '';
             foreach ($this->cookies as $name => $cookie) {

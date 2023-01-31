@@ -2,7 +2,7 @@
 
 * changed: the minimum php version required has been increased to 5.4
 
-* changed: dropped support for parsing cookie headers which follow the obsolete "version 2" specification
+* changed: dropped support for parsing cookie headers which follow the obsolete Cookie2 specification
 
 * new: allow to specify other charsets than the canonical three (UTF-8, ISO-8859-1, ASCII), when mbstring is
   available, both for outgoing and incoming data (issue #42).
