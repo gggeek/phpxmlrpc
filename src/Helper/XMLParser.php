@@ -146,6 +146,8 @@ class XMLParser
      * @throws \Exception this can happen if a callback function is set and it does throw (i.e. we do not catch exceptions)
      *
      * @todo refactor? we could 1. return the parsed data structure, and 2. move $returnType and $accept into options
+     * @todo feature-creep make it possible to pass in options overriding usage of PhpXmlRpc::$xmlrpc_XXX_format, so
+     *       that parsing will be completely independent of global state. Note that it might incur a small perf hit...
      */
     public function parse($data, $returnType = self::RETURN_XMLRPCVALS, $accept = 3, $options = array())
     {
@@ -868,6 +870,8 @@ class XMLParser
      *                PhpXmlRpc::$xmlrpc_defencoding if it can't be determined and mbstring is not enabled
      *
      * @todo explore usage of mb_http_input(): does it detect http headers + post data? if so, use it instead of hand-detection!!!
+     * @todo feature-creep make it possible to pass in options overriding usage of PhpXmlRpc static variables, to make
+     *       the method independent of global state
      */
     public static function guessEncoding($httpHeader = '', $xmlChunk = '', $encodingPrefs = null)
     {

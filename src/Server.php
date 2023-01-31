@@ -691,7 +691,7 @@ class Server
         $xmlRpcParser = $this->getParser();
         try {
             $xmlRpcParser->parse($data, $this->functions_parameters_type, XMLParser::ACCEPT_REQUEST, $options);
-            $_xh = $xmlRpcParser->_xh['isf'];
+            $_xh = $xmlRpcParser->_xh;
         } catch (NoSuchMethodException $e) {
             return new Response(0, $e->getCode(), $e->getMessage());
         }
