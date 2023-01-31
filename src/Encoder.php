@@ -331,19 +331,20 @@ class Encoder
             XMLParser::ACCEPT_REQUEST | XMLParser::ACCEPT_RESPONSE | XMLParser::ACCEPT_VALUE | XMLParser::ACCEPT_FAULT,
             $parserOptions
         );
+        $_xh = $xmlRpcParser->_xh['isf'];
 
-        if ($xmlRpcParser->_xh['isf'] > 1) {
-            // test that $xmlrpc->_xh['value'] is an obj, too???
+        if ($_xh['isf'] > 1) {
+            // test that $_xh['value'] is an obj, too???
 
-            $this->getLogger()->error('XML-RPC: ' . $xmlRpcParser->_xh['isf_reason']);
+            $this->getLogger()->error('XML-RPC: ' . $_xh['isf_reason']);
 
             return false;
         }
 
-        switch ($xmlRpcParser->_xh['rt']) {
+        switch ($_xh['rt']) {
             case 'methodresponse':
-                $v = $xmlRpcParser->_xh['value'];
-                if ($xmlRpcParser->_xh['isf'] == 1) {
+                $v = $_xh['value'];
+                if ($_xh['isf'] == 1) {
                     /** @var Value $vc */
                     $vc = $v['faultCode'];
                     /** @var Value $vs */
@@ -355,18 +356,18 @@ class Encoder
                 return $r;
 
             case 'methodcall':
-                $req = new Request($xmlRpcParser->_xh['method']);
-                for ($i = 0; $i < count($xmlRpcParser->_xh['params']); $i++) {
-                    $req->addParam($xmlRpcParser->_xh['params'][$i]);
+                $req = new Request($_xh['method']);
+                for ($i = 0; $i < count($_xh['params']); $i++) {
+                    $req->addParam($_xh['params'][$i]);
                 }
                 return $req;
 
             case 'value':
-                return $xmlRpcParser->_xh['value'];
+                return $_xh['value'];
 
             case 'fault':
                 // EPI api emulation
-                $v = $xmlRpcParser->_xh['value'];
+                $v = $_xh['value'];
                 // use a known error code
                 /** @var Value $vc */
                 $vc = isset($v['faultCode']) ? $v['faultCode']->scalarVal() : PhpXmlRpc::$xmlrpcerr['invalid_return'];

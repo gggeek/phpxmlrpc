@@ -309,9 +309,10 @@ class Request
 
         $xmlRpcParser = $this->getParser();
         $xmlRpcParser->parse($data, $returnType, XMLParser::ACCEPT_RESPONSE, $options);
+        $_xh = $xmlRpcParser->_xh['isf'];
 
         // first error check: xml not well-formed
-        if ($xmlRpcParser->_xh['isf'] == 3) {
+        if ($_xh['isf'] == 3) {
 
             // BC break: in the past for some cases we used the error message: 'XML error at line 1, check URL'
 
@@ -320,25 +321,25 @@ class Request
             //    there could be proxies meddling with the request, or network data corruption...
 
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_xml'],
-                PhpXmlRpc::$xmlrpcstr['invalid_xml'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '', $httpResponse);
+                PhpXmlRpc::$xmlrpcstr['invalid_xml'] . ' ' . $_xh['isf_reason'], '', $httpResponse);
 
             if ($this->debug > 0) {
-                $this->getLogger()->debug($xmlRpcParser->_xh['isf_reason']);
+                $this->getLogger()->debug($_xh['isf_reason']);
             }
         }
         // second error check: xml well-formed but not xml-rpc compliant
-        elseif ($xmlRpcParser->_xh['isf'] == 2) {
+        elseif ($_xh['isf'] == 2) {
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['xml_not_compliant'],
-                PhpXmlRpc::$xmlrpcstr['xml_not_compliant'] . ' ' . $xmlRpcParser->_xh['isf_reason'], '', $httpResponse);
+                PhpXmlRpc::$xmlrpcstr['xml_not_compliant'] . ' ' . $_xh['isf_reason'], '', $httpResponse);
 
             /// @todo echo something for the user? check if it was already done by the parser...
             //if ($this->debug > 0) {
-            //    $this->getLogger()->debug($xmlRpcParser->_xh['isf_reason']);
+            //    $this->getLogger()->debug($_xh['isf_reason']);
             //}
         }
         // third error check: parsing of the response has somehow gone boink.
         /// @todo shall we omit this check, since we trust the parsing code?
-        elseif ($xmlRpcParser->_xh['isf'] > 3 || $returnType == XMLParser::RETURN_XMLRPCVALS && !is_object($xmlRpcParser->_xh['value'])) {
+        elseif ($_xh['isf'] > 3 || $returnType == XMLParser::RETURN_XMLRPCVALS && !is_object($_xh['value'])) {
             // something odd has happened and it's time to generate a client side error indicating something odd went on
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['xml_parsing_error'], PhpXmlRpc::$xmlrpcstr['xml_parsing_error'],
                 '', $httpResponse
@@ -348,13 +349,13 @@ class Request
         } else {
             if ($this->debug > 1) {
                 $this->getLogger()->debug(
-                    "---PARSED---\n".var_export($xmlRpcParser->_xh['value'], true)."\n---END---"
+                    "---PARSED---\n".var_export($_xh['value'], true)."\n---END---"
                 );
             }
 
-            $v = $xmlRpcParser->_xh['value'];
+            $v = $_xh['value'];
 
-            if ($xmlRpcParser->_xh['isf']) {
+            if ($_xh['isf']) {
                 /// @todo we should test (here or preferably in the parser) if server sent an int and a string, and/or
                 ///       coerce them into such...
                 if ($returnType == XMLParser::RETURN_XMLRPCVALS) {

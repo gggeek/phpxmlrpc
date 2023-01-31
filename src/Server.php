@@ -691,43 +691,44 @@ class Server
         $xmlRpcParser = $this->getParser();
         try {
             $xmlRpcParser->parse($data, $this->functions_parameters_type, XMLParser::ACCEPT_REQUEST, $options);
+            $_xh = $xmlRpcParser->_xh['isf'];
         } catch (NoSuchMethodException $e) {
             return new Response(0, $e->getCode(), $e->getMessage());
         }
 
-        if ($xmlRpcParser->_xh['isf'] == 3) {
+        if ($_xh['isf'] == 3) {
             // (BC) we return XML error as a faultCode
-            preg_match('/^XML error ([0-9]+)/', $xmlRpcParser->_xh['isf_reason'], $matches);
+            preg_match('/^XML error ([0-9]+)/', $_xh['isf_reason'], $matches);
             return new Response(
                 0,
                 PhpXmlRpc::$xmlrpcerrxml + (int)$matches[1],
-                $xmlRpcParser->_xh['isf_reason']);
-        } elseif ($xmlRpcParser->_xh['isf']) {
+                $_xh['isf_reason']);
+        } elseif ($_xh['isf']) {
             /// @todo separate better the various cases, as we have done in Request::parseResponse: invalid xml-rpc vs.
             ///       parsing error
             return new Response(
                 0,
                 PhpXmlRpc::$xmlrpcerr['invalid_request'],
-                PhpXmlRpc::$xmlrpcstr['invalid_request'] . ' ' . $xmlRpcParser->_xh['isf_reason']);
+                PhpXmlRpc::$xmlrpcstr['invalid_request'] . ' ' . $_xh['isf_reason']);
         } else {
             // small layering violation in favor of speed and memory usage: we should allow the 'execute' method handle
             // this, but in the most common scenario (xml-rpc values type server with some methods registered as phpvals)
             // that would mean a useless encode+decode pass
             if ($this->functions_parameters_type != 'xmlrpcvals' ||
-                (isset($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type']) &&
-                    ($this->dmap[$xmlRpcParser->_xh['method']]['parameters_type'] != 'xmlrpcvals')
+                (isset($this->dmap[$_xh['method']]['parameters_type']) &&
+                    ($this->dmap[$_xh['method']]['parameters_type'] != 'xmlrpcvals')
                 )
             ) {
                 if ($this->debug > 1) {
-                    $this->debugmsg("\n+++PARSED+++\n" . var_export($xmlRpcParser->_xh['params'], true) . "\n+++END+++");
+                    $this->debugmsg("\n+++PARSED+++\n" . var_export($_xh['params'], true) . "\n+++END+++");
                 }
 
-                return $this->execute($xmlRpcParser->_xh['method'], $xmlRpcParser->_xh['params'], $xmlRpcParser->_xh['pt']);
+                return $this->execute($_xh['method'], $_xh['params'], $_xh['pt']);
             } else {
                 // build a Request object with data parsed from xml and add parameters in
-                $req = new Request($xmlRpcParser->_xh['method']);
-                for ($i = 0; $i < count($xmlRpcParser->_xh['params']); $i++) {
-                    $req->addParam($xmlRpcParser->_xh['params'][$i]);
+                $req = new Request($_xh['method']);
+                for ($i = 0; $i < count($_xh['params']); $i++) {
+                    $req->addParam($_xh['params'][$i]);
                 }
 
                 if ($this->debug > 1) {
