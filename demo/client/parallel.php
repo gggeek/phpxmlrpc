@@ -106,7 +106,7 @@ for ($i = 0; $i < $num_tests; $i++) {
 }
 
 $client = new ParallelClient(XMLRPCSERVER);
-$client->no_multicall = true;
+$client->setOption(Client::OPT_NO_MULTICALL,  true);
 
 // a minimal benchmark - use 3 strategies to execute the same 25 calls: sequentially, using parallel http requests, and
 // using a single system.multiCall request
@@ -126,7 +126,7 @@ $t = microtime(true) - $t;
 echo "Parallel send: " . sprintf('%.3f', $t) . " secs.\n";
 flush();
 
-$client->no_multicall = false;
+$client->setOption(Client::OPT_NO_MULTICALL, false);
 $t = microtime(true);
 $resp = $client->send($reqs);
 $t = microtime(true) - $t;

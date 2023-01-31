@@ -27,6 +27,18 @@ class ClientTest extends PhpXmlRpc_LoggerAwareTestCase
         $this->assertEquals(5, $r->faultCode());
     }
 
+    public function test404Interop()
+    {
+        $m = new xmlrpcmsg('examples.echo', array(
+            new xmlrpcval('hello', 'string'),
+        ));
+        $orig = \PhpXmlRpc\PhpXmlRpc::$xmlrpcerr;
+        \PhpXmlRpc\PhpXmlRpc::useInteropFaults();
+        $r = $this->client->send($m, 5);
+        $this->assertEquals(-32300, $r->faultCode());
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpcerr = $orig;
+    }
+
     public function testSrvNotFound()
     {
         $m = new xmlrpcmsg('examples.echo', array(

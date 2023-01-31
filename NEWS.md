@@ -1,9 +1,11 @@
 ## XML-RPC for PHP version 4.xx - unreleased
 
-* changed: the minimum php version required has increased to 5.4
+* changed: the minimum php version required has been increased to 5.4
+
+* changed: dropped support for parsing cookie headers which follow the obsolete "version 2" specification
 
 * new: allow to specify other charsets than the canonical three (UTF-8, ISO-8859-1, ASCII), when mbstring is
-  available, both for outgoing and incoming data.
+  available, both for outgoing and incoming data (issue #42).
 
   For outgoing data, this can be set in `$client->request_charset_encoding` and `$server->response_charset_encoding`.
   The library will then transcode the data fed to it by the application into the desired charset when serializing
@@ -20,10 +22,10 @@
   In order to enable this, you should set `PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = true`.
 
   NB: since the xml-rpc spec mandates that no Timezone is used on the wire for dateTime values, the DateTime objects
-  created by the library will be set to the default php timzeone, set using the 'date.timezone' ini setting.
+  created by the library will be set to the default php timezone, set using the 'date.timezone' ini setting.
 
-  NB: if the received strings are not parseable as dates, NULL will be returned instead of an object (but that can
-  be avoided by setting `PhpXmlRpc\PhpXmlRpc::$xmlrpc_reject_invalid_values = true`, see below).
+  NB: if the received strings are not parseable as dates, NULL will be returned instead of an object, but that can
+  be avoided by setting `PhpXmlRpc\PhpXmlRpc::$xmlrpc_reject_invalid_values = true`, see below.
 
 * improved: be more strict in the `Response` constructor and in `Request::addParam`: both of those will now generate
   an error message in the log if passed unexpected values
@@ -42,19 +44,17 @@
   on to the application. The same will apply for elements of type struct-member which miss either the name or the value
 
 * new: it is now possible to tell the library to allow non-standard formats for received datetime value, such as f.e.
-  datetimes with a timezone specifier, by setting a custom value to `PhpXmlRpc\PhpXmlRpc::$xmlrpc_datetime_format`.
+  datetimes with a timezone specifier, by setting a custom value to `PhpXmlRpc\PhpXmlRpc::$xmlrpc_datetime_format`
+  (issue #46).
 
 * new: it is now possible to tell the library to allow non-standard formats for received int and float values, as well
   as for methdoname elements. See the api docs for `PhpXmlRpc\PhpXmlRpc` static variables.
-
-* improved: limit the size of incoming data which will be used in error responses and logged error messages, making
-  it slightly harder to carry out DOS attacks against the library
 
 * fixed: when a server is configured with its default value of 'xmlrpcvals' for `$functions_parameters_type`, and
   a method handler in the dispatch was defined with `'parameters_type' = 'phpvals'`, the handler would be passed a
   Request object instead of plain php values.
 
-* fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, we would be always falling back to
+* fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, the code would be always falling back to
   non-multicall requests
 
 * fixed: receiving integers which use the '<EX:I8>' xml tag
@@ -62,23 +62,36 @@
 * fixed: setting/retrieving the php value from a Value object using array notation would fail if the object was created
   using `i4` then accessed using `int`, eg: `$v = new Value(1, 'i4'); $v[$v->scalrtyp()] = 2;`
 
-* fixed: setting values to deprecated Response property `cookies` would trigger a PHP notice (introduced in 4.6.0), ex:
-  `$response->_cookies['name'] = ['value' => 'something'];`
+* fixed: setting values to deprecated Response property `cookies` would trigger a PHP notice, ex:
+  `$response->_cookies['name'] = ['value' => 'something'];` (introduced in 4.6.0)
 
 * new: method `PhpXmlRpc::useInteropFaults()` can be used to make the library change the error codes it generates to
   match the spec described at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
-
-* new: added the `Client::setTimeout` method, meant to replace usage of the `$timeout` argument in calls to `send`
-  and `multicall`
 
 * new: method `Client::getUrl()`
 
 * new: method `Server::setDispatchMap()`
 
-* new: it is now possible to inject a custom logger into helper classes `Charset`, `Http`, `XMLParser`, inching a step
-  closer to supporting DIC patterns
+* new: added methods `getOption`, `setOption`, `setOptions` and `getOptions` to both Client and Server, meant to replace
+  direct access to _all public properties_ as well as the `$timeout` argument in calls to `Client::send` and `Client::multicall`
 
-* new: method `PhpXmlRpc::setLogger()`, to simplify injecting the logger into all classes of the library in one step
+* new: it is now possible to make the library generate warning messages whenever a deprecated feature is used, such as
+  calling deprecated methods, using deprecated method parameters, or reading/writing deprecated object properties.
+  This is disabled by default, and can be enabled by setting `PhpXmlRpc\PhpXmlRpc::xmlrpc_silence_deprecations = false`.
+  Note that the deprecation warnings will be by default added to the php error log, and not be displayed on screen.
+  If you prefer them to be handled in some other way, you should take over the Logger, as described just below here
+
+* new: it is now possible to inject a custom logger into helper classes `Charset`, `Http`, `XMLParser`, inching a step
+  closer to supporting DIC patterns (issue #78)
+
+* new: method `PhpXmlRpc::setLogger()`, to simplify injecting a custom logger into all classes of the library in one step
+
+* improved: the `Logger` class now sports methods adhering to Psr\Log\LoggerInterface
+
+* improved: made sure all debug output goes through the logger at response parsing time (there was one printf call left)
+
+* improved: limit the size of incoming data which will be used in error responses and logged error messages, making
+  it slightly harder to carry out DOS attacks against the library
 
 * new: passing value -1 to `$client->setDebug` will avoid storing the full http response data in the returned Response
   object when executing `call`. This could be useful in reducing memory usage for big responses
@@ -89,14 +102,12 @@
 
 * new: when calling `Wrapper::wrapXmlrpcMethod`, `wrapXmlrpcServer`, `wrapPhpFunction` and `wrapPhpClass` it is possible
   to pass 'encode_nulls' as option to argument `$extraOptions`. This will make the generated code emit a '<nil/>'
-  xml-rpc element for php null values, instead of emitting an empty-string xmlr-rpc element
+  xml-rpc element for php null values, instead of emitting an empty-string xml-rpc element
 
 * new: methods `Wrapper::holdObject()` and `Wrapper::getheldObject()`, allowing flexibility in storing object instances
   for code-generation scenarios involving `Wrapper::wrapPhpClass` and `Wrapper::wrapPhpFunction`
 
-* improved: the `Logger` class now sports methods adhering to Psr\Log\LoggerInterface
-
-* improved: made sure all debug output goes through the logger at response parsing time (there was one printf call left)
+* improved: all `Value` methods now follow snakeCase convention
 
 * improved: all the Exceptions thrown by the library are now `\PhpXmlRpc\Exception` or subclasses thereof
 
@@ -107,13 +118,11 @@
 
 * new: method `Helper\Date::iso8601Encode` now accepts a DateTime input beside a timestamp
 
-* new: in the dispatch map, it is now possible to set different exception handling modes for each expose xml-rpc method
+* new: in the dispatch map, it is now possible to set different exception handling modes for each exposed xml-rpc method
 
 * new: method `Server::add_to_map` has acquired new parameters: `$parametersType = false, $exceptionHandling = false`
 
 * improved: the `XMLParser` accepts more options in its constructor (see phpdocs for details)
-
-* improved: dropped support for parsing cookie headers which follow the obsolete "version 2" specification
 
 * improved: removed usage of `extension_loaded` in favour of `function_exists` when checking for mbstring. This allows
   for mbstring functions to be polyfilled
@@ -129,7 +138,7 @@
 
 * improved: made sure the test container and gha test runners have at least one locale with comma as decimal separator
 
-* BC notes:
+* BC notes (besides what can be inferred from the changes listed above):
 
   for library users
 
@@ -148,6 +157,9 @@
   - an error message will now be generated if, in incoming data, a STRUCT element has no NAME
   - parameters `$timeout` and `$method` are now considered deprecated in `Client::send()` and `Client::multicall()`
   - Client properties `$errno` and `$errstring` are now deprecated
+  - direct access to all properties of Client and Server is now deprecated and should be replaced by calls to
+    `setOption` / `getOption`. The same applies to the following "setter" methods of the Client: `setSSLVerifyPeer`,
+    `setSSLVerifyHost`, `setSSLVersion`, `setRequestCompression`, `setCurlOptions`, `setUseCurl`, `setUserAgent`
   - direct access to `Wrapper::$objHolder` is now deprecated
   - the code generated by the debugger when using "Generate stub for method call" will throw on errors instead of
     returning a Response object
@@ -167,8 +179,8 @@
     objects for the cases in which it previously returned a string
   - if you subclassed the `Client` class, take care of new static variables `$requestClass` and `$responseClass`,
     which should be used to instantiate requests and responses
-  - if you replaced the Logger class, take care that you will have to implement methods `error` and `debug` (all is ok
-    if you subclassed id)
+  - if you replaced the Logger class, take care that you will have to implement methods `error`, `warning` and `debug`
+    (all is ok if you subclassed it)
   - traits have been introduced for all classes dealing with Logger, XMLParser and CharsetEncoder; method `setCharsetEncoder`
     is now static
   - exception `\PhpXmlRpc\Exception\PhpXmlRpcException` is deprecated. Use `\PhpXmlRpc\Exception` instead

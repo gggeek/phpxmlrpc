@@ -43,7 +43,7 @@ $srv->setDispatchMap(array(
 ));
 
 // let the xml-rpc server know that the method-handler functions expect plain php values
-$srv->functions_parameters_type = 'phpvals';
+$srv->setOption(Server::OPT_FUNCTIONS_PARAMETERS_TYPE, 'phpvals');
 
 // let code exceptions float all the way to the remote caller as xml-rpc faults - it helps debugging.
 // At the same time, it opens a wide security hole, and should never be enabled on public or production servers...

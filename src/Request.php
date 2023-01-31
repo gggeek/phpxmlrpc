@@ -6,7 +6,7 @@ use PhpXmlRpc\Exception\HttpException;
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\XMLParser;
 use PhpXmlRpc\Traits\CharsetEncoderAware;
-use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\DeprecationLogger;
 use PhpXmlRpc\Traits\ParserAware;
 
 /**
@@ -18,7 +18,7 @@ use PhpXmlRpc\Traits\ParserAware;
 class Request
 {
     use CharsetEncoderAware;
-    use LoggerAware;
+    use DeprecationLogger;
     use ParserAware;
 
     /// @todo: do these need to be public?
@@ -356,8 +356,8 @@ class Request
                 if ($returnType == XMLParser::RETURN_XMLRPCVALS) {
                     $errNo_v = $v['faultCode'];
                     $errStr_v = $v['faultString'];
-                    $errNo = $errNo_v->scalarval();
-                    $errStr = $errStr_v->scalarval();
+                    $errNo = $errNo_v->scalarVal();
+                    $errStr = $errStr_v->scalarVal();
                 } else {
                     $errNo = $v['faultCode'];
                     $errStr = $v['faultString'];

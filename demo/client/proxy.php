@@ -50,12 +50,12 @@ class XmlRpcProxy
         }
 
         // just in case this was set to something else
-        $originalReturnType = $this->client->return_type;
-        $this->client->return_type = 'phpvals';
+        $originalReturnType = $this->client->getOption(\PhpXmlRpc\Client::OPT_RETURN_TYPE);
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_RETURN_TYPE, 'phpvals');
 
         $resp = $this->client->send(new PhpXmlRpc\Request($this->prefix.$name, $args));
 
-        $this->client->return_type = $originalReturnType;
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_RETURN_TYPE, $originalReturnType);
 
         if ($resp->faultCode()) {
             throw new \Exception($resp->faultString(), $resp->faultCode());
@@ -66,6 +66,7 @@ class XmlRpcProxy
 
     /**
      * In case the remote method name has characters which are not valid as php method names, use this.
+     * (note that, in theory this is unlikely, as php has a broader definition for identifiers than xml-rpc method names)
      *
      * @param string $name remote function name. Will be prefixed
      * @param array $arguments any php value will do. For xml-rpc base64 values, wrap them in a Value object

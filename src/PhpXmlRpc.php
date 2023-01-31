@@ -93,7 +93,6 @@ class PhpXmlRpc
      * received charset cannot be determined and mbstring extension is not enabled.
      */
     public static $xmlrpc_defencoding = "UTF-8";
-
     /**
      * @var string[]
      * The list of preferred encodings used by the server for requests and by the client for responses to detect the
@@ -102,7 +101,6 @@ class PhpXmlRpc
      * - mbstring extension is enabled
      */
     public static $xmlrpc_detectencodings = array();
-
     /**
      * @var string
      * The encoding used internally by PHP.
@@ -210,9 +208,17 @@ class PhpXmlRpc
     public static $xmlrpc_methodname_format = '|^[ \t]*[a-zA-Z0-9_.:/]+[ \t]*$|';
 
     /**
+     * @var bool
+     * Set this to false to have a warning added to the log whenever user code uses a deprecated method/parameter/property
+     */
+    public static $xmlrpc_silence_deprecations = true;
+
+    /**
      * A function to be used for compatibility with legacy code: it creates all global variables which used to be declared,
      * such as library version etc...
      * @return void
+     *
+     * @deprecated
      */
     public static function exportGlobals()
     {
@@ -255,6 +261,8 @@ class PhpXmlRpc
      * 4. run your own code.
      *
      * @return void
+     *
+     * @deprecated
      */
     public static function importGlobals()
     {

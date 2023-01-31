@@ -3,12 +3,13 @@
 namespace PhpXmlRpc;
 
 use PhpXmlRpc\Exception\NoSuchMethodException;
+use PhpXmlRpc\Exception\ValueErrorException;
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\Interop;
 use PhpXmlRpc\Helper\Logger;
 use PhpXmlRpc\Helper\XMLParser;
 use PhpXmlRpc\Traits\CharsetEncoderAware;
-use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\DeprecationLogger;
 use PhpXmlRpc\Traits\ParserAware;
 
 /**
@@ -17,8 +18,17 @@ use PhpXmlRpc\Traits\ParserAware;
 class Server
 {
     use CharsetEncoderAware;
-    use LoggerAware;
+    use DeprecationLogger;
     use ParserAware;
+
+    const OPT_ACCEPTED_COMPRESSION = 'accepted_compression';
+    const OPT_ALLOW_SYSTEM_FUNCS = 'allow_system_funcs';
+    const OPT_COMPRESS_RESPONSE = 'compress_response';
+    const OPT_DEBUG = 'debug';
+    const OPT_EXCEPTION_HANDLING = 'exception_handling';
+    const OPT_FUNCTIONS_PARAMETERS_TYPE = 'functions_parameters_type';
+    const OPT_PHPVALS_ENCODING_OPTIONS = 'phpvals_encoding_options';
+    const OPT_RESPONSE_CHARSET_ENCODING = 'response_charset_encoding';
 
     /**
      * @var string
@@ -113,6 +123,17 @@ class Server
      */
     protected $dmap = array();
 
+    protected $options = array(
+        self::OPT_ACCEPTED_COMPRESSION,
+        self::OPT_ALLOW_SYSTEM_FUNCS,
+        self::OPT_COMPRESS_RESPONSE,
+        self::OPT_DEBUG,
+        self::OPT_EXCEPTION_HANDLING,
+        self::OPT_FUNCTIONS_PARAMETERS_TYPE,
+        self::OPT_PHPVALS_ENCODING_OPTIONS,
+        self::OPT_RESPONSE_CHARSET_ENCODING,
+    );
+
     /**
      * Storage for internal debug info.
      */
@@ -161,6 +182,102 @@ class Server
                 $this->service();
             }
         }
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return $this
+     * @throws ValueErrorException on unsupported option
+     */
+    public function setOption($name, $value)
+    {
+        switch ($name) {
+            case self::OPT_ACCEPTED_COMPRESSION :
+                $this->accepted_charset_encodings = $value;
+                break;
+            case self::OPT_ALLOW_SYSTEM_FUNCS:
+                $this->allow_system_funcs = $value;
+                break;
+            case self::OPT_COMPRESS_RESPONSE:
+                $this->compress_response = $value;
+                break;
+            case self::OPT_DEBUG:
+                $this->debug = $value;
+                break;
+            case self::OPT_EXCEPTION_HANDLING:
+                $this->exception_handling = $value;
+                break;
+            case self::OPT_FUNCTIONS_PARAMETERS_TYPE:
+                $this->functions_parameters_type = $value;
+                break;
+            case self::OPT_PHPVALS_ENCODING_OPTIONS:
+                $this->phpvals_encoding_options = $value;
+                break;
+            case self::OPT_RESPONSE_CHARSET_ENCODING:
+                $this->response_charset_encoding = $value;
+                break;
+            default:
+                throw new ValueErrorException("Unsupported option '$name'");
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws ValueErrorException on unsupported option
+     */
+    public function getOption($name)
+    {
+        switch ($name) {
+            case self::OPT_ACCEPTED_COMPRESSION:
+                return $this->accepted_compression;
+            case self::OPT_ALLOW_SYSTEM_FUNCS:
+                return $this->allow_system_funcs;
+            case self::OPT_COMPRESS_RESPONSE:
+                return $this->compress_response;
+            case self::OPT_DEBUG:
+                return $this->debug;
+            case self::OPT_EXCEPTION_HANDLING:
+                return $this->exception_handling;
+            case self::OPT_FUNCTIONS_PARAMETERS_TYPE:
+                return $this->functions_parameters_type;
+            case self::OPT_PHPVALS_ENCODING_OPTIONS:
+                return $this->phpvals_encoding_options;
+            case self::OPT_RESPONSE_CHARSET_ENCODING:
+                return $this->response_charset_encoding;
+            default:
+                throw new ValueErrorException("Unsupported option '$name'");
+        }
+    }
+
+    /**
+     * Returns the complete list of Client options.
+     * @return array
+     */
+    public function getOptions()
+    {
+        $values = array();
+        foreach($this->options as $opt) {
+            $values[$opt] = $this->getOption($opt);
+        }
+        return $values;
+    }
+
+    /**
+     * @param array $options
+     * @return $this
+     * @throws ValueErrorException on unsupported option
+     */
+    public function setOptions($options)
+    {
+        foreach($options as $name => $value) {
+            $this->setOption($name, $value);
+        }
+
+        return $this;
     }
 
     /**
@@ -396,7 +513,7 @@ class Server
                     if (is_object($in)) {
                         $p = $in->getParam($n);
                         if ($p->kindOf() == 'scalar') {
-                            $pt = $p->scalartyp();
+                            $pt = $p->scalarTyp();
                         } else {
                             $pt = $p->kindOf();
                         }
@@ -1055,7 +1172,7 @@ class Server
         // let's accept as parameter either an xml-rpc value or string
         if (is_object($req)) {
             $methName = $req->getParam(0);
-            $methName = $methName->scalarval();
+            $methName = $methName->scalarVal();
         } else {
             $methName = $req;
         }
@@ -1099,7 +1216,7 @@ class Server
         // let's accept as parameter either an xml-rpc value or string
         if (is_object($req)) {
             $methName = $req->getParam(0);
-            $methName = $methName->scalarval();
+            $methName = $methName->scalarVal();
         } else {
             $methName = $req;
         }
@@ -1159,10 +1276,10 @@ class Server
         if (!$methName) {
             return static::_xmlrpcs_multicall_error('nomethod');
         }
-        if ($methName->kindOf() != 'scalar' || $methName->scalartyp() != 'string') {
+        if ($methName->kindOf() != 'scalar' || $methName->scalarTyp() != 'string') {
             return static::_xmlrpcs_multicall_error('notstring');
         }
-        if ($methName->scalarval() == 'system.multicall') {
+        if ($methName->scalarVal() == 'system.multicall') {
             return static::_xmlrpcs_multicall_error('recursion');
         }
 
@@ -1174,7 +1291,7 @@ class Server
             return static::_xmlrpcs_multicall_error('notarray');
         }
 
-        $req = new Request($methName->scalarval());
+        $req = new Request($methName->scalarVal());
         foreach ($params as $i => $param) {
             if (!$req->addParam($param)) {
                 $i++; // for error message, we count params from 1

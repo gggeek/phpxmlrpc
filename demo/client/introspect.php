@@ -22,7 +22,7 @@ function display_error($r)
 
 $client = new Client(XMLRPCSERVER);
 // tell the client we want back plain php values
-$client->return_type = XMLRPCParser::RETURN_PHP;
+$client->setOption(Client::OPT_RETURN_TYPE, XMLRPCParser::RETURN_PHP);
 
 // First off, let's retrieve the list of methods available on the remote server
 output("<h3>methods available at http://" . $client->server . $client->path . "</h3>\n");
@@ -43,7 +43,7 @@ if ($resp->faultCode()) {
         }
     }
 
-    $client->no_multicall = $avoidMulticall;
+    $client->setOption(Client::OPT_NO_MULTICALL, $avoidMulticall);
 
     // Then, retrieve the signature and help text of each available method
     foreach ($v as $methodName) {

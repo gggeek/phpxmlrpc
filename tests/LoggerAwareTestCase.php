@@ -57,4 +57,9 @@ abstract class PhpXmlRpc_LoggerAwareTestCase extends PhpXmlRpc_PolyfillTestCase
     {
         $this->buffer .= $message . "\n";
     }
+
+    public function warning($message, $context = array())
+    {
+        $this->buffer .= $message . "\n";
+    }
 }

@@ -31,7 +31,7 @@ $client->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR 
 $client->setRequestCompression('gzip');
 
 // ask the client to give us back xml
-$client->return_type = 'xml';
+$client->setOption(Client::OPT_RETURN_TYPE, 'xml');
 
 $client->setDebug(1);
 

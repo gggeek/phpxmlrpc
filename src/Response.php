@@ -4,7 +4,7 @@ namespace PhpXmlRpc;
 
 use PhpXmlRpc\Exception\StateErrorException;
 use PhpXmlRpc\Traits\CharsetEncoderAware;
-use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\DeprecationLogger;
 
 /**
  * This class provides the representation of the response of an XML-RPC server.
@@ -18,7 +18,7 @@ use PhpXmlRpc\Traits\LoggerAware;
 class Response
 {
     use CharsetEncoderAware;
-    use LoggerAware;
+    use DeprecationLogger;
 
     /// @todo: do these need to be public?
     /** @internal */
@@ -194,16 +194,18 @@ class Response
     // we have to make this return by ref in order to allow calls such as `$resp->_cookies['name'] = ['value' => 'something'];`
     public function &__get($name)
     {
-        //trigger_error('getting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
-
         switch ($name) {
             case 'hdrs':
+                $this->logDeprecation('Getting property Response::' . $name . ' is deprecated');
                 return $this->httpResponse['headers'];
             case '_cookies':
+                $this->logDeprecation('Getting property Response::' . $name . ' is deprecated');
                 return $this->httpResponse['cookies'];
             case 'raw_data':
+                $this->logDeprecation('Getting property Response::' . $name . ' is deprecated');
                 return $this->httpResponse['raw_data'];
             default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
                 return null;
@@ -212,19 +214,21 @@ class Response
 
     public function __set($name, $value)
     {
-        //trigger_error('setting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
-
         switch ($name) {
             case 'hdrs':
+                $this->logDeprecation('Setting property Response::' . $name . ' is deprecated');
                 $this->httpResponse['headers'] = $value;
                 break;
             case '_cookies':
+                $this->logDeprecation('Setting property Response::' . $name . ' is deprecated');
                 $this->httpResponse['cookies'] = $value;
                 break;
             case 'raw_data':
+                $this->logDeprecation('Setting property Response::' . $name . ' is deprecated');
                 $this->httpResponse['raw_data'] = $value;
                 break;
             default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }
@@ -232,14 +236,15 @@ class Response
 
     public function __isset($name)
     {
-        //trigger_error('checking property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
-
         switch ($name) {
             case 'hdrs':
+                $this->logDeprecation('Checking property Response::' . $name . ' is deprecated');
                 return isset($this->httpResponse['headers']);
             case '_cookies':
+                $this->logDeprecation('Checking property Response::' . $name . ' is deprecated');
                 return isset($this->httpResponse['cookies']);
             case 'raw_data':
+                $this->logDeprecation('Checking property Response::' . $name . ' is deprecated');
                 return isset($this->httpResponse['raw_data']);
             default:
                 return false;
@@ -250,15 +255,19 @@ class Response
     {
         switch ($name) {
             case 'hdrs':
+                $this->logDeprecation('Unsetting property Response::' . $name . ' is deprecated');
                 unset($this->httpResponse['headers']);
                 break;
             case '_cookies':
+                $this->logDeprecation('Unsetting property Response::' . $name . ' is deprecated');
                 unset($this->httpResponse['cookies']);
                 break;
             case 'raw_data':
+                $this->logDeprecation('Unsetting property Response::' . $name . ' is deprecated');
                 unset($this->httpResponse['raw_data']);
                 break;
             default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }

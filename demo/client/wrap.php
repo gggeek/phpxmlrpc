@@ -17,7 +17,7 @@ output('<html lang="en">
 ');
 
 $client = new PhpXmlRpc\Client(XMLRPCSERVER);
-$client->return_type = 'phpvals'; // let client give us back php values instead of xmlrpcvals
+$client->setOption(\PhpXmlRpc\Client::OPT_RETURN_TYPE, 'phpvals'); // let client give us back php values instead of xmlrpcvals
 $resp = $client->send(new PhpXmlRpc\Request('system.listMethods'));
 if ($resp->faultCode()) {
     output("<p>Server methods list could not be retrieved: error {$resp->faultCode()} '" . htmlspecialchars($resp->faultString()) . "'</p>\n");

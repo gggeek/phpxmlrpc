@@ -160,7 +160,7 @@ class Wrapper
      * @todo decide how to deal with params passed by ref in function definition: bomb out or allow?
      * @todo finish using phpdoc info to build method sig if all params are named but out of order
      * @todo add a check for params of 'resource' type
-     * @todo add some trigger_errors / error_log when returning false?
+     * @todo add some error logging when returning false?
      * @todo what to do when the PHP function returns NULL? We are currently returning an empty string value...
      * @todo add an option to suppress php warnings in invocation of user function, similar to server debug level 3?
      * @todo add a verbatim_object_copy parameter to allow avoiding usage the same obj instance?
@@ -822,7 +822,7 @@ class Wrapper
         if (!$response->faultCode()) {
             $mDesc = $response->value();
             if ($client->return_type != 'phpvals') {
-                $mDesc = $mDesc->scalarval();
+                $mDesc = $mDesc->scalarVal();
             }
         }
 

@@ -3,7 +3,7 @@
 namespace PhpXmlRpc\Helper;
 
 use PhpXmlRpc\PhpXmlRpc;
-use PhpXmlRpc\Traits\LoggerAware;
+use PhpXmlRpc\Traits\DeprecationLogger;
 use PhpXmlRpc\Value;
 
 /**
@@ -20,7 +20,7 @@ use PhpXmlRpc\Value;
  */
 class XMLParser
 {
-    use LoggerAware;
+    use DeprecationLogger;
 
     const RETURN_XMLRPCVALS = 'xmlrpcvals';
     const RETURN_EPIVALS = 'epivals';
@@ -317,7 +317,7 @@ class XMLParser
             if ($acceptSingleVals === false) {
                 $accept = $this->current_parsing_options['accept'];
             } else {
-                //trigger_error('using argument $acceptSingleVals is deprecated', E_USER_DEPRECATED);
+                $this->logDeprecation('Using argument $acceptSingleVals for method ' . __METHOD__ . ' is deprecated');
                 $accept = self::ACCEPT_REQUEST | self::ACCEPT_RESPONSE | self::ACCEPT_VALUE;
             }
             if (($name == 'METHODCALL' && ($accept & self::ACCEPT_REQUEST)) ||
@@ -489,7 +489,8 @@ class XMLParser
      */
     public function xmlrpc_se_any($parser, $name, $attrs)
     {
-        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+        // avoid spamming the log with warnings in case this is in use...
+        //$this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         $this->xmlrpc_se($parser, $name, $attrs, true);
     }
@@ -606,7 +607,7 @@ class XMLParser
             case 'I8':
             case 'INT':
                 // NB: we build the Value object with the original xml element name found, except for ex:i8. The
-                // `Value::scalartyp()` function will do some normalization of the data
+                // `Value::scalarTyp()` function will do some normalization of the data
                 $this->_xh['vt'] = strtolower($name);
                 $this->_xh['lv'] = 3; // indicate we've found a value
                 if (!preg_match(PhpXmlRpc::$xmlrpc_int_format, $this->_xh['ac'])) {
@@ -1012,14 +1013,14 @@ class XMLParser
 
     public function __set($name, $value)
     {
-        //trigger_error('setting property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
-
         switch ($name) {
             // this should only ever be called by subclasses which overtook `parse()`
             case 'accept':
+                $this->logDeprecation('Setting property XMLParser::' . $name . ' is deprecated');
                 $this->current_parsing_options['accept'] = $value;
                 break;
             default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }
@@ -1027,10 +1028,9 @@ class XMLParser
 
     public function __isset($name)
     {
-        //trigger_error('checking property Response::' . $name . ' is deprecated', E_USER_DEPRECATED);
-
         switch ($name) {
             case 'accept':
+                $this->logDeprecation('Checking property XMLParser::' . $name . ' is deprecated');
                 return isset($this->current_parsing_options['accept']);
             default:
                 return false;
@@ -1042,9 +1042,11 @@ class XMLParser
         switch ($name) {
             // q: does this make sense at all?
             case 'accept':
+                $this->logDeprecation('Unsetting property XMLParser::' . $name . ' is deprecated');
                 unset($this->current_parsing_options['accept']);
                 break;
             default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
                 trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }

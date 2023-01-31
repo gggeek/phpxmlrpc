@@ -32,13 +32,13 @@ var_dump($input);
 $c = new Client(XMLRPCSERVER);
 
 // allow the full request and response to be seen on screen
-$c->setDebug(2);
+$c->setOption(Client::OPT_DEBUG, 2);
 // tell the server not to compress the response - this is not necessary btw, it is only done to make the debug look nicer
-$c->accepted_compression = array();
+$c->setOption(Client::OPT_ACCEPTED_COMPRESSION, array());
 // tell the server not to encode everything as ASCII - this is not necessary btw, it is only done to make the debug look nicer
-$c->accepted_charset_encodings = array('UTF-8');
+$c->setOption(Client::OPT_ACCEPTED_CHARSET_ENCODINGS, array('UTF-8'));
 // force the client not to encode everything as ASCII - this is not necessary btw, it is only done to make the debug nicer
-$c->request_charset_encoding = 'UTF-8';
+$c->setOption(Client::OPT_REQUEST_CHARSET_ENCODING, 'UTF-8');
 
 $r = $c->send(new Request('examples.stringecho', array(new Value($input))));
 $output = $r->value()->scalarval();
