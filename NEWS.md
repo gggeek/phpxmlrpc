@@ -136,6 +136,8 @@
 
 * improved: the debugger will now sport the "load method synopsis" button when interacting with json-rpc servers
 
+* improved: added an example Symfony Client and Server to the demo files (using Symfony 6 / PHP 8 syntax)
+
 * improved: made sure the test container and gha test runners have at least one locale with comma as decimal separator
 
 * BC notes (besides what can be inferred from the changes listed above):
