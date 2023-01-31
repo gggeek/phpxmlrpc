@@ -594,7 +594,7 @@ class Client
     public function getOptions()
     {
         $values = array();
-        foreach($this->options as $opt) {
+        foreach ($this->options as $opt) {
             $values[$opt] = $this->getOption($opt);
         }
         return $values;
@@ -607,7 +607,7 @@ class Client
      */
     public function setOptions($options)
     {
-        foreach($options as $name => $value) {
+        foreach ($options as $name => $value) {
             $this->setOption($name, $value);
         }
 
@@ -911,6 +911,7 @@ class Client
 
     /**
      * @return string
+     * @todo feature-creep allow to return single url components, such as parse_url does
      */
     public function getUrl()
     {
@@ -974,9 +975,7 @@ class Client
 
         if (is_array($req)) {
             // $req is an array of Requests
-            $r = $this->multicall($req, $timeout, $method);
-
-            return $r;
+            return $this->multicall($req, $timeout, $method);
         } elseif (is_string($req)) {
             $n = new static::$requestClass('');
             $n->payload = $req;
@@ -989,8 +988,9 @@ class Client
         /// @todo we could be smarter about this and force usage of curl in scenarios where it is both available and
         ///       needed, such as digest or ntlm auth. Do not attempt to use it for https if not present
         $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO &&
-            (in_array($method, array('https', 'http11', 'h2c', 'h2'))));
+                (in_array($method, array('https', 'http11', 'h2c', 'h2'))));
 
+        // BC - we go through sendPayloadCURL/sendPayloadSocket in case some subclass reimplemented those
         if ($useCurl) {
             $r = $this->sendPayloadCURL(
                 $req,
@@ -1045,113 +1045,29 @@ class Client
     }
 
     /**
-     * @deprecated
-     *
      * @param Request $req
-     * @param string $server
-     * @param int $port
-     * @param int $timeout
-     * @param string $username
-     * @param string $password
-     * @param int $authType
-     * @param string $proxyHost
-     * @param int $proxyPort
-     * @param string $proxyUsername
-     * @param string $proxyPassword
-     * @param int $proxyAuthType
      * @param string $method
-     * @return Response
-     */
-    protected function sendPayloadHTTP10($req, $server, $port, $timeout = 0, $username = '', $password = '',
-        $authType = 1, $proxyHost = '', $proxyPort = 0, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1,
-        $method='http')
-    {
-        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
-
-        return $this->sendPayloadSocket($req, $server, $port, $timeout, $username, $password, $authType, null, null,
-            null, null, $proxyHost, $proxyPort, $proxyUsername, $proxyPassword, $proxyAuthType, $method);
-    }
-
-    /**
-     * @deprecated
-     *
-     * @param Request $req
      * @param string $server
      * @param int $port
-     * @param int $timeout
-     * @param string $username
-     * @param string $password
-     * @param int $authType
-     * @param string $cert
-     * @param string $certPass
-     * @param string $caCert
-     * @param string $caCertDir
-     * @param string $proxyHost
-     * @param int $proxyPort
-     * @param string $proxyUsername
-     * @param string $proxyPassword
-     * @param int $proxyAuthType
-     * @param bool $keepAlive
-     * @param string $key
-     * @param string $keyPass
-     * @param int $sslVersion
+     * @param string $path
+     * @param array $opts
      * @return Response
      */
-    protected function sendPayloadHTTPS($req, $server, $port, $timeout = 0, $username = '',  $password = '',
-        $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
-        $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $keepAlive = false, $key = '', $keyPass = '',
-        $sslVersion = 0)
-    {
-        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
-
-        return $this->sendPayloadCURL($req, $server, $port, $timeout, $username,
-            $password, $authType, $cert, $certPass, $caCert, $caCertDir, $proxyHost, $proxyPort,
-            $proxyUsername, $proxyPassword, $proxyAuthType, 'https', $keepAlive, $key, $keyPass, $sslVersion);
-    }
-
-    /**
-     * @param Request $req
-     * @param string $server
-     * @param int $port
-     * @param int $timeout
-     * @param string $username
-     * @param string $password
-     * @param int $authType only value supported is 1
-     * @param string $cert
-     * @param string $certPass
-     * @param string $caCert
-     * @param string $caCertDir
-     * @param string $proxyHost
-     * @param int $proxyPort
-     * @param string $proxyUsername
-     * @param string $proxyPassword
-     * @param int $proxyAuthType only value supported is 1
-     * @param string $method 'http' (synonym for 'http10'), 'http10' or 'https'
-     * @param string $key
-     * @param string $keyPass @todo not implemented yet.
-     * @param int $sslVersion @todo not implemented yet. See http://php.net/manual/en/migration56.openssl.php
-     * @return Response
-     *
-     * @todo refactor: we get many options for the call passed in, but some we use from $this. We should clean that up
-     */
-    protected function sendPayloadSocket($req, $server, $port, $timeout = 0, $username = '', $password = '',
-        $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
-        $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method='http', $key = '', $keyPass = '',
-        $sslVersion = 0)
+    protected function sendViaSocket($req, $method, $server, $port, $path, $opts)
     {
         /// @todo log a warning if passed an unsupported method
 
         // Only create the payload if it was not created previously
         /// @todo what if the request's payload was created with a different encoding?
         if (empty($req->payload)) {
-            $req->serialize($this->request_charset_encoding);
+            $req->serialize($opts['request_charset_encoding']);
         }
         $payload = $req->payload;
 
         // Deflate request body and set appropriate request headers
         $encodingHdr = '';
-        if (function_exists('gzdeflate') && ($this->request_compression == 'gzip' || $this->request_compression == 'deflate')) {
-            if ($this->request_compression == 'gzip') {
+        if (function_exists('gzdeflate') && ($opts['request_compression'] == 'gzip' || $opts['request_compression'] == 'deflate')) {
+            if ($opts['request_compression'] == 'gzip') {
                 $a = @gzencode($payload);
                 if ($a) {
                     $payload = $a;
@@ -1168,17 +1084,17 @@ class Client
 
         // thanks to Grant Rauscher <grant7@firstworld.net> for this
         $credentials = '';
-        if ($username != '') {
-            $credentials = 'Authorization: Basic ' . base64_encode($username . ':' . $password) . "\r\n";
-            if ($authType != 1) {
+        if ($opts['username'] != '') {
+            $credentials = 'Authorization: Basic ' . base64_encode($opts['username'] . ':' . $opts['password']) . "\r\n";
+            if ($opts['authtype'] != 1) {
                 /// @todo make this a proper error, i.e. return a failure
                 $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported with HTTP 1.0');
             }
         }
 
         $acceptedEncoding = '';
-        if (is_array($this->accepted_compression) && count($this->accepted_compression)) {
-            $acceptedEncoding = 'Accept-Encoding: ' . implode(', ', $this->accepted_compression) . "\r\n";
+        if (is_array($opts['accepted_compression']) && count($opts['accepted_compression'])) {
+            $acceptedEncoding = 'Accept-Encoding: ' . implode(', ', $opts['accepted_compression']) . "\r\n";
         }
 
         if ($port == 0) {
@@ -1186,35 +1102,36 @@ class Client
         }
 
         $proxyCredentials = '';
-        if ($proxyHost) {
-            if ($proxyPort == 0) {
-                $proxyPort = 8080;
+        if ($opts['proxy']) {
+            if ($opts['proxyport'] == 0) {
+                $opts['proxyport'] = 8080;
             }
-            $connectServer = $proxyHost;
-            $connectPort = $proxyPort;
+            $connectServer = $opts['proxy'];
+            $connectPort = $opts['proxyport'];
             $transport = 'tcp';
             /// @todo check: should we not use https in some cases?
-            $uri = 'http://' . $server . ':' . $port . $this->path;
-            if ($proxyUsername != '') {
-                if ($proxyAuthType != 1) {
+            $uri = 'http://' . $server . ':' . $port . $path;
+            if ($opts['proxy_user'] != '') {
+                if ($opts['proxy_authtype'] != 1) {
                     /// @todo make this a proper error, i.e. return a failure
                     $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported with HTTP 1.0');
                 }
-                $proxyCredentials = 'Proxy-Authorization: Basic ' . base64_encode($proxyUsername . ':' . $proxyPassword) . "\r\n";
+                $proxyCredentials = 'Proxy-Authorization: Basic ' . base64_encode($opts['proxy_user'] . ':' .
+                    $opts['proxy_pass']) . "\r\n";
             }
         } else {
             $connectServer = $server;
             $connectPort = $port;
             $transport = ($method === 'https') ? 'tls' : 'tcp';
-            $uri = $this->path;
+            $uri = $path;
         }
 
         // Cookie generation, as per RFC6265
         // NB: the following code does not honour 'expires', 'path' and 'domain' cookie attributes set to client obj by the user...
         $cookieHeader = '';
-        if (count($this->cookies)) {
+        if (count($opts['cookies'])) {
             $version = '';
-            foreach ($this->cookies as $name => $cookie) {
+            foreach ($opts['cookies'] as $name => $cookie) {
                 /// @todo should we sanitize the cookie value on behalf of the user? See setCookie comments
                 $cookieHeader .= ' ' . $name . '=' . $cookie['value'] . ";";
             }
@@ -1223,55 +1140,55 @@ class Client
 
         // omit port if default
         if (($port == 80 && in_array($method, array('http', 'http10'))) || ($port == 443 && $method == 'https')) {
-            $port =  '';
+            $port = '';
         } else {
             $port = ':' . $port;
         }
 
         $op = 'POST ' . $uri . " HTTP/1.0\r\n" .
-            'User-Agent: ' . $this->user_agent . "\r\n" .
+            'User-Agent: ' . $opts['user_agent'] . "\r\n" .
             'Host: ' . $server . $port . "\r\n" .
             $credentials .
             $proxyCredentials .
             $acceptedEncoding .
             $encodingHdr .
-            'Accept-Charset: ' . implode(',', $this->accepted_charset_encodings) . "\r\n" .
+            'Accept-Charset: ' . implode(',', $opts['accepted_charset_encodings']) . "\r\n" .
             $cookieHeader .
             'Content-Type: ' . $req->content_type . "\r\nContent-Length: " .
             strlen($payload) . "\r\n\r\n" .
             $payload;
 
-        if ($this->debug > 1) {
+        if ($opts['debug'] > 1) {
             $this->getLogger()->debug("---SENDING---\n$op\n---END---");
         }
 
         $contextOptions = array();
         if ($method == 'https') {
-            if ($cert != '') {
-                $contextOptions['ssl']['local_cert'] = $cert;
-                if ($certPass != '') {
-                    $contextOptions['ssl']['passphrase'] = $certPass;
+            if ($opts['cert'] != '') {
+                $contextOptions['ssl']['local_cert'] = $opts['cert'];
+                if ($opts['certpass'] != '') {
+                    $contextOptions['ssl']['passphrase'] = $opts['certpass'];
                 }
             }
-            if ($caCert != '') {
-                $contextOptions['ssl']['cafile'] = $caCert;
+            if ($opts['cacert'] != '') {
+                $contextOptions['ssl']['cafile'] = $opts['cacert'];
             }
-            if ($caCertDir != '') {
-                $contextOptions['ssl']['capath'] = $caCertDir;
+            if ($opts['cacertdir'] != '') {
+                $contextOptions['ssl']['capath'] = $opts['cacertdir'];
             }
-            if ($key != '') {
-                $contextOptions['ssl']['local_pk'] = $key;
+            if ($opts['key'] != '') {
+                $contextOptions['ssl']['local_pk'] = $opts['key'];
             }
-            $contextOptions['ssl']['verify_peer'] = $this->verifypeer;
-            $contextOptions['ssl']['verify_peer_name'] = $this->verifypeer;
+            $contextOptions['ssl']['verify_peer'] = $opts['verifypeer'];
+            $contextOptions['ssl']['verify_peer_name'] = $opts['verifypeer'];
         }
 
         $context = stream_context_create($contextOptions);
 
-        if ($timeout <= 0) {
+        if ($opts['timeout'] <= 0) {
             $connectTimeout = ini_get('default_socket_timeout');
         } else {
-            $connectTimeout = $timeout;
+            $connectTimeout = $opts['timeout'];
         }
 
         $this->errno = 0;
@@ -1280,8 +1197,8 @@ class Client
         $fp = @stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $connectTimeout,
             STREAM_CLIENT_CONNECT, $context);
         if ($fp) {
-            if ($timeout > 0) {
-                stream_set_timeout($fp, $timeout, 0);
+            if ($opts['timeout'] > 0) {
+                stream_set_timeout($fp, $opts['timeout'], 0);
             }
         } else {
             if ($this->errstr == '') {
@@ -1298,9 +1215,7 @@ class Client
         if (!fputs($fp, $op, strlen($op))) {
             fclose($fp);
             $this->errstr = 'Write error';
-            $r = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
-
-            return $r;
+            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
         }
 
         // Close socket before parsing.
@@ -1313,9 +1228,7 @@ class Client
         } while (!feof($fp));
         fclose($fp);
 
-        $r = $req->parseResponse($ipd, false, $this->return_type);
-
-        return $r;
+        return $req->parseResponse($ipd, false, $opts['return_type']);
     }
 
     /**
@@ -1324,34 +1237,16 @@ class Client
      * NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!
      *
      * @param Request $req
+     * @param string $method
      * @param string $server
      * @param int $port
-     * @param int $timeout
-     * @param string $username
-     * @param string $password
-     * @param int $authType
-     * @param string $cert
-     * @param string $certPass
-     * @param string $caCert
-     * @param string $caCertDir
-     * @param string $proxyHost
-     * @param int $proxyPort
-     * @param string $proxyUsername
-     * @param string $proxyPassword
-     * @param int $proxyAuthType
-     * @param string $method 'http' (let curl decide), 'http10', 'http11', 'https', 'h2c' or 'h2'
-     * @param bool $keepAlive
-     * @param string $key
-     * @param string $keyPass
-     * @param int $sslVersion
+     * @param string $path
+     * @param array $opts the keys/values match self::getOptions
      * @return Response
      *
-     * @todo refactor: we get many options for the call passed in, but some we use from $this. We should clean that up
+     * @todo the $path arg atm is ignored. What to do if it is != $this->path?
      */
-    protected function sendPayloadCURL($req, $server, $port, $timeout = 0, $username = '', $password = '',
-        $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
-        $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'https', $keepAlive = false, $key = '',
-        $keyPass = '', $sslVersion = 0)
+    protected function sendViaCURL($req, $method, $server, $port, $path, $opts)
     {
         if (!function_exists('curl_init')) {
             $this->errstr = 'CURL unavailable on this install';
@@ -1372,18 +1267,20 @@ class Client
             return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['no_http2'], PhpXmlRpc::$xmlrpcstr['no_http2']);
         }
 
-        $curl = $this->prepareCurlHandle($req, $server, $port, $timeout, $username, $password,
-            $authType, $cert, $certPass, $caCert, $caCertDir, $proxyHost, $proxyPort,
-            $proxyUsername, $proxyPassword, $proxyAuthType, $method, $keepAlive, $key,
-            $keyPass, $sslVersion);
+        // BC - we go through prepareCurlHandle in case some subclass reimplemented it
+        $curl = $this->prepareCurlHandle($req, $server, $port, $opts['timeout'], $opts['username'], $opts['password'],
+            $opts['authtype'], $opts['cert'], $opts['certpass'], $opts['cacert'], $opts['cacertdir'], $opts['proxy'],
+            $opts['proxyport'], $opts['proxy_user'], $opts['proxy_pass'], $opts['proxy_authtype'], $method,
+            $opts['keepalive'], $opts['key'], $opts['keypass'], $opts['sslversion']);
 
         if (!$curl) {
-            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': error during curl initialization. Check php error log for details');
+            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] .
+                ': error during curl initialization. Check php error log for details');
         }
 
         $result = curl_exec($curl);
 
-        if ($this->debug > 1) {
+        if ($opts['debug'] > 1) {
             $message = "---CURL INFO---\n";
             foreach (curl_getinfo($curl) as $name => $val) {
                 if (is_array($val)) {
@@ -1399,17 +1296,18 @@ class Client
             /// @todo we should use a better check here - what if we get back '' or '0'?
 
             $this->errstr = 'no response';
-            $resp = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': ' . curl_error($curl));
+            $resp = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] .
+                ': ' . curl_error($curl));
             curl_close($curl);
-            if ($keepAlive) {
+            if ($opts['keepalive']) {
                 $this->xmlrpc_curl_handle = null;
             }
         } else {
-            if (!$keepAlive) {
+            if (!$opts['keepalive']) {
                 curl_close($curl);
             }
-            $resp = $req->parseResponse($result, true, $this->return_type);
-            if ($keepAlive) {
+            $resp = $req->parseResponse($result, true, $opts['return_type']);
+            if ($opts['keepalive']) {
                 /// @todo if we got back a 302 or 308, we should not reuse the curl handle for later calls
                 if ($resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error']) {
                     curl_close($curl);
@@ -1422,35 +1320,15 @@ class Client
     }
 
     /**
-     * @param $req
-     * @param $server
-     * @param $port
-     * @param $timeout
-     * @param $username
-     * @param $password
-     * @param $authType
-     * @param $cert
-     * @param $certPass
-     * @param $caCert
-     * @param $caCertDir
-     * @param $proxyHost
-     * @param $proxyPort
-     * @param $proxyUsername
-     * @param $proxyPassword
-     * @param $proxyAuthType
-     * @param $method
-     * @param $keepAlive
-     * @param $key
-     * @param $keyPass
-     * @param $sslVersion
-     * @return false|\CurlHandle|resource
-     *
-     * @todo refactor: we get many options for the call passed in, but some we use from $this. We should clean that up
+     * @param Request $req
+     * @param string $method
+     * @param string $server
+     * @param int $port
+     * @param string $path
+     * @param array $opts the keys/values match self::getOptions
+     * @return \CurlHandle|resource|false
      */
-    protected function prepareCurlHandle($req, $server, $port, $timeout = 0, $username = '', $password = '',
-         $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
-         $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'https', $keepAlive = false, $key = '',
-         $keyPass = '', $sslVersion = 0)
+    protected function createCurlHandle($req, $method, $server, $port, $path, $opts)
     {
         if ($port == 0) {
             if (in_array($method, array('http', 'http10', 'http11', 'h2c'))) {
@@ -1462,15 +1340,15 @@ class Client
 
         // Only create the payload if it was not created previously
         if (empty($req->payload)) {
-            $req->serialize($this->request_charset_encoding);
+            $req->serialize($opts['request_charset_encoding']);
         }
 
         // Deflate request body and set appropriate request headers
         $payload = $req->payload;
         $encodingHdr = '';
         /// @todo test for existence of proper function, in case of polyfills
-        if (function_exists('gzdeflate') && ($this->request_compression == 'gzip' || $this->request_compression == 'deflate')) {
-            if ($this->request_compression == 'gzip') {
+        if (function_exists('gzdeflate') && ($opts['request_compression'] == 'gzip' || $opts['request_compression'] == 'deflate')) {
+            if ($opts['request_compression'] == 'gzip') {
                 $a = @gzencode($payload);
                 if ($a) {
                     $payload = $a;
@@ -1485,7 +1363,7 @@ class Client
             }
         }
 
-        if (!$keepAlive || !$this->xmlrpc_curl_handle) {
+        if (!$opts['keepalive'] || !$this->xmlrpc_curl_handle) {
             if ($method == 'http11' || $method == 'http10' || $method == 'h2c') {
                 $protocol = 'http';
             } else {
@@ -1500,11 +1378,11 @@ class Client
                     }
                 }
             }
-            $curl = curl_init($protocol . '://' . $server . ':' . $port . $this->path);
+            $curl = curl_init($protocol . '://' . $server . ':' . $port . $path);
             if (!$curl) {
                 return false;
             }
-            if ($keepAlive) {
+            if ($opts['keepalive']) {
                 $this->xmlrpc_curl_handle = $curl;
             }
         } else {
@@ -1514,11 +1392,11 @@ class Client
         // results into variable
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-        if ($this->debug > 1) {
+        if ($opts['debug'] > 1) {
             curl_setopt($curl, CURLOPT_VERBOSE, true);
             /// @todo redirect curlopt_stderr to some stream which can be piped to the logger
         }
-        curl_setopt($curl, CURLOPT_USERAGENT, $this->user_agent);
+        curl_setopt($curl, CURLOPT_USERAGENT, $opts['user_agent']);
         // required for XMLRPC: post the data
         curl_setopt($curl, CURLOPT_POST, 1);
         // the data
@@ -1529,19 +1407,19 @@ class Client
 
         // NB: if we set an empty string, CURL will add http header indicating
         // ALL methods it is supporting. This is possibly a better option than letting the user tell what curl can / cannot do...
-        if (is_array($this->accepted_compression) && count($this->accepted_compression)) {
-            //curl_setopt($curl, CURLOPT_ENCODING, implode(',', $this->accepted_compression));
+        if (is_array($opts['accepted_compression']) && count($opts['accepted_compression'])) {
+            //curl_setopt($curl, CURLOPT_ENCODING, implode(',', $opts['accepted_compression']));
             // empty string means 'any supported by CURL' (shall we catch errors in case CURLOPT_SSLKEY undefined ?)
-            if (count($this->accepted_compression) == 1) {
-                curl_setopt($curl, CURLOPT_ENCODING, $this->accepted_compression[0]);
+            if (count($opts['accepted_compression']) == 1) {
+                curl_setopt($curl, CURLOPT_ENCODING, $opts['accepted_compression'][0]);
             } else {
                 curl_setopt($curl, CURLOPT_ENCODING, '');
             }
         }
         // extra headers
-        $headers = array('Content-Type: ' . $req->content_type, 'Accept-Charset: ' . implode(',', $this->accepted_charset_encodings));
+        $headers = array('Content-Type: ' . $req->content_type, 'Accept-Charset: ' . implode(',', $opts['accepted_charset_encodings']));
         // if no keepalive is wanted, let the server know it in advance
-        if (!$keepAlive) {
+        if (!$opts['keepalive']) {
             $headers[] = 'Connection: close';
         }
         // request compression header
@@ -1555,8 +1433,8 @@ class Client
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         // timeout is borked
-        if ($timeout) {
-            curl_setopt($curl, CURLOPT_TIMEOUT, $timeout == 1 ? 1 : $timeout - 1);
+        if ($opts['timeout']) {
+            curl_setopt($curl, CURLOPT_TIMEOUT, $opts['timeout'] == 1 ? 1 : $opts['timeout'] - 1);
         }
 
         switch ($method) {
@@ -1579,11 +1457,11 @@ class Client
                 break;
         }
 
-        if ($username && $password) {
-            curl_setopt($curl, CURLOPT_USERPWD, $username . ':' . $password);
+        if ($opts['username'] && $opts['password']) {
+            curl_setopt($curl, CURLOPT_USERPWD, $opts['username'] . ':' . $opts['password']);
             if (defined('CURLOPT_HTTPAUTH')) {
-                curl_setopt($curl, CURLOPT_HTTPAUTH, $authType);
-            } elseif ($authType != 1) {
+                curl_setopt($curl, CURLOPT_HTTPAUTH, $opts['authtype']);
+            } elseif ($opts['authtype'] != 1) {
                 /// @todo make this a proper error, i.e. return a failure
                 $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported by the current PHP/curl install');
             }
@@ -1592,48 +1470,48 @@ class Client
         // note: h2c is http2 without the https. No need to have it in this IF
         if ($method == 'https' || $method == 'h2') {
             // set cert file
-            if ($cert) {
-                curl_setopt($curl, CURLOPT_SSLCERT, $cert);
+            if ($opts['cert']) {
+                curl_setopt($curl, CURLOPT_SSLCERT, $opts['cert']);
             }
             // set cert password
-            if ($certPass) {
-                curl_setopt($curl, CURLOPT_SSLCERTPASSWD, $certPass);
+            if ($opts['certpass']) {
+                curl_setopt($curl, CURLOPT_SSLCERTPASSWD, $opts['certpass']);
             }
             // whether to verify remote host's cert
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->verifypeer);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $opts['verifypeer']);
             // set ca certificates file/dir
-            if ($caCert) {
-                curl_setopt($curl, CURLOPT_CAINFO, $caCert);
+            if ($opts['cacert']) {
+                curl_setopt($curl, CURLOPT_CAINFO, $opts['cacert']);
             }
-            if ($caCertDir) {
-                curl_setopt($curl, CURLOPT_CAPATH, $caCertDir);
+            if ($opts['cacertdir']) {
+                curl_setopt($curl, CURLOPT_CAPATH, $opts['cacertdir']);
             }
             // set key file (shall we catch errors in case CURLOPT_SSLKEY undefined ?)
-            if ($key) {
-                curl_setopt($curl, CURLOPT_SSLKEY, $key);
+            if ($opts['key']) {
+                curl_setopt($curl, CURLOPT_SSLKEY, $opts['key']);
             }
             // set key password (shall we catch errors in case CURLOPT_SSLKEY undefined ?)
-            if ($keyPass) {
-                curl_setopt($curl, CURLOPT_SSLKEYPASSWD, $keyPass);
+            if ($opts['keypass']) {
+                curl_setopt($curl, CURLOPT_SSLKEYPASSWD, $opts['keypass']);
             }
             // whether to verify cert's common name (CN); 0 for no, 1 to verify that it exists, and 2 to verify that
             // it matches the hostname used
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->verifyhost);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $opts['verifyhost']);
             // allow usage of different SSL versions
-            curl_setopt($curl, CURLOPT_SSLVERSION, $sslVersion);
+            curl_setopt($curl, CURLOPT_SSLVERSION, $opts['sslversion']);
         }
 
         // proxy info
-        if ($proxyHost) {
-            if ($proxyPort == 0) {
-                $proxyPort = 8080; // NB: even for HTTPS, local connection is on port 8080
+        if ($opts['proxy']) {
+            if ($opts['proxyport'] == 0) {
+                $opts['proxyport'] = 8080; // NB: even for HTTPS, local connection is on port 8080
             }
-            curl_setopt($curl, CURLOPT_PROXY, $proxyHost . ':' . $proxyPort);
-            if ($proxyUsername) {
-                curl_setopt($curl, CURLOPT_PROXYUSERPWD, $proxyUsername . ':' . $proxyPassword);
+            curl_setopt($curl, CURLOPT_PROXY, $opts['proxy'] . ':' . $opts['proxyport']);
+            if ($opts['proxy_user']) {
+                curl_setopt($curl, CURLOPT_PROXYUSERPWD, $opts['proxy_user'] . ':' . $opts['proxy_pass']);
                 if (defined('CURLOPT_PROXYAUTH')) {
-                    curl_setopt($curl, CURLOPT_PROXYAUTH, $proxyAuthType);
-                } elseif ($proxyAuthType != 1) {
+                    curl_setopt($curl, CURLOPT_PROXYAUTH, $opts['proxy_authtype']);
+                } elseif ($opts['proxy_authtype'] != 1) {
                     /// @todo make this a proper error, i.e. return a failure
                     $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported by the current PHP/curl install');
                 }
@@ -1642,19 +1520,19 @@ class Client
 
         // NB: should we build cookie http headers by hand rather than let CURL do it?
         // NB: the following code does not honour 'expires', 'path' and 'domain' cookie attributes set to client obj by the user...
-        if (count($this->cookies)) {
+        if (count($opts['cookies'])) {
             $cookieHeader = '';
-            foreach ($this->cookies as $name => $cookie) {
+            foreach ($opts['cookies'] as $name => $cookie) {
                 $cookieHeader .= $name . '=' . $cookie['value'] . '; ';
             }
             curl_setopt($curl, CURLOPT_COOKIE, substr($cookieHeader, 0, -2));
         }
 
-        foreach ($this->extracurlopts as $opt => $val) {
+        foreach ($opts['extracurlopts'] as $opt => $val) {
             curl_setopt($curl, $opt, $val);
         }
 
-        if ($this->debug > 1) {
+        if ($opts['debug'] > 1) {
             $this->getLogger()->debug("---SENDING---\n$payload\n---END---");
         }
 
@@ -1884,5 +1762,267 @@ class Client
         }
 
         return $response;
+    }
+
+    // BC layer
+
+
+    /**
+     * @param Request $req
+     * @param string $server
+     * @param int $port
+     * @param int $timeout
+     * @param string $username
+     * @param string $password
+     * @param int $authType
+     * @param string $proxyHost
+     * @param int $proxyPort
+     * @param string $proxyUsername
+     * @param string $proxyPassword
+     * @param int $proxyAuthType
+     * @param string $method
+     * @return Response
+     * @deprecated
+     *
+     */
+    protected function sendPayloadHTTP10($req, $server, $port, $timeout = 0, $username = '', $password = '',
+        $authType = 1, $proxyHost = '', $proxyPort = 0, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1,
+        $method = 'http')
+    {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        return $this->sendPayloadSocket($req, $server, $port, $timeout, $username, $password, $authType, null, null,
+            null, null, $proxyHost, $proxyPort, $proxyUsername, $proxyPassword, $proxyAuthType, $method);
+    }
+
+    /**
+     * @param Request $req
+     * @param string $server
+     * @param int $port
+     * @param int $timeout
+     * @param string $username
+     * @param string $password
+     * @param int $authType
+     * @param string $cert
+     * @param string $certPass
+     * @param string $caCert
+     * @param string $caCertDir
+     * @param string $proxyHost
+     * @param int $proxyPort
+     * @param string $proxyUsername
+     * @param string $proxyPassword
+     * @param int $proxyAuthType
+     * @param bool $keepAlive
+     * @param string $key
+     * @param string $keyPass
+     * @param int $sslVersion
+     * @return Response
+     * @deprecated
+     *
+     */
+    protected function sendPayloadHTTPS($req, $server, $port, $timeout = 0, $username = '', $password = '',
+        $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
+        $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $keepAlive = false, $key = '', $keyPass = '',
+        $sslVersion = 0)
+    {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        return $this->sendPayloadCURL($req, $server, $port, $timeout, $username,
+            $password, $authType, $cert, $certPass, $caCert, $caCertDir, $proxyHost, $proxyPort,
+            $proxyUsername, $proxyPassword, $proxyAuthType, 'https', $keepAlive, $key, $keyPass, $sslVersion);
+    }
+
+    /**
+     * @deprecated
+     *
+     * @param Request $req
+     * @param string $server
+     * @param int $port
+     * @param int $timeout
+     * @param string $username
+     * @param string $password
+     * @param int $authType only value supported is 1
+     * @param string $cert
+     * @param string $certPass
+     * @param string $caCert
+     * @param string $caCertDir
+     * @param string $proxyHost
+     * @param int $proxyPort
+     * @param string $proxyUsername
+     * @param string $proxyPassword
+     * @param int $proxyAuthType only value supported is 1
+     * @param string $method 'http' (synonym for 'http10'), 'http10' or 'https'
+     * @param string $key
+     * @param string $keyPass @todo not implemented yet.
+     * @param int $sslVersion @todo not implemented yet. See http://php.net/manual/en/migration56.openssl.php
+     * @return Response
+     */
+    protected function sendPayloadSocket($req, $server, $port, $timeout = 0, $username = '', $password = '',
+        $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
+        $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'http', $key = '', $keyPass = '',
+        $sslVersion = 0)
+    {
+        return $this->sendViaSocket($req, $method, $server, $port, $this->path, array(
+            'accepted_charset_encodings' => $this->accepted_charset_encodings,
+            'accepted_compression' => $this->accepted_compression,
+            'authtype' => $authType,
+            'cacert' => $caCert,
+            'cacertdir' => $caCertDir,
+            'cert' => $cert,
+            'certpass' => $certPass,
+            'cookies' => $this->cookies,
+            'debug' => $this->debug,
+            'extracurlopts' => $this->extracurlopts,
+            'keepalive' => $this->keepalive,
+            'key' => $key,
+            'keypass' => $keyPass,
+            'no_multicall' => $this->no_multicall,
+            'password' => $password,
+            'proxy' => $proxyHost,
+            'proxy_authtype' => $proxyAuthType,
+            'proxy_pass' => $proxyPassword,
+            'proxyport' => $proxyPort,
+            'proxy_user' => $proxyUsername,
+            'request_charset_encoding' => $this->request_charset_encoding,
+            'request_compression' => $this->request_compression,
+            'return_type' => $this->return_type,
+            'sslversion' => $sslVersion,
+            'timeout' => $timeout,
+            'username' => $username,
+            'user_agent' => $this->user_agent,
+            'use_curl' => $this->use_curl,
+            'verifyhost' => $this->verifyhost,
+            'verifypeer' => $this->verifypeer,
+        ));
+    }
+
+    /**
+     * @param Request $req
+     * @param string $server
+     * @param int $port
+     * @param int $timeout
+     * @param string $username
+     * @param string $password
+     * @param int $authType
+     * @param string $cert
+     * @param string $certPass
+     * @param string $caCert
+     * @param string $caCertDir
+     * @param string $proxyHost
+     * @param int $proxyPort
+     * @param string $proxyUsername
+     * @param string $proxyPassword
+     * @param int $proxyAuthType
+     * @param string $method 'http' (let curl decide), 'http10', 'http11', 'https', 'h2c' or 'h2'
+     * @param bool $keepAlive
+     * @param string $key
+     * @param string $keyPass
+     * @param int $sslVersion
+     * @return Response
+     * @deprecated
+     *
+     */
+    protected function sendPayloadCURL($req, $server, $port, $timeout = 0, $username = '', $password = '',
+        $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
+        $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'https', $keepAlive = false, $key = '',
+        $keyPass = '', $sslVersion = 0)
+    {
+        return $this->sendViaCURL($req, $method, $server, $port, $this->path, array(
+            'accepted_charset_encodings' => $this->accepted_charset_encodings,
+            'accepted_compression' => $this->accepted_compression,
+            'authtype' => $authType,
+            'cacert' => $caCert,
+            'cacertdir' => $caCertDir,
+            'cert' => $cert,
+            'certpass' => $certPass,
+            'cookies' => $this->cookies,
+            'debug' => $this->debug,
+            'extracurlopts' => $this->extracurlopts,
+            'keepalive' => $keepAlive,
+            'key' => $key,
+            'keypass' => $keyPass,
+            'no_multicall' => $this->no_multicall,
+            'password' => $password,
+            'proxy' => $proxyHost,
+            'proxy_authtype' => $proxyAuthType,
+            'proxy_pass' => $proxyPassword,
+            'proxyport' => $proxyPort,
+            'proxy_user' => $proxyUsername,
+            'request_charset_encoding' => $this->request_charset_encoding,
+            'request_compression' => $this->request_compression,
+            'return_type' => $this->return_type,
+            'sslversion' => $sslVersion,
+            'timeout' => $timeout,
+            'username' => $username,
+            'user_agent' => $this->user_agent,
+            'use_curl' => $this->use_curl,
+            'verifyhost' => $this->verifyhost,
+            'verifypeer' => $this->verifypeer,
+        ));
+    }
+
+    /**
+     * @deprecated
+     *
+     * @param $req
+     * @param $server
+     * @param $port
+     * @param $timeout
+     * @param $username
+     * @param $password
+     * @param $authType
+     * @param $cert
+     * @param $certPass
+     * @param $caCert
+     * @param $caCertDir
+     * @param $proxyHost
+     * @param $proxyPort
+     * @param $proxyUsername
+     * @param $proxyPassword
+     * @param $proxyAuthType
+     * @param $method
+     * @param $keepAlive
+     * @param $key
+     * @param $keyPass
+     * @param $sslVersion
+     * @return false|\CurlHandle|resource
+     */
+    protected function prepareCurlHandle($req, $server, $port, $timeout = 0, $username = '', $password = '',
+         $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
+         $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'https', $keepAlive = false, $key = '',
+         $keyPass = '', $sslVersion = 0)
+    {
+        return $this->createCurlHandle($req, $method, $server, $port, $this->path, array(
+            'accepted_charset_encodings' => $this->accepted_charset_encodings,
+            'accepted_compression' => $this->accepted_compression,
+            'authtype' => $authType,
+            'cacert' => $caCert,
+            'cacertdir' => $caCertDir,
+            'cert' => $cert,
+            'certpass' => $certPass,
+            'cookies' => $this->cookies,
+            'debug' => $this->debug,
+            'extracurlopts' => $this->extracurlopts,
+            'keepalive' => $keepAlive,
+            'key' => $key,
+            'keypass' => $keyPass,
+            'no_multicall' => $this->no_multicall,
+            'password' => $password,
+            'proxy' => $proxyHost,
+            'proxy_authtype' => $proxyAuthType,
+            'proxy_pass' => $proxyPassword,
+            'proxyport' => $proxyPort,
+            'proxy_user' => $proxyUsername,
+            'request_charset_encoding' => $this->request_charset_encoding,
+            'request_compression' => $this->request_compression,
+            'return_type' => $this->return_type,
+            'sslversion' => $sslVersion,
+            'timeout' => $timeout,
+            'username' => $username,
+            'user_agent' => $this->user_agent,
+            'use_curl' => $this->use_curl,
+            'verifyhost' => $this->verifyhost,
+            'verifypeer' => $this->verifypeer,
+        ));
     }
 }
