@@ -15,3 +15,5 @@ services:
     App\Controller\ClientController:
         arguments:
             $client: '@App\Service\XmlRpcClient'
+            # in case you want to use a dedicated log file for all xml-rpc related stuff
+            #$logger: '@monolog.logger.xmlrpc'

@@ -2,7 +2,7 @@ parameters:
     xml_rpc_server_options: []
 
 services:
-    # explicitly configure the services
+    # explicitly configure the services where autowiring is impossible
 
     App\Service\CommentManager:
         class: CommentManager
@@ -29,3 +29,5 @@ services:
     App\Controller\ServerController:
         arguments:
             $server: '@App\Service\XmlRpcServer'
+            # in case you want to use a dedicated log file for all xml-rpc related stuff
+            #$logger: '@monolog.logger.xmlrpc'
