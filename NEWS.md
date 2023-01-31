@@ -1,6 +1,6 @@
 ## XML-RPC for PHP version 4.xx - unreleased
 
-* changed: the minimum php version required has increased to 5.4
+* changed: the minimum php version required has been increased to 5.4
 
 * changed: dropped support for parsing cookie headers which follow the obsolete "version 2" specification
 
@@ -22,10 +22,10 @@
   In order to enable this, you should set `PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = true`.
 
   NB: since the xml-rpc spec mandates that no Timezone is used on the wire for dateTime values, the DateTime objects
-  created by the library will be set to the default php timzeone, set using the 'date.timezone' ini setting.
+  created by the library will be set to the default php timezone, set using the 'date.timezone' ini setting.
 
-  NB: if the received strings are not parseable as dates, NULL will be returned instead of an object (but that can
-  be avoided by setting `PhpXmlRpc\PhpXmlRpc::$xmlrpc_reject_invalid_values = true`, see below).
+  NB: if the received strings are not parseable as dates, NULL will be returned instead of an object, but that can
+  be avoided by setting `PhpXmlRpc\PhpXmlRpc::$xmlrpc_reject_invalid_values = true`, see below.
 
 * improved: be more strict in the `Response` constructor and in `Request::addParam`: both of those will now generate
   an error message in the log if passed unexpected values
@@ -54,7 +54,7 @@
   a method handler in the dispatch was defined with `'parameters_type' = 'phpvals'`, the handler would be passed a
   Request object instead of plain php values.
 
-* fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, we would be always falling back to
+* fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, the code would be always falling back to
   non-multicall requests
 
 * fixed: receiving integers which use the '<EX:I8>' xml tag
@@ -62,23 +62,29 @@
 * fixed: setting/retrieving the php value from a Value object using array notation would fail if the object was created
   using `i4` then accessed using `int`, eg: `$v = new Value(1, 'i4'); $v[$v->scalrtyp()] = 2;`
 
-* fixed: setting values to deprecated Response property `cookies` would trigger a PHP notice (introduced in 4.6.0), ex:
-  `$response->_cookies['name'] = ['value' => 'something'];`
+* fixed: setting values to deprecated Response property `cookies` would trigger a PHP notice, ex:
+  `$response->_cookies['name'] = ['value' => 'something'];` (introduced in 4.6.0)
 
 * new: method `PhpXmlRpc::useInteropFaults()` can be used to make the library change the error codes it generates to
   match the spec described at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
-
-* new: added methods `getOption`, `setOption`, `setOptions` and `getOptions` to both Client and Server, meant to replace
-  direct access to _all public properties_ as well as the `$timeout` argument in calls to `Client::send` and `Client::multicall`
 
 * new: method `Client::getUrl()`
 
 * new: method `Server::setDispatchMap()`
 
+* new: added methods `getOption`, `setOption`, `setOptions` and `getOptions` to both Client and Server, meant to replace
+  direct access to _all public properties_ as well as the `$timeout` argument in calls to `Client::send` and `Client::multicall`
+
+* new: it is now possible to make the library generate warning messages whenever a deprecated feature is used, such as
+  calling deprecated methods, using deprecated method parameters, or reading/writing deprecated object properties.
+  This is disabled by default, and can be enabled by setting `PhpXmlRpc\PhpXmlRpc::xmlrpc_silence_deprecations = false`.
+  Note that the deprecation warnings will be by default added to the php error log, and not be displayed on screen.
+  If you prefer them to be handled in some other way, you should take over the Logger, as described just below here
+
 * new: it is now possible to inject a custom logger into helper classes `Charset`, `Http`, `XMLParser`, inching a step
   closer to supporting DIC patterns (issue #78)
 
-* new: method `PhpXmlRpc::setLogger()`, to simplify injecting the logger into all classes of the library in one step
+* new: method `PhpXmlRpc::setLogger()`, to simplify injecting a custom logger into all classes of the library in one step
 
 * improved: the `Logger` class now sports methods adhering to Psr\Log\LoggerInterface
 
@@ -96,7 +102,7 @@
 
 * new: when calling `Wrapper::wrapXmlrpcMethod`, `wrapXmlrpcServer`, `wrapPhpFunction` and `wrapPhpClass` it is possible
   to pass 'encode_nulls' as option to argument `$extraOptions`. This will make the generated code emit a '<nil/>'
-  xml-rpc element for php null values, instead of emitting an empty-string xmlr-rpc element
+  xml-rpc element for php null values, instead of emitting an empty-string xml-rpc element
 
 * new: methods `Wrapper::holdObject()` and `Wrapper::getheldObject()`, allowing flexibility in storing object instances
   for code-generation scenarios involving `Wrapper::wrapPhpClass` and `Wrapper::wrapPhpFunction`
@@ -152,7 +158,8 @@
   - parameters `$timeout` and `$method` are now considered deprecated in `Client::send()` and `Client::multicall()`
   - Client properties `$errno` and `$errstring` are now deprecated
   - direct access to all properties of Client and Server is now deprecated and should be replaced by calls to
-    `setOption` and `getOption`. The same applies to a few "setter" methods of the Client
+    `setOption` / `getOption`. The same applies to the following "setter" methods of the Client: `setSSLVerifyPeer`,
+    `setSSLVerifyHost`, `setSSLVersion`, `setRequestCompression`, `setCurlOptions`, `setUseCurl`, `setUserAgent`
   - direct access to `Wrapper::$objHolder` is now deprecated
   - the code generated by the debugger when using "Generate stub for method call" will throw on errors instead of
     returning a Response object
