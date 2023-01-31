@@ -1,0 +1,31 @@
+parameters:
+    xml_rpc_server_options: []
+
+services:
+    # explicitly configure the services
+
+    App\Service\CommentManager:
+        class: CommentManager
+
+    App\Service\XmlRpcServer:
+        class: PhpXmlRpc\Server
+        arguments:
+            -
+                # the dispatch map can not be defined using a parameter because it contains references to a service
+                discuss.addComment:
+                    function: ['@App\Service\CommentManager', 'addComment'],
+                    signature:
+                        - ['int', 'string', 'string', 'string']
+                    docstring: Adds a comment to an item. The first parameter is the item ID, the second the name of the commenter, and the third is the comment itself. Returns the number of comments against that ID.
+                discuss.getComments:
+                    function: ['@App\Service\CommentManager', 'getComments'],
+                    signature:
+                        - [ 'array', 'string' ]
+                    docstring: Returns an array of comments for a given ID, which is the sole argument. Each array item is a struct containing name and comment text.
+            - false
+        calls:
+            - setOptions: ['%xml_rpc_server_options%']
+
+    App\Controller\ServerController:
+        arguments:
+            $server: '@App\Service\XmlRpcServer'

@@ -1,0 +1,17 @@
+parameters:
+    xml_rpc_server: https://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php
+    xml_rpc_client_options: []
+
+services:
+    # explicitly configure the services where autowiring is impossible
+
+    App\Service\XmlRpcClient:
+        class: PhpXmlRpc\Client
+        arguments:
+            - '%xml_rpc_server%'
+        calls:
+            - setOptions: ['%xml_rpc_client_options%']
+
+    App\Controller\ClientController:
+        arguments:
+            $client: '@App\Service\XmlRpcClient'
