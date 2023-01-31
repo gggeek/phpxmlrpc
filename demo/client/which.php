@@ -24,11 +24,11 @@ output("XML custom request:<br/><pre>" . htmlspecialchars($payload) . "</pre>\n"
 $client = new Client(XMLRPCSERVER);
 
 // to support http redirects we have to force usage of cURL even for http 1.0 requests
-$client->setUseCurl(Client::USE_CURL_ALWAYS);
-$client->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
+$client->setOption(Client::OPT_USE_CURL, Client::USE_CURL_ALWAYS);
+$client->setOption(Client::OPT_EXTRA_CURL_OPTS, array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
 
 // if we know that the server supports them, we can enable sending of compressed requests
-$client->setRequestCompression('gzip');
+$client->setOption(Client::OPT_REQUEST_COMPRESSION, 'gzip');
 
 // ask the client to give us back xml
 $client->setOption(Client::OPT_RETURN_TYPE, 'xml');

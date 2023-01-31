@@ -16,6 +16,7 @@ class MyLogger
 {
     protected $debugBuffer = '';
     protected $errorBuffer = '';
+    protected $warningBuffer = '';
 
     // logger API
     public function debug($message, $context = array())
@@ -23,10 +24,14 @@ class MyLogger
         $this->debugBuffer .= $message . "\n";
     }
 
-    // logger API
     public function error($message, $context = array())
     {
         $this->errorBuffer .= $message . "\n";
+    }
+
+    public function warning($message, $context = array())
+    {
+        $this->warningBuffer .= $message . "\n";
     }
 
     public function getDebug()
@@ -37,6 +42,11 @@ class MyLogger
     public function getError()
     {
         return $this->errorBuffer;
+    }
+
+    public function getWarning()
+    {
+        return $this->warningBuffer;
     }
 }
 
@@ -60,6 +70,9 @@ $input = array(
 $encoder = new Encoder();
 $client = new Client(XMLRPCSERVER);
 
+// enable warnings for use of deprecated features
+PhpXmlRpc::$xmlrpc_silence_deprecations = false;
+
 // set maximum debug level, to have all the communication details logged
 $client->setDebug(2);
 
@@ -73,4 +86,5 @@ $response = $client->send($request);
 output("Response received.<br>");
 
 output("The client error info is:<pre>\n" . $logger->getError() . "\n</pre>");
+output("The client warning info is:<pre>\n" . $logger->getWarning() . "\n</pre>");
 output("The client debug info is:<pre>\n" . $logger->getDebug() . "\n</pre>");
