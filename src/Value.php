@@ -255,6 +255,8 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     protected function serializeData($typ, $val, $charsetEncoding = '')
     {
+        $this->logDeprecationUnlessCalledBy('serialize');
+
         $rs = '';
 
         if (!isset(static::$xmlrpcTypes[$typ])) {
@@ -362,67 +364,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * Checks whether a struct member with a given name is present.
-     *
-     * Works only on xml-rpc values of type struct.
-     *
-     * @param string $key the name of the struct member to be looked up
-     * @return boolean
-     *
-     * @deprecated use array access, e.g. isset($val[$key])
-     */
-    public function structMemExists($key)
-    {
-        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
-
-        return array_key_exists($key, $this->me['struct']);
-    }
-
-    /**
-     * Returns the value of a given struct member (an xml-rpc value object in itself).
-     * Will raise a php warning if struct member of given name does not exist.
-     *
-     * @param string $key the name of the struct member to be looked up
-     * @return Value
-     *
-     * @deprecated use array access, e.g. $val[$key]
-     */
-    public function structMem($key)
-    {
-        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
-
-        return $this->me['struct'][$key];
-    }
-
-    /**
-     * Reset internal pointer for xml-rpc values of type struct.
-     * @return void
-     *
-     * @deprecated iterate directly over the object using foreach instead
-     */
-    public function structReset()
-    {
-        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
-
-        reset($this->me['struct']);
-    }
-
-    /**
-     * Return next member element for xml-rpc values of type struct.
-     *
-     * @return Value
-     * @throws \Error starting with php 8.0, this function should not be used, as it will always throw
-     *
-     * @deprecated iterate directly over the object using foreach instead
-     */
-    public function structEach()
-    {
-        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
-
-        return @each($this->me['struct']);
-    }
-
-    /**
      * Returns the value of a scalar xml-rpc value (base 64 decoding is automatically handled here)
      *
      * @return mixed
@@ -449,50 +390,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         return $a;
-    }
-
-    /**
-     * Returns the m-th member of an xml-rpc value of array type.
-     *
-     * @param integer $key the index of the value to be retrieved (zero based)
-     *
-     * @return Value
-     *
-     * @deprecated use array access, e.g. $val[$key]
-     */
-    public function arrayMem($key)
-    {
-        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
-
-        return $this->me['array'][$key];
-    }
-
-    /**
-     * Returns the number of members in an xml-rpc value of array type.
-     *
-     * @return integer
-     *
-     * @deprecated use count() instead
-     */
-    public function arraySize()
-    {
-        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
-
-        return count($this->me['array']);
-    }
-
-    /**
-     * Returns the number of members in an xml-rpc value of struct type.
-     *
-     * @return integer
-     *
-     * @deprecated use count() instead
-     */
-    public function structSize()
-    {
-        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
-
-        return count($this->me['struct']);
     }
 
     /**
@@ -669,5 +566,112 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 // return null or exception?
                 throw new StateErrorException("XML-RPC Value is of type 'undef' and can not be accessed using array index");
         }
+    }
+
+    // *** BC layer ***
+
+    /**
+     * Checks whether a struct member with a given name is present.
+     *
+     * Works only on xml-rpc values of type struct.
+     *
+     * @param string $key the name of the struct member to be looked up
+     * @return boolean
+     *
+     * @deprecated use array access, e.g. isset($val[$key])
+     */
+    public function structMemExists($key)
+    {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        return array_key_exists($key, $this->me['struct']);
+    }
+
+    /**
+     * Returns the value of a given struct member (an xml-rpc value object in itself).
+     * Will raise a php warning if struct member of given name does not exist.
+     *
+     * @param string $key the name of the struct member to be looked up
+     * @return Value
+     *
+     * @deprecated use array access, e.g. $val[$key]
+     */
+    public function structMem($key)
+    {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        return $this->me['struct'][$key];
+    }
+
+    /**
+     * Reset internal pointer for xml-rpc values of type struct.
+     * @return void
+     *
+     * @deprecated iterate directly over the object using foreach instead
+     */
+    public function structReset()
+    {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        reset($this->me['struct']);
+    }
+
+    /**
+     * Return next member element for xml-rpc values of type struct.
+     *
+     * @return Value
+     * @throws \Error starting with php 8.0, this function should not be used, as it will always throw
+     *
+     * @deprecated iterate directly over the object using foreach instead
+     */
+    public function structEach()
+    {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        return @each($this->me['struct']);
+    }
+
+    /**
+     * Returns the m-th member of an xml-rpc value of array type.
+     *
+     * @param integer $key the index of the value to be retrieved (zero based)
+     *
+     * @return Value
+     *
+     * @deprecated use array access, e.g. $val[$key]
+     */
+    public function arrayMem($key)
+    {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        return $this->me['array'][$key];
+    }
+
+    /**
+     * Returns the number of members in an xml-rpc value of array type.
+     *
+     * @return integer
+     *
+     * @deprecated use count() instead
+     */
+    public function arraySize()
+    {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        return count($this->me['array']);
+    }
+
+    /**
+     * Returns the number of members in an xml-rpc value of struct type.
+     *
+     * @return integer
+     *
+     * @deprecated use count() instead
+     */
+    public function structSize()
+    {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        return count($this->me['struct']);
     }
 }

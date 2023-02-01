@@ -184,6 +184,7 @@
     objects for the cases in which it previously returned a string
   - if you replaced the Logger class, take care that you will have to implement methods `error`, `warning` and `debug`
     (all is ok if you subclassed it)
+  - calling method `Value::serializeData` is now deprecated
   - traits have been introduced for all classes dealing with Logger, XMLParser and CharsetEncoder; method `setCharsetEncoder`
     is now static
   - new methods in helper classes: `Charset::knownCharsets`, `Http::parseAcceptHeader`, `XMLParser::truncateValueForLog`

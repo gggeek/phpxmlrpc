@@ -1009,7 +1009,7 @@ class Client
                 $this->proxy_user,
                 $this->proxy_pass,
                 $this->proxy_authtype,
-                // bc
+                // BC
                 $method == 'http11' ? 'http' : $method,
                 $this->keepalive,
                 $this->key,
@@ -1764,10 +1764,11 @@ class Client
         return $response;
     }
 
-    // BC layer
-
+    // *** BC layer ***
 
     /**
+     * @deprecated
+     *
      * @param Request $req
      * @param string $server
      * @param int $port
@@ -1782,8 +1783,6 @@ class Client
      * @param int $proxyAuthType
      * @param string $method
      * @return Response
-     * @deprecated
-     *
      */
     protected function sendPayloadHTTP10($req, $server, $port, $timeout = 0, $username = '', $password = '',
         $authType = 1, $proxyHost = '', $proxyPort = 0, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1,
@@ -1796,6 +1795,8 @@ class Client
     }
 
     /**
+     * @deprecated
+     *
      * @param Request $req
      * @param string $server
      * @param int $port
@@ -1817,8 +1818,6 @@ class Client
      * @param string $keyPass
      * @param int $sslVersion
      * @return Response
-     * @deprecated
-     *
      */
     protected function sendPayloadHTTPS($req, $server, $port, $timeout = 0, $username = '', $password = '',
         $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
@@ -1862,6 +1861,8 @@ class Client
         $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'http', $key = '', $keyPass = '',
         $sslVersion = 0)
     {
+        $this->logDeprecationUnlessCalledBy('send');
+
         return $this->sendViaSocket($req, $method, $server, $port, $this->path, array(
             'accepted_charset_encodings' => $this->accepted_charset_encodings,
             'accepted_compression' => $this->accepted_compression,
@@ -1897,6 +1898,8 @@ class Client
     }
 
     /**
+     * @deprecated
+     *
      * @param Request $req
      * @param string $server
      * @param int $port
@@ -1919,14 +1922,14 @@ class Client
      * @param string $keyPass
      * @param int $sslVersion
      * @return Response
-     * @deprecated
-     *
      */
     protected function sendPayloadCURL($req, $server, $port, $timeout = 0, $username = '', $password = '',
         $authType = 1, $cert = '', $certPass = '', $caCert = '', $caCertDir = '', $proxyHost = '', $proxyPort = 0,
         $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'https', $keepAlive = false, $key = '',
         $keyPass = '', $sslVersion = 0)
     {
+        $this->logDeprecationUnlessCalledBy('send');
+
         return $this->sendViaCURL($req, $method, $server, $port, $this->path, array(
             'accepted_charset_encodings' => $this->accepted_charset_encodings,
             'accepted_compression' => $this->accepted_compression,
@@ -1992,6 +1995,8 @@ class Client
          $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $method = 'https', $keepAlive = false, $key = '',
          $keyPass = '', $sslVersion = 0)
     {
+        $this->logDeprecationUnlessCalledBy('sendViaCURL');
+
         return $this->createCurlHandle($req, $method, $server, $port, $this->path, array(
             'accepted_charset_encodings' => $this->accepted_charset_encodings,
             'accepted_compression' => $this->accepted_compression,
