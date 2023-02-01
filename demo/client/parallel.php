@@ -83,6 +83,9 @@ class ParallelClient extends Client
     }
 }
 
+// a minimal benchmark - use 3 strategies to execute the same 25 calls: sequentially, using parallel http requests, and
+// using a single system.multiCall request
+
 $num_tests = 25;
 
 $data = array(1, 1.0, 'hello world', true, '20051021T23:43:00', -1, 11.0, '~!@#$%^&*()_+|', false, '20051021T23:43:00');
@@ -96,14 +99,11 @@ for ($i = 0; $i < $num_tests; $i++) {
 
 $client = new ParallelClient(XMLRPCSERVER);
 
-// a minimal benchmark - use 3 strategies to execute the same 25 calls: sequentially, using parallel http requests, and
-// using a single system.multiCall request
-
-echo "Making $num_tests xml-rpc calls...\n";
-flush();
-
 // avoid storing http info in the responses, to make the checksums comparable
 $client->setDebug(-1);
+
+echo "Making $num_tests calls to method interopEchoTests.echoValue on server " . XMLRPCSERVER . " ...\n";
+flush();
 
 $client->setOption(Client::OPT_NO_MULTICALL,  true);
 $t = microtime(true);
@@ -114,7 +114,6 @@ echo "Response checksum: " . md5(var_export($resp, true)) . "\n";
 flush();
 
 if (strpos(XMLRPCSERVER, 'http://') === 0) {
-    $client->setOption(Client::OPT_NO_MULTICALL,  true);
     $client->setOption(Client::OPT_USE_CURL,  Client::USE_CURL_ALWAYS);
     $t = microtime(true);
     $resp = $client->send($reqs);
@@ -132,6 +131,8 @@ echo "Response checksum: " . md5(var_export($resp, true)) . "\n";
 flush();
 
 $client->setOption(Client::OPT_NO_MULTICALL, false);
+// make sure we don't reuse the keepalive handle
+$client->setOption(Client::OPT_USE_CURL,  Client::USE_CURL_NEVER);
 $t = microtime(true);
 $resp = $client->send($reqs);
 $t = microtime(true) - $t;

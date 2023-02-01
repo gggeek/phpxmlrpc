@@ -152,7 +152,7 @@ for ($i = 0; $i < $num_tests; $i++) {
         foreach($val1 as $name => $val) {
             $out[$name] = array();
             foreach($val as $data) {
-                $out[$name][] = $data->scalarval();
+                $out[$name][] = $data->scalarVal();
             }
         }
         $result[] = $out;
@@ -165,16 +165,16 @@ for ($i = 0; $i < $num_tests; $i++) {
     $response = $dummy->ParseResponse($in, true);
     $value = $response->value();
     $result = array();
-    $l = $value->arraysize();
+    $l = $value->arraySize();
     for ($k = 0; $k < $l; $k++) {
-        $val1 = $value->arraymem($k);
+        $val1 = $value->arrayMem($k);
         $out = array();
         foreach($val1 as $name => $val) {
             $out[$name] = array();
-            $m = $val->arraysize();
+            $m = $val->arraySize();
             for ($j = 0; $j < $m; $j++) {
-                $data = $val->arraymem($j);
-                $out[$name][] = $data->scalarval();
+                $data = $val->arrayMem($j);
+                $out[$name][] = $data->scalarVal();
             }
         } // while
         $result[] = $out;
@@ -184,7 +184,7 @@ end_test('Data decoding (large array)', 'manual decoding deprecated', $result);
 
 begin_test('Data decoding (large array)', 'automatic decoding');
 for ($i = 0; $i < $num_tests; $i++) {
-    $response = $dummy->ParseResponse($in, true, 'phpvals');
+    $response = $dummy->parseResponse($in, true, 'phpvals');
     $value = $response->value();
 }
 end_test('Data decoding (large array)', 'automatic decoding', $value);
@@ -192,7 +192,7 @@ end_test('Data decoding (large array)', 'automatic decoding', $value);
 if (function_exists('xmlrpc_decode')) {
     begin_test('Data decoding (large array)', 'xmlrpc-epi decoding');
     for ($i = 0; $i < $num_tests; $i++) {
-        $response = $dummy->ParseResponse($in, true, 'xml');
+        $response = $dummy->parseResponse($in, true, 'xml');
         $value = xmlrpc_decode($response->value());
     }
     end_test('Data decoding (large array)', 'xmlrpc-epi decoding', $value);
