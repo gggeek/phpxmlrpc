@@ -918,25 +918,29 @@ class Client
      */
     public function getUrl($component = null)
     {
-        switch($component) {
-            case PHP_URL_SCHEME:
-                return $this->method;
-            case PHP_URL_HOST:
-                return $this->server;
-            case PHP_URL_PORT:
-                return $this->port;
-            case  PHP_URL_PATH:
-                return $this->path;
-            case '':
-                $url = $this->method . '://' . $this->server;
-                if (($this->port == 80 && in_array($this->method, array('http', 'http10', 'http11', 'h2c'))) ||
-                    ($this->port == 443 && in_array($this->method, array('https', 'h2')))) {
-                    return $url . $this->path;
-                } else {
-                    return $url . ':' . $this->port . $this->path;
-                }
-            default:
-                throw new ValueErrorException("Unsupported component '$component'");
+        if (is_int($component) || ctype_digit($component)) {
+            switch ($component) {
+                case PHP_URL_SCHEME:
+                    return $this->method;
+                case PHP_URL_HOST:
+                    return $this->server;
+                case PHP_URL_PORT:
+                    return $this->port;
+                case  PHP_URL_PATH:
+                    return $this->path;
+                case '':
+
+                default:
+                    throw new ValueErrorException("Unsupported component '$component'");
+            }
+        }
+
+        $url = $this->method . '://' . $this->server;
+        if ($this->port == 0 || ($this->port == 80 && in_array($this->method, array('http', 'http10', 'http11', 'h2c'))) ||
+            ($this->port == 443 && in_array($this->method, array('https', 'h2')))) {
+            return $url . $this->path;
+        } else {
+            return $url . ':' . $this->port . $this->path;
         }
     }
 

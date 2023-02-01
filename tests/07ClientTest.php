@@ -85,4 +85,16 @@ class ClientTest extends PhpXmlRpc_LoggerAwareTestCase
         $ro = $r->value();
         is_object($ro) && $this->assertEquals('hello', $ro->scalarVal());
     }
+
+    public function testgetUrl()
+    {
+        $m = $this->client->getUrl(PHP_URL_SCHEME);
+        $this->assertEquals($m, $this->client->method);
+        $h = $this->client->getUrl(PHP_URL_HOST);
+        $this->assertEquals($h, $this->client->server);
+        $p = $this->client->getUrl(PHP_URL_PORT);
+        $this->assertEquals($p, $this->client->port);
+        $p = $this->client->getUrl(PHP_URL_PATH);
+        $this->assertEquals($p, $this->client->path);
+    }
 }
