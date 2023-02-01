@@ -44,7 +44,7 @@ function xmlrpc_2_php_type($xmlrpcType)
 function wrap_php_function($funcName, $newFuncName='', $extraOptions=array())
 {
     $wrapper = new PhpXmlRpc\Wrapper();
-    if (!isset($extraOptions['return_source'])  || $extraOptions['return_source'] == false) {
+    if (!isset($extraOptions['return_source']) || $extraOptions['return_source'] == false) {
         // backwards compat: return string instead of callable
         $extraOptions['return_source'] = true;
         $wrapped = $wrapper->wrapPhpFunction($funcName, $newFuncName, $extraOptions);
@@ -68,7 +68,7 @@ function wrap_php_class($className, $extraOptions=array())
 {
     $wrapper = new PhpXmlRpc\Wrapper();
     $fix = false;
-    if (!isset($extraOptions['return_source'])  || $extraOptions['return_source'] == false) {
+    if (!isset($extraOptions['return_source']) || $extraOptions['return_source'] == false) {
         // backwards compat: return string instead of callable
         $extraOptions['return_source'] = true;
         $fix = true;
@@ -207,9 +207,9 @@ function build_remote_method_wrapper_code($client, $methodName, $xmlrpcFuncName,
         $respCode = '$res';
     }
     if ($decodePhpObjects) {
-        $innerCode .= "if (\$res->faultcode()) return $respCode; else return \$encoder->decode(\$res->value(), array('decode_php_objs'));";
+        $innerCode .= "if (\$res->faultCode()) return $respCode; else return \$encoder->decode(\$res->value(), array('decode_php_objs'));";
     } else {
-        $innerCode .= "if (\$res->faultcode()) return $respCode; else return \$encoder->decode(\$res->value());";
+        $innerCode .= "if (\$res->faultCode()) return $respCode; else return \$encoder->decode(\$res->value());";
     }
 
     $code = $code . $plist . ") {\n" . $innerCode . "\n}\n";

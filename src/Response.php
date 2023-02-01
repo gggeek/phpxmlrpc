@@ -189,7 +189,7 @@ class Response
         return $result;
     }
 
-    // BC layer
+    // *** BC layer ***
 
     // we have to make this return by ref in order to allow calls such as `$resp->_cookies['name'] = ['value' => 'something'];`
     public function &__get($name)
@@ -206,7 +206,7 @@ class Response
                 return $this->httpResponse['raw_data'];
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
-                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
                 trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
                 return null;
         }
@@ -229,7 +229,7 @@ class Response
                 break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
-                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
                 trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }
     }
@@ -268,7 +268,7 @@ class Response
                 break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
-                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
                 trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }
     }

@@ -48,12 +48,7 @@
  * file api_changes_v4.md for how to change this if required.
  *****************************************************************************/
 
-include_once(__DIR__.'/../src/Client.php');
-include_once(__DIR__.'/../src/Encoder.php');
-include_once(__DIR__.'/../src/PhpXmlRpc.php');
-include_once(__DIR__.'/../src/Request.php');
-include_once(__DIR__.'/../src/Response.php');
-include_once(__DIR__.'/../src/Value.php');
+// the list is sorted more-or-less in dependency order
 include_once(__DIR__.'/../src/Exception.php');
 include_once(__DIR__.'/../src/Exception/FaultResponseException.php');
 include_once(__DIR__.'/../src/Exception/ParsingException.php');
@@ -66,11 +61,22 @@ include_once(__DIR__.'/../src/Exception/NoSuchMethodException.php');
 include_once(__DIR__.'/../src/Exception/StateErrorException.php');
 include_once(__DIR__.'/../src/Exception/TypeErrorException.php');
 include_once(__DIR__.'/../src/Exception/ValueErrorException.php');
+include_once(__DIR__.'/../src/PhpXmlRpc.php');
 include_once(__DIR__.'/../src/Helper/Charset.php');
 include_once(__DIR__.'/../src/Helper/Date.php');
 include_once(__DIR__.'/../src/Helper/Http.php');
+include_once(__DIR__.'/../src/Helper/Interop.php');
 include_once(__DIR__.'/../src/Helper/Logger.php');
 include_once(__DIR__.'/../src/Helper/XMLParser.php');
+include_once(__DIR__.'/../src/Traits/CharsetEncoderAware.php');
+include_once(__DIR__.'/../src/Traits/LoggerAware.php');
+include_once(__DIR__.'/../src/Traits/DeprecationLogger.php');
+include_once(__DIR__.'/../src/Traits/ParserAware.php');
+include_once(__DIR__.'/../src/Value.php');
+include_once(__DIR__.'/../src/Request.php');
+include_once(__DIR__.'/../src/Response.php');
+include_once(__DIR__.'/../src/Client.php');
+include_once(__DIR__.'/../src/Encoder.php');
 
 use PhpXmlRpc\Client;
 use PhpXmlRpc\Encoder;
@@ -105,7 +111,7 @@ $GLOBALS['xmlrpc_backslash'] = chr(92).chr(92);
 /* Expose with the old names the classes which have been namespaced */
 
 /**
- * @todo reinstate access to method serializedata ?
+ * @todo reinstate access to method serializeData?
  */
 class xmlrpcval extends Value
 {
@@ -123,13 +129,13 @@ class xmlrpcval extends Value
         $val = reset($ar);
         $typ = key($ar);
 
-        return '<value>' . $this->serializedata($typ, $val) . "</value>\n";
+        return '<value>' . $this->serializeData($typ, $val) . "</value>\n";
         //}
     }
 
     /**
-     * @deprecated this code looks like it is very fragile and has not been fixed
-     * for a long long time. Shall we remove it for 2.0?
+     * @deprecated this code looks like it is very fragile and has not been fixed for a long long time.
+     * Shall we remove it for 2.0?
      */
     public function getval()
     {
@@ -143,7 +149,7 @@ class xmlrpcval extends Value
 
         if (is_array($b)) {
             foreach($b as $id => $cont) {
-                $b[$id] = $cont->scalarval();
+                $b[$id] = $cont->scalarVal();
             }
         }
 
@@ -151,7 +157,7 @@ class xmlrpcval extends Value
         if (is_object($b)) {
             $t = get_object_vars($b);
             foreach($t as $id => $cont) {
-                $t[$id] = $cont->scalarval();
+                $t[$id] = $cont->scalarVal();
             }
             foreach($t as $id => $cont) {
                 @$b->$id = $cont;
@@ -175,7 +181,7 @@ class xmlrpcval extends Value
 }
 
 /**
- * @todo reinstate access to method parseResponseHeaders ?
+ * @todo reinstate access to method parseResponseHeaders?
  */
 class xmlrpcmsg extends Request
 {
@@ -186,7 +192,7 @@ class xmlrpcresp extends Response
 }
 
 /**
- * @todo reinstate access to methods sendPayloadHTTP10, sendPayloadHTTPS, sendPayloadCURL, _try_multicall ?
+ * @todo reinstate access to methods sendPayloadHTTP10, sendPayloadHTTPS, sendPayloadCURL, _try_multicall?
  */
 class xmlrpc_client extends Client
 {

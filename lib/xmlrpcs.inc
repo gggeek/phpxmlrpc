@@ -84,6 +84,8 @@ class xmlrpc_server extends Server
     {
         return $name === 'dmap';
     }
+
+    /// @todo what about __set, __unset?
 }
 
 /* Expose as global functions the ones which are now class methods */

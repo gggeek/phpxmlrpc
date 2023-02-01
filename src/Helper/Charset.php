@@ -340,6 +340,8 @@ class Charset
         return $knownCharsets;
     }
 
+    // *** BC layer ***
+
     /**
      * Checks if a given charset encoding is present in a list of encodings or if it is a valid subset of any encoding
      * in the list.
@@ -372,7 +374,7 @@ class Charset
     }
 
     /**
-     * Used only for backwards compatibility.
+     * Used only for backwards compatibility (the .inc shims).
      * @deprecated
      *
      * @param string $charset

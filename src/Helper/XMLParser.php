@@ -480,24 +480,6 @@ class XMLParser
     }
 
     /**
-     * xml parser handler function for opening element tags.
-     * Used in decoding xml chunks that might represent single xml-rpc values as well as requests, responses.
-     * @deprecated
-     *
-     * @param resource $parser
-     * @param $name
-     * @param $attrs
-     * @return void
-     */
-    public function xmlrpc_se_any($parser, $name, $attrs)
-    {
-        // avoid spamming the log with warnings in case this is in use...
-        //$this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
-
-        $this->xmlrpc_se($parser, $name, $attrs, true);
-    }
-
-    /**
      * xml parser handler function for close element tags.
      * @internal
      *
@@ -831,7 +813,7 @@ class XMLParser
 
     /**
      * xml parser handler function for 'other stuff', i.e. not char data or element start/end tag.
-     * In fact it only gets called on unknown entities...
+     * In fact, it only gets called on unknown entities...
      * @internal
      *
      * @param $parser
@@ -1013,7 +995,25 @@ class XMLParser
         return $data;
     }
 
-    // BC layer
+    // *** BC layer ***
+
+    /**
+     * xml parser handler function for opening element tags.
+     * Used in decoding xml chunks that might represent single xml-rpc values as well as requests, responses.
+     * @deprecated
+     *
+     * @param resource $parser
+     * @param $name
+     * @param $attrs
+     * @return void
+     */
+    public function xmlrpc_se_any($parser, $name, $attrs)
+    {
+        // this will be spamming the log if this method is in use...
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        $this->xmlrpc_se($parser, $name, $attrs, true);
+    }
 
     public function __set($name, $value)
     {
@@ -1025,7 +1025,7 @@ class XMLParser
                 break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
-                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
                 trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }
     }
@@ -1051,7 +1051,7 @@ class XMLParser
                 break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
-                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
                 trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }
     }

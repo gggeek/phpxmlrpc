@@ -213,6 +213,41 @@ class PhpXmlRpc
      */
     public static $xmlrpc_silence_deprecations = true;
 
+    // *** BC layer ***
+
+    /**
+     * Inject a logger into all classes of the PhpXmlRpc library which use one
+     *
+     * @param $logger
+     * @return void
+     */
+    public static function setLogger($logger)
+    {
+        Charset::setLogger($logger);
+        Client::setLogger($logger);
+        Encoder::setLogger($logger);
+        Http::setLogger($logger);
+        Request::setLogger($logger);
+        Server::setLogger($logger);
+        Value::setLogger($logger);
+        Wrapper::setLogger($logger);
+        XMLParser::setLogger($logger);
+    }
+
+    /**
+     * Makes the library use the error codes detailed at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
+     *
+     * @return void
+     *
+     * @tofo feature creep - allow switching back to the original set of codes; querying the current mode
+     */
+    public static function useInteropFaults()
+    {
+        self::$xmlrpcerr = Interop::$xmlrpcerr;
+
+        self::$xmlrpcerruser = -Interop::$xmlrpcerruser;
+    }
+
     /**
      * A function to be used for compatibility with legacy code: it creates all global variables which used to be declared,
      * such as library version etc...
@@ -273,38 +308,5 @@ class PhpXmlRpc
                 self::$$name = $GLOBALS[$name];
             }
         }
-    }
-
-    /**
-     * Inject a logger into all classes of the PhpXmlRpc library which use one
-     *
-     * @param $logger
-     * @return void
-     */
-    public static function setLogger($logger)
-    {
-        Charset::setLogger($logger);
-        Client::setLogger($logger);
-        Encoder::setLogger($logger);
-        Http::setLogger($logger);
-        Request::setLogger($logger);
-        Server::setLogger($logger);
-        Value::setLogger($logger);
-        Wrapper::setLogger($logger);
-        XMLParser::setLogger($logger);
-    }
-
-    /**
-     * Makes the library use the error codes detailed at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
-     *
-     * @return void
-     *
-     * @tofo feature creep - allow switching back to the original set of codes; querying the current mode
-     */
-    public static function useInteropFaults()
-    {
-        self::$xmlrpcerr = Interop::$xmlrpcerr;
-
-        self::$xmlrpcerruser = -Interop::$xmlrpcerruser;
     }
 }
