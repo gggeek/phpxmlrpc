@@ -25,7 +25,7 @@ $client = new Client(XMLRPCSERVER);
 $client->setOption(Client::OPT_RETURN_TYPE, XMLRPCParser::RETURN_PHP);
 
 // First off, let's retrieve the list of methods available on the remote server
-output("<h3>methods available at http://" . $client->server . $client->path . "</h3>\n");
+output("<h3>methods available at http://" . $client->getUrl(PHP_URL_HOST) . $client->getUrl(PHP_URL_PATH) . "</h3>\n");
 $req = new Request('system.listMethods');
 $resp = $client->send($req);
 
