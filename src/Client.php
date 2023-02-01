@@ -848,7 +848,8 @@ class Client
      *       response not requests. We do the opposite...)
      * @todo strip invalid chars from cookie name? As per RFC6265, we should follow RFC2616, Section 2.2
      * @todo drop/rename $port parameter. Cookies are not isolated by port!
-     * @todo feature-creep allow storing 'expires', 'secure', 'httponly' and 'samesite' cookie attributes
+     * @todo feature-creep allow storing 'expires', 'secure', 'httponly' and 'samesite' cookie attributes (we could do
+     *       as php, and allow $path to be an array of attributes...)
      */
     public function setCookie($name, $value = '', $path = '', $domain = '', $port = null)
     {
@@ -910,17 +911,32 @@ class Client
     }
 
     /**
-     * @return string
-     * @todo feature-creep allow to return single url components, such as parse_url does
+     * @param null|int $component allowed values: PHP_URL_SCHEME, PHP_URL_HOST, PHP_URL_PORT, PHP_URL_PATH
+     * @return string|int Notes: the path component will include query string and fragment; NULL is a valid value for port
+     *                    (in which case the default port for http/https will be used);
+     * @throws ValueErrorException on unsupported component
      */
-    public function getUrl()
+    public function getUrl($component = null)
     {
-        $url = $this->method . '://' . $this->server;
-        if (($this->port = 80 && in_array($this->method, array('http', 'http10', 'http11', 'h2c'))) &&
-            ($this->port = 443 && in_array($this->method, array('https', 'h2')))) {
-            return $url . $this->path;
-        } else {
-            return $url . ':' . $this->port . $this->path;
+        switch($component) {
+            case PHP_URL_SCHEME:
+                return $this->method;
+            case PHP_URL_HOST:
+                return $this->server;
+            case PHP_URL_PORT:
+                return $this->port;
+            case  PHP_URL_PATH:
+                return $this->path;
+            case '':
+                $url = $this->method . '://' . $this->server;
+                if (($this->port == 80 && in_array($this->method, array('http', 'http10', 'http11', 'h2c'))) ||
+                    ($this->port == 443 && in_array($this->method, array('https', 'h2')))) {
+                    return $url . $this->path;
+                } else {
+                    return $url . ':' . $this->port . $this->path;
+                }
+            default:
+                throw new ValueErrorException("Unsupported component '$component'");
         }
     }
 
