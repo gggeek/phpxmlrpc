@@ -21,6 +21,13 @@ class ParallelClient extends Client
             $method = $this->method;
         }
 
+        if ($timeout == 0) {
+            $timeout = $this->timeout;
+        }
+
+        $opts = $this->getOptions();
+        $opts['timeout'] = $timeout;
+
         /// @todo validate that $method can be handled by the current curl install
 
         $handles = array();
@@ -28,30 +35,7 @@ class ParallelClient extends Client
 
         foreach($requests as $k => $req) {
             $req->setDebug($this->debug);
-
-            $handle = $this->prepareCurlHandle(
-                $req,
-                $this->server,
-                $this->port,
-                $timeout,
-                $this->username,
-                $this->password,
-                $this->authtype,
-                $this->cert,
-                $this->certpass,
-                $this->cacert,
-                $this->cacertdir,
-                $this->proxy,
-                $this->proxyport,
-                $this->proxy_user,
-                $this->proxy_pass,
-                $this->proxy_authtype,
-                $method,
-                false,
-                $this->key,
-                $this->keypass,
-                $this->sslversion
-            );
+            $handle = $this->createCurlHandle($req, $method, $this->server, $this->port, $this->path, $opts);
             curl_multi_add_handle($curl, $handle);
             $handles[$k] = $handle;
         }
@@ -62,6 +46,7 @@ class ParallelClient extends Client
         } while($running > 0);
 
         $responses = array();
+        $errors = array();
         foreach($handles as $k => $h) {
             $responses[$k] = curl_multi_getcontent($handles[$k]);
 
@@ -77,6 +62,10 @@ class ParallelClient extends Client
                 $this->getLogger()->debugMessage($message);
             }
 
+            if (!$responses[$k]) {
+                $errors[$k] = curl_error($h);
+            }
+
             //curl_close($h);
             curl_multi_remove_handle($curl, $h);
         }
@@ -84,7 +73,7 @@ class ParallelClient extends Client
 
         foreach($responses as $k => $resp) {
             if (!$resp) {
-                $responses[$k] = new Response(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': ' . curl_error($curl));
+                $responses[$k] = new Response(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] . ': ' . $errors[$k]);
             } else {
                 $responses[$k] = $requests[$k]->parseResponse($resp, true, $this->return_type);
             }
@@ -106,7 +95,6 @@ for ($i = 0; $i < $num_tests; $i++) {
 }
 
 $client = new ParallelClient(XMLRPCSERVER);
-$client->setOption(Client::OPT_NO_MULTICALL,  true);
 
 // a minimal benchmark - use 3 strategies to execute the same 25 calls: sequentially, using parallel http requests, and
 // using a single system.multiCall request
@@ -114,16 +102,33 @@ $client->setOption(Client::OPT_NO_MULTICALL,  true);
 echo "Making $num_tests xml-rpc calls...\n";
 flush();
 
+// avoid storing http info in the responses, to make the checksums comparable
+$client->setDebug(-1);
+
+$client->setOption(Client::OPT_NO_MULTICALL,  true);
 $t = microtime(true);
 $resp = $client->send($reqs);
 $t = microtime(true) - $t;
 echo "Sequential send: " . sprintf('%.3f', $t) . " secs.\n";
+echo "Response checksum: " . md5(var_export($resp, true)) . "\n";
 flush();
+
+if (strpos(XMLRPCSERVER, 'http://') === 0) {
+    $client->setOption(Client::OPT_NO_MULTICALL,  true);
+    $client->setOption(Client::OPT_USE_CURL,  Client::USE_CURL_ALWAYS);
+    $t = microtime(true);
+    $resp = $client->send($reqs);
+    $t = microtime(true) - $t;
+    echo "Sequential send, curl (w. keepalive): " . sprintf('%.3f', $t) . " secs.\n";
+    echo "Response checksum: " . md5(var_export($resp, true)) . "\n";
+    flush();
+}
 
 $t = microtime(true);
 $resp = $client->sendParallel($reqs);
 $t = microtime(true) - $t;
 echo "Parallel send: " . sprintf('%.3f', $t) . " secs.\n";
+echo "Response checksum: " . md5(var_export($resp, true)) . "\n";
 flush();
 
 $client->setOption(Client::OPT_NO_MULTICALL, false);
@@ -131,3 +136,5 @@ $t = microtime(true);
 $resp = $client->send($reqs);
 $t = microtime(true) - $t;
 echo "Multicall send: " . sprintf('%.3f', $t) . " secs.\n";
+echo "Response checksum: " . md5(var_export($resp, true)) . "\n";
+flush();
