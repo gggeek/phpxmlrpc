@@ -420,7 +420,7 @@ class Server
         // if we get a warning/error that has output some text before here, then we cannot
         // add a new header. We cannot say we are sending xml, either...
         if (!headers_sent()) {
-            header('Content-Type: ' . $resp->content_type);
+            header('Content-Type: ' . $resp->getContentType());
             // we do not know if client actually told us an accepted charset, but if it did we have to tell it what we did
             header("Vary: Accept-Charset");
 

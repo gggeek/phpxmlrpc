@@ -34,4 +34,12 @@ trait PayloadBearer
     {
         return $this->payload;
     }
+
+    /**
+     * @return string
+     */
+    public function getContentType()
+    {
+        return $this->content_type;
+    }
 }

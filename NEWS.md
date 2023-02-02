@@ -70,6 +70,8 @@
 * new: method `PhpXmlRpc::useInteropFaults()` can be used to make the library change the error codes it generates to
   match the spec described at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
 
+* new: both `Request` and `Response` acquired methods `getPayload` and `getContentType`
+
 * new: method `Client::getUrl()`
 
 * new: method `Server::setDispatchMap()`

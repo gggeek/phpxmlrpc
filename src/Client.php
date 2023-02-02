@@ -1175,7 +1175,7 @@ class Client
             $encodingHdr .
             'Accept-Charset: ' . implode(',', $opts['accepted_charset_encodings']) . "\r\n" .
             $cookieHeader .
-            'Content-Type: ' . $req->content_type . "\r\nContent-Length: " .
+            'Content-Type: ' . $req->getContentType() . "\r\nContent-Length: " .
             strlen($payload) . "\r\n\r\n" .
             $payload;
 
@@ -1438,7 +1438,7 @@ class Client
             }
         }
         // extra headers
-        $headers = array('Content-Type: ' . $req->content_type, 'Accept-Charset: ' . implode(',', $opts['accepted_charset_encodings']));
+        $headers = array('Content-Type: ' . $req->getContentType(), 'Accept-Charset: ' . implode(',', $opts['accepted_charset_encodings']));
         // if no keepalive is wanted, let the server know it in advance
         if (!$opts['keepalive']) {
             $headers[] = 'Connection: close';
