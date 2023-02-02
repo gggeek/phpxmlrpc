@@ -116,6 +116,14 @@ class Response
     }
 
     /**
+     * @return string
+     */
+    public function valueType()
+    {
+        return $this->valtyp;
+    }
+
+    /**
      * Returns an array with the cookies received from the server.
      * Array has the form: $cookiename => array ('value' => $val, $attr1 => $val1, $attr2 => $val2, ...)
      * with attributes being e.g. 'expires', 'path', domain'.

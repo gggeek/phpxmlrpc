@@ -368,7 +368,7 @@ And turned it into nylon';
             $expect_array = array('ctLeftAngleBrackets', 'ctRightAngleBrackets', 'ctAmpersands', 'ctApostrophes', 'ctQuotes');
             foreach($expect_array as $val) {
                 $b = $v->structmem($val);
-                $got .= $b->me['int'];
+                $got .= $b->scalarVal();
             }
             $this->assertEquals($expected, $got);
         }

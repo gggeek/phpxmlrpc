@@ -48,8 +48,8 @@ class Encoder
         switch ($xmlrpcVal->kindOf()) {
             case 'scalar':
                 if (in_array('extension_api', $options)) {
-                    $val = reset($xmlrpcVal->me);
-                    $typ = key($xmlrpcVal->me);
+                    $val = $xmlrpcVal->scalarVal();
+                    $typ = $xmlrpcVal->scalarTyp();
                     switch ($typ) {
                         case 'dateTime.iso8601':
                             $xmlrpcVal = array(

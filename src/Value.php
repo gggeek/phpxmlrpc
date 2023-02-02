@@ -47,7 +47,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     /** @var Value[]|mixed */
     public $me = array();
     /**
-     * @var int
+     * @var int 0 for undef, 1 for scalar, 2 for array, 3 for struct
      * @internal
      */
     public $mytype = 0;
