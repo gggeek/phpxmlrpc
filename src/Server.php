@@ -406,6 +406,7 @@ class Server
 
         // Do not create response serialization if it has already happened. Helps to build json magic
         /// @todo what if the payload was created targeting a different charset than $respCharset?
+        ///       Also, if we do not call serialize(), the request will not set its content-type to have the charset declared
         if (empty($resp->payload)) {
             $resp->serialize($respCharset);
         }

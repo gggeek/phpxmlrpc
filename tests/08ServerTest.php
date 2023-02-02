@@ -1006,7 +1006,7 @@ And turned it into nylon';
         $this->assertEquals('200', $h['status_code']);
         $this->assertNotEmpty($h['headers']);
 
-        $d = $this->client->debug;
+        $d = $this->client->getOption('debug');
         $this->client->setDebug(-1);
         $v2 = $this->send($m, 0, true);
         $this->client->setDebug($d);

@@ -1079,6 +1079,7 @@ class Client
 
         // Only create the payload if it was not created previously
         /// @todo what if the request's payload was created with a different encoding?
+        ///       Also, if we do not call serialize(), the request will not set its content-type to have the charset declared
         if (empty($req->payload)) {
             $req->serialize($opts['request_charset_encoding']);
         }

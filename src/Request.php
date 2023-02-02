@@ -74,18 +74,21 @@ class Request
     }
 
     /**
-     * @internal this function will become protected in the future
+     * @internal this function will become protected in the future (and be folded into serialize)
      *
      * @param string $charsetEncoding
      * @return void
      */
     public function createPayload($charsetEncoding = '')
     {
+        $this->logDeprecationUnlessCalledBy('serialize');
+
         if ($charsetEncoding != '') {
             $this->content_type = 'text/xml; charset=' . $charsetEncoding;
         } else {
             $this->content_type = 'text/xml';
         }
+
         $this->payload = $this->xml_header($charsetEncoding);
         $this->payload .= '<methodName>' . $this->getCharsetEncoder()->encodeEntities(
             $this->methodname, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</methodName>\n";

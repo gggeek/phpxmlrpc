@@ -32,6 +32,7 @@ class Response
     public $payload;
     /** @var string */
     public $content_type = 'text/xml';
+
     protected $httpResponse = array('headers' => array(), 'cookies' => array(), 'raw_data' => '', 'status_code' => null);
 
     /**
@@ -156,6 +157,7 @@ class Response
         } else {
             $this->content_type = 'text/xml';
         }
+
         if (PhpXmlRpc::$xmlrpc_null_apache_encoding) {
             $result = "<methodResponse xmlns:ex=\"" . PhpXmlRpc::$xmlrpc_null_apache_encoding_ns . "\">\n";
         } else {
@@ -184,6 +186,7 @@ class Response
             }
         }
         $result .= "\n</methodResponse>";
+
         $this->payload = $result;
 
         return $result;
