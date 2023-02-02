@@ -998,7 +998,7 @@ class Client
             return $this->multicall($req, $timeout, $method);
         } elseif (is_string($req)) {
             $n = new static::$requestClass('');
-            $n->payload = $req;
+            $n->setPayload($req);
             $req = $n;
         }
 
@@ -1080,10 +1080,10 @@ class Client
         // Only create the payload if it was not created previously
         /// @todo what if the request's payload was created with a different encoding?
         ///       Also, if we do not call serialize(), the request will not set its content-type to have the charset declared
-        if (empty($req->payload)) {
-            $req->serialize($opts['request_charset_encoding']);
+        $payload = $req->getPayload();
+        if (empty($payload)) {
+            $payload = $req->serialize($opts['request_charset_encoding']);
         }
-        $payload = $req->payload;
 
         // Deflate request body and set appropriate request headers
         $encodingHdr = '';
@@ -1360,12 +1360,12 @@ class Client
         }
 
         // Only create the payload if it was not created previously
-        if (empty($req->payload)) {
-            $req->serialize($opts['request_charset_encoding']);
+        $payload = $req->getPayload();
+        if (empty($payload)) {
+            $payload = $req->serialize($opts['request_charset_encoding']);
         }
 
         // Deflate request body and set appropriate request headers
-        $payload = $req->payload;
         $encodingHdr = '';
         /// @todo test for existence of proper function, in case of polyfills
         if (function_exists('gzdeflate') && ($opts['request_compression'] == 'gzip' || $opts['request_compression'] == 'deflate')) {

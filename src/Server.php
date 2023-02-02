@@ -399,18 +399,19 @@ class Server
                 static::$_xmlrpcs_occurred_errors . "+++END+++");
         }
 
-        $payload = $resp->xml_header($respCharset);
+        $header = $resp->xml_header($respCharset);
         if ($this->debug > 0) {
-            $payload = $payload . $this->serializeDebug($respCharset);
+            $header .= $this->serializeDebug($respCharset);
         }
 
         // Do not create response serialization if it has already happened. Helps to build json magic
         /// @todo what if the payload was created targeting a different charset than $respCharset?
         ///       Also, if we do not call serialize(), the request will not set its content-type to have the charset declared
-        if (empty($resp->payload)) {
-            $resp->serialize($respCharset);
+        $payload = $resp->getPayload();
+        if (empty($payload)) {
+            $payload = $resp->serialize($respCharset);
         }
-        $payload = $payload . $resp->payload;
+        $payload = $header . $payload;
 
         if ($returnPayload) {
             return $payload;

@@ -5,6 +5,7 @@ namespace PhpXmlRpc;
 use PhpXmlRpc\Exception\StateErrorException;
 use PhpXmlRpc\Traits\CharsetEncoderAware;
 use PhpXmlRpc\Traits\DeprecationLogger;
+use PhpXmlRpc\Traits\PayloadBearer;
 
 /**
  * This class provides the representation of the response of an XML-RPC server.
@@ -19,6 +20,7 @@ class Response
 {
     use CharsetEncoderAware;
     use DeprecationLogger;
+    use PayloadBearer;
 
     /// @todo: do these need to be public?
     /** @internal */
@@ -29,9 +31,6 @@ class Response
     public $errno = 0;
     /** @internal */
     public $errstr = '';
-    public $payload;
-    /** @var string */
-    public $content_type = 'text/xml';
 
     protected $httpResponse = array('headers' => array(), 'cookies' => array(), 'raw_data' => '', 'status_code' => null);
 
@@ -224,7 +223,8 @@ class Response
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
                 trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
-                return null;
+                $result = null;
+                return $result;
         }
     }
 

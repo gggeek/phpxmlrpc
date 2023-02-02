@@ -214,25 +214,28 @@ if ($action) {
                 $msg[0] = new $requestClass($method, array(), $id);
                 // hack! build payload by hand
                 if ($wstype == 1) {
-                    $msg[0]->payload = "{\n" .
+                    $payload = "{\n" .
                         '"method": "' . $method . "\",\n\"params\": [" .
                         $payload .
                         "\n],\n\"id\": ";
                     // fix: if user gave an empty string, use NULL, or we'll break json syntax
                     if ($id == "") {
-                        $msg[0]->payload .= "null\n}";
+                        $payload .= "null\n}";
                     } else {
                         if (is_numeric($id) || $id == 'false' || $id == 'true' || $id == 'null') {
-                            $msg[0]->payload .= "$id\n}";
+                            $payload .= "$id\n}";
                         } else {
-                            $msg[0]->payload .= "\"$id\"\n}";
+                            $payload .= "\"$id\"\n}";
                         }
                     }
+                    $msg[0]->setPayload($payload);
                 } else {
-                    $msg[0]->payload = $msg[0]->xml_header($inputcharset) .
+                    $msg[0]->setPayload(
+                        $msg[0]->xml_header($inputcharset) .
                         '<methodName>' . $method . "</methodName>\n<params>" .
                         $payload .
-                        "</params>\n" . $msg[0]->xml_footer();
+                        "</params>\n" . $msg[0]->xml_footer()
+                    );
                 }
                 $actionname = 'Execution of method ' . $method;
                 break;

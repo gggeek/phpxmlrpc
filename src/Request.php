@@ -8,6 +8,7 @@ use PhpXmlRpc\Helper\XMLParser;
 use PhpXmlRpc\Traits\CharsetEncoderAware;
 use PhpXmlRpc\Traits\DeprecationLogger;
 use PhpXmlRpc\Traits\ParserAware;
+use PhpXmlRpc\Traits\PayloadBearer;
 
 /**
  * This class provides the representation of a request to an XML-RPC server.
@@ -20,17 +21,15 @@ class Request
     use CharsetEncoderAware;
     use DeprecationLogger;
     use ParserAware;
+    use PayloadBearer;
 
     /// @todo: do these need to be public?
-    public $payload;
     /** @internal */
     public $methodname;
     /** @internal */
     public $params = array();
     /** @var int */
     public $debug = 0;
-    /** @var string */
-    public $content_type = 'text/xml';
 
     // holds data while parsing the response. NB: Not a full Response object
     /** @deprecated will be removed in a future release */
