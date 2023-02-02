@@ -49,59 +49,6 @@ class Request
     }
 
     /**
-     * @internal this function will become protected in the future
-     *
-     * @param string $charsetEncoding
-     * @return string
-     */
-    public function xml_header($charsetEncoding = '')
-    {
-        if ($charsetEncoding != '') {
-            return "<?xml version=\"1.0\" encoding=\"$charsetEncoding\" ?" . ">\n<methodCall>\n";
-        } else {
-            return "<?xml version=\"1.0\"?" . ">\n<methodCall>\n";
-        }
-    }
-
-    /**
-     * @internal this function will become protected in the future
-     *
-     * @return string
-     */
-    public function xml_footer()
-    {
-        return '</methodCall>';
-    }
-
-    /**
-     * @internal this function will become protected in the future (and be folded into serialize)
-     *
-     * @param string $charsetEncoding
-     * @return void
-     */
-    public function createPayload($charsetEncoding = '')
-    {
-        $this->logDeprecationUnlessCalledBy('serialize');
-
-        if ($charsetEncoding != '') {
-            $this->content_type = 'text/xml; charset=' . $charsetEncoding;
-        } else {
-            $this->content_type = 'text/xml';
-        }
-
-        $this->payload = $this->xml_header($charsetEncoding);
-        $this->payload .= '<methodName>' . $this->getCharsetEncoder()->encodeEntities(
-            $this->methodname, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</methodName>\n";
-        $this->payload .= "<params>\n";
-        foreach ($this->params as $p) {
-            $this->payload .= "<param>\n" . $p->serialize($charsetEncoding) .
-                "</param>\n";
-        }
-        $this->payload .= "</params>\n";
-        $this->payload .= $this->xml_footer();
-    }
-
-    /**
      * Gets/sets the xml-rpc method to be invoked.
      *
      * @param string $methodName the method to be set (leave empty not to set it)
@@ -114,19 +61,6 @@ class Request
         }
 
         return $this->methodname;
-    }
-
-    /**
-     * Returns xml representation of the message. XML prologue included.
-     *
-     * @param string $charsetEncoding
-     * @return string the xml representation of the message, xml prologue included
-     */
-    public function serialize($charsetEncoding = '')
-    {
-        $this->createPayload($charsetEncoding);
-
-        return $this->payload;
     }
 
     /**
@@ -168,6 +102,78 @@ class Request
     public function getNumParams()
     {
         return count($this->params);
+    }
+
+    /**
+     * Returns xml representation of the message, XML prologue included. Sets `payload` and `content_type` properties
+     *
+     * @param string $charsetEncoding
+     * @return string the xml representation of the message, xml prologue included
+     */
+    public function serialize($charsetEncoding = '')
+    {
+        $this->createPayload($charsetEncoding);
+
+        return $this->payload;
+    }
+
+    /**
+     * @internal this function will become protected in the future (and be folded into serialize)
+     *
+     * @param string $charsetEncoding
+     * @return void
+     */
+    public function createPayload($charsetEncoding = '')
+    {
+        $this->logDeprecationUnlessCalledBy('serialize');
+
+        if ($charsetEncoding != '') {
+            $this->content_type = 'text/xml; charset=' . $charsetEncoding;
+        } else {
+            $this->content_type = 'text/xml';
+        }
+
+        $result = $this->xml_header($charsetEncoding);
+        $result .= '<methodName>' . $this->getCharsetEncoder()->encodeEntities(
+                $this->methodname, PhpXmlRpc::$xmlrpc_internalencoding, $charsetEncoding) . "</methodName>\n";
+        $result .= "<params>\n";
+        foreach ($this->params as $p) {
+            $result .= "<param>\n" . $p->serialize($charsetEncoding) .
+                "</param>\n";
+        }
+        $result .= "</params>\n";
+        $result .= $this->xml_footer();
+
+        $this->payload = $result;
+    }
+
+    /**
+     * @internal this function will become protected in the future (and be folded into serialize)
+     *
+     * @param string $charsetEncoding
+     * @return string
+     */
+    public function xml_header($charsetEncoding = '')
+    {
+        $this->logDeprecationUnlessCalledBy('createPayload');
+
+        if ($charsetEncoding != '') {
+            return "<?xml version=\"1.0\" encoding=\"$charsetEncoding\" ?" . ">\n<methodCall>\n";
+        } else {
+            return "<?xml version=\"1.0\"?" . ">\n<methodCall>\n";
+        }
+    }
+
+    /**
+     * @internal this function will become protected in the future (and be folded into serialize)
+     *
+     * @return string
+     */
+    public function xml_footer()
+    {
+        $this->logDeprecationUnlessCalledBy('createPayload');
+
+        return '</methodCall>';
     }
 
     /**
@@ -274,7 +280,7 @@ class Request
                 /// @todo what if there is no end tag?
                 $end = strpos($data, '-->', $start);
                 $comments = substr($data, $start, $end - $start);
-                $this->getLogger()->debug("---SERVER DEBUG INFO (DECODED) ---\n\t" .
+                $this->getLogger()->debug("---SERVER DEBUG INFO (DECODED)---\n\t" .
                     str_replace("\n", "\n\t", base64_decode($comments)) . "\n---END---", array('encoding' => $respEncoding));
             }
         }

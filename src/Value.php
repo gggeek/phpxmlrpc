@@ -245,6 +245,50 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
     }
 
+
+    /**
+     * Returns the value of a scalar xml-rpc value (base 64 decoding is automatically handled here)
+     *
+     * @return mixed
+     */
+    public function scalarVal()
+    {
+        $b = reset($this->me);
+
+        return $b;
+    }
+
+    /**
+     * Returns the type of the xml-rpc value.
+     *
+     * @return string For integers, 'int' is always returned in place of 'i4'. 'i8' is considered a separate type and
+     *                returned as such
+     */
+    public function scalarTyp()
+    {
+        reset($this->me);
+        $a = key($this->me);
+        if ($a == static::$xmlrpcI4) {
+            $a = static::$xmlrpcInt;
+        }
+
+        return $a;
+    }
+
+    /**
+     * Returns the xml representation of the value. XML prologue not included.
+     *
+     * @param string $charsetEncoding the charset to be used for serialization. If null, US-ASCII is assumed
+     * @return string
+     */
+    public function serialize($charsetEncoding = '')
+    {
+        $val = reset($this->me);
+        $typ = key($this->me);
+
+        return '<value>' . $this->serializeData($typ, $val, $charsetEncoding) . "</value>\n";
+    }
+
     /**
      * @param string $typ
      * @param Value[]|mixed $val
@@ -345,49 +389,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         return $rs;
-    }
-
-    /**
-     * Returns the xml representation of the value. XML prologue not included.
-     *
-     * @param string $charsetEncoding the charset to be used for serialization. If null, US-ASCII is assumed
-     * @return string
-     */
-    public function serialize($charsetEncoding = '')
-    {
-        $val = reset($this->me);
-        $typ = key($this->me);
-
-        return '<value>' . $this->serializeData($typ, $val, $charsetEncoding) . "</value>\n";
-    }
-
-    /**
-     * Returns the value of a scalar xml-rpc value (base 64 decoding is automatically handled here)
-     *
-     * @return mixed
-     */
-    public function scalarVal()
-    {
-        $b = reset($this->me);
-
-        return $b;
-    }
-
-    /**
-     * Returns the type of the xml-rpc value.
-     *
-     * @return string For integers, 'int' is always returned in place of 'i4'. 'i8' is considered a separate type and
-     *                returned as such
-     */
-    public function scalarTyp()
-    {
-        reset($this->me);
-        $a = key($this->me);
-        if ($a == static::$xmlrpcI4) {
-            $a = static::$xmlrpcInt;
-        }
-
-        return $a;
     }
 
     /**

@@ -399,7 +399,7 @@ class Server
                 static::$_xmlrpcs_occurred_errors . "+++END+++");
         }
 
-        $payload = $this->xml_header($respCharset);
+        $payload = $resp->xml_header($respCharset);
         if ($this->debug > 0) {
             $payload = $payload . $this->serializeDebug($respCharset);
         }
@@ -767,9 +767,7 @@ class Server
 
         if (!isset($dmap[$methodName]['function'])) {
             // No such method
-            return new Response(0,
-                PhpXmlRpc::$xmlrpcerr['unknown_method'],
-                PhpXmlRpc::$xmlrpcstr['unknown_method']);
+            return new Response(0, PhpXmlRpc::$xmlrpcerr['unknown_method'], PhpXmlRpc::$xmlrpcstr['unknown_method']);
         }
 
         // Check signature
@@ -1002,19 +1000,6 @@ class Server
     }
 
     /**
-     * @param string $charsetEncoding
-     * @return string
-     */
-    protected function xml_header($charsetEncoding = '')
-    {
-        if ($charsetEncoding != '') {
-            return "<?xml version=\"1.0\" encoding=\"$charsetEncoding\"?" . ">\n";
-        } else {
-            return "<?xml version=\"1.0\"?" . ">\n";
-        }
-    }
-
-    /**
      * @param string $methName
      * @return bool
      */
@@ -1022,7 +1007,6 @@ class Server
     {
         return (strpos($methName, "system.") === 0);
     }
-
 
     /**
      * @param array $dmap
@@ -1376,7 +1360,7 @@ class Server
     public static function _xmlrpcs_multicall($server, $req)
     {
         $result = array();
-        // let accept a plain list of php parameters, beside a single xml-rpc msg object
+        // let's accept a plain list of php parameters, beside a single xml-rpc msg object
         if (is_object($req)) {
             $calls = $req->getParam(0);
             foreach ($calls as $call) {
@@ -1436,6 +1420,25 @@ class Server
                     $method($errCode, $errString, $filename, $lineNo, $context);
                 }
             }
+        }
+    }
+
+    // *** BC layer ***
+
+    /**
+     * @param string $charsetEncoding
+     * @return string
+     *
+     * @deprecated this method was moved to the Response class
+     */
+    protected function xml_header($charsetEncoding = '')
+    {
+        $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
+
+        if ($charsetEncoding != '') {
+            return "<?xml version=\"1.0\" encoding=\"$charsetEncoding\"?" . ">\n";
+        } else {
+            return "<?xml version=\"1.0\"?" . ">\n";
         }
     }
 }

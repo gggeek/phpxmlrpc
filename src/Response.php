@@ -144,7 +144,7 @@ class Response
     }
 
     /**
-     * Returns xml representation of the response. XML prologue not included.
+     * Returns xml representation of the response, XML prologue _not_ included. Sets `payload` and `content_type` properties
      *
      * @param string $charsetEncoding the charset to be used for serialization. If null, US-ASCII is assumed
      * @return string the xml representation of the response
@@ -190,6 +190,19 @@ class Response
         $this->payload = $result;
 
         return $result;
+    }
+
+    /**
+     * @param string $charsetEncoding
+     * @return string
+     */
+    public function xml_header($charsetEncoding = '')
+    {
+        if ($charsetEncoding != '') {
+            return "<?xml version=\"1.0\" encoding=\"$charsetEncoding\"?" . ">\n";
+        } else {
+            return "<?xml version=\"1.0\"?" . ">\n";
+        }
     }
 
     // *** BC layer ***
