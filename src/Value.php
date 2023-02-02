@@ -619,8 +619,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Return next member element for xml-rpc values of type struct.
      *
-     * @return Value
-     * @throws \Error starting with php 8.0, this function should not be used, as it will always throw
+     * @return array having the same format as PHP's `each` method
      *
      * @deprecated iterate directly over the object using foreach instead
      */
@@ -628,11 +627,14 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
-        return @each($this->me['struct']);
+        $key = key($this->me['struct']);
+        $value = current($this->me['struct']);
+        next($this->me['struct']);
+        return array(1 => $value, 'value' => $value, 0 => $key, 'key' => $key);
     }
 
     /**
-     * Returns the m-th member of an xml-rpc value of array type.
+     * Returns the n-th member of an xml-rpc value of array type.
      *
      * @param integer $key the index of the value to be retrieved (zero based)
      *
