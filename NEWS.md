@@ -72,6 +72,8 @@
 
 * new: both `Request` and `Response` acquired methods `getPayload` and `getContentType`
 
+* new: method `Response::valueType()`
+
 * new: method `Client::getUrl()`
 
 * new: method `Server::setDispatchMap()`
