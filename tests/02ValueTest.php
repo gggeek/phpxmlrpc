@@ -152,7 +152,7 @@ class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
     {
         $v1 = new xmlrpcval(array(new xmlrpcval('one'), new xmlrpcval('two')), 'array');
         $this->assertequals(1, count($v1));
-        $out = array('me' => array(), 'mytype' => 2, '_php_class' => null);
+        $out = array('me' => array(), 'mytype' => 2, /*'_php_class' => null*/);
 
         foreach($v1 as $key => $val)
         {

@@ -51,8 +51,6 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
      * @internal
      */
     public $mytype = 0;
-    /** @var string|null */
-    public $_php_class = null;
 
     /**
      * Build an xml-rpc value.
@@ -359,11 +357,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                 break;
             case 3:
                 // struct
-                if ($this->_php_class) {
-                    $rs = '<struct php_class="' . $this->_php_class . "\">\n";
-                } else {
-                    $rs = "<struct>\n";
-                }
+                $rs = "<struct>\n";
                 $charsetEncoder = $this->getCharsetEncoder();
                 /** @var Value $val2 */
                 foreach ($val as $key2 => $val2) {

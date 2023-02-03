@@ -2,6 +2,7 @@
 
 namespace PhpXmlRpc\Helper;
 
+use PhpXmlRpc\ObjectValue;
 use PhpXmlRpc\PhpXmlRpc;
 use PhpXmlRpc\Traits\DeprecationLogger;
 use PhpXmlRpc\Value;
@@ -518,10 +519,13 @@ class XMLParser
 
                 if ($rebuildXmlrpcvals > 0) {
                     // build the xml-rpc val out of the data received, and substitute it
-                    $temp = new Value($this->_xh['value'], $this->_xh['vt']);
+
                     // in case we got info about underlying php class, save it in the object we're rebuilding
                     if (isset($this->_xh['php_class'])) {
-                        $temp->_php_class = $this->_xh['php_class'];
+                        $temp = new ObjectValue($this->_xh['value'], $this->_xh['vt']);
+                        $temp->setClass($this->_xh['php_class']);
+                    } else {
+                        $temp = new Value($this->_xh['value'], $this->_xh['vt']);
                     }
                     $this->_xh['value'] = $temp;
                 } elseif ($rebuildXmlrpcvals < 0) {

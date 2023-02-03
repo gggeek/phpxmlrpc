@@ -115,9 +115,8 @@ class Encoder
             case 'struct':
                 // If user said so, try to rebuild php objects for specific struct vals.
                 /// @todo should we raise a warning for class not found?
-                // shall we check for proper subclass of xml-rpc value instead of presence of _php_class to detect
-                // what we can do?
-                if (in_array('decode_php_objs', $options) && $xmlrpcVal->_php_class != ''
+                // @todo we should check for proper interface instead of presence of _php_class to decide what we can do
+                if (in_array('decode_php_objs', $options) && isset($xmlrpcVal->_php_class)
                     && class_exists($xmlrpcVal->_php_class)
                 ) {
                     $obj = @new $xmlrpcVal->_php_class();
