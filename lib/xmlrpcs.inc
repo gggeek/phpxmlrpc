@@ -63,7 +63,7 @@ class xmlrpc_server extends Server
      * @param string $name
      * @return mixed
      */
-    public function __get($name)
+    public function &__get($name)
     {
         switch($name) {
             case 'dmap':
