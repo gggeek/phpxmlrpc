@@ -194,7 +194,7 @@ class Server
     }
 
     /**
-     * @param string $name
+     * @param string $name see all the OPT_ constants
      * @param mixed $value
      * @return $this
      * @throws ValueErrorException on unsupported option
@@ -220,7 +220,7 @@ class Server
     }
 
     /**
-     * @param string $name
+     * @param string $name see all the OPT_ constants
      * @return mixed
      * @throws ValueErrorException on unsupported option
      */
@@ -242,7 +242,7 @@ class Server
     }
 
     /**
-     * Returns the complete list of Client options.
+     * Returns the complete list of Server options.
      * @return array
      */
     public function getOptions()
@@ -255,7 +255,7 @@ class Server
     }
 
     /**
-     * @param array $options
+     * @param array $options key:  see all the OPT_ constants
      * @return $this
      * @throws ValueErrorException on unsupported option
      */

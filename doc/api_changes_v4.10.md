@@ -6,8 +6,8 @@ to happen in future version 5.
 
 In particular, API cleanups mean that most public access to object properties has been replaced by dedicated methods.
 
-New classes, traits, exceptions
--------------------------------
+New classes, traits, exceptions, interfaces
+-------------------------------------------
 
 For the first time, usage of custom exceptions is in place. Traits are also in use for sharing common functionality.
 
@@ -89,6 +89,8 @@ New static properties
 | PhpXmlRpc | $xmlrpc_reject_invalid_values | false               |           |
 | PhpXmlRpc | $xmlrpc_return_datetimes      | false               |           |
 | PhpXmlRpc | $xmlrpc_silence_deprecations  | true                |           |
+| Server    | $options                      | see code            | protected |
+| Wrapper   | $namespace                    | \PhpXmlRpc\         | protected |
 
 New constants
 -------------
@@ -103,12 +105,35 @@ Changed methods
 
 The following methods acquired new parameters, or accept a wider range of values for existing parameters
 
-| Class     | Method   | Notes |
-|-----------|----------|-------|
-| PhpXmlRpc | $xmlrpc_ |       |
+| Class     | Method           | Notes                                                              |
+|-----------|------------------|--------------------------------------------------------------------|
+| Client    | setDebug         | value -1 can now be used for $level                                |
+| Date      | iso8601Encode    | a DateTimeInterface value is accepted for $timet                   |
+| Server    | add_to_map       | new parameters: parametersType = false, $exceptionHandling = false |
+| Wrapper   | wrapPhpClass     | $extraoptions accepts 'encode_nulls'                               |
+| Wrapper   | wrapPhpFunction  | $extraoptions accepts 'encode_nulls'                               |
+| Wrapper   | wrapXmlrpcMethod | $extraoptions accepts 'throw_on_fault'                             |
+| Wrapper   | wrapXmlrpcMethod | $extraoptions accepts 'encode_nulls'                               |
+| Wrapper   | wrapXmlrpcServer | $extraoptions accepts 'throw_on_fault'                             |
+| Wrapper   | wrapXmlrpcServer | $extraoptions accepts 'encode_null'                                |
+| XMLParser | __construct      | extra values accepted in $options (see code)                       |
+| XMLParser | parse            | extra values accepted in $options (see code)                       |
+
+The following methods have had some parameters deprecated
+
+| Class     | Method    | Notes                                          |
+|-----------|-----------|------------------------------------------------|
+| Client    | send      | parameters $timeout and $method are deprecated |
+| Client    | multicall | parameters $timeout and $method are deprecated |
+
+The following methods have modified their return value
+
+| Class     | Method         | Notes   |
+|-----------|----------------|---------|
+| Client    | _try_multicall | private |
 
 Deprecated methods
----------------------
+------------------
 
 | Class   | Method                | Replacement          |
 |---------|-----------------------|----------------------|

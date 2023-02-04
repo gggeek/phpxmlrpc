@@ -77,133 +77,107 @@ class Client
 
     /**
      * @var string
-     * @internal use getUrl/__construct
      */
     protected $method = 'http';
     /**
      * @var string
-     * @internal use getUrl/__construct
      */
     protected $server;
     /**
      * @var int
-     * @internal use getUrl/__construct
      */
     protected $port = 0;
     /**
      * @var string
-     * @internal use getUrl/__construct
      */
     protected $path;
 
     /**
      * @var int
-     * @internal use setOption/getOption
      */
     protected $debug = 0;
     /**
      * @var string
-     * @internal use setCredentials/getOption
      */
     protected $username = '';
     /**
      * @var string
-     * @internal use setCredentials/getOption
      */
     protected $password = '';
     /**
      * @var int
-     * @internal use setCredentials/getOption
      */
     protected $authtype = 1;
     /**
      * @var string
-     * @internal use setCertificate/getOption
      */
     protected $cert = '';
     /**
      * @var string
-     * @internal use setCertificate/getOption
      */
     protected $certpass = '';
     /**
      * @var string
-     * @internal use setCaCertificate/getOption
      */
     protected $cacert = '';
     /**
      * @var string
-     * @internal use setCaCertificate/getOption
      */
     protected $cacertdir = '';
     /**
      * @var string
-     * @internal use setKey/getOption
      */
     protected $key = '';
     /**
      * @var string
-     * @internal use setKey/getOption
      */
     protected $keypass = '';
     /**
      * @var bool
-     * @internal use setOption/getOption
      */
     protected $verifypeer = true;
     /**
      * @var int
-     * @internal use setOption/getOption
      */
     protected $verifyhost = 2;
     /**
      * @var int
-     * @internal use setOption/getOption
      */
     protected $sslversion = 0; // corresponds to CURL_SSLVERSION_DEFAULT
     /**
      * @var string
-     * @internal use setProxy/getOption
      */
     protected $proxy = '';
     /**
      * @var int
-     * @internal use setProxy/getOption
      */
     protected $proxyport = 0;
     /**
      * @var string
-     * @internal use setProxy/getOption
      */
     protected $proxy_user = '';
     /**
      * @var string
-     * @internal use setProxy/getOption
      */
     protected $proxy_pass = '';
     /**
      * @var int
-     * @internal use setProxy/getOption
      */
     protected $proxy_authtype = 1;
     /**
      * @var array
-     * @internal use setCookie/getOption
      */
     protected $cookies = array();
     /**
      * @var array
-     * @internal use setOption/getOption
      */
     protected $extracurlopts = array();
     /**
      * @var int
-     * @internal use setOption/getOption
      */
     protected $timeout = 0;
     /**
      * @var int
-     * @internal use setOption/getOption
      */
     protected $use_curl = self::USE_CURL_AUTO;
     /**
@@ -213,8 +187,6 @@ class Client
      * to dispatch to the server an array of requests in a single http roundtrip or simply execute many consecutive http
      * calls. Defaults to FALSE, but it will be enabled automatically on the first failure of execution of
      * system.multicall.
-     *
-     * @internal use setOption/getOption
      */
     protected $no_multicall = false;
     /**
@@ -226,8 +198,6 @@ class Client
      * NNB: you can set it to any non-empty array for HTTP11 and HTTPS, since in those cases it will be up to CURL to
      * decide the compression methods it supports. You might check for the presence of 'zlib' in the output of
      * curl_version() to determine whether compression is supported or not
-     *
-     * @internal use setAcceptedCompression/getOption
      */
     protected $accepted_compression = array();
     /**
@@ -235,24 +205,18 @@ class Client
      *
      * Name of compression scheme to be used for sending requests.
      * Either null, 'gzip' or 'deflate'.
-     *
-     * @internal use setOption/getOption
      */
     protected $request_compression = '';
     /**
      * @var bool
      *
      * Whether to use persistent connections for http 1.1 and https. Value set at constructor time.
-     *
-     * @internal use setOption/getOption
      */
     protected $keepalive = false;
     /**
      * @var string[]
      *
      * Charset encodings that can be decoded without problems by the client. Value set at constructor time
-     *
-     * @internal use setOption/getOption
      */
     protected $accepted_charset_encodings = array();
     /**
@@ -264,8 +228,6 @@ class Client
      * in the transfer, a CR-LF will be preserved as well as a singe LF).
      * Valid values are 'US-ASCII', 'UTF-8' and 'ISO-8859-1'.
      * For the fastest mode of operation, set your both your app internal encoding and this to UTF-8.
-     *
-     * @internal use setOption/getOption
      */
     protected $request_charset_encoding = '';
     /**
@@ -282,16 +244,12 @@ class Client
      * Note that the 'phpvals' setting will yield faster execution times, but some of the information from the original
      * response will be lost. It will be e.g. impossible to tell whether a particular php string value was sent by the
      * server as an xml-rpc string or base64 value.
-     *
-     * @internal use setOption/getOption
      */
     protected $return_type = XMLParser::RETURN_XMLRPCVALS;
     /**
      * @var string
      *
      * Sent to servers in http headers. Value set at constructor time.
-     *
-     * @internal use setOption/getOption
      */
     protected $user_agent;
 
@@ -417,7 +375,7 @@ class Client
     }
 
     /**
-     * @param string $name
+     * @param string $name see all the OPT_ constants
      * @param mixed $value
      * @return $this
      * @throws ValueErrorException on unsupported option
@@ -433,7 +391,7 @@ class Client
     }
 
     /**
-     * @param string $name
+     * @param string $name see all the OPT_ constants
      * @return mixed
      * @throws ValueErrorException on unsupported option
      */
@@ -447,7 +405,7 @@ class Client
     }
 
     /**
-     * Returns the complete list of Client options.
+     * Returns the complete list of Client options, with their value.
      * @return array
      */
     public function getOptions()
@@ -460,7 +418,7 @@ class Client
     }
 
     /**
-     * @param array $options
+     * @param array $options key: any valid option (see all the OPT_ constants)
      * @return $this
      * @throws ValueErrorException on unsupported option
      */
