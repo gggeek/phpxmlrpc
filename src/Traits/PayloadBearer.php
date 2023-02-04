@@ -5,9 +5,9 @@ namespace PhpXmlRpc\Traits;
 trait PayloadBearer
 {
     /** @var string */
-    public $payload;
+    protected $payload;
     /** @var string */
-    public $content_type = 'text/xml';
+    protected $content_type = 'text/xml';
 
     /**
      * @internal

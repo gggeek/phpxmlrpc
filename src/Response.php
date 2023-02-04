@@ -12,9 +12,15 @@ use PhpXmlRpc\Traits\PayloadBearer;
  * Server-side, a server method handler will construct a Response and pass it as its return value.
  * An identical Response object will be returned by the result of an invocation of the send() method of the Client class.
  *
- * @property array $hdrs deprecated, use $httpResponse['headers']
- * @property array _cookies deprecated, use $httpResponse['cookies']
- * @property string $raw_data deprecated, use $httpResponse['raw_data']
+ * @property Value|string|mixed $val deprecated - public access left in purely for BC. Access via value()/__construct()
+ * @property string $valtyp deprecated - public access left in purely for BC. Access via valueType()/__construct()
+ * @property int $errno deprecated - public access left in purely for BC. Access via faultCode()/__construct()
+ * @property string $errstr deprecated - public access left in purely for BC. Access faultString()/__construct()
+ * @property string $payload deprecated - public access left in purely for BC. Access via getPayload()/setPayload()
+ * @property string $content_type deprecated - public access left in purely for BC. Access via getContentType()/setPayload()
+ * @property array $hdrs deprecated. Access via httpResponse()['headers'], set via $httpResponse['headers']
+ * @property array _cookies deprecated. Access via httpResponse()['cookies'], set via $httpResponse['cookies']
+ * @property string $raw_data deprecated. Access via httpResponse()['raw_data'], set via $httpResponse['raw_data']
  */
 class Response
 {
@@ -22,15 +28,14 @@ class Response
     use DeprecationLogger;
     use PayloadBearer;
 
-    /// @todo: do these need to be public?
-    /** @internal */
-    public $val = 0;
-    /** @internal */
-    public $valtyp;
-    /** @internal */
-    public $errno = 0;
-    /** @internal */
-    public $errstr = '';
+    /** @var Value|string|mixed */
+    protected $val = 0;
+    /** @var string */
+    protected $valtyp;
+    /** @var int */
+    protected $errno = 0;
+    /** @var string */
+    protected $errstr = '';
 
     protected $httpResponse = array('headers' => array(), 'cookies' => array(), 'raw_data' => '', 'status_code' => null);
 
@@ -218,6 +223,14 @@ class Response
     public function &__get($name)
     {
         switch ($name) {
+            case 'val':
+            case 'valtyp':
+            case 'errno':
+            case 'errstr':
+            case 'payload':
+            case 'content_type':
+                $this->logDeprecation('Getting property Response::' . $name . ' is deprecated');
+                return $this->$name;
             case 'hdrs':
                 $this->logDeprecation('Getting property Response::' . $name . ' is deprecated');
                 return $this->httpResponse['headers'];
@@ -239,6 +252,15 @@ class Response
     public function __set($name, $value)
     {
         switch ($name) {
+            case 'val':
+            case 'valtyp':
+            case 'errno':
+            case 'errstr':
+            case 'payload':
+            case 'content_type':
+                $this->logDeprecation('Setting property Response::' . $name . ' is deprecated');
+                $this->$name = $value;
+                break;
             case 'hdrs':
                 $this->logDeprecation('Setting property Response::' . $name . ' is deprecated');
                 $this->httpResponse['headers'] = $value;
@@ -261,6 +283,14 @@ class Response
     public function __isset($name)
     {
         switch ($name) {
+            case 'val':
+            case 'valtyp':
+            case 'errno':
+            case 'errstr':
+            case 'payload':
+            case 'content_type':
+                $this->logDeprecation('Checking property Response::' . $name . ' is deprecated');
+                return isset($this->$name);
             case 'hdrs':
                 $this->logDeprecation('Checking property Response::' . $name . ' is deprecated');
                 return isset($this->httpResponse['headers']);
@@ -278,6 +308,15 @@ class Response
     public function __unset($name)
     {
         switch ($name) {
+            case 'val':
+            case 'valtyp':
+            case 'errno':
+            case 'errstr':
+            case 'payload':
+            case 'content_type':
+                $this->logDeprecation('Setting property Response::' . $name . ' is deprecated');
+                unset($this->$name);
+                break;
             case 'hdrs':
                 $this->logDeprecation('Unsetting property Response::' . $name . ' is deprecated');
                 unset($this->httpResponse['headers']);

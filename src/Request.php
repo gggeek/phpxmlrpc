@@ -15,6 +15,12 @@ use PhpXmlRpc\Traits\PayloadBearer;
  * A client sends a PhpXmlrpc\Request to a server, and receives back an PhpXmlrpc\Response.
  *
  * @todo feature creep - add a protected $httpRequest member, in the same way the Response has one
+ *
+ * @property string $methodname deprecated - public access left in purely for BC. Access via method()/__construct()
+ * @property Value[] $params deprecated - public access left in purely for BC. Access via getParam()/__construct()
+ * @property int $debug deprecated - public access left in purely for BC. Access via .../setDebug()
+ * @property string $payload deprecated - public access left in purely for BC. Access via getPayload()/setPayload()
+ * @property string $content_type deprecated - public access left in purely for BC. Access via getContentType()/setPayload()
  */
 class Request
 {
@@ -23,16 +29,17 @@ class Request
     use ParserAware;
     use PayloadBearer;
 
-    /// @todo: do these need to be public?
-    /** @internal */
-    public $methodname;
-    /** @internal */
-    public $params = array();
+    /** @var string */
+    protected $methodname;
+    /** @var Value[] */
+    protected $params = array();
     /** @var int */
-    public $debug = 0;
+    protected $debug = 0;
 
-    // holds data while parsing the response. NB: Not a full Response object
-    /** @deprecated will be removed in a future release */
+    /**
+     * holds data while parsing the response. NB: Not a full Response object
+     * @deprecated will be removed in a future release
+     */
     protected $httpResponse = array();
 
     /**
@@ -412,5 +419,78 @@ class Request
     {
         $this->debug = $level;
         return $this;
+    }
+
+    // *** BC layer ***
+
+    // we have to make this return by ref in order to allow calls such as `$resp->_cookies['name'] = ['value' => 'something'];`
+    public function &__get($name)
+    {
+        switch ($name) {
+            case 'me':
+            case 'mytype':
+            case '_php_class':
+            case 'payload':
+            case 'content_type':
+                $this->logDeprecation('Getting property Request::' . $name . ' is deprecated');
+                return $this->$name;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+                $result = null;
+                return $result;
+        }
+    }
+
+    public function __set($name, $value)
+    {
+        switch ($name) {
+            case 'methodname':
+            case 'params':
+            case 'debug':
+            case 'payload':
+            case 'content_type':
+                $this->logDeprecation('Setting property Request::' . $name . ' is deprecated');
+                $this->$name = $value;
+                break;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
+    }
+
+    public function __isset($name)
+    {
+        switch ($name) {
+            case 'methodname':
+            case 'params':
+            case 'debug':
+            case 'payload':
+            case 'content_type':
+                $this->logDeprecation('Checking property Request::' . $name . ' is deprecated');
+                return isset($this->$name);
+            default:
+                return false;
+        }
+    }
+
+    public function __unset($name)
+    {
+        switch ($name) {
+            case 'methodname':
+            case 'params':
+            case 'debug':
+            case 'payload':
+            case 'content_type':
+                $this->logDeprecation('Unsetting property Request::' . $name . ' is deprecated');
+                unset($this->$name);
+                break;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
     }
 }

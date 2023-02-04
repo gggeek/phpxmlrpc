@@ -10,6 +10,10 @@ use PhpXmlRpc\Traits\DeprecationLogger;
 
 /**
  * This class enables the creation of values for XML-RPC, by encapsulating plain php values.
+ *
+ * @property Value[]|mixed $me deprecated - public access left in purely for BC. Access via scalarVal()/__construct()
+ * @property int $params $mytype - public access left in purely for BC. Access via kindOf()/__construct()
+ * @property string|null $_php_class deprecated - public access left in purely for BC.
  */
 class Value implements \Countable, \IteratorAggregate, \ArrayAccess
 {
@@ -43,16 +47,14 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         "null" => 1,
     );
 
-    /// @todo: do these need to be public?
     /** @var Value[]|mixed */
-    public $me = array();
+    protected $me = array();
     /**
      * @var int 0 for undef, 1 for scalar, 2 for array, 3 for struct
-     * @internal
      */
-    public $mytype = 0;
+    protected $mytype = 0;
     /** @var string|null */
-    public $_php_class = null;
+    protected $_php_class = null;
 
     /**
      * Build an xml-rpc value.
@@ -674,5 +676,68 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
         $this->logDeprecation('Method ' . __METHOD__ . ' is deprecated');
 
         return count($this->me['struct']);
+    }
+
+    // we have to make this return by ref in order to allow calls such as `$resp->_cookies['name'] = ['value' => 'something'];`
+    public function &__get($name)
+    {
+        switch ($name) {
+            case 'me':
+            case 'mytype':
+            case '_php_class':
+                $this->logDeprecation('Getting property Value::' . $name . ' is deprecated');
+                return $this->$name;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+                $result = null;
+                return $result;
+        }
+    }
+
+    public function __set($name, $value)
+    {
+        switch ($name) {
+            case 'me':
+            case 'mytype':
+            case '_php_class':
+                $this->logDeprecation('Setting property Value::' . $name . ' is deprecated');
+                $this->$name = $value;
+                break;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
+    }
+
+    public function __isset($name)
+    {
+        switch ($name) {
+            case 'me':
+            case 'mytype':
+            case '_php_class':
+                $this->logDeprecation('Checking property Value::' . $name . ' is deprecated');
+                return isset($this->$name);
+            default:
+                return false;
+        }
+    }
+
+    public function __unset($name)
+    {
+        switch ($name) {
+            case 'me':
+            case 'mytype':
+            case '_php_class':
+                $this->logDeprecation('Unsetting property Value::' . $name . ' is deprecated');
+                unset($this->$name);
+                break;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
     }
 }

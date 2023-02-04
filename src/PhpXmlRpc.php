@@ -259,7 +259,10 @@ class PhpXmlRpc
     {
         $reflection = new \ReflectionClass('PhpXmlRpc\PhpXmlRpc');
         foreach ($reflection->getStaticProperties() as $name => $value) {
-            $GLOBALS[$name] = $value;
+            if (!in_array($name, array('xmlrpc_return_datetimes', 'xmlrpc_reject_invalid_values', 'xmlrpc_datetime_format',
+                'xmlrpc_int_format', 'xmlrpc_double_format', 'xmlrpc_methodname_format', 'xmlrpc_silence_deprecations'))) {
+                $GLOBALS[$name] = $value;
+            }
         }
 
         // NB: all the variables exported into the global namespace below here do NOT guarantee 100% compatibility,
@@ -272,14 +275,10 @@ class PhpXmlRpc
             }
         }
 
+        /// @todo mke it possible to inject the XMLParser and Charset, as we do in other classes
+
         $parser = new Helper\XMLParser();
-        $reflection = new \ReflectionClass('PhpXmlRpc\Helper\XMLParser');
-        foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $name => $value) {
-            if (in_array($value->getName(), array('xmlrpc_valid_parents')))
-            {
-                $GLOBALS[$value->getName()] = $value->getValue($parser);
-            }
-        }
+        $GLOBALS['xmlrpc_valid_parents'] = $parser->xmlrpc_valid_parents;
 
         $charset = Charset::instance();
         $GLOBALS['xml_iso88591_Entities'] = $charset->getEntities('iso88591');
@@ -298,14 +297,19 @@ class PhpXmlRpc
      * @return void
      *
      * @deprecated
+     *
+     * @todo this function does not import back xmlrpc_valid_parents and xml_iso88591_Entities
      */
     public static function importGlobals()
     {
         $reflection = new \ReflectionClass('PhpXmlRpc\PhpXmlRpc');
-        $staticProperties = $reflection->getStaticProperties();
-        foreach ($staticProperties as $name => $value) {
-            if (isset($GLOBALS[$name])) {
-                self::$$name = $GLOBALS[$name];
+        foreach ($reflection->getStaticProperties() as $name => $value) {
+            if (!in_array($name, array('xmlrpc_return_datetimes', 'xmlrpc_reject_invalid_values', 'xmlrpc_datetime_format',
+                'xmlrpc_int_format', 'xmlrpc_double_format', 'xmlrpc_methodname_format', 'xmlrpc_silence_deprecations')))
+            {
+                if (isset($GLOBALS[$name])) {
+                    self::$$name = $GLOBALS[$name];
+                }
             }
         }
     }

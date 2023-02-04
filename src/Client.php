@@ -2,17 +2,25 @@
 
 namespace PhpXmlRpc;
 
-//use PhpXmlRpc\Helper\Charset;
 use PhpXmlRpc\Exception\ValueErrorException;
 use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Traits\CharsetEncoderAware;
 use PhpXmlRpc\Traits\DeprecationLogger;
 
 /**
  * Used to represent a client of an XML-RPC server.
+ *
+ * @property int $errno deprecated - public access left in purely for BC.
+ * @property string $errstr deprecated - public access left in purely for BC.
+ * @property string $method deprecated - public access left in purely for BC. Access via getUrl()/__construct()
+ * @property string $server deprecated - public access left in purely for BC. Access via getUrl()/__construct()
+ * @property int $port deprecated - public access left in purely for BC. Access via getUrl()/__construct()
+ * @property string $path deprecated - public access left in purely for BC. Access via getUrl()/__construct()
  */
 class Client
 {
     use DeprecationLogger;
+    //use CharsetEncoderAware;
 
     const USE_CURL_NEVER = 0;
     const USE_CURL_ALWAYS = 1;
@@ -58,12 +66,12 @@ class Client
      * @var int
      * @deprecated will be removed in the future
      */
-    public $errno;
+    protected $errno;
     /**
      * @var string
      * @deprecated will be removed in the future
      */
-    public $errstr;
+    protected $errstr;
 
     /// @todo: do all the ones below need to be public?
 
@@ -71,133 +79,133 @@ class Client
      * @var string
      * @internal use getUrl/__construct
      */
-    public $method = 'http';
+    protected $method = 'http';
     /**
      * @var string
      * @internal use getUrl/__construct
      */
-    public $server;
+    protected $server;
     /**
      * @var int
      * @internal use getUrl/__construct
      */
-    public $port = 0;
+    protected $port = 0;
     /**
      * @var string
      * @internal use getUrl/__construct
      */
-    public $path;
+    protected $path;
 
     /**
      * @var int
      * @internal use setOption/getOption
      */
-    public $debug = 0;
+    protected $debug = 0;
     /**
      * @var string
      * @internal use setCredentials/getOption
      */
-    public $username = '';
+    protected $username = '';
     /**
      * @var string
      * @internal use setCredentials/getOption
      */
-    public $password = '';
+    protected $password = '';
     /**
      * @var int
      * @internal use setCredentials/getOption
      */
-    public $authtype = 1;
+    protected $authtype = 1;
     /**
      * @var string
      * @internal use setCertificate/getOption
      */
-    public $cert = '';
+    protected $cert = '';
     /**
      * @var string
      * @internal use setCertificate/getOption
      */
-    public $certpass = '';
+    protected $certpass = '';
     /**
      * @var string
      * @internal use setCaCertificate/getOption
      */
-    public $cacert = '';
+    protected $cacert = '';
     /**
      * @var string
      * @internal use setCaCertificate/getOption
      */
-    public $cacertdir = '';
+    protected $cacertdir = '';
     /**
      * @var string
      * @internal use setKey/getOption
      */
-    public $key = '';
+    protected $key = '';
     /**
      * @var string
      * @internal use setKey/getOption
      */
-    public $keypass = '';
+    protected $keypass = '';
     /**
      * @var bool
      * @internal use setOption/getOption
      */
-    public $verifypeer = true;
+    protected $verifypeer = true;
     /**
      * @var int
      * @internal use setOption/getOption
      */
-    public $verifyhost = 2;
+    protected $verifyhost = 2;
     /**
      * @var int
      * @internal use setOption/getOption
      */
-    public $sslversion = 0; // corresponds to CURL_SSLVERSION_DEFAULT
+    protected $sslversion = 0; // corresponds to CURL_SSLVERSION_DEFAULT
     /**
      * @var string
      * @internal use setProxy/getOption
      */
-    public $proxy = '';
+    protected $proxy = '';
     /**
      * @var int
      * @internal use setProxy/getOption
      */
-    public $proxyport = 0;
+    protected $proxyport = 0;
     /**
      * @var string
      * @internal use setProxy/getOption
      */
-    public $proxy_user = '';
+    protected $proxy_user = '';
     /**
      * @var string
      * @internal use setProxy/getOption
      */
-    public $proxy_pass = '';
+    protected $proxy_pass = '';
     /**
      * @var int
      * @internal use setProxy/getOption
      */
-    public $proxy_authtype = 1;
+    protected $proxy_authtype = 1;
     /**
      * @var array
      * @internal use setCookie/getOption
      */
-    public $cookies = array();
+    protected $cookies = array();
     /**
      * @var array
      * @internal use setOption/getOption
      */
-    public $extracurlopts = array();
+    protected $extracurlopts = array();
     /**
      * @var int
      * @internal use setOption/getOption
      */
-    public $timeout = 0;
+    protected $timeout = 0;
     /**
      * @var int
      * @internal use setOption/getOption
      */
-    public $use_curl = self::USE_CURL_AUTO;
+    protected $use_curl = self::USE_CURL_AUTO;
     /**
      * @var bool
      *
@@ -208,7 +216,7 @@ class Client
      *
      * @internal use setOption/getOption
      */
-    public $no_multicall = false;
+    protected $no_multicall = false;
     /**
      * @var array
      *
@@ -221,7 +229,7 @@ class Client
      *
      * @internal use setAcceptedCompression/getOption
      */
-    public $accepted_compression = array();
+    protected $accepted_compression = array();
     /**
      * @var string|null
      *
@@ -230,7 +238,7 @@ class Client
      *
      * @internal use setOption/getOption
      */
-    public $request_compression = '';
+    protected $request_compression = '';
     /**
      * @var bool
      *
@@ -238,7 +246,7 @@ class Client
      *
      * @internal use setOption/getOption
      */
-    public $keepalive = false;
+    protected $keepalive = false;
     /**
      * @var string[]
      *
@@ -246,7 +254,7 @@ class Client
      *
      * @internal use setOption/getOption
      */
-    public $accepted_charset_encodings = array();
+    protected $accepted_charset_encodings = array();
     /**
      * @var string
      *
@@ -259,7 +267,7 @@ class Client
      *
      * @internal use setOption/getOption
      */
-    public $request_charset_encoding = '';
+    protected $request_charset_encoding = '';
     /**
      * @var string
      *
@@ -277,7 +285,7 @@ class Client
      *
      * @internal use setOption/getOption
      */
-    public $return_type = XMLParser::RETURN_XMLRPCVALS;
+    protected $return_type = XMLParser::RETURN_XMLRPCVALS;
     /**
      * @var string
      *
@@ -285,7 +293,7 @@ class Client
      *
      * @internal use setOption/getOption
      */
-    public $user_agent;
+    protected $user_agent;
 
     /**
      * CURL handle: used for keep-alive
@@ -296,7 +304,7 @@ class Client
     /**
      * @var array
      */
-    protected $options = array(
+    protected static $options = array(
         self::OPT_ACCEPTED_CHARSET_ENCODINGS,
         self::OPT_ACCEPTED_COMPRESSION,
         self::OPT_AUTH_TYPE,
@@ -401,7 +409,7 @@ class Client
         $this->accepted_charset_encodings = array('UTF-8', 'ISO-8859-1', 'US-ASCII');
 
         // NB: this is disabled to avoid making all the requests sent huge... mbstring supports more than 80 charsets!
-        //$ch = Charset::instance();
+        //$ch = $this->getCharsetEncoder();
         //$this->accepted_charset_encodings = $ch->knownCharsets();
 
         // initialize user_agent string
@@ -416,102 +424,12 @@ class Client
      */
     public function setOption($name, $value)
     {
-        switch ($name) {
-            case self::OPT_ACCEPTED_CHARSET_ENCODINGS:
-                $this->accepted_charset_encodings = $value;
-                break;
-            case self::OPT_ACCEPTED_COMPRESSION:
-                $this->accepted_compression = $value;
-                break;
-            case self::OPT_AUTH_TYPE:
-                $this->authtype = $value;
-                break;
-            case self::OPT_CA_CERT:
-                $this->cacert = $value;
-                break;
-            case self::OPT_CA_CERT_DIR:
-                $this->cacertdir = $value;
-                break;
-            case self::OPT_CERT:
-                $this->cert = $value;
-                break;
-            case self::OPT_CERT_PASS:
-                $this->certpass = $value;
-                break;
-            case self::OPT_COOKIES:
-                $this->cookies = $value;
-                break;
-            case self::OPT_DEBUG:
-                $this->debug = $value;
-                break;
-            case self::OPT_EXTRA_CURL_OPTS:
-                $this->extracurlopts = $value;
-                break;
-            case self::OPT_KEEPALIVE:
-                $this->keepalive = $value;
-                break;
-            case self::OPT_KEY:
-                $this->key = $value;
-                break;
-            case self::OPT_KEY_PASS:
-                $this->keypass = $value;
-                break;
-            case self::OPT_NO_MULTICALL:
-                $this->no_multicall = $value;
-                break;
-            case self::OPT_PASSWORD:
-                $this->password = $value;
-                break;
-            case self::OPT_PROXY:
-                $this->proxy = $value;
-                break;
-            case self::OPT_PROXY_AUTH_TYPE:
-                $this->proxy_authtype = $value;
-                break;
-            case self::OPT_PROXY_PASS:
-                $this->proxy_pass = $value;
-                break;
-            case self::OPT_PROXY_PORT:
-                $this->proxyport = $value;
-                break;
-            case self::OPT_PROXY_USER:
-                $this->proxy_user = $value;
-                break;
-            case self::OPT_REQUEST_CHARSET_ENCODING:
-                $this->request_charset_encoding = $value;
-                break;
-            case self::OPT_REQUEST_COMPRESSION:
-                $this->request_compression = $value;
-                break;
-            case self::OPT_RETURN_TYPE:
-                $this->return_type = $value;
-                break;
-            case self::OPT_SSL_VERSION:
-                $this->sslversion = $value;
-                break;
-            case self::OPT_TIMEOUT:
-                $this->timeout = $value;
-                break;
-            case self::OPT_USERNAME:
-                $this->username = $value;
-                break;
-            case self::OPT_USER_AGENT:
-                $this->user_agent = $value;
-                break;
-            case self::OPT_USE_CURL:
-                $this->use_curl = $value;
-                break;
-            case self::OPT_VERIFY_HOST:
-                $this->verifyhost = $value;
-                break;
-            case self::OPT_VERIFY_PEER:
-                $this->verifypeer = $value;
-                break;
-            default:
-                throw new ValueErrorException("Unsupported option '$name'");
+        if (in_array($name, static::$options)) {
+            $this->$name = $value;
+            return $this;
         }
 
-        return $this;
+        throw new ValueErrorException("Unsupported option '$name'");
     }
 
     /**
@@ -521,70 +439,11 @@ class Client
      */
     public function getOption($name)
     {
-        switch ($name) {
-            case self::OPT_ACCEPTED_CHARSET_ENCODINGS:
-                return $this->accepted_charset_encodings;
-            case self::OPT_ACCEPTED_COMPRESSION:
-                return $this->accepted_compression;
-            case self::OPT_AUTH_TYPE:
-                return $this->authtype;
-            case self::OPT_CA_CERT:
-                return $this->cacert;
-            case self::OPT_CA_CERT_DIR:
-                return $this->cacertdir;
-            case self::OPT_CERT:
-                return $this->cert;
-            case self::OPT_CERT_PASS:
-                return $this->certpass;
-            case self::OPT_COOKIES:
-                return $this->cookies;
-            case self::OPT_DEBUG:
-                return $this->debug;
-            case self::OPT_EXTRA_CURL_OPTS:
-                return $this->extracurlopts;
-            case self::OPT_KEEPALIVE:
-                return $this->keepalive;
-            case self::OPT_KEY:
-                return $this->key;
-            case self::OPT_KEY_PASS:
-                return $this->keypass;
-            case self::OPT_NO_MULTICALL:
-                return $this->no_multicall;
-            case self::OPT_PASSWORD:
-                return $this->password;
-            case self::OPT_PROXY:
-                return $this->proxy;
-            case self::OPT_PROXY_AUTH_TYPE:
-                return $this->proxy_authtype;
-            case self::OPT_PROXY_PASS:
-                return $this->proxy_pass;
-            case self::OPT_PROXY_PORT:
-                return $this->proxyport;
-            case self::OPT_PROXY_USER:
-                return $this->proxy_user;
-            case self::OPT_REQUEST_CHARSET_ENCODING:
-                return $this->request_charset_encoding;
-            case self::OPT_REQUEST_COMPRESSION:
-                return $this->request_compression;
-            case self::OPT_RETURN_TYPE:
-                return $this->return_type;
-            case self::OPT_SSL_VERSION:
-                return $this->sslversion;
-            case self::OPT_TIMEOUT:
-                return $this->timeout;
-            case self::OPT_USERNAME:
-                return $this->username;
-            case self::OPT_USER_AGENT:
-                return $this->user_agent;
-            case self::OPT_USE_CURL:
-                return $this->use_curl;
-            case self::OPT_VERIFY_HOST:
-                return $this->verifyhost;
-            case self::OPT_VERIFY_PEER:
-                return $this->verifypeer;
-            default:
-                throw new ValueErrorException("Unsupported option '$name'");
+        if (in_array($name, static::$options)) {
+            return $this->$name;
         }
+
+        throw new ValueErrorException("Unsupported option '$name'");
     }
 
     /**
@@ -594,7 +453,7 @@ class Client
     public function getOptions()
     {
         $values = array();
-        foreach ($this->options as $opt) {
+        foreach (static::$options as $opt) {
             $values[$opt] = $this->getOption($opt);
         }
         return $values;
@@ -1349,7 +1208,7 @@ class Client
      * @param array $opts the keys/values match self::getOptions
      * @return \CurlHandle|resource|false
      */
-    protected function createCurlHandle($req, $method, $server, $port, $path, $opts)
+    protected function createCURLHandle($req, $method, $server, $port, $path, $opts)
     {
         if ($port == 0) {
             if (in_array($method, array('http', 'http10', 'http11', 'h2c'))) {
@@ -2018,7 +1877,7 @@ class Client
     {
         $this->logDeprecationUnlessCalledBy('sendViaCURL');
 
-        return $this->createCurlHandle($req, $method, $server, $port, $this->path, array(
+        return $this->createCURLHandle($req, $method, $server, $port, $this->path, array(
             'accepted_charset_encodings' => $this->accepted_charset_encodings,
             'accepted_compression' => $this->accepted_compression,
             'authtype' => $authType,
@@ -2050,5 +1909,102 @@ class Client
             'verifyhost' => $this->verifyhost,
             'verifypeer' => $this->verifypeer,
         ));
+    }
+
+    // we have to make this return by ref in order to allow calls such as `$resp->_cookies['name'] = ['value' => 'something'];`
+    public function &__get($name)
+    {
+        if (in_array($name, static::$options)) {
+            $this->logDeprecation('Getting property Client::' . $name . ' is deprecated');
+            return $this->$name;
+        }
+
+        switch ($name) {
+            case 'errno':
+            case 'errstr':
+            case 'method':
+            case 'server':
+            case 'port':
+            case 'path':
+                $this->logDeprecation('Getting property Client::' . $name . ' is deprecated');
+                return $this->$name;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+                $result = null;
+                return $result;
+        }
+    }
+
+    public function __set($name, $value)
+    {
+        if (in_array($name, static::$options)) {
+            $this->logDeprecation('Setting property Client::' . $name . ' is deprecated');
+            $this->$name = $value;
+            return;
+        }
+
+        switch ($name) {
+            case 'errno':
+            case 'errstr':
+            case 'method':
+            case 'server':
+            case 'port':
+            case 'path':
+                $this->logDeprecation('Setting property Client::' . $name . ' is deprecated');
+                $this->$name = $value;
+                return;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
+    }
+
+    public function __isset($name)
+    {
+        if (in_array($name, static::$options)) {
+            $this->logDeprecation('Checking property Client::' . $name . ' is deprecated');
+            return isset($this->$name);
+        }
+
+        switch ($name) {
+            case 'errno':
+            case 'errstr':
+            case 'method':
+            case 'server':
+            case 'port':
+            case 'path':
+                $this->logDeprecation('Checking property Client::' . $name . ' is deprecated');
+                return isset($this->$name);
+            default:
+                return false;
+        }
+    }
+
+    public function __unset($name)
+    {
+        if (in_array($name, static::$options)) {
+            $this->logDeprecation('Unsetting property Client::' . $name . ' is deprecated');
+            unset($this->$name);
+            return;
+        }
+
+        switch ($name) {
+            case 'errno':
+            case 'errstr':
+            case 'method':
+            case 'server':
+            case 'port':
+            case 'path':
+                $this->logDeprecation('Unsetting property Client::' . $name . ' is deprecated');
+                unset($this->$name);
+                return;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
     }
 }

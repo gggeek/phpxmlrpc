@@ -69,10 +69,7 @@ class xmlrpc_server extends Server
             case 'dmap':
                 return $this->dmap;
             default:
-                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-                trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' .
-                    $trace[0]['line'], E_USER_NOTICE);
-                return null;
+                return parent::__get($name);
         }
     }
 
@@ -82,7 +79,7 @@ class xmlrpc_server extends Server
      */
     public function __isset($name)
     {
-        return $name === 'dmap';
+        return $name === 'dmap' ? true : parent::__isset($name);
     }
 
     /// @todo what about __set, __unset?

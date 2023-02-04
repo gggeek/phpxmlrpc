@@ -17,6 +17,9 @@ use PhpXmlRpc\Value;
  * @todo if iconv() or mb_string() are available, we could allow to convert the received xml to a custom charset encoding
  *       while parsing, which is faster than doing it later by going over the rebuilt data structure
  * @todo rename? This is an xml-rpc parser, not a generic xml parser...
+ *
+ * @property array $xmlrpc_valid_parents deprecated - public access left in purely for BC
+ * @property int $accept deprecated - (protected) access left in purely for BC
  */
 class XMLParser
 {
@@ -72,9 +75,8 @@ class XMLParser
 
     /**
      * @var array[]
-     * @internal
      */
-    public $xmlrpc_valid_parents = array(
+    protected $xmlrpc_valid_parents = array(
         'VALUE' => array('MEMBER', 'DATA', 'PARAM', 'FAULT'),
         'BOOLEAN' => array('VALUE'),
         'I4' => array('VALUE'),
@@ -1015,6 +1017,21 @@ class XMLParser
         $this->xmlrpc_se($parser, $name, $attrs, true);
     }
 
+    public function &__get($name)
+    {
+        switch ($name) {
+            case 'xmlrpc_valid_parents':
+                $this->logDeprecation('Getting property XMLParser::' . $name . ' is deprecated');
+                return $this->$name;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+                $result = null;
+                return $result;
+        }
+    }
+
     public function __set($name, $value)
     {
         switch ($name) {
@@ -1022,6 +1039,10 @@ class XMLParser
             case 'accept':
                 $this->logDeprecation('Setting property XMLParser::' . $name . ' is deprecated');
                 $this->current_parsing_options['accept'] = $value;
+                break;
+            case 'xmlrpc_valid_parents':
+                $this->logDeprecation('Setting property XMLParser::' . $name . ' is deprecated');
+                $this->$name = $value;
                 break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
@@ -1036,6 +1057,9 @@ class XMLParser
             case 'accept':
                 $this->logDeprecation('Checking property XMLParser::' . $name . ' is deprecated');
                 return isset($this->current_parsing_options['accept']);
+            case 'xmlrpc_valid_parents':
+                $this->logDeprecation('Checking property XMLParser::' . $name . ' is deprecated');
+                return isset($this->$name);
             default:
                 return false;
         }
@@ -1048,6 +1072,10 @@ class XMLParser
             case 'accept':
                 $this->logDeprecation('Unsetting property XMLParser::' . $name . ' is deprecated');
                 unset($this->current_parsing_options['accept']);
+                break;
+            case 'xmlrpc_valid_parents':
+                $this->logDeprecation('Unsetting property XMLParser::' . $name . ' is deprecated');
+                unset($this->$name);
                 break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...

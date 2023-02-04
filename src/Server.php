@@ -14,6 +14,15 @@ use PhpXmlRpc\Traits\ParserAware;
 
 /**
  * Allows effortless implementation of XML-RPC servers
+ *
+ * @property string[] $accepted_compression deprecated - public access left in purely for BC. Access via getOption()/setOption()
+ * @property bool $allow_system_funcs deprecated - public access left in purely for BC. Access via getOption()/setOption()
+ * @property bool $compress_response deprecated - public access left in purely for BC. Access via getOption()/setOption()
+ * @property int $debug deprecated - public access left in purely for BC. Access via getOption()/setOption()
+ * @property int $exception_handling deprecated - public access left in purely for BC. Access via getOption()/setOption()
+ * @property string $functions_parameters_type deprecated - public access left in purely for BC. Access via getOption()/setOption()
+ * @property array $phpvals_encoding_options deprecated - public access left in purely for BC. Access via getOption()/setOption()
+ * @property string $response_charset_encoding deprecated - public access left in purely for BC. Access via getOption()/setOption()
  */
 class Server
 {
@@ -37,7 +46,7 @@ class Server
      *
      * @todo create class constants for these
      */
-    public $functions_parameters_type = 'xmlrpcvals';
+    protected $functions_parameters_type = 'xmlrpcvals';
 
     /**
      * @var array
@@ -45,7 +54,7 @@ class Server
      * when the functions_parameters_type member is set to 'phpvals'.
      * @see Encoder::encode for a list of values
      */
-    public $phpvals_encoding_options = array('auto_dates');
+    protected $phpvals_encoding_options = array('auto_dates');
 
     /**
      * @var int
@@ -57,7 +66,7 @@ class Server
      * 2 =
      * 3 =
      */
-    public $debug = 1;
+    protected $debug = 1;
 
     /**
      * @var int
@@ -68,7 +77,7 @@ class Server
      * 2 = allow the exception to float to the upper layers
      * Can be overridden per-method-handler in the dispatch map
      */
-    public $exception_handling = 0;
+    protected $exception_handling = 0;
 
     /**
      * @var bool
@@ -76,27 +85,27 @@ class Server
      * for compression in the request.
      * Automatically set at constructor time.
      */
-    public $compress_response = false;
+    protected $compress_response = false;
 
     /**
      * @var string[]
      * List of http compression methods accepted by the server for requests. Automatically set at constructor time.
      * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib
      */
-    public $accepted_compression = array();
+    protected $accepted_compression = array();
 
     /**
      * @var bool
      * Shall we serve calls to system.* methods?
      */
-    public $allow_system_funcs = true;
+    protected $allow_system_funcs = true;
 
     /**
      * List of charset encodings natively accepted for requests.
      * Set at constructor time.
-     * UNUSED so far...
+     * @deprecated UNUSED so far...
      */
-    public $accepted_charset_encodings = array();
+    protected $accepted_charset_encodings = array();
 
     /**
      * @var string
@@ -108,7 +117,18 @@ class Server
      * - 'auto' (use client-specified charset encoding or same as request if request headers do not specify it (unless request is US-ASCII: then use library default anyway).
      * NB: pretty dangerous if you accept every charset and do not have mbstring enabled)
      */
-    public $response_charset_encoding = '';
+    protected $response_charset_encoding = '';
+
+    protected static $options = array(
+        self::OPT_ACCEPTED_COMPRESSION,
+        self::OPT_ALLOW_SYSTEM_FUNCS,
+        self::OPT_COMPRESS_RESPONSE,
+        self::OPT_DEBUG,
+        self::OPT_EXCEPTION_HANDLING,
+        self::OPT_FUNCTIONS_PARAMETERS_TYPE,
+        self::OPT_PHPVALS_ENCODING_OPTIONS,
+        self::OPT_RESPONSE_CHARSET_ENCODING,
+    );
 
     /**
      * @var mixed
@@ -122,17 +142,6 @@ class Server
      * @var array[] $dmap
      */
     protected $dmap = array();
-
-    protected $options = array(
-        self::OPT_ACCEPTED_COMPRESSION,
-        self::OPT_ALLOW_SYSTEM_FUNCS,
-        self::OPT_COMPRESS_RESPONSE,
-        self::OPT_DEBUG,
-        self::OPT_EXCEPTION_HANDLING,
-        self::OPT_FUNCTIONS_PARAMETERS_TYPE,
-        self::OPT_PHPVALS_ENCODING_OPTIONS,
-        self::OPT_RESPONSE_CHARSET_ENCODING,
-    );
 
     /**
      * Storage for internal debug info.
@@ -194,28 +203,14 @@ class Server
     {
         switch ($name) {
             case self::OPT_ACCEPTED_COMPRESSION :
-                $this->accepted_charset_encodings = $value;
-                break;
             case self::OPT_ALLOW_SYSTEM_FUNCS:
-                $this->allow_system_funcs = $value;
-                break;
             case self::OPT_COMPRESS_RESPONSE:
-                $this->compress_response = $value;
-                break;
             case self::OPT_DEBUG:
-                $this->debug = $value;
-                break;
             case self::OPT_EXCEPTION_HANDLING:
-                $this->exception_handling = $value;
-                break;
             case self::OPT_FUNCTIONS_PARAMETERS_TYPE:
-                $this->functions_parameters_type = $value;
-                break;
             case self::OPT_PHPVALS_ENCODING_OPTIONS:
-                $this->phpvals_encoding_options = $value;
-                break;
             case self::OPT_RESPONSE_CHARSET_ENCODING:
-                $this->response_charset_encoding = $value;
+                $this->$name = $value;
                 break;
             default:
                 throw new ValueErrorException("Unsupported option '$name'");
@@ -233,21 +228,14 @@ class Server
     {
         switch ($name) {
             case self::OPT_ACCEPTED_COMPRESSION:
-                return $this->accepted_compression;
             case self::OPT_ALLOW_SYSTEM_FUNCS:
-                return $this->allow_system_funcs;
             case self::OPT_COMPRESS_RESPONSE:
-                return $this->compress_response;
             case self::OPT_DEBUG:
-                return $this->debug;
             case self::OPT_EXCEPTION_HANDLING:
-                return $this->exception_handling;
             case self::OPT_FUNCTIONS_PARAMETERS_TYPE:
-                return $this->functions_parameters_type;
             case self::OPT_PHPVALS_ENCODING_OPTIONS:
-                return $this->phpvals_encoding_options;
             case self::OPT_RESPONSE_CHARSET_ENCODING:
-                return $this->response_charset_encoding;
+                return $this->$name;
             default:
                 throw new ValueErrorException("Unsupported option '$name'");
         }
@@ -260,7 +248,7 @@ class Server
     public function getOptions()
     {
         $values = array();
-        foreach($this->options as $opt) {
+        foreach(static::$options as $opt) {
             $values[$opt] = $this->getOption($opt);
         }
         return $values;
@@ -1440,6 +1428,89 @@ class Server
             return "<?xml version=\"1.0\" encoding=\"$charsetEncoding\"?" . ">\n";
         } else {
             return "<?xml version=\"1.0\"?" . ">\n";
+        }
+    }
+
+    // we have to make this return by ref in order to allow calls such as `$resp->_cookies['name'] = ['value' => 'something'];`
+    public function &__get($name)
+    {
+        switch ($name) {
+            case self::OPT_ACCEPTED_COMPRESSION :
+            case self::OPT_ALLOW_SYSTEM_FUNCS:
+            case self::OPT_COMPRESS_RESPONSE:
+            case self::OPT_DEBUG:
+            case self::OPT_EXCEPTION_HANDLING:
+            case self::OPT_FUNCTIONS_PARAMETERS_TYPE:
+            case self::OPT_PHPVALS_ENCODING_OPTIONS:
+            case self::OPT_RESPONSE_CHARSET_ENCODING:
+                $this->logDeprecation('Getting property Request::' . $name . ' is deprecated');
+                return $this->$name;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+                $result = null;
+                return $result;
+        }
+    }
+
+    public function __set($name, $value)
+    {
+        switch ($name) {
+            case self::OPT_ACCEPTED_COMPRESSION :
+            case self::OPT_ALLOW_SYSTEM_FUNCS:
+            case self::OPT_COMPRESS_RESPONSE:
+            case self::OPT_DEBUG:
+            case self::OPT_EXCEPTION_HANDLING:
+            case self::OPT_FUNCTIONS_PARAMETERS_TYPE:
+            case self::OPT_PHPVALS_ENCODING_OPTIONS:
+            case self::OPT_RESPONSE_CHARSET_ENCODING:
+                $this->logDeprecation('Setting property Request::' . $name . ' is deprecated');
+                $this->$name = $value;
+                break;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __set(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
+        }
+    }
+
+    public function __isset($name)
+    {
+        switch ($name) {
+            case self::OPT_ACCEPTED_COMPRESSION :
+            case self::OPT_ALLOW_SYSTEM_FUNCS:
+            case self::OPT_COMPRESS_RESPONSE:
+            case self::OPT_DEBUG:
+            case self::OPT_EXCEPTION_HANDLING:
+            case self::OPT_FUNCTIONS_PARAMETERS_TYPE:
+            case self::OPT_PHPVALS_ENCODING_OPTIONS:
+            case self::OPT_RESPONSE_CHARSET_ENCODING:
+                $this->logDeprecation('Checking property Request::' . $name . ' is deprecated');
+                return isset($this->$name);
+            default:
+                return false;
+        }
+    }
+
+    public function __unset($name)
+    {
+        switch ($name) {
+            case self::OPT_ACCEPTED_COMPRESSION :
+            case self::OPT_ALLOW_SYSTEM_FUNCS:
+            case self::OPT_COMPRESS_RESPONSE:
+            case self::OPT_DEBUG:
+            case self::OPT_EXCEPTION_HANDLING:
+            case self::OPT_FUNCTIONS_PARAMETERS_TYPE:
+            case self::OPT_PHPVALS_ENCODING_OPTIONS:
+            case self::OPT_RESPONSE_CHARSET_ENCODING:
+                $this->logDeprecation('Unsetting property Request::' . $name . ' is deprecated');
+                unset($this->$name);
+                break;
+            default:
+                /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+                trigger_error('Undefined property via __unset(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'], E_USER_WARNING);
         }
     }
 }
