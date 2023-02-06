@@ -126,7 +126,8 @@
 
 * new: in the dispatch map, it is now possible to set different exception handling modes for each exposed xml-rpc method
 
-* new: method `Server::add_to_map` has acquired new parameters: `$parametersType = false, $exceptionHandling = false`
+* new: method `Server::add_to_map` is deprecated in favour of `addToMap`. It has also acquired new parameters:
+  `$parametersType = false, $exceptionHandling = false`
 
 * improved: the `XMLParser` accepts more options in its constructor (see phpdocs for details)
 

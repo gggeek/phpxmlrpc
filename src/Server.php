@@ -365,7 +365,7 @@ class Server
 
         // Save what we received, before parsing it
         if ($this->debug > 1) {
-            $this->debugmsg("+++GOT+++\n" . $data . "\n+++END+++");
+            $this->debugMsg("+++GOT+++\n" . $data . "\n+++END+++");
         }
 
         $resp = $this->parseRequestHeaders($data, $reqCharset, $respCharset, $respEncoding);
@@ -383,7 +383,7 @@ class Server
         }
 
         if ($this->debug > 2 && static::$_xmlrpcs_occurred_errors != '') {
-            $this->debugmsg("+++PROCESSING ERRORS AND WARNINGS+++\n" .
+            $this->debugMsg("+++PROCESSING ERRORS AND WARNINGS+++\n" .
                 static::$_xmlrpcs_occurred_errors . "+++END+++");
         }
 
@@ -460,9 +460,35 @@ class Server
      *
      * @todo raise a warning if the user tries to register a 'system.' method
      */
+    public function addToMap($methodName, $function, $sig = null, $doc = false, $sigDoc = false, $parametersType = false,
+        $exceptionHandling = false)
+    {
+       return $this->addToMap($methodName, $function, $sig, $doc, $sigDoc, $parametersType, $exceptionHandling);
+    }
+
+    /**
+     * Add a method to the dispatch map.
+     *
+     * @param string $methodName the name with which the method will be made available
+     * @param callable $function the php function that will get invoked
+     * @param array[] $sig the array of valid method signatures.
+     *                     Each element is one signature: an array of strings with at least one element
+     *                     First element = type of returned value. Elements 2..N = types of parameters 1..N
+     * @param string $doc method documentation
+     * @param array[] $sigDoc the array of valid method signatures docs, following the format of $sig but with
+     *                        descriptions instead of types (one string for return type, one per param)
+     * @param string $parametersType to allow single method handlers to receive php values instead of a Request, or vice-versa
+     * @param int $exceptionHandling @see $this->exception_handling
+     * @return void
+     *
+     * @todo raise a warning if the user tries to register a 'system.' method
+     * @deprecated use addToMap instead
+     */
     public function add_to_map($methodName, $function, $sig = null, $doc = false, $sigDoc = false, $parametersType = false,
         $exceptionHandling = false)
     {
+        $this->logDeprecationUnlessCalledBy('addToMap');
+
         $this->dmap[$methodName] = array(
             'function' => $function,
             'docstring' => $doc,
@@ -547,9 +573,9 @@ class Server
 
         if ($this->debug > 1) {
             if (function_exists('getallheaders')) {
-                $this->debugmsg(''); // empty line
+                $this->debugMsg(''); // empty line
                 foreach (getallheaders() as $name => $val) {
-                    $this->debugmsg("HEADER: $name: $val");
+                    $this->debugMsg("HEADER: $name: $val");
                 }
             }
         }
@@ -571,12 +597,12 @@ class Server
                     if ($contentEncoding == 'deflate' && $degzdata = @gzuncompress($data)) {
                         $data = $degzdata;
                         if ($this->debug > 1) {
-                            $this->debugmsg("\n+++INFLATED REQUEST+++[" . strlen($data) . " chars]+++\n" . $data . "\n+++END+++");
+                            $this->debugMsg("\n+++INFLATED REQUEST+++[" . strlen($data) . " chars]+++\n" . $data . "\n+++END+++");
                         }
                     } elseif ($contentEncoding == 'gzip' && $degzdata = @gzinflate(substr($data, 10))) {
                         $data = $degzdata;
                         if ($this->debug > 1) {
-                            $this->debugmsg("+++INFLATED REQUEST+++[" . strlen($data) . " chars]+++\n" . $data . "\n+++END+++");
+                            $this->debugMsg("+++INFLATED REQUEST+++[" . strlen($data) . " chars]+++\n" . $data . "\n+++END+++");
                         }
                     } else {
                         $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_decompress_fail'],
@@ -710,7 +736,7 @@ class Server
                 )
             ) {
                 if ($this->debug > 1) {
-                    $this->debugmsg("\n+++PARSED+++\n" . var_export($_xh['params'], true) . "\n+++END+++");
+                    $this->debugMsg("\n+++PARSED+++\n" . var_export($_xh['params'], true) . "\n+++END+++");
                 }
 
                 return $this->execute($_xh['method'], $_xh['params'], $_xh['pt']);
@@ -722,7 +748,7 @@ class Server
                 }
 
                 if ($this->debug > 1) {
-                    $this->debugmsg("\n+++PARSED+++\n" . var_export($req, true) . "\n+++END+++");
+                    $this->debugMsg("\n+++PARSED+++\n" . var_export($req, true) . "\n+++END+++");
                 }
 
                 return $this->execute($req);
@@ -983,7 +1009,7 @@ class Server
      * @param string $string
      * @return void
      */
-    protected function debugmsg($string)
+    protected function debugMsg($string)
     {
         $this->debug_info .= $string . "\n";
     }

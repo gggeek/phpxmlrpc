@@ -148,6 +148,7 @@ Deprecated methods
 | Client  | setSSLVersion         | setOption            |
 | Client  | setUseCurl            | setOption            |
 | Client  | setUserAgent          | setOption            |
+| Server  | add_to_map            | addToMap             |
 | Server  | xml_header            | Response::xml_header |
 | Value   | serializeData         | -                    |
 

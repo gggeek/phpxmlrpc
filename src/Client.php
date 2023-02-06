@@ -812,6 +812,7 @@ class Client
 
         if (is_array($req)) {
             // $req is an array of Requests
+            /// @todo switch to the new syntax for multicall
             return $this->multicall($req, $timeout, $method);
         } elseif (is_string($req)) {
             $n = new static::$requestClass('');
@@ -1386,20 +1387,30 @@ class Client
      * Unfortunately, there is no server error code universally used to denote the fact that multicall is unsupported,
      * so there is no way to reliably distinguish between that and a temporary failure.
      * If you are sure that server supports multicall and do not want to fallback to using many single calls, set the
-     * fourth parameter to FALSE.
+     * 2np parameter to FALSE.
      *
      * NB: trying to shoehorn extra functionality into existing syntax has resulted
      * in pretty much convoluted code...
      *
      * @param Request[] $reqs an array of Request objects
-     * @param integer $timeout deprecated - connection timeout (in seconds). See the details in the docs for the send() method
-     * @param string $method deprecated - the http protocol variant to be used. See the details in the docs for the send() method
-     * @param boolean $fallback When true, upon receiving an error during multicall, multiple single calls will be
-     *                         attempted
+     * @param bool $noFallback When true, upon receiving an error during multicall, multiple single calls will not be
+     *                         attempted.
+     *                         Deprecated alternative, was: int - "connection timeout (in seconds). See the details in the
+     *                         docs for the send() method". Please use setOption instead to set a timeout
+     * @param string $method deprecated. Was: "the http protocol variant to be used. See the details in the docs for the send() method."
+     *                       Please use the constructor to set an http protocol variant.
+     * @param boolean $fallback deprecated. Was: "w"hen true, upon receiving an error during multicall, multiple single
+     *                          calls will be attempted"
      * @return Response[]
      */
     public function multicall($reqs, $timeout = 0, $method = '', $fallback = true)
     {
+        // BC
+        if (is_bool($timeout) && $fallback === true) {
+            $fallback = !$timeout;
+            $timeout = 0;
+        }
+
         if ($method == '') {
             $method = $this->method;
         }
