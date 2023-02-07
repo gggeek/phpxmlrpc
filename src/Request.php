@@ -323,8 +323,11 @@ class Request
         }
 
         $xmlRpcParser = $this->getParser();
-        $xmlRpcParser->parse($data, $returnType, XMLParser::ACCEPT_RESPONSE, $options);
-        $_xh = $xmlRpcParser->_xh;
+        $_xh = $xmlRpcParser->parse($data, $returnType, XMLParser::ACCEPT_RESPONSE, $options);
+        // BC
+        if (!is_array($_xh)) {
+            $_xh = $xmlRpcParser->_xh;
+        }
 
         // first error check: xml not well-formed
         if ($_xh['isf'] == 3) {

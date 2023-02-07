@@ -325,13 +325,16 @@ class Encoder
         }
 
         $xmlRpcParser = $this->getParser();
-        $xmlRpcParser->parse(
+        $_xh = $xmlRpcParser->parse(
             $xmlVal,
             XMLParser::RETURN_XMLRPCVALS,
             XMLParser::ACCEPT_REQUEST | XMLParser::ACCEPT_RESPONSE | XMLParser::ACCEPT_VALUE | XMLParser::ACCEPT_FAULT,
             $parserOptions
         );
-        $_xh = $xmlRpcParser->_xh;
+        // BC
+        if (!is_array($_xh)) {
+            $_xh = $xmlRpcParser->_xh;
+        }
 
         if ($_xh['isf'] > 1) {
             // test that $_xh['value'] is an obj, too???

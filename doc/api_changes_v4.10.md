@@ -56,6 +56,7 @@ implementation clashes with the new one if you implemented:
 | Response  | getPayload          |           |
 | Response  | valueType           |           |
 | Response  | xml_header          |           |
+| Server    | addToMap            |           |
 | Server    | getOption           |           |
 | Server    | getOptions          |           |
 | Server    | setDispatchMap      |           |
@@ -128,9 +129,10 @@ The following methods have had some parameters deprecated
 
 The following methods have modified their return value
 
-| Class     | Method         | Notes   |
-|-----------|----------------|---------|
-| Client    | _try_multicall | private |
+| Class     | Method         | Notes                               |
+|-----------|----------------|-------------------------------------|
+| Client    | _try_multicall | private                             |
+| XMLParser | parse          | was: return void, now returns array |
 
 Deprecated methods
 ------------------
@@ -157,64 +159,65 @@ Deprecated properties
 
 The following properties have now protected access. Replacement accessor for public use are listed.
 
-| Class    | Property                   | Read via               | Write via                        |
-|----------|----------------------------|------------------------|----------------------------------|
-| Client   | accepted_charset_encodings | getOption              | setOption                        |
-| Client   | accepted_compression       | getOption              | setOption/setAcceptedCompression |
-| Client   | authtype                   | getOption              | setOption/setCredentials         |
-| Client   | cacert                     | getOption              | setOption/setCaCertificate       |
-| Client   | cacertdir                  | getOption              | setOption/setCaCertificate       |
-| Client   | cert                       | getOption              | setOption/setCertificate         |
-| Client   | certpass                   | getOption              | setOption/setCertificate         |
-| Client   | cookies                    | getOption              | setOption                        |
-| Client   | debug                      | getOption              | setOption/setDebug               |
-| Client   | errno                      | -                      | -                                |
-| Client   | errstr                     | -                      | -                                |
-| Client   | extracurlopts              | getOption              | setOption                        |
-| Client   | keepalive                  | getOption              | setOption                        |
-| Client   | key                        | getOption              | setOption/setKey                 |
-| Client   | keypass                    | getOption              | setOption/setKey                 |
-| Client   | method                     | getUrl                 | __construct                      |
-| Client   | no_multicall               | getOption              | setOption                        |
-| Client   | password                   | getOption              | setOption/setCredentials         |
-| Client   | path                       | getUrl                 | __construct                      |
-| Client   | port                       | getUrl                 | __construct                      |
-| Client   | proxy                      | getOption              | setOption/setProxy               |
-| Client   | proxy_authtype             | getOption              | setOption/setProxy               |
-| Client   | proxy_pass                 | getOption              | setOption/setProxy               |
-| Client   | proxy_user                 | getOption              | setOption/setProxy               |
-| Client   | proxyport                  | getOption              | setOption/setProxy               |
-| Client   | request_charset_encoding   | getOption              | setOption                        |
-| Client   | request_compression        | getOption              | setOption                        |
-| Client   | return_type                | getOption              | setOption                        |
-| Client   | server                     | getUrl                 | __construct                      |
-| Client   | sslversion                 | getOption              | setOption                        |
-| Client   | use_curl                   | getOption              | setOption                        |
-| Client   | user_agent                 | getOption              | setOption                        |
-| Client   | username                   | getOption              | setOption/setCredentials         |
-| Client   | verifyhost                 | getOption              | setOption                        |
-| Client   | verifypeer                 | getOption              | setOption                        |
-| Request  | content_type               | getContentType         | setPayload                       |
-| Request  | debug                      | setDebug               | -                                |
-| Request  | methodname                 | method                 | __construct/method               |
-| Request  | params                     | getParam               | __construct/addParam             |
-| Request  | payload                    | getPayload             | setPayload                       |
-| Response | val                        | value                  | __construct                      |
-| Response | valtyp                     | valueType              | __construct                      |
-| Response | errno                      | faultCode              | __construct                      |
-| Response | errstr                     | faultString            | __construct                      |
-| Response | content_type               | getContentType         | setPayload                       |
-| Response | payload                    | getPayload             | setPayload                       |
-| Server   | accepted_charset_encodings | -                      | -                                |
-| Server   | accepted_compression       | getOption              | setOption                        |
-| Server   | allow_system_funcs         | getOption              | setOption                        |
-| Server   | compress_response          | getOption              | setOption                        |
-| Server   | debug                      | getOption              | setOption/setDebug               |
-| Server   | exception_handling         | getOption              | setOption                        |
-| Server   | functions_parameters_type  | getOption              | setOption                        |
-| Server   | phpvals_encoding_options   | getOption              | setOption                        |
-| Server   | response_charset_encoding  | getOption              | setOption                        |
-| Value    | _php_class                 | -                      | -                                |
-| Value    | me                         | scalarVal/array access | __construct                      |
-| Value    | mytype                     | kindOf                 | __construct                      |
-| Wrapper  | $objectholder              | getHeldObject          | holdObject                       |
+| Class     | Property                   | Read via               | Write via                        |
+|-----------|----------------------------|------------------------|----------------------------------|
+| Client    | accepted_charset_encodings | getOption              | setOption                        |
+| Client    | accepted_compression       | getOption              | setOption/setAcceptedCompression |
+| Client    | authtype                   | getOption              | setOption/setCredentials         |
+| Client    | cacert                     | getOption              | setOption/setCaCertificate       |
+| Client    | cacertdir                  | getOption              | setOption/setCaCertificate       |
+| Client    | cert                       | getOption              | setOption/setCertificate         |
+| Client    | certpass                   | getOption              | setOption/setCertificate         |
+| Client    | cookies                    | getOption              | setOption                        |
+| Client    | debug                      | getOption              | setOption/setDebug               |
+| Client    | errno                      | -                      | -                                |
+| Client    | errstr                     | -                      | -                                |
+| Client    | extracurlopts              | getOption              | setOption                        |
+| Client    | keepalive                  | getOption              | setOption                        |
+| Client    | key                        | getOption              | setOption/setKey                 |
+| Client    | keypass                    | getOption              | setOption/setKey                 |
+| Client    | method                     | getUrl                 | __construct                      |
+| Client    | no_multicall               | getOption              | setOption                        |
+| Client    | password                   | getOption              | setOption/setCredentials         |
+| Client    | path                       | getUrl                 | __construct                      |
+| Client    | port                       | getUrl                 | __construct                      |
+| Client    | proxy                      | getOption              | setOption/setProxy               |
+| Client    | proxy_authtype             | getOption              | setOption/setProxy               |
+| Client    | proxy_pass                 | getOption              | setOption/setProxy               |
+| Client    | proxy_user                 | getOption              | setOption/setProxy               |
+| Client    | proxyport                  | getOption              | setOption/setProxy               |
+| Client    | request_charset_encoding   | getOption              | setOption                        |
+| Client    | request_compression        | getOption              | setOption                        |
+| Client    | return_type                | getOption              | setOption                        |
+| Client    | server                     | getUrl                 | __construct                      |
+| Client    | sslversion                 | getOption              | setOption                        |
+| Client    | use_curl                   | getOption              | setOption                        |
+| Client    | user_agent                 | getOption              | setOption                        |
+| Client    | username                   | getOption              | setOption/setCredentials         |
+| Client    | verifyhost                 | getOption              | setOption                        |
+| Client    | verifypeer                 | getOption              | setOption                        |
+| Request   | content_type               | getContentType         | setPayload                       |
+| Request   | debug                      | setDebug               | -                                |
+| Request   | methodname                 | method                 | __construct/method               |
+| Request   | params                     | getParam               | __construct/addParam             |
+| Request   | payload                    | getPayload             | setPayload                       |
+| Response  | val                        | value                  | __construct                      |
+| Response  | valtyp                     | valueType              | __construct                      |
+| Response  | errno                      | faultCode              | __construct                      |
+| Response  | errstr                     | faultString            | __construct                      |
+| Response  | content_type               | getContentType         | setPayload                       |
+| Response  | payload                    | getPayload             | setPayload                       |
+| Server    | accepted_charset_encodings | -                      | -                                |
+| Server    | accepted_compression       | getOption              | setOption                        |
+| Server    | allow_system_funcs         | getOption              | setOption                        |
+| Server    | compress_response          | getOption              | setOption                        |
+| Server    | debug                      | getOption              | setOption/setDebug               |
+| Server    | exception_handling         | getOption              | setOption                        |
+| Server    | functions_parameters_type  | getOption              | setOption                        |
+| Server    | phpvals_encoding_options   | getOption              | setOption                        |
+| Server    | response_charset_encoding  | getOption              | setOption                        |
+| Value     | _php_class                 | -                      | -                                |
+| Value     | me                         | scalarVal/array access | __construct                      |
+| Value     | mytype                     | kindOf                 | __construct                      |
+| Wrapper   | $objectholder              | getHeldObject          | holdObject                       |
+| XMLParser | $_xh                       | results of parse()     | -                                |

@@ -59,7 +59,7 @@ class XMLParser
      *    pt - used to store the type of each received parameter. Useful if parameters are automatically decoded to php values
      *    rt - 'methodcall', 'methodresponse', 'value' or 'fault' (the last one used only in EPI emulation mode)
      */
-    public $_xh = array(
+    protected $_xh = array(
         'ac' => '',
         'stack' => array(),
         'valuestack' => array(),
@@ -144,7 +144,7 @@ class XMLParser
      *                       These options are added to options received in the constructor.
      *                       Note that if options xmlrpc_null_extension, xmlrpc_return_datetimes and xmlrpc_reject_invalid_values
      *                       are not set, the default settings from PhpXmlRpc\PhpXmlRpc are used
-     * @return void the caller has to look into $this->_xh to find the results
+     * @return array see the definition of $this->_xh for the meaning of the results
      * @throws \Exception this can happen if a callback function is set and it does throw (i.e. we do not catch exceptions)
      *
      * @todo refactor? we could 1. return the parsed data structure, and 2. move $returnType and $accept into options
@@ -173,7 +173,7 @@ class XMLParser
         if ($len == 0) {
             $this->_xh['isf'] = 3;
             $this->_xh['isf_reason'] = 'XML error 5: empty document';
-            return;
+            return $this->_xh;
         }
 
         $this->current_parsing_options = array('accept' => $accept);
@@ -289,6 +289,8 @@ class XMLParser
 
         xml_parser_free($parser);
         $this->current_parsing_options = array();
+
+        return $this->_xh;
     }
 
     /**
@@ -1020,6 +1022,7 @@ class XMLParser
     public function &__get($name)
     {
         switch ($name) {
+            case '_xh':
             case 'xmlrpc_valid_parents':
                 $this->logDeprecation('Getting property XMLParser::' . $name . ' is deprecated');
                 return $this->$name;
@@ -1040,6 +1043,7 @@ class XMLParser
                 $this->logDeprecation('Setting property XMLParser::' . $name . ' is deprecated');
                 $this->current_parsing_options['accept'] = $value;
                 break;
+            case '_xh':
             case 'xmlrpc_valid_parents':
                 $this->logDeprecation('Setting property XMLParser::' . $name . ' is deprecated');
                 $this->$name = $value;
@@ -1057,6 +1061,7 @@ class XMLParser
             case 'accept':
                 $this->logDeprecation('Checking property XMLParser::' . $name . ' is deprecated');
                 return isset($this->current_parsing_options['accept']);
+            case '_xh':
             case 'xmlrpc_valid_parents':
                 $this->logDeprecation('Checking property XMLParser::' . $name . ' is deprecated');
                 return isset($this->$name);
@@ -1073,6 +1078,7 @@ class XMLParser
                 $this->logDeprecation('Unsetting property XMLParser::' . $name . ' is deprecated');
                 unset($this->current_parsing_options['accept']);
                 break;
+            case '_xh':
             case 'xmlrpc_valid_parents':
                 $this->logDeprecation('Unsetting property XMLParser::' . $name . ' is deprecated');
                 unset($this->$name);

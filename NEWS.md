@@ -183,8 +183,9 @@
     and reimplemented the `parse` methods, or wholesale replaced it, you will have to adapt your code: both for that,
     and for making sure that it sets `$this->current_parsing_options['xmlrpc_null_extension']` from
     `PhpXmlRpc::$xmlrpc_null_extension`
-  - also, if you had reimplemented `XMLParser::parse`, be warned that the callers now treat differently results when
-    `_xh['isf'] > 3`
+  - also, if you had reimplemented `XMLParser::parse`, be warned that:
+    - you should return `$this->_xh` instead of void
+    - the callers now treat differently results when `_xh['isf'] > 3`
   - `Client` protected methods `sendPayloadSocket`, `sendPayloadCURL` and `prepareCurlHandle` are now deprecated. They
     have been replaced by `sendViaSocket`, `sendViaCURL` and `createCurlHandle` respectively
   - if you subclassed the `Client` class, take care of new static variables `$requestClass` and `$responseClass`,

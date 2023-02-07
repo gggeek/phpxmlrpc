@@ -205,9 +205,9 @@ class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
         $req = new \PhpXmlRpc\Request('test', array($val));
         $xml = $req->serialize();
         $parser = new \PhpXmlRpc\Helper\XMLParser();
-        $parser->parse($xml);
+        $_xh = $parser->parse($xml);
 
-        $this->assertequals(0, $parser->_xh['isf']);
+        $this->assertequals(0, $_xh['isf']);
     }
 
     public function testLatin15InternalEncoding()
