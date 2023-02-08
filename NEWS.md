@@ -68,6 +68,8 @@
 * fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, the code would be always falling back to
   non-multicall requests
 
+* fixed: support calling `Client::setSSLVersion()` for the case of not using curl transport
+
 * fixed: receiving integers which use the '<EX:I8>' xml tag
 
 * fixed: setting/retrieving the php value from a Value object using array notation would fail if the object was created

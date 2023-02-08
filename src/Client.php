@@ -144,7 +144,7 @@ class Client
     /**
      * @var int
      */
-    protected $sslversion = 0; // corresponds to CURL_SSLVERSION_DEFAULT
+    protected $sslversion = 0; // corresponds to CURL_SSLVERSION_DEFAULT. Other  CURL_SSLVERSION_ values are supported
     /**
      * @var string
      */
@@ -575,7 +575,7 @@ class Client
     /**
      * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let cURL decide
      *
-     * @param int $i
+     * @param int $i see  CURL_SSLVERSION_ constants
      * @return $this
      * @deprecated use setOption
      */
@@ -829,8 +829,8 @@ class Client
         // where req is a Request
         $req->setDebug($this->debug);
 
-        /// @todo we could be smarter about this and not force usage of curl for https if not present, as well as
-        ///       use the presence of curl_extra_opts or socket_extra_opts as a hint
+        /// @todo we could be smarter about this and not force usage of curl for https if not present as well as use the
+        ///       presence of curl_extra_opts or socket_extra_opts as a hint
         $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO && (
             in_array($method, array('https', 'http11', 'h2c', 'h2')) ||
             ($this->username != '' && $this->authtype != 1) ||
@@ -1041,6 +1041,41 @@ class Client
             }
             $contextOptions['ssl']['verify_peer'] = $opts['verifypeer'];
             $contextOptions['ssl']['verify_peer_name'] = $opts['verifypeer'];
+
+            if ($opts['sslversion'] != 0) {
+                /// @see https://www.php.net/manual/en/function.curl-setopt.php, https://www.php.net/manual/en/migration56.openssl.php
+                switch($opts['sslversion']) {
+                    /// @todo what does this map to? 1.0-1.3?
+                    //case 1: // TLSv1
+                    //    break;
+                    case 2: // SSLv2
+                        $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_SSLv2_CLIENT;
+                        break;
+                    case 3: // SSLv3
+                        $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_SSLv3_CLIENT;
+                        break;
+                    case 4: // TLSv1.0
+                        $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT;
+                        break;
+                    case 5: // TLSv1.1
+                        $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT;
+                        break;
+                    case 6: // TLSv1.2
+                        $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
+                        break;
+                    case 7: // TLSv1.3
+                        if (defined('STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT')) {
+                            $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT;
+                        } else {
+                            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['unsupported_option'],
+                                PhpXmlRpc::$xmlrpcerr['unsupported_option'] . ': TLS-1.3 only is supported with PHP 7.4 or later');
+                        }
+                        break;
+                    default:
+                        return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['unsupported_option'],
+                            PhpXmlRpc::$xmlrpcerr['unsupported_option'] . ': Unsupported required TLS version');
+                }
+            }
         }
 
         foreach ($opts['extracurlopts'] as $proto => $protoOpts) {
@@ -1405,6 +1440,7 @@ class Client
             foreach ($opts['cookies'] as $name => $cookie) {
                 $cookieHeader .= $name . '=' . $cookie['value'] . '; ';
             }
+var_dump(substr($cookieHeader, 0, -2));
             curl_setopt($curl, CURLOPT_COOKIE, substr($cookieHeader, 0, -2));
         }
 
