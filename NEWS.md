@@ -62,6 +62,9 @@
 
 * fixed: made sure all debug output goes through the logger at response parsing time (there was one printf call left)
 
+* fixed: `Client::send` will now return an error Response when it is requested to use an auth method that it does not
+  support, instead of logging an error message and continuing with another auth schema. The returned error code is 20
+
 * fixed: when calling `Client::multicall()` with `$client->return_type = 'xml'`, the code would be always falling back to
   non-multicall requests
 
@@ -93,6 +96,8 @@
   closer to supporting DIC patterns (issue #78)
 
 * new: method `PhpXmlRpc::setLogger()`, to simplify injecting a custom logger into all classes of the library in one step
+
+* improved: the Client is more verbose in logging issues when trying to compress a Request for sending
 
 * improved: the `Logger` class now sports methods adhering to Psr\Log\LoggerInterface
 

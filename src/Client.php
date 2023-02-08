@@ -905,20 +905,28 @@ class Client
 
         // Deflate request body and set appropriate request headers
         $encodingHdr = '';
-        if (function_exists('gzdeflate') && ($opts['request_compression'] == 'gzip' || $opts['request_compression'] == 'deflate')) {
-            if ($opts['request_compression'] == 'gzip') {
+        if ($opts['request_compression'] == 'gzip' || $opts['request_compression'] == 'deflate') {
+            if ($opts['request_compression'] == 'gzip' && function_exists('gzencode')) {
                 $a = @gzencode($payload);
                 if ($a) {
                     $payload = $a;
                     $encodingHdr = "Content-Encoding: gzip\r\n";
+                } else {
+                    $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': gzencode failure in compressing request');
                 }
-            } else {
+            } else if (function_exists('gzcompress')) {
                 $a = @gzcompress($payload);
                 if ($a) {
                     $payload = $a;
                     $encodingHdr = "Content-Encoding: deflate\r\n";
+                } else {
+                    $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': gzcompress failure in compressing request');
                 }
+            } else {
+                $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': desired request compression method is unsupported by this PHP install');
             }
+        } else {
+            $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': desired request compression method is unsupported');
         }
 
         // thanks to Grant Rauscher
@@ -926,8 +934,9 @@ class Client
         if ($opts['username'] != '') {
             $credentials = 'Authorization: Basic ' . base64_encode($opts['username'] . ':' . $opts['password']) . "\r\n";
             if ($opts['authtype'] != 1) {
-                /// @todo make this a proper error, i.e. return a failure
                 $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported with HTTP 1.0');
+                return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['unsupported_option'],
+                    PhpXmlRpc::$xmlrpcerr['unsupported_option'] . ': only Basic auth is supported with HTTP 1.0');
             }
         }
 
@@ -952,8 +961,9 @@ class Client
             $uri = 'http://' . $server . ':' . $port . $path;
             if ($opts['proxy_user'] != '') {
                 if ($opts['proxy_authtype'] != 1) {
-                    /// @todo make this a proper error, i.e. return a failure
                     $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported with HTTP 1.0');
+                    return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['unsupported_option'],
+                        PhpXmlRpc::$xmlrpcerr['unsupported_option'] . ': only Basic auth to proxy is supported with HTTP 1.0');
                 }
                 $proxyCredentials = 'Proxy-Authorization: Basic ' . base64_encode($opts['proxy_user'] . ':' .
                     $opts['proxy_pass']) . "\r\n";
@@ -1166,6 +1176,8 @@ class Client
      * @param string $path
      * @param array $opts the keys/values match self::getOptions
      * @return \CurlHandle|resource|false
+     *
+     * @todo allow this method to either throw or return a Response, so that we can pass back to caller more info on errors
      */
     protected function createCURLHandle($req, $method, $server, $port, $path, $opts)
     {
@@ -1185,21 +1197,28 @@ class Client
 
         // Deflate request body and set appropriate request headers
         $encodingHdr = '';
-        /// @todo test for existence of proper function, in case of polyfills
-        if (function_exists('gzdeflate') && ($opts['request_compression'] == 'gzip' || $opts['request_compression'] == 'deflate')) {
-            if ($opts['request_compression'] == 'gzip') {
+        if (($opts['request_compression'] == 'gzip' || $opts['request_compression'] == 'deflate')) {
+            if ($opts['request_compression'] == 'gzip' && function_exists('gzencode')) {
                 $a = @gzencode($payload);
                 if ($a) {
                     $payload = $a;
                     $encodingHdr = 'Content-Encoding: gzip';
+                } else {
+                    $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': gzencode failure in compressing request');
                 }
-            } else {
+            } else if (function_exists('gzcompress')) {
                 $a = @gzcompress($payload);
                 if ($a) {
                     $payload = $a;
                     $encodingHdr = 'Content-Encoding: deflate';
+                } else {
+                    $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': gzcompress failure in compressing request');
                 }
+            } else {
+                $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': desired request compression method is unsupported by this PHP install');
             }
+        } else {
+            $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': desired request compression method is unsupported');
         }
 
         if (!$opts['keepalive'] || !$this->xmlrpc_curl_handle) {
@@ -1287,8 +1306,9 @@ class Client
                 if (defined('CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE')) {
                     curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
                 } else {
-                    /// @todo make this a proper error, i.e. return a failure
                     $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. HTTP2 is not supported by the current PHP/curl install');
+                    curl_close($curl);
+                    return false;
                 }
                 break;
             case 'h2':
@@ -1301,8 +1321,9 @@ class Client
             if (defined('CURLOPT_HTTPAUTH')) {
                 curl_setopt($curl, CURLOPT_HTTPAUTH, $opts['authtype']);
             } elseif ($opts['authtype'] != 1) {
-                /// @todo make this a proper error, i.e. return a failure
                 $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported by the current PHP/curl install');
+                curl_close($curl);
+                return false;
             }
         }
 
@@ -1351,8 +1372,9 @@ class Client
                 if (defined('CURLOPT_PROXYAUTH')) {
                     curl_setopt($curl, CURLOPT_PROXYAUTH, $opts['proxy_authtype']);
                 } elseif ($opts['proxy_authtype'] != 1) {
-                    /// @todo make this a proper error, i.e. return a failure
                     $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported by the current PHP/curl install');
+                    curl_close($curl);
+                    return false;
                 }
             }
         }

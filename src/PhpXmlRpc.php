@@ -36,6 +36,7 @@ class PhpXmlRpc
         'multicall_noparams' => 13, // client
         'multicall_notarray' => 14, // client
         'no_http2' => 19, // client
+        'unsupported_option' => 20, // client
         // the following 3 are meant to give greater insight than 'invalid_return'. They use the same code for BC,
         // but you can override their value in your own code
         'invalid_xml' => 2, // client
@@ -74,6 +75,7 @@ class PhpXmlRpc
         'multicall_noparams' => 'Missing params',
         'multicall_notarray' => 'params is not an array',
         'no_http2' => 'No HTTP/2 support compiled in',
+        'unsupported_option' => 'Some client option is not supported with the transport method currently in use',
         // the following 3 are meant to give greater insight than 'invalid_return'. They use the same string for BC,
         // but you can override their value in your own code
         'invalid_xml' => 'Invalid response payload (you can use the setDebug method to allow analysis of the response)',

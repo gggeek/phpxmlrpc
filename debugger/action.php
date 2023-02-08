@@ -570,7 +570,7 @@ if ($action) {
     </ol>
     <?php
     if (!extension_loaded('curl')) {
-        echo "<p class=\"evidence\">You will need to enable the CURL extension to use the HTTPS, HTTP 1.1 and HTTP/2 transports</p>\n";
+        echo "<p class=\"evidence\">You will need to enable the cURL extension to use the HTTPS, HTTP 1.1 and HTTP/2 transports</p>\n";
     }
     ?>
 
