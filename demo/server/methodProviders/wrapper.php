@@ -69,7 +69,7 @@ class handlersContainer
         if ($req->getNumParams()) {
             $p1 = $req->getParam(0);
             if ($p1->kindOf() === 'scalar') {
-                $errNum = (int)$p1->scalarval();
+                $errNum = (int)$p1->scalarVal();
             }
         }
         throw new Exception("it's just a test", $errNum);

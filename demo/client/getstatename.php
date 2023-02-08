@@ -33,7 +33,7 @@ if (isset($_POST['stateno']) && $_POST['stateno'] != "") {
         // NB: we are _assuming_ that the server did return a scalar xml-rpc value here.
         // If the server is not trusted, we might check that via `$val->kindOf() == 'scalar'`
         output('<br/>State number <b>' . $stateNo . '</b> is <b>'
-            . htmlspecialchars($val->scalarval()) . '</b><br/><br/>');
+            . htmlspecialchars($val->scalarVal()) . '</b><br/><br/>');
     } else {
         output('An error occurred: ');
         output('<pre>Code: ' . htmlspecialchars($resp->faultCode())

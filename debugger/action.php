@@ -133,8 +133,8 @@ if ($action) {
         }
 
         if ($protocol == 2 || $protocol == 3) {
-            $client->setSSLVerifyPeer($verifypeer);
-            $client->setSSLVerifyHost($verifyhost);
+            $client->setOption(\PhpXmlRpc\Client::OPT_VERIFY_PEER, $verifypeer);
+            $client->setOption(\PhpXmlRpc\Client::OPT_VERIFY_HOST, $verifyhost);
             if ($cainfo) {
                 $client->setCaCertificate($cainfo);
             }
@@ -159,28 +159,28 @@ if ($action) {
 
         switch ($requestcompression) {
             case 0:
-                $client->request_compression = '';
+                $client->setOption(\PhpXmlRpc\Client::OPT_REQUEST_COMPRESSION, '');
                 break;
             case 1:
-                $client->request_compression = 'gzip';
+                $client->setOption(\PhpXmlRpc\Client::OPT_REQUEST_COMPRESSION, 'gzip');
                 break;
             case 2:
-                $client->request_compression = 'deflate';
+                $client->setOption(\PhpXmlRpc\Client::OPT_REQUEST_COMPRESSION, 'deflate');
                 break;
         }
 
         switch ($responsecompression) {
             case 0:
-                $client->accepted_compression = '';
+                $client->setOption(\PhpXmlRpc\Client::OPT_ACCEPTED_COMPRESSION, '');
                 break;
             case 1:
-                $client->accepted_compression = array('gzip');
+                $client->setOption(\PhpXmlRpc\Client::OPT_ACCEPTED_COMPRESSION, array('gzip'));
                 break;
             case 2:
-                $client->accepted_compression = array('deflate');
+                $client->setOption(\PhpXmlRpc\Client::OPT_ACCEPTED_COMPRESSION, ('deflate'));
                 break;
             case 3:
-                $client->accepted_compression = array('gzip', 'deflate');
+                $client->setOption(\PhpXmlRpc\Client::OPT_ACCEPTED_COMPRESSION, array('gzip', 'deflate'));
                 break;
         }
 
@@ -586,7 +586,7 @@ if ($action) {
 
     <h3>Changelog</h3>
     <ul>
-        <li>2023-XX-YY: display in the top row the version of the libraries in use; made the generated code throw instead
+        <li>2023-02-YY: display in the top row the version of the libraries in use; made the generated code throw instead
             of returning a Response object on error; fixes for the json-rpc debugger</li>
         <li>2022-12-18: fix XSS vulnerability in the debugger; load jsxmlrpc from CDN; minor improvements</li>
         <li>2022-11-28: allow to use http/2 protocol; two security issues fixed in the underlying library</li>

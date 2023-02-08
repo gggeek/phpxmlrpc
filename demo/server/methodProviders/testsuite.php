@@ -69,10 +69,10 @@ function findStateWithNulls($req)
     $a = $req->getParam(0);
     $b = $req->getParam(1);
 
-    if ($a->scalartyp() == Value::$xmlrpcNull)
-        return new Response(new Value(plain_findstate($b->scalarval())));
+    if ($a->scalarTyp() == Value::$xmlrpcNull)
+        return new Response(new Value(plain_findstate($b->scalarVal())));
     else
-        return new Response(new Value(plain_findstate($a->scalarval())));
+        return new Response(new Value(plain_findstate($a->scalarVal())));
 }
 
 return array(

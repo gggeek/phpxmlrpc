@@ -41,7 +41,7 @@ $c->setOption(Client::OPT_ACCEPTED_CHARSET_ENCODINGS, array('UTF-8'));
 $c->setOption(Client::OPT_REQUEST_CHARSET_ENCODING, 'UTF-8');
 
 $r = $c->send(new Request('examples.stringecho', array(new Value($input))));
-$output = $r->value()->scalarval();
+$output = $r->value()->scalarVal();
 
 echo "This is the value we got back from the server (in CP-1252): ";
 var_dump($output);

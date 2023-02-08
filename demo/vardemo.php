@@ -28,7 +28,7 @@ output("Datetime (from php DateTime): <PRE>" . htmlentities($v->serialize()) . "
 
 $v = new PhpXmlRpc\Value('hello world', 'base64');
 output("Base64: <PRE>" . htmlentities($v->serialize()) . "</PRE>");
-output("(value of base64 string is: '" . $v->scalarval() . "')<BR><BR>");
+output("(value of base64 string is: '" . $v->scalarVal() . "')<BR><BR>");
 
 $v = new PhpXmlRpc\Value(
     array(

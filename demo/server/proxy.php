@@ -42,7 +42,7 @@ function forward_request($req)
 
     // create client
     $timeout = 0;
-    $url = $req->getParam(0)->scalarval();
+    $url = $req->getParam(0)->scalarVal();
     // *** NB *** here we should validate the received url, using f.e. a whitelist of approved servers _and protocols_...
     //            fe. any url using the 'file://' protocol might be considered a hacking attempt
     $client = new Client($url);
@@ -59,8 +59,8 @@ function forward_request($req)
                 case 'followRedirects':
                     // requires cURL to be enabled
                     if ($val) {
-                        $client->use_curl = Client::USE_CURL_ALWAYS;
-                        $client->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
+                        $client->setOption(Client::OPT_USE_CURL, Client::USE_CURL_ALWAYS);
+                        $client->setOption(Client::OPT_EXTRA_CURL_OPTS, array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
                     }
                 case 'Cookies':
                     /// @todo add support for this if needed
@@ -75,16 +75,16 @@ function forward_request($req)
                 case 'RequestCharsetEncoding':
                     // allow the server to work as charset transcoder.
                     // NB: works best with mbstring enabled
-                    $client->request_charset_encoding = $val;
+                    $client->setOption(Client::OPT_REQUEST_CHARSET_ENCODING, $val);
                     break;
                 case 'RequestCompression':
-                    $client->setRequestCompression($val);
+                    $client->setOption(Client::OPT_REQUEST_COMPRESSION, $val);
                     break;
                 case 'SSLVerifyHost':
-                    $client->setSSLVerifyHost($val);
+                    $client->setOption(Client::OPT_VERIFY_HOST, $val);
                     break;
                 case 'SSLVerifyPeer':
-                    $client->setSSLVerifyPeer($val);
+                    $client->setOption(Client::OPT_VERIFY_PEER, $val);
                     break;
                 case 'Timeout':
                     $timeout = (integer)$val;
@@ -98,7 +98,7 @@ function forward_request($req)
     ///       - as xml comments in the payload, or
     ///       - using std http header conventions, such as X-forwarded-for (but public servers should strip
     ///         X-forwarded-for anyway, unless they consider this server as trusted...)
-    $reqMethod = $req->getParam(1)->scalarval();
+    $reqMethod = $req->getParam(1)->scalarVal();
     $req = new Request($reqMethod);
     if ($req->getNumParams() > 1) {
         $pars = $req->getParam(2);

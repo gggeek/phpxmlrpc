@@ -47,7 +47,7 @@ $srv->setOption(Server::OPT_FUNCTIONS_PARAMETERS_TYPE, 'phpvals');
 
 // let code exceptions float all the way to the remote caller as xml-rpc faults - it helps debugging.
 // At the same time, it opens a wide security hole, and should never be enabled on public or production servers...
-//$srv->exception_handling = 1;
+//$srv->->setOption(Server::OPT_EXCEPTION_HANDLING, 1);
 
 // NB: take care not to output anything else after this call, as it will mess up the responses and it will be hard to
 // debug. In case you have to do so, at least re-emit a correct Content-Length http header (requires output buffering)

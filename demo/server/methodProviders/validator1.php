@@ -24,7 +24,7 @@ return array(
             foreach ($sno as $str) {
                 foreach ($str as $key => $val) {
                     if ($key == "curly") {
-                        $numCurly += $val->scalarval();
+                        $numCurly += $val->scalarVal();
                     }
                 }
             }
@@ -44,7 +44,7 @@ return array(
             $moe = $sno["moe"];
             $larry = $sno["larry"];
             $curly = $sno["curly"];
-            $num = $moe->scalarval() + $larry->scalarval() + $curly->scalarval();
+            $num = $moe->scalarVal() + $larry->scalarVal() + $curly->scalarVal();
 
             return new Response(new Value($num, Value::$xmlrpcInt));
         }
@@ -99,7 +99,7 @@ return array(
             $first = $ar[0];
             $last = $ar[$sz - 1];
 
-            return new Response(new Value($first->scalarval() . $last->scalarval(), Value::$xmlrpcString));
+            return new Response(new Value($first->scalarVal() . $last->scalarVal(), Value::$xmlrpcString));
         }
     ),
 
@@ -111,7 +111,7 @@ return array(
         "function" => function ($req)
         {
             $sno = $req->getParam(0);
-            $v = $sno->scalarval();
+            $v = $sno->scalarVal();
 
             return new Response(new Value(
                 array(
@@ -140,7 +140,7 @@ return array(
             $larry = $fools["larry"];
             $moe = $fools["moe"];
 
-            return new Response(new Value($curly->scalarval() + $larry->scalarval() + $moe->scalarval(), Value::$xmlrpcInt));
+            return new Response(new Value($curly->scalarVal() + $larry->scalarVal() + $moe->scalarVal(), Value::$xmlrpcInt));
         }
     ),
 
@@ -152,7 +152,7 @@ return array(
         "function" => function ($req)
         {
             $sno = $req->getParam(0);
-            $str = $sno->scalarval();
+            $str = $sno->scalarVal();
             $gt = 0;
             $lt = 0;
             $ap = 0;

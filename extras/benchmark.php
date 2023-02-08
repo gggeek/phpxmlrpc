@@ -93,7 +93,7 @@ begin_test('Data encoding (large array)', 'manual encoding');
 for ($i = 0; $i < $num_tests; $i++) {
     $vals = array();
     for ($j = 0; $j < 10; $j++) {
-        $valarray = array();
+        $valArray = array();
         foreach ($data[$j] as $key => $val) {
             $values = array();
             $values[] = new Value($val[0], 'int');
@@ -106,9 +106,9 @@ for ($i = 0; $i < $num_tests; $i++) {
             $values[] = new Value($val[7], 'string');
             $values[] = new Value($val[8], 'boolean');
             $values[] = new Value($val[9], 'dateTime.iso8601');
-            $valarray[$key] = new Value($values, 'array');
+            $valArray[$key] = new Value($values, 'array');
         }
-        $vals[] = new Value($valarray, 'struct');
+        $vals[] = new Value($valArray, 'struct');
     }
     $value = new Value($vals, 'array');
     $out = $value->serialize();
@@ -223,7 +223,7 @@ if (!$xd) {
 
     // do not interfere with http compression
     $c->setAcceptedCompression(false);
-    //$c->debug = 1;
+    //$c->setDebug(1);
 
     $testName = "Repeated send (small array) to $srv";
 
@@ -236,7 +236,7 @@ if (!$xd) {
     end_test($testName, 'http 10', $response);
 
     if (function_exists('curl_init')) {
-        $c->keepalive = false;
+        $c->setOption(Client::OPT_KEEPALIVE, false);
         begin_test($testName, 'http 11 no keepalive');
         $response = array();
         for ($i = 0; $i < $num_tests; $i++) {
@@ -264,8 +264,8 @@ if (!$xd) {
     end_test($testName, 'multicall', $response);
 
     if (function_exists('gzinflate')) {
-        $c->accepted_compression = array('gzip');
-        $c->request_compression = 'gzip';
+        $c->setOption(Client::OPT_ACCEPTED_COMPRESSION, array('gzip'));
+        $c->setOption(Client::OPT_REQUEST_COMPRESSION, 'gzip');
 
         begin_test($testName, 'http 10 w. compression');
         $response = array();
@@ -276,7 +276,7 @@ if (!$xd) {
         end_test($testName, 'http 10 w. compression', $response);
 
         if (function_exists('curl_init')) {
-            $c->keepalive = false;
+            $c->setOption(Client::OPT_KEEPALIVE, false);
             begin_test($testName, 'http 11 w. compression and no keepalive');
             $response = array();
             for ($i = 0; $i < $num_tests; $i++) {
@@ -285,7 +285,7 @@ if (!$xd) {
             }
             end_test($testName, 'http 11 w. compression and no keepalive', $response);
 
-            $c->keepalive = true;
+            $c->setOption(Client::OPT_KEEPALIVE, true);
             begin_test($testName, 'http 11 w. keep-alive and compression');
             $response = array();
             for ($i = 0; $i < $num_tests; $i++) {
@@ -316,16 +316,16 @@ if (!$xd) {
             $srv = 'https://' . $args['HTTPSSERVER'] . $args['HTTPSURI'];
             $c = new Client($args['HTTPSURI'], $args['HTTPSSERVER'], 443, 'https');
         }
-        $c->setSSLVerifyPeer(!$args['HTTPSIGNOREPEER']);
-        $c->setSSLVerifyHost($args['HTTPSVERIFYHOST']);
+        $c->setOption(Client::OPT_VERIFY_PEER, !$args['HTTPSIGNOREPEER']);
+        $c->setOption(Client::OPT_VERIFY_HOST, $args['HTTPSVERIFYHOST']);
         // do not interfere with http compression
-        $c->setAcceptedCompression(false);
+        $c->setOption(Client::OPT_ACCEPTED_COMPRESSION, false);
         //$c->debug = 1;
 
         $testName = "Repeated send (small array) to $srv";
 
+        $c->setOption(Client::OPT_KEEPALIVE, false);
         begin_test($testName, 'https no keep-alive');
-        $c->keepalive = false;
         $response = array();
         for ($i = 0; $i < $num_tests; $i++) {
             $resp = $c->send($req);
@@ -333,8 +333,8 @@ if (!$xd) {
         }
         end_test($testName, 'https no keep-alive', $response);
 
+        $c->setOption(Client::OPT_KEEPALIVE, true);
         begin_test($testName, 'https w. keep-alive');
-        $c->keepalive = true;
         $response = array();
         for ($i = 0; $i < $num_tests; $i++) {
             $resp = $c->send($req, 10);
@@ -351,10 +351,10 @@ if (!$xd) {
         end_test($testName, 'https multicall', $response);
 
         if (function_exists('gzinflate')) {
-            $c->accepted_compression = array('gzip');
-            $c->request_compression = 'gzip';
+            $c->setOption(Client::OPT_ACCEPTED_COMPRESSION, array('gzip'));
+            $c->setOption(Client::OPT_REQUEST_COMPRESSION, 'gzip');
 
-            $c->keepalive = false;
+            $c->setOption(Client::OPT_KEEPALIVE, false);
             begin_test($testName, 'https w. compression and no keepalive');
             $response = array();
             for ($i = 0; $i < $num_tests; $i++) {
@@ -363,7 +363,7 @@ if (!$xd) {
             }
             end_test($testName, 'https w. compression and no keepalive', $response);
 
-            $c->keepalive = true;
+            $c->setOption(Client::OPT_KEEPALIVE, true);
             begin_test($testName, 'https w. keep-alive and compression');
             $response = array();
             for ($i = 0; $i < $num_tests; $i++) {
@@ -394,16 +394,16 @@ if (!$xd) {
             $srv = 'https://' . $args['HTTPSSERVER'] . $args['HTTPSURI'];
             $c = new Client($args['HTTPSURI'], $args['HTTPSSERVER'], 443, 'h2');
         }
-        $c->setSSLVerifyPeer(!$args['HTTPSIGNOREPEER']);
-        $c->setSSLVerifyHost($args['HTTPSVERIFYHOST']);
+        $c->setOption(Client::OPT_VERIFY_PEER, !$args['HTTPSIGNOREPEER']);
+        $c->setOption(Client::OPT_VERIFY_HOST, $args['HTTPSVERIFYHOST']);
         // do not interfere with http compression
-        $c->setAcceptedCompression(false);
-        //$c->debug = 1;
+        $c->setOption(Client::OPT_ACCEPTED_COMPRESSION, false);
+        //$c->setDebug(1);
 
         $testName = "Repeated send (small array) to $srv - HTTP/2";
 
+        $c->setOption(Client::OPT_KEEPALIVE, false);
         begin_test($testName, 'http2 no keep-alive');
-        $c->keepalive = false;
         $response = array();
         for ($i = 0; $i < $num_tests; $i++) {
             $resp = $c->send($req);
@@ -411,8 +411,8 @@ if (!$xd) {
         }
         end_test($testName, 'http2 no keep-alive', $response);
 
+        $c->setOption(Client::OPT_KEEPALIVE, true);
         begin_test($testName, 'http2 w. keep-alive');
-        $c->keepalive = true;
         $response = array();
         for ($i = 0; $i < $num_tests; $i++) {
             $resp = $c->send($req, 10);
@@ -429,10 +429,10 @@ if (!$xd) {
         end_test($testName, 'http2 multicall', $response);
 
         if (function_exists('gzinflate')) {
-            $c->accepted_compression = array('gzip');
-            $c->request_compression = 'gzip';
+            $c->setOption(Client::OPT_ACCEPTED_COMPRESSION, array('gzip'));
+            $c->setOption(Client::OPT_REQUEST_COMPRESSION, 'gzip');
 
-            $c->keepalive = false;
+            $c->setOption(Client::OPT_KEEPALIVE, false);
             begin_test($testName, 'http2 w. compression and no keepalive');
             $response = array();
             for ($i = 0; $i < $num_tests; $i++) {
@@ -441,7 +441,7 @@ if (!$xd) {
             }
             end_test($testName, 'http2 w. compression and no keepalive', $response);
 
-            $c->keepalive = true;
+            $c->setOption(Client::OPT_KEEPALIVE, true);
             begin_test($testName, 'http2 w. keep-alive and compression');
             $response = array();
             for ($i = 0; $i < $num_tests; $i++) {

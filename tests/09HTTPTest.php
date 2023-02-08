@@ -105,6 +105,7 @@ class HTTPTest extends ServerTest
             return;
         }
 
+        /// @todo replace with setOption when dropping the BC layer
         $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_ALWAYS);
         $this->client->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
 
@@ -286,6 +287,7 @@ class HTTPTest extends ServerTest
         $this->method = 'https';
         $this->client->method = 'https';
         $this->client->path = $this->args['HTTPSURI'];
+        /// @todo replace with setOptions when dropping the BC layer
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
@@ -327,6 +329,7 @@ class HTTPTest extends ServerTest
         $this->method = 'https';
         $this->client->method = 'https';
         $this->client->path = $this->args['HTTPSURI'];
+        /// @todo replace with setOptions when dropping the BC layer
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
@@ -364,11 +367,12 @@ class HTTPTest extends ServerTest
             return;
         }
 
-        $this->client->server = $this->args['HTTPSSERVER'];
         $this->method = 'https';
         $this->client->method = 'https';
-        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
+        $this->client->server = $this->args['HTTPSSERVER'];
         $this->client->path = $this->args['HTTPSURI'];
+        /// @todo replace with setOptions when dropping the BC layer
+        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
@@ -421,10 +425,11 @@ class HTTPTest extends ServerTest
             return;
         }
 
-        $this->client->server = $this->args['HTTPSSERVER'];
         $this->method = 'h2';
         $this->client->method = 'h2';
+        $this->client->server = $this->args['HTTPSSERVER'];
         $this->client->path = $this->args['HTTPSURI'];
+        /// @todo replace with setOptions when dropping the BC layer
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);

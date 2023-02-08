@@ -51,7 +51,7 @@ class exampleMethods
         $sno = $req->getParam(0);
 
         // extract the value of the state number
-        $snv = $sno->scalarval();
+        $snv = $sno->scalarVal();
 
         // look it up in our array (zero-based)
         if (isset(self::$stateNames[$snv - 1])) {
@@ -132,7 +132,7 @@ And the array will be returned with the entries sorted by their numbers.';
         $s = $req->getParam(0);
         $t = $req->getParam(1);
 
-        return new Response(new Value($s->scalarval() + $t->scalarval(), Value::$xmlrpcInt));
+        return new Response(new Value($s->scalarVal() + $t->scalarVal(), Value::$xmlrpcInt));
     }
 
     public static $addtwodouble_sig = array(array('double', 'double', 'double'));
@@ -142,7 +142,7 @@ And the array will be returned with the entries sorted by their numbers.';
         $s = $req->getParam(0);
         $t = $req->getParam(1);
 
-        return new Response(new Value($s->scalarval() + $t->scalarval(), Value::$xmlrpcDouble));
+        return new Response(new Value($s->scalarVal() + $t->scalarVal(), Value::$xmlrpcDouble));
     }
 
     public static $stringecho_sig = array(array('string', 'string'));
@@ -150,7 +150,7 @@ And the array will be returned with the entries sorted by their numbers.';
     public static function stringEcho($req)
     {
         // just sends back a string
-        return new Response(new Value($req->getParam(0)->scalarval()));
+        return new Response(new Value($req->getParam(0)->scalarVal()));
     }
 
     public static $echoback_sig = array(array('string', 'string'));
@@ -178,7 +178,7 @@ And the array will be returned with the entries sorted by their numbers.';
         // This is to test that base64 encoding is working as expected
         $incoming = $req->getParam(0);
 
-        return new Response(new Value($incoming->scalarval(), Value::$xmlrpcString));
+        return new Response(new Value($incoming->scalarVal(), Value::$xmlrpcString));
     }
 
     public static $bitflipper_sig = array(array('array', 'array'));
@@ -189,7 +189,7 @@ And the array will be returned with the entries sorted by their numbers.';
         $rv = new Value(array(), Value::$xmlrpcArray);
 
         foreach ($v as $b) {
-            if ($b->scalarval()) {
+            if ($b->scalarVal()) {
                 $rv[] = new Value(false, Value::$xmlrpcBoolean);
             } else {
                 $rv[] = new Value(true, Value::$xmlrpcBoolean);
@@ -228,32 +228,32 @@ mimetype, a string, is a standard MIME type, for example, text/plain.';
         $mBcc = $req->getParam(5);
         $mMime = $req->getParam(6);
 
-        if ($mTo->scalarval() == "") {
+        if ($mTo->scalarVal() == "") {
             $err = "Error, no 'To' field specified";
         }
 
-        if ($mFrom->scalarval() == "") {
+        if ($mFrom->scalarVal() == "") {
             $err = "Error, no 'From' field specified";
         }
 
         /// @todo in real life, we should check for presence of return characters to avoid header injection!
 
-        $msgHdr = "From: " . $mFrom->scalarval() . "\n";
-        $msgHdr .= "To: " . $mTo->scalarval() . "\n";
+        $msgHdr = "From: " . $mFrom->scalarVal() . "\n";
+        $msgHdr .= "To: " . $mTo->scalarVal() . "\n";
 
-        if ($mCc->scalarval() != "") {
-            $msgHdr .= "Cc: " . $mCc->scalarval() . "\n";
+        if ($mCc->scalarVal() != "") {
+            $msgHdr .= "Cc: " . $mCc->scalarVal() . "\n";
         }
-        if ($mBcc->scalarval() != "") {
-            $msgHdr .= "Bcc: " . $mBcc->scalarval() . "\n";
+        if ($mBcc->scalarVal() != "") {
+            $msgHdr .= "Bcc: " . $mBcc->scalarVal() . "\n";
         }
-        if ($mMime->scalarval() != "") {
-            $msgHdr .= "Content-type: " . $mMime->scalarval() . "\n";
+        if ($mMime->scalarVal() != "") {
+            $msgHdr .= "Content-type: " . $mMime->scalarVal() . "\n";
         }
         $msgHdr .= "X-Mailer: XML-RPC for PHP mailer 1.0";
 
         if ($err == "") {
-            if (!mail("", $mSub->scalarval(), $mBody->scalarval(), $msgHdr)) {
+            if (!mail("", $mSub->scalarVal(), $mBody->scalarVal(), $msgHdr)) {
                 $err = "Error, could not send the mail.";
             }
         }
