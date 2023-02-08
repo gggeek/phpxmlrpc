@@ -261,7 +261,7 @@ class Request
         /// @todo optimization creep - return an error msg if $data == ''
 
         // be tolerant of junk after methodResponse (e.g. javascript ads automatically inserted by free hosts)
-        // idea from Luca Mariano <luca.mariano@email.it> originally in PEARified version of the lib
+        // idea from Luca Mariano, originally in PEARified version of the lib
         $pos = strrpos($data, '</methodResponse>');
         if ($pos !== false) {
             $data = substr($data, 0, $pos + 17);
@@ -390,6 +390,8 @@ class Request
                     // FAULT returned, errno needs to reflect that
                     /// @todo feature creep - add this code to PhpXmlRpc::$xmlrpcerr
                     $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': fault response received with faultCode 0 or null. Converted it to -1');
+                    /// @todo in Encoder::decodeXML, we use PhpXmlRpc::$xmlrpcerr['invalid_return'] for this case (see
+                    ///       also the todo 17 lines above)
                     $errNo = -1;
                 }
 

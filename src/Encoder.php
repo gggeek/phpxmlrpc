@@ -31,7 +31,7 @@ class Encoder
      * that might wreak havoc if instances are built outside an appropriate context).
      * Make sure you trust the remote server/client before enabling this!
      *
-     * @author Dan Libby (dan@libby.com)
+     * @author Dan Libby
      *
      * @param Value|Request $xmlrpcVal
      * @param array $options accepted elements:
@@ -160,7 +160,7 @@ class Encoder
      * PHP resource and NULL variables will be converted into uninitialized Value objects (which will lead to invalid
      * xml-rpc when later serialized); to support encoding of the latter use the appropriate $options parameter.
      *
-     * @author Dan Libby (dan@libby.com)
+     * @author Dan Libby
      *
      * @param mixed $phpVal the value to be converted into an xml-rpc value object
      * @param array $options can include:
@@ -268,7 +268,7 @@ class Encoder
                 break;
             // catch "user function", "unknown type"
             default:
-                // it has to return an empty object in case, not a boolean. (giancarlo pinerolo <ping@alt.it>)
+                // it has to return an empty object in case, not a boolean. (giancarlo pinerolo)
                 $xmlrpcVal = new Value();
                 break;
         }

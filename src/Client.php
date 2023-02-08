@@ -921,7 +921,7 @@ class Client
             }
         }
 
-        // thanks to Grant Rauscher <grant7@firstworld.net> for this
+        // thanks to Grant Rauscher
         $credentials = '';
         if ($opts['username'] != '') {
             $credentials = 'Authorization: Basic ' . base64_encode($opts['username'] . ':' . $opts['password']) . "\r\n";
@@ -1071,7 +1071,7 @@ class Client
     }
 
     /**
-     * Contributed by Justin Miller <justin@voxel.net>
+     * Contributed by Justin Miller
      * Requires curl to be built into PHP
      * NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!
      *

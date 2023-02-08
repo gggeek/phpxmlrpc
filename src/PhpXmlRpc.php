@@ -16,31 +16,31 @@ class PhpXmlRpc
      * @var int[]
      */
     public static $xmlrpcerr = array(
-        'unknown_method' => 1,
+        'unknown_method' => 1, // server
         /// @deprecated. left in for BC
-        'invalid_return' => 2,
-        'incorrect_params' => 3,
-        'introspect_unknown' => 4,
-        'http_error' => 5,
-        'no_data' => 6,
-        'no_ssl' => 7,
-        'curl_fail' => 8,
-        'invalid_request' => 15,
-        'no_curl' => 16,
-        'server_error' => 17,
-        'multicall_error' => 18,
-        'multicall_notstruct' => 9,
-        'multicall_nomethod' => 10,
-        'multicall_notstring' => 11,
-        'multicall_recursion' => 12,
-        'multicall_noparams' => 13,
-        'multicall_notarray' => 14,
-        'no_http2' => 19,
+        'invalid_return' => 2, // client
+        'incorrect_params' => 3, // server
+        'introspect_unknown' => 4, // server
+        'http_error' => 5, // client
+        'no_data' => 6, // client
+        'no_ssl' => 7, // client
+        'curl_fail' => 8, // client
+        'invalid_request' => 15, // server
+        'no_curl' => 16, // client
+        'server_error' => 17, // server
+        'multicall_error' => 18, // client
+        'multicall_notstruct' => 9, // client
+        'multicall_nomethod' => 10, // client
+        'multicall_notstring' => 11, // client
+        'multicall_recursion' => 12, // client
+        'multicall_noparams' => 13, // client
+        'multicall_notarray' => 14, // client
+        'no_http2' => 19, // client
         // the following 3 are meant to give greater insight than 'invalid_return'. They use the same code for BC,
         // but you can override their value in your own code
-        'invalid_xml' => 2,
-        'xml_not_compliant' => 2,
-        'xml_parsing_error' => 2,
+        'invalid_xml' => 2, // client
+        'xml_not_compliant' => 2, // client
+        'xml_parsing_error' => 2, // client
 
         /// @todo verify: can these conflict with $xmlrpcerrxml?
         'cannot_decompress' => 103,
