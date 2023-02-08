@@ -46,6 +46,7 @@ class ClientTest extends PhpXmlRpc_LoggerAwareTestCase
         ));
         $this->client->setOption(\PhpXmlRpc\Client::OPT_USERNAME, 'user');
         $this->client->setOption(\PhpXmlRpc\Client::OPT_AUTH_TYPE, 2);
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_USE_CURL, \PhpXmlRpc\Client::USE_CURL_NEVER);
         $r = $this->client->send($m);
         $this->assertEquals(\PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['unsupported_option'], $r->faultCode());
     }

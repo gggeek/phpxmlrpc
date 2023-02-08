@@ -935,7 +935,9 @@ class Client
                 $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': desired request compression method is unsupported by this PHP install');
             }
         } else {
-            $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': desired request compression method is unsupported');
+            if ($opts['request_compression'] != '') {
+                $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': desired request compression method is unsupported');
+            }
         }
 
         // thanks to Grant Rauscher
@@ -1233,7 +1235,9 @@ class Client
                 $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': desired request compression method is unsupported by this PHP install');
             }
         } else {
-            $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': desired request compression method is unsupported');
+            if ($opts['request_compression'] != '') {
+                $this->getLogger()->warning('XML-RPC: ' . __METHOD__ . ': desired request compression method is unsupported');
+            }
         }
 
         if (!$opts['keepalive'] || !$this->xmlrpc_curl_handle) {
