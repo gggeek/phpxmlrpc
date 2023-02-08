@@ -207,7 +207,6 @@ The following properties have now protected access. Replacement accessor for pub
 | Response  | errstr                     | faultString            | __construct                      |
 | Response  | content_type               | getContentType         | setPayload                       |
 | Response  | payload                    | getPayload             | setPayload                       |
-| Server    | accepted_charset_encodings | -                      | -                                |
 | Server    | accepted_compression       | getOption              | setOption                        |
 | Server    | allow_system_funcs         | getOption              | setOption                        |
 | Server    | compress_response          | getOption              | setOption                        |
@@ -221,3 +220,10 @@ The following properties have now protected access. Replacement accessor for pub
 | Value     | mytype                     | kindOf                 | __construct                      |
 | Wrapper   | $objectholder              | getHeldObject          | holdObject                       |
 | XMLParser | $_xh                       | results of parse()     | -                                |
+
+The following previously protected properties are now deprecated for access by subclasses
+
+| Class     | Property                   | Read via               | Write via                        |
+|-----------|----------------------------|------------------------|----------------------------------|
+| Request   | httpResponse               | -                      | -                                |
+| Server    | accepted_charset_encodings | -                      | -                                |

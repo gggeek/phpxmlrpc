@@ -38,9 +38,9 @@ class Request
 
     /**
      * holds data while parsing the response. NB: Not a full Response object
-     * @deprecated will be removed in a future release
+     * @deprecated will be removed in a future release; still accessible by subclasses for the moment
      */
-    protected $httpResponse = array();
+    private $httpResponse = array();
 
     /**
      * @param string $methodName the name of the method to invoke
@@ -437,6 +437,22 @@ class Request
             case 'content_type':
                 $this->logDeprecation('Getting property Request::' . $name . ' is deprecated');
                 return $this->$name;
+            case 'httpResponse':
+                // manually implement the 'protected property' behaviour
+                $canAccess = false;
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+                if (isset($trace[1]) && isset($trace[1]['class'])) {
+                    if (is_subclass_of($trace[1]['class'], 'PhpXmlRpc\Request')) {
+                        $canAccess = true;
+                    }
+                }
+                if ($canAccess) {
+                    $this->logDeprecation('Getting property Request::' . $name . ' is deprecated');
+                    return $this->httpResponse;
+                } else {
+                    trigger_error("Cannot access protected property Request::httpResponse in " . __FILE__, E_USER_ERROR);
+                }
+                break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
@@ -457,6 +473,22 @@ class Request
                 $this->logDeprecation('Setting property Request::' . $name . ' is deprecated');
                 $this->$name = $value;
                 break;
+            case 'httpResponse':
+                // manually implement the 'protected property' behaviour
+                $canAccess = false;
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+                if (isset($trace[1]) && isset($trace[1]['class'])) {
+                    if (is_subclass_of($trace[1]['class'], 'PhpXmlRpc\Request')) {
+                        $canAccess = true;
+                    }
+                }
+                if ($canAccess) {
+                    $this->logDeprecation('Setting property Request::' . $name . ' is deprecated');
+                    $this->httpResponse = $value;
+                } else {
+                    trigger_error("Cannot access protected property Request::httpResponse in " . __FILE__, E_USER_ERROR);
+                }
+                break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
@@ -474,6 +506,20 @@ class Request
             case 'content_type':
                 $this->logDeprecation('Checking property Request::' . $name . ' is deprecated');
                 return isset($this->$name);
+            case 'httpResponse':
+                // manually implement the 'protected property' behaviour
+                $canAccess = false;
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+                if (isset($trace[1]) && isset($trace[1]['class'])) {
+                    if (is_subclass_of($trace[1]['class'], 'PhpXmlRpc\Request')) {
+                        $canAccess = true;
+                    }
+                }
+                if ($canAccess) {
+                    $this->logDeprecation('Checking property Request::' . $name . ' is deprecated');
+                    return isset($this->httpResponse);
+                }
+                // break through voluntarily
             default:
                 return false;
         }
@@ -489,6 +535,22 @@ class Request
             case 'content_type':
                 $this->logDeprecation('Unsetting property Request::' . $name . ' is deprecated');
                 unset($this->$name);
+                break;
+            case 'httpResponse':
+                // manually implement the 'protected property' behaviour
+                $canAccess = false;
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+                if (isset($trace[1]) && isset($trace[1]['class'])) {
+                    if (is_subclass_of($trace[1]['class'], 'PhpXmlRpc\Request')) {
+                        $canAccess = true;
+                    }
+                }
+                if ($canAccess) {
+                    $this->logDeprecation('Unsetting property Request::' . $name . ' is deprecated');
+                    unset($this->httpResponse);
+                } else {
+                    trigger_error("Cannot access protected property Request::httpResponse in " . __FILE__, E_USER_ERROR);
+                }
                 break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...

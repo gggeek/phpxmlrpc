@@ -200,6 +200,7 @@
     is now static
   - new methods in helper classes: `Charset::knownCharsets`, `Http::parseAcceptHeader`, `XMLParser::truncateValueForLog`
   - new method `Response::xml_header` has replaced `Server::xml_header`
+  - protected property `Server::$accepted_charset_encodings` is now deprecated
   - exception `\PhpXmlRpc\Exception\PhpXmlRpcException` is deprecated. Use `\PhpXmlRpc\Exception` instead
 
 

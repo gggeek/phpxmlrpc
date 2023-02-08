@@ -103,9 +103,9 @@ class Server
     /**
      * List of charset encodings natively accepted for requests.
      * Set at constructor time.
-     * @deprecated UNUSED so far...
+     * @deprecated UNUSED so far by this library. It is still accessible by subclasses but will be dropped in the future.
      */
-    protected $accepted_charset_encodings = array();
+    private $accepted_charset_encodings = array();
 
     /**
      * @var string
@@ -463,7 +463,7 @@ class Server
     public function addToMap($methodName, $function, $sig = null, $doc = false, $sigDoc = false, $parametersType = false,
         $exceptionHandling = false)
     {
-       return $this->addToMap($methodName, $function, $sig, $doc, $sigDoc, $parametersType, $exceptionHandling);
+       $this->add_to_map($methodName, $function, $sig, $doc, $sigDoc, $parametersType, $exceptionHandling);
     }
 
     /**
@@ -1474,6 +1474,22 @@ class Server
             case self::OPT_RESPONSE_CHARSET_ENCODING:
                 $this->logDeprecation('Getting property Request::' . $name . ' is deprecated');
                 return $this->$name;
+            case 'accepted_charset_encodings':
+                // manually implement the 'protected property' behaviour
+                $canAccess = false;
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+                if (isset($trace[1]) && isset($trace[1]['class'])) {
+                    if (is_subclass_of($trace[1]['class'], 'PhpXmlRpc\Server')) {
+                        $canAccess = true;
+                    }
+                }
+                if ($canAccess) {
+                    $this->logDeprecation('Getting property Request::' . $name . ' is deprecated');
+                    return $this->accepted_compression;
+                } else {
+                    trigger_error("Cannot access protected property Server::accepted_charset_encodings in " . __FILE__, E_USER_ERROR);
+                }
+                break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
@@ -1497,6 +1513,22 @@ class Server
                 $this->logDeprecation('Setting property Request::' . $name . ' is deprecated');
                 $this->$name = $value;
                 break;
+            case 'accepted_charset_encodings':
+                // manually implement the 'protected property' behaviour
+                $canAccess = false;
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+                if (isset($trace[1]) && isset($trace[1]['class'])) {
+                    if (is_subclass_of($trace[1]['class'], 'PhpXmlRpc\Server')) {
+                        $canAccess = true;
+                    }
+                }
+                if ($canAccess) {
+                    $this->logDeprecation('Setting property Request::' . $name . ' is deprecated');
+                    $this->accepted_compression = $value;
+                } else {
+                    trigger_error("Cannot access protected property Server::accepted_charset_encodings in " . __FILE__, E_USER_ERROR);
+                }
+                break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
                 $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
@@ -1517,6 +1549,20 @@ class Server
             case self::OPT_RESPONSE_CHARSET_ENCODING:
                 $this->logDeprecation('Checking property Request::' . $name . ' is deprecated');
                 return isset($this->$name);
+            case 'accepted_charset_encodings':
+                // manually implement the 'protected property' behaviour
+                $canAccess = false;
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+                if (isset($trace[1]) && isset($trace[1]['class'])) {
+                    if (is_subclass_of($trace[1]['class'], 'PhpXmlRpc\Server')) {
+                        $canAccess = true;
+                    }
+                }
+                if ($canAccess) {
+                    $this->logDeprecation('Checking property Request::' . $name . ' is deprecated');
+                    return isset($this->accepted_compression);
+                }
+                // break through voluntarily
             default:
                 return false;
         }
@@ -1535,6 +1581,22 @@ class Server
             case self::OPT_RESPONSE_CHARSET_ENCODING:
                 $this->logDeprecation('Unsetting property Request::' . $name . ' is deprecated');
                 unset($this->$name);
+                break;
+            case 'accepted_charset_encodings':
+                // manually implement the 'protected property' behaviour
+                $canAccess = false;
+                $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+                if (isset($trace[1]) && isset($trace[1]['class'])) {
+                    if (is_subclass_of($trace[1]['class'], 'PhpXmlRpc\Server')) {
+                        $canAccess = true;
+                    }
+                }
+                if ($canAccess) {
+                    $this->logDeprecation('Unsetting property Request::' . $name . ' is deprecated');
+                    unset($this->accepted_compression);
+                } else {
+                    trigger_error("Cannot access protected property Server::accepted_charset_encodings in " . __FILE__, E_USER_ERROR);
+                }
                 break;
             default:
                 /// @todo throw instead? There are very few other places where the lib trigger errors which can potentially reach stdout...
