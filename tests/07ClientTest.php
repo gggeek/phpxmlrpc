@@ -39,6 +39,17 @@ class ClientTest extends PhpXmlRpc_LoggerAwareTestCase
         \PhpXmlRpc\PhpXmlRpc::$xmlrpcerr = $orig;
     }
 
+    public function testUnsupportedAuth()
+    {
+        $m = new xmlrpcmsg('examples.echo', array(
+            new xmlrpcval('hello', 'string'),
+        ));
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_USERNAME, 'user');
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_AUTH_TYPE, 2);
+        $r = $this->client->send($m);
+        $this->assertEquals(\PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['unsupported_option'], $r->faultCode());
+    }
+
     public function testSrvNotFound()
     {
         $m = new xmlrpcmsg('examples.echo', array(
