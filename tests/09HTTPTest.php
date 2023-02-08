@@ -195,6 +195,7 @@ class HTTPTest extends ServerTest
 
         $this->method = 'http10'; // not an error the double assignment!
         $this->client->method = 'http10';
+        /// @todo replace with setOption when dropping the BC layer
         $this->client->keepalive = false;
         $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_ALWAYS);
 

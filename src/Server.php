@@ -183,7 +183,7 @@ class Server
 
         // dispMap is a dispatch array of methods mapped to function names and signatures.
         // If a method doesn't appear in the map then an unknown method error is generated.
-        // milosch - changed to make passing dispMap optional. Instead, you can use the class add_to_map() function
+        // milosch - changed to make passing dispMap optional. Instead, you can use the addToMap() function
         // to add functions manually (borrowed from SOAPX4)
         if ($dispatchMap) {
             $this->setDispatchMap($dispatchMap);
