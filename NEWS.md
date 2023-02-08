@@ -92,6 +92,10 @@
 * new: added methods `getOption`, `setOption`, `setOptions` and `getOptions` to both Client and Server, meant to replace
   direct access to _all public properties_ as well as the `$timeout` argument in calls to `Client::send` and `Client::multicall`
 
+* new: by using `Client::setOption('extracurlopts')`, it is possible to pass in protocol=specific options for when
+  using the Socket http transport. The value has to be an array with key being 'socket' or 'ssl', and the value an array
+  (see https://www.php.net/manual/en/context.socket.php and https://www.php.net/manual/en/context.ssl.php)
+
 * new: it is now possible to inject a custom logger into helper classes `Charset`, `Http`, `XMLParser`, inching a step
   closer to supporting DIC patterns (issue #78)
 

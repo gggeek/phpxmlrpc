@@ -332,6 +332,13 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVersion($this->args['SSLVERSION']);
         $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
 
+        if (version_compare(PHP_VERSION, '8.0', '>'))
+        {
+            $version = explode('.', PHP_VERSION);
+            $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_SOCKET_OPTS,
+                array('ssl' => array('security_level' => 2 + $version[1])));
+        }
+
         $this->$method();
     }
 

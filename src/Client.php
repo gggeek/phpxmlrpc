@@ -36,6 +36,7 @@ class Client
     const OPT_COOKIES = 'cookies';
     const OPT_DEBUG = 'debug';
     const OPT_EXTRA_CURL_OPTS = 'extracurlopts';
+    const OPT_EXTRA_SOCKET_OPTS = 'extrasockopts';
     const OPT_KEEPALIVE = 'keepalive';
     const OPT_KEY = 'key';
     const OPT_KEY_PASS = 'keypass';
@@ -168,6 +169,10 @@ class Client
      * @var array
      */
     protected $cookies = array();
+    /**
+     * @var array
+     */
+    protected $extrasockopts = array();
     /**
      * @var array
      */
@@ -1030,6 +1035,12 @@ class Client
             }
             $contextOptions['ssl']['verify_peer'] = $opts['verifypeer'];
             $contextOptions['ssl']['verify_peer_name'] = $opts['verifypeer'];
+        }
+
+        foreach ($opts['extracurlopts'] as $proto => $protoOpts) {
+            foreach ($protoOpts as $key => $val) {
+                $contextOptions[$proto][$key] = $val;
+            }
         }
 
         $context = stream_context_create($contextOptions);
