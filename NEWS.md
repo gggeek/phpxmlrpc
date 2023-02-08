@@ -101,6 +101,9 @@
 
 * new: method `PhpXmlRpc::setLogger()`, to simplify injecting a custom logger into all classes of the library in one step
 
+* improved: the Client will automatically try to use cURL for requests using Digest/NTLM auth, unless told explicitly
+  told not to do so via option 'use_curl'
+
 * improved: the Client is more verbose in logging issues when trying to compress a Request for sending
 
 * improved: the `Logger` class now sports methods adhering to Psr\Log\LoggerInterface

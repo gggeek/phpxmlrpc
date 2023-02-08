@@ -829,10 +829,13 @@ class Client
         // where req is a Request
         $req->setDebug($this->debug);
 
-        /// @todo we could be smarter about this and force usage of curl in scenarios where it is both available and
-        ///       needed, such as digest or ntlm auth. Do not attempt to use it for https if not present
-        $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO &&
-                (in_array($method, array('https', 'http11', 'h2c', 'h2'))));
+        /// @todo we could be smarter about this and not force usage of curl for https if not present, as well as
+        ///       use the presence of curl_extra_opts or socket_extra_opts as a hint
+        $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO && (
+            in_array($method, array('https', 'http11', 'h2c', 'h2')) ||
+            ($this->username != '' && $this->authtype != 1) ||
+            ($this->proxy != '' && $this->proxy_user != '' && $this->proxy_authtype != 1)
+        ));
 
         // BC - we go through sendPayloadCURL/sendPayloadSocket in case some subclass reimplemented those
         if ($useCurl) {
