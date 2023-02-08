@@ -278,6 +278,7 @@ class Client
         self::OPT_COOKIES,
         self::OPT_DEBUG,
         self::OPT_EXTRA_CURL_OPTS,
+        self::OPT_EXTRA_SOCKET_OPTS,
         self::OPT_KEEPALIVE,
         self::OPT_KEY,
         self::OPT_KEY_PASS,
@@ -937,12 +938,12 @@ class Client
         // thanks to Grant Rauscher
         $credentials = '';
         if ($opts['username'] != '') {
-            $credentials = 'Authorization: Basic ' . base64_encode($opts['username'] . ':' . $opts['password']) . "\r\n";
             if ($opts['authtype'] != 1) {
                 $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported with HTTP 1.0');
                 return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['unsupported_option'],
                     PhpXmlRpc::$xmlrpcerr['unsupported_option'] . ': only Basic auth is supported with HTTP 1.0');
             }
+            $credentials = 'Authorization: Basic ' . base64_encode($opts['username'] . ':' . $opts['password']) . "\r\n";
         }
 
         $acceptedEncoding = '';
@@ -1756,6 +1757,7 @@ class Client
             'cookies' => $this->cookies,
             'debug' => $this->debug,
             'extracurlopts' => $this->extracurlopts,
+            'extrasockopts' => $this->extrasockopts,
             'keepalive' => $this->keepalive,
             'key' => $key,
             'keypass' => $keyPass,
@@ -1823,6 +1825,7 @@ class Client
             'cookies' => $this->cookies,
             'debug' => $this->debug,
             'extracurlopts' => $this->extracurlopts,
+            'extrasockopts' => $this->extrasockopts,
             'keepalive' => $keepAlive,
             'key' => $key,
             'keypass' => $keyPass,
