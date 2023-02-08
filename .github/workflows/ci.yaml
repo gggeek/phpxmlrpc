@@ -113,10 +113,11 @@ jobs:
             -   name: test perl demo files
                 run: 'perl demo/client/perl/test.pl'
 
-            - name: Qodana scan
-              uses: JetBrains/qodana-action@main
-              env:
-                  QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+            # disabled for the moment (2023/02), as we get only noise from the scans...
+            #- name: Qodana scan
+            #  uses: JetBrains/qodana-action@main
+            #  env:
+            #      QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
 
             -   name: failure troubleshooting
                 if: ${{ failure() }}
