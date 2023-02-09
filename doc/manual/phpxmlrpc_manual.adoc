@@ -33,8 +33,6 @@ as the XML-RPC specification explicitly forbids passing of timezone specifiers i
 use the `PhpXmlRpc\Helper\Date` class to do the encoding and decoding for you, or force usage of DateTime objects via
 the `PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes` variable.
 
-Most class members have "public" access, even those only meant for internal usage.
-
 There are a lot of static class variables which are meant be treated as if they were constants.
 
 Usage of Exceptions is almost non-existent.
@@ -275,7 +273,7 @@ values (including the empty string) are converted to an xml-rpc `false`.
 
 When manually creating Value objects representing an xml-rpc dateTime.iso8601, php DateTimes, integers (unix timestamps)
 and strings (representing dates in the specific xml-rpc ISO-8601 format) can be used as source values. For those, the
-original value will be returned when calling `+$value->scalarval();+`.
+original value will be returned when calling `+$value->scalarVal();+`.
 
 When Value objects are created by the library by parsing some received XML text, all Value objects representing an xml-rpc
 dateTime.iso8601 value will by default return the string representation of the date when calling `+$value->scalarVal();+`.
@@ -486,17 +484,22 @@ A wide range of options can be set to the client to manage the details of the HT
 authentication (Basic, Digest, NTLM), SSL certificates, proxies, cookies, compression of the requests, usage of keepalives
 for consecutive calls, the accepted response compression, charset encoding used for the requests and the user-agent string.
 
-See the https://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Client.html[phpdoc documentation] for details on
-all of those.
+The complete list of options available for the `setOption` call, and their current value, can be obtained via a call to
+`getOptions`. See the https://gggeek.github.io/phpxmlrpc/doc-4/api/classes/PhpXmlRpc-Client.html[phpdoc documentation] for
+details on the valid values of all the options.
 
 ===== cURL vs socket calls
 
 Please note that, depending on the HTTP protocol version used and the options set to the client, the client will
 transparently switch between using a socket-based HTTP implementation and a cURL based implementation. If needed, you
-can make use of the `setUseCurl` method to force or disable usage of the cURL based implementation.
+can make use of a `setOption(Client::OPT_USE_CURL, ...)` method call to force or disable usage of the cURL based implementation.
 
 When using cURL as the underlying transport, it is possible to set directly into the client any of the cURL options
-available in your php installation, via the `setCurlOptions` method.
+available in your php installation, via a `setOption(Client::OPT_EXTRA_CURL_OPTS, ...)` method call.
+
+When using sockets as the underlying transport, it is possible to set directly into the client any of the stream
+context options available for ssl and tcp in your php installation, via a `setOption(Client::OPT_EXTRA_SOCKET_OPTS, ...)`
+method call.
 
 ==== Sending multiple requests
 
@@ -531,10 +534,10 @@ foreach($rs as $resp) {
 
 Please note that, in case of faults during execution of a multicall call, the Client will automatically fail back to
 sending every request separately, one at a time. If you are sure that the server supports the multicall protocol, you
-might want to optimize and avoid this second attempt by passing `false` as 4th argument to `multicall()`.
+might want to optimize and avoid this second attempt by passing `false` as 2nd argument to `multicall()`.
 
 If, on the other hand, after writing code which uses the `multicall` method, you are forced to migrate to a server which
-does not support the `system.multiCall` method, you can simply set `+$client->no_multicall = true+`.
+does not support the `system.multiCall` method, you can simply call `+$client->setOption(Client::OPT_NO_MULTICALL, true)+`.
 
 In case you are not using multicall, but have to send many requests in a row to the same server, the best performances
 are generally obtained by forcing the Client to use the cURL HTTP transport, which enables usage of http keepalive, and
@@ -725,7 +728,7 @@ function foo ($xmlrpcreq)
     // retrieve value of first parameter - assumes at least one param received
     $par = $xmlrpcreq->getParam(0);
     // decode value of first parameter - assumes it is a scalar value
-    $val = $par->scalarval();
+    $val = $par->scalarVal();
 
     // note that we could also have achieved the same this way:
     //$val = new PhpXmlRpc\Encoder()->decode($xmlrpcreq)[0];
@@ -860,12 +863,14 @@ $resp = $srv->service($xmlrpc_request_body, true);
 // ... some code that does other stuff with xml response $resp here
 ----
 
+See the file __demo/server/symfony/ServerController.php__ for a complete example of such use.
+
 ==== Modifying the server's behaviour
 
-A couple of methods / options are available to modify the behaviour of the server. The only way to take
-advantage of their existence is by usage of a delayed server response (see above).
+A few options are available to modify the behaviour of the server. The only way to take advantage of their existence is
+by usage of a delayed server response (see above) and a `setOption` call.
 
-===== setDebug() [[setdebug]]
+===== setDebug() / Server::OPT_DEBUG [[setdebug]]
 
 This function controls weather the server is going to echo debugging messages back to the client as comments in response
 body. Valid values: 0,1,2,3, with 1 being the default. At level 0, no debug info is returned to the client. At level 2,
@@ -873,12 +878,12 @@ the complete client request is added to the response, as part of the xml comment
 is set when executing user functions exposed as server methods, and all non-fatal errors are trapped and added as comments
 into the response.
 
-===== allow_system_funcs
+===== Server::OPT_ALLOW_SYSTEM_FUNCS
 
 Default value: `true`. When set to `false`, disables support for `System.xxx` functions in the server. It might be useful
 e.g. if you do not wish the server to respond to requests to `System.ListMethods`.
 
-===== compress_response
+===== Server::OPT_COMPRESS_RESPONSE
 
 When set to `true`, enables the server to take advantage of HTTP compression, otherwise disables it. Responses will be
 transparently compressed, but only when an xml-rpc client declares its support for compression in the HTTP headers of the
@@ -886,7 +891,7 @@ request.
 
 Note that the ZLIB php extension must be installed for this to work. If it is, 'compress_response' will default to TRUE.
 
-===== exception_handling [[exception_handling]]
+===== Server::OPT_EXCEPTION_HANDLING [[exception_handling]]
 
 This option controls the behaviour of the server when an exception is thrown by a method handler php function. Valid
 values: 0,1,2, with 0 being the default. At level 0, the server catches the exception and returns an 'internal error'
@@ -894,7 +899,7 @@ xml-rpc response; at 1 it catches the exception and returns an xml-rpc response 
 corresponding to the exception that was thrown - never enable it for publicly accessible servers!; at 2, the exception
 is floated to the upper layers in the code - which hopefully do not display it to end users.
 
-===== response_charset_encoding
+===== Server::OPT_RESPONSE_CHARSET_ENCODING
 
 Charset encoding to be used for responses (only affects string values).
 
@@ -928,15 +933,15 @@ Standard errors returned by the library include:
 
 `1` Unknown method:: Returned if the server was asked to dispatch a method it didn't know about
 
-`2` Invalid return payload:: This error is actually generated by the client, not server, code, but signifies that a
-    server returned something it couldn't understand. A more detailed error report is sometimes added onto the end of
+`2` Invalid return payload:: This error is actually generated by the client, not server, code, and signifies that a
+    server returned something it couldn't understand. A more detailed error message is sometimes added at the end of
     the phrase above.
 
 `3` Incorrect parameters:: This error is generated when the server has signature(s) defined for a method, and the
     parameters passed by the client do not match any of signatures.
 
-`4` Can't introspect: method unknown:: This error is generated by the builtin system.* methods when any kind of
-    introspection is attempted on a method undefined by the server.
+`4` Can't introspect: method unknown:: This error is generated by the server's builtin system.* methods when any kind of
+    introspection is attempted on an undefined method.
 
 `5` Didn't receive 200 OK from remote server:: This error is generated by the client when a remote server doesn't return
     HTTP/1.1 200 OK in response to a request. A more detailed error report is added onto the end of the phrase above.
@@ -960,6 +965,8 @@ Standard errors returned by the library include:
 
 `19` No HTTP/2 support compiled in:: ...
 
+`20` Unsupported client option:: ...
+
 `100-` XML parse errors:: Returns 100 plus the XML parser error code for the fault that occurred. The faultString returned
     explains where the parse error was in the incoming XML stream.
 
@@ -971,10 +978,10 @@ known) for error codes, by making use of the call `PhpXmlrpc\PhpXmlRpc::useInter
 In order to extend the functionality offered by XML-RPC servers without impacting on the protocol, reserved methods are
 supported.
 
-All methods starting with __system.__ are considered reserved by the server. PHPXMLRPC itself provides four
-special methods, detailed in this chapter.
+All methods starting with __system.__ are considered reserved by the server. PHPXMLRPC itself provides four special
+methods, detailed in this chapter.
 
-Note that all server objects will automatically respond to clients querying these methods, unless the option
+Note that all Server objects will automatically respond to clients querying these methods, unless the option
 'allow_system_funcs' has been set to false before calling the `service()` method. This might pose a security risk
 if the server is exposed to public access, e.g. on the internet.
 

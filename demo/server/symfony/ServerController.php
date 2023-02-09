@@ -22,13 +22,14 @@ class ServerController extends AbstractController
     }
 
     # This single method serves ALL the xml-rpc requests.
-    # The configuration for which xml-rpc methods exist and how they are handled is carried out in the Server service definition
+    # The configuration for which xml-rpc methods exist and how they are handled is carried out in the service definition
+    # of the Server in the constructor
     #[Route('/xmlrpc', name: 'xml_rpc', methods: ['POST'])]
     public function serve(): Response
     {
         $xmlrpcResponse = $this->server->service(null, true);
         $response = new Response($xmlrpcResponse, 200, ['Content-Type' => 'text/xml']);
-        // there should be no need to avoid caching since this is only accessed via POST
+        // there should be no need to disable response caching since this is only accessed via POST
         return $response;
     }
 }

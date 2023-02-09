@@ -37,6 +37,21 @@ Documentation
   library using Composer option `--prefer-install=source`. Whatever the method chosen, make sure that the demo folder is
   not directly accessible from the internet, i.e. it is not within the webserver root directory).
 
+Extras
+------
+
+* This library does include a visual debugger which can be used to troubleshoot connections to 3rd party xml-rpc servers.
+  In case you'd like to use the debugger but do not have a working PHP installation, you can run it standalone as a
+  Container image. Instructions can be found at https://github.com/gggeek/phpxmlrpc-debugger
+
+* A companion PHP library, which adds support for the JSON-RPC protocol, is available at https://github.com/gggeek/phpxmlrpc-jsonrpc
+
+* A companion PHP library, which adds support for XML-RPC servers to automatically generate API documentation, and more,
+  is available at https://github.com/gggeek/phpxmlrpc-extras
+
+* Lats but not least, a Javascript library, implementing both XML-RPC and JSON-RPC clients using a very similar API, is
+  available at https://github.com/gggeek/jsxmlrpc
+
 License
 -------
 Use of this software is subject to the terms in the [license.txt](license.txt) file
