@@ -11,7 +11,7 @@ set -e
 echo "Installing Perl..."
 
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    libexpat1-dev
+    perl libexpat1-dev
 
 yes | perl -MCPAN -e 'install XML::Parser'
 yes | perl -MCPAN -e 'install Frontier::Client'
