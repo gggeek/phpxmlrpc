@@ -79,7 +79,17 @@ function build_api() {
 
     $PHPDOC run --cache-folder 'build/.phpdoc' -d "$(realpath ../src/)" -t 'api' --title PHPXMLRPC --defaultpackagename PHPXMLRPC
 
-    # @todo manually mangle the index.html file to add generation date, lib version, etc...
+    # manually mangle the index.html file to add generation date, lib version, etc...
+    TAG=$(grep 'public \+static \+$xmlrpcVersion *=' ../src/PhpXmlRpc.php | sed 's/public \+static \+$xmlrpcVersion *= *//' | tr -d ' ' | tr -d \" | tr -d ';' | tr -d "'")
+    sed -r -i -e "s|<h2>Documentation</h2>|<h2>Documentation for the <a href=\"https://gggeek.github.io/phpxmlrpc/\">PHPXMLRPC</a> library, ver. ${TAG}</h2><p>Built on $(date +%Y/%m/%d)</p>|g" ./api/index.html
+    find api -name '*.html' xargs sed -r -i -e 's|<a href="" class="phpdocumentor-title__link">|<a href="index.html" class="phpdocumentor-title__link">|g'
+    find api -name '*.html' | xargs sed -r -i -e "s|>PHPXMLRPC</a></h1>|>PHPXMLRPC ${TAG}</a></h1>|g"
+    #find api -name '*.html' | fgrep -v 'api/index.html' | xargs sed -r -i -e "s|...|...|g"
+
+    if [ ! -d api/images ]; then
+        mkdir api/images
+    fi
+    cp ../debugger/favicon.ico api/images
 }
 
 function build_manual() {
