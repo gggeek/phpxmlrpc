@@ -292,7 +292,7 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
-        if (version_compare(PHP_VERSION, '8.0', '>') && $this->args['SSLVERSION'] == 0)
+        if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
         {
             $version = explode('.', PHP_VERSION);
             $this->client->setSSLVersion(4 + $version[1]);
@@ -340,7 +340,7 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
-        if (version_compare(PHP_VERSION, '8.0', '>'))
+        if (version_compare(PHP_VERSION, '8.0', '>='))
         {
             $version = explode('.', PHP_VERSION);
             $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_SOCKET_OPTS,
@@ -384,7 +384,7 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
-        if (version_compare(PHP_VERSION, '8.0', '>') && $this->args['SSLVERSION'] == 0)
+        if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
         {
             $version = explode('.', PHP_VERSION);
             $this->client->setSSLVersion(4 + $version[1]);
