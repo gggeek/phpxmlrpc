@@ -7,7 +7,8 @@ ARG PHP_VERSION=default
 COPY setup/*.sh /root/setup/
 COPY config/* /root/config/
 
-RUN mkdir -p /usr/share/man/man1 && \
+RUN if [ ! -f /.dockerenv ]; then touch /.dockerenv; fi && \
+  mkdir -p /usr/share/man/man1 && \
   apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && \
   chmod 755 /root/setup/*.sh && \
   cd /root/setup && \
