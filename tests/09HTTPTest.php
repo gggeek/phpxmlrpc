@@ -340,7 +340,8 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
-        if (version_compare(PHP_VERSION, '8.0', '>'))
+
+        if (version_compare(PHP_VERSION, '8.1', '>='))
         {
             $version = explode('.', PHP_VERSION);
             $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_SOCKET_OPTS,
