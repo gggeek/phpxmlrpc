@@ -29,11 +29,13 @@ abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_ServerAwareTestCase
                 CURLOPT_POSTFIELDS => $payload
             ));
         }
-        curl_setopt($ch, CURLOPT_COOKIE, 'PHPUNIT_RANDOM_TEST_ID=' . static::$randId);
+        $cookie = 'PHPUNIT_RANDOM_TEST_ID=' . static::$randId;
         if ($this->collectCodeCoverageInformation)
         {
-            curl_setopt($ch, CURLOPT_COOKIE, 'PHPUNIT_SELENIUM_TEST_ID='.$this->testId);
+            $cookie .= '; PHPUNIT_SELENIUM_TEST_ID=' . $this->testId;
         }
+        curl_setopt($ch, CURLOPT_COOKIE, $cookie);
+
         if ($this->args['DEBUG'] > 0) {
             curl_setopt($ch, CURLOPT_VERBOSE, 1);
         }
