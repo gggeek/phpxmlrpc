@@ -340,16 +340,17 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
-        if (version_compare(PHP_VERSION, '8.0', '>='))
+        if (version_compare(PHP_VERSION, '8.0', '>'))
         {
             $version = explode('.', PHP_VERSION);
             $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_SOCKET_OPTS,
                 array('ssl' => array('security_level' => 2 + $version[1])));
+            /// @todo we should probably look deeper into the Apache config / ssl version in use to find out why this
+            ///       does not work well with TLS < 1.2
             if ($this->args['SSLVERSION'] == 0) {
-                $this->client->setSSLVersion(4 + $version[1]);
+                $this->client->setSSLVersion(5 + $version[1]);
             }
         }
-
         $this->$method();
     }
 
