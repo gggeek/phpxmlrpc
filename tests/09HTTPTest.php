@@ -292,6 +292,11 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
+        if (version_compare(PHP_VERSION, '8.0', '>') && $this->args['SSLVERSION'] == 0)
+        {
+            $version = explode('.', PHP_VERSION);
+            $this->client->setSSLVersion(4 + $version[1]);
+        }
 
         $this->$method();
     }
@@ -333,14 +338,16 @@ class HTTPTest extends ServerTest
         /// @todo replace with setOptions when dropping the BC layer
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
-        $this->client->setSSLVersion($this->args['SSLVERSION']);
         $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
-
+        $this->client->setSSLVersion($this->args['SSLVERSION']);
         if (version_compare(PHP_VERSION, '8.0', '>'))
         {
             $version = explode('.', PHP_VERSION);
             $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_SOCKET_OPTS,
                 array('ssl' => array('security_level' => 2 + $version[1])));
+            if ($this->args['SSLVERSION'] == 0) {
+                $this->client->setSSLVersion(4 + $version[1]);
+            }
         }
 
         $this->$method();
@@ -377,6 +384,11 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
+        if (version_compare(PHP_VERSION, '8.0', '>') && $this->args['SSLVERSION'] == 0)
+        {
+            $version = explode('.', PHP_VERSION);
+            $this->client->setSSLVersion(4 + $version[1]);
+        }
 
         $this->$method();
     }
@@ -385,7 +397,7 @@ class HTTPTest extends ServerTest
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
      */
-    public function testHttp2($method)
+    public function testHttp2NoTls($method)
     {
         if (!function_exists('curl_init'))
         {
