@@ -1,11 +1,11 @@
 <?php
 
-include_once __DIR__ . '/LoggerAwareTestCase.php';
+include_once __DIR__ . '/ServerAwareTestCase.php';
 
 /**
- * Tests involving the Client class (and no server).
+ * Tests involving the Client class (and mostly no server).
  */
-class ClientTest extends PhpXmlRpc_LoggerAwareTestCase
+class ClientTest extends PhpXmlRpc_ServerAwareTestCase
 {
     /** @var xmlrpc_client $client */
     public $client = null;
@@ -91,7 +91,7 @@ class ClientTest extends PhpXmlRpc_LoggerAwareTestCase
         }
         $this->client->server = $server[0];
         $this->client->path = $this->args['HTTPURI'];
-
+        $this->client->setCookie('PHPUNIT_RANDOM_TEST_ID', static::$randId);
         $r = $this->client->send($m, 5, 'http11');
         $this->assertEquals(0, $r->faultCode());
         $ro = $r->value();

@@ -1440,7 +1440,6 @@ class Client
             foreach ($opts['cookies'] as $name => $cookie) {
                 $cookieHeader .= $name . '=' . $cookie['value'] . '; ';
             }
-var_dump(substr($cookieHeader, 0, -2));
             curl_setopt($curl, CURLOPT_COOKIE, substr($cookieHeader, 0, -2));
         }
 

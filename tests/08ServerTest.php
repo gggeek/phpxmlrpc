@@ -54,6 +54,12 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
         $this->client->setDebug($this->args['DEBUG']);
         $this->client->request_compression = $this->request_compression;
         $this->client->accepted_compression = $this->accepted_compression;
+
+        $this->client->setCookie('PHPUNIT_RANDOM_TEST_ID', static::$randId);
+
+        if ($this->collectCodeCoverageInformation) {
+            $this->client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);
+        }
     }
 
     /**
@@ -64,10 +70,6 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
      */
     protected function send($msg, $errorCode = 0, $returnResponse = false)
     {
-        if ($this->collectCodeCoverageInformation) {
-            $this->client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);
-        }
-
         $r = $this->client->send($msg, $this->timeout, $this->method);
         // for multicall, return directly array of responses
         if (is_array($r)) {
@@ -965,9 +967,12 @@ And turned it into nylon';
             $v = $r->value();
             $v = php_xmlrpc_decode($v);
 
-            // take care for the extra cookie used for coverage collection
+            // take care of the extra cookies used for coverage collection and test mechanics
             if (isset($v['PHPUNIT_SELENIUM_TEST_ID'])) {
                 unset($v['PHPUNIT_SELENIUM_TEST_ID']);
+            }
+            if (isset($v['PHPUNIT_RANDOM_TEST_ID'])) {
+                unset($v['PHPUNIT_RANDOM_TEST_ID']);
             }
 
             // on IIS and Apache getallheaders returns something slightly different...

@@ -16,7 +16,7 @@ abstract class PhpXmlRpc_LoggerAwareTestCase extends PhpXmlRpc_PolyfillTestCase
     protected $buffer = '';
 
     /**
-     * hide debug messages and errors unless we either are in debug mode or the test fails
+     * Hide debug messages and errors unless we either are in debug mode or the test fails.
      * @return void
      */
     protected function set_up()
@@ -46,7 +46,7 @@ abstract class PhpXmlRpc_LoggerAwareTestCase extends PhpXmlRpc_PolyfillTestCase
         }
     }
 
-    // logger API
+    // logger API implementation
 
     public function debug($message, $context = array())
     {

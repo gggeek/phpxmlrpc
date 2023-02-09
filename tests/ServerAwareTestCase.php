@@ -16,6 +16,8 @@ abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LoggerAwareTestCa
     /** @var string */
     protected $coverageScriptUrl;
 
+    protected static $randId;
+
     /**
      * Reimplemented to allow us to collect code coverage info from the target server.
      * Code taken from PHPUnit_Extensions_Selenium2TestCase
@@ -52,6 +54,24 @@ abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LoggerAwareTestCa
         //$this->getStrategy()->endOfTest($this->session);
 
         return $result;
+    }
+
+    public static function set_up_before_class()
+    {
+        parent::set_up_before_class();
+
+        // Set up a database connection or other fixture which needs to be available.
+        self::$randId = uniqid();
+        file_put_contents(sys_get_temp_dir() . '/phpunit_rand_id.txt', self::$randId);
+    }
+
+    public static function tear_down_after_class()
+    {
+        if (is_file(sys_get_temp_dir() . '/phpunit_rand_id.txt')) {
+            unlink(sys_get_temp_dir() . '/phpunit_rand_id.txt');
+        }
+
+        parent::tear_down_after_class();
     }
 
     public function set_up()

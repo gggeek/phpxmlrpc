@@ -29,6 +29,7 @@ abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_ServerAwareTestCase
                 CURLOPT_POSTFIELDS => $payload
             ));
         }
+        curl_setopt($ch, CURLOPT_COOKIE, 'PHPUNIT_RANDOM_TEST_ID=' . static::$randId);
         if ($this->collectCodeCoverageInformation)
         {
             curl_setopt($ch, CURLOPT_COOKIE, 'PHPUNIT_SELENIUM_TEST_ID='.$this->testId);
@@ -50,7 +51,8 @@ abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_ServerAwareTestCase
     }
 
     /**
-     * Build an xml-rpc client, tweaked if needed to collect code-coverage information of the server
+     * Build an xml-rpc client, tweaked if needed to collect code-coverage information of the server.
+     * @see also ServerTest::set_up
      *
      * @param string $path
      * @return \PhpXmlRpc\Client
@@ -58,6 +60,7 @@ abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_ServerAwareTestCase
     protected function newClient($path)
     {
         $client = new \PhpXmlRpc\Client($this->baseUrl . $path);
+        $client->setCookie('PHPUNIT_RANDOM_TEST_ID', static::$randId);
         if ($this->collectCodeCoverageInformation) {
             $client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);
         }
