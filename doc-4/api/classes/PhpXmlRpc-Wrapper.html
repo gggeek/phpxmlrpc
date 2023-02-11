@@ -24,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">PHPXMLRPC</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.0</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -65,6 +65,10 @@
             </li>
                     <li>
                 <a href="namespaces/phpxmlrpc-helper.html" class="">Helper</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpxmlrpc-traits.html" class="">Traits</a>
                 
             </li>
             </ul>
@@ -109,6 +113,9 @@
         </div>
     
     
+            <span class="phpdocumentor-element__extends">
+            Uses
+                            <a href="classes/PhpXmlRpc-Traits-LoggerAware.html"><abbr title="\PhpXmlRpc\Traits\LoggerAware">LoggerAware</abbr></a>                    </span>
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
@@ -118,7 +125,7 @@
 
     </aside>
 
-            <p class="phpdocumentor-summary">PHPXMLRPC &quot;wrapper&quot; class - generate stubs to transparently access xmlrpc methods as php functions and vice-versa.</p>
+            <p class="phpdocumentor-summary">PHPXMLRPC &quot;wrapper&quot; class - generate stubs to transparently access xml-rpc methods as php functions and vice-versa.</p>
 
     <section class="phpdocumentor-description"><p>Note: this class implements the PROXY pattern, but it is not named so to avoid confusion with http proxies.</p>
 </section>
@@ -144,15 +151,6 @@
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
                                                  <section class="phpdocumentor-description"><p>implement method wrapping with preservation of php objs in calls</p>
-</section>
-
-                                    </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">todo</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>when wrapping methods without obj rebuilding, use return_type = 'phpvals' (faster)</p>
 </section>
 
                                     </dd>
@@ -187,24 +185,38 @@
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
-                    <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PhpXmlRpc-Wrapper.html#property_objHolder">$objHolder</a>
+                    <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#property_logger">$logger</a>
     <span>
                         &nbsp;: mixed            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Wrapper.html#property_logger">$logger</a>
+    <a href="classes/PhpXmlRpc-Wrapper.html#property_namespace">$namespace</a>
     <span>
-                        &nbsp;: mixed            </span>
+                        &nbsp;: string            </span>
 </dt>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Wrapper.html#method_getLogger">getLogger()</a>
+    <a href="classes/PhpXmlRpc-Wrapper.html#method_getHeldObject">getHeldObject()</a>
+    <span>
+                                &nbsp;: object    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_getLogger">getLogger()</a>
     <span>
                                 &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Wrapper.html#method_holdObject">holdObject()</a>
+    <span>
+                                &nbsp;: void    </span>
 </dt>
 <dd></dd>
 
@@ -217,7 +229,7 @@
 accepted come from javadoc blocks), return corresponding phpxmlrpc type.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Wrapper.html#method_setLogger">setLogger()</a>
+    <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_setLogger">setLogger()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
@@ -229,7 +241,7 @@ accepted come from javadoc blocks), return corresponding phpxmlrpc type.</dd>
                                 &nbsp;: array&lt;string|int, mixed&gt;|false    </span>
 </dt>
 <dd>Given a user-defined PHP class or php object, map its methods onto a list of
-PHP &#039;wrapper&#039; functions that can be exposed as xmlrpc methods from an xmlrpc server
+PHP &#039;wrapper&#039; functions that can be exposed as xml-rpc methods from an xml-rpc server
 object and called from remote clients (as well as their corresponding signature info).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
@@ -237,24 +249,24 @@ object and called from remote clients (as well as their corresponding signature 
     <span>
                                 &nbsp;: array&lt;string|int, mixed&gt;|false    </span>
 </dt>
-<dd>Given a user-defined PHP function, create a PHP &#039;wrapper&#039; function that can be exposed as xmlrpc method from an
-xmlrpc server object and called from remote clients (as well as its corresponding signature info).</dd>
+<dd>Given a user-defined PHP function, create a PHP &#039;wrapper&#039; function that can be exposed as xml-rpc method from an
+xml-rpc server object and called from remote clients (as well as its corresponding signature info).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Wrapper.html#method_wrapXmlrpcMethod">wrapXmlrpcMethod()</a>
     <span>
                                 &nbsp;: <abbr title="\Closure">Closure</abbr>|array&lt;string|int, string&gt;|false    </span>
 </dt>
-<dd>Given an xmlrpc client and a method name, register a php wrapper function that will call it and return results
+<dd>Given an xml-rpc client and a method name, register a php wrapper function that will call it and return results
 using native php types for both arguments and results. The generated php function will return a Response
-object for failed xmlrpc calls.</dd>
+object for failed xml-rpc calls.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Wrapper.html#method_wrapXmlrpcServer">wrapXmlrpcServer()</a>
     <span>
                                 &nbsp;: string|array&lt;string|int, mixed&gt;|false    </span>
 </dt>
-<dd>Similar to wrapXmlrpcMethod, but will generate a php class that wraps all xmlrpc methods exposed by the remote
+<dd>Similar to wrapXmlrpcMethod, but will generate a php class that wraps all xml-rpc methods exposed by the remote
 server as own methods.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
@@ -332,7 +344,7 @@ server as own methods.</dd>
     <span>
                                 &nbsp;: false|array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd>Retrieves an xmlrpc method signature from a server which supports system.methodSignature</dd>
+<dd>Retrieves an xml-rpc method signature from a server which supports system.methodSignature</dd>
 
         </dl>
 
@@ -350,53 +362,19 @@ server as own methods.</dd>
         class="
             phpdocumentor-element
             -property
-            -public
-            -static                                            "
->
-    <h4 class="phpdocumentor-element__name" id="property_objHolder">
-        $objHolder
-        <a href="classes/PhpXmlRpc-Wrapper.html#property_objHolder" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">25</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$objHolder</span>
-     = <span class="phpdocumentor-signature__default-value">array()</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
             -protected
             -static                                            "
 >
     <h4 class="phpdocumentor-element__name" id="property_logger">
         $logger
-        <a href="classes/PhpXmlRpc-Wrapper.html#property_logger" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#property_logger" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Traits/LoggerAware.php"><a href="files/traits-loggeraware.html"><abbr title="Traits/LoggerAware.php">LoggerAware.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">27</span>
+    <span class="phpdocumentor-element-found-in__line">9</span>
 
     </aside>
 
@@ -414,6 +392,38 @@ server as own methods.</dd>
     
 
 </article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_namespace">
+        $namespace
+        <a href="classes/PhpXmlRpc-Wrapper.html#property_namespace" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">34</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$namespace</span>
+     = <span class="phpdocumentor-signature__default-value">&#039;\\PhpXmlRpc\\&#039;</span></code>
+
+    
+    
+    
+
+</article>
             </section>
 
             <section class="phpdocumentor-methods">
@@ -425,16 +435,72 @@ server as own methods.</dd>
         class="phpdocumentor-element
             -method
             -public
-                                                        "
+                                    -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_getLogger">
-        getLogger()
-        <a href="classes/PhpXmlRpc-Wrapper.html#method_getLogger" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_getHeldObject">
+        getHeldObject()
+        <a href="classes/PhpXmlRpc-Wrapper.html#method_getHeldObject" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">29</span>
+    <span class="phpdocumentor-element-found-in__line">1250</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">getHeldObject</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">object</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$index</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/PhpXmlRpc-Exception-ValueErrorException.html"><abbr title="\PhpXmlRpc\Exception\ValueErrorException">ValueErrorException</abbr></a></span>
+                                                            
+                                             
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">object</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getLogger">
+        getLogger()
+        <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_getLogger" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Traits/LoggerAware.php"><a href="files/traits-loggeraware.html"><abbr title="Traits/LoggerAware.php">LoggerAware.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">11</span>
 
     </aside>
 
@@ -458,6 +524,55 @@ server as own methods.</dd>
         class="phpdocumentor-element
             -method
             -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_holdObject">
+        holdObject()
+        <a href="classes/PhpXmlRpc-Wrapper.html#method_holdObject" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1240</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">holdObject</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$index</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$object</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$index</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$object</span>
+                : <span class="phpdocumentor-signature__argument__return-type">object</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
                                                         "
 >
     <h4 class="phpdocumentor-element__name" id="method_php2XmlrpcType">
@@ -467,7 +582,7 @@ server as own methods.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">61</span>
+    <span class="phpdocumentor-element-found-in__line">51</span>
 
     </aside>
 
@@ -481,7 +596,7 @@ accepted come from javadoc blocks), return corresponding phpxmlrpc type.</p>
         <section class="phpdocumentor-description"><p>Notes:</p>
 <ul>
 <li>for php 'resource' types returns empty string, since resources cannot be serialized;</li>
-<li>for php class names returns 'struct', since php objects can be serialized as xmlrpc structs</li>
+<li>for php class names returns 'struct', since php objects can be serialized as xml-rpc structs</li>
 <li>for php arrays always return array, even though arrays sometimes serialize as structs...</li>
 <li>for 'void' and 'null' returns 'undefined'</li>
 </ul>
@@ -538,12 +653,12 @@ accepted come from javadoc blocks), return corresponding phpxmlrpc type.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_setLogger">
         setLogger()
-        <a href="classes/PhpXmlRpc-Wrapper.html#method_setLogger" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_setLogger" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Traits/LoggerAware.php"><a href="files/traits-loggeraware.html"><abbr title="Traits/LoggerAware.php">LoggerAware.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">41</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
@@ -585,12 +700,12 @@ accepted come from javadoc blocks), return corresponding phpxmlrpc type.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">630</span>
+    <span class="phpdocumentor-element-found-in__line">640</span>
 
     </aside>
 
         <p class="phpdocumentor-summary">Given a user-defined PHP class or php object, map its methods onto a list of
-PHP &#039;wrapper&#039; functions that can be exposed as xmlrpc methods from an xmlrpc server
+PHP &#039;wrapper&#039; functions that can be exposed as xml-rpc methods from an xml-rpc server
 object and called from remote clients (as well as their corresponding signature info).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
@@ -605,7 +720,7 @@ object and called from remote clients (as well as their corresponding signature 
                 : <span class="phpdocumentor-signature__argument__return-type">string|object</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>the name of the class whose methods are to be exposed as xmlrpc methods, or an object instance of that class</p>
+                    <section class="phpdocumentor-description"><p>the name of the class whose methods are to be exposed as xml-rpc methods, or an object instance of that class</p>
 </section>
 
             </dd>
@@ -614,11 +729,11 @@ object and called from remote clients (as well as their corresponding signature 
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                  = <span class="phpdocumentor-signature__argument__default-value">array()</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>see the docs for wrapPhpMethod for basic options, plus</p>
+                    <section class="phpdocumentor-description"><p>see the docs for wrapPhpFunction for basic options, plus</p>
 <ul>
 <li>string method_type    'static', 'nonstatic', 'all' and 'auto' (default); the latter will switch between static and non-static depending on whether $className is a class name or object instance</li>
 <li>string method_filter  a regexp used to filter methods to wrap based on their names</li>
-<li>string prefix         used for the names of the xmlrpc methods created.</li>
+<li>string prefix         used for the names of the xml-rpc methods created.</li>
 <li>string replace_class_name use to completely replace the class name with the prefix in the generated method names. e.g. instead of \Some\Namespace\Class.method use prefixmethod</li>
 </ul>
 </section>
@@ -627,6 +742,22 @@ object and called from remote clients (as well as their corresponding signature 
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>allow the generated function to be able to reuse an external Encoder instance instead of creating one on
+each invocation, for the case where all the generated functions will be saved as methods of a class</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|false</span>
@@ -649,19 +780,19 @@ object and called from remote clients (as well as their corresponding signature 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">177</span>
+    <span class="phpdocumentor-element-found-in__line">168</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Given a user-defined PHP function, create a PHP &#039;wrapper&#039; function that can be exposed as xmlrpc method from an
-xmlrpc server object and called from remote clients (as well as its corresponding signature info).</p>
+        <p class="phpdocumentor-summary">Given a user-defined PHP function, create a PHP &#039;wrapper&#039; function that can be exposed as xml-rpc method from an
+xml-rpc server object and called from remote clients (as well as its corresponding signature info).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">wrapPhpFunction</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Callable">Callable</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$callable</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$newFuncName</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$extraOptions</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|false</span></code>
 
         <section class="phpdocumentor-description"><p>Since php is a typeless language, to infer types of input and output parameters, it relies on parsing the
-javadoc-style comment block associated with the given function. Usage of xmlrpc native types (such as
+javadoc-style comment block associated with the given function. Usage of xml-rpc native types (such as
 datetime.dateTime.iso8601 and base64) in the '@param' tag is also allowed, if you need the php function to
 receive/send data in that particular format (note that base64 encoding/decoding is transparently carried out by
 the lib, while datetime values are passed around as strings)</p>
@@ -669,14 +800,14 @@ the lib, while datetime values are passed around as strings)</p>
 <ul>
 <li>only works for user-defined functions, not for PHP internal functions (reflection does not support retrieving
 number/type of params for those)</li>
-<li>functions returning php objects will generate special structs in xmlrpc responses: when the xmlrpc decoding of
+<li>functions returning php objects will generate special structs in xml-rpc responses: when the xml-rpc decoding of
 those responses is carried out by this same lib, using the appropriate param in php_xmlrpc_decode, the php
 objects will be rebuilt.
 In short: php objects can be serialized, too (except for their resource members), using this function.
 Other libs might choke on the very same xml that will be generated in this case (i.e. it has a nonstandard
 attribute on struct element tags)</li>
 </ul>
-<p>Note that since rel. 2.0RC3 the preferred method to have the server call 'standard' php functions (ie. functions
+<p>Note that since rel. 2.0RC3 the preferred method to have the server call 'standard' php functions (i.e. functions
 not expecting a single Request obj as parameter) is by making use of the $functions_parameters_type and
 $exception_handling properties.</p>
 </section>
@@ -688,7 +819,7 @@ $exception_handling properties.</p>
                 : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Callable">Callable</abbr></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>the PHP user function to be exposed as xmlrpc method: a closure, function name, array($obj, 'methodname') or array('class', 'methodname') are ok</p>
+                    <section class="phpdocumentor-description"><p>the PHP user function to be exposed as xml-rpc method: a closure, function name, array($obj, 'methodname') or array('class', 'methodname') are ok</p>
 </section>
 
             </dd>
@@ -709,7 +840,8 @@ $exception_handling properties.</p>
                     <section class="phpdocumentor-description"><p>(optional) array of options for conversion. valid values include:</p>
 <ul>
 <li>bool return_source     when true, php code w. function definition will be returned, instead of a closure</li>
-<li>bool encode_php_objs   let php objects be sent to server using the 'improved' xmlrpc notation, so server can deserialize them as php objects</li>
+<li>bool encode_nulls      let php objects be sent to server using <nil> elements instead of empty strings</li>
+<li>bool encode_php_objs   let php objects be sent to server using the 'improved' xml-rpc notation, so server can deserialize them as php objects</li>
 <li>bool decode_php_objs   --- WARNING !!! possible security hazard. only use it with trusted servers ---</li>
 <li>bool suppress_warnings remove from produced xml any warnings generated at runtime by the php function being invoked</li>
 </ul>
@@ -756,7 +888,7 @@ $exception_handling properties.</p>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
-                                                 <section class="phpdocumentor-description"><p>add some trigger_errors / error_log when returning false?</p>
+                                                 <section class="phpdocumentor-description"><p>add some error logging when returning false?</p>
 </section>
 
                                     </dd>
@@ -820,13 +952,13 @@ its signature and docs, to be used in the server dispatch map</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">717</span>
+    <span class="phpdocumentor-element-found-in__line">746</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Given an xmlrpc client and a method name, register a php wrapper function that will call it and return results
+        <p class="phpdocumentor-summary">Given an xml-rpc client and a method name, register a php wrapper function that will call it and return results
 using native php types for both arguments and results. The generated php function will return a Response
-object for failed xmlrpc calls.</p>
+object for failed xml-rpc calls.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -834,15 +966,15 @@ object for failed xmlrpc calls.</p>
 
         <section class="phpdocumentor-description"><p>Known limitations:</p>
 <ul>
-<li>server must support system.methodSignature for the target xmlrpc method</li>
+<li>server must support system.methodSignature for the target xml-rpc method</li>
 <li>for methods that expose many signatures, only one can be picked (we could in principle check if signatures
 differ only by number of params and not by type, but it would be more complication than we can spare time for)</li>
-<li>nested xmlrpc params: the caller of the generated php function has to encode on its own the params passed to
+<li>nested xml-rpc params: the caller of the generated php function has to encode on its own the params passed to
 the php function if these are structs or arrays whose (sub)members include values of type base64</li>
 </ul>
 <p>Notes: the connection properties of the given client will be copied and reused for the connection used during
 the call to the generated php function.
-Calling the generated php function 'might' be slightly slow: a new xmlrpc client is created on every invocation
+Calling the generated php function 'might' be slightly slow: a new xml-rpc client is created on every invocation
 and an xmlrpc-connection opened+closed.
 An extra 'debug' argument, defaulting to 0, is appended to the argument list of the generated function, useful
 for debugging purposes.</p>
@@ -855,7 +987,7 @@ for debugging purposes.</p>
                 : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpXmlRpc-Client.html"><abbr title="\PhpXmlRpc\Client">Client</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>an xmlrpc client set up correctly to communicate with target server</p>
+                    <section class="phpdocumentor-description"><p>an xml-rpc client set up correctly to communicate with target server</p>
 </section>
 
             </dd>
@@ -864,7 +996,7 @@ for debugging purposes.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>the xmlrpc method to be mapped to a php function</p>
+                    <section class="phpdocumentor-description"><p>the xml-rpc method to be mapped to a php function</p>
 </section>
 
             </dd>
@@ -875,16 +1007,31 @@ for debugging purposes.</p>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>array of options that specify conversion details. Valid options include</p>
 <ul>
-<li>integer signum              the index of the method signature to use in mapping (if method exposes many sigs)</li>
+<li>integer signum              the index of the method signature to use in mapping (if
+method exposes many sigs)</li>
 <li>integer timeout             timeout (in secs) to be used when executing function/calling remote method</li>
-<li>string  protocol            'http' (default), 'http11' or 'https'</li>
-<li>string  new_function_name   the name of php function to create, when return_source is used. If unspecified, lib will pick an appropriate name</li>
-<li>string  return_source       if true return php code w. function definition instead of function itself (closure)</li>
-<li>bool    encode_php_objs     let php objects be sent to server using the 'improved' xmlrpc notation, so server can deserialize them as php objects</li>
-<li>bool    decode_php_objs     --- WARNING !!! possible security hazard. only use it with trusted servers ---</li>
-<li>mixed   return_on_fault     a php value to be returned when the xmlrpc call fails/returns a fault response (by default the Response object is returned in this case). If a string is used, '%faultCode%' and '%faultString%' tokens will be substituted with actual error values</li>
-<li>bool    debug               set it to 1 or 2 to see debug results of querying server for method synopsis</li>
-<li>int     simple_client_copy  set it to 1 to have a lightweight copy of the $client object made in the generated code (only used when return_source = true)</li>
+<li>string  protocol            'http' (default), 'http11', 'https', 'h2' or 'h2c'</li>
+<li>string  new_function_name   the name of php function to create, when return_source is used.
+If unspecified, lib will pick an appropriate name</li>
+<li>string  return_source       if true return php code w. function definition instead of
+the function itself (closure)</li>
+<li>bool    encode_nulls        if true, use <code class="prettyprint">&lt;nil/&gt;</code> elements instead of empty string xml-rpc
+values for php null values</li>
+<li>bool    encode_php_objs     let php objects be sent to server using the 'improved' xml-rpc
+notation, so server can deserialize them as php objects</li>
+<li>bool    decode_php_objs     --- WARNING !!! possible security hazard. only use it with
+trusted servers ---</li>
+<li>mixed   return_on_fault     a php value to be returned when the xml-rpc call fails/returns
+a fault response (by default the Response object is returned
+in this case).  If a string is used, '%faultCode%' and
+'%faultString%' tokens  will be substituted with actual error values</li>
+<li>bool    throw_on_fault      if true, throw an exception instead of returning a Response
+in case of errors/faults;
+if a string, do the same and assume it is the exception class to throw</li>
+<li>bool    debug               set it to 1 or 2 to see debug results of querying server for
+method synopsis</li>
+<li>int     simple_client_copy  set it to 1 to have a lightweight copy of the $client object
+made in the generated code (only used when return_source = true)</li>
 </ul>
 </section>
 
@@ -898,15 +1045,6 @@ for debugging purposes.</p>
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">todo</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>allow the created function to throw exceptions on method calls failures</p>
-</section>
-
-                                    </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">todo</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
@@ -934,6 +1072,24 @@ It might be hard (hence slow) to match based on type and number of arguments...<
 </section>
 
                                     </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>when wrapping methods without obj rebuilding, use return_type = 'phpvals' (faster)</p>
+</section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>allow creating functions which have an extra <code class="prettyprint">$debug=0</code> parameter</p>
+</section>
+
+                                    </dd>
                         </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -957,11 +1113,11 @@ It might be hard (hence slow) to match based on type and number of arguments...<
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1030</span>
+    <span class="phpdocumentor-element-found-in__line">1102</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Similar to wrapXmlrpcMethod, but will generate a php class that wraps all xmlrpc methods exposed by the remote
+        <p class="phpdocumentor-summary">Similar to wrapXmlrpcMethod, but will generate a php class that wraps all xml-rpc methods exposed by the remote
 server as own methods.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
@@ -1026,6 +1182,25 @@ we do not support them yet...</p>
 </section>
 
                                     </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>add method setDebug() to new class, to enable/disable debugging</p>
+</section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>optimization - move the generated Encoder instance to be a property of the created class, instead of creating
+it on every generated method invocation</p>
+</section>
+
+                                    </dd>
                         </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -1049,7 +1224,7 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">108</span>
+    <span class="phpdocumentor-element-found-in__line">98</span>
 
     </aside>
 
@@ -1092,7 +1267,7 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1132</span>
+    <span class="phpdocumentor-element-found-in__line">1215</span>
 
     </aside>
 
@@ -1119,7 +1294,7 @@ we do not support them yet...</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>when true, copy the whole state of the client, except for 'debug' and 'return_type'</p>
+                    <section class="phpdocumentor-description"><p>when true, copy the whole options of the client, except for 'debug' and 'return_type'</p>
 </section>
 
             </dd>
@@ -1162,7 +1337,7 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">356</span>
+    <span class="phpdocumentor-element-found-in__line">347</span>
 
     </aside>
 
@@ -1223,7 +1398,7 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">427</span>
+    <span class="phpdocumentor-element-found-in__line">418</span>
 
     </aside>
 
@@ -1311,7 +1486,7 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">535</span>
+    <span class="phpdocumentor-element-found-in__line">527</span>
 
     </aside>
 
@@ -1361,21 +1536,6 @@ we do not support them yet...</p>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">todo</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>add a nice phpdoc block in the generated source</p>
-</section>
-
-                                    </dd>
-                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string</span>
@@ -1396,7 +1556,7 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">829</span>
+    <span class="phpdocumentor-element-found-in__line">862</span>
 
     </aside>
 
@@ -1427,7 +1587,9 @@ we do not support them yet...</p>
                 : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>@see wrapXmlrpcMethod</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$mSig</span>
@@ -1474,7 +1636,7 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">663</span>
+    <span class="phpdocumentor-element-found-in__line">676</span>
 
     </aside>
 
@@ -1510,6 +1672,22 @@ we do not support them yet...</p>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>php allows many more characters in identifiers than the xml-rpc spec does. We should make sure to
+replace those (while trying to make sure we are not running in collisions)</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string</span>
@@ -1530,7 +1708,7 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">248</span>
+    <span class="phpdocumentor-element-found-in__line">239</span>
 
     </aside>
 
@@ -1580,7 +1758,7 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">492</span>
+    <span class="phpdocumentor-element-found-in__line">486</span>
 
     </aside>
 
@@ -1598,7 +1776,7 @@ we do not support them yet...</p>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>a php callable, or the name of an xmlrpc method</p>
+                    <section class="phpdocumentor-description"><p>a php callable, or the name of an xml-rpc method</p>
 </section>
 
             </dd>
@@ -1642,7 +1820,7 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">794</span>
+    <span class="phpdocumentor-element-found-in__line">825</span>
 
     </aside>
 
@@ -1700,11 +1878,11 @@ we do not support them yet...</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html"><abbr title="Wrapper.php">Wrapper.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">752</span>
+    <span class="phpdocumentor-element-found-in__line">781</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Retrieves an xmlrpc method signature from a server which supports system.methodSignature</p>
+        <p class="phpdocumentor-summary">Retrieves an xml-rpc method signature from a server which supports system.methodSignature</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>

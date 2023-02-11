@@ -24,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">PHPXMLRPC</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.0</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -65,6 +65,10 @@
             </li>
                     <li>
                 <a href="namespaces/phpxmlrpc-helper.html" class="">Helper</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpxmlrpc-traits.html" class="">Traits</a>
                 
             </li>
             </ul>
@@ -112,12 +116,15 @@
             implements
                             <abbr title="\Countable">Countable</abbr>,                             <abbr title="\IteratorAggregate">IteratorAggregate</abbr>,                             <abbr title="\ArrayAccess">ArrayAccess</abbr>                    </span>
     
+            <span class="phpdocumentor-element__extends">
+            Uses
+                            <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html"><abbr title="\PhpXmlRpc\Traits\CharsetEncoderAware">CharsetEncoderAware</abbr></a>,                             <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html"><abbr title="\PhpXmlRpc\Traits\DeprecationLogger">DeprecationLogger</abbr></a>                    </span>
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">11</span>
+    <span class="phpdocumentor-element-found-in__line">18</span>
 
     </aside>
 
@@ -164,6 +171,13 @@
     <a href="classes/PhpXmlRpc-Value.html#property_me">$me</a>
     <span>
                         &nbsp;: array&lt;string|int, <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>&gt;|mixed            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/PhpXmlRpc-Value.html#property_params">$params</a>
+    <span>
+                        &nbsp;: int            </span>
 </dt>
 <dd></dd>
 
@@ -259,16 +273,30 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Value.html#property_charsetEncoder">$charsetEncoder</a>
+    <a href="classes/PhpXmlRpc-Value.html#property__php_class">$_php_class</a>
+    <span>
+                        &nbsp;: string|null            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#property_charsetEncoder">$charsetEncoder</a>
     <span>
                         &nbsp;: mixed            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Value.html#property_logger">$logger</a>
+    <a href="classes/PhpXmlRpc-Value.html#property_me">$me</a>
     <span>
-                        &nbsp;: mixed            </span>
+                        &nbsp;: array&lt;string|int, <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>&gt;|mixed            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/PhpXmlRpc-Value.html#property_mytype">$mytype</a>
+    <span>
+                        &nbsp;: int            </span>
 </dt>
 <dd></dd>
 
@@ -277,62 +305,83 @@
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd>Build an xmlrpc value.</dd>
+<dd>Build an xml-rpc value.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_addArray">addArray()</a>
-    <span>
-                                &nbsp;: int    </span>
-</dt>
-<dd>Add an array of xmlrpc value objects to an xmlrpc value.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_addScalar">addScalar()</a>
-    <span>
-                                &nbsp;: int    </span>
-</dt>
-<dd>Add a single php value to an xmlrpc value.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_addStruct">addStruct()</a>
-    <span>
-                                &nbsp;: int    </span>
-</dt>
-<dd>Merges an array of named xmlrpc value objects into an xmlrpc value.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_arraymem">arraymem()</a>
-    <span>
-                                &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>    </span>
-</dt>
-<dd>Returns the m-th member of an xmlrpc value of array type.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_arraysize">arraysize()</a>
-    <span>
-                                &nbsp;: int    </span>
-</dt>
-<dd>Returns the number of members in an xmlrpc value of array type.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_count">count()</a>
-    <span>
-                                &nbsp;: int    </span>
-</dt>
-<dd>Returns the number of members in an xmlrpc value:
-- 0 for uninitialized values
-- 1 for scalar values
-- the number of elements for struct and array values</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_getCharsetEncoder">getCharsetEncoder()</a>
+    <a href="classes/PhpXmlRpc-Value.html#method___get">__get()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_getLogger">getLogger()</a>
+    <a href="classes/PhpXmlRpc-Value.html#method___isset">__isset()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Value.html#method___set">__set()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Value.html#method___unset">__unset()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Value.html#method_addArray">addArray()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Add an array of xml-rpc value objects to an xml-rpc value.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Value.html#method_addScalar">addScalar()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Add a single php value to an xml-rpc value.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Value.html#method_addStruct">addStruct()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Merges an array of named xml-rpc value objects into an xml-rpc value.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Value.html#method_arrayMem">arrayMem()</a>
+    <span>
+                                &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>    </span>
+</dt>
+<dd>Returns the n-th member of an xml-rpc value of array type.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Value.html#method_arraySize">arraySize()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Returns the number of members in an xml-rpc value of array type.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Value.html#method_count">count()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Returns the number of members in an xml-rpc value:
+- 0 for uninitialized values
+- 1 for scalar values
+- the number of elements for struct and array values</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_getCharsetEncoder">getCharsetEncoder()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
@@ -343,21 +392,21 @@
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd>Returns a string containing either &quot;struct&quot;, &quot;array&quot;, &quot;scalar&quot; or &quot;undef&quot;, describing the base type of the value.</dd>
+<dd>Returns a string describing the base type of the value.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_scalartyp">scalartyp()</a>
+    <a href="classes/PhpXmlRpc-Value.html#method_scalarTyp">scalarTyp()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd>Returns the type of the xmlrpc value.</dd>
+<dd>Returns the type of the xml-rpc value.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_scalarval">scalarval()</a>
+    <a href="classes/PhpXmlRpc-Value.html#method_scalarVal">scalarVal()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd>Returns the value of a scalar xmlrpc value (base 64 decoding is automatically handled here)</dd>
+<dd>Returns the value of a scalar xml-rpc value (base 64 decoding is automatically handled here)</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Value.html#method_serialize">serialize()</a>
@@ -367,56 +416,63 @@
 <dd>Returns the xml representation of the value. XML prologue not included.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_setCharsetEncoder">setCharsetEncoder()</a>
+    <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_setCharsetEncoder">setCharsetEncoder()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_setLogger">setLogger()</a>
+    <a href="classes/PhpXmlRpc-Value.html#method_structEach">structEach()</a>
     <span>
-                                &nbsp;: void    </span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
-<dd></dd>
+<dd>Return next member element for xml-rpc values of type struct.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_structeach">structeach()</a>
-    <span>
-                                &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>    </span>
-</dt>
-<dd>Return next member element for xmlrpc values of type struct.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_structmem">structmem()</a>
+    <a href="classes/PhpXmlRpc-Value.html#method_structMem">structMem()</a>
     <span>
                                 &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>    </span>
 </dt>
-<dd>Returns the value of a given struct member (an xmlrpc value object in itself).</dd>
+<dd>Returns the value of a given struct member (an xml-rpc value object in itself).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_structmemexists">structmemexists()</a>
+    <a href="classes/PhpXmlRpc-Value.html#method_structMemExists">structMemExists()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Checks whether a struct member with a given name is present.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_structreset">structreset()</a>
+    <a href="classes/PhpXmlRpc-Value.html#method_structReset">structReset()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Reset internal pointer for xmlrpc values of type struct.</dd>
+<dd>Reset internal pointer for xml-rpc values of type struct.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Value.html#method_structsize">structsize()</a>
+    <a href="classes/PhpXmlRpc-Value.html#method_structSize">structSize()</a>
     <span>
                                 &nbsp;: int    </span>
 </dt>
-<dd>Returns the number of members in an xmlrpc value of struct type.</dd>
+<dd>Returns the number of members in an xml-rpc value of struct type.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PhpXmlRpc-Value.html#method_serializedata">serializedata()</a>
+    <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecation">logDeprecation()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecationUnlessCalledBy">logDeprecationUnlessCalledBy()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/PhpXmlRpc-Value.html#method_serializeData">serializeData()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
@@ -450,7 +506,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">52</span>
+    <span class="phpdocumentor-element-found-in__line">0</span>
 
     </aside>
 
@@ -459,10 +515,13 @@
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string|null</span>
     <span class="phpdocumentor-signature__name">$_php_class</span>
-     = <span class="phpdocumentor-signature__default-value">null</span></code>
+    </code>
 
-    
-    
+        <section class="phpdocumentor-description"><p>deprecated - public access left in purely for BC.</p>
+</section>
+
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -482,7 +541,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">45</span>
+    <span class="phpdocumentor-element-found-in__line">0</span>
 
     </aside>
 
@@ -491,10 +550,48 @@
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>&gt;|mixed</span>
     <span class="phpdocumentor-signature__name">$me</span>
-     = <span class="phpdocumentor-signature__default-value">array()</span></code>
+    </code>
+
+        <section class="phpdocumentor-description"><p>deprecated - public access left in purely for BC. Access via scalarVal()/__construct()</p>
+</section>
+
+        <section class="phpdocumentor-description"></section>
 
     
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_params">
+        $params
+        <a href="classes/PhpXmlRpc-Value.html#property_params" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">0</span>
+
+    </aside>
+
     
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$params</span>
+    </code>
+
+        <section class="phpdocumentor-description"><p>$mytype - public access left in purely for BC. Access via kindOf()/__construct()</p>
+</section>
+
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -514,7 +611,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">31</span>
 
     </aside>
 
@@ -548,7 +645,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">20</span>
+    <span class="phpdocumentor-element-found-in__line">30</span>
 
     </aside>
 
@@ -582,7 +679,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">16</span>
+    <span class="phpdocumentor-element-found-in__line">26</span>
 
     </aside>
 
@@ -616,7 +713,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">19</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 
     </aside>
 
@@ -650,7 +747,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">17</span>
+    <span class="phpdocumentor-element-found-in__line">27</span>
 
     </aside>
 
@@ -684,7 +781,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">13</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
@@ -718,7 +815,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">14</span>
+    <span class="phpdocumentor-element-found-in__line">24</span>
 
     </aside>
 
@@ -752,7 +849,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">15</span>
+    <span class="phpdocumentor-element-found-in__line">25</span>
 
     </aside>
 
@@ -786,7 +883,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">24</span>
+    <span class="phpdocumentor-element-found-in__line">34</span>
 
     </aside>
 
@@ -820,7 +917,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">18</span>
+    <span class="phpdocumentor-element-found-in__line">28</span>
 
     </aside>
 
@@ -854,7 +951,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">22</span>
+    <span class="phpdocumentor-element-found-in__line">32</span>
 
     </aside>
 
@@ -888,7 +985,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">26</span>
+    <span class="phpdocumentor-element-found-in__line">36</span>
 
     </aside>
 
@@ -922,7 +1019,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">33</span>
 
     </aside>
 
@@ -945,18 +1042,50 @@
             phpdocumentor-element
             -property
             -protected
-            -static                                            "
+                                                        "
 >
-    <h4 class="phpdocumentor-element__name" id="property_charsetEncoder">
-        $charsetEncoder
-        <a href="classes/PhpXmlRpc-Value.html#property_charsetEncoder" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property__php_class">
+        $_php_class
+        <a href="classes/PhpXmlRpc-Value.html#property__php_class" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">41</span>
+    <span class="phpdocumentor-element-found-in__line">57</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">string|null</span>
+    <span class="phpdocumentor-signature__name">$_php_class</span>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
+
+    
+    
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_charsetEncoder">
+        $charsetEncoder
+        <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#property_charsetEncoder" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Traits/CharsetEncoderAware.php"><a href="files/traits-charsetencoderaware.html"><abbr title="Traits/CharsetEncoderAware.php">CharsetEncoderAware.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">9</span>
 
     </aside>
 
@@ -979,31 +1108,63 @@
             phpdocumentor-element
             -property
             -protected
-            -static                                            "
+                                                        "
 >
-    <h4 class="phpdocumentor-element__name" id="property_logger">
-        $logger
-        <a href="classes/PhpXmlRpc-Value.html#property_logger" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_me">
+        $me
+        <a href="classes/PhpXmlRpc-Value.html#property_me" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">40</span>
+    <span class="phpdocumentor-element-found-in__line">51</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$logger</span>
-    </code>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>&gt;|mixed</span>
+    <span class="phpdocumentor-signature__name">$me</span>
+     = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
-        <section class="phpdocumentor-description"></section>
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_mytype">
+        $mytype
+        <a href="classes/PhpXmlRpc-Value.html#property_mytype" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">55</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__type">int</span>
+    <span class="phpdocumentor-signature__name">$mytype</span>
+     = <span class="phpdocumentor-signature__default-value">0</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>0 for undef, 1 for scalar, 2 for array, 3 for struct</p>
+</section>
 
     
 
@@ -1028,11 +1189,11 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">101</span>
+    <span class="phpdocumentor-element-found-in__line">70</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Build an xmlrpc value.</p>
+        <p class="phpdocumentor-summary">Build an xml-rpc value.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -1057,11 +1218,195 @@
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>any valid xmlrpc type name (lowercase): i4, int, boolean, string, double, dateTime.iso8601,
+                    <section class="phpdocumentor-description"><p>any valid xml-rpc type name (lowercase): i4, int, boolean, string, double, dateTime.iso8601,
 base64, array, struct, null.
 If null, 'string' is assumed.
-You should refer to http://www.xmlrpc.com/spec for more information on what each of these mean.</p>
+You should refer to http://xmlrpc.com/spec.md for more information on what each of these mean.</p>
 </section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___get">
+        __get()
+        <a href="classes/PhpXmlRpc-Value.html#method___get" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">682</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__reference-operator">&amp;</span>    <span class="phpdocumentor-signature__name">__get</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___isset">
+        __isset()
+        <a href="classes/PhpXmlRpc-Value.html#method___isset" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">715</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">__isset</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___set">
+        __set()
+        <a href="classes/PhpXmlRpc-Value.html#method___set" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">699</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">__set</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___unset">
+        __unset()
+        <a href="classes/PhpXmlRpc-Value.html#method___unset" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">728</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">__unset</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
 
             </dd>
             </dl>
@@ -1087,18 +1432,18 @@ You should refer to http://www.xmlrpc.com/spec for more information on what each
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">204</span>
+    <span class="phpdocumentor-element-found-in__line">182</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Add an array of xmlrpc value objects to an xmlrpc value.</p>
+        <p class="phpdocumentor-summary">Add an array of xml-rpc value objects to an xml-rpc value.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">addArray</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$values</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
-        <section class="phpdocumentor-description"><p>If the xmlrpc value is an array, the elements are appended to the existing ones.
-If the xmlrpc value is empty (uninitialized), this method makes it an array value, and sets that value.
+        <section class="phpdocumentor-description"><p>If the xml-rpc value is an array, the elements are appended to the existing ones.
+If the xml-rpc value is empty (uninitialized), this method makes it an array value, and sets that value.
 Fails otherwise.</p>
 </section>
 
@@ -1124,7 +1469,16 @@ Fails otherwise.</p>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
-                                                 <section class="phpdocumentor-description"><p>add some checking for $values to be an array of xmlrpc values?</p>
+                                                 <section class="phpdocumentor-description"><p>add some checking for $values to be an array of xml-rpc values?</p>
+</section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>rename to addToArray?</p>
 </section>
 
                                     </dd>
@@ -1151,19 +1505,19 @@ Fails otherwise.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">148</span>
+    <span class="phpdocumentor-element-found-in__line">123</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Add a single php value to an xmlrpc value.</p>
+        <p class="phpdocumentor-summary">Add a single php value to an xml-rpc value.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">addScalar</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$val</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$type</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;string&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
-        <section class="phpdocumentor-description"><p>If the xmlrpc value is an array, the php value is added as its last element.
-If the xmlrpc value is empty (uninitialized), this method makes it a scalar value, and sets that value.
-Fails if the xmlrpc value is not an array (i.e. a struct or a scalar) and already initialized.</p>
+        <section class="phpdocumentor-description"><p>If the xml-rpc value is an array, the php value is added as its last element.
+If the xml-rpc value is empty (uninitialized), this method makes it a scalar value, and sets that value.
+Fails if the xml-rpc value is not an array (i.e. a struct or a scalar) and already initialized.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1187,6 +1541,33 @@ Fails if the xmlrpc value is not an array (i.e. a struct or a scalar) and alread
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>arguably, as we have addArray to add elements to an Array value, and addStruct to add elements to a Struct
+value, we should not allow this method to add values to an Array. The 'scalar' in the method name refers to
+the expected state of the target object, not to the type of $val. Also, this works differently from
+addScalar/addStruct in that, when adding an element to an array, it wraps it into a new Value</p>
+</section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>rename?</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">int</span>
@@ -1209,18 +1590,18 @@ Fails if the xmlrpc value is not an array (i.e. a struct or a scalar) and alread
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">234</span>
+    <span class="phpdocumentor-element-found-in__line">213</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Merges an array of named xmlrpc value objects into an xmlrpc value.</p>
+        <p class="phpdocumentor-summary">Merges an array of named xml-rpc value objects into an xml-rpc value.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">addStruct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$values</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
-        <section class="phpdocumentor-description"><p>If the xmlrpc value is a struct, the elements are merged with the existing ones (overwriting existing ones).
-If the xmlrpc value is empty (uninitialized), this method makes it a struct value, and sets that value.
+        <section class="phpdocumentor-description"><p>If the xml-rpc value is a struct, the elements are merged with the existing ones (overwriting existing ones).
+If the xml-rpc value is empty (uninitialized), this method makes it a struct value, and sets that value.
 Fails otherwise.</p>
 </section>
 
@@ -1246,7 +1627,16 @@ Fails otherwise.</p>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
                                                                                 
-                                                 <section class="phpdocumentor-description"><p>add some checking for $values to be an array?</p>
+                                                 <section class="phpdocumentor-description"><p>add some checking for $values to be an array of xml-rpc values?</p>
+</section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>rename to addToStruct?</p>
 </section>
 
                                     </dd>
@@ -1266,22 +1656,22 @@ Fails otherwise.</p>
             -public
             -deprecated                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="method_arraymem">
-        arraymem()
-        <a href="classes/PhpXmlRpc-Value.html#method_arraymem" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_arrayMem">
+        arrayMem()
+        <a href="classes/PhpXmlRpc-Value.html#method_arrayMem" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">485</span>
+    <span class="phpdocumentor-element-found-in__line">646</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns the m-th member of an xmlrpc value of array type.</p>
+        <p class="phpdocumentor-summary">Returns the n-th member of an xml-rpc value of array type.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">arraymem</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">arrayMem</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1326,22 +1716,22 @@ Fails otherwise.</p>
             -public
             -deprecated                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="method_arraysize">
-        arraysize()
-        <a href="classes/PhpXmlRpc-Value.html#method_arraysize" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_arraySize">
+        arraySize()
+        <a href="classes/PhpXmlRpc-Value.html#method_arraySize" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">499</span>
+    <span class="phpdocumentor-element-found-in__line">660</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns the number of members in an xmlrpc value of array type.</p>
+        <p class="phpdocumentor-summary">Returns the number of members in an xml-rpc value of array type.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">arraysize</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+                    <span class="phpdocumentor-signature__name">arraySize</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
     
     
@@ -1381,11 +1771,11 @@ Fails otherwise.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">528</span>
+    <span class="phpdocumentor-element-found-in__line">404</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns the number of members in an xmlrpc value:
+        <p class="phpdocumentor-summary">Returns the number of members in an xml-rpc value:
 - 0 for uninitialized values
 - 1 for scalar values
 - the number of elements for struct and array values</p>
@@ -1412,12 +1802,12 @@ Fails otherwise.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_getCharsetEncoder">
         getCharsetEncoder()
-        <a href="classes/PhpXmlRpc-Value.html#method_getCharsetEncoder" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_getCharsetEncoder" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Traits/CharsetEncoderAware.php"><a href="files/traits-charsetencoderaware.html"><abbr title="Traits/CharsetEncoderAware.php">CharsetEncoderAware.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">71</span>
+    <span class="phpdocumentor-element-found-in__line">11</span>
 
     </aside>
 
@@ -1443,39 +1833,6 @@ Fails otherwise.</p>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_getLogger">
-        getLogger()
-        <a href="classes/PhpXmlRpc-Value.html#method_getLogger" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">54</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getLogger</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
     <h4 class="phpdocumentor-element__name" id="method_kindOf">
         kindOf()
         <a href="classes/PhpXmlRpc-Value.html#method_kindOf" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1483,11 +1840,11 @@ Fails otherwise.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">257</span>
+    <span class="phpdocumentor-element-found-in__line">236</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns a string containing either &quot;struct&quot;, &quot;array&quot;, &quot;scalar&quot; or &quot;undef&quot;, describing the base type of the value.</p>
+        <p class="phpdocumentor-summary">Returns a string describing the base type of the value.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -1500,7 +1857,9 @@ Fails otherwise.</p>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string</span>
             &mdash;
-        
+            <section class="phpdocumentor-description"><p>either &quot;struct&quot;, &quot;array&quot;, &quot;scalar&quot; or &quot;undef&quot;</p>
+</section>
+
     
 </article>
                     <article
@@ -1509,33 +1868,34 @@ Fails otherwise.</p>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_scalartyp">
-        scalartyp()
-        <a href="classes/PhpXmlRpc-Value.html#method_scalartyp" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_scalarTyp">
+        scalarTyp()
+        <a href="classes/PhpXmlRpc-Value.html#method_scalarTyp" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">465</span>
+    <span class="phpdocumentor-element-found-in__line">269</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns the type of the xmlrpc value.</p>
+        <p class="phpdocumentor-summary">Returns the type of the xml-rpc value.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">scalartyp</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">scalarTyp</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"><p>For integers, 'int' is always returned in place of 'i4'. 'i8' is considered a separate type and returned as such</p>
-</section>
-
+    
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string</span>
             &mdash;
-        
+            <section class="phpdocumentor-description"><p>For integers, 'int' is always returned in place of 'i4'. 'i8' is considered a separate type and
+returned as such</p>
+</section>
+
     
 </article>
                     <article
@@ -1544,22 +1904,22 @@ Fails otherwise.</p>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_scalarval">
-        scalarval()
-        <a href="classes/PhpXmlRpc-Value.html#method_scalarval" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_scalarVal">
+        scalarVal()
+        <a href="classes/PhpXmlRpc-Value.html#method_scalarVal" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">451</span>
+    <span class="phpdocumentor-element-found-in__line">256</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns the value of a scalar xmlrpc value (base 64 decoding is automatically handled here)</p>
+        <p class="phpdocumentor-summary">Returns the value of a scalar xml-rpc value (base 64 decoding is automatically handled here)</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">scalarval</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">scalarVal</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     
     
@@ -1584,7 +1944,7 @@ Fails otherwise.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">377</span>
+    <span class="phpdocumentor-element-found-in__line">286</span>
 
     </aside>
 
@@ -1602,7 +1962,7 @@ Fails otherwise.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>the charset to be used for serialization. if null, US-ASCII is assumed</p>
+                    <section class="phpdocumentor-description"><p>the charset to be used for serialization. If null, US-ASCII is assumed</p>
 </section>
 
             </dd>
@@ -1620,23 +1980,23 @@ Fails otherwise.</p>
         class="phpdocumentor-element
             -method
             -public
-                                                        "
+                                    -static                    "
 >
     <h4 class="phpdocumentor-element__name" id="method_setCharsetEncoder">
         setCharsetEncoder()
-        <a href="classes/PhpXmlRpc-Value.html#method_setCharsetEncoder" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_setCharsetEncoder" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Traits/CharsetEncoderAware.php"><a href="files/traits-charsetencoderaware.html"><abbr title="Traits/CharsetEncoderAware.php">CharsetEncoderAware.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">85</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">setCharsetEncoder</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetEncoder</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setCharsetEncoder</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetEncoder</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1651,63 +2011,6 @@ Fails otherwise.</p>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">todo</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>this should be a static method</p>
-</section>
-
-                                    </dd>
-                        </dl>
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_setLogger">
-        setLogger()
-        <a href="classes/PhpXmlRpc-Value.html#method_setLogger" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">66</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setLogger</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$logger</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-            </dl>
-
-    
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">void</span>
@@ -1721,22 +2024,22 @@ Fails otherwise.</p>
             -public
             -deprecated                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="method_structeach">
-        structeach()
-        <a href="classes/PhpXmlRpc-Value.html#method_structeach" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_structEach">
+        structEach()
+        <a href="classes/PhpXmlRpc-Value.html#method_structEach" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">439</span>
+    <span class="phpdocumentor-element-found-in__line">627</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Return next member element for xmlrpc values of type struct.</p>
+        <p class="phpdocumentor-summary">Return next member element for xml-rpc values of type struct.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">structeach</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">structEach</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
     
     
@@ -1747,16 +2050,6 @@ Fails otherwise.</p>
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">throws</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                <span class="phpdocumentor-tag-link"><abbr title="\Error">Error</abbr></span>
-                                                            
-                                                 <section class="phpdocumentor-description"><p>starting with php 8.0, this function should not be used, as it will always throw</p>
-</section>
-
-                                    </dd>
-                                                <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">deprecated</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
@@ -1768,9 +2061,11 @@ Fails otherwise.</p>
                         </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
             &mdash;
-        
+            <section class="phpdocumentor-description"><p>having the same format as PHP's <code class="prettyprint">each</code> method</p>
+</section>
+
     
 </article>
                     <article
@@ -1779,22 +2074,22 @@ Fails otherwise.</p>
             -public
             -deprecated                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="method_structmem">
-        structmem()
-        <a href="classes/PhpXmlRpc-Value.html#method_structmem" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_structMem">
+        structMem()
+        <a href="classes/PhpXmlRpc-Value.html#method_structMem" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">411</span>
+    <span class="phpdocumentor-element-found-in__line">600</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns the value of a given struct member (an xmlrpc value object in itself).</p>
+        <p class="phpdocumentor-summary">Returns the value of a given struct member (an xml-rpc value object in itself).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">structmem</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span></code>
+                    <span class="phpdocumentor-signature__name">structMem</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span></code>
 
         <section class="phpdocumentor-description"><p>Will raise a php warning if struct member of given name does not exist.</p>
 </section>
@@ -1841,14 +2136,14 @@ Fails otherwise.</p>
             -public
             -deprecated                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="method_structmemexists">
-        structmemexists()
-        <a href="classes/PhpXmlRpc-Value.html#method_structmemexists" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_structMemExists">
+        structMemExists()
+        <a href="classes/PhpXmlRpc-Value.html#method_structMemExists" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">395</span>
+    <span class="phpdocumentor-element-found-in__line">584</span>
 
     </aside>
 
@@ -1856,9 +2151,9 @@ Fails otherwise.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">structmemexists</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">structMemExists</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"><p>Works only on xmlrpc values of type struct.</p>
+        <section class="phpdocumentor-description"><p>Works only on xml-rpc values of type struct.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1903,22 +2198,22 @@ Fails otherwise.</p>
             -public
             -deprecated                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="method_structreset">
-        structreset()
-        <a href="classes/PhpXmlRpc-Value.html#method_structreset" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_structReset">
+        structReset()
+        <a href="classes/PhpXmlRpc-Value.html#method_structReset" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">424</span>
+    <span class="phpdocumentor-element-found-in__line">613</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Reset internal pointer for xmlrpc values of type struct.</p>
+        <p class="phpdocumentor-summary">Reset internal pointer for xml-rpc values of type struct.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">structreset</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">structReset</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
     
@@ -1951,22 +2246,22 @@ Fails otherwise.</p>
             -public
             -deprecated                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="method_structsize">
-        structsize()
-        <a href="classes/PhpXmlRpc-Value.html#method_structsize" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_structSize">
+        structSize()
+        <a href="classes/PhpXmlRpc-Value.html#method_structSize" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">513</span>
+    <span class="phpdocumentor-element-found-in__line">674</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Returns the number of members in an xmlrpc value of struct type.</p>
+        <p class="phpdocumentor-summary">Returns the number of members in an xml-rpc value of struct type.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">structsize</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+                    <span class="phpdocumentor-signature__name">structSize</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
     
     
@@ -1999,21 +2294,109 @@ Fails otherwise.</p>
             -protected
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_serializedata">
-        serializedata()
-        <a href="classes/PhpXmlRpc-Value.html#method_serializedata" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_logDeprecation">
+        logDeprecation()
+        <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecation" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Traits/DeprecationLogger.php"><a href="files/traits-deprecationlogger.html"><abbr title="Traits/DeprecationLogger.php">DeprecationLogger.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">277</span>
+    <span class="phpdocumentor-element-found-in__line">11</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">serializedata</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$typ</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>&gt;|mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$val</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetEncoding</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">logDeprecation</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$message</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_logDeprecationUnlessCalledBy">
+        logDeprecationUnlessCalledBy()
+        <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecationUnlessCalledBy" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Traits/DeprecationLogger.php"><a href="files/traits-deprecationlogger.html"><abbr title="Traits/DeprecationLogger.php">DeprecationLogger.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">25</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">logDeprecationUnlessCalledBy</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$expectedCaller</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$expectedCaller</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>atm only the method name is supported</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+            -deprecated                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="method_serializeData">
+        serializeData()
+        <a href="classes/PhpXmlRpc-Value.html#method_serializeData" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Value.php"><a href="files/value.html"><abbr title="Value.php">Value.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">302</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">serializeData</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$typ</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>&gt;|mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$val</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetEncoding</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -2042,6 +2425,21 @@ Fails otherwise.</p>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">deprecated</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>this should be folded back into serialize()</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string</span>

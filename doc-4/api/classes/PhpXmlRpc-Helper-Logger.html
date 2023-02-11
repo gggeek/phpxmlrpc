@@ -24,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">PHPXMLRPC</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.0</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -65,6 +65,10 @@
             </li>
                     <li>
                 <a href="namespaces/phpxmlrpc-helper.html" class="">Helper</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpxmlrpc-traits.html" class="">Traits</a>
                 
             </li>
             </ul>
@@ -166,25 +170,32 @@
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Helper-Logger.html#method_debugMessage">debugMessage()</a>
+    <a href="classes/PhpXmlRpc-Helper-Logger.html#method_debug">debug()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Echoes a debug message, taking care of escaping it when not in console mode.</dd>
+<dd>NB: unlike other &quot;traditional&quot; loggers, this one echoes to screen the debug messages instead of logging them.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Helper-Logger.html#method_errorLog">errorLog()</a>
+    <a href="classes/PhpXmlRpc-Helper-Logger.html#method_error">error()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd>Writes a message to the error log.</dd>
+<dd>Triggers the writing of a message to php&#039;s error log</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Helper-Logger.html#method_instance">instance()</a>
     <span>
                                 &nbsp;: <a href="classes/PhpXmlRpc-Helper-Logger.html"><abbr title="\PhpXmlRpc\Helper\Logger">Logger</abbr></a>    </span>
 </dt>
-<dd>This class can be used as singleton, so that later we can move to DI patterns.</dd>
+<dd>This class can be used as singleton, so that later we can move to DI patterns (ish...)</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-Helper-Logger.html#method_warning">warning()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Following the general principle of &#039;never break stdout&#039;, the default behaviour</dd>
 
         </dl>
 
@@ -245,9 +256,9 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_debugMessage">
-        debugMessage()
-        <a href="classes/PhpXmlRpc-Helper-Logger.html#method_debugMessage" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_debug">
+        debug()
+        <a href="classes/PhpXmlRpc-Helper-Logger.html#method_debug" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/Logger.php"><a href="files/helper-logger.html"><abbr title="Helper/Logger.php">Logger.php</abbr></a></abbr>
@@ -256,16 +267,13 @@
 
     </aside>
 
-        <p class="phpdocumentor-summary">Echoes a debug message, taking care of escaping it when not in console mode.</p>
+        <p class="phpdocumentor-summary">NB: unlike other &quot;traditional&quot; loggers, this one echoes to screen the debug messages instead of logging them.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">debugMessage</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$encoding</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">debug</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$context</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"><p>NB: if the encoding of the message is not known or wrong, and we are working in web mode, there is no guarantee
-of 100% accuracy, which kind of defeats the purpose of debugging</p>
-</section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -276,11 +284,13 @@ of 100% accuracy, which kind of defeats the purpose of debugging</p>
                 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$encoding</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
+                <span class="phpdocumentor-signature__argument__name">$context</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">array()</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>known key: 'encoding'</p>
+</section>
+
             </dd>
             </dl>
 
@@ -298,22 +308,22 @@ of 100% accuracy, which kind of defeats the purpose of debugging</p>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_errorLog">
-        errorLog()
-        <a href="classes/PhpXmlRpc-Helper-Logger.html#method_errorLog" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_error">
+        error()
+        <a href="classes/PhpXmlRpc-Helper-Logger.html#method_error" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/Logger.php"><a href="files/helper-logger.html"><abbr title="Helper/Logger.php">Logger.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">70</span>
+    <span class="phpdocumentor-element-found-in__line">64</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Writes a message to the error log.</p>
+        <p class="phpdocumentor-summary">Triggers the writing of a message to php&#039;s error log</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">errorLog</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">error</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$context</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -322,6 +332,13 @@ of 100% accuracy, which kind of defeats the purpose of debugging</p>
                 <span class="phpdocumentor-signature__argument__name">$message</span>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$context</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">array()</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
             </dd>
@@ -352,7 +369,7 @@ of 100% accuracy, which kind of defeats the purpose of debugging</p>
 
     </aside>
 
-        <p class="phpdocumentor-summary">This class can be used as singleton, so that later we can move to DI patterns.</p>
+        <p class="phpdocumentor-summary">This class can be used as singleton, so that later we can move to DI patterns (ish...)</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -364,6 +381,56 @@ of 100% accuracy, which kind of defeats the purpose of debugging</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Helper-Logger.html"><abbr title="\PhpXmlRpc\Helper\Logger">Logger</abbr></a></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_warning">
+        warning()
+        <a href="classes/PhpXmlRpc-Helper-Logger.html#method_warning" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Helper/Logger.php"><a href="files/helper-logger.html"><abbr title="Helper/Logger.php">Logger.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">52</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Following the general principle of &#039;never break stdout&#039;, the default behaviour</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">warning</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$context</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$message</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$context</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                 = <span class="phpdocumentor-signature__argument__default-value">array()</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
             &mdash;
         
     

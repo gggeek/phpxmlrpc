@@ -24,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">PHPXMLRPC</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.0</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -65,6 +65,10 @@
             </li>
                     <li>
                 <a href="namespaces/phpxmlrpc-helper.html" class="">Helper</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpxmlrpc-traits.html" class="">Traits</a>
                 
             </li>
             </ul>
@@ -114,7 +118,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">8</span>
+    <span class="phpdocumentor-element-found-in__line">13</span>
 
     </aside>
 
@@ -142,6 +146,13 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_datetime_format">$xmlrpc_datetime_format</a>
+    <span>
+                        &nbsp;: string            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_defencoding">$xmlrpc_defencoding</a>
     <span>
                         &nbsp;: string            </span>
@@ -156,7 +167,28 @@
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_double_format">$xmlrpc_double_format</a>
+    <span>
+                        &nbsp;: string            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_int_format">$xmlrpc_int_format</a>
+    <span>
+                        &nbsp;: string            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_internalencoding">$xmlrpc_internalencoding</a>
+    <span>
+                        &nbsp;: string            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_methodname_format">$xmlrpc_methodname_format</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
@@ -178,6 +210,27 @@
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_null_extension">$xmlrpc_null_extension</a>
+    <span>
+                        &nbsp;: bool            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_reject_invalid_values">$xmlrpc_reject_invalid_values</a>
+    <span>
+                        &nbsp;: bool            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_return_datetimes">$xmlrpc_return_datetimes</a>
+    <span>
+                        &nbsp;: bool            </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_silence_deprecations">$xmlrpc_silence_deprecations</a>
     <span>
                         &nbsp;: bool            </span>
 </dt>
@@ -241,6 +294,20 @@ such as library version etc.</dd>
 <dd>A function to be used for compatibility with legacy code: it gets the values of all global variables which used
 to be declared, such as library version etc... and sets them to php classes.</dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-PhpXmlRpc.html#method_setLogger">setLogger()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Inject a logger into all classes of the PhpXmlRpc library which use one</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/PhpXmlRpc-PhpXmlRpc.html#method_useInteropFaults">useInteropFaults()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Makes the library use the error codes detailed at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php</dd>
+
         </dl>
 
 
@@ -269,7 +336,7 @@ to be declared, such as library version etc... and sets them to php classes.</dd
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">148</span>
+    <span class="phpdocumentor-element-found-in__line">170</span>
 
     </aside>
 
@@ -282,6 +349,58 @@ to be declared, such as library version etc... and sets them to php classes.</dd
 
     
         <section class="phpdocumentor-description"><p>Number of decimal digits used to serialize Double values.</p>
+</section>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>rename :'-(</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_xmlrpc_datetime_format">
+        $xmlrpc_datetime_format
+        <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_datetime_format" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">179</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$xmlrpc_datetime_format</span>
+     = <span class="phpdocumentor-signature__default-value">&#039;/^([0-9]{4})(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9]|60)$/&#039;</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>Used to validate received date values. Alter this if the server/client you are communicating with uses date
+formats non-conformant with the spec
+NB: the string should not match any data which php can not successfully use in a DateTime object constructor call
+NB: atm, the Date helper uses this regexp and expects to find matches in a specific order</p>
 </section>
 
     
@@ -303,7 +422,7 @@ to be declared, such as library version etc... and sets them to php classes.</dd
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">90</span>
+    <span class="phpdocumentor-element-found-in__line">97</span>
 
     </aside>
 
@@ -338,7 +457,7 @@ received charset cannot be determined and mbstring extension is not enabled.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">99</span>
+    <span class="phpdocumentor-element-found-in__line">105</span>
 
     </aside>
 
@@ -350,12 +469,86 @@ received charset cannot be determined and mbstring extension is not enabled.</p>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
     
-        <section class="phpdocumentor-description"><p>The list of encodings used by the server for requests and by the client for responses to detect the charset of
-the received payload when</p>
+        <section class="phpdocumentor-description"><p>The list of preferred encodings used by the server for requests and by the client for responses to detect the
+charset of the received payload when</p>
 <ul>
 <li>the charset cannot be determined by looking at http headers, xml declaration or BOM</li>
 <li>mbstring extension is enabled</li>
 </ul>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_xmlrpc_double_format">
+        $xmlrpc_double_format
+        <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_double_format" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">197</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$xmlrpc_double_format</span>
+     = <span class="phpdocumentor-signature__default-value">&#039;/^[ \\t]*[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?[ \\t]*$/&#039;</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>Used to validate received double values. Alter this if the server/client you are communicating with uses
+formats non-conformant with the spec, e.g. with leading/trailing spaces/tabs/newlines.
+We keep in spaces for BC, even though they are forbidden by the spec.
+NB: the string should not match any data which php can not successfully cast to a float</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_xmlrpc_int_format">
+        $xmlrpc_int_format
+        <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_int_format" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">188</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$xmlrpc_int_format</span>
+     = <span class="phpdocumentor-signature__default-value">&#039;/^[ \\t]*[+-]?[0-9]+[ \\t]*$/&#039;</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>Used to validate received integer values. Alter this if the server/client you are communicating with uses
+formats non-conformant with the spec.
+We keep in spaces for BC, even though they are forbidden by the spec.
+NB: the string should not match any data which php can not successfully cast to an integer</p>
 </section>
 
     
@@ -377,7 +570,7 @@ the received payload when</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">108</span>
+    <span class="phpdocumentor-element-found-in__line">113</span>
 
     </aside>
 
@@ -392,7 +585,48 @@ the received payload when</p>
         <section class="phpdocumentor-description"><p>The encoding used internally by PHP.
 String values received as xml will be converted to this, and php strings will be converted to xml as if
 having been coded with this.
-Valid also when defining names of xmlrpc methods</p>
+Valid also when defining names of xml-rpc methods</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_xmlrpc_methodname_format">
+        $xmlrpc_methodname_format
+        <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_methodname_format" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">210</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$xmlrpc_methodname_format</span>
+     = <span class="phpdocumentor-signature__default-value">&#039;|^[ \\t]*[a-zA-Z0-9_.:/]+[ \\t]*$|&#039;</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>Used to validate received methodname values.
+According to the spec: &quot;The string may only contain identifier characters, upper and lower-case A-Z, the numeric
+characters, 0-9, underscore, dot, colon and slash&quot;.
+We keep in leading and trailing spaces for BC, even though they are forbidden by the spec.
+But what about &quot;identifier characters&quot;? Is that meant to be 'identifier characters: upper and lower-case A-Z, ...'
+or something else? If the latter, there is no consensus across programming languages about what is a valid
+identifier character. PHP has one of the most crazy definitions of what is a valid identifier character, allowing
+<em>bytes</em> in range x80-xff, without even specifying a character set (and then lowercasing anyway in some cases)...</p>
 </section>
 
     
@@ -414,7 +648,7 @@ Valid also when defining names of xmlrpc methods</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">140</span>
+    <span class="phpdocumentor-element-found-in__line">161</span>
 
     </aside>
 
@@ -448,7 +682,7 @@ Valid also when defining names of xmlrpc methods</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">142</span>
+    <span class="phpdocumentor-element-found-in__line">163</span>
 
     </aside>
 
@@ -482,7 +716,7 @@ Valid also when defining names of xmlrpc methods</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">134</span>
+    <span class="phpdocumentor-element-found-in__line">139</span>
 
     </aside>
 
@@ -507,6 +741,112 @@ Valid also when defining names of xmlrpc methods</p>
             -public
             -static                                            "
 >
+    <h4 class="phpdocumentor-element__name" id="property_xmlrpc_reject_invalid_values">
+        $xmlrpc_reject_invalid_values
+        <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_reject_invalid_values" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">155</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$xmlrpc_reject_invalid_values</span>
+     = <span class="phpdocumentor-signature__default-value">false</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>Set to TRUE to make the library reject incoming xml which uses invalid data for xml-rpc elements, such
+as base64 strings which can not be decoded, dateTime strings which do not represent a valid date, invalid bools,
+floats and integers, method names with forbidden characters, or struct members missing the value or name</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_xmlrpc_return_datetimes">
+        $xmlrpc_return_datetimes
+        <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_return_datetimes" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">147</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$xmlrpc_return_datetimes</span>
+     = <span class="phpdocumentor-signature__default-value">false</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>Set to TRUE to make the library use DateTime objects instead of strings for all values parsed from incoming XML.
+NB: if the received strings are not parseable as dates, NULL will be returned. To prevent that, enable as
+well <code class="prettyprint">xmlrpc_reject_invalid_values</code>, so that invalid dates will be rejected by the library</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_xmlrpc_silence_deprecations">
+        $xmlrpc_silence_deprecations
+        <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpc_silence_deprecations" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">216</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$xmlrpc_silence_deprecations</span>
+     = <span class="phpdocumentor-signature__default-value">true</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>Set this to false to have a warning added to the log whenever user code uses a deprecated method/parameter/property</p>
+</section>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+            -static                                            "
+>
     <h4 class="phpdocumentor-element__name" id="property_xmlrpcerr">
         $xmlrpcerr
         <a href="classes/PhpXmlRpc-PhpXmlRpc.html#property_xmlrpcerr" class="headerlink"><i class="fas fa-link"></i></a>
@@ -516,7 +856,7 @@ Valid also when defining names of xmlrpc methods</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">13</span>
+    <span class="phpdocumentor-element-found-in__line">18</span>
 
     </aside>
 
@@ -527,30 +867,54 @@ Valid also when defining names of xmlrpc methods</p>
     <span class="phpdocumentor-signature__name">$xmlrpcerr</span>
      = <span class="phpdocumentor-signature__default-value">array(
     &#039;unknown_method&#039; =&gt; 1,
+    // server
     /// @deprecated. left in for BC
     &#039;invalid_return&#039; =&gt; 2,
+    // client
     &#039;incorrect_params&#039; =&gt; 3,
+    // server
     &#039;introspect_unknown&#039; =&gt; 4,
+    // server
     &#039;http_error&#039; =&gt; 5,
+    // client
     &#039;no_data&#039; =&gt; 6,
+    // client
     &#039;no_ssl&#039; =&gt; 7,
+    // client
     &#039;curl_fail&#039; =&gt; 8,
+    // client
     &#039;invalid_request&#039; =&gt; 15,
+    // server
     &#039;no_curl&#039; =&gt; 16,
+    // client
     &#039;server_error&#039; =&gt; 17,
+    // server
     &#039;multicall_error&#039; =&gt; 18,
+    // client
     &#039;multicall_notstruct&#039; =&gt; 9,
+    // client
     &#039;multicall_nomethod&#039; =&gt; 10,
+    // client
     &#039;multicall_notstring&#039; =&gt; 11,
+    // client
     &#039;multicall_recursion&#039; =&gt; 12,
+    // client
     &#039;multicall_noparams&#039; =&gt; 13,
+    // client
     &#039;multicall_notarray&#039; =&gt; 14,
+    // client
     &#039;no_http2&#039; =&gt; 19,
+    // client
+    &#039;unsupported_option&#039; =&gt; 20,
+    // client
     // the following 3 are meant to give greater insight than &#039;invalid_return&#039;. They use the same code for BC,
     // but you can override their value in your own code
     &#039;invalid_xml&#039; =&gt; 2,
+    // client
     &#039;xml_not_compliant&#039; =&gt; 2,
+    // client
     &#039;xml_parsing_error&#039; =&gt; 2,
+    // client
     /// @todo verify: can these conflict with $xmlrpcerrxml?
     &#039;cannot_decompress&#039; =&gt; 103,
     &#039;decompress_fail&#039; =&gt; 104,
@@ -580,7 +944,7 @@ Valid also when defining names of xmlrpc methods</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">123</span>
+    <span class="phpdocumentor-element-found-in__line">128</span>
 
     </aside>
 
@@ -614,7 +978,7 @@ Valid also when defining names of xmlrpc methods</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">128</span>
+    <span class="phpdocumentor-element-found-in__line">133</span>
 
     </aside>
 
@@ -648,7 +1012,7 @@ Valid also when defining names of xmlrpc methods</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">113</span>
+    <span class="phpdocumentor-element-found-in__line">118</span>
 
     </aside>
 
@@ -680,7 +1044,7 @@ Valid also when defining names of xmlrpc methods</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">57</span>
 
     </aside>
 
@@ -710,6 +1074,7 @@ Valid also when defining names of xmlrpc methods</p>
     &#039;multicall_noparams&#039; =&gt; &#039;Missing params&#039;,
     &#039;multicall_notarray&#039; =&gt; &#039;params is not an array&#039;,
     &#039;no_http2&#039; =&gt; &#039;No HTTP/2 support compiled in&#039;,
+    &#039;unsupported_option&#039; =&gt; &#039;Some client option is not supported with the transport method currently in use&#039;,
     // the following 3 are meant to give greater insight than &#039;invalid_return&#039;. They use the same string for BC,
     // but you can override their value in your own code
     &#039;invalid_xml&#039; =&gt; &#039;Invalid response payload (you can use the setDebug method to allow analysis of the response)&#039;,
@@ -743,7 +1108,7 @@ Valid also when defining names of xmlrpc methods</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">117</span>
+    <span class="phpdocumentor-element-found-in__line">122</span>
 
     </aside>
 
@@ -752,7 +1117,7 @@ Valid also when defining names of xmlrpc methods</p>
     <span class="phpdocumentor-signature__visibility">public</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$xmlrpcVersion</span>
-     = <span class="phpdocumentor-signature__default-value">&quot;4.9.5&quot;</span></code>
+     = <span class="phpdocumentor-signature__default-value">&quot;4.10.0&quot;</span></code>
 
     
     
@@ -770,7 +1135,7 @@ Valid also when defining names of xmlrpc methods</p>
         class="phpdocumentor-element
             -method
             -public
-                                    -static                    "
+            -deprecated                        -static                    "
 >
     <h4 class="phpdocumentor-element__name" id="method_exportGlobals">
         exportGlobals()
@@ -779,14 +1144,14 @@ Valid also when defining names of xmlrpc methods</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">155</span>
+    <span class="phpdocumentor-element-found-in__line">260</span>
 
     </aside>
 
         <p class="phpdocumentor-summary">A function to be used for compatibility with legacy code: it creates all global variables which used to be declared,
 such as library version etc.</p>
 
-    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">exportGlobals</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
@@ -795,6 +1160,19 @@ such as library version etc.</p>
 
     
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">deprecated</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                             
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">void</span>
@@ -806,7 +1184,7 @@ such as library version etc.</p>
         class="phpdocumentor-element
             -method
             -public
-                                    -static                    "
+            -deprecated                        -static                    "
 >
     <h4 class="phpdocumentor-element__name" id="method_importGlobals">
         importGlobals()
@@ -815,14 +1193,14 @@ such as library version etc.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">195</span>
+    <span class="phpdocumentor-element-found-in__line">305</span>
 
     </aside>
 
         <p class="phpdocumentor-summary">A function to be used for compatibility with legacy code: it gets the values of all global variables which used
 to be declared, such as library version etc... and sets them to php classes.</p>
 
-    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">importGlobals</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
@@ -838,6 +1216,119 @@ Example code:</p>
 
     
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">deprecated</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                             
+                                    </dd>
+                                                <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>this function does not import back xmlrpc_valid_parents and xml_iso88591_Entities</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setLogger">
+        setLogger()
+        <a href="classes/PhpXmlRpc-PhpXmlRpc.html#method_setLogger" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">226</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Inject a logger into all classes of the PhpXmlRpc library which use one</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setLogger</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$logger</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_useInteropFaults">
+        useInteropFaults()
+        <a href="classes/PhpXmlRpc-PhpXmlRpc.html#method_useInteropFaults" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpXmlRpc.php"><a href="files/phpxmlrpc.html"><abbr title="PhpXmlRpc.php">PhpXmlRpc.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">246</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Makes the library use the error codes detailed at https://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">useInteropFaults</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">tofo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>feature creep - allow switching back to the original set of codes; querying the current mode</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">void</span>

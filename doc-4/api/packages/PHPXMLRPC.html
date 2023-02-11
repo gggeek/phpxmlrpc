@@ -24,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">PHPXMLRPC</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.0</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -65,6 +65,10 @@
             </li>
                     <li>
                 <a href="namespaces/phpxmlrpc-helper.html" class="">Helper</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpxmlrpc-traits.html" class="">Traits</a>
                 
             </li>
             </ul>
@@ -113,9 +117,29 @@
         <dd>Used to represent a client of an XML-RPC server.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Encoder.html"><abbr title="\PhpXmlRpc\Encoder">Encoder</abbr></a></dt>
         <dd>A helper class to easily convert between Value objects and php native values.</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-FaultResponseException.html"><abbr title="\PhpXmlRpc\Exception\FaultResponseException">FaultResponseException</abbr></a></dt>
+        <dd>To be used when throwing exceptions instead of returning Response objects (future API?)</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-HttpException.html"><abbr title="\PhpXmlRpc\Exception\HttpException">HttpException</abbr></a></dt>
-        <dd></dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-PhpXmlrpcException.html"><abbr title="\PhpXmlRpc\Exception\PhpXmlrpcException">PhpXmlrpcException</abbr></a></dt>
+        <dd>To be used for all errors related to parsing HTTP requests and responses</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-NoSuchMethodException.html"><abbr title="\PhpXmlRpc\Exception\NoSuchMethodException">NoSuchMethodException</abbr></a></dt>
+        <dd>Base exception for errors thrown by the server while trying to handle the requests, such as errors with the dispatch map</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-ParsingException.html"><abbr title="\PhpXmlRpc\Exception\ParsingException">ParsingException</abbr></a></dt>
+        <dd>Base exception for errors while parsing xml-rpc requests/responses: charset issue, xml issues, xml-rpc issues</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-ServerException.html"><abbr title="\PhpXmlRpc\Exception\ServerException">ServerException</abbr></a></dt>
+        <dd>Base exception for errors thrown by the server while trying to handle the requests, such as errors with the dispatch map</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-StateErrorException.html"><abbr title="\PhpXmlRpc\Exception\StateErrorException">StateErrorException</abbr></a></dt>
+        <dd>Exception thrown when an object is in such a state that it can not fulfill execution of a method</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-TransportException.html"><abbr title="\PhpXmlRpc\Exception\TransportException">TransportException</abbr></a></dt>
+        <dd>To be used for all errors related to the transport, which are not related to specifically to HTTP. Eg: can not open socket</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-TypeErrorException.html"><abbr title="\PhpXmlRpc\Exception\TypeErrorException">TypeErrorException</abbr></a></dt>
+        <dd>Exception thrown when an argument passed to a function or method has an unsupported type</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-ValueErrorException.html"><abbr title="\PhpXmlRpc\Exception\ValueErrorException">ValueErrorException</abbr></a></dt>
+        <dd>Exception thrown when an argument passed to a function or method has an unsupported value (but its type is ok)</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-XmlException.html"><abbr title="\PhpXmlRpc\Exception\XmlException">XmlException</abbr></a></dt>
+        <dd>Base exception for errors while parsing xml-rpc requests/responses: charset issue, xml issues, xml-rpc issues</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-XmlRpcException.html"><abbr title="\PhpXmlRpc\Exception\XmlRpcException">XmlRpcException</abbr></a></dt>
+        <dd>Base exception for errors while parsing xml-rpc requests/responses: charset issue, xml issues, xml-rpc issues</dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception.html"><abbr title="\PhpXmlRpc\Exception">Exception</abbr></a></dt>
         <dd></dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Charset.html"><abbr title="\PhpXmlRpc\Helper\Charset">Charset</abbr></a></dt>
         <dd></dd>
@@ -123,6 +147,8 @@
         <dd>Helps to convert timestamps to the xml-rpc date format.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Http.html"><abbr title="\PhpXmlRpc\Helper\Http">Http</abbr></a></dt>
         <dd></dd>
+            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Interop.html"><abbr title="\PhpXmlRpc\Helper\Interop">Interop</abbr></a></dt>
+        <dd>A helper dedicated to support Interoperability features</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Logger.html"><abbr title="\PhpXmlRpc\Helper\Logger">Logger</abbr></a></dt>
         <dd></dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-XMLParser.html"><abbr title="\PhpXmlRpc\Helper\XMLParser">XMLParser</abbr></a></dt>
@@ -138,8 +164,18 @@
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></dt>
         <dd>This class enables the creation of values for XML-RPC, by encapsulating plain php values.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Wrapper.html"><abbr title="\PhpXmlRpc\Wrapper">Wrapper</abbr></a></dt>
-        <dd>PHPXMLRPC &quot;wrapper&quot; class - generate stubs to transparently access xmlrpc methods as php functions and vice-versa.</dd>
+        <dd>PHPXMLRPC &quot;wrapper&quot; class - generate stubs to transparently access xml-rpc methods as php functions and vice-versa.</dd>
     
+            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html"><abbr title="\PhpXmlRpc\Traits\CharsetEncoderAware">CharsetEncoderAware</abbr></a></dt>
+        <dd></dd>
+            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html"><abbr title="\PhpXmlRpc\Traits\DeprecationLogger">DeprecationLogger</abbr></a></dt>
+        <dd></dd>
+            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-LoggerAware.html"><abbr title="\PhpXmlRpc\Traits\LoggerAware">LoggerAware</abbr></a></dt>
+        <dd></dd>
+            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-ParserAware.html"><abbr title="\PhpXmlRpc\Traits\ParserAware">ParserAware</abbr></a></dt>
+        <dd></dd>
+            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html"><abbr title="\PhpXmlRpc\Traits\PayloadBearer">PayloadBearer</abbr></a></dt>
+        <dd></dd>
     
     </dl>
 
