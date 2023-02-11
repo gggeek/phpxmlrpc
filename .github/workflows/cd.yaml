@@ -133,7 +133,7 @@ jobs:
                     password: ${{ secrets.ftp_gggeek_altervista_org_password }}
                     protocol: ftps
                     local-dir: ./src/
-                    server-dir: sw/xmlrpc/src/
+                    server-dir: src/
                     dangerous-clean-slate: true
             -   name: upload lib to gggeek.altervista.org - demo
                 if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
@@ -144,7 +144,7 @@ jobs:
                     password: ${{ secrets.ftp_gggeek_altervista_org_password }}
                     protocol: ftps
                     local-dir: ./demo/
-                    server-dir: sw/xmlrpc/demo/
+                    server-dir: demo/
                     dangerous-clean-slate: true
                     # NB: codegen and discuss demos will not work anyway because /tmp is not writeable
                     exclude: |
@@ -164,5 +164,5 @@ jobs:
                     password: ${{ secrets.ftp_gggeek_altervista_org_password }}
                     protocol: ftps
                     local-dir: ./debugger/
-                    server-dir: sw/xmlrpc/debugger/
+                    server-dir: debugger/
                     dangerous-clean-slate: true
