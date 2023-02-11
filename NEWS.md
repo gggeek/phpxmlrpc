@@ -1,4 +1,4 @@
-## XML-RPC for PHP version 4.xx - unreleased
+## XML-RPC for PHP version 4.10.0 - 2023/02/11
 
 * changed: the minimum php version required has been increased to 5.4
 
