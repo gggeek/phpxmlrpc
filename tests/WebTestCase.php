@@ -67,7 +67,7 @@ abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_ServerAwareTestCase
             $client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);
         }
         // let's just assume that the client works fine for these tests, and avoid polluting output, even in debug mode
-        //$client->setAcceptedCompression(false);
+        //$client->setOption(Client::OPT_ACCEPTED_COMPRESSION, false);
         //$client->setDebug($this->args['DEBUG']);
         return $client;
     }
