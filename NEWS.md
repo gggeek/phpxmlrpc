@@ -1,3 +1,9 @@
+## XML-RPC for PHP version 4.10.1 - unreleased
+
+* fixed: let the Server create Response objects whose class can be overridden by subclasses (this is required by the
+  json-rpc server now that the `xml_header` method has been moved to the `Request` object)
+
+
 ## XML-RPC for PHP version 4.10.0 - 2023/02/11
 
 * changed: the minimum php version required has been increased to 5.4

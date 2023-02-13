@@ -39,6 +39,9 @@ class Server
     const OPT_PHPVALS_ENCODING_OPTIONS = 'phpvals_encoding_options';
     const OPT_RESPONSE_CHARSET_ENCODING = 'response_charset_encoding';
 
+    /** @var string */
+    protected static $responseClass = '\\PhpXmlRpc\\Response';
+
     /**
      * @var string
      * Defines how functions in $dmap will be invoked: either using an xml-rpc Request object or plain php values.
@@ -605,14 +608,14 @@ class Server
                             $this->debugMsg("+++INFLATED REQUEST+++[" . strlen($data) . " chars]+++\n" . $data . "\n+++END+++");
                         }
                     } else {
-                        $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_decompress_fail'],
+                        $r = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['server_decompress_fail'],
                             PhpXmlRpc::$xmlrpcstr['server_decompress_fail'], '', array('raw_data' => $rawData)
                         );
 
                         return $r;
                     }
                 } else {
-                    $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_cannot_decompress'],
+                    $r = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['server_cannot_decompress'],
                         PhpXmlRpc::$xmlrpcstr['server_cannot_decompress'], '', array('raw_data' => $rawData)
                     );
 
@@ -712,20 +715,20 @@ class Server
                 $_xh = $xmlRpcParser->_xh;
             }
         } catch (NoSuchMethodException $e) {
-            return new Response(0, $e->getCode(), $e->getMessage());
+            return new static::$responseClass(0, $e->getCode(), $e->getMessage());
         }
 
         if ($_xh['isf'] == 3) {
             // (BC) we return XML error as a faultCode
             preg_match('/^XML error ([0-9]+)/', $_xh['isf_reason'], $matches);
-            return new Response(
+            return new static::$responseClass(
                 0,
                 PhpXmlRpc::$xmlrpcerrxml + (int)$matches[1],
                 $_xh['isf_reason']);
         } elseif ($_xh['isf']) {
             /// @todo separate better the various cases, as we have done in Request::parseResponse: invalid xml-rpc vs.
             ///       parsing error
-            return new Response(
+            return new static::$responseClass(
                 0,
                 PhpXmlRpc::$xmlrpcerr['invalid_request'],
                 PhpXmlRpc::$xmlrpcstr['invalid_request'] . ' ' . $_xh['isf_reason']);
@@ -746,6 +749,7 @@ class Server
             } else {
                 // build a Request object with data parsed from xml and add parameters in
                 $req = new Request($_xh['method']);
+                /// @todo for more speed, we could just pass in the array to the constructor (and loose the type validation)...
                 for ($i = 0; $i < count($_xh['params']); $i++) {
                     $req->addParam($_xh['params'][$i]);
                 }
@@ -785,7 +789,7 @@ class Server
 
         if (!isset($dmap[$methodName]['function'])) {
             // No such method
-            return new Response(0, PhpXmlRpc::$xmlrpcerr['unknown_method'], PhpXmlRpc::$xmlrpcstr['unknown_method']);
+            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['unknown_method'], PhpXmlRpc::$xmlrpcstr['unknown_method']);
         }
 
         // Check signature
@@ -798,7 +802,7 @@ class Server
             }
             if (!$ok) {
                 // Didn't match.
-                return new Response(
+                return new static::$responseClass(
                     0,
                     PhpXmlRpc::$xmlrpcerr['incorrect_params'],
                     PhpXmlRpc::$xmlrpcstr['incorrect_params'] . ": {$errStr}"
@@ -829,7 +833,7 @@ class Server
         // verify that function to be invoked is in fact callable
         if (!is_callable($func)) {
             $this->getLogger()->error("XML-RPC: " . __METHOD__ . ": function '$funcName' registered as method handler is not callable");
-            return new Response(
+            return new static::$responseClass(
                 0,
                 PhpXmlRpc::$xmlrpcerr['server_error'],
                 PhpXmlRpc::$xmlrpcstr['server_error'] . ": no function matches method"
@@ -860,9 +864,9 @@ class Server
                 if (!is_a($r, 'PhpXmlRpc\Response')) {
                     $this->getLogger()->error("XML-RPC: " . __METHOD__ . ": function '$funcName' registered as method handler does not return an xmlrpc response object but a " . gettype($r));
                     if (is_a($r, 'PhpXmlRpc\Value')) {
-                        $r = new Response($r);
+                        $r = new static::$responseClass($r);
                     } else {
-                        $r = new Response(
+                        $r = new static::$responseClass(
                             0,
                             PhpXmlRpc::$xmlrpcerr['server_error'],
                             PhpXmlRpc::$xmlrpcstr['server_error'] . ": function does not return xmlrpc response object"
@@ -880,12 +884,12 @@ class Server
                         $r = call_user_func_array($func, array($methodName, $params, $this->user_data));
                         // mimic EPI behaviour: if we get an array that looks like an error, make it an error response
                         if (is_array($r) && array_key_exists('faultCode', $r) && array_key_exists('faultString', $r)) {
-                            $r = new Response(0, (integer)$r['faultCode'], (string)$r['faultString']);
+                            $r = new static::$responseClass(0, (integer)$r['faultCode'], (string)$r['faultString']);
                         } else {
                             // functions using EPI api should NOT return resp objects, so make sure we encode the
                             // return type correctly
                             $encoder = new Encoder();
-                            $r = new Response($encoder->encode($r, array('extension_api')));
+                            $r = new static::$responseClass($encoder->encode($r, array('extension_api')));
                         }
                     } else {
                         $r = call_user_func_array($func, $params);
@@ -896,7 +900,7 @@ class Server
                     // q: what should we assume here about automatic encoding of datetimes and php classes instances?
                     // a: let the user decide
                     $encoder = new Encoder();
-                    $r = new Response($encoder->encode($r, $this->phpvals_encoding_options));
+                    $r = new static::$responseClass($encoder->encode($r, $this->phpvals_encoding_options));
                 }
             }
         /// @todo bump minimum php version to 7.1 and use a single catch clause instead of the duplicate blocks
@@ -918,10 +922,10 @@ class Server
                     if ($errCode == 0) {
                         $errCode = PhpXmlRpc::$xmlrpcerr['server_error'];
                     }
-                    $r = new Response(0, $errCode, $e->getMessage());
+                    $r = new static::$responseClass(0, $errCode, $e->getMessage());
                     break;
                 default:
-                    $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_error'], PhpXmlRpc::$xmlrpcstr['server_error']);
+                    $r = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['server_error'], PhpXmlRpc::$xmlrpcstr['server_error']);
             }
         } catch (\Error $e) {
             // (barring errors in the lib) an uncaught exception happened in the called function, we wrap it in a
@@ -941,10 +945,10 @@ class Server
                     if ($errCode == 0) {
                         $errCode = PhpXmlRpc::$xmlrpcerr['server_error'];
                     }
-                    $r = new Response(0, $errCode, $e->getMessage());
+                    $r = new static::$responseClass(0, $errCode, $e->getMessage());
                     break;
                 default:
-                    $r = new Response(0, PhpXmlRpc::$xmlrpcerr['server_error'], PhpXmlRpc::$xmlrpcstr['server_error']);
+                    $r = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['server_error'], PhpXmlRpc::$xmlrpcstr['server_error']);
             }
         }
 
@@ -1145,7 +1149,7 @@ class Server
     public static function _xmlrpcs_getCapabilities($server, $req = null)
     {
         $encoder = new Encoder();
-        return new Response($encoder->encode($server->getCapabilities()));
+        return new static::$responseClass($encoder->encode($server->getCapabilities()));
     }
 
     /**
@@ -1165,7 +1169,7 @@ class Server
             $outAr[] = new Value($key, 'string');
         }
 
-        return new Response(new Value($outAr, 'array'));
+        return new static::$responseClass(new Value($outAr, 'array'));
     }
 
     /**
@@ -1199,14 +1203,14 @@ class Server
                     }
                     $sigs[] = new Value($curSig, 'array');
                 }
-                $r = new Response(new Value($sigs, 'array'));
+                $r = new static::$responseClass(new Value($sigs, 'array'));
             } else {
                 // NB: according to the official docs, we should be returning a
                 // "none-array" here, which means not-an-array
-                $r = new Response(new Value('undef', 'string'));
+                $r = new static::$responseClass(new Value('undef', 'string'));
             }
         } else {
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['introspect_unknown'], PhpXmlRpc::$xmlrpcstr['introspect_unknown']);
+            $r = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['introspect_unknown'], PhpXmlRpc::$xmlrpcstr['introspect_unknown']);
         }
 
         return $r;
@@ -1235,12 +1239,12 @@ class Server
         }
         if (isset($dmap[$methName])) {
             if (isset($dmap[$methName]['docstring'])) {
-                $r = new Response(new Value($dmap[$methName]['docstring'], 'string'));
+                $r = new static::$responseClass(new Value($dmap[$methName]['docstring'], 'string'));
             } else {
-                $r = new Response(new Value('', 'string'));
+                $r = new static::$responseClass(new Value('', 'string'));
             }
         } else {
-            $r = new Response(0, PhpXmlRpc::$xmlrpcerr['introspect_unknown'], PhpXmlRpc::$xmlrpcstr['introspect_unknown']);
+            $r = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['introspect_unknown'], PhpXmlRpc::$xmlrpcstr['introspect_unknown']);
         }
 
         return $r;
@@ -1303,7 +1307,7 @@ class Server
         foreach ($params as $i => $param) {
             if (!$req->addParam($param)) {
                 $i++; // for error message, we count params from 1
-                return static::_xmlrpcs_multicall_error(new Response(0,
+                return static::_xmlrpcs_multicall_error(new static::$responseClass(0,
                     PhpXmlRpc::$xmlrpcerr['incorrect_params'],
                     PhpXmlRpc::$xmlrpcstr['incorrect_params'] . ": probable xml error in param " . $i));
             }
@@ -1391,7 +1395,7 @@ class Server
             }
         }
 
-        return new Response(new Value($result, 'array'));
+        return new static::$responseClass(new Value($result, 'array'));
     }
 
     /**
