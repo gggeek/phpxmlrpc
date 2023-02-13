@@ -194,6 +194,9 @@
 
   For library extenders:
 
+  - if you subclassed the `Server` class, and dynamically inject/manipulate the dispatch map, be aware that the server
+    will now validate the methodname from the received request as soon as possible during the xml parsing phase, via
+    a new method `methodNameCallback`. You might want to reimplement it and f.e. make it a NOOP to avoid such validation
   - the `$options` argument passed to `XMLParser::parse` will now contain both options intended to be passed down to
     the php xml parser, and further options used to tweak the parsing results. If you have subclassed `XMLParser`
     and reimplemented the `parse` methods, or wholesale replaced it, you will have to adapt your code: both for that,
@@ -209,7 +212,7 @@
   - if you had been somehow interacting with private method `Client::_try_multicall`, be warned its returned data has
     changed: it now returns a Response for the cases in which it previously returned false, and an array of Response
     objects for the cases in which it previously returned a string
-  - if you replaced the Logger class, take care that you will have to implement methods `error`, `warning` and `debug`
+  - if you replaced the `Logger` class, take care that you will have to implement methods `error`, `warning` and `debug`
     (all is ok if you subclassed it)
   - calling method `Value::serializeData` is now deprecated
   - traits have been introduced for all classes dealing with Logger, XMLParser and CharsetEncoder; method `setCharsetEncoder`
