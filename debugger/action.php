@@ -586,7 +586,7 @@ if ($action) {
 
     <h3>Changelog</h3>
     <ul>
-        <li>2023-02-YY: display in the top row the version of the libraries in use; made the generated code throw instead
+        <li>2023-02-11: display in the top row the version of the libraries in use; made the generated code throw instead
             of returning a Response object on error; fixes for the json-rpc debugger</li>
         <li>2022-12-18: fix XSS vulnerability in the debugger; load jsxmlrpc from CDN; minor improvements</li>
         <li>2022-11-28: allow to use http/2 protocol; two security issues fixed in the underlying library</li>
