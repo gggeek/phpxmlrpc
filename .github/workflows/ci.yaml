@@ -143,3 +143,25 @@ jobs:
                     if [ -d /var/log/apache2 ]; then sudo cat /var/log/apache2/error.log; fi
                     if [ -d /var/log/apache2 ]; then sudo cat /var/log/apache2/other_vhosts_access.log; fi
                     sudo cat /var/log/php*.log
+
+    test-dependencies:
+        runs-on: ubuntu-20.04
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    -   dependency: phpxmlrpc/extras
+                    #-   dependency: phpxmlrpc/jsonrpc
+                    -   dependency: phpxmlrpc/polyfill-xmlrpc
+        steps:
+            -   name: download dependency, build its test vm and run its tests against the current commit
+                run: |
+                    composer create-project --prefer-source --no-install --remove-vcs --stability=alpha "${{ matrix.dependency }}" .
+                    sed -i -E -e 's|"phpxmlrpc/phpxmlrpc" *: *"[^s]+|"phpxmlrpc/phpxmlrpc": "dev-master#${{ github.ref_name }}"|g' composer.json
+                    chmod 755 ./tests/ci/vm.sh
+                    ./tests/ci/vm.sh build
+                    ./tests/ci/vm.sh start
+                    # @todo check instead for bootstrap being finished
+                    sleep 30
+                    ./tests/ci/vm.sh exec
+                    ./tests/ci/vm.sh runtests
