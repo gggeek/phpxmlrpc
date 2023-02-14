@@ -163,5 +163,4 @@ jobs:
                     ./tests/ci/vm.sh start
                     # @todo check instead for bootstrap being finished
                     sleep 30
-                    ./tests/ci/vm.sh exec
                     ./tests/ci/vm.sh runtests
