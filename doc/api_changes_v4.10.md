@@ -78,20 +78,21 @@ New class properties
 New static properties
 ---------------------
 
-| Class     | Property                      | Default value       | Notes     |
-|-----------|-------------------------------|---------------------|-----------|
-| Client    | $options                      | see code            | protected |
-| Client    | $requestClass                 | \PhpXmlRpc\Request  | protected |
-| Client    | $responseClass                | \PhpXmlRpc\Response | protected |
-| PhpXmlRpc | $xmlrpc_datetime_format       | see code            |           |
-| PhpXmlRpc | $xmlrpc_double_format         | see code            |           |
-| PhpXmlRpc | $xmlrpc_int_format            | see code            |           |
-| PhpXmlRpc | $xmlrpc_methodname_format     | see code            |           |
-| PhpXmlRpc | $xmlrpc_reject_invalid_values | false               |           |
-| PhpXmlRpc | $xmlrpc_return_datetimes      | false               |           |
-| PhpXmlRpc | $xmlrpc_silence_deprecations  | true                |           |
-| Server    | $options                      | see code            | protected |
-| Wrapper   | $namespace                    | \PhpXmlRpc\         | protected |
+| Class     | Property                      | Default value       | Notes                      |
+|-----------|-------------------------------|---------------------|----------------------------|
+| Client    | $options                      | see code            | protected                  |
+| Client    | $requestClass                 | \PhpXmlRpc\Request  | protected                  |
+| Client    | $responseClass                | \PhpXmlRpc\Response | protected                  |
+| PhpXmlRpc | $xmlrpc_datetime_format       | see code            |                            |
+| PhpXmlRpc | $xmlrpc_double_format         | see code            |                            |
+| PhpXmlRpc | $xmlrpc_int_format            | see code            |                            |
+| PhpXmlRpc | $xmlrpc_methodname_format     | see code            |                            |
+| PhpXmlRpc | $xmlrpc_reject_invalid_values | false               |                            |
+| PhpXmlRpc | $xmlrpc_return_datetimes      | false               |                            |
+| PhpXmlRpc | $xmlrpc_silence_deprecations  | true                |                            |
+| Server    | $options                      | see code            | protected                  |
+| Server    | $responseClass                | \PhpXmlRpc\Response | protected. Added in 4.10.1 |
+| Wrapper   | $namespace                    | \PhpXmlRpc\         | protected                  |
 
 New constants
 -------------

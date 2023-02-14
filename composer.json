@@ -8,7 +8,6 @@
         "php": "^5.4.0 || ^7.0 || ^8.0",
         "ext-xml": "*"
     },
-    "_comment::tests": "The dev packages below require a minimum of php 5.4, even though we support php 5.3. Can we manage to do better?",
     "require-dev": {
         "ext-curl": "*",
         "ext-dom": "*",
@@ -29,7 +28,8 @@
     },
     "_comment::conflict": "Within the extras package, only the XMLRPC extension emulation is not compatible... the JSONRPC part should be ok. Both have been moved to different packages anyway",
     "conflict": {
-        "phpxmlrpc/extras": "<= 0.6.3"
+        "phpxmlrpc/extras": "<= 1.0.0-beta2",
+        "phpxmlrpc/jsonrpc": "<= 1.0.0-beta1"
     },
     "autoload": {
         "psr-4": {"PhpXmlRpc\\": "src/"}

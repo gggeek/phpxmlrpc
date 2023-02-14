@@ -3,6 +3,10 @@
 * fixed: let the Server create Response objects whose class can be overridden by subclasses (this is required by the
   json-rpc server now that the `xml_header` method has been moved to the `Request` object)
 
+* fixed: let the Client create Requests whose class can be overridden by subclasses, within the `_try_multicall` method,
+  which is called from `multicall`
+
+* fixed: declare the library not to be compatible with old versions of 'phpxmlrpc/extras' and 'phpxmlrpc/jsonrpc'
 
 ## XML-RPC for PHP version 4.10.0 - 2023/02/11
 
@@ -203,6 +207,8 @@
   - if you subclassed the `Server` class, and dynamically inject/manipulate the dispatch map, be aware that the server
     will now validate the methodname from the received request as soon as possible during the xml parsing phase, via
     a new method `methodNameCallback`. You might want to reimplement it and f.e. make it a NOOP to avoid such validation
+  - new method `Response::xml_header` has replaced `Server::xml_header`. Take care if you had overridden the server
+    version - you might need to override `Server::service`
   - the `$options` argument passed to `XMLParser::parse` will now contain both options intended to be passed down to
     the php xml parser, and further options used to tweak the parsing results. If you have subclassed `XMLParser`
     and reimplemented the `parse` methods, or wholesale replaced it, you will have to adapt your code: both for that,
@@ -224,7 +230,6 @@
   - traits have been introduced for all classes dealing with Logger, XMLParser and CharsetEncoder; method `setCharsetEncoder`
     is now static
   - new methods in helper classes: `Charset::knownCharsets`, `Http::parseAcceptHeader`, `XMLParser::truncateValueForLog`
-  - new method `Response::xml_header` has replaced `Server::xml_header`
   - protected property `Server::$accepted_charset_encodings` is now deprecated
   - exception `\PhpXmlRpc\Exception\PhpXmlRpcException` is deprecated. Use `\PhpXmlRpc\Exception` instead
 
