@@ -156,8 +156,12 @@ jobs:
         steps:
             -   name: download dependency, build its test vm and run its tests against the current commit
                 run: |
+                    systemctl list-units --all --type=service --no-pager | grep running
                     composer create-project --prefer-source --no-install --remove-vcs --stability=alpha "${{ matrix.dependency }}" .
-                    sed -i -E -e 's|"phpxmlrpc/phpxmlrpc" *: *"[^s]+|"phpxmlrpc/phpxmlrpc": "dev-master#${{ github.ref_name }}"|g' composer.json
+                    # avoid rewriting 'source' line - we should figure out how to use negative lookahed...
+                    sed -i -E -e 's|"phpxmlrpc/phpxmlrpc" *: *"source"|"phpxmlrpc/phpxmlrpc_": "source"|g' composer.json
+                    sed -i -E -e 's|"phpxmlrpc/phpxmlrpc" *: *".+|"phpxmlrpc/phpxmlrpc": "dev-master#${{ github.ref_name }} as 4.999"|g' composer.json
+                    sed -i -E -e 's|"phpxmlrpc/phpxmlrpc_" *: *"source"|"phpxmlrpc/phpxmlrpc": "source"|g' composer.json
                     chmod 755 ./tests/ci/vm.sh
                     ./tests/ci/vm.sh build
                     ./tests/ci/vm.sh start
