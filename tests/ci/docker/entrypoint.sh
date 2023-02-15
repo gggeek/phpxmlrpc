@@ -4,6 +4,10 @@ USERNAME="${1:-docker}"
 
 echo "[$(date)] Bootstrapping the Test container..."
 
+if [ -f "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok" ]; then
+    rm "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok"
+fi
+
 clean_up() {
     # Perform program exit housekeeping
 
@@ -77,6 +81,14 @@ echo "[$(date)] Starting Privoxy..."
 service privoxy start
 
 echo "[$(date)] Bootstrap finished"
+
+# Create the file which can be used by the vm.sh script to check for end of bootstrap
+if [ ! -d "${TESTS_ROOT_DIR}/tests/ci/var" ]; then
+    mkdir -p "${TESTS_ROOT_DIR}/tests/ci/var"
+    chown -R "${USERNAME}" "${TESTS_ROOT_DIR}/tests/ci/var"
+fi
+# @todo save to bootstrap_ok an actual error code if any of the commands above failed
+touch "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok" && chown "${USERNAME}" "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok"
 
 tail -f /dev/null &
 child=$!

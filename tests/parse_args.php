@@ -16,7 +16,7 @@
  * @copyright (C) 2007-2023 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  *
- * @todo rename both the class and the file. PhpXmlRpc_TestArgParser ?
+ * @todo rename both the class and the file. PhpXmlRpc_TestConfigParser ?
  **/
 class argParser
 {
@@ -44,7 +44,7 @@ class argParser
         );
 
         // check for command line params (passed as env vars) vs. web page input params (passed as GET/POST)
-        // Note that the only usecase for web-page mode is when this is used by benchmark.php
+        // Note that the only use-case for web-page mode is when this is used by benchmark.php
         if (!isset($_SERVER['REQUEST_METHOD'])) {
             foreach($_SERVER as $key => $val) {
                 if (array_key_exists($key, $args)) {

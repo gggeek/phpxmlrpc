@@ -13,3 +13,4 @@
 /.phpunit.result.cache
 /composer.lock
 /phpunit.xml
+/tests/ci/var/*
