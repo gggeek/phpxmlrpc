@@ -1,5 +1,7 @@
 ## XML-RPC for PHP version 4.10.1 - unreleased
 
+* fixed: class autoloading got broken in rel 4.10.0 for users of the legacy API (issue #111)
+
 * fixed: let the Server create Response objects whose class can be overridden by subclasses (this is required by the
   json-rpc server now that the `xml_header` method has been moved to the `Request` object)
 
