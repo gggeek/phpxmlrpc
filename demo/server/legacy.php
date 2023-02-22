@@ -1,6 +1,6 @@
 <?php
 /**
- * Demo server for phpxmlrpc library - legacy (v3) API.
+ * Demo server for phpxmlrpc library - legacy API (v3).
  *
  * It mimics server.php, but does not rely on other autoload mechanisms than the loading of xmlrpc.inc and xmlrpcs.inc
  */
