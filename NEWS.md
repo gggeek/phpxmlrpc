@@ -1,4 +1,4 @@
-## XML-RPC for PHP version 4.10.1 - unreleased
+## XML-RPC for PHP version 4.10.1 - 2023/02/22
 
 * fixed: class autoloading got broken in rel 4.10.0 for users of the legacy API (issue #111)
 
@@ -9,6 +9,7 @@
   which is called from `multicall`
 
 * fixed: declare the library not to be compatible with old versions of 'phpxmlrpc/extras' and 'phpxmlrpc/jsonrpc'
+
 
 ## XML-RPC for PHP version 4.10.0 - 2023/02/11
 

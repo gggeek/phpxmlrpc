@@ -47,7 +47,7 @@ function remove_debugger_visualeditor() {
     if [ -d "${ROOT_DIR}/debugger/jsxmlrpc" ]; then rm -rf "${ROOT_DIR}/debugger/jsxmlrpc"; fi
 }
 
-# arg: $TAG. Replaces the lib version tag in all files (soutrce and docs) known to use it
+# arg: $TAG. Replaces the lib version tag in all files (source and docs) known to use it
 function tag_code() {
     TAG="$1"
     if [ -z "${TAG}" ]; then
