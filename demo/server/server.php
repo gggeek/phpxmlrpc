@@ -32,7 +32,7 @@ use PhpXmlRpc\Server;
 // Most of the code used to implement the webservices, and their signatures, are stowed away in neatly organized files,
 // each demoing a different topic
 
-// One of the simplest way of implementing webservices: as xml-rpc-aware methods of a php object
+// One of the simplest ways of implementing webservices: as xml-rpc-aware methods of a php object
 $signatures1 = include(__DIR__.'/methodProviders/functions.php');
 
 // Even simpler? webservices defined using php functions in the global scope: definitions of webservices used for

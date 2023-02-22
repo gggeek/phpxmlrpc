@@ -144,6 +144,9 @@ jobs:
                     if [ -d /var/log/apache2 ]; then sudo cat /var/log/apache2/other_vhosts_access.log; fi
                     sudo cat /var/log/php*.log
 
+    # Whenever a change is pushed to this library, we run as well the tests of all known packages depending on it,
+    # so that we can catch any (involuntary) breackage.
+    # NB: if any are detected, do not forget to mark the current versions of dependents as incompatible in composer.json
     test-dependencies:
         runs-on: ubuntu-20.04
         strategy:
@@ -157,6 +160,11 @@ jobs:
             -   name: download dependency, build its test vm and run its tests against the current commit
                 run: |
                     systemctl list-units --all --type=service --no-pager | grep running
+                    # We test against the latest available release of dependents.
+                    # Arguably, we could (also?) test against their master branch, in case some fixes were pushed there
+                    # and not released yet, which make them work ok with us, but those tend to be tested when pushing
+                    # to them (and we do not push to dependents changes which make them use an unreleased version
+                    # of us anyway)
                     composer create-project --prefer-source --no-install --remove-vcs --stability=alpha "${{ matrix.dependency }}" .
                     # avoid rewriting 'source' line - we should figure out how to use negative lookahed...
                     sed -i -E -e 's|"phpxmlrpc/phpxmlrpc" *: *"source"|"phpxmlrpc/phpxmlrpc_": "source"|g' composer.json
