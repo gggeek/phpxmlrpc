@@ -1386,6 +1386,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpXmlRpc-Server.html#constant_OPT_RESPONSE_CHARSET_ENCODING"
         },                {
+            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024responseClass",
+            "name": "responseClass",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Server.html#property_responseClass"
+        },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003A\u0024functions_parameters_type",
             "name": "functions_parameters_type",
             "summary": "",
