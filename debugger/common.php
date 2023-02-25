@@ -50,7 +50,7 @@ if (ini_get('register_globals')) {
 }
 
 // work around magic quotes
-if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc()) {
     function stripslashes_deep($value)
     {
         $value = is_array($value) ?  array_map('stripslashes_deep', $value) : stripslashes($value);
