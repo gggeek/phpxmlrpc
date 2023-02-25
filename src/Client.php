@@ -669,7 +669,7 @@ class Client
      *
      * @todo check correctness of urlencoding cookie value (copied from php way of doing it, but php is generally sending
      *       response not requests. We do the opposite...)
-     * @todo strip invalid chars from cookie name? As per RFC6265, we should follow RFC2616, Section 2.2
+     * @todo strip invalid chars from cookie name? As per RFC 6265, we should follow RFC 2616, Section 2.2
      * @todo drop/rename $port parameter. Cookies are not isolated by port!
      * @todo feature-creep allow storing 'expires', 'secure', 'httponly' and 'samesite' cookie attributes (we could do
      *       as php, and allow $path to be an array of attributes...)
@@ -822,6 +822,7 @@ class Client
             return $this->multicall($req, $timeout, $method);
         } elseif (is_string($req)) {
             $n = new static::$requestClass('');
+            /// @todo we should somehow allow the caller to declare a custom contenttype too, esp. for the charset declaration
             $n->setPayload($req);
             $req = $n;
         }
@@ -986,7 +987,7 @@ class Client
             $uri = $path;
         }
 
-        // Cookie generation, as per RFC6265
+        // Cookie generation, as per RFC 6265
         // NB: the following code does not honour 'expires', 'path' and 'domain' cookie attributes set to client obj by the user...
         $cookieHeader = '';
         if (count($opts['cookies'])) {
