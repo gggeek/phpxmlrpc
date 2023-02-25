@@ -7,7 +7,7 @@ jobs:
         runs-on: ${{ matrix.operating-system }}
         env:
             HTTPSERVER: localhost
-            URI: /tests/index.php?demo=server/server.php
+            HTTPURI: /tests/index.php?demo=server/server.php
             HTTPSSERVER: localhost
             HTTPSURI: /tests/index.php?demo=server/server.php
             PROXYSERVER: localhost:8080
