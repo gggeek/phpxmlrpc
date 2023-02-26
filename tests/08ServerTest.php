@@ -597,6 +597,7 @@ And turned it into nylon';
         $m = new xmlrpcmsg('tests.generatePHPWarning', array(
             new xmlrpcval('whatever', 'string'),
         ));
+        $this->addQueryParams(array('FORCE_DEBUG' => 0));
         $v = $this->send($m);
         if ($v) {
             $this->assertEquals(true, $v->scalarval());

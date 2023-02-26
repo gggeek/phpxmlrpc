@@ -61,6 +61,9 @@ $s->setOption(Server::OPT_DEBUG, 3);
 // Out-of-band information: let the client manipulate the server operations.
 // We do this to help the testsuite script: *** do not reproduce in production or public environments! ***
 if (defined('TESTMODE')) {
+    if (isset($_GET['FORCE_DEBUG'])) {
+        $s->setOption(Server::OPT_DEBUG, $_GET['FORCE_DEBUG']);
+    }
     if (isset($_GET['RESPONSE_ENCODING'])) {
         $s->setOption(Server::OPT_RESPONSE_CHARSET_ENCODING, $_GET['RESPONSE_ENCODING']);
     }
