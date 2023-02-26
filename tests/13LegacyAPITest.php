@@ -9,7 +9,7 @@ class LegacyAPITest extends PhpXmlRpc_ServerAwareTestCase
 {
     public function testLegacyLoader()
     {
-        /// @todo pass on as cli args for the executed script all the args that are already parsed by now
+        /// @todo pass on as cli args for the executed script all the args that are already parsed by now, plus $this->testId
 
         exec('php ' . __DIR__ . '/legacy_loader_test.php', $out, $result);
 
