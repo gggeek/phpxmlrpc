@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
@@ -19,12 +19,13 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.1</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.2</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -52,7 +53,7 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
                     <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
@@ -95,8 +96,9 @@
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/phpxmlrpc.html">PhpXmlRpc</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/phpxmlrpc-helper.html">Helper</a></li>
     </ul>
@@ -119,6 +121,11 @@
                             <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html"><abbr title="\PhpXmlRpc\Traits\DeprecationLogger">DeprecationLogger</abbr></a>                    </span>
     </h2>
 
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
     :
@@ -132,14 +139,15 @@
 
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Helper-XMLParser.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">see</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
-                                                                                    <span class="phpdocumentor-tag-link"><a href="http://xmlrpc.com/spec.md"><abbr title="http://xmlrpc.com/spec.md">http://xmlrpc.com/spec.md</abbr></a></span>
+                                                                                    <span class="phpdocumentor-tag-link"><a href="http://xmlrpc.com/spec.md">http://xmlrpc.com/spec.md</a></span>
                                         
                                              
                                     </dd>
@@ -176,158 +184,164 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
 </section>
 
                                     </dd>
-                        </dl>
-
-
-
+                                            </dl>
 
 
 
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/PhpXmlRpc-Helper-XMLParser.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+
+
+
+
+<h4 id="toc-constants">
+    Constants
+    <a href="classes/PhpXmlRpc-Helper-XMLParser.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_FAULT">ACCEPT_FAULT</a>
     <span>
         &nbsp;= 8                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_REQUEST">ACCEPT_REQUEST</a>
     <span>
         &nbsp;= 1                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_RESPONSE">ACCEPT_RESPONSE</a>
     <span>
         &nbsp;= 2                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_VALUE">ACCEPT_VALUE</a>
     <span>
         &nbsp;= 4                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_RETURN_EPIVALS">RETURN_EPIVALS</a>
     <span>
         &nbsp;= &#039;epivals&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_RETURN_PHP">RETURN_PHP</a>
     <span>
         &nbsp;= &#039;phpvals&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_RETURN_XMLRPCVALS">RETURN_XMLRPCVALS</a>
     <span>
         &nbsp;= &#039;xmlrpcvals&#039;                            </span>
 </dt>
-<dd></dd>
 
-                    <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    </dl>
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/PhpXmlRpc-Helper-XMLParser.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_accept">$accept</a>
     <span>
                         &nbsp;: int            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_xmlrpc_valid_parents">$xmlrpc_valid_parents</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property__xh">$_xh</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_current_parsing_options">$current_parsing_options</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_maxChunkLength">$maxChunkLength</a>
     <span>
                         &nbsp;: int            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_maxLogValueLength">$maxLogValueLength</a>
     <span>
                         &nbsp;: int            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_parsing_options">$parsing_options</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_xmlrpc_valid_parents">$xmlrpc_valid_parents</a>
     <span>
                         &nbsp;: array&lt;string|int, array&lt;string|int, mixed&gt;&gt;            </span>
 </dt>
-<dd></dd>
 
-                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    </dl>
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/PhpXmlRpc-Helper-XMLParser.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___get">__get()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___isset">__isset()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___set">__set()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___unset">__unset()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_guessEncoding">guessEncoding()</a>
@@ -362,21 +376,18 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
     <span>
                                 &nbsp;: bool    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecation">logDeprecation()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecationUnlessCalledBy">logDeprecationUnlessCalledBy()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_truncateValueForLog">truncateValueForLog()</a>
@@ -385,7 +396,8 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
 </dt>
 <dd>Truncates unsafe data</dd>
 
-        </dl>
+    </dl>
+
 
 
 
@@ -394,11 +406,13 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
         <h3 class="phpdocumentor-elements__header" id="constants">
             Constants
             <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_ACCEPT_FAULT">
         ACCEPT_FAULT
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_FAULT" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -417,10 +431,8 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
 </article>
@@ -428,6 +440,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
     <h4 class="phpdocumentor-element__name" id="constant_ACCEPT_REQUEST">
         ACCEPT_REQUEST
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_REQUEST" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -446,10 +459,8 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
 </article>
@@ -457,6 +468,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
     <h4 class="phpdocumentor-element__name" id="constant_ACCEPT_RESPONSE">
         ACCEPT_RESPONSE
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_RESPONSE" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -475,10 +487,8 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
 </article>
@@ -486,6 +496,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
     <h4 class="phpdocumentor-element__name" id="constant_ACCEPT_VALUE">
         ACCEPT_VALUE
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_VALUE" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -504,10 +515,8 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
 </article>
@@ -515,6 +524,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
     <h4 class="phpdocumentor-element__name" id="constant_RETURN_EPIVALS">
         RETURN_EPIVALS
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_RETURN_EPIVALS" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -533,10 +543,8 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
 </article>
@@ -544,6 +552,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
     <h4 class="phpdocumentor-element__name" id="constant_RETURN_PHP">
         RETURN_PHP
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_RETURN_PHP" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -562,10 +571,8 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
 </article>
@@ -573,6 +580,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
     <h4 class="phpdocumentor-element__name" id="constant_RETURN_XMLRPCVALS">
         RETURN_XMLRPCVALS
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_RETURN_XMLRPCVALS" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -591,10 +599,8 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
 </article>
@@ -605,6 +611,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
             <a href="classes/PhpXmlRpc-Helper-XMLParser.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="
@@ -616,6 +623,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
     <h4 class="phpdocumentor-element__name" id="property_accept">
         $accept
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_accept" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -636,8 +644,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
         <section class="phpdocumentor-description"><p>deprecated - (protected) access left in purely for BC</p>
 </section>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
 
 </article>
@@ -651,6 +658,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
     <h4 class="phpdocumentor-element__name" id="property_xmlrpc_valid_parents">
         $xmlrpc_valid_parents
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_xmlrpc_valid_parents" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -671,8 +679,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
         <section class="phpdocumentor-description"><p>deprecated - public access left in purely for BC</p>
 </section>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
 
 </article>
@@ -686,6 +693,7 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
     <h4 class="phpdocumentor-element__name" id="property__xh">
         $_xh
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property__xh" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -735,6 +743,7 @@ rt - 'methodcall', 'methodresponse', 'value' or 'fault' (the last one used only 
     <h4 class="phpdocumentor-element__name" id="property_current_parsing_options">
         $current_parsing_options
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_current_parsing_options" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -771,6 +780,7 @@ the element handler methods</p>
     <h4 class="phpdocumentor-element__name" id="property_maxChunkLength">
         $maxChunkLength
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_maxChunkLength" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -805,6 +815,7 @@ the element handler methods</p>
     <h4 class="phpdocumentor-element__name" id="property_maxLogValueLength">
         $maxLogValueLength
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_maxLogValueLength" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -839,6 +850,7 @@ the element handler methods</p>
     <h4 class="phpdocumentor-element__name" id="property_parsing_options">
         $parsing_options
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_parsing_options" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -871,6 +883,7 @@ the element handler methods</p>
     <h4 class="phpdocumentor-element__name" id="property_xmlrpc_valid_parents">
         $xmlrpc_valid_parents
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_xmlrpc_valid_parents" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -922,6 +935,7 @@ the element handler methods</p>
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
             <a href="classes/PhpXmlRpc-Helper-XMLParser.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="phpdocumentor-element
@@ -932,6 +946,7 @@ the element handler methods</p>
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
@@ -945,6 +960,8 @@ the element handler methods</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -969,10 +986,6 @@ string keys:</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -984,11 +997,12 @@ string keys:</p>
     <h4 class="phpdocumentor-element__name" id="method___get">
         __get()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___get" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1022</span>
+    <span class="phpdocumentor-element-found-in__line">1051</span>
 
     </aside>
 
@@ -997,8 +1011,9 @@ string keys:</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                 <span class="phpdocumentor-signature__reference-operator">&amp;</span>    <span class="phpdocumentor-signature__name">__get</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1006,17 +1021,12 @@ string keys:</p>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -1028,11 +1038,12 @@ string keys:</p>
     <h4 class="phpdocumentor-element__name" id="method___isset">
         __isset()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___isset" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1058</span>
+    <span class="phpdocumentor-element-found-in__line">1087</span>
 
     </aside>
 
@@ -1041,8 +1052,9 @@ string keys:</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">__isset</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1050,17 +1062,12 @@ string keys:</p>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -1072,11 +1079,12 @@ string keys:</p>
     <h4 class="phpdocumentor-element__name" id="method___set">
         __set()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___set" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1038</span>
+    <span class="phpdocumentor-element-found-in__line">1067</span>
 
     </aside>
 
@@ -1085,8 +1093,9 @@ string keys:</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">__set</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1094,25 +1103,19 @@ string keys:</p>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$value</span>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -1124,11 +1127,12 @@ string keys:</p>
     <h4 class="phpdocumentor-element__name" id="method___unset">
         __unset()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___unset" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1073</span>
+    <span class="phpdocumentor-element-found-in__line">1102</span>
 
     </aside>
 
@@ -1137,8 +1141,9 @@ string keys:</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">__unset</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1146,17 +1151,12 @@ string keys:</p>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -1168,11 +1168,12 @@ string keys:</p>
     <h4 class="phpdocumentor-element__name" id="method_guessEncoding">
         guessEncoding()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_guessEncoding" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">862</span>
+    <span class="phpdocumentor-element-found-in__line">888</span>
 
     </aside>
 
@@ -1182,8 +1183,10 @@ string keys:</p>
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">guessEncoding</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$httpHeader</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$xmlChunk</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$encodingPrefs</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"><p>Tries to determine the charset encoding of an XML chunk received over HTTP.
-NB: according to the spec (RFC 3023), if text/xml content-type is received over HTTP without a content-type,
+    <div class="phpdocumentor-label-line">
+        </div>
+        <section class="phpdocumentor-description"><p>Tries to determine the charset encoding of an XML chunk received over HTTP.</p>
+<p>NB: according to the spec (RFC 3023), if text/xml content-type is received over HTTP without a content-type,
 we SHOULD assume it is strictly US-ASCII. But we try to be more tolerant of non-conforming (legacy?) clients/servers,
 which will be most probably using UTF-8 anyway...
 In order of importance checks:</p>
@@ -1230,10 +1233,21 @@ This can also be set globally using PhpXmlRpc::$xmlrpc_detectencodings</p>
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_guessEncoding#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">todo</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>as of 2023, the relevant RFC for XML Media Types is now 7303, and for HTTP it is 9110. Check if the order of
+precedence implemented here is still correct</p>
+</section>
+
+                                    </dd>
+                            <dt class="phpdocumentor-tag-list__entry">
                     <span class="phpdocumentor-tag__name">todo</span>
                 </dt>
                 <dd class="phpdocumentor-tag-list__definition">
@@ -1252,16 +1266,18 @@ the method independent of global state</p>
 </section>
 
                                     </dd>
-                        </dl>
+                                            </dl>
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>the encoding determined. Null if it can't be determined and mbstring is enabled,
+        <span class="phpdocumentor-signature__response_type">string</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>the encoding determined. Null if it can't be determined and mbstring is enabled,
 PhpXmlRpc::$xmlrpc_defencoding if it can't be determined and mbstring is not enabled</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1272,11 +1288,12 @@ PhpXmlRpc::$xmlrpc_defencoding if it can't be determined and mbstring is not ena
     <h4 class="phpdocumentor-element__name" id="method_hasEncoding">
         hasEncoding()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_hasEncoding" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">946</span>
+    <span class="phpdocumentor-element-found-in__line">975</span>
 
     </aside>
 
@@ -1286,6 +1303,8 @@ PhpXmlRpc::$xmlrpc_defencoding if it can't be determined and mbstring is not ena
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">hasEncoding</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$xmlChunk</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -1301,7 +1320,8 @@ PhpXmlRpc::$xmlrpc_defencoding if it can't be determined and mbstring is not ena
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_hasEncoding#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -1313,13 +1333,13 @@ PhpXmlRpc::$xmlrpc_defencoding if it can't be determined and mbstring is not ena
 </section>
 
                                     </dd>
-                        </dl>
+                                            </dl>
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1330,6 +1350,7 @@ PhpXmlRpc::$xmlrpc_defencoding if it can't be determined and mbstring is not ena
     <h4 class="phpdocumentor-element__name" id="method_parse">
         parse()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_parse" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
@@ -1344,6 +1365,8 @@ PhpXmlRpc::$xmlrpc_defencoding if it can't be determined and mbstring is not ena
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">parse</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$returnType</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">self::RETURN_XMLRPCVALS</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$accept</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">3</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Logs to the error log any issues which do not cause the parsing to fail.</p>
 </section>
 
@@ -1391,7 +1414,8 @@ are not set, the default settings from PhpXmlRpc\PhpXmlRpc are used</p>
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_parse#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -1423,15 +1447,17 @@ that parsing will be completely independent of global state. Note that it might 
 </section>
 
                                     </dd>
-                        </dl>
+                                            </dl>
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>see the definition of $this-&gt;_xh for the meaning of the results</p>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>see the definition of $this-&gt;_xh for the meaning of the results</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1442,11 +1468,12 @@ that parsing will be completely independent of global state. Note that it might 
     <h4 class="phpdocumentor-element__name" id="method_xmlrpc_se_any">
         xmlrpc_se_any()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_xmlrpc_se_any" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1014</span>
+    <span class="phpdocumentor-element-found-in__line">1043</span>
 
     </aside>
 
@@ -1454,8 +1481,10 @@ that parsing will be completely independent of global state. Note that it might 
 
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">xmlrpc_se_any</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">resource&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parser</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$attrs</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">xmlrpc_se_any</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">resource&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parser</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href=""></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$attrs</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Used in decoding xml chunks that might represent single xml-rpc values as well as requests, responses.</p>
 </section>
 
@@ -1470,14 +1499,14 @@ that parsing will be completely independent of global state. Note that it might 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$attrs</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -1487,7 +1516,8 @@ that parsing will be completely independent of global state. Note that it might 
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_xmlrpc_se_any#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -1497,12 +1527,8 @@ that parsing will be completely independent of global state. Note that it might 
                                                                                 
                                              
                                     </dd>
-                        </dl>
+                                            </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -1514,11 +1540,12 @@ that parsing will be completely independent of global state. Note that it might 
     <h4 class="phpdocumentor-element__name" id="method_handleParsingError">
         handleParsingError()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_handleParsingError" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">976</span>
+    <span class="phpdocumentor-element-found-in__line">1005</span>
 
     </aside>
 
@@ -1527,6 +1554,8 @@ that parsing will be completely independent of global state. Note that it might 
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">handleParsingError</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -1550,13 +1579,15 @@ that parsing will be completely independent of global state. Note that it might 
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>false if the caller has to stop parsing</p>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>false if the caller has to stop parsing</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1567,6 +1598,7 @@ that parsing will be completely independent of global state. Note that it might 
     <h4 class="phpdocumentor-element__name" id="method_logDeprecation">
         logDeprecation()
         <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecation" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Traits/DeprecationLogger.php"><a href="files/traits-deprecationlogger.html"><abbr title="Traits/DeprecationLogger.php">DeprecationLogger.php</abbr></a></abbr>
@@ -1580,8 +1612,9 @@ that parsing will be completely independent of global state. Note that it might 
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">logDeprecation</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1589,17 +1622,12 @@ that parsing will be completely independent of global state. Note that it might 
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -1611,6 +1639,7 @@ that parsing will be completely independent of global state. Note that it might 
     <h4 class="phpdocumentor-element__name" id="method_logDeprecationUnlessCalledBy">
         logDeprecationUnlessCalledBy()
         <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecationUnlessCalledBy" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Traits/DeprecationLogger.php"><a href="files/traits-deprecationlogger.html"><abbr title="Traits/DeprecationLogger.php">DeprecationLogger.php</abbr></a></abbr>
@@ -1624,6 +1653,8 @@ that parsing will be completely independent of global state. Note that it might 
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">logDeprecationUnlessCalledBy</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$expectedCaller</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -1640,10 +1671,6 @@ that parsing will be completely independent of global state. Note that it might 
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -1655,11 +1682,12 @@ that parsing will be completely independent of global state. Note that it might 
     <h4 class="phpdocumentor-element__name" id="method_truncateValueForLog">
         truncateValueForLog()
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_truncateValueForLog" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/XMLParser.php"><a href="files/helper-xmlparser.html"><abbr title="Helper/XMLParser.php">XMLParser.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">993</span>
+    <span class="phpdocumentor-element-found-in__line">1022</span>
 
     </aside>
 
@@ -1669,6 +1697,8 @@ that parsing will be completely independent of global state. Note that it might 
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">truncateValueForLog</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -1683,78 +1713,173 @@ that parsing will be completely independent of global state. Note that it might 
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
 </article>
             </section>
 
-        
+        <div class="phpdocumentor-modal" id="source-view">
+    <div class="phpdocumentor-modal-bg" data-exit-button></div>
+    <div class="phpdocumentor-modal-container">
+        <div class="phpdocumentor-modal-content">
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/Helper/XMLParser.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+        </div>
+        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
+    </div>
+</div>
+
     <script type="text/javascript">
-        function loadExternalCodeSnippets(line) {
-            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach((pre) => {
-                var src = pre.getAttribute('data-src').replace( /\\/g, '/');
-                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
-                var language = 'php';
+        (function () {
+            function loadExternalCodeSnippet(el, url, line) {
+                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+                    const language = 'php';
 
-                var code = document.createElement('code');
-                code.className = 'language-' + language;
+                    const code = document.createElement('code');
+                    code.className = 'language-' + language;
+                    pre.textContent = '';
+                    pre.setAttribute('data-line', line)
+                    code.textContent = 'Loading…';
+                    pre.appendChild(code);
 
-                pre.textContent = '';
+                    var xhr = new XMLHttpRequest();
 
-                pre.setAttribute('data-line', line)
-                code.textContent = 'Loading…';
+                    xhr.open('GET', src, true);
 
-                pre.appendChild(code);
-
-                var xhr = new XMLHttpRequest();
-
-                xhr.open('GET', src, true);
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState !== 4) {
+                            return;
+                        }
 
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
-
                             Prism.highlightElement(code);
+                            return;
                         }
-                        else if (xhr.status >= 400) {
+
+                        if (xhr.status === 404) {
+                            code.textContent = '✖ Error: File could not be found';
+                            return;
+                        }
+
+                        if (xhr.status >= 400) {
                             code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                            return;
                         }
-                        else {
-                            code.textContent = '✖ Error: File does not exist, is empty or trying to view from localhost';
-                        }
+
+                        code.textContent = '✖ Error: An unknown error occurred';
+                    };
+
+                    xhr.send(null);
+                });
+            }
+
+            const modalButtons = document.querySelectorAll("[data-modal]");
+            const openedAsLocalFile = window.location.protocol === 'file:';
+            if (modalButtons.length > 0 && openedAsLocalFile) {
+                console.warn(
+                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
+                    'browsers block XHR requests when a page is opened this way'
+                );
+            }
+
+            modalButtons.forEach(function (trigger) {
+                if (openedAsLocalFile) {
+                    trigger.setAttribute("hidden", "hidden");
+                }
+
+                trigger.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const modal = document.getElementById(trigger.dataset.modal);
+                    if (!modal) {
+                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
+                        return;
                     }
-                };
+                    modal.classList.add("phpdocumentor-modal__open");
 
-                xhr.send(null);
-            });
-        }
-
-        var modals = document.querySelectorAll("[data-modal]");
-
-        modals.forEach(function (trigger) {
-            trigger.addEventListener("click", function (event) {
-                //event.preventDefault();
-                const modal = document.getElementById(trigger.dataset.modal);
-                modal.classList.add("phpdocumentor-modal__open");
-                loadExternalCodeSnippets(trigger.dataset.line)
-                const exits = modal.querySelectorAll("[data-exit-button]");
-                exits.forEach(function (exit) {
-                    exit.addEventListener("click", function (event) {
-                        event.preventDefault();
-                        modal.classList.remove("phpdocumentor-modal__open");
+                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
+                    const exits = modal.querySelectorAll("[data-exit-button]");
+                    exits.forEach(function (exit) {
+                        exit.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            modal.classList.remove("phpdocumentor-modal__open");
+                        });
                     });
                 });
             });
-        });
+        })();
     </script>
 
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                        <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#toc-constants">Constants</a></li>
+                                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+                            <li class="phpdocumentor-on-this-page-section__title">Constants</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_FAULT">ACCEPT_FAULT</a></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_REQUEST">ACCEPT_REQUEST</a></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_RESPONSE">ACCEPT_RESPONSE</a></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_ACCEPT_VALUE">ACCEPT_VALUE</a></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_RETURN_EPIVALS">RETURN_EPIVALS</a></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_RETURN_PHP">RETURN_PHP</a></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#constant_RETURN_XMLRPCVALS">RETURN_XMLRPCVALS</a></li>
+                                            </ul>
+                </li>
+            
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_accept">$accept<a href="classes/PhpXmlRpc-Helper-XMLParser.html"></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_xmlrpc_valid_parents">$xmlrpc_valid_parents<a href="classes/PhpXmlRpc-Helper-XMLParser.html"></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#property__xh">$_xh<a href="classes/PhpXmlRpc-Helper-XMLParser.html"></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_current_parsing_options">$current_parsing_options<a href="classes/PhpXmlRpc-Helper-XMLParser.html"></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_maxChunkLength">$maxChunkLength<a href="classes/PhpXmlRpc-Helper-XMLParser.html"></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_maxLogValueLength">$maxLogValueLength<a href="classes/PhpXmlRpc-Helper-XMLParser.html"></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_parsing_options">$parsing_options<a href="classes/PhpXmlRpc-Helper-XMLParser.html"></li>
+                                                    <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#property_xmlrpc_valid_parents">$xmlrpc_valid_parents<a href="classes/PhpXmlRpc-Helper-XMLParser.html"></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___construct">__construct()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___get">__get()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___isset">__isset()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___set">__set()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method___unset">__unset()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_guessEncoding">guessEncoding()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_hasEncoding">hasEncoding()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_parse">parse()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_xmlrpc_se_any">xmlrpc_se_any()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_handleParsingError">handleParsingError()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecation">logDeprecation()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecationUnlessCalledBy">logDeprecationUnlessCalledBy()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Helper-XMLParser.html#method_truncateValueForLog">truncateValueForLog()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -1765,7 +1890,6 @@ that parsing will be completely independent of global state. Note that it might 
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/PhpXmlRpc-Helper-XMLParser.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 

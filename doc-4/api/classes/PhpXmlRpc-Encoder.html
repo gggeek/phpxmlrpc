@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
@@ -19,12 +19,13 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.1</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.2</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -52,7 +53,7 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
                     <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
@@ -95,8 +96,9 @@
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/phpxmlrpc.html">PhpXmlRpc</a></li>
     </ul>
 
@@ -118,8 +120,13 @@
                             <a href="classes/PhpXmlRpc-Traits-LoggerAware.html"><abbr title="\PhpXmlRpc\Traits\LoggerAware">LoggerAware</abbr></a>,                             <a href="classes/PhpXmlRpc-Traits-ParserAware.html"><abbr title="\PhpXmlRpc\Traits\ParserAware">ParserAware</abbr></a>                    </span>
     </h2>
 
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html">Encoder.php</a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">15</span>
 
@@ -131,7 +138,8 @@
 
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Encoder.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -152,34 +160,51 @@
 </section>
 
                                     </dd>
-                        </dl>
-
-
-
+                                            </dl>
 
 
 
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/PhpXmlRpc-Encoder.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+
+
+
+
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/PhpXmlRpc-Encoder.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
-                    <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#property_logger">$logger</a>
     <span>
                         &nbsp;: mixed            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpXmlRpc-Traits-ParserAware.html#property_parser">$parser</a>
     <span>
                         &nbsp;: mixed            </span>
 </dt>
-<dd></dd>
 
-                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    </dl>
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/PhpXmlRpc-Encoder.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Encoder.html#method_decode">decode()</a>
     <span>
                                 &nbsp;: mixed    </span>
@@ -206,30 +231,27 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</dd>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Traits-ParserAware.html#method_getParser">getParser()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_setLogger">setLogger()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpXmlRpc-Traits-ParserAware.html#method_setParser">setParser()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd></dd>
 
-        </dl>
+    </dl>
+
 
 
 
@@ -240,6 +262,7 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</dd>
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
             <a href="classes/PhpXmlRpc-Encoder.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="
@@ -251,6 +274,7 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</dd>
     <h4 class="phpdocumentor-element__name" id="property_logger">
         $logger
         <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#property_logger" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -268,10 +292,8 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</dd>
     <span class="phpdocumentor-signature__name">$logger</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
 </article>
@@ -285,6 +307,7 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</dd>
     <h4 class="phpdocumentor-element__name" id="property_parser">
         $parser
         <a href="classes/PhpXmlRpc-Traits-ParserAware.html#property_parser" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -302,10 +325,8 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</dd>
     <span class="phpdocumentor-signature__name">$parser</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
+    
+    
     
 
 </article>
@@ -315,6 +336,7 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</dd>
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
             <a href="classes/PhpXmlRpc-Encoder.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="phpdocumentor-element
@@ -325,9 +347,10 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</dd>
     <h4 class="phpdocumentor-element__name" id="method_decode">
         decode()
         <a href="classes/PhpXmlRpc-Encoder.html#method_decode" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html">Encoder.php</a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">46</span>
 
@@ -339,6 +362,8 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</dd>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">decode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|<a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$xmlrpcVal</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Works with xml-rpc Request objects as input, too.
 Xmlrpc dateTime values will be converted to strings or DateTime objects depending on an $options parameter
 Supports i8 and NIL xml-rpc values without the need for specific options.
@@ -381,7 +406,8 @@ objects, see the details above;</li>
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Encoder.html#method_decode#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -393,15 +419,17 @@ objects, see the details above;</li>
 </section>
 
                                     </dd>
-                        </dl>
+                                            </dl>
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>Feature creep -- add an option to allow converting xml-rpc dateTime values to unix timestamps (integers)</p>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Feature creep -- add an option to allow converting xml-rpc dateTime values to unix timestamps (integers)</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -412,9 +440,10 @@ objects, see the details above;</li>
     <h4 class="phpdocumentor-element__name" id="method_decodeXml">
         decodeXml()
         <a href="classes/PhpXmlRpc-Encoder.html#method_decodeXml" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html">Encoder.php</a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">293</span>
 
@@ -427,6 +456,8 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">decodeXml</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$xmlVal</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|<a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>|false</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -451,7 +482,8 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</p>
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Encoder.html#method_decodeXml#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -491,15 +523,17 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</p>
 </section>
 
                                     </dd>
-                        </dl>
+                                            </dl>
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|<a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>|false</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>false on error, or an instance of either Value, Request or Response</p>
+        <span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|<a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>|false</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>false on error, or an instance of either Value, Request or Response</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -510,9 +544,10 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</p>
     <h4 class="phpdocumentor-element__name" id="method_encode">
         encode()
         <a href="classes/PhpXmlRpc-Encoder.html#method_encode" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html"><abbr title="Encoder.php">Encoder.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="Encoder.php"><a href="files/encoder.html">Encoder.php</a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">178</span>
 
@@ -524,6 +559,8 @@ xml-rpc value into the appropriate object (a.k.a. deserialize).</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">encode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$phpVal</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">array()</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>PHP strings, integers, floats and booleans have a straightforward encoding - note that integers will <em>not</em> be
 converted to xml-rpc <i8> elements, even if they exceed the 32-bit range.
 PHP arrays will be encoded to either xml-rpc structs or arrays, depending on whether they are hashes
@@ -571,7 +608,8 @@ instance of the same php object</li>
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpXmlRpc-Encoder.html#method_encode#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -583,16 +621,18 @@ instance of the same php object</li>
 </section>
 
                                     </dd>
-                        </dl>
+                                            </dl>
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>Feature creep -- could support more types via optional type argument (string =&gt; datetime support has been added,
+        <span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Feature creep -- could support more types via optional type argument (string =&gt; datetime support has been added,
 ??? =&gt; base64 not yet). Also: allow auto-encoding of integers to i8 when too-big to fit into i4</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -603,6 +643,7 @@ instance of the same php object</li>
     <h4 class="phpdocumentor-element__name" id="method_getLogger">
         getLogger()
         <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_getLogger" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Traits/LoggerAware.php"><a href="files/traits-loggeraware.html"><abbr title="Traits/LoggerAware.php">LoggerAware.php</abbr></a></abbr>
@@ -616,15 +657,12 @@ instance of the same php object</li>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getLogger</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
+    
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -636,6 +674,7 @@ instance of the same php object</li>
     <h4 class="phpdocumentor-element__name" id="method_getParser">
         getParser()
         <a href="classes/PhpXmlRpc-Traits-ParserAware.html#method_getParser" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Traits/ParserAware.php"><a href="files/traits-parseraware.html"><abbr title="Traits/ParserAware.php">ParserAware.php</abbr></a></abbr>
@@ -649,15 +688,12 @@ instance of the same php object</li>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getParser</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
+    
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -669,6 +705,7 @@ instance of the same php object</li>
     <h4 class="phpdocumentor-element__name" id="method_setLogger">
         setLogger()
         <a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_setLogger" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Traits/LoggerAware.php"><a href="files/traits-loggeraware.html"><abbr title="Traits/LoggerAware.php">LoggerAware.php</abbr></a></abbr>
@@ -680,14 +717,16 @@ instance of the same php object</li>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setLogger</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setLogger</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$logger</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -696,10 +735,6 @@ instance of the same php object</li>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -711,6 +746,7 @@ instance of the same php object</li>
     <h4 class="phpdocumentor-element__name" id="method_setParser">
         setParser()
         <a href="classes/PhpXmlRpc-Traits-ParserAware.html#method_setParser" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Traits/ParserAware.php"><a href="files/traits-parseraware.html"><abbr title="Traits/ParserAware.php">ParserAware.php</abbr></a></abbr>
@@ -722,14 +758,16 @@ instance of the same php object</li>
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setParser</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parser</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setParser</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$parser</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$parser</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -738,78 +776,144 @@ instance of the same php object</li>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
     
 </article>
             </section>
 
-        
+        <div class="phpdocumentor-modal" id="source-view">
+    <div class="phpdocumentor-modal-bg" data-exit-button></div>
+    <div class="phpdocumentor-modal-container">
+        <div class="phpdocumentor-modal-content">
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/Encoder.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+        </div>
+        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
+    </div>
+</div>
+
     <script type="text/javascript">
-        function loadExternalCodeSnippets(line) {
-            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach((pre) => {
-                var src = pre.getAttribute('data-src').replace( /\\/g, '/');
-                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
-                var language = 'php';
+        (function () {
+            function loadExternalCodeSnippet(el, url, line) {
+                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+                    const language = 'php';
 
-                var code = document.createElement('code');
-                code.className = 'language-' + language;
+                    const code = document.createElement('code');
+                    code.className = 'language-' + language;
+                    pre.textContent = '';
+                    pre.setAttribute('data-line', line)
+                    code.textContent = 'Loading…';
+                    pre.appendChild(code);
 
-                pre.textContent = '';
+                    var xhr = new XMLHttpRequest();
 
-                pre.setAttribute('data-line', line)
-                code.textContent = 'Loading…';
+                    xhr.open('GET', src, true);
 
-                pre.appendChild(code);
-
-                var xhr = new XMLHttpRequest();
-
-                xhr.open('GET', src, true);
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState !== 4) {
+                            return;
+                        }
 
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
-
                             Prism.highlightElement(code);
+                            return;
                         }
-                        else if (xhr.status >= 400) {
+
+                        if (xhr.status === 404) {
+                            code.textContent = '✖ Error: File could not be found';
+                            return;
+                        }
+
+                        if (xhr.status >= 400) {
                             code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                            return;
                         }
-                        else {
-                            code.textContent = '✖ Error: File does not exist, is empty or trying to view from localhost';
-                        }
+
+                        code.textContent = '✖ Error: An unknown error occurred';
+                    };
+
+                    xhr.send(null);
+                });
+            }
+
+            const modalButtons = document.querySelectorAll("[data-modal]");
+            const openedAsLocalFile = window.location.protocol === 'file:';
+            if (modalButtons.length > 0 && openedAsLocalFile) {
+                console.warn(
+                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
+                    'browsers block XHR requests when a page is opened this way'
+                );
+            }
+
+            modalButtons.forEach(function (trigger) {
+                if (openedAsLocalFile) {
+                    trigger.setAttribute("hidden", "hidden");
+                }
+
+                trigger.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const modal = document.getElementById(trigger.dataset.modal);
+                    if (!modal) {
+                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
+                        return;
                     }
-                };
+                    modal.classList.add("phpdocumentor-modal__open");
 
-                xhr.send(null);
-            });
-        }
-
-        var modals = document.querySelectorAll("[data-modal]");
-
-        modals.forEach(function (trigger) {
-            trigger.addEventListener("click", function (event) {
-                //event.preventDefault();
-                const modal = document.getElementById(trigger.dataset.modal);
-                modal.classList.add("phpdocumentor-modal__open");
-                loadExternalCodeSnippets(trigger.dataset.line)
-                const exits = modal.querySelectorAll("[data-exit-button]");
-                exits.forEach(function (exit) {
-                    exit.addEventListener("click", function (event) {
-                        event.preventDefault();
-                        modal.classList.remove("phpdocumentor-modal__open");
+                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
+                    const exits = modal.querySelectorAll("[data-exit-button]");
+                    exits.forEach(function (exit) {
+                        exit.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            modal.classList.remove("phpdocumentor-modal__open");
+                        });
                     });
                 });
             });
-        });
+        })();
     </script>
 
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                                            <li><a href="classes/PhpXmlRpc-Encoder.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/PhpXmlRpc-Encoder.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+            
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="classes/PhpXmlRpc-Traits-LoggerAware.html#property_logger">$logger<a href="classes/PhpXmlRpc-Encoder.html"></li>
+                                                    <li><a href="classes/PhpXmlRpc-Traits-ParserAware.html#property_parser">$parser<a href="classes/PhpXmlRpc-Encoder.html"></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li><a href="classes/PhpXmlRpc-Encoder.html#method_decode">decode()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Encoder.html#method_decodeXml">decodeXml()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Encoder.html#method_encode">encode()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_getLogger">getLogger()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Traits-ParserAware.html#method_getParser">getParser()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_setLogger">setLogger()</a></li>
+                                            <li><a href="classes/PhpXmlRpc-Traits-ParserAware.html#method_setParser">setParser()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -820,7 +924,6 @@ instance of the same php object</li>
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/PhpXmlRpc-Encoder.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 

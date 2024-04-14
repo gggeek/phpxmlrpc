@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
@@ -19,12 +19,13 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.1</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.2</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -52,7 +53,7 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
                     <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
@@ -95,97 +96,164 @@
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
     </ul>
 
     <article class="phpdocumentor-element -package">
         <h2 class="phpdocumentor-content__title">PHPXMLRPC</h2>
 
         
+<h3 id="toc">
+    Table of Contents
+    <a href="packages/PHPXMLRPC.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
-<h3 id="interfaces_class_traits">
-    Interfaces, Classes, Traits and Enums
-    <a href="#interfaces_class_traits" class="headerlink"><i class="fas fa-link"></i></a>
 </h3>
 
-<dl class="phpdocumentor-table-of-contents">
-    
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Autoloader.html"><abbr title="\PhpXmlRpc\Autoloader">Autoloader</abbr></a></dt>
-        <dd>In the unlikely event that you are not using Composer to manage class autoloading, here&#039;s an autoloader for this lib.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Client.html"><abbr title="\PhpXmlRpc\Client">Client</abbr></a></dt>
-        <dd>Used to represent a client of an XML-RPC server.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Encoder.html"><abbr title="\PhpXmlRpc\Encoder">Encoder</abbr></a></dt>
-        <dd>A helper class to easily convert between Value objects and php native values.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-FaultResponseException.html"><abbr title="\PhpXmlRpc\Exception\FaultResponseException">FaultResponseException</abbr></a></dt>
-        <dd>To be used when throwing exceptions instead of returning Response objects (future API?)</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-HttpException.html"><abbr title="\PhpXmlRpc\Exception\HttpException">HttpException</abbr></a></dt>
-        <dd>To be used for all errors related to parsing HTTP requests and responses</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-NoSuchMethodException.html"><abbr title="\PhpXmlRpc\Exception\NoSuchMethodException">NoSuchMethodException</abbr></a></dt>
-        <dd>Base exception for errors thrown by the server while trying to handle the requests, such as errors with the dispatch map</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-ParsingException.html"><abbr title="\PhpXmlRpc\Exception\ParsingException">ParsingException</abbr></a></dt>
-        <dd>Base exception for errors while parsing xml-rpc requests/responses: charset issue, xml issues, xml-rpc issues</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-ServerException.html"><abbr title="\PhpXmlRpc\Exception\ServerException">ServerException</abbr></a></dt>
-        <dd>Base exception for errors thrown by the server while trying to handle the requests, such as errors with the dispatch map</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-StateErrorException.html"><abbr title="\PhpXmlRpc\Exception\StateErrorException">StateErrorException</abbr></a></dt>
-        <dd>Exception thrown when an object is in such a state that it can not fulfill execution of a method</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-TransportException.html"><abbr title="\PhpXmlRpc\Exception\TransportException">TransportException</abbr></a></dt>
-        <dd>To be used for all errors related to the transport, which are not related to specifically to HTTP. Eg: can not open socket</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-TypeErrorException.html"><abbr title="\PhpXmlRpc\Exception\TypeErrorException">TypeErrorException</abbr></a></dt>
-        <dd>Exception thrown when an argument passed to a function or method has an unsupported type</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-ValueErrorException.html"><abbr title="\PhpXmlRpc\Exception\ValueErrorException">ValueErrorException</abbr></a></dt>
-        <dd>Exception thrown when an argument passed to a function or method has an unsupported value (but its type is ok)</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-XmlException.html"><abbr title="\PhpXmlRpc\Exception\XmlException">XmlException</abbr></a></dt>
-        <dd>Base exception for errors while parsing xml-rpc requests/responses: charset issue, xml issues, xml-rpc issues</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-XmlRpcException.html"><abbr title="\PhpXmlRpc\Exception\XmlRpcException">XmlRpcException</abbr></a></dt>
-        <dd>Base exception for errors while parsing xml-rpc requests/responses: charset issue, xml issues, xml-rpc issues</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception.html"><abbr title="\PhpXmlRpc\Exception">Exception</abbr></a></dt>
-        <dd></dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Charset.html"><abbr title="\PhpXmlRpc\Helper\Charset">Charset</abbr></a></dt>
-        <dd></dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Date.html"><abbr title="\PhpXmlRpc\Helper\Date">Date</abbr></a></dt>
-        <dd>Helps to convert timestamps to the xml-rpc date format.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Http.html"><abbr title="\PhpXmlRpc\Helper\Http">Http</abbr></a></dt>
-        <dd></dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Interop.html"><abbr title="\PhpXmlRpc\Helper\Interop">Interop</abbr></a></dt>
-        <dd>A helper dedicated to support Interoperability features</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Logger.html"><abbr title="\PhpXmlRpc\Helper\Logger">Logger</abbr></a></dt>
-        <dd></dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-XMLParser.html"><abbr title="\PhpXmlRpc\Helper\XMLParser">XMLParser</abbr></a></dt>
-        <dd>Deals with parsing the XML.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-PhpXmlRpc.html"><abbr title="\PhpXmlRpc\PhpXmlRpc">PhpXmlRpc</abbr></a></dt>
-        <dd>Manages global configuration for operation of the library.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a></dt>
-        <dd>This class provides the representation of a request to an XML-RPC server.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a></dt>
-        <dd>This class provides the representation of the response of an XML-RPC server.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Server.html"><abbr title="\PhpXmlRpc\Server">Server</abbr></a></dt>
-        <dd>Allows effortless implementation of XML-RPC servers</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></dt>
-        <dd>This class enables the creation of values for XML-RPC, by encapsulating plain php values.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Wrapper.html"><abbr title="\PhpXmlRpc\Wrapper">Wrapper</abbr></a></dt>
-        <dd>PHPXMLRPC &quot;wrapper&quot; class - generate stubs to transparently access xml-rpc methods as php functions and vice-versa.</dd>
-    
-            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html"><abbr title="\PhpXmlRpc\Traits\CharsetEncoderAware">CharsetEncoderAware</abbr></a></dt>
-        <dd></dd>
-            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html"><abbr title="\PhpXmlRpc\Traits\DeprecationLogger">DeprecationLogger</abbr></a></dt>
-        <dd></dd>
-            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-LoggerAware.html"><abbr title="\PhpXmlRpc\Traits\LoggerAware">LoggerAware</abbr></a></dt>
-        <dd></dd>
-            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-ParserAware.html"><abbr title="\PhpXmlRpc\Traits\ParserAware">ParserAware</abbr></a></dt>
-        <dd></dd>
-            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html"><abbr title="\PhpXmlRpc\Traits\PayloadBearer">PayloadBearer</abbr></a></dt>
-        <dd></dd>
-    
-    </dl>
+
+
+
+    <h4 id="toc-classes">
+        Classes
+        <a href="packages/PHPXMLRPC.html#toc-classes" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <dl class="phpdocumentor-table-of-contents">
+                    <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Autoloader.html"><abbr title="\PhpXmlRpc\Autoloader">Autoloader</abbr></a></dt><dd>In the unlikely event that you are not using Composer to manage class autoloading, here&#039;s an autoloader for this lib.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Client.html"><abbr title="\PhpXmlRpc\Client">Client</abbr></a></dt><dd>Used to represent a client of an XML-RPC server.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Encoder.html"><abbr title="\PhpXmlRpc\Encoder">Encoder</abbr></a></dt><dd>A helper class to easily convert between Value objects and php native values.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-FaultResponseException.html"><abbr title="\PhpXmlRpc\Exception\FaultResponseException">FaultResponseException</abbr></a></dt><dd>To be used when throwing exceptions instead of returning Response objects (future API?)</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-HttpException.html"><abbr title="\PhpXmlRpc\Exception\HttpException">HttpException</abbr></a></dt><dd>To be used for all errors related to parsing HTTP requests and responses</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-NoSuchMethodException.html"><abbr title="\PhpXmlRpc\Exception\NoSuchMethodException">NoSuchMethodException</abbr></a></dt><dd>Base exception for errors thrown by the server while trying to handle the requests, such as errors with the dispatch map</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-ParsingException.html"><abbr title="\PhpXmlRpc\Exception\ParsingException">ParsingException</abbr></a></dt><dd>Base exception for errors while parsing xml-rpc requests/responses: charset issue, xml issues, xml-rpc issues</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-ServerException.html"><abbr title="\PhpXmlRpc\Exception\ServerException">ServerException</abbr></a></dt><dd>Base exception for errors thrown by the server while trying to handle the requests, such as errors with the dispatch map</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-StateErrorException.html"><abbr title="\PhpXmlRpc\Exception\StateErrorException">StateErrorException</abbr></a></dt><dd>Exception thrown when an object is in such a state that it can not fulfill execution of a method</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-TransportException.html"><abbr title="\PhpXmlRpc\Exception\TransportException">TransportException</abbr></a></dt><dd>To be used for all errors related to the transport, which are not related to specifically to HTTP. Eg: can not open socket</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-TypeErrorException.html"><abbr title="\PhpXmlRpc\Exception\TypeErrorException">TypeErrorException</abbr></a></dt><dd>Exception thrown when an argument passed to a function or method has an unsupported type</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-ValueErrorException.html"><abbr title="\PhpXmlRpc\Exception\ValueErrorException">ValueErrorException</abbr></a></dt><dd>Exception thrown when an argument passed to a function or method has an unsupported value (but its type is ok)</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-XmlException.html"><abbr title="\PhpXmlRpc\Exception\XmlException">XmlException</abbr></a></dt><dd>Base exception for errors while parsing xml-rpc requests/responses: charset issue, xml issues, xml-rpc issues</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception-XmlRpcException.html"><abbr title="\PhpXmlRpc\Exception\XmlRpcException">XmlRpcException</abbr></a></dt><dd>Base exception for errors while parsing xml-rpc requests/responses: charset issue, xml issues, xml-rpc issues</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Exception.html"><abbr title="\PhpXmlRpc\Exception">Exception</abbr></a></dt>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Charset.html"><abbr title="\PhpXmlRpc\Helper\Charset">Charset</abbr></a></dt>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Date.html"><abbr title="\PhpXmlRpc\Helper\Date">Date</abbr></a></dt><dd>Helps to convert timestamps to the xml-rpc date format.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Http.html"><abbr title="\PhpXmlRpc\Helper\Http">Http</abbr></a></dt>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Interop.html"><abbr title="\PhpXmlRpc\Helper\Interop">Interop</abbr></a></dt><dd>A helper dedicated to support Interoperability features</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-Logger.html"><abbr title="\PhpXmlRpc\Helper\Logger">Logger</abbr></a></dt>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Helper-XMLParser.html"><abbr title="\PhpXmlRpc\Helper\XMLParser">XMLParser</abbr></a></dt><dd>Deals with parsing the XML.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-PhpXmlRpc.html"><abbr title="\PhpXmlRpc\PhpXmlRpc">PhpXmlRpc</abbr></a></dt><dd>Manages global configuration for operation of the library.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a></dt><dd>This class provides the representation of a request to an XML-RPC server.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a></dt><dd>This class provides the representation of the response of an XML-RPC server.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Server.html"><abbr title="\PhpXmlRpc\Server">Server</abbr></a></dt><dd>Allows effortless implementation of XML-RPC servers</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a></dt><dd>This class enables the creation of values for XML-RPC, by encapsulating plain php values.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/PhpXmlRpc-Wrapper.html"><abbr title="\PhpXmlRpc\Wrapper">Wrapper</abbr></a></dt><dd>PHPXMLRPC &quot;wrapper&quot; class - generate stubs to transparently access xml-rpc methods as php functions and vice-versa.</dd>    </dl>
+
+    <h4 id="toc-traits">
+        Traits
+        <a href="packages/PHPXMLRPC.html#toc-traits" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html"><abbr title="\PhpXmlRpc\Traits\CharsetEncoderAware">CharsetEncoderAware</abbr></a></dt>        <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html"><abbr title="\PhpXmlRpc\Traits\DeprecationLogger">DeprecationLogger</abbr></a></dt>        <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-LoggerAware.html"><abbr title="\PhpXmlRpc\Traits\LoggerAware">LoggerAware</abbr></a></dt>        <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-ParserAware.html"><abbr title="\PhpXmlRpc\Traits\ParserAware">ParserAware</abbr></a></dt>        <dt class="phpdocumentor-table-of-contents__entry -trait"><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html"><abbr title="\PhpXmlRpc\Traits\PayloadBearer">PayloadBearer</abbr></a></dt>    </dl>
+
+
+
+
 
 
 
         
 
         
+        <div class="phpdocumentor-modal" id="source-view">
+    <div class="phpdocumentor-modal-bg" data-exit-button></div>
+    <div class="phpdocumentor-modal-container">
+        <div class="phpdocumentor-modal-content">
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="" class="language-php line-numbers linkable-line-numbers"></pre>
+        </div>
+        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        (function () {
+            function loadExternalCodeSnippet(el, url, line) {
+                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+                    const language = 'php';
+
+                    const code = document.createElement('code');
+                    code.className = 'language-' + language;
+                    pre.textContent = '';
+                    pre.setAttribute('data-line', line)
+                    code.textContent = 'Loading…';
+                    pre.appendChild(code);
+
+                    var xhr = new XMLHttpRequest();
+
+                    xhr.open('GET', src, true);
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState !== 4) {
+                            return;
+                        }
+
+                        if (xhr.status < 400 && xhr.responseText) {
+                            code.textContent = xhr.responseText;
+                            Prism.highlightElement(code);
+                            return;
+                        }
+
+                        if (xhr.status === 404) {
+                            code.textContent = '✖ Error: File could not be found';
+                            return;
+                        }
+
+                        if (xhr.status >= 400) {
+                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                            return;
+                        }
+
+                        code.textContent = '✖ Error: An unknown error occurred';
+                    };
+
+                    xhr.send(null);
+                });
+            }
+
+            const modalButtons = document.querySelectorAll("[data-modal]");
+            const openedAsLocalFile = window.location.protocol === 'file:';
+            if (modalButtons.length > 0 && openedAsLocalFile) {
+                console.warn(
+                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
+                    'browsers block XHR requests when a page is opened this way'
+                );
+            }
+
+            modalButtons.forEach(function (trigger) {
+                if (openedAsLocalFile) {
+                    trigger.setAttribute("hidden", "hidden");
+                }
+
+                trigger.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const modal = document.getElementById(trigger.dataset.modal);
+                    if (!modal) {
+                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
+                        return;
+                    }
+                    modal.classList.add("phpdocumentor-modal__open");
+
+                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
+                    const exits = modal.querySelectorAll("[data-exit-button]");
+                    exits.forEach(function (exit) {
+                        exit.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            modal.classList.remove("phpdocumentor-modal__open");
+                        });
+                    });
+                });
+            });
+        })();
+    </script>
+
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                            
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                                                                                        <li><a href="packages/PHPXMLRPC.html#toc-classes">Classes</a></li>
+                                                                <li><a href="packages/PHPXMLRPC.html#toc-traits">Traits</a></li>
+                                                                                                </ul>
+            </li>
+
+            
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -196,7 +264,6 @@
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="packages/PHPXMLRPC.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
