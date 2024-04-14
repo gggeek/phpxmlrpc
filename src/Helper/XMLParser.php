@@ -162,7 +162,7 @@ class XMLParser
             'isf_reason' => '',
             'value' => null,
             'method' => false, // so we can check later if we got a methodname or not
-            'params' => array(),
+            'params' => false, // so we can check later if we got a params tag or not
             'pt' => array(),
             'rt' => '',
         );
@@ -289,6 +289,11 @@ class XMLParser
 
         xml_parser_free($parser);
         $this->current_parsing_options = array();
+
+        // BC
+        if ($this->_xh['params'] === false) {
+            $this->_xh['params'] = array();
+        }
 
         return $this->_xh;
     }
@@ -419,8 +424,11 @@ class XMLParser
 
             case 'METHODCALL':
             case 'METHODRESPONSE':
-            case 'PARAMS':
                 // valid elements that add little to processing
+                break;
+
+            case 'PARAMS':
+                $this->_xh['params'] = array();
                 break;
 
             case 'METHODNAME':
@@ -751,13 +759,28 @@ class XMLParser
                 break;
 
             /// @todo add extra checking:
-            ///       - METHODRESPONSE should contain either a PARAMS with a single PARAM, or a FAULT
             ///       - FAULT should contain a single struct with the 2 expected members (check their name and type)
-            ///       - METHODCALL should contain a methodname
             case 'PARAMS':
             case 'FAULT':
+                break;
+
             case 'METHODCALL':
+                /// @todo should we allow to accept this case via a call to handleParsingError ?
+                if ($this->_xh['method'] === false) {
+                    $this->_xh['isf'] = 2;
+                    $this->_xh['isf_reason'] = "missing METHODNAME element inside METHODCALL";
+                }
+                break;
+
             case 'METHODRESPONSE':
+                /// @todo should we allow to accept these cases via a call to handleParsingError ?
+                if ($this->_xh['isf'] != 1 && $this->_xh['params'] === false) {
+                    $this->_xh['isf'] = 2;
+                    $this->_xh['isf_reason'] = "missing both FAULT and PARAMS elements inside METHODRESPONSE";
+                } elseif ($this->_xh['isf'] == 0 && count($this->_xh['params']) !== 1) {
+                    $this->_xh['isf'] = 2;
+                    $this->_xh['isf_reason'] = "PARAMS element inside METHODRESPONSE should have exactly 1 PARAM";
+                }
                 break;
 
             default:
