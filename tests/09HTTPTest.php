@@ -295,7 +295,7 @@ class HTTPTest extends ServerTest
         if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
         {
             $version = explode('.', PHP_VERSION);
-            $this->client->setSSLVersion(4 + $version[1]);
+            $this->client->setSSLVersion(min(4 + $version[1], 7));
         }
 
         $this->$method();
@@ -349,7 +349,7 @@ class HTTPTest extends ServerTest
             /// @todo we should probably look deeper into the Apache config / ssl version in use to find out why this
             ///       does not work well with TLS < 1.2
             if ($this->args['SSLVERSION'] == 0) {
-                $this->client->setSSLVersion(5 + $version[1]);
+                $this->client->setSSLVersion(min(5 + $version[1], 7));
             }
         }
         $this->$method();
@@ -389,7 +389,7 @@ class HTTPTest extends ServerTest
         if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
         {
             $version = explode('.', PHP_VERSION);
-            $this->client->setSSLVersion(4 + $version[1]);
+            $this->client->setSSLVersion(min(4 + $version[1], 7));
         }
 
         $this->$method();
