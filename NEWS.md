@@ -5,6 +5,12 @@
 * fixed: the Server would not swallow and log php warnings generated from end user's method handler functions unless
   debug mode was set to 2 or higher. It now does that always.
 
+* fixed: the library will now return a Fault `Response` object whenever parsing some xml responses which do not conform
+  to the specification, namely the for following cases:
+
+  - a `methodResponse` element without either `fault` or `params`
+  - a `methodResponse` element with a `params` child which does not have a single `param`
+
 
 ## XML-RPC for PHP version 4.10.1 - 2023/02/22
 
