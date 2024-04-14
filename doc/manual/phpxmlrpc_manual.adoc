@@ -1,6 +1,6 @@
 = XML-RPC for PHP User Manual
 Gaetano Giunta; Edd Dumbill
-4.10.1
+4.10.2
 :keywords: xml-rpc, xml, rpc, webservices, http
 :title-page:
 :toc:
@@ -1102,7 +1102,7 @@ string.
 
 ==== $xmlrpcVersion
 
-    PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion = "4.10.1"
+    PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion = "4.10.2"
 
 The string representation of the version number of the PHPXMLRPC library in use. It is used by the Client for
 building the User-Agent HTTP header that is sent with every request to the server. You can change its value if you need

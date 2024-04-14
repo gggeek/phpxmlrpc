@@ -1,4 +1,4 @@
-## XML-RPC for PHP version 4.XX - unreleased
+## XML-RPC for PHP version 4.10.2 - 2024/04/14
 
 * fixed: allow `Server` subclasses to use their own Parser to determine the Request's charset
 
@@ -10,6 +10,8 @@
 
   - a `methodResponse` element without either `fault` or `params`
   - a `methodResponse` element with a `params` child which does not have a single `param`
+
+* improved: test on php 8.3
 
 
 ## XML-RPC for PHP version 4.10.1 - 2023/02/22
