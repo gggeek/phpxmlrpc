@@ -175,6 +175,8 @@ jobs:
                     chmod 755 ./tests/ci/vm.sh
                     ./tests/ci/vm.sh build
                     ./tests/ci/vm.sh start
-                    # @todo check instead for bootstrap being finished
+                    # @todo this should not be necessary any more, as `start` waits for the app to be set up
                     sleep 30
+                    # echo the logs of the bootstrap of the container, as there might be useful info
+                    ./tests/ci/vm.sh logs
                     ./tests/ci/vm.sh runtests
