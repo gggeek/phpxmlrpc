@@ -126,7 +126,7 @@ jobs:
 
             -   name: upload lib to gggeek.altervista.org - src
                 #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
-                uses: SamKirkland/FTP-Deploy-Action@4.3.3
+                uses: SamKirkland/FTP-Deploy-Action@4.3.5
                 with:
                     server: ftp.gggeek.altervista.org
                     username: ${{ secrets.ftp_gggeek_altervista_org_user }}
@@ -137,7 +137,7 @@ jobs:
                     dangerous-clean-slate: true
             -   name: upload lib to gggeek.altervista.org - demo
                 if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
-                uses: SamKirkland/FTP-Deploy-Action@4.3.3
+                uses: SamKirkland/FTP-Deploy-Action@4.3.5
                 with:
                     server: ftp.gggeek.altervista.org
                     username: ${{ secrets.ftp_gggeek_altervista_org_user }}
@@ -157,7 +157,7 @@ jobs:
                         **/wrapper.php
             -   name: upload lib to gggeek.altervista.org - debugger
                 #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
-                uses: SamKirkland/FTP-Deploy-Action@4.3.3
+                uses: SamKirkland/FTP-Deploy-Action@4.3.5
                 with:
                     server: ftp.gggeek.altervista.org
                     username: ${{ secrets.ftp_gggeek_altervista_org_user }}
