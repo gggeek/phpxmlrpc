@@ -136,15 +136,17 @@ case "${ACTION}" in
         ;;
 
     runcoverage)
+        test -t 1 && USE_TTY="-t"
         # @todo clean up /tmp/phpxmlrpc and .phpunit.result.cache
         if [ ! -d build ]; then mkdir build; fi
         docker exec -t "${CONTAINER_NAME}" "${CONTAINER_WORKSPACE_DIR}/tests/ci/setup/setup_code_coverage.sh" enable
-        docker exec -it "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html build/coverage -v tests"
+        docker exec -i $USE_TTY "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html build/coverage -v tests"
         docker exec -t "${CONTAINER_NAME}" "${CONTAINER_WORKSPACE_DIR}/tests/ci/setup/setup_code_coverage.sh" disable
         ;;
 
     runtests)
-        docker exec -it "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v tests"
+        test -t 1 && USE_TTY="-t"
+        docker exec -i $USE_TTY "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v tests"
         ;;
 
     start)
