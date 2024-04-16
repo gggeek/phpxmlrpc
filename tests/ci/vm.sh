@@ -14,6 +14,7 @@ export UBUNTU_VERSION=${UBUNTU_VERSION:-focal}
 CONTAINER_USER=docker
 CONTAINER_WORKSPACE_DIR="/home/${CONTAINER_USER}/workspace"
 ROOT_DIR="$(dirname -- "$(dirname -- "$(dirname -- "$(readlink -f "$0")")")")"
+# @todo (low priority) allow passing in a custom prefix for image name, container name
 IMAGE_NAME=phpxmlrpc:${UBUNTU_VERSION}-${PHP_VERSION}
 CONTAINER_NAME=phpxmlrpc_${UBUNTU_VERSION}_${PHP_VERSION}
 
@@ -73,8 +74,8 @@ build() {
     docker run -d \
         -p 80:80 -p 443:443 -p 8080:8080 \
         --name "${CONTAINER_NAME}" \
-        --env CONTAINER_USER_UID=$(id -u) --env CONTAINER_USER_GID=$(id -g) \
-        --env TESTS_ROOT_DIR=${CONTAINER_WORKSPACE_DIR} \
+        --env "CONTAINER_USER_UID=$(id -u)" --env "CONTAINER_USER_GID=$(id -g)" \
+        --env "TESTS_ROOT_DIR=${CONTAINER_WORKSPACE_DIR}" \
         --env HTTPSERVER=localhost \
         --env HTTPURI=/tests/index.php?demo=server/server.php \
         --env HTTPSSERVER=localhost \

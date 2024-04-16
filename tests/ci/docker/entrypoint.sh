@@ -20,6 +20,10 @@ clean_up() {
     echo "[$(date)] Stopping FPM"
     service php-fpm stop
 
+    if [ -f "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok" ]; then
+        rm "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok"
+    fi
+
     echo "[$(date)] Exiting"
     exit
 }
@@ -28,18 +32,18 @@ clean_up() {
 
 echo "[$(date)] Fixing filesystem permissions..."
 
-ORIGPASSWD=$(cat /etc/passwd | grep "^${USERNAME}:")
-ORIG_UID=$(echo "$ORIGPASSWD" | cut -f3 -d:)
-ORIG_GID=$(echo "$ORIGPASSWD" | cut -f4 -d:)
-CONTAINER_USER_HOME=$(echo "$ORIGPASSWD" | cut -f6 -d:)
-CONTAINER_USER_UID=${CONTAINER_USER_UID:=$ORIG_UID}
-CONTAINER_USER_GID=${CONTAINER_USER_GID:=$ORIG_GID}
+ORIGPASSWD="$(grep "^${USERNAME}:" /etc/passwd)"
+ORIG_UID="$(echo "$ORIGPASSWD" | cut -f3 -d:)"
+ORIG_GID="$(echo "$ORIGPASSWD" | cut -f4 -d:)"
+CONTAINER_USER_HOME="$(echo "$ORIGPASSWD" | cut -f6 -d:)"
+CONTAINER_USER_UID="${CONTAINER_USER_UID:=$ORIG_UID}"
+CONTAINER_USER_GID="${CONTAINER_USER_GID:=$ORIG_GID}"
 
-if [ "$CONTAINER_USER_UID" != "$ORIG_UID" -o "$CONTAINER_USER_GID" != "$ORIG_GID" ]; then
+if [ "$CONTAINER_USER_UID" != "$ORIG_UID" ] || [ "$CONTAINER_USER_GID" != "$ORIG_GID" ]; then
     groupmod -g "$CONTAINER_USER_GID" "${USERNAME}"
     usermod -u "$CONTAINER_USER_UID" -g "$CONTAINER_USER_GID" "${USERNAME}"
 fi
-if [ "$(stat -c '%u' "${CONTAINER_USER_HOME}")" != "${CONTAINER_USER_UID}" -o "$(stat -c '%g' "${CONTAINER_USER_HOME}")" != "${CONTAINER_USER_GID}" ]; then
+if [ "$(stat -c '%u' "${CONTAINER_USER_HOME}")" != "${CONTAINER_USER_UID}" ] || [ "$(stat -c '%g' "${CONTAINER_USER_HOME}")" != "${CONTAINER_USER_GID}" ]; then
     chown "${CONTAINER_USER_UID}":"${CONTAINER_USER_GID}" "${CONTAINER_USER_HOME}"
     chown -R "${CONTAINER_USER_UID}":"${CONTAINER_USER_GID}" "${CONTAINER_USER_HOME}"/.*
     if [ -d /usr/local/php ]; then
@@ -62,12 +66,17 @@ sed -e "s?^group =.*?group = ${USERNAME}?g" --in-place "${FPMCONF}"
 sed -e "s?^listen.owner =.*?listen.owner = ${USERNAME}?g" --in-place "${FPMCONF}"
 sed -e "s?^listen.group =.*?listen.group = ${USERNAME}?g" --in-place "${FPMCONF}"
 
-echo "[$(date)] Running Composer..."
+if [ -f "${TESTS_ROOT_DIR}/composer.json" ]; then
+    echo "[$(date)] Running Composer..."
 
-# @todo if there is a composer.lock file present, there are chances it might be a leftover from when running the
-#       container using a different php version. We should then back it up / do some symlink magic to make sure that
-#       it matches the current php version and a hash of composer.json...
-su "${USERNAME}" -c "cd ${TESTS_ROOT_DIR} && composer install"
+    # @todo if there is a composer.lock file present, there are chances it might be a leftover from when running the
+    #       container using a different php version. We should then back it up / do some symlink magic to make sure that
+    #       it matches the current php version and a hash of composer.json...
+    su "${USERNAME}" -c "cd ${TESTS_ROOT_DIR} && composer install"
+else
+    # @todo should we exit?
+    echo "Missing file '${TESTS_ROOT_DIR}/composer.json' - was the container started without the correct mount?" >&2
+fi
 
 trap clean_up TERM
 

@@ -40,14 +40,15 @@ abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_ServerAwareTestCase
             curl_setopt($ch, CURLOPT_VERBOSE, 1);
         }
         $page = curl_exec($ch);
+        $info = curl_getinfo($ch);
         curl_close($ch);
 
-        $this->assertNotFalse($page);
+        $this->assertNotFalse($page, 'Curl request should not fail. Url: ' . @$info['url'] . ', Http code: ' . @$info['http_code']);
         if (!$emptyPageOk) {
-            $this->assertNotEquals('', $page);
+            $this->assertNotEquals('', $page, 'Retrieved web page should not be empty');
         }
-        $this->assertStringNotContainsStringIgnoringCase('Fatal error', $page);
-        $this->assertStringNotContainsStringIgnoringCase('Notice:', $page);
+        $this->assertStringNotContainsStringIgnoringCase('Fatal error', $page, 'Retrieved web page should not contain a fatal error string');
+        $this->assertStringNotContainsStringIgnoringCase('Notice:', $page, 'Retrieved web page should not contain a notice string');
 
         return $page;
     }
