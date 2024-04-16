@@ -33,7 +33,7 @@
 <p>XML-RPC is a format devised by <a href="http://www.userland.com">Userland Software</a> for achieving remote procedure
     call via XML using HTTP as the transport. XML-RPC has its own website, <a href="http://xmlrpc.com">http://xmlrpc.com</a></p>
 <p>Note that this is not <a href="http://xmlrpc-epi.sourceforge.net/">the library</a> which can be compiled as a
-    <a href="https://pecl.php.net/package/xmlrpc">php extension</a> and has been bundled with php from version 4.1 up to
+    <a href="https://pecl.php.net/package/xmlrpc">PHP extension</a> and has been bundled with PHP from version 4.1 up to
     version 7.4.<br>
     This is also not the same library as <a href="https://pear.php.net/package/XML_RPC/">the one</a> that is part of PEAR,
     either. They both share a common ancestry, since the PEAR version is a branch of the original phpxmlrpc library, later
@@ -42,14 +42,14 @@
 <h2><a id="features">Main Features</a></h2>
 <ul>
 <li>Support for creating both xml-rpc clients and servers</li>
-<li>Fully automated or fully manual, fine-grained encoding and decoding from php values to xml-rpc</li>
-<li>Support for UTF8, Latin-1 and ASCII character encodings. With the php mbstring extension enabled, even more character
+<li>Fully automated or fully manual, fine-grained encoding and decoding from PHP values to xml-rpc</li>
+<li>Support for UTF8, Latin-1 and ASCII character encodings. With the PHP mbstring extension enabled, even more character
     sets are supported</li>
 <li>Support for http features including compression of both requests and responses, cookies, proxies, basic and digest auth,
-    ntlm auth, https, http2, keepalives (some only with the php cURL extension)</li>
+    ntlm auth, https, http2, keepalives (some only with the PHP cURL extension)</li>
 <li>Support for `system.listMethods`, `system.methodHelp`, `system.multicall` and `system.getCapabilities` methods</li>
 <li>Support for the `&lt;NIL/&gt;` and `&lt;EX:NIL/&gt;` extensions to xml-rpc</li>
-<li>Possibility to register existing php function or class methods as webservices, extracting value-added information
+<li>Possibility to register existing PHP function or class methods as webservices, extracting value-added information
     from phpdoc comments, including code-generation capabilities</li>
 <li>Optional validation in the server of parameter types of incoming xml-rpc request</li>
 <li>Zero dependencies on 3rd party packages</li>
@@ -58,7 +58,7 @@
 <li>A package emulating the API of the native XML-RPC extension for PHP, built on this library, is available at
     <a href="https://github.com/gggeek/polyfill-xmlrpc">https://github.com/gggeek/polyfill-xmlrpc</a></li>
 <li>Other cool features are delivered with extra packages, such as an <a href="https://github.com/gggeek/phpxmlrpc-extras">
-    xml-rpc server</a> that automatically generates html documentation of exposed webservices, and a complete
+    xml-rpc server</a> that automatically generates html documentation of exposed webservices, and a (work-in-progress)
     <a href="https://github.com/gggeek/phpxmlrpc-jsonrpc">jsonrpc library</a>...</li>
 <li>Last but not least, a <a href="http://gggeek.github.io/jsxmlrpc/">Javascript version of the library</a> is available,
     which implements the same API, allowing to leverage acquired knowledge to easily build nodejs/browser clients</li>
@@ -68,12 +68,12 @@
 <p>The library has been designed with goals of flexibility and backward compatibility. As such, it supports a wide range
     of PHP installs. Note that not all features of the lib are available in every configuration.</p>
 <ul>
-<li>PHP 5.3.0 or later; 7.4 or later recommended</li>
-<li>the php "curl" extension is needed if you wish to use HTTPS, HTTP 1.1 or HTTP2 to communicate with remote servers or
+<li>PHP 5.4.0 or later; 7.4 or later recommended</li>
+<li>the PHP "curl" extension is needed if you wish to use HTTPS, HTTP 1.1 or HTTP2 to communicate with remote servers or
     to use NTLM/Digest authentication</li>
-<li>the php "mbstring" extension is needed to allow reception of requests/responses in character sets other than ASCII,
+<li>the PHP "mbstring" extension is needed to allow reception of requests/responses in character sets other than ASCII,
     Latin-1, UTF-8</li>
-<li>the php "xmlrpc" native extension is not required, but if it is installed, there will be no interference with the
+<li>the PHP "xmlrpc" native extension is not required, but if it is installed, there will be no interference with the
     operation of this library</li>
 </ul>
 
@@ -98,7 +98,7 @@ phpxmlrpc, is now available as a NodeJS package at <a href="https://www.npmjs.co
 <h4>29/11/2022</h4>
 <p>the xml-rpc debugger which was historically made available as part of this library, or as an online
 tool (currently at gggeek.altervista.org), is now also packaged as a Docker Container, making it easier to use by
-anyone who does not have a php installation set up. Available at <a href="https://github.com/gggeek/phpxmlrpc-debugger/pkgs/container/phpxmlrpc-debugger">https://github.com/gggeek/phpxmlrpc-debugger/</a></p>
+anyone who does not have a PHP installation set up. Available at <a href="https://github.com/gggeek/phpxmlrpc-debugger/pkgs/container/phpxmlrpc-debugger">https://github.com/gggeek/phpxmlrpc-debugger/</a></p>
 <p><a href="news.html">Older news</a> (up to December 2021)...</p>
 
 <h2><a id="documentation">Documentation</a></h2>
@@ -251,7 +251,7 @@ All the contributors listed on <a href="https://github.com/gggeek/phpxmlrpc/grap
 <!--<a href="https://validator.w3.org/nu/?doc=http%3A%2F%2Fgggeek.github.io%2Fphpxmlrpc%2F"><img
     src="https://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
     alt="Valid HTML 5"></a><br>-->
-Page last updated: 2024/4/14
+Page last updated: 2024/4/15
 
 </div>
 </body>
