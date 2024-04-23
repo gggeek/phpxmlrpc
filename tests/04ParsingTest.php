@@ -308,6 +308,28 @@ class ParsingTest extends PhpXmlRpc_LoggerAwareTestCase
 </methodResponse>';
         $r = $m->parseResponse($f);
         $this->assertEquals(2, $r->faultCode());
+
+        // having both 'params' and 'fault'
+        $f = '<?xml version="1.0"?>
+<methodResponse>
+<params>
+<param><value><string>system.methodHelp</string></value></param>
+</params>
+<fault><value><struct>
+<member><name>faultCode</name><value><int>888</int></value></member>
+<member><name>faultString</name><value><string>yolo</string></value></member>
+</struct></value></fault>
+</methodResponse>';
+        $r = $m->parseResponse($f);
+        $this->assertEquals(2, $r->faultCode());
+    }
+
+    public function testBuggyXML()
+    {
+        $m = $this->newRequest('dummy');
+        $r = $m->parseResponse("<\000\000\000\au\006");
+        $this->assertEquals(2, $r->faultCode());
+        //$this->assertStringContainsString('XML error', $r->faultString());
     }
 
     public function testBuggyHttp()

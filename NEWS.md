@@ -1,3 +1,11 @@
+## XML-RPC for PHP version 4.10.3 - 2024/04/24
+
+* fixed: avoid emitting warnings when parsing some classes of malformed XML (issue #116)
+
+* fixed: the library will now return a Fault `Response` object with error code 2 whenever parsing some xml responses
+  which do not conform to the specification, namely those having both `fault` and `params` elements inside `methodResponse`
+
+
 ## XML-RPC for PHP version 4.10.2 - 2024/04/14
 
 * fixed: allow `Server` subclasses to use their own Parser to determine the Request's charset
