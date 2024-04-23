@@ -119,7 +119,7 @@ class PhpXmlRpc
     /**
      * @var string
      */
-    public static $xmlrpcVersion = "4.10.2";
+    public static $xmlrpcVersion = "4.10.3";
 
     /**
      * @var int

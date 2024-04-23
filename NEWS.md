@@ -19,7 +19,7 @@
   - a `methodResponse` element without either `fault` or `params`
   - a `methodResponse` element with a `params` child which does not have a single `param`
 
-* improved: test on php 8.3
+* improved: test on PHP 8.3 as part of CI
 
 
 ## XML-RPC for PHP version 4.10.1 - 2023/02/22
