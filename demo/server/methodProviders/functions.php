@@ -309,6 +309,14 @@ return array(
         "docstring" => exampleMethods::$bitflipper_doc,
     ),
 
+    // same as examples_getStateName, but with no dot - so that it is easier to map this into a method call
+    // by clients which map f.e. xmlrpc method names into php object method names
+    "examples_getStateName" => array(
+        "function" => array("exampleMethods", "findState"),
+        "signature" => exampleMethods::$findstate_sig,
+        "docstring" => exampleMethods::$findstate_doc,
+    ),
+
     // left in as an example, but disabled by default, to avoid this being abused if left on an open server
     /*"mail.send" => array(
         "function" => array("exampleMethods", "mailSend"),
