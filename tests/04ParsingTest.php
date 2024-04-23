@@ -218,6 +218,17 @@ class ParsingTest extends PhpXmlRpc_LoggerAwareTestCase
     public function testBrokenRequests()
     {
         $s = new xmlrpc_server();
+
+        // omitting the 'methodName' tag: not tolerated by the lib anymore
+        $f = '<?xml version="1.0"?>
+<methodCall>
+<params>
+<value><string>system.methodHelp</string></value>
+</params>
+</methodCall>';
+        $r = $s->parserequest($f);
+        $this->assertEquals(15, $r->faultCode());
+
         // omitting the 'params' tag: not tolerated by the lib anymore
         $f = '<?xml version="1.0"?>
 <methodCall>
@@ -228,6 +239,7 @@ class ParsingTest extends PhpXmlRpc_LoggerAwareTestCase
 </methodCall>';
         $r = $s->parserequest($f);
         $this->assertEquals(15, $r->faultCode());
+
         // omitting a 'param' tag
         $f = '<?xml version="1.0"?>
 <methodCall>
@@ -238,6 +250,7 @@ class ParsingTest extends PhpXmlRpc_LoggerAwareTestCase
 </methodCall>';
         $r = $s->parserequest($f);
         $this->assertEquals(15, $r->faultCode());
+
         // omitting a 'value' tag
         $f = '<?xml version="1.0"?>
 <methodCall>
@@ -253,7 +266,13 @@ class ParsingTest extends PhpXmlRpc_LoggerAwareTestCase
     public function testBrokenResponses()
     {
         $m = $this->newRequest('dummy');
+
         // omitting the 'params' tag: no more tolerated by the lib...
+        $f = '<?xml version="1.0"?>
+<methodResponse>
+</methodResponse>';
+        $r = $m->parseResponse($f);
+        $this->assertEquals(2, $r->faultCode());
         $f = '<?xml version="1.0"?>
 <methodResponse>
 <param>
@@ -262,7 +281,15 @@ class ParsingTest extends PhpXmlRpc_LoggerAwareTestCase
 </methodResponse>';
         $r = $m->parseResponse($f);
         $this->assertEquals(2, $r->faultCode());
+
         // omitting the 'param' tag: no more tolerated by the lib...
+        $f = '<?xml version="1.0"?>
+<methodResponse>
+<params>
+</params>
+</methodResponse>';
+        $r = $m->parseResponse($f);
+        $this->assertEquals(2, $r->faultCode());
         $f = '<?xml version="1.0"?>
 <methodResponse>
 <params>
@@ -271,6 +298,7 @@ class ParsingTest extends PhpXmlRpc_LoggerAwareTestCase
 </methodResponse>';
         $r = $m->parseResponse($f);
         $this->assertEquals(2, $r->faultCode());
+
         // omitting a 'value' tag: KO
         $f = '<?xml version="1.0"?>
 <methodResponse>
