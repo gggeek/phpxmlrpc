@@ -45,7 +45,7 @@ class Server
     /**
      * @var string
      * Defines how functions in $dmap will be invoked: either using an xml-rpc Request object or plain php values.
-     * Valid strings are 'xmlrpcvals', 'phpvals' or 'epivals' (only for use by polyfill-xmlrpc).
+     * Valid strings are 'xmlrpcvals', 'phpvals' or 'epivals' (the latter only for use by polyfill-xmlrpc).
      *
      * @todo create class constants for these
      */
@@ -163,7 +163,7 @@ class Server
      *                             - docstring (optional)
      *                             - signature (array, optional)
      *                             - signature_docs (array, optional)
-     *                             - parameters_type (string, optional)
+     *                             - parameters_type (string, optional). Valid values: 'phpvals', 'xmlrpcvals'
      *                             - exception_handling (int, optional)
      * @param boolean $serviceNow set to false in order to prevent the server from running upon construction
      */
@@ -710,6 +710,9 @@ class Server
 
         $xmlRpcParser = $this->getParser();
         try {
+            // NB: during parsing, the actual type of php values built will be automatically switched from
+            // $this->functions_parameters_type to the one defined in the method signature, if defined there. This
+            // happens via the parser making a call to $this->methodNameCallback as soon as it finds the desired method
             $_xh = $xmlRpcParser->parse($data, $this->functions_parameters_type, XMLParser::ACCEPT_REQUEST, $options);
             // BC
             if (!is_array($_xh)) {

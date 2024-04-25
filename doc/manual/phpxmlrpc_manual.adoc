@@ -688,6 +688,10 @@ $srv = new Server(array(
 ));
 ----
 
+In case a php method that you want to expose has `void` return type, given the fact that there is no such thing as "no
+return value" in the XML-RPC specification, the best approximation is to also use the class property `Value::$xmlrpcValue` to
+indicate the return type in the method signature.
+
 ==== Method handler functions [[method_handlers]]
 
 The same php function can be registered as handler of multiple xml-rpc methods.
@@ -718,9 +722,14 @@ Here is a more detailed example of what a handler function "foo" might do:
 [source, php]
 ----
 use PhpXmlRpc\PhpXmlRpc;
+use PhpXmlRpc\Request;
 use PhpXmlRpc\Response;
 use PhpXmlRpc\Value;
 
+/**
+ * @param Request $xmlrpcreq
+ * @return Response
+ */
 function foo ($xmlrpcreq)
 {
     // retrieve method name
@@ -785,12 +794,18 @@ $srv = new Server(
             "signature" => array(
                 array(Value::$xmlrpcStruct, Value::$xmlrpcInt),
                 array(Value::$xmlrpcStruct, Value::$xmlrpcInt, $xmlrpcString)
-            )
+            ),
+            "parameters_type" => "phpvals"
         )
     ),
     false
 );
-$srv->setOption(Server::OPT_FUNCTIONS_PARAMETERS_TYPE, 'phpvals');
+
+// The line below is an alternative to specifying `parameters_type` for every method in the dispatch map. It applies
+// to all php functions registered with the server.
+// If both the server option and the `parameters_type` are set, the latter takes precedence.
+//$srv->setOption(Server::OPT_FUNCTIONS_PARAMETERS_TYPE, 'phpvals');
+
 $srv->service();
 ----
 
