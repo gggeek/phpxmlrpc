@@ -377,7 +377,7 @@ class Client
         //$this->accepted_charset_encodings = $ch->knownCharsets();
 
         // initialize user_agent string
-        $this->user_agent = PhpXmlRpc::$xmlrpcName . ' ' . PhpXmlRpc::$xmlrpcVersion;
+        $this->user_agent = PhpXmlRpc::$xmlrpcName . '/' . PhpXmlRpc::$xmlrpcVersion;
     }
 
     /**
