@@ -25,7 +25,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.3</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.10.4</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -54,7 +54,7 @@
     Menu
 </label>
 <aside class="phpdocumentor-column -three phpdocumentor-sidebar">
-                    <section class="phpdocumentor-sidebar__category">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="namespaces/phpxmlrpc.html" class="">PhpXmlRpc</a>
@@ -75,7 +75,7 @@
             </ul>
 
                         </section>
-                <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="packages/PHPXMLRPC.html" class="">PHPXMLRPC</a>
@@ -83,14 +83,14 @@
 
                         </section>
             
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
@@ -116,7 +116,7 @@
     
     
             <span class="phpdocumentor-element__extends">
-            Uses
+            uses
                             <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html"><abbr title="\PhpXmlRpc\Traits\CharsetEncoderAware">CharsetEncoderAware</abbr></a>,                             <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html"><abbr title="\PhpXmlRpc\Traits\DeprecationLogger">DeprecationLogger</abbr></a>,                             <a href="classes/PhpXmlRpc-Traits-PayloadBearer.html"><abbr title="\PhpXmlRpc\Traits\PayloadBearer">PayloadBearer</abbr></a>                    </span>
     </h2>
 
@@ -134,9 +134,28 @@
 
             <p class="phpdocumentor-summary">This class provides the representation of the response of an XML-RPC server.</p>
 
+
     <section class="phpdocumentor-description"><p>Server-side, a server method handler will construct a Response and pass it as its return value.
 An identical Response object will be returned by the result of an invocation of the send() method of the Client class.</p>
 </section>
+
+
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/PhpXmlRpc-Response.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">@property</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>array _cookies deprecated. Access via httpResponse()['cookies'], set via $httpResponse['cookies']</p>
+</section>
+
+                                    </dd>
+                                            </dl>
 
 
 
@@ -163,97 +182,97 @@ An identical Response object will be returned by the result of an invocation of 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PhpXmlRpc-Response.html#property_content_type">$content_type</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_content_type">$content_type</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PhpXmlRpc-Response.html#property_errno">$errno</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_errno">$errno</a>
     <span>
                         &nbsp;: int            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PhpXmlRpc-Response.html#property_errstr">$errstr</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_errstr">$errstr</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PhpXmlRpc-Response.html#property_hdrs">$hdrs</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_hdrs">$hdrs</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PhpXmlRpc-Response.html#property_payload">$payload</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_payload">$payload</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PhpXmlRpc-Response.html#property_raw_data">$raw_data</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_raw_data">$raw_data</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PhpXmlRpc-Response.html#property_val">$val</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_val">$val</a>
     <span>
                         &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|string|mixed            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PhpXmlRpc-Response.html#property_valtyp">$valtyp</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_valtyp">$valtyp</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#property_charsetEncoder">$charsetEncoder</a>
+    <a class="" href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#property_charsetEncoder">$charsetEncoder</a>
     <span>
                         &nbsp;: mixed            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#property_content_type">$content_type</a>
+    <a class="" href="classes/PhpXmlRpc-Traits-PayloadBearer.html#property_content_type">$content_type</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Response.html#property_errno">$errno</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_errno">$errno</a>
     <span>
                         &nbsp;: int            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Response.html#property_errstr">$errstr</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_errstr">$errstr</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Response.html#property_httpResponse">$httpResponse</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_httpResponse">$httpResponse</a>
     <span>
                         &nbsp;: mixed            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#property_payload">$payload</a>
+    <a class="" href="classes/PhpXmlRpc-Traits-PayloadBearer.html#property_payload">$payload</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Response.html#property_val">$val</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_val">$val</a>
     <span>
                         &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|string|mixed            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpXmlRpc-Response.html#property_valtyp">$valtyp</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#property_valtyp">$valtyp</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
@@ -267,96 +286,96 @@ An identical Response object will be returned by the result of an invocation of 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method___construct">__construct()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method___get">__get()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method___get">__get()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method___isset">__isset()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method___isset">__isset()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method___set">__set()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method___set">__set()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method___unset">__unset()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method___unset">__unset()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method_cookies">cookies()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method_cookies">cookies()</a>
     <span>
                                 &nbsp;: array&lt;string|int, array&lt;string|int, mixed&gt;&gt;    </span>
 </dt>
 <dd>Returns an array with the cookies received from the server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method_faultCode">faultCode()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method_faultCode">faultCode()</a>
     <span>
                                 &nbsp;: int    </span>
 </dt>
 <dd>Returns the error code of the response.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method_faultString">faultString()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method_faultString">faultString()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 <dd>Returns the error code of the response.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_getCharsetEncoder">getCharsetEncoder()</a>
+    <a class="" href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_getCharsetEncoder">getCharsetEncoder()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#method_getContentType">getContentType()</a>
+    <a class="" href="classes/PhpXmlRpc-Traits-PayloadBearer.html#method_getContentType">getContentType()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#method_getPayload">getPayload()</a>
+    <a class="" href="classes/PhpXmlRpc-Traits-PayloadBearer.html#method_getPayload">getPayload()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method_httpResponse">httpResponse()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method_httpResponse">httpResponse()</a>
     <span>
                                 &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd>Returns an array with info about the http response received from the server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method_serialize">serialize()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method_serialize">serialize()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 <dd>Returns xml representation of the response, XML prologue _not_ included. Sets `payload` and `content_type` properties</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_setCharsetEncoder">setCharsetEncoder()</a>
+    <a class="" href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_setCharsetEncoder">setCharsetEncoder()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method_value">value()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method_value">value()</a>
     <span>
                                 &nbsp;: <a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|string|mixed    </span>
 </dt>
@@ -364,31 +383,30 @@ An identical Response object will be returned by the result of an invocation of 
 method should not be used (it may not even be an object).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method_valueType">valueType()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method_valueType">valueType()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpXmlRpc-Response.html#method_xml_header">xml_header()</a>
+    <a class="" href="classes/PhpXmlRpc-Response.html#method_xml_header">xml_header()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecation">logDeprecation()</a>
+    <a class="" href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecation">logDeprecation()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecationUnlessCalledBy">logDeprecationUnlessCalledBy()</a>
+    <a class="" href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecationUnlessCalledBy">logDeprecationUnlessCalledBy()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
 
     </dl>
-
 
 
 
@@ -423,6 +441,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -433,6 +452,8 @@ method should not be used (it may not even be an object).</dd>
 </section>
 
     
+    
+
     
 
 </article>
@@ -458,6 +479,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -468,6 +490,8 @@ method should not be used (it may not even be an object).</dd>
 </section>
 
     
+    
+
     
 
 </article>
@@ -493,6 +517,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -503,6 +528,8 @@ method should not be used (it may not even be an object).</dd>
 </section>
 
     
+    
+
     
 
 </article>
@@ -528,6 +555,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
@@ -538,6 +566,8 @@ method should not be used (it may not even be an object).</dd>
 </section>
 
     
+    
+
     
 
 </article>
@@ -563,6 +593,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -573,6 +604,8 @@ method should not be used (it may not even be an object).</dd>
 </section>
 
     
+    
+
     
 
 </article>
@@ -598,6 +631,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -608,6 +642,8 @@ method should not be used (it may not even be an object).</dd>
 </section>
 
     
+    
+
     
 
 </article>
@@ -633,6 +669,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|string|mixed</span>
@@ -643,6 +680,8 @@ method should not be used (it may not even be an object).</dd>
 </section>
 
     
+    
+
     
 
 </article>
@@ -668,6 +707,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -678,6 +718,8 @@ method should not be used (it may not even be an object).</dd>
 </section>
 
     
+    
+
     
 
 </article>
@@ -703,6 +745,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
@@ -711,6 +754,8 @@ method should not be used (it may not even be an object).</dd>
 
     
     
+    
+
     
 
 </article>
@@ -736,6 +781,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -744,6 +790,8 @@ method should not be used (it may not even be an object).</dd>
 
     
     
+    
+
     
 
 </article>
@@ -769,6 +817,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -777,6 +826,8 @@ method should not be used (it may not even be an object).</dd>
 
     
     
+    
+
     
 
 </article>
@@ -802,6 +853,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -810,6 +862,8 @@ method should not be used (it may not even be an object).</dd>
 
     
     
+    
+
     
 
 </article>
@@ -835,6 +889,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -843,6 +898,8 @@ method should not be used (it may not even be an object).</dd>
 
     
     
+    
+
     
 
 </article>
@@ -868,6 +925,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -876,6 +934,8 @@ method should not be used (it may not even be an object).</dd>
 
     
     
+    
+
     
 
 </article>
@@ -901,6 +961,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type"><a href="classes/PhpXmlRpc-Value.html"><abbr title="\PhpXmlRpc\Value">Value</abbr></a>|string|mixed</span>
@@ -909,6 +970,8 @@ method should not be used (it may not even be an object).</dd>
 
     
     
+    
+
     
 
 </article>
@@ -934,6 +997,7 @@ method should not be used (it may not even be an object).</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -942,6 +1006,8 @@ method should not be used (it may not even be an object).</dd>
 
     
     
+    
+
     
 
 </article>
@@ -978,6 +1044,7 @@ method should not be used (it may not even be an object).</dd>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -1054,6 +1121,8 @@ xml chunk, depending on usage of Client::send() inside which the constructor is 
                                             </dl>
 
     
+
+    
 </article>
                     <article
         class="phpdocumentor-element
@@ -1081,6 +1150,7 @@ xml chunk, depending on usage of Client::send() inside which the constructor is 
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1091,6 +1161,8 @@ xml chunk, depending on usage of Client::send() inside which the constructor is 
                 
             </dd>
             </dl>
+
+    
 
     
 
@@ -1122,6 +1194,7 @@ xml chunk, depending on usage of Client::send() inside which the constructor is 
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1132,6 +1205,8 @@ xml chunk, depending on usage of Client::send() inside which the constructor is 
                 
             </dd>
             </dl>
+
+    
 
     
 
@@ -1163,6 +1238,7 @@ xml chunk, depending on usage of Client::send() inside which the constructor is 
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1180,6 +1256,8 @@ xml chunk, depending on usage of Client::send() inside which the constructor is 
                 
             </dd>
             </dl>
+
+    
 
     
 
@@ -1211,6 +1289,7 @@ xml chunk, depending on usage of Client::send() inside which the constructor is 
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1221,6 +1300,8 @@ xml chunk, depending on usage of Client::send() inside which the constructor is 
                 
             </dd>
             </dl>
+
+    
 
     
 
@@ -1252,6 +1333,7 @@ xml chunk, depending on usage of Client::send() inside which the constructor is 
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Array has the form: $cookiename =&gt; array ('value' =&gt; $val, $attr1 =&gt; $val1, $attr2 =&gt; $val2, ...)
 with attributes being e.g. 'expires', 'path', domain'.
 NB: cookies sent as 'expired' by the server (i.e. with an expiry date in the past) are still present in the array.
@@ -1261,6 +1343,8 @@ The values are filled in at constructor time, and might not be set for specific 
 </section>
 
     
+    
+
     
 
             <section>
@@ -1302,6 +1386,9 @@ The values are filled in at constructor time, and might not be set for specific 
     
     
     
+    
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -1342,6 +1429,9 @@ The values are filled in at constructor time, and might not be set for specific 
     
     
     
+    
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -1381,6 +1471,9 @@ The values are filled in at constructor time, and might not be set for specific 
     
     
     
+    
+
+    
 
     
 </article>
@@ -1411,6 +1504,9 @@ The values are filled in at constructor time, and might not be set for specific 
         </div>
     
     
+    
+    
+
     
 
             <section>
@@ -1447,6 +1543,9 @@ The values are filled in at constructor time, and might not be set for specific 
     
     
     
+    
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -1480,10 +1579,13 @@ The values are filled in at constructor time, and might not be set for specific 
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>The values are filled in at constructor time, and might not be set for specific debug values used.</p>
 </section>
 
     
+    
+
     
 
             <section>
@@ -1523,6 +1625,7 @@ The values are filled in at constructor time, and might not be set for specific 
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1555,6 +1658,8 @@ The values are filled in at constructor time, and might not be set for specific 
                                     </dd>
                                             </dl>
 
+    
+
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">string</span>
@@ -1586,21 +1691,24 @@ The values are filled in at constructor time, and might not be set for specific 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setCharsetEncoder</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetEncoder</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setCharsetEncoder</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$charsetEncoder</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$charsetEncoder</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href=""></a></span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
             </dd>
             </dl>
+
+    
 
     
 
@@ -1635,6 +1743,9 @@ method should not be used (it may not even be an object).</p>
         </div>
     
     
+    
+    
+
     
 
             <section>
@@ -1676,6 +1787,9 @@ depending on the convention adopted when creating the Response</p>
     
     
     
+    
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -1709,6 +1823,7 @@ depending on the convention adopted when creating the Response</p>
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1719,6 +1834,8 @@ depending on the convention adopted when creating the Response</p>
                 
             </dd>
             </dl>
+
+    
 
     
 
@@ -1754,6 +1871,7 @@ depending on the convention adopted when creating the Response</p>
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1764,6 +1882,8 @@ depending on the convention adopted when creating the Response</p>
                 
             </dd>
             </dl>
+
+    
 
     
 
@@ -1795,6 +1915,7 @@ depending on the convention adopted when creating the Response</p>
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1807,6 +1928,8 @@ depending on the convention adopted when creating the Response</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -1925,47 +2048,47 @@ depending on the convention adopted when creating the Response</p>
                             <li class="phpdocumentor-on-this-page-section__title">Properties</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_content_type">$content_type<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_errno">$errno<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_errstr">$errstr<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_hdrs">$hdrs<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_payload">$payload<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_raw_data">$raw_data<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_val">$val<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_valtyp">$valtyp<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#property_charsetEncoder">$charsetEncoder<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#property_content_type">$content_type<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_errno">$errno<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_errstr">$errstr<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_httpResponse">$httpResponse<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#property_payload">$payload<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_val">$val<a href="classes/PhpXmlRpc-Response.html"></li>
-                                                    <li><a href="classes/PhpXmlRpc-Response.html#property_valtyp">$valtyp<a href="classes/PhpXmlRpc-Response.html"></li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_content_type">$content_type</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_errno">$errno</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_errstr">$errstr</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_hdrs">$hdrs</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_payload">$payload</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_raw_data">$raw_data</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_val">$val</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_valtyp">$valtyp</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#property_charsetEncoder">$charsetEncoder</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#property_content_type">$content_type</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_errno">$errno</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_errstr">$errstr</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_httpResponse">$httpResponse</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#property_payload">$payload</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_val">$val</li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Response.html#property_valtyp">$valtyp</li>
                                             </ul>
                 </li>
             
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method___construct">__construct()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method___get">__get()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method___isset">__isset()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method___set">__set()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method___unset">__unset()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method_cookies">cookies()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method_faultCode">faultCode()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method_faultString">faultString()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_getCharsetEncoder">getCharsetEncoder()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#method_getContentType">getContentType()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#method_getPayload">getPayload()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method_httpResponse">httpResponse()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method_serialize">serialize()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_setCharsetEncoder">setCharsetEncoder()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method_value">value()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method_valueType">valueType()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Response.html#method_xml_header">xml_header()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecation">logDeprecation()</a></li>
-                                            <li><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecationUnlessCalledBy">logDeprecationUnlessCalledBy()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method___construct">__construct()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method___get">__get()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method___isset">__isset()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method___set">__set()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method___unset">__unset()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method_cookies">cookies()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method_faultCode">faultCode()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method_faultString">faultString()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_getCharsetEncoder">getCharsetEncoder()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#method_getContentType">getContentType()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Traits-PayloadBearer.html#method_getPayload">getPayload()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method_httpResponse">httpResponse()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method_serialize">serialize()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Traits-CharsetEncoderAware.html#method_setCharsetEncoder">setCharsetEncoder()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method_value">value()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method_valueType">valueType()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Response.html#method_xml_header">xml_header()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecation">logDeprecation()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecationUnlessCalledBy">logDeprecationUnlessCalledBy()</a></li>
                                     </ul>
             </li>
                     </ul>
