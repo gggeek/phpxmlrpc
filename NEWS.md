@@ -1,3 +1,8 @@
+## XML-RPC for PHP version 4.10.4 - 2024/06/27
+
+* fixed: Response returned from the library in case of HttpException did not have set the correct `status_code` member var
+
+
 ## XML-RPC for PHP version 4.10.3 - 2024/04/24
 
 * fixed: avoid emitting warnings when parsing some classes of malformed XML (issue #116)
