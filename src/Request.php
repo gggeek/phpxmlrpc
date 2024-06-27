@@ -247,7 +247,7 @@ class Request
             } catch (HttpException $e) {
                 // failed processing of HTTP response headers
                 // save into response obj the full payload received, for debugging
-                return new Response(0, $e->getCode(), $e->getMessage(), '', array('raw_data' => $data, 'status_code', $e->statusCode()));
+                return new Response(0, $e->getCode(), $e->getMessage(), '', array('raw_data' => $data, 'status_code' => $e->statusCode()));
             } catch(\Exception $e) {
                 return new Response(0, $e->getCode(), $e->getMessage(), '', array('raw_data' => $data));
             }
