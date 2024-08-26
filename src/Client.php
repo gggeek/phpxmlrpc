@@ -259,6 +259,13 @@ class Client
     protected $user_agent;
 
     /**
+     * Additional headers to be included in the requests.
+     * 
+     * @var string[]
+     */
+    protected $extra_headers = array();
+
+    /**
      * CURL handle: used for keep-alive
      * @internal
      */
@@ -317,8 +324,9 @@ class Client
      *                       for http/2 without tls. Note that 'h2c' will not use the h2c 'upgrade' method, and be
      *                       thus incompatible with any server/proxy not supporting http/2. This is because POST
      *                       request are not compatible with h2c upgrade.
+     * @param string[] $extra_headers Additional headers to be included in the requests.
      */
-    public function __construct($path, $server = '', $port = '', $method = '')
+    public function __construct($path, $server = '', $port = '', $method = '', array $extra_headers = array())
     {
         // allow user to specify all params in $path
         if ($server == '' && $port == '' && $method == '') {
@@ -378,6 +386,8 @@ class Client
 
         // initialize user_agent string
         $this->user_agent = PhpXmlRpc::$xmlrpcName . ' ' . PhpXmlRpc::$xmlrpcVersion;
+
+        $this->extra_headers = $extra_headers;
     }
 
     /**
@@ -765,6 +775,30 @@ class Client
         } else {
             return $url . ':' . $this->port . $this->path;
         }
+    }
+
+    /**
+     * Get additional headers to be included in the requests.
+     * 
+     * @return string[]
+     */
+    public function getExtraHeaders()
+    {
+        return $this->extra_headers;
+    }
+
+    /**
+     * Set additional headers to be included in the requests.
+     * 
+     * @param string[] $value
+     *
+     * @return $this
+     */
+    public function setExtraHeaders(array $value)
+    {
+        $this->extra_headers = $value;
+
+        return $this;
     }
 
     /**
@@ -1338,6 +1372,10 @@ class Client
         // request compression header
         if ($encodingHdr) {
             $headers[] = $encodingHdr;
+        }
+
+        if ($this->extra_headers !== array()) {
+            $headers = array_merge($headers, $this->extra_headers);
         }
 
         // Fix the HTTP/1.1 417 Expectation Failed Bug (curl by default adds a 'Expect: 100-continue' header when POST
