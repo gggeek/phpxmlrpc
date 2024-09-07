@@ -261,7 +261,7 @@ class Client
 
     /**
      * Additional headers to be included in the requests.
-     * 
+     *
      * @var string[]
      */
     protected $extra_headers = array();
@@ -1009,7 +1009,7 @@ class Client
         }
 
         $extraHeaders = '';
-        if (!empty($this->extra_headers) && is_array($this->extra_headers)) {
+        if (is_array($this->extra_headers) && $this->extra_headers) {
             $extraHeaders = implode("\r\n", $this->extra_headers) . "\r\n";
         }
 
@@ -1029,9 +1029,9 @@ class Client
             $encodingHdr .
             'Accept-Charset: ' . implode(',', $opts['accepted_charset_encodings']) . "\r\n" .
             $cookieHeader .
+            'Content-Type: ' . $req->getContentType() . "\r\n" .
             $extraHeaders .
-            'Content-Type: ' . $req->getContentType() . "\r\nContent-Length: " .
-            strlen($payload) . "\r\n\r\n" .
+            'Content-Length: ' . strlen($payload) . "\r\n\r\n" .
             $payload;
 
         if ($opts['debug'] > 1) {
@@ -1355,7 +1355,7 @@ class Client
             $headers[] = $encodingHdr;
         }
 
-        if (!empty($this->extra_headers) && is_array($this->extra_headers)) {
+        if (is_array($this->extra_headers) && $this->extra_headers) {
             $headers = array_merge($headers, $this->extra_headers);
         }
 

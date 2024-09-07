@@ -17,22 +17,41 @@ $getallheaders_sig = array(array(Value::$xmlrpcStruct));
 $getallheaders_doc = 'Returns a struct containing all the HTTP headers received with the request. Provides limited functionality with IIS';
 function getAllHeaders_xmlrpc($req)
 {
-    $encoder = new Encoder();
-
     if (function_exists('getallheaders')) {
-        return new Response($encoder->encode(getallheaders()));
+        $headers = getallheaders();
     } else {
+        // poor man's version of getallheaders. Thanks ralouphie/getallheaders
         $headers = array();
-        // poor man's version of getallheaders
-        foreach ($_SERVER as $key => $val) {
-            if (strpos($key, 'HTTP_') === 0) {
-                $key = ucfirst(str_replace('_', '-', strtolower(substr($key, 5))));
-                $headers[$key] = $val;
+        $copy_server = array(
+            'CONTENT_TYPE'   => 'Content-Type',
+            'CONTENT_LENGTH' => 'Content-Length',
+            'CONTENT_MD5'    => 'Content-Md5',
+        );
+        foreach ($_SERVER as $key => $value) {
+            if (substr($key, 0, 5) === 'HTTP_') {
+                $key = substr($key, 5);
+                if (!isset($copy_server[$key]) || !isset($_SERVER[$key])) {
+                    $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
+                    $headers[$key] = $value;
+                }
+            } elseif (isset($copy_server[$key])) {
+                $headers[$copy_server[$key]] = $value;
             }
         }
-
-        return new Response($encoder->encode($headers));
+        if (!isset($headers['Authorization'])) {
+            if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+                $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+            } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
+                $basic_pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
+                $headers['Authorization'] = 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
+            } elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
+                $headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
+            }
+        }
     }
+
+    $encoder = new Encoder();
+    return new Response($encoder->encode($headers));
 }
 
 // used to test mixed-convention calling

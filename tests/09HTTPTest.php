@@ -530,6 +530,15 @@ class HTTPTest extends ServerTest
         $this->$method();
     }
 
+    public function testCustomHeaders()
+    {
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_HEADERS, array('X-PXR-Test: yes'));
+
+        $r = new \PhpXmlRpc\Request('tests.getallheaders');
+        $v = $this->send($r);
+        $this->assertArrayHasKey('X-Pxr-Test', $v);
+    }
+
     /**
      * @param \PhpXmlRpc\Response $r
      * @return void

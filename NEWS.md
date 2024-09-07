@@ -2,6 +2,8 @@
 
 * improved: compatibility with not-yet-released PHP version 8.4
 
+* improved: added new option `Client::OPT_EXTRA_HEADERS`, useful to set custom HTTP headers
+
 
 ## XML-RPC for PHP version 4.10.4 - 2024/06/27
 
