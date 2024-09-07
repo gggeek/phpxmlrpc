@@ -82,4 +82,24 @@ abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LoggerAwareTestCa
         $this->baseUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|\?.+|', '', $this->args['HTTPURI']);
         $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|/tests/index\.php(\?.*)?|', '/tests/phpunit_coverage.php', $this->args['HTTPURI']);
     }
+
+    protected function getClient($customPath)
+    {
+        $server = explode(':', $this->args['HTTPSERVER']);
+        if (count($server) > 1) {
+            $client = new xmlrpc_client($this->args['HTTPURI'], $server[0], $server[1]);
+        } else {
+            $client = new xmlrpc_client($this->args['HTTPURI'], $this->args['HTTPSERVER']);
+        }
+
+        $client->setDebug($this->args['DEBUG']);
+
+        $client->setCookie('PHPUNIT_RANDOM_TEST_ID', static::$randId);
+
+        if ($this->collectCodeCoverageInformation) {
+            $client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);
+        }
+
+        return $client;
+    }
 }

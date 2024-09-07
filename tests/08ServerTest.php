@@ -44,22 +44,10 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
     {
         parent::set_up();
 
-        $server = explode(':', $this->args['HTTPSERVER']);
-        if (count($server) > 1) {
-            $this->client = new xmlrpc_client($this->args['HTTPURI'], $server[0], $server[1]);
-        } else {
-            $this->client = new xmlrpc_client($this->args['HTTPURI'], $this->args['HTTPSERVER']);
-        }
+        $this->client = $this->getClient();
 
-        $this->client->setDebug($this->args['DEBUG']);
         $this->client->request_compression = $this->request_compression;
         $this->client->accepted_compression = $this->accepted_compression;
-
-        $this->client->setCookie('PHPUNIT_RANDOM_TEST_ID', static::$randId);
-
-        if ($this->collectCodeCoverageInformation) {
-            $this->client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);
-        }
     }
 
     /**

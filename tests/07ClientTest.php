@@ -14,12 +14,13 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
     {
         parent::set_up();
 
-        $this->client = new xmlrpc_client('/NOTEXIST.php', $this->args['HTTPSERVER'], 80);
-        $this->client->setDebug($this->args['DEBUG']);
+        $this->client = $this->getClient();
     }
 
     public function test404()
     {
+        $this->client->path = '/NOTEXIST.php';
+
         $m = new xmlrpcmsg('examples.echo', array(
             new xmlrpcval('hello', 'string'),
         ));
@@ -29,6 +30,8 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
 
     public function test404Interop()
     {
+        $this->client->path = '/NOTEXIST.php';
+
         $m = new xmlrpcmsg('examples.echo', array(
             new xmlrpcval('hello', 'string'),
         ));
@@ -53,14 +56,14 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
 
     public function testSrvNotFound()
     {
-        $m = new xmlrpcmsg('examples.echo', array(
-            new xmlrpcval('hello', 'string'),
-        ));
         $this->client->server .= 'XXX';
         $dnsinfo = @dns_get_record($this->client->server);
         if ($dnsinfo) {
             $this->markTestSkipped('Seems like there is a catchall DNS in effect: host ' . $this->client->server . ' found');
         } else {
+            $m = new xmlrpcmsg('examples.echo', array(
+                new xmlrpcval('hello', 'string'),
+            ));
             $r = $this->client->send($m, 5);
             // make sure there's no freaking catchall DNS in effect
             $this->assertEquals(5, $r->faultCode());
@@ -90,15 +93,29 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
             $this->client->port = $server[1];
         }
         $this->client->server = $server[0];
-        $this->client->path = $this->args['HTTPURI'];
-        $this->client->setCookie('PHPUNIT_RANDOM_TEST_ID', static::$randId);
+        //$this->client->path = $this->args['HTTPURI'];
+        //$this->client->setCookie('PHPUNIT_RANDOM_TEST_ID', static::$randId);
         $r = $this->client->send($m, 5, 'http11');
         $this->assertEquals(0, $r->faultCode());
         $ro = $r->value();
         is_object($ro) && $this->assertEquals('hello', $ro->scalarVal());
     }
 
-    public function testCustomHeaders()
+    /**
+     * @dataProvider getAvailableUseCurlOptions
+     */
+    public function testCustomHeaders($curlOpt)
+    {
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_USE_CURL, $curlOpt);
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_HEADERS, array('X-PXR-Test: yes'));
+        $r = new \PhpXmlRpc\Request('tests.getallheaders');
+        $r = $this->client->send($r);
+        $this->assertEquals(0, $r->faultCode());
+        $ro = $r->value();
+        $this->assertArrayHasKey('X-Pxr-Test', $ro->scalarVal(), "Testing with curl mode: $curlOpt");
+    }
+
+    public function getAvailableUseCurlOptions()
     {
         $opts = array(\PhpXmlRpc\Client::USE_CURL_NEVER);
         if (function_exists('curl_init'))
@@ -106,16 +123,7 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
             $opts[] = \PhpXmlRpc\Client::USE_CURL_ALWAYS;
         }
 
-        $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_HEADERS, array('X-PXR-Test: yes'));
-        $r = new \PhpXmlRpc\Request('tests.getallheaders');
-
-        foreach ($opts as $opt) {
-            $this->client->setOption(\PhpXmlRpc\Client::OPT_USE_CURL, $opt);
-            $r = $this->client->send($r);
-            $this->assertEquals(0, $r->faultCode());
-            $ro = $r->value();
-            $this->assertArrayHasKey('X-Pxr-Test', $ro->scalarVal(), "Testing with curl mode: $opt");
-        }
+        return array($opts);
     }
 
     public function testgetUrl()
