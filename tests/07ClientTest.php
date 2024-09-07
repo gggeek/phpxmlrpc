@@ -98,6 +98,26 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         is_object($ro) && $this->assertEquals('hello', $ro->scalarVal());
     }
 
+    public function testCustomHeaders()
+    {
+        $opts = array(\PhpXmlRpc\Client::USE_CURL_NEVER);
+        if (function_exists('curl_init'))
+        {
+            $opts[] = \PhpXmlRpc\Client::USE_CURL_ALWAYS;
+        }
+
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_HEADERS, array('X-PXR-Test: yes'));
+        $r = new \PhpXmlRpc\Request('tests.getallheaders');
+
+        foreach ($opts as $opt) {
+            $this->client->setOption(\PhpXmlRpc\Client::OPT_USE_CURL, $opt);
+            $r = $this->client->send($r);
+            $this->assertEquals(0, $r->faultCode());
+            $ro = $r->value();
+            $this->assertArrayHasKey('X-Pxr-Test', $ro->scalarVal(), "Testing with curl mode: $opt");
+        }
+    }
+
     public function testgetUrl()
     {
         $m = $this->client->getUrl(PHP_URL_SCHEME);
