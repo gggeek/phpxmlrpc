@@ -17,6 +17,17 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         $this->client = $this->getClient();
     }
 
+    public function getAvailableUseCurlOptions()
+    {
+        $opts = array(\PhpXmlRpc\Client::USE_CURL_NEVER);
+        if (function_exists('curl_init'))
+        {
+            $opts[] = \PhpXmlRpc\Client::USE_CURL_ALWAYS;
+        }
+
+        return array($opts);
+    }
+
     public function test404()
     {
         $this->client->path = '/NOTEXIST.php';
@@ -113,17 +124,6 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         $this->assertEquals(0, $r->faultCode());
         $ro = $r->value();
         $this->assertArrayHasKey('X-Pxr-Test', $ro->scalarVal(), "Testing with curl mode: $curlOpt");
-    }
-
-    public function getAvailableUseCurlOptions()
-    {
-        $opts = array(\PhpXmlRpc\Client::USE_CURL_NEVER);
-        if (function_exists('curl_init'))
-        {
-            $opts[] = \PhpXmlRpc\Client::USE_CURL_ALWAYS;
-        }
-
-        return array($opts);
     }
 
     public function testgetUrl()
