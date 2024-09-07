@@ -998,15 +998,15 @@ class Server
             /// @todo this should be done by a method of the XMLParser
             switch ($dmap[$methodName]['parameters_type']) {
                 case XMLParser::RETURN_PHP:
-                    xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_fast');
+                    xml_set_element_handler($parser, array($xmlParser, 'xmlrpc_se'), array($xmlParser, 'xmlrpc_ee_fast'));
                     break;
                 case XMLParser::RETURN_EPIVALS:
-                    xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_epi');
+                    xml_set_element_handler($parser, array($xmlParser, 'xmlrpc_se'), array($xmlParser, 'xmlrpc_ee_epi'));
                     break;
                 /// @todo log a warning on unsupported return type
                 case XMLParser::RETURN_XMLRPCVALS:
                 default:
-                    xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee');
+                    xml_set_element_handler($parser, array($xmlParser, 'xmlrpc_se'), array($xmlParser, 'xmlrpc_ee'));
             }
         }
     }

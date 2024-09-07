@@ -237,23 +237,21 @@ class XMLParser
         // always set this, in case someone tries to disable it via options...
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 1);
 
-        xml_set_object($parser, $this);
-
         switch ($returnType) {
             case self::RETURN_PHP:
-                xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_fast');
+                xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee_fast'));
                 break;
             case self::RETURN_EPIVALS:
-                xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee_epi');
+                xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee_epi'));
                 break;
             /// @todo log an error / throw / error-out on unsupported return type
             case XMLParser::RETURN_XMLRPCVALS:
             default:
-                xml_set_element_handler($parser, 'xmlrpc_se', 'xmlrpc_ee');
+                xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee'));
         }
 
-        xml_set_character_data_handler($parser, 'xmlrpc_cd');
-        xml_set_default_handler($parser, 'xmlrpc_dh');
+        xml_set_character_data_handler($parser, array($this, 'xmlrpc_cd'));
+        xml_set_default_handler($parser, array($this, 'xmlrpc_dh'));
 
         try {
             // @see ticket #70 - we have to parse big xml docs in chunks to avoid errors
