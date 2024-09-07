@@ -1,3 +1,8 @@
+## XML-RPC for PHP version 4.11 - UNRELEASED
+
+* improved: compatibility with not-yet-released PHP version 8.4
+
+
 ## XML-RPC for PHP version 4.10.4 - 2024/06/27
 
 * fixed: Response returned from the library in case of HttpException did not have set the correct `status_code` member var
