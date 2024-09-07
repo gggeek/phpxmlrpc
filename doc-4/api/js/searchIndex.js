@@ -371,6 +371,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpXmlRpc-Client.html#constant_OPT_VERIFY_PEER"
         },                {
+            "fqsen": "\\PhpXmlRpc\\Client\u003A\u003AOPT_EXTRA_HEADERS",
+            "name": "OPT_EXTRA_HEADERS",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Client.html#constant_OPT_EXTRA_HEADERS"
+        },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003A\u0024requestClass",
             "name": "requestClass",
             "summary": "",
@@ -565,6 +570,11 @@ Search.appendIndex(
             "name": "user_agent",
             "summary": "",
             "url": "classes/PhpXmlRpc-Client.html#property_user_agent"
+        },                {
+            "fqsen": "\\PhpXmlRpc\\Client\u003A\u003A\u0024extra_headers",
+            "name": "extra_headers",
+            "summary": "Additional\u0020headers\u0020to\u0020be\u0020included\u0020in\u0020the\u0020requests.",
+            "url": "classes/PhpXmlRpc-Client.html#property_extra_headers"
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003A\u0024options",
             "name": "options",
