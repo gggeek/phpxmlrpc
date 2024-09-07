@@ -83,7 +83,7 @@ abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LoggerAwareTestCa
         $this->coverageScriptUrl = 'http://' . $this->args['HTTPSERVER'] . preg_replace('|/tests/index\.php(\?.*)?|', '/tests/phpunit_coverage.php', $this->args['HTTPURI']);
     }
 
-    protected function getClient($customPath)
+    protected function getClient()
     {
         $server = explode(':', $this->args['HTTPSERVER']);
         if (count($server) > 1) {
