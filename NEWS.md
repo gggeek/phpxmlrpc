@@ -1,4 +1,4 @@
-## XML-RPC for PHP version 4.11 - 2024/9/7
+## XML-RPC for PHP version 4.11.0 - 2024/9/7
 
 * new: added new Client option `Client::OPT_EXTRA_HEADERS`, useful to set custom HTTP headers
 
