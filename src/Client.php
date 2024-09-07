@@ -57,6 +57,7 @@ class Client
     const OPT_USE_CURL = 'use_curl';
     const OPT_VERIFY_HOST = 'verifyhost';
     const OPT_VERIFY_PEER = 'verifypeer';
+    const OPT_EXTRA_HEADERS = 'extra_headers';
 
     /** @var string */
     protected static $requestClass = '\\PhpXmlRpc\\Request';
@@ -259,6 +260,13 @@ class Client
     protected $user_agent;
 
     /**
+     * Additional headers to be included in the requests.
+     * 
+     * @var string[]
+     */
+    protected $extra_headers = array();
+
+    /**
      * CURL handle: used for keep-alive
      * @internal
      */
@@ -299,6 +307,7 @@ class Client
         self::OPT_USERNAME,
         self::OPT_VERIFY_HOST,
         self::OPT_VERIFY_PEER,
+        self::OPT_EXTRA_HEADERS,
     );
 
     /**
@@ -999,6 +1008,11 @@ class Client
             $cookieHeader = 'Cookie:' . $version . substr($cookieHeader, 0, -1) . "\r\n";
         }
 
+        $extraHeaders = '';
+        if (!empty($this->extra_headers) && is_array($this->extra_headers)) {
+            $extraHeaders = implode("\r\n", $this->extra_headers) . "\r\n";
+        }
+
         // omit port if default
         if (($port == 80 && in_array($method, array('http', 'http10'))) || ($port == 443 && $method == 'https')) {
             $port = '';
@@ -1015,6 +1029,7 @@ class Client
             $encodingHdr .
             'Accept-Charset: ' . implode(',', $opts['accepted_charset_encodings']) . "\r\n" .
             $cookieHeader .
+            $extraHeaders .
             'Content-Type: ' . $req->getContentType() . "\r\nContent-Length: " .
             strlen($payload) . "\r\n\r\n" .
             $payload;
@@ -1338,6 +1353,10 @@ class Client
         // request compression header
         if ($encodingHdr) {
             $headers[] = $encodingHdr;
+        }
+
+        if (!empty($this->extra_headers) && is_array($this->extra_headers)) {
+            $headers = array_merge($headers, $this->extra_headers);
         }
 
         // Fix the HTTP/1.1 417 Expectation Failed Bug (curl by default adds a 'Expect: 100-continue' header when POST
