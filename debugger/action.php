@@ -409,7 +409,7 @@ if ($action) {
                                             switch($type) {
                                                 case 'undefined':
                                                     break;
-                                                case 'null';
+                                                case 'null':
                                                     $type = 'nil';
                                                     // fall thru intentionally
                                                 default:
