@@ -893,6 +893,8 @@ the complete client request is added to the response, as part of the xml comment
 is set when executing user functions exposed as server methods, and all non-fatal errors are trapped and added as comments
 into the response.
 
+Note: the `Client` class also sports a `setDebug` method, but its valid values are -1 to 2.
+
 ===== Server::OPT_ALLOW_SYSTEM_FUNCS
 
 Default value: `true`. When set to `false`, disables support for `System.xxx` functions in the server. It might be useful
