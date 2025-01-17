@@ -1416,7 +1416,6 @@ class Server
             return;
         }
 
-        //if ($errCode != E_NOTICE && $errCode != E_WARNING && $errCode != E_USER_NOTICE && $errCode != E_USER_WARNING)
         // From PHP 8.4 the E_STRICT constant has been deprecated and will emit deprecation notices.
         // PHP core and core extensions since PHP 8.0 and later do not emit E_STRICT notices at all.
         // On PHP 7 series before PHP 7.4, some functions conditionally emit E_STRICT notices.
