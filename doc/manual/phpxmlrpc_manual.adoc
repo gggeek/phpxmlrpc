@@ -1119,7 +1119,7 @@ string.
 
 ==== $xmlrpcVersion
 
-    PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion = "4.11.0"
+    PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion = "4.11.1"
 
 The string representation of the version number of the PHPXMLRPC library in use. It is used by the Client for
 building the User-Agent HTTP header that is sent with every request to the server. You can change its value if you need

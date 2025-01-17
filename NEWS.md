@@ -1,3 +1,8 @@
+## XML-RPC for PHP version 4.11.1 - 2025/1/17
+
+* fixed: removed one warning emitted by the Server on php 8.4 and later (issue #125, thanks @ziegenberg)
+
+
 ## XML-RPC for PHP version 4.11.0 - 2024/9/7
 
 * new: added new Client option `Client::OPT_EXTRA_HEADERS`, useful to set custom HTTP headers
