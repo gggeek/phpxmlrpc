@@ -279,8 +279,8 @@ class XMLParser
         } catch (\Error $e) {
             xml_parser_free($parser);
             $this->current_parsing_options = array();
-                //$this->accept = $prevAccept;
-                /// @todo should we set $this->_xh['isf'] and $this->_xh['isf_reason'] ?
+            //$this->accept = $prevAccept;
+            /// @todo should we set $this->_xh['isf'] and $this->_xh['isf_reason'] ?
             throw $e;
         }
 

@@ -710,4 +710,24 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $r = $m->parseresponse($s);
         $this->assertequals(2, $r->faultCode());
     }
+
+    public function testXXE()
+    {
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE foo [
+    <!ENTITY xxe SYSTEM "https://www.google.com/favicon.ico">
+]>
+<methodResponse>
+    <params>
+        <param>
+            <value><string>&xxe;</string></value>
+        </param>
+    </params>
+</methodResponse>
+';
+        $req = new \PhpXmlRpc\Request('hi');
+        $resp = $req->parseResponse($xml, true);
+        $val = $resp->value();
+        $this->assertequals('', $val->scalarVal());
+    }
 }
