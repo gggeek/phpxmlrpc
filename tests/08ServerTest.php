@@ -617,7 +617,7 @@ And turned it into nylon';
     {
         if (version_compare(PHP_VERSION, '7.0.0', '<'))
         {
-            $this->markTestSkipped('cannot test php Error on php < 7.0');
+            $this->markTestSkipped('Cannot test php Error on php < 7.0');
             return;
         }
 

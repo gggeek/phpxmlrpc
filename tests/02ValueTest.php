@@ -141,10 +141,10 @@ class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
                 setlocale(LC_NUMERIC, $locale);
             } else {
                 setlocale(LC_NUMERIC, $locale);
-                $this->markTestSkipped('did not find a locale which sets decimal separator to comma');
+                $this->markTestSkipped('Did not find a locale which sets decimal separator to comma');
             }
         } else {
-            $this->markTestSkipped('did not find a locale which sets decimal separator to comma');
+            $this->markTestSkipped('Did not find a locale which sets decimal separator to comma');
         }
     }
 
