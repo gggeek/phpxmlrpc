@@ -728,6 +728,10 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $req = new \PhpXmlRpc\Request('hi');
         $resp = $req->parseResponse($xml, true);
         $val = $resp->value();
-        $this->assertequals('', $val->scalarVal());
+        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+            $this->assertequals('', $val->scalarVal());
+        } else {
+            $this->assertequals('&xxe;', $val->scalarVal());
+        }
     }
 }
