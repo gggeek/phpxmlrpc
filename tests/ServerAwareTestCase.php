@@ -102,4 +102,15 @@ abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LoggerAwareTestCa
 
         return $client;
     }
+
+    public function getAvailableUseCurlOptions()
+    {
+        $opts = array(array(\PhpXmlRpc\Client::USE_CURL_NEVER));
+        if (function_exists('curl_init'))
+        {
+            $opts[] = array(\PhpXmlRpc\Client::USE_CURL_ALWAYS);
+        }
+
+        return $opts;
+    }
 }

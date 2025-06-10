@@ -19,6 +19,7 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
     protected $accepted_compression = '';
 
     protected static $failed_tests = array();
+    protected static $originalInternalEncoding;
 
     /**
      * @todo instead of overriding fail via _fail, implement Yoast\PHPUnitPolyfills\TestListeners\TestListenerDefaultImplementation
@@ -27,7 +28,7 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
     {
         // save in a static var that this particular test has failed
         // (but only if not called from subclass objects / multitests)
-        if (function_exists('debug_backtrace') && strtolower(get_called_class()) == 'localhosttests') {
+        if (function_exists('debug_backtrace') && strtolower(get_called_class()) == 'servertest') {
             $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
             for ($i = 0; $i < count($trace); $i++) {
                 if (strpos($trace[$i]['function'], 'test') === 0) {
@@ -40,19 +41,32 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
         parent::_fail($message);
     }
 
+    public static function set_up_before_class()
+    {
+        self::$originalInternalEncoding = \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding;
+    }
+
     public function set_up()
     {
         parent::set_up();
 
-        $this->client = $this->getClient();
+        $this->timeout = 10;
 
+        $this->client = $this->getClient();
         $this->client->request_compression = $this->request_compression;
         $this->client->accepted_compression = $this->accepted_compression;
     }
 
+    public function tear_down()
+    {
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = self::$originalInternalEncoding;
+
+        parent::tear_down();
+    }
+
     /**
      * @param PhpXmlRpc\Request|array $msg
-     * @param int|array $errorCode expected error codes
+     * @param int|int[] $errorCode expected error codes
      * @param bool $returnResponse
      * @return mixed|\PhpXmlRpc\Response|\PhpXmlRpc\Response[]|\PhpXmlRpc\Value|string|null
      */
@@ -167,7 +181,7 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
         }
         $v = $this->send(mb_convert_encoding(str_replace('_ENC_', 'UTF-16', $str), 'UTF-16', 'UTF-8'));
         $this->assertEquals($sendString, $v->scalarval());
-        PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
+        //PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
     }
 
     public function testExoticCharsetsRequests2()
@@ -193,7 +207,7 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
         // (used on the server side) sort it out
         $this->addQueryParams(array('DETECT_ENCODINGS' => array('EUC-JP', 'UTF-8')));
         $v = $this->send(mb_convert_encoding($str, 'EUC-JP', 'UTF-8'));
-        PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
+        //PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
         $this->assertEquals($sendString, $v->scalarval());
     }
 
@@ -241,7 +255,7 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
             new xmlrpcval('hello')
         ));
         $v = $this->send($m);
-        PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
+        //PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-1';
         if ($v) {
             $this->assertEquals('hello', $v->scalarval());
         }
@@ -290,7 +304,7 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
     public function testUnknownMethod()
     {
         $m = new xmlrpcmsg('examples.a_very_unlikely.method', array());
-        $v = $this->send($m, \PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['unknown_method']);
+        $this->send($m, \PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['unknown_method']);
     }
 
     public function testBoolean()

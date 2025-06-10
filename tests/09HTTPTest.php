@@ -10,24 +10,27 @@ class HTTPTest extends ServerTest
 {
     protected $expectHttp2 = false;
 
+    protected $unsafeMethods = array(
+        'testCatchExceptions', 'testCatchErrors', 'testUtf8Method', 'testServerComments',
+        'testExoticCharsetsRequests', 'testExoticCharsetsRequests2', 'testExoticCharsetsRequests3',
+        'testWrapInexistentUrl', 'testNegativeDebug', 'testTimeout'
+    );
+
     /**
-     * Returns all test methods from the base class, except the ones which failed already
+     * Returns all test methods from the base class, except the ones which failed already and the ones which make no sense
+     * to run with different HTTP options.
      *
      * @todo (re)introduce skipping of tests which failed when executed individually even if test runs happen as separate processes
      * @todo reintroduce skipping of tests within the loop
+     * @todo testTimeout is actually good to be tested with proxies etc - but it slows down the testsuite a lot!
      */
     public function getSingleHttpTestMethods()
     {
-        $unsafeMethods = array(
-            'testCatchExceptions', 'testCatchErrors', 'testUtf8Method', 'testServerComments',
-            'testExoticCharsetsRequests', 'testExoticCharsetsRequests2', 'testExoticCharsetsRequests3',
-            'testWrapInexistentUrl', 'testNegativeDebug'
-        );
-
         $methods = array();
+        // as long as we are descendants, get_class_methods will list private/protected methods
         foreach(get_class_methods('ServerTest') as $method)
         {
-            if (strpos($method, 'test') === 0 && !in_array($method, $unsafeMethods))
+            if (strpos($method, 'test') === 0 && !in_array($method, $this->unsafeMethods))
             {
                 if (!isset(self::$failed_tests[$method])) {
                     $methods[$method] = array($method);
@@ -128,7 +131,6 @@ class HTTPTest extends ServerTest
         $r = new \PhpXmlRpc\Request('examples.stringecho', array(new \PhpXmlRpc\Value('€')));
         //chr(164)
 
-        $originalEncoding = \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding;
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'UTF-8';
 
         $this->addQueryParams(array('RESPONSE_ENCODING' => 'auto'));
@@ -142,7 +144,6 @@ class HTTPTest extends ServerTest
         if ($v) {
             $this->assertEquals('€', $v->value()->scalarval());
         }
-        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = $originalEncoding;
     }
 
     /**
@@ -531,6 +532,54 @@ class HTTPTest extends ServerTest
     }
 
     /**
+     * @dataProvider getAvailableUseCurlOptions
+     */
+    public function testTimeout($curlOpt)
+    {
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_USE_CURL, $curlOpt);
+
+        // decrease the timeout to avoid slowing down the testsuite too much
+        $this->timeout = 3;
+
+        // the server will wait for 1 second before sending back the response - should pass
+        $m = new xmlrpcmsg('tests.sleep', array(new xmlrpcval(1, 'int')));
+        // this checks for a non-failed call
+        $time = microtime(true);
+        $this->send($m);
+        $time = microtime(true) - $time;
+        $this->assertGreaterThan(1.0, $time);
+        $this->assertLessThan(2.0, $time);
+
+        // the server will wait for 5 seconds before sending back the response - fail
+        $m = new xmlrpcmsg('tests.sleep', array(new xmlrpcval(5, 'int')));
+        $time = microtime(true);
+        $r = $this->send($m, array(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
+        $time = microtime(true) - $time;
+        $this->assertGreaterThan(2.0, $time);
+        $this->assertLessThan(4.0, $time);
+
+        /*
+                // the server will send back the response one chunk per second, waiting 5 seconds in between chunks
+                // This atm gives different behaviour when in curl (will fail) or socket mode (will pass) ???
+                $m = new xmlrpcmsg('examples.addtwo', array(new xmlrpcval(1, 'int'), new xmlrpcval(2, 'int')));
+                $this->addQueryParams(array('SLOW_LORIS' => 5));
+                $time = microtime(true);
+                $this->send($m, array(PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
+                $time = microtime(true) - $time;
+        echo "SL 5: ";var_dump($time);
+
+                // pesky case: the server will send back the response one char per second, taking 10 seconds in total
+                // This atm gives different behaviour when in curl (will fail) or socket mode (will pass) !!!
+                $m = new xmlrpcmsg('examples.addtwo', array(new xmlrpcval(1, 'int'), new xmlrpcval(2, 'int')));
+                $this->addQueryParams(array('SLOW_LORIS' => 1));
+                $time = microtime(true);
+                $this->send($m, array(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
+                $time = microtime(true) - $time;
+        echo "SL 1: ";var_dump($time);
+        */
+    }
+
+    /**
      * @param \PhpXmlRpc\Response $r
      * @return void
      */
@@ -539,8 +588,6 @@ class HTTPTest extends ServerTest
         if ($this->expectHttp2) {
             $hr = $r->httpResponse();
             $this->assertEquals("2", @$hr['protocol_version']);
-        } else {
-
         }
     }
 }

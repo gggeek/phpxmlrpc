@@ -94,6 +94,15 @@ function findStateWithNulls($req)
         return new Response(new Value(plain_findstate($a->scalarVal())));
 }
 
+$sleep_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcInt));
+$sleep_doc = 'Sleeps for the requested number of seconds (between 1 and 60), before sending back the response';
+function sleepSeconds($secs) {
+    if ($secs > 0 && $secs < 61) {
+        sleep($secs);
+    }
+    return $secs;
+}
+
 return array(
     "tests.getallheaders" => array(
         "function" => 'getAllHeaders_xmlrpc',
@@ -129,5 +138,12 @@ return array(
         "function" => "findStateWithNulls",
         "signature" => $findstate12_sig,
         "docstring" => exampleMethods::$findstate_doc,
+    ),
+
+    'tests.sleep' => array(
+        "function" => 'sleepSeconds',
+        "signature" => $sleep_sig,
+        "docstring" => $sleep_doc,
+        "parameters_type" => 'phpvals',
     ),
 );

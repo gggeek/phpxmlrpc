@@ -5,6 +5,11 @@
  * It mimics server.php, but does not rely on other autoload mechanisms than the loading of xmlrpc.inc and xmlrpcs.inc
  */
 
+// NB: this server does not answer to CORS preflight requests, preventing browsers which are visiting a site on a
+// different domain to send xml-rpc requests (generated via javascript) to this server.
+// That is generally a good idea security-wise, but you might want to allow it in case of specific needs.
+// Look at the code in demo/server.php for an example of how to enable that.
+
 require_once __DIR__ . "/../../lib/xmlrpc.inc";
 require_once __DIR__ . "/../../lib/xmlrpcs.inc";
 

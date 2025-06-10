@@ -476,6 +476,7 @@ yes
             $this->assertEquals(2, $v, "Testing $value");
         }
 
+        /// @todo move to tear_down(), so that we reset this even in case of test failure
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_reject_invalid_values = $i;
     }
 
@@ -643,6 +644,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $v = $r->value();
         $this->assertInstanceOf('\DateTime', $v->scalarval());
 
+        /// @todo move to tear_down(), so that we reset this even in case of test failure
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = $o;
     }
 
@@ -670,6 +672,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
         $v = $r->value();
         $this->assertInstanceOf('\DateTime', $v->scalarval());
 
+        /// @todo move to tear_down(), so that we reset these even in case of test failure
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_return_datetimes = $o;
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_reject_invalid_values = $i;
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_datetime_format = $d;

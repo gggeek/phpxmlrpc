@@ -9,23 +9,13 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
 {
     /** @var xmlrpc_client $client */
     public $client = null;
+    protected $timeout = 10;
 
     public function set_up()
     {
         parent::set_up();
 
         $this->client = $this->getClient();
-    }
-
-    public function getAvailableUseCurlOptions()
-    {
-        $opts = array(\PhpXmlRpc\Client::USE_CURL_NEVER);
-        if (function_exists('curl_init'))
-        {
-            $opts[] = \PhpXmlRpc\Client::USE_CURL_ALWAYS;
-        }
-
-        return array($opts);
     }
 
     public function test404()
@@ -35,7 +25,7 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         $m = new xmlrpcmsg('examples.echo', array(
             new xmlrpcval('hello', 'string'),
         ));
-        $r = $this->client->send($m, 5);
+        $r = $this->client->send($m, $this->timeout);
         $this->assertEquals(5, $r->faultCode());
     }
 
@@ -48,7 +38,7 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         ));
         $orig = \PhpXmlRpc\PhpXmlRpc::$xmlrpcerr;
         \PhpXmlRpc\PhpXmlRpc::useInteropFaults();
-        $r = $this->client->send($m, 5);
+        $r = $this->client->send($m, $this->timeout);
         $this->assertEquals(-32300, $r->faultCode());
         \PhpXmlRpc\PhpXmlRpc::$xmlrpcerr = $orig;
     }
@@ -75,7 +65,7 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
             $m = new xmlrpcmsg('examples.echo', array(
                 new xmlrpcval('hello', 'string'),
             ));
-            $r = $this->client->send($m, 5);
+            $r = $this->client->send($m, $this->timeout);
             // make sure there's no freaking catchall DNS in effect
             $this->assertEquals(5, $r->faultCode());
         }
@@ -94,7 +84,7 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         // test 2 calls w. keepalive: 1st time connection ko, second time ok
         $this->client->server .= 'XXX';
         $this->client->keepalive = true;
-        $r = $this->client->send($m, 5, 'http11');
+        $r = $this->client->send($m, $this->timeout, 'http11');
         // in case we have a "universal dns resolver" getting in the way, we might get a 302 instead of a 404
         $this->assertTrue($r->faultCode() === 8 || $r->faultCode() == 5);
 
@@ -106,7 +96,7 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         $this->client->server = $server[0];
         //$this->client->path = $this->args['HTTPURI'];
         //$this->client->setCookie('PHPUNIT_RANDOM_TEST_ID', static::$randId);
-        $r = $this->client->send($m, 5, 'http11');
+        $r = $this->client->send($m, $this->timeout, 'http11');
         $this->assertEquals(0, $r->faultCode());
         $ro = $r->value();
         is_object($ro) && $this->assertEquals('hello', $ro->scalarVal());

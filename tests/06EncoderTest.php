@@ -82,6 +82,7 @@ class EncoderTest extends PhpXmlRpc_LoggerAwareTestCase
         $u = $e->decodeXml('<?xml version="1.0" encoding="UTF-8" ?><value><string>€</string></value>');
         $this->assertEquals($string, $u->scalarVal());
 
+        /// @todo move to tear_down(), so that we reset this even in case of test failure
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = $originalEncoding;
     }
 }

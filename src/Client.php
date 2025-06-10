@@ -1094,7 +1094,7 @@ class Client
             }
         }
 
-        foreach ($opts['extracurlopts'] as $proto => $protoOpts) {
+        foreach ($opts['extrasockopts'] as $proto => $protoOpts) {
             foreach ($protoOpts as $key => $val) {
                 $contextOptions[$proto][$key] = $val;
             }
@@ -1124,14 +1124,19 @@ class Client
             }
 
             $this->errstr = 'Connect error: ' . $this->errstr;
-            $r = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
-
-            return $r;
+            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
         }
 
         if (!fputs($fp, $op, strlen($op))) {
             fclose($fp);
             $this->errstr = 'Write error';
+            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
+        }
+
+        $info = stream_get_meta_data($fp);
+        if ($info['timed_out']) {
+            fclose($fp);
+            $this->errstr = 'Write timeout';
             return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
         }
 
@@ -1142,6 +1147,14 @@ class Client
             // shall we check for $data === FALSE?
             // as per the manual, it signals an error
             $ipd .= fread($fp, 32768);
+
+            $info = stream_get_meta_data($fp);
+            if ($info['timed_out']) {
+                fclose($fp);
+                $this->errstr = 'Read timeout';
+                return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr);
+            }
+
         } while (!feof($fp));
         fclose($fp);
 
@@ -1364,9 +1377,10 @@ class Client
         $headers[] = 'Expect:';
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        // timeout is borked
+        // previous note: "timeout is borked" (on some old php/curl versions? It seems to work on 8.1. Maybe the issue
+        // hsa to do with dns resolution...)
         if ($opts['timeout']) {
-            curl_setopt($curl, CURLOPT_TIMEOUT, $opts['timeout'] == 1 ? 1 : $opts['timeout'] - 1);
+            curl_setopt($curl, CURLOPT_TIMEOUT, $opts['timeout']);
         }
 
         switch ($method) {
