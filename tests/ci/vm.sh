@@ -43,7 +43,7 @@ Options:
 
 Environment variables: to be set before the 'build' action
     PHP_VERSION       default value: 'default', ie. the stock php version from the Ubuntu version in use. Other possible values: 5.6, 7.0 .. 7.4, 8.0 .. 8.4
-    UBUNTU_VERSION    default value: focal. Other possible values: xenial, bionic, jammy, noble
+    UBUNTU_VERSION    default value: jammy. Other possible values: xenial, bionic, focal, noble
 "
 }
 
