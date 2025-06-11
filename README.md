@@ -61,5 +61,5 @@ Use of this software is subject to the terms in the [license.txt](license.txt) f
 [![Latest Stable Version](https://poser.pugx.org/phpxmlrpc/phpxmlrpc/v/stable)](https://packagist.org/packages/phpxmlrpc/phpxmlrpc)
 [![Total Downloads](https://poser.pugx.org/phpxmlrpc/phpxmlrpc/downloads)](https://packagist.org/packages/phpxmlrpc/phpxmlrpc)
 
-[![Build Status](https://github.com/gggeek/phpxmlrpc/actions/workflows/ci.yaml/badge.svg)](https://github.com/gggeek/phpxmlrpc/actions/workflows/ci.yml)
+[![Build Status](https://github.com/gggeek/phpxmlrpc/actions/workflows/ci.yaml/badge.svg)](https://github.com/gggeek/phpxmlrpc/actions/workflows/ci.yaml)
 [![Code Coverage](https://codecov.io/gh/gggeek/phpxmlrpc/branch/master/graph/badge.svg)](https://app.codecov.io/gh/gggeek/phpxmlrpc)
