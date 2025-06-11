@@ -1,3 +1,14 @@
+## XML-RPC for PHP version 4.11.2 - 2025/6/xx (unreleased)
+
+* fixed: the Client would not honour the timeout when in Socket mode (issue #127, thanks to @dima-bzzz for PR #84)
+
+* fixed: the Client would use a timeout off by 1 second when in CURL mode
+
+* fixed: the Client would not honour options set via `OPT_EXTRA_SOCKET_OPTS`
+
+* improved: default the local testing container to using PHP 8.1 on Ubuntu Jammy
+
+
 ## XML-RPC for PHP version 4.11.1 - 2025/1/17
 
 * fixed: removed one warning emitted by the Server on php 8.4 and later (issue #125, thanks @ziegenberg)
