@@ -69,7 +69,7 @@ else
         echo "Using PHP from shivammathur/php5-ubuntu..."
 
         # @todo this set of packages has only been tested on Bionic, Focal and Jammy so far
-        if [ "${DEBIAN_VERSION}" = jammy ]; then
+        if [ "${DEBIAN_VERSION}" = jammy -o "${DEBIAN_VERSION}" = noble ]; then
             ENCHANTSUFFIX='-2'
         fi
         DEBIAN_FRONTEND=noninteractive apt-get install -y \
