@@ -345,8 +345,9 @@ class HTTPTest extends ServerTest
         if (version_compare(PHP_VERSION, '8.1', '>='))
         {
             $version = explode('.', PHP_VERSION);
+            /// @see https://docs.openssl.org/1.1.1/man3/SSL_CTX_set_security_level/#default-callback-behaviour for levels
             $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_SOCKET_OPTS,
-                array('ssl' => array('security_level' => 2 + $version[1])));
+                array('ssl' => array('security_level' => min(2 + $version[1], 5))));
             /// @todo we should probably look deeper into the Apache config / ssl version in use to find out why this
             ///       does not work well with TLS < 1.2
             if ($this->args['SSLVERSION'] == 0) {

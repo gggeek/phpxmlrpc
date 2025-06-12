@@ -11,6 +11,10 @@ export PHP_VERSION=${PHP_VERSION:-default}
 # Valid values: precise (12), trusty (14), xenial (16), bionic (18), focal (20), jammy (22), noble (24)
 export UBUNTU_VERSION=${UBUNTU_VERSION:-jammy}
 
+HTTPSVERIFYHOST="${HTTPSVERIFYHOST:-0}"
+HTTPSIGNOREPEER="${HTTPSIGNOREPEER:-1}"
+SSLVERSION="${SSLVERSION:-0}"
+
 CONTAINER_USER=docker
 CONTAINER_WORKSPACE_DIR="/home/${CONTAINER_USER}/workspace"
 ROOT_DIR="$(dirname -- "$(dirname -- "$(dirname -- "$(readlink -f "$0")")")")"
@@ -41,9 +45,14 @@ Commands:
 Options:
     -h                print help
 
-Environment variables: to be set before the 'build' action
+Environment variables:
+  to be set before the 'build' action
     PHP_VERSION       default value: 'default', ie. the stock php version from the Ubuntu version in use. Other possible values: 5.6, 7.0 .. 7.4, 8.0 .. 8.4
     UBUNTU_VERSION    default value: jammy. Other possible values: xenial, bionic, focal, noble
+  can also be set before the 'runtests' and 'runcoverage' actions:
+    HTTPSVERIFYHOST   0, 1 or 2. Default and recommended: 0
+    HTTPSIGNOREPEER   0 or 1. Default and recommended: 1
+    SSLVERSION        0 (auto), 2 (SSLv2) to 7 (tls 1.3). Default: 0
 "
 }
 
@@ -81,9 +90,9 @@ build() {
         --env HTTPSSERVER=localhost \
         --env HTTPSURI=/tests/index.php?demo=server/server.php \
         --env PROXYSERVER=localhost:8080 \
-        --env HTTPSVERIFYHOST=0 \
-        --env HTTPSIGNOREPEER=1 \
-        --env SSLVERSION=0 \
+        --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
+        --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
+        --env "SSLVERSION=${SSLVERSION}" \
         --env DEBUG=0 \
         -v "${ROOT_DIR}":"${CONTAINER_WORKSPACE_DIR}" \
          "${IMAGE_NAME}"
@@ -141,13 +150,21 @@ case "${ACTION}" in
         # @todo clean up /tmp/phpxmlrpc and .phpunit.result.cache
         if [ ! -d build ]; then mkdir build; fi
         docker exec -t "${CONTAINER_NAME}" "${CONTAINER_WORKSPACE_DIR}/tests/ci/setup/setup_code_coverage.sh" enable
-        docker exec -i $USE_TTY "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html build/coverage -v tests"
+        docker exec -i $USE_TTY \
+            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
+            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
+            --env "SSLVERSION=${SSLVERSION}" \
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html build/coverage -v tests"
         docker exec -t "${CONTAINER_NAME}" "${CONTAINER_WORKSPACE_DIR}/tests/ci/setup/setup_code_coverage.sh" disable
         ;;
 
     runtests)
         test -t 1 && USE_TTY="-t"
-        docker exec -i $USE_TTY "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v tests"
+        docker exec -i $USE_TTY \
+            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
+            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
+            --env "SSLVERSION=${SSLVERSION}" \
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v tests"
         ;;
 
     start)

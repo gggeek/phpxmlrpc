@@ -582,9 +582,9 @@ class Client
     }
 
     /**
-     * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let cURL decide
+     * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let PHP decide.
      *
-     * @param int $i see  CURL_SSLVERSION_ constants
+     * @param int $i use CURL_SSLVERSION_ constants. When in socket mode, use values 2 (SSLv2) to 7 (TLSv1.3). 0 for auto
      * @return $this
      * @deprecated use setOption
      */
@@ -1812,7 +1812,7 @@ class Client
      * @param string $method 'http' (synonym for 'http10'), 'http10' or 'https'
      * @param string $key
      * @param string $keyPass @todo not implemented yet.
-     * @param int $sslVersion @todo not implemented yet. See http://php.net/manual/en/migration56.openssl.php
+     * @param int $sslVersion
      * @return Response
      */
     protected function sendPayloadSocket($req, $server, $port, $timeout = 0, $username = '', $password = '',
