@@ -43,6 +43,8 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
 
     public static function set_up_before_class()
     {
+        parent::set_up_before_class();
+
         self::$originalInternalEncoding = \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding;
     }
 
