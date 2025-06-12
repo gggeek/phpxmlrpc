@@ -14,6 +14,7 @@ export UBUNTU_VERSION=${UBUNTU_VERSION:-jammy}
 HTTPSVERIFYHOST="${HTTPSVERIFYHOST:-0}"
 HTTPSIGNOREPEER="${HTTPSIGNOREPEER:-1}"
 SSLVERSION="${SSLVERSION:-0}"
+DEBUG="${DEBUG:-0}"
 
 CONTAINER_USER=docker
 CONTAINER_WORKSPACE_DIR="/home/${CONTAINER_USER}/workspace"
@@ -53,6 +54,8 @@ Environment variables:
     HTTPSVERIFYHOST   0, 1 or 2. Default and recommended: 0
     HTTPSIGNOREPEER   0 or 1. Default and recommended: 1
     SSLVERSION        0 (auto), 2 (SSLv2) to 7 (tls 1.3). Default: 0
+  can be used only for 'runtests' and 'runcoverage' actions:
+    DEBUG
 "
 }
 
@@ -93,7 +96,7 @@ build() {
         --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
         --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
         --env "SSLVERSION=${SSLVERSION}" \
-        --env DEBUG=0 \
+        --env DEBUG="${DEBUG}" \
         -v "${ROOT_DIR}":"${CONTAINER_WORKSPACE_DIR}" \
          "${IMAGE_NAME}"
 
@@ -133,7 +136,12 @@ case "${ACTION}" in
 
     enter | shell | cli)
         # @todo allow login as root
-        docker exec -it "${CONTAINER_NAME}" su "${CONTAINER_USER}"
+        docker exec -it \
+            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
+            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
+            --env "SSLVERSION=${SSLVERSION}" \
+            --env DEBUG="${DEBUG}" \
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}"
         ;;
 
     # @todo implement
@@ -154,6 +162,7 @@ case "${ACTION}" in
             --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
             --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
             --env "SSLVERSION=${SSLVERSION}" \
+            --env DEBUG="${DEBUG}" \
             "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html build/coverage -v tests"
         docker exec -t "${CONTAINER_NAME}" "${CONTAINER_WORKSPACE_DIR}/tests/ci/setup/setup_code_coverage.sh" disable
         ;;
@@ -164,7 +173,14 @@ case "${ACTION}" in
             --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
             --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
             --env "SSLVERSION=${SSLVERSION}" \
+            --env DEBUG="${DEBUG}" \
             "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v tests"
+        docker exec -i $USE_TTY \
+            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
+            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
+            --env "SSLVERSION=${SSLVERSION}" \
+            --env DEBUG="${DEBUG}" \
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "php ./tests/legacy_loader_test.php"
         ;;
 
     start)

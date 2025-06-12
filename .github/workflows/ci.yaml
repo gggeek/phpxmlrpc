@@ -109,6 +109,9 @@ jobs:
                         fi
                     fi
 
+            -   name: test legacy php classes loader
+                run: 'php ./tests/legacy_loader_test.php'
+
             # @todo would it be useful to run a 2nd test with composer --prefer-lowest? After all the only dependencies we have are testing tools
 
             -   name: test python demo files
@@ -164,7 +167,7 @@ jobs:
         steps:
             # NB: unusually, but intentionally, we do _not_ download the code of this very own repo into the workspace!
 
-            -   name: download dependency, build its test vm and run its tests against the current commit
+            -   name: download dependency, build its test container and run its tests against the current commit
                 run: |
                     # We test against the latest available release of dependents.
                     # Arguably, we could (also?) test against their master branch, in case some fixes were pushed there
