@@ -455,6 +455,10 @@ class HTTPTest extends ServerTest
         $this->expectHttp2 = false;
     }
 
+    /// @todo a better organization of tests could be to move the 4 tests below and all charset-related tests from
+    ///       class ServerTest to a dedicated class - and make sure we iterate over each of those with different
+    ///       proxy/auth/compression/etc... settings
+
     /**
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
@@ -559,24 +563,24 @@ class HTTPTest extends ServerTest
         $this->assertLessThan(4.0, $time);
 
         /*
-                // the server will send back the response one chunk per second, waiting 5 seconds in between chunks
-                // This atm gives different behaviour when in curl (will fail) or socket mode (will pass) ???
-                $m = new xmlrpcmsg('examples.addtwo', array(new xmlrpcval(1, 'int'), new xmlrpcval(2, 'int')));
-                $this->addQueryParams(array('SLOW_LORIS' => 5));
-                $time = microtime(true);
-                $this->send($m, array(PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
-                $time = microtime(true) - $time;
-        echo "SL 5: ";var_dump($time);
-
-                // pesky case: the server will send back the response one char per second, taking 10 seconds in total
-                // This atm gives different behaviour when in curl (will fail) or socket mode (will pass) !!!
-                $m = new xmlrpcmsg('examples.addtwo', array(new xmlrpcval(1, 'int'), new xmlrpcval(2, 'int')));
-                $this->addQueryParams(array('SLOW_LORIS' => 1));
-                $time = microtime(true);
-                $this->send($m, array(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
-                $time = microtime(true) - $time;
-        echo "SL 1: ";var_dump($time);
+        // the server will send back the response one chunk per second, waiting 5 seconds in between chunks
+        $m = new xmlrpcmsg('examples.addtwo', array(new xmlrpcval(1, 'int'), new xmlrpcval(2, 'int')));
+        $this->addQueryParams(array('SLOW_LORIS' => 5));
+        $time = microtime(true);
+        $this->send($m, array(PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
+        $time = microtime(true) - $time;
+        $this->assertGreaterThan(2.0, $time);
+        $this->assertLessThan(4.0, $time);
         */
+
+        // pesky case: the server will send back the response one chunk per second, taking 10 seconds in total
+        $m = new xmlrpcmsg('examples.addtwo', array(new xmlrpcval(1, 'int'), new xmlrpcval(2, 'int')));
+        $this->addQueryParams(array('SLOW_LORIS' => 1));
+        $time = microtime(true);
+        $this->send($m, array(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
+        $time = microtime(true) - $time;
+        $this->assertGreaterThan(2.0, $time);
+        $this->assertLessThan(4.0, $time);
     }
 
     /**

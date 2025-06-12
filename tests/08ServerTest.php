@@ -69,6 +69,7 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
      * @param int|int[] $errorCode expected error codes
      * @param bool $returnResponse
      * @return mixed|\PhpXmlRpc\Response|\PhpXmlRpc\Response[]|\PhpXmlRpc\Value|string|null
+     * @todo allo callers to disable checking of faultCode
      */
     protected function send($msg, $errorCode = 0, $returnResponse = false)
     {
