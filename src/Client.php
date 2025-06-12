@@ -796,7 +796,10 @@ class Client
      *                         will be used. If that is 0, a platform specific timeout will apply.
      *                         This timeout value is passed to fsockopen(). It is also used for detecting server
      *                         timeouts during communication (i.e. if the server does not send anything to the client
-     *                         for $timeout seconds, the connection will be closed).
+     *                         for $timeout seconds, the connection will be closed). When in CURL mode, this is the
+     *                         CURL timeout.
+     *                         NB: in both CURL and Socket modes, some conditions might lead to the client not
+     *                        respecting the given timeout. Eg. if the network is not connected
      * @param string $method deprecated. Use the same value in the constructor instead.
      *                       Valid values are 'http', 'http11', 'https', 'h2' and 'h2c'. If left empty,
      *                       the http protocol chosen during creation of the object will be used.
@@ -1378,7 +1381,7 @@ class Client
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         // previous note: "timeout is borked" (on some old php/curl versions? It seems to work on 8.1. Maybe the issue
-        // hsa to do with dns resolution...)
+        // has to do with dns resolution...)
         if ($opts['timeout']) {
             curl_setopt($curl, CURLOPT_TIMEOUT, $opts['timeout']);
         }
@@ -1509,7 +1512,7 @@ class Client
      *                         docs for the send() method". Please use setOption instead to set a timeout
      * @param string $method deprecated. Was: "the http protocol variant to be used. See the details in the docs for the send() method."
      *                       Please use the constructor to set an http protocol variant.
-     * @param boolean $fallback deprecated. Was: "w"hen true, upon receiving an error during multicall, multiple single
+     * @param boolean $fallback deprecated. Was: "when true, upon receiving an error during multicall, multiple single
      *                          calls will be attempted"
      * @return Response[]
      */
