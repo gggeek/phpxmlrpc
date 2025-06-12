@@ -11,7 +11,7 @@ $idFile = sys_get_temp_dir() . '/phpunit_rand_id.txt';
 $randId = isset($_COOKIE['PHPUNIT_RANDOM_TEST_ID']) ? $_COOKIE['PHPUNIT_RANDOM_TEST_ID'] : '';
 $fileId = file_exists($idFile) ? file_get_contents($idFile) : '';
 if ($randId == '' || $fileId == '' || $fileId !== $randId) {
-    //die('This url can only be accessed by the test suite');
+    die('This url can only be accessed by the test suite');
 }
 
 // Make errors visible
