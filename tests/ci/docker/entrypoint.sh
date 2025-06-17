@@ -4,8 +4,11 @@ USERNAME="${1:-docker}"
 
 echo "[$(date)] Bootstrapping the Test container..."
 
-UBUNTU_VERSION="$(fgrep DISTRIB_CODENAME /etc/lsb-release | sed 's/DISTRIB_CODENAME=//')"
-PHP_VERSION="$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')"
+# load values for UBUNTU_VERSION, PHP_VERSION
+. /etc/build-info
+# NB: the following line does not account for 'default'
+#PHP_VERSION="$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')"
+#UBUNTU_VERSION="$(fgrep DISTRIB_CODENAME /etc/lsb-release | sed 's/DISTRIB_CODENAME=//')"
 BOOTSTRAP_OK_FILE="${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok_${UBUNTU_VERSION}_${PHP_VERSION}"
 
 if [ -f "${BOOTSTRAP_OK_FILE}" ]; then
@@ -74,8 +77,9 @@ if [ -f "${TESTS_ROOT_DIR}/composer.json" ]; then
     echo "[$(date)] Running Composer..."
 
     # @todo if there is a composer.lock file present, there are chances it might be a leftover from when running the
-    #       container using a different php version. We should then back it up / do some symlink magic to make sure that
-    #       it matches the current php version and a hash of composer.json...
+    #       container using a different os/php version. We should then back it up / do some symlink magic to make sure that
+    #       it matches the current php version and a hash of composer.json... (also symlink the vendor folder).
+    #       Make it at least optional to run composer at container start
     su "${USERNAME}" -c "cd ${TESTS_ROOT_DIR} && composer install"
 else
     # @todo should we exit?

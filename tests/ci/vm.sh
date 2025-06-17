@@ -56,12 +56,14 @@ Environment variables:
   to be set before the 'build' action
     PHP_VERSION       default value: 'default', ie. the stock php version from the Ubuntu version in use. Other possible values: 5.6, 7.0 .. 7.4, 8.0 .. 8.4
     UBUNTU_VERSION    default value: jammy. Other possible values: xenial, bionic, focal, noble
-     default value: 8080. Set to 'no' not to publish the container's proxy http port to the host
-  can also be set before the 'runtests' and 'runcoverage' actions:
+  to be set before the 'start' action
+    HOST_HTTPPORT     default value: 80. Set to 'no' not to publish the container's http port to the host
+    HOST_HTTPSPORT    default value: 443. Set to 'no' not to publish the container's https port to the host
+    HOST_PROXYPORT    default value: 8080. Set to 'no' not to publish the container's proxy http port to the host
+  to be set before the 'runtests' and 'runcoverage' actions:
     HTTPSVERIFYHOST   0, 1 or 2. Default and recommended: 0
     HTTPSIGNOREPEER   0 or 1. Default and recommended: 1
     SSLVERSION        0 (auto), 2 (SSLv2) to 7 (tls 1.3). Default: 0
-  can be used only for 'runtests' and 'runcoverage' actions:
     DEBUG
 "
 }
@@ -77,7 +79,8 @@ wait_for_bootstrap() {
         sleep 1
         I=$((I+1))
     done
-    if [ $I -eq 60 ]; then
+    if [ $I -gt 60 ]; then
+        echo ''
         echo "ERROR: Container did not finish bootstrapping within 60 seconds..." >&2
         return 1
     fi
@@ -85,68 +88,82 @@ wait_for_bootstrap() {
 }
 
 build() {
-    stop
-    docker build --build-arg PHP_VERSION --build-arg UBUNTU_VERSION -t "${IMAGE_NAME}" .
-    if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
-        docker rm "${CONTAINER_NAME}"
-    fi
-    PORTMAPPING=''
-    # @todo improve error message and abort in case any port is not an integer or negative
-    if [ "$HOST_HTTPPORT" != no ] && [ "$HOST_HTTPPORT" != '' ]; then
-        PORTMAPPING="-p $((HOST_HTTPPORT-0)):80 "
-    fi
-    if [ "$HOST_HTTPSPORT" != no ] && [ "$HOST_HTTPSPORT" != '' ]; then
-        PORTMAPPING="${PORTMAPPING}-p $((HOST_HTTPSPORT)):443 "
-    fi
-    if [ "$HOST_PROXYPORT" != no ] && [ "$HOST_PROXYPORT" != '' ]; then
-        PORTMAPPING="-p $((HOST_PROXYPORT-0)):8080 "
-    fi
-    if docker run -d \
-        $PORTMAPPING \
-        --name "${CONTAINER_NAME}" \
-        --env "CONTAINER_USER_UID=$(id -u)" --env "CONTAINER_USER_GID=$(id -g)" \
-        --env "TESTS_ROOT_DIR=${CONTAINER_WORKSPACE_DIR}" \
-        --env HTTPSERVER=localhost \
-        --env HTTPURI=/tests/index.php?demo=server/server.php \
-        --env HTTPSSERVER=localhost \
-        --env HTTPSURI=/tests/index.php?demo=server/server.php \
-        --env PROXYSERVER=localhost:8080 \
-        --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
-        --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
-        --env "SSLVERSION=${SSLVERSION}" \
-        --env DEBUG="${DEBUG}" \
-        -v "${ROOT_DIR}":"${CONTAINER_WORKSPACE_DIR}" \
-         "${IMAGE_NAME}"; then
-        wait_for_bootstrap
+    if docker build --build-arg PHP_VERSION --build-arg UBUNTU_VERSION -t "${IMAGE_NAME}" .; then
+        if [ "$1" = '-r' ]; then
+            # stop and remove existing containers built from a previous version of this image
+            if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
+                stop
+                docker rm "${CONTAINER_NAME}"
+            fi
+        fi
     fi
 }
 
 start() {
-    if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
-        docker start "${CONTAINER_NAME}"
-        if [ $? -eq 0 ]; then
-            wait_for_bootstrap
-        fi
+    if [ "$(docker inspect --format '{{.State.Status}}' ${CONTAINER_NAME} 2>/dev/null)" = running ]; then
+        # @todo we should check that the env vars have not changed, and give a warning if so
+        echo "${CONTAINER_NAME} already started..."
     else
-        build
+        if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
+            echo "starting existing container ${CONTAINER_NAME}..."
+            # @todo we should check that the env vars have not changed, and give a warning if so. Doable using `inspect`...
+            if docker start "${CONTAINER_NAME}"; then
+                wait_for_bootstrap
+            fi
+        else
+            build
+
+            PORTMAPPING=''
+            # @todo improve error message and abort in case any port is not an integer or negative
+            if [ "$HOST_HTTPPORT" != no ] && [ "$HOST_HTTPPORT" != '' ]; then
+                PORTMAPPING="-p $((HOST_HTTPPORT-0)):80 "
+            fi
+            if [ "$HOST_HTTPSPORT" != no ] && [ "$HOST_HTTPSPORT" != '' ]; then
+                PORTMAPPING="${PORTMAPPING}-p $((HOST_HTTPSPORT)):443 "
+            fi
+            if [ "$HOST_PROXYPORT" != no ] && [ "$HOST_PROXYPORT" != '' ]; then
+                PORTMAPPING="-p $((HOST_PROXYPORT-0)):8080 "
+            fi
+            if docker run -d \
+                $PORTMAPPING \
+                --name "${CONTAINER_NAME}" \
+                --env "CONTAINER_USER_UID=$(id -u)" --env "CONTAINER_USER_GID=$(id -g)" \
+                --env "TESTS_ROOT_DIR=${CONTAINER_WORKSPACE_DIR}" \
+                --env HTTPSERVER=localhost \
+                --env HTTPURI=/tests/index.php?demo=server/server.php \
+                --env HTTPSSERVER=localhost \
+                --env HTTPSURI=/tests/index.php?demo=server/server.php \
+                --env PROXYSERVER=localhost:8080 \
+                -v "${ROOT_DIR}":"${CONTAINER_WORKSPACE_DIR}" \
+                 "${IMAGE_NAME}"; then
+                wait_for_bootstrap
+            fi
+        fi
     fi
 }
 
 stop() {
-    if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
-        docker stop "${CONTAINER_NAME}"
+    if [ "$(docker inspect --format '{{.State.Status}}' ${CONTAINER_NAME} 2>/dev/null)" = exited ]; then
+        echo "${CONTAINER_NAME} already stopped"
+    else
+        if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
+            echo "stopping ${CONTAINER_NAME}..."
+            docker stop "${CONTAINER_NAME}"
+        fi
     fi
 }
 
 case "${ACTION}" in
 
     build)
-        build
-        stop
+        build -r
         ;;
 
     cleanup)
-        docker rm "${CONTAINER_NAME}"
+        if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
+            docker stop "${CONTAINER_NAME}"
+            docker rm "${CONTAINER_NAME}"
+        fi
         docker rmi "${IMAGE_NAME}"
         ;;
 
@@ -164,13 +181,13 @@ case "${ACTION}" in
         shift
         test -t 1 && USE_TTY="-t"
         docker exec -i $USE_TTY \
-                    --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
-                    --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
-                    --env "SSLVERSION=${SSLVERSION}" \
-                    --env DEBUG="${DEBUG}" \
-                    "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c '"$0" "$@"' -- "$@"
-                    # q: which one is better? test with a command with spaces in options values, and with a composite command such as cd here && do that
-                    #"${CONTAINER_NAME}" sudo -iu "${CONTAINER_USER}" -- "$@"
+            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
+            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
+            --env "SSLVERSION=${SSLVERSION}" \
+            --env DEBUG="${DEBUG}" \
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c '"$0" "$@"' -- "$@"
+            # @todo which one is better? test with a command with spaces in options values, and with a composite command such as cd here && do that
+            #"${CONTAINER_NAME}" sudo -iu "${CONTAINER_USER}" -- "$@"
         ;;
 
     restart)
@@ -181,6 +198,7 @@ case "${ACTION}" in
     runcoverage)
         test -t 1 && USE_TTY="-t"
         # @todo clean up /tmp/phpxmlrpc and .phpunit.result.cache
+        # @todo run composer install if it was not yet run or we are asked to
         if [ ! -d build ]; then mkdir build; fi
         docker exec -t "${CONTAINER_NAME}" "${CONTAINER_WORKSPACE_DIR}/tests/ci/setup/setup_code_coverage.sh" enable
         docker exec -i $USE_TTY \
@@ -194,6 +212,8 @@ case "${ACTION}" in
 
     runtests)
         test -t 1 && USE_TTY="-t"
+        # @todo clean up /tmp/phpxmlrpc and .phpunit.result.cache
+        # @todo run composer install if it was not yet run or we are asked to
         docker exec -i $USE_TTY \
             --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
             --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
@@ -211,10 +231,6 @@ case "${ACTION}" in
     start)
         start
         ;;
-
-    #status)
-    #    :
-    #    ;;
 
     stop)
         stop

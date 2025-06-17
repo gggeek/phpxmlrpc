@@ -3,6 +3,7 @@ ARG UBUNTU_VERSION=focal
 FROM ubuntu:${UBUNTU_VERSION}
 
 ARG PHP_VERSION=default
+ARG UBUNTU_VERSION=focal
 
 COPY setup/*.sh /root/setup/
 COPY config/* /root/config/
@@ -18,7 +19,9 @@ RUN if [ ! -f /.dockerenv ]; then touch /.dockerenv; fi && \
   ./setup_apache.sh && \
   ./setup_privoxy.sh && \
   ./setup_php.sh "${PHP_VERSION}" && \
-  ./setup_composer.sh
+  ./setup_composer.sh && \
+  echo "PHP_VERSION=${PHP_VERSION}" > /etc/build-info && \
+  echo "UBUNTU_VERSION=${UBUNTU_VERSION}" >> /etc/build-info
 
 COPY docker/entrypoint.sh /root/entrypoint.sh
 RUN chmod 755 /root/entrypoint.sh
