@@ -8,6 +8,10 @@ echo "Creating user account..."
 
 USERNAME="${1:-docker}"
 
+# adduser is not preinstalled on noble
+DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    adduser
+
 addgroup --gid 2000 "${USERNAME}"
 adduser --system --uid=2000 --gid=2000 --home "/home/${USERNAME}" --shell /bin/bash "${USERNAME}"
 adduser "${USERNAME}" "${USERNAME}"

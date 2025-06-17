@@ -6,10 +6,11 @@ set -e
 
 echo "Installing base software packages..."
 
-# @todo make updating of preinstalled sw optional, so that we can have faster builds as part of CI
+# @todo allow optional updating of preinstalled sw
 
 apt-get update
 
+# adduser is not preinstalled on noble
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
     locales sudo unzip wget
 
