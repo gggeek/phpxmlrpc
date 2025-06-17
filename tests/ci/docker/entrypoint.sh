@@ -4,8 +4,12 @@ USERNAME="${1:-docker}"
 
 echo "[$(date)] Bootstrapping the Test container..."
 
-if [ -f "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok" ]; then
-    rm "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok"
+UBUNTU_VERSION="$(fgrep DISTRIB_CODENAME /etc/lsb-release | sed 's/DISTRIB_CODENAME=//')"
+PHP_VERSION="$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')"
+BOOTSTRAP_OK_FILE="${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok_${UBUNTU_VERSION}_${PHP_VERSION}"
+
+if [ -f "${BOOTSTRAP_OK_FILE}" ]; then
+    rm "${BOOTSTRAP_OK_FILE}"
 fi
 
 clean_up() {
@@ -20,8 +24,8 @@ clean_up() {
     echo "[$(date)] Stopping FPM"
     service php-fpm stop
 
-    if [ -f "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok" ]; then
-        rm "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok"
+    if [ -f "${BOOTSTRAP_OK_FILE}" ]; then
+        rm "${BOOTSTRAP_OK_FILE}"
     fi
 
     echo "[$(date)] Exiting"
@@ -97,7 +101,7 @@ if [ ! -d "${TESTS_ROOT_DIR}/tests/ci/var" ]; then
     chown -R "${USERNAME}" "${TESTS_ROOT_DIR}/tests/ci/var"
 fi
 # @todo save to bootstrap_ok an actual error code if any of the commands above failed
-touch "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok" && chown "${USERNAME}" "${TESTS_ROOT_DIR}/tests/ci/var/bootstrap_ok"
+touch "${BOOTSTRAP_OK_FILE}" && chown "${USERNAME}" "${BOOTSTRAP_OK_FILE}"
 
 tail -f /dev/null &
 child=$!

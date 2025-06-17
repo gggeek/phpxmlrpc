@@ -69,7 +69,7 @@ Environment variables:
 wait_for_bootstrap() {
     I=0
     while [ $I -le 60 ]; do
-        if [ -f "${ROOT_DIR}/tests/ci/var/bootstrap_ok" ]; then
+        if [ -f "${ROOT_DIR}/tests/ci/var/bootstrap_ok_${UBUNTU_VERSION}_${PHP_VERSION}" ]; then
             echo ''
             break;
         fi
@@ -160,9 +160,18 @@ case "${ACTION}" in
             "${CONTAINER_NAME}" su "${CONTAINER_USER}"
         ;;
 
-    # @todo implement
-    #exec)
-    #    ;;
+    exec)
+        shift
+        test -t 1 && USE_TTY="-t"
+        docker exec -i $USE_TTY \
+                    --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
+                    --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
+                    --env "SSLVERSION=${SSLVERSION}" \
+                    --env DEBUG="${DEBUG}" \
+                    "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c '"$0" "$@"' -- "$@"
+                    # q: which one is better? test with a command with spaces in options values, and with a composite command such as cd here && do that
+                    #"${CONTAINER_NAME}" sudo -iu "${CONTAINER_USER}" -- "$@"
+        ;;
 
     restart)
         stop
