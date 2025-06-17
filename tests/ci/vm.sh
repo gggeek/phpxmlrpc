@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# @todo support getting the 2 vars as cli options as well as via env vars?
+# @todo support getting the various settings as cli options as well as via env vars?
 
 set -e
 
@@ -16,17 +16,23 @@ HTTPSIGNOREPEER="${HTTPSIGNOREPEER:-1}"
 SSLVERSION="${SSLVERSION:-0}"
 DEBUG="${DEBUG:-0}"
 
+HOST_HTTPPORT="${HOST_HTTPPORT:-80}"
+HOST_HTTPSPORT="${HOST_HTTPSPORT:-443}"
+HOST_PROXYPORT="${HOST_PROXYPORT:-8080}"
+
+CONTAINER_NAME_PREFIX="${CONTAINER_NAME_PREFIX:-phpxmlrpc}"
+CONTAINER_IMAGE_PREFIX="${CONTAINER_IMAGE_PREFIX:-phpxmlrpc_}"
 CONTAINER_USER=docker
 CONTAINER_WORKSPACE_DIR="/home/${CONTAINER_USER}/workspace"
+
 ROOT_DIR="$(dirname -- "$(dirname -- "$(dirname -- "$(readlink -f "$0")")")")"
-# @todo (low priority) allow passing in a custom prefix for image name, container name
-IMAGE_NAME=phpxmlrpc:${UBUNTU_VERSION}-${PHP_VERSION}
-CONTAINER_NAME=phpxmlrpc_${UBUNTU_VERSION}_${PHP_VERSION}
+IMAGE_NAME="${CONTAINER_NAME_PREFIX}:${UBUNTU_VERSION}-${PHP_VERSION}"
+CONTAINER_NAME="${CONTAINER_IMAGE_PREFIX}${UBUNTU_VERSION}_${PHP_VERSION}"
 
 cd "$(dirname -- "$(readlink -f "$0")")"
 
 help() {
-printf "Usage: vm.sh [OPTIONS] ACTION [OPTARGS]
+    printf "Usage: vm.sh [OPTIONS] ACTION [OPTARGS]
 
 Manages the Test Environment Docker Stack
 
@@ -50,6 +56,7 @@ Environment variables:
   to be set before the 'build' action
     PHP_VERSION       default value: 'default', ie. the stock php version from the Ubuntu version in use. Other possible values: 5.6, 7.0 .. 7.4, 8.0 .. 8.4
     UBUNTU_VERSION    default value: jammy. Other possible values: xenial, bionic, focal, noble
+     default value: 8080. Set to 'no' not to publish the container's proxy http port to the host
   can also be set before the 'runtests' and 'runcoverage' actions:
     HTTPSVERIFYHOST   0, 1 or 2. Default and recommended: 0
     HTTPSIGNOREPEER   0 or 1. Default and recommended: 1
@@ -83,8 +90,19 @@ build() {
     if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
         docker rm "${CONTAINER_NAME}"
     fi
-    docker run -d \
-        -p 80:80 -p 443:443 -p 8080:8080 \
+    PORTMAPPING=''
+    # @todo improve error message and abort in case any port is not an integer or negative
+    if [ "$HOST_HTTPPORT" != no ] && [ "$HOST_HTTPPORT" != '' ]; then
+        PORTMAPPING="-p $((HOST_HTTPPORT-0)):80 "
+    fi
+    if [ "$HOST_HTTPSPORT" != no ] && [ "$HOST_HTTPSPORT" != '' ]; then
+        PORTMAPPING="${PORTMAPPING}-p $((HOST_HTTPSPORT)):443 "
+    fi
+    if [ "$HOST_PROXYPORT" != no ] && [ "$HOST_PROXYPORT" != '' ]; then
+        PORTMAPPING="-p $((HOST_PROXYPORT-0)):8080 "
+    fi
+    if docker run -d \
+        $PORTMAPPING \
         --name "${CONTAINER_NAME}" \
         --env "CONTAINER_USER_UID=$(id -u)" --env "CONTAINER_USER_GID=$(id -g)" \
         --env "TESTS_ROOT_DIR=${CONTAINER_WORKSPACE_DIR}" \
@@ -98,9 +116,7 @@ build() {
         --env "SSLVERSION=${SSLVERSION}" \
         --env DEBUG="${DEBUG}" \
         -v "${ROOT_DIR}":"${CONTAINER_WORKSPACE_DIR}" \
-         "${IMAGE_NAME}"
-
-    if [ $? -eq 0 ]; then
+         "${IMAGE_NAME}"; then
         wait_for_bootstrap
     fi
 }
@@ -204,7 +220,7 @@ case "${ACTION}" in
         ;;
 
     *)
-        printf "\n\e[31mERROR:\e[0m unknown action '${ACTION}'\n\n" >&2
+        printf "\n\e[31mERROR:\e[0m unknown action '%s'\n\n" "${ACTION}" >&2
         help
         exit 1
         ;;
