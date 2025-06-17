@@ -34,19 +34,24 @@ cd "$(dirname -- "$(readlink -f "$0")")"
 help() {
     printf "Usage: vm.sh [OPTIONS] ACTION [OPTARGS]
 
-Manages the Test Environment Docker Stack
+Manages the Test Environment Docker Container
 
 Commands:
-    build             build or rebuild the containers and set up the test env
-    cleanup           removes the docker containers and their images
-    enter             enter the test container
+    build             build or rebuild the container image with the test env
+    cleanup           remove the container and its image
+    enter             start a shell session in the container
+    exec [\$command]   runs a single command in the container
     inspect
     logs
+    port
     ps
-    runtests [\$suite] execute the test suite using the test container (or a single test scenario eg. tests/1ParsingBugsTest.php)
-    runcoverage       execute the test suite and generate a code coverage report (in build/coverage)
-    start             start the containers
-    stop              stop containers
+    runtests [\$suite] execute the test suite using the test container (or a single test scenario eg. tests/1ParsingBugsTest.php);
+                      build and start the container if required
+    runcoverage       execute the test suite and generate a code coverage report (in build/coverage);
+                      build and start the container if required
+    start             start the container; build it if required
+    stats
+    stop              stop the container
     top
 
 Options:
@@ -196,6 +201,9 @@ case "${ACTION}" in
         ;;
 
     runcoverage)
+        if [ "$(docker inspect --format '{{.State.Status}}' ${CONTAINER_NAME} 2>/dev/null)" != running ]; then
+            start
+        fi
         test -t 1 && USE_TTY="-t"
         # @todo clean up /tmp/phpxmlrpc and .phpunit.result.cache
         # @todo run composer install if it was not yet run or we are asked to
@@ -211,6 +219,9 @@ case "${ACTION}" in
         ;;
 
     runtests)
+        if [ "$(docker inspect --format '{{.State.Status}}' ${CONTAINER_NAME} 2>/dev/null)" != running ]; then
+            start
+        fi
         test -t 1 && USE_TTY="-t"
         # @todo clean up /tmp/phpxmlrpc and .phpunit.result.cache
         # @todo run composer install if it was not yet run or we are asked to
