@@ -143,9 +143,10 @@ class Client
      */
     protected $verifyhost = 2;
     /**
-     * @var int
+     * @var int Corresponds to CURL_SSLVERSION_DEFAULT. Other CURL_SSLVERSION_ values are supported when in socket mode,
+     *          and in socket mode different values from 0 to 7, with old php versions not supporting all of them
      */
-    protected $sslversion = 0; // corresponds to CURL_SSLVERSION_DEFAULT. Other  CURL_SSLVERSION_ values are supported
+    protected $sslversion = 0; //
     /**
      * @var string
      */
@@ -585,6 +586,7 @@ class Client
      * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let PHP decide.
      *
      * @param int $i use CURL_SSLVERSION_ constants. When in socket mode, use values 2 (SSLv2) to 7 (TLSv1.3). 0 for auto
+     *               (note that old php versions do not support all TLS versions)
      * @return $this
      * @deprecated use setOption
      */
@@ -1073,16 +1075,16 @@ class Client
                     case 3: // SSLv3
                         $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_SSLv3_CLIENT;
                         break;
-                    case 4: // TLSv1.0
+                    case 4: // TLSv1.0 - not always available
                         $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT;
                         break;
-                    case 5: // TLSv1.1
+                    case 5: // TLSv1.1 - not always available
                         $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT;
                         break;
-                    case 6: // TLSv1.2
+                    case 6: // TLSv1.2 - not always available
                         $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
                         break;
-                    case 7: // TLSv1.3
+                    case 7: // TLSv1.3 - not always available
                         if (defined('STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT')) {
                             $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT;
                         } else {

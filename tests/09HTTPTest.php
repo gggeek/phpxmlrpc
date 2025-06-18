@@ -315,6 +315,8 @@ class HTTPTest extends ServerTest
         }
 
         /// @todo investigate: can we make this work?
+        ///       See changes in STREAM_CRYPTO_METHOD_TLS constants in 7.2 at https://wiki.php.net/rfc/improved-tls-constants
+        ///       and in 5.6 at https://www.php.net/manual/en/migration56.openssl.php#migration56.openssl.crypto-method
         if (version_compare(PHP_VERSION, '7.2', '<'))
         {
             if (is_readable('/etc/os-release')) {
@@ -349,7 +351,8 @@ class HTTPTest extends ServerTest
             $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_SOCKET_OPTS,
                 array('ssl' => array('security_level' => min(2 + $version[1], 5))));
             /// @todo we should probably look deeper into the Apache config / ssl version in use to find out why this
-            ///       does not work well with TLS < 1.2
+            ///       does not work well with TLS < 1.2.
+            ///       Also: push this IF to the test matrix config, leave here only setting of security_level
             if ($this->args['SSLVERSION'] == 0) {
                 $this->client->setSSLVersion(min(5 + $version[1], 7));
             }
