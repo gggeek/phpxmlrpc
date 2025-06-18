@@ -58,6 +58,7 @@ if [ "$(stat -c '%u' "${CONTAINER_USER_HOME}")" != "${CONTAINER_USER_UID}" ] || 
     fi
 fi
 # @todo do the same chmod for ${TESTS_ROOT_DIR}, if it's not within CONTAINER_USER_HOME
+#       Also, the composer cache dir, while within the user home dir, is mounted via docker and might have faulty ownership  or perms
 
 # @todo the following snippet does not seem to be required on any vm - but we might want to run a chown/chmod on $TESTS_ROOT_DIR
 #DIR="$(dirname "$TESTS_ROOT_DIR")"
