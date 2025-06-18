@@ -1124,7 +1124,7 @@ class Client
         ///         PHP Warning:  stream_socket_client(): Failed to enable crypto in /home/docker/workspace/src/Client.php on line 1121
         ///         PHP Warning:  stream_socket_client(): unable to connect to tls://localhost:443 (Unknown error) in /home/docker/workspace/src/Client.php on line 1121'
         ///       This could be obviated by removing the `@` and capturing warnings via ob_start and co
-        $fp = stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $connectTimeout,
+        $fp = @stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $connectTimeout,
             STREAM_CLIENT_CONNECT, $context);
         if ($fp) {
             if ($opts['timeout'] > 0) {
