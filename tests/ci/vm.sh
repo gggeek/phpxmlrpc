@@ -36,7 +36,7 @@ ROOT_DIR="$(dirname -- "$(dirname -- "$(dirname -- "$(readlink -f "$0")")")")"
 cd "$(dirname -- "$(readlink -f "$0")")"
 
 help() {
-    printf "Usage: vm.sh [OPTIONS] ACTION
+    printf "Usage: vm.sh [OPTIONS] ACTION [OPTARGS]
 
 Manages the Test Environment (a Docker Container)
 
@@ -45,7 +45,7 @@ Main actions:
     cleanup           remove the container and its image
     enter             start a shell session in the running container
     exec [\$command]   run a single command in the running container
-    runtests [\$suite] execute the test suite using the test container (or a single test scenario eg. tests/1ParsingBugsTest.php);
+    runtests [\$suite] execute the test suite using the test container (or a single test scenario eg. tests/02ValueTest.php);
                       build and start the container if required
     runcoverage       execute the test suite and generate a code coverage report (in build/coverage);
                       build and start the container if required
@@ -177,6 +177,11 @@ runtests() {
     if [ "$(docker inspect --format '{{.State.Status}}' "${CONTAINER_NAME}" 2>/dev/null)" != running ]; then
         start
     fi
+    if [ -z "$1" ]; then
+        TESTSUITE=tests
+    else
+        TESTSUITE="$*"
+    fi
     test -t 1 && USE_TTY="-t"
     lock
     trap unlock INT
@@ -188,7 +193,7 @@ runtests() {
             --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
             --env "SSLVERSION=${SSLVERSION}" \
             --env DEBUG="${DEBUG}" \
-            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v tests"
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v $TESTSUITE"
         docker exec -i $USE_TTY \
             --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
             --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
@@ -295,7 +300,8 @@ case "${ACTION}" in
         ;;
 
     runtests)
-        runtests
+        shift
+        runtests "$@"
         ;;
 
     start)
