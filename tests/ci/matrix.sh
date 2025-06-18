@@ -30,7 +30,7 @@ Builds and runs a Test Matrix (ie. using different OS/PHP versions)
 
 Commands:
     build             build or rebuild the containers and set up the test env
-    runtests [\$suite] execute the test suite using the test containers (or a single test scenario eg. tests/1ParsingBugsTest.php)
+    runtests [\$suite] execute the test suite using the test containers (or a single test scenario eg. tests/02ValueTest.php)
     cleanup           removes the docker containers and their images
     exec \$command
     inspect
@@ -91,7 +91,7 @@ loop() {
                     if [ -f ../../composer.lock ]; then
                         rm ../../composer.lock
                     fi
-                    if ! $VM_CMD runtests; then
+                    if ! $VM_CMD runtests "$@"; then
                         FAILURES=$((FAILURES + 1))
                     fi
                     # @todo (optionally) abort as soon as one test fails?
@@ -125,8 +125,13 @@ case "${ACTION}" in
         loop exec "$@"
         ;;
 
-    build | start | runtests | stop | cleanup | diff | inspect | kill | logs | pause | port | ps | top | unpause)
+    build | start | stop | cleanup | diff | inspect | kill | logs | pause | port | ps | top | unpause)
         loop "${ACTION}"
+        ;;
+
+    runtests)
+        shift
+        loop "${ACTION}" "$@"
         ;;
 
     *)
