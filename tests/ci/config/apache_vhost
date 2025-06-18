@@ -65,6 +65,11 @@
   </Directory>
 
   SSLEngine on
+
+  # Allow a max nr. of protocols and renegotiations
+  #SSLProtocol all
+  #SSLInsecureRenegotiation on
+
   # This cert is bundled by default in Ubuntu
   SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
   SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key

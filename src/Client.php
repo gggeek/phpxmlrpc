@@ -143,8 +143,9 @@ class Client
      */
     protected $verifyhost = 2;
     /**
-     * @var int Corresponds to CURL_SSLVERSION_DEFAULT. Other CURL_SSLVERSION_ values are supported when in socket mode,
+     * @var int Corresponds to CURL_SSLVERSION_DEFAULT. Other CURL_SSLVERSION_ values are supported when in curl mode,
      *          and in socket mode different values from 0 to 7, with old php versions not supporting all of them
+     *          (php 5.4 and 5.5 not supporting any in fact)
      */
     protected $sslversion = 0; //
     /**
@@ -1116,7 +1117,14 @@ class Client
         $this->errno = 0;
         $this->errstr = '';
 
-        $fp = @stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $connectTimeout,
+        /// @todo using `error_get_last` does not give us very detailed messages for connections errors, eg. for ssl
+        ///       problems on php 5.6 we get 'Connect error: stream_socket_client(): unable to connect to tls://localhost:443 (Unknown error) (0)',
+        ///       versus the more detailed warnings 'PHP Warning:  stream_socket_client(): SSL operation failed with code 1. OpenSSL Error messages:
+        ///         error:0A0C0103:SSL routines::internal error in /home/docker/workspace/src/Client.php on line 1121
+        ///         PHP Warning:  stream_socket_client(): Failed to enable crypto in /home/docker/workspace/src/Client.php on line 1121
+        ///         PHP Warning:  stream_socket_client(): unable to connect to tls://localhost:443 (Unknown error) in /home/docker/workspace/src/Client.php on line 1121'
+        ///       This could be obviated by removing the `@` and capturing warnings via ob_start and co
+        $fp = stream_socket_client("$transport://$connectServer:$connectPort", $this->errno, $this->errstr, $connectTimeout,
             STREAM_CLIENT_CONNECT, $context);
         if ($fp) {
             if ($opts['timeout'] > 0) {
