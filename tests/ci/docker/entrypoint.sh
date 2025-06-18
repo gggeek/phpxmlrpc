@@ -59,6 +59,13 @@ if [ "$(stat -c '%u' "${CONTAINER_USER_HOME}")" != "${CONTAINER_USER_UID}" ] || 
 fi
 # @todo do the same chmod for ${TESTS_ROOT_DIR}, if it's not within CONTAINER_USER_HOME
 
+# @todo the following snippet does not seem to be required on any vm - but we might want to run a chown/chmod on $TESTS_ROOT_DIR
+#DIR="$(dirname "$TESTS_ROOT_DIR")"
+#while "$DIR" != /; do
+#    chmod o+rx "$DIR"
+#    DIR="$(dirname "$DIR")"
+#done
+
 echo "[$(date)] Fixing Apache configuration..."
 
 sed -e "s?^export TESTS_ROOT_DIR=.*?export TESTS_ROOT_DIR=${TESTS_ROOT_DIR}?g" --in-place /etc/apache2/envvars
@@ -67,7 +74,13 @@ sed -e "s?^export APACHE_RUN_GROUP=.*?export APACHE_RUN_GROUP=${USERNAME}?g" --i
 
 echo "[$(date)] Fixing FPM configuration..."
 
-FPMCONF="/etc/php/$(php -r 'echo implode(".",array_slice(explode(".",PHP_VERSION),0,2));' 2>/dev/null)/fpm/pool.d/www.conf"
+PHPVER="$(php -r 'echo implode(".",array_slice(explode(".",PHP_VERSION),0,2));' 2>/dev/null)"
+if [ -f "/usr/local/php/${PHPVER}/etc/php-fpm.conf" ]; then
+    # presumably a php installation from shivammathur/php5-ubuntu, which does not have separate files in a pool.d dir
+    FPMCONF="/usr/local/php/${PHPVER}/etc/php-fpm.conf"
+else
+    FPMCONF="/etc/php/${PHPVER}/fpm/pool.d/www.conf"
+fi
 sed -e "s?^user =.*?user = ${USERNAME}?g" --in-place "${FPMCONF}"
 sed -e "s?^group =.*?group = ${USERNAME}?g" --in-place "${FPMCONF}"
 sed -e "s?^listen.owner =.*?listen.owner = ${USERNAME}?g" --in-place "${FPMCONF}"
