@@ -44,10 +44,12 @@ jobs:
                         operating-system: ubuntu-22.04
                     -   php: '7.1'
                         operating-system: ubuntu-22.04
+                        sslversion: 6
                     -   php: '7.0'
                         operating-system: ubuntu-22.04
                     -   php: '5.6'
                         operating-system: ubuntu-22.04
+                        sslversion: 6
                     -   php: '5.5'
                         operating-system: ubuntu-22.04
                     -   php: '5.4'
@@ -95,6 +97,9 @@ jobs:
 
             -   name: run tests and upload coverage info if needed
                 run: |
+                    if [ -n "${{ matrix.sslversion }}" ]; then
+                        export SSLVERSION="${{ matrix.sslversion }}"
+                    fi
                     if [ -z "${{ matrix.code-coverage }}" ]; then
                         ./vendor/bin/phpunit -v tests
                     else
