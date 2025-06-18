@@ -22,7 +22,7 @@ HOST_HTTPPORT="${HOST_HTTPPORT:-80}"
 HOST_HTTPSPORT="${HOST_HTTPSPORT:-443}"
 HOST_PROXYPORT="${HOST_PROXYPORT:-8080}"
 
-CONTAINER_INSTALL_ON_START="${CONTAINER_INSTALL_ON_START:-true}"
+CONTAINER_INSTALL_ON_START="${CONTAINER_INSTALL_ON_START:-false}"
 CONTAINER_NAME_PREFIX="${CONTAINER_NAME_PREFIX:-phpxmlrpc}"
 CONTAINER_IMAGE_PREFIX="${CONTAINER_IMAGE_PREFIX:-phpxmlrpc_}"
 CONTAINER_USER=docker
@@ -74,25 +74,6 @@ Environment variables:
     SSLVERSION        0 (auto), 2 (SSLv2) to 7 (tls 1.3). Default: 0
     DEBUG             0 - 3. Default: 0
 "
-}
-
-wait_for_bootstrap() {
-    I=0
-    while [ $I -le 60 ]; do
-        if [ -f "${ROOT_DIR}/tests/ci/var/bootstrap_ok_${UBUNTU_VERSION}_${PHP_VERSION}" ]; then
-            echo ''
-            break;
-        fi
-        printf '.'
-        sleep 1
-        I=$((I+1))
-    done
-    if [ $I -gt 60 ]; then
-        echo ''
-        echo "ERROR: Container did not finish bootstrapping within 60 seconds..." >&2
-        return 1
-    fi
-    return 0
 }
 
 build() {
@@ -155,6 +136,25 @@ start() {
             fi
         fi
     fi
+}
+
+wait_for_bootstrap() {
+    I=0
+    while [ $I -le 60 ]; do
+        if [ -f "${ROOT_DIR}/tests/ci/var/bootstrap_ok_${UBUNTU_VERSION}_${PHP_VERSION}" ]; then
+            echo ''
+            break;
+        fi
+        printf '.'
+        sleep 1
+        I=$((I+1))
+    done
+    if [ $I -gt 60 ]; then
+        echo ''
+        echo "ERROR: Container did not finish bootstrapping within 60 seconds..." >&2
+        return 1
+    fi
+    return 0
 }
 
 stop() {
