@@ -134,7 +134,9 @@ start() {
             if [ "$HOST_PROXYPORT" != no ] && [ "$HOST_PROXYPORT" != '' ]; then
                 PORTMAPPING="-p $((HOST_PROXYPORT-0)):8080 "
             fi
-            # @todo map the composer cache dir to a host folder, to speed up reinstalls
+
+            if [ ! -d "${ROOT_DIR}/tests/ci/var/composer_cache" ]; then mkdir -p "${ROOT_DIR}/tests/ci/var/composer_cache"; fi
+
             if docker run -d \
                 $PORTMAPPING \
                 --name "${CONTAINER_NAME}" \
@@ -146,7 +148,8 @@ start() {
                 --env HTTPSSERVER=localhost \
                 --env HTTPSURI=/tests/index.php?demo=server/server.php \
                 --env PROXYSERVER=localhost:8080 \
-                -v "${ROOT_DIR}":"${CONTAINER_WORKSPACE_DIR}" \
+                -v "${ROOT_DIR}:${CONTAINER_WORKSPACE_DIR}" \
+                -v "${ROOT_DIR}/tests/ci/var/composer_cache:/home/${CONTAINER_USER}/.cache/composer" \
                  "${IMAGE_NAME}"; then
                 wait_for_bootstrap
             fi
@@ -250,6 +253,7 @@ case "${ACTION}" in
         ;;
 
     cleanup)
+        # @todo allow to cleanup tests/ci/var completely - use either a cli option or a separate action?
         # @todo allow to only remove the container but not the image - use either a cli option or a separate action?
         if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
             stop -q

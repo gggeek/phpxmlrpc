@@ -14,8 +14,7 @@ if [ -f "${TESTS_ROOT_DIR}/composer.json" ]; then
     if [ ! -f "${TESTS_ROOT_DIR}/composer.lock" ] || [ ! -d "${TESTS_ROOT_DIR}/vendor" ]; then
         echo "Running Composer..."
 
-        # @todo do not swallow _all_ composer errors - just stuff such as an abandoned package
-        su "${USERNAME}" -c "cd ${TESTS_ROOT_DIR} && composer install --no-interaction --audit" || true
+        su "${USERNAME}" -c "cd ${TESTS_ROOT_DIR} && composer install --no-interaction"
     else
         # @todo calculate an md5 of composer.lock, and compare it to an md5 (previously stored in ./var at the time that
         #       composer was run), adding in as key the os+php versions. If not matching, delete composer.lock
