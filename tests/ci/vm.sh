@@ -169,6 +169,80 @@ stop() {
     fi
 }
 
+runtests() {
+    # @todo allow auto-deleting the container after execution - use either a cli option or an env var?
+    if [ "$(docker inspect --format '{{.State.Status}}' "${CONTAINER_NAME}" 2>/dev/null)" != running ]; then
+        start
+    fi
+    test -t 1 && USE_TTY="-t"
+    lock
+    trap unlock INT
+    RETCODE=0
+    {
+        docker exec $USE_TTY "${CONTAINER_NAME}" /root/setup/setup_app.sh "${CONTAINER_WORKSPACE_DIR}"
+        docker exec -i $USE_TTY \
+            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
+            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
+            --env "SSLVERSION=${SSLVERSION}" \
+            --env DEBUG="${DEBUG}" \
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v tests"
+        docker exec -i $USE_TTY \
+            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
+            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
+            --env "SSLVERSION=${SSLVERSION}" \
+            --env DEBUG="${DEBUG}" \
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "php ./tests/legacy_loader_test.php"
+    } || {
+        RETCODE="$?"
+    }
+    unlock
+    return $RETCODE
+}
+
+runcoverage() {
+    # @todo allow auto-deleting the container after execution - use either a cli option or an env var?
+    if [ "$(docker inspect --format '{{.State.Status}}' "${CONTAINER_NAME}" 2>/dev/null)" != running ]; then
+        start
+    fi
+    # @todo double-check if setup_code_coverage.sh does always need a tty (`-t`). If so, abort if `test -t 1` fails
+    test -t 1 && USE_TTY="-t"
+    RETCODE=0
+    lock
+    trap unlock INT
+    {
+        # @todo clean up /tmp/phpxmlrpc (in setup_code_coverage.sh?)
+        docker exec $USE_TTY "${CONTAINER_NAME}" /root/setup/setup_app.sh "${CONTAINER_WORKSPACE_DIR}" || true
+        if [ ! -d ./var/coverage ]; then mkdir -p ./var/coverage; fi
+        docker exec -t "${CONTAINER_NAME}" /root/setup/setup_code_coverage.sh enable
+        docker exec -i $USE_TTY \
+            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
+            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
+            --env "SSLVERSION=${SSLVERSION}" \
+            --env DEBUG="${DEBUG}" \
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html tests/ci/var/coverage -v tests"
+        docker exec -t "${CONTAINER_NAME}" /root/setup/setup_code_coverage.sh disable
+    } || {
+       RETCODE="$?"
+    }
+    unlock
+    return $RETCODE
+}
+
+lock() {
+    if [ -f ./var/tests_executing.lock ]; then
+        echo "ERROR: tests are already running - or there is a leftover lock file. Use 'unlock' action to remove it" >&2
+        exit 1
+    else
+        touch ./var/tests_executing.lock
+    fi
+}
+
+unlock() {
+    if [ -f ./var/tests_executing.lock ]; then
+        rm ./var/tests_executing.lock;
+    fi
+}
+
 case "${ACTION}" in
 
     build)
@@ -213,44 +287,11 @@ case "${ACTION}" in
         ;;
 
     runcoverage)
-        # @todo allow auto-deleting the container after execution - use either a cli option or an env var?
-        if [ "$(docker inspect --format '{{.State.Status}}' "${CONTAINER_NAME}" 2>/dev/null)" != running ]; then
-            start
-        fi
-        # @todo double-check if setup_code_coverage.sh does always need a tty (`-t`). If so, abort if `test -t 1` fails
-        test -t 1 && USE_TTY="-t"
-        # @todo clean up /tmp/phpxmlrpc (in setup_code_coverage.sh?)
-        docker exec $USE_TTY "${CONTAINER_NAME}" /root/setup/setup_app.sh "${CONTAINER_WORKSPACE_DIR}" || true
-        if [ ! -d ./var/coverage ]; then mkdir -p ./var/coverage; fi
-        docker exec -t "${CONTAINER_NAME}" /root/setup/setup_code_coverage.sh enable
-        docker exec -i $USE_TTY \
-            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
-            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
-            --env "SSLVERSION=${SSLVERSION}" \
-            --env DEBUG="${DEBUG}" \
-            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html tests/ci/var/coverage -v tests"
-        docker exec -t "${CONTAINER_NAME}" /root/setup/setup_code_coverage.sh disable
+        runcoverage
         ;;
 
     runtests)
-        # @todo allow auto-deleting the container after execution - use either a cli option or an env var?
-        if [ "$(docker inspect --format '{{.State.Status}}' "${CONTAINER_NAME}" 2>/dev/null)" != running ]; then
-            start
-        fi
-        test -t 1 && USE_TTY="-t"
-        docker exec $USE_TTY "${CONTAINER_NAME}" /root/setup/setup_app.sh "${CONTAINER_WORKSPACE_DIR}"
-        docker exec -i $USE_TTY \
-            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
-            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
-            --env "SSLVERSION=${SSLVERSION}" \
-            --env DEBUG="${DEBUG}" \
-            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v tests"
-        docker exec -i $USE_TTY \
-            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
-            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
-            --env "SSLVERSION=${SSLVERSION}" \
-            --env DEBUG="${DEBUG}" \
-            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "php ./tests/legacy_loader_test.php"
+        runtests
         ;;
 
     start)
@@ -267,6 +308,10 @@ case "${ACTION}" in
 
     diff | inspect | kill | logs | pause | port | stats | top | unpause)
         docker container "${ACTION}" "${CONTAINER_NAME}"
+        ;;
+
+    unlock)
+        unlock
         ;;
 
     *)
