@@ -13,9 +13,9 @@ PHPCONFDIR_FPM=$(echo "$PHPCONFDIR_CLI" | sed 's|/cli/|/fpm/|')
 
 enable_cc() {
     if [ -L "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"; fi
-    sudo ln -s $(realpath tests/ci/config/codecoverage_xdebug.ini) "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"
+    sudo ln -s "$(realpath tests/ci/config/codecoverage_xdebug.ini)" "${PHPCONFDIR_CLI}/99-codecoverage_xdebug.ini"
     if [ -L "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini" ]; then sudo rm "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini"; fi
-    sudo ln -s $(realpath tests/ci/config/codecoverage_xdebug.ini) "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini"
+    sudo ln -s "$(realpath tests/ci/config/codecoverage_xdebug.ini)" "${PHPCONFDIR_FPM}/99-codecoverage_xdebug.ini"
 
     sudo service php-fpm restart
 }

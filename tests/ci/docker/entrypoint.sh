@@ -73,17 +73,9 @@ sed -e "s?^group =.*?group = ${USERNAME}?g" --in-place "${FPMCONF}"
 sed -e "s?^listen.owner =.*?listen.owner = ${USERNAME}?g" --in-place "${FPMCONF}"
 sed -e "s?^listen.group =.*?listen.group = ${USERNAME}?g" --in-place "${FPMCONF}"
 
-if [ -f "${TESTS_ROOT_DIR}/composer.json" ]; then
-    echo "[$(date)] Running Composer..."
-
-    # @todo if there is a composer.lock file present, there are chances it might be a leftover from when running the
-    #       container using a different os/php version. We should then back it up / do some symlink magic to make sure that
-    #       it matches the current php version and a hash of composer.json... (also symlink the vendor folder).
-    #       Make it at least optional to run composer at container start
-    su "${USERNAME}" -c "cd ${TESTS_ROOT_DIR} && composer install"
-else
-    # @todo should we exit?
-    echo "Missing file '${TESTS_ROOT_DIR}/composer.json' - was the container started without the correct mount?" >&2
+#  We make it optional to run composer at container start
+if [ "${INSTALL_ON_START}" = true ]; then
+    /root/setup/setup_app.sh "${TESTS_ROOT_DIR}"
 fi
 
 trap clean_up TERM
