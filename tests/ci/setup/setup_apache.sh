@@ -14,7 +14,10 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y apache2
 
 # set up Apache for php-fpm
 
-a2enmod rewrite proxy_fcgi setenvif ssl http2
+a2enmod rewrite proxy_fcgi setenvif ssl
+if  apache2ctl -M 2>/dev/null | grep -q http2; then
+    a2enmod http2
+fi
 
 # in case mod-php was enabled (this is the case at least on GHA's ubuntu with php 5.x and shivammathur/setup-php)
 if [ -n "$(ls /etc/apache2/mods-enabled/php* 2>/dev/null)" ]; then
