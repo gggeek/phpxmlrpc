@@ -5,19 +5,24 @@
 
 set -e
 
-echo "Installing the app dependencies..."
+echo "Setting up the app..."
 
 TESTS_ROOT_DIR="${1}"
 USERNAME="${2:-docker}"
 
 if [ -f "${TESTS_ROOT_DIR}/composer.json" ]; then
-    echo "[$(date)] Running Composer..."
+    if [ ! -f "${TESTS_ROOT_DIR}/composer.lock" ] || [ ! -d "${TESTS_ROOT_DIR}/vendor" ]; then
+        echo "Running Composer..."
 
-    # @todo if there is a composer.lock file present, there are chances it might be a leftover from when running the
-    #       container using a different os/php version. We could then back it up / do some symlink magic to make sure
-    #       that it matches the current php version and a hash of composer.json... (also symlink the vendor folder).
+        # @todo do not swallow _all_ composer errors - just stuff such as an abandoned package
+        su "${USERNAME}" -c "cd ${TESTS_ROOT_DIR} && composer install --no-interaction --audit" || true
+    else
+        # @todo calculate an md5 of composer.lock, and compare it to an md5 (previously stored in ./var at the time that
+        #       composer was run), adding in as key the os+php versions. If not matching, delete composer.lock
+        #       and reinstall
 
-    su "${USERNAME}" -c "cd ${TESTS_ROOT_DIR} && composer install --no-interaction --audit"
+        echo "Not running Composer: it was done previously"
+    fi
 else
     echo "Missing file '${TESTS_ROOT_DIR}/composer.json' - was the container started without the correct mount?" >&2
     exit 1

@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# @todo rename: this is not based on a vm. Also, the 'ci' folder should really be called 'env' or 'testenv'...
 # @todo support getting the various settings as cli options as well as via env vars?
 
 set -e
@@ -9,6 +10,7 @@ ACTION="${1}"
 # Valid values: 'default', 5.6, 7.0 .. 7.4, 8.0 .. 8.4
 export PHP_VERSION=${PHP_VERSION:-default}
 # Valid values: precise (12), trusty (14), xenial (16), bionic (18), focal (20), jammy (22), noble (24)
+# For end of support dates, see: https://wiki.ubuntu.com/Releases
 export UBUNTU_VERSION=${UBUNTU_VERSION:-jammy}
 
 HTTPSVERIFYHOST="${HTTPSVERIFYHOST:-0}"
@@ -34,19 +36,15 @@ ROOT_DIR="$(dirname -- "$(dirname -- "$(dirname -- "$(readlink -f "$0")")")")"
 cd "$(dirname -- "$(readlink -f "$0")")"
 
 help() {
-    printf "Usage: vm.sh [OPTIONS] ACTION [OPTARGS]
+    printf "Usage: vm.sh [OPTIONS] ACTION
 
-Manages the Test Environment (Docker Container)
+Manages the Test Environment (a Docker Container)
 
-Commands:
+Main actions:
     build             build or rebuild the container image with the test env
     cleanup           remove the container and its image
     enter             start a shell session in the running container
     exec [\$command]   run a single command in the running container
-    inspect
-    logs
-    port
-    ps
     runtests [\$suite] execute the test suite using the test container (or a single test scenario eg. tests/1ParsingBugsTest.php);
                       build and start the container if required
     runcoverage       execute the test suite and generate a code coverage report (in build/coverage);
@@ -55,6 +53,9 @@ Commands:
     stats
     stop              stop the container
     top
+
+Actions for troubleshooting the container:
+    inspect, logs, port, ps, stats, top
 
 Options:
     -h                print help
@@ -67,12 +68,11 @@ Environment variables:
     HOST_HTTPPORT     default value: 80. Set to 'no' not to publish the container's http port to the host
     HOST_HTTPSPORT    default value: 443. Set to 'no' not to publish the container's https port to the host
     HOST_PROXYPORT    default value: 8080. Set to 'no' not to publish the container's proxy http port to the host
-    CONTAINER_INSTALL_ON_START default value: true. Change to avoid having Composer be run at the start of the Container
   used by the 'runtests' and 'runcoverage' actions:
     HTTPSVERIFYHOST   0, 1 or 2. Default and recommended: 0
     HTTPSIGNOREPEER   0 or 1. Default and recommended: 1
     SSLVERSION        0 (auto), 2 (SSLv2) to 7 (tls 1.3). Default: 0
-    DEBUG
+    DEBUG             0 - 3. Default: 0
 "
 }
 
@@ -109,12 +109,14 @@ build() {
 
 start() {
     if [ "$(docker inspect --format '{{.State.Status}}' "${CONTAINER_NAME}" 2>/dev/null)" = running ]; then
-        # @todo we should check that the env vars have not changed, and give a warning if so. Doable using `docker container cp`...
+        # @todo we should check that the env vars have not changed since cont. start, and give a warning if so.
+        #       Doable using `docker container cp` to retrieve the /etc/build-info file...
         echo "${CONTAINER_NAME} already started..."
     else
         if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
             echo "starting existing container ${CONTAINER_NAME}..."
-            # @todo we should check that the env vars have not changed, and give a warning if so. Doable using `docker container inspect`...
+            # @todo we should check that the env vars have not changed since cont. creation, and give a warning if so.
+            #       Doable using `docker container inspect`...
             if docker start "${CONTAINER_NAME}"; then
                 wait_for_bootstrap
             fi
@@ -174,6 +176,7 @@ case "${ACTION}" in
         ;;
 
     cleanup)
+        # @todo allow to only remove the container but not the image - use either a cli option or a separate action?
         if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
             stop -q
             docker rm "${CONTAINER_NAME}"
@@ -182,7 +185,7 @@ case "${ACTION}" in
         ;;
 
     enter | shell | cli)
-        # @todo allow login as root
+        # @todo allow login as root - use either a cli option or a separate action?
         docker exec -it \
             --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
             --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
@@ -210,38 +213,32 @@ case "${ACTION}" in
         ;;
 
     runcoverage)
+        # @todo allow auto-deleting the container after execution - use either a cli option or an env var?
         if [ "$(docker inspect --format '{{.State.Status}}' "${CONTAINER_NAME}" 2>/dev/null)" != running ]; then
             start
         fi
+        # @todo double-check if setup_code_coverage.sh does always need a tty (`-t`). If so, abort if `test -t 1` fails
         test -t 1 && USE_TTY="-t"
-        # @todo clean up /tmp/phpxmlrpc (in setup_code_coverage.sh?) and possibly .phpunit.result.cache
-        # run composer install if it was not yet run
-        if [ ! -f ../../composer.lock ] || [ ! -d ../../vendor ]; then
-            # @todo do not swallow _all_ composer errors - just stuff such as an abandoned package
-            docker exec $USE_TTY "${CONTAINER_NAME}" /root/setup/setup_app.sh "${CONTAINER_WORKSPACE_DIR}" || true
-        fi
+        # @todo clean up /tmp/phpxmlrpc (in setup_code_coverage.sh?)
+        docker exec $USE_TTY "${CONTAINER_NAME}" /root/setup/setup_app.sh "${CONTAINER_WORKSPACE_DIR}" || true
         if [ ! -d ./var/coverage ]; then mkdir -p ./var/coverage; fi
-        docker exec -t "${CONTAINER_NAME}" "/root/setup/setup_code_coverage.sh" enable
+        docker exec -t "${CONTAINER_NAME}" /root/setup/setup_code_coverage.sh enable
         docker exec -i $USE_TTY \
             --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
             --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
             --env "SSLVERSION=${SSLVERSION}" \
             --env DEBUG="${DEBUG}" \
             "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html tests/ci/var/coverage -v tests"
-        docker exec -t "${CONTAINER_NAME}" "/root/setup/setup_code_coverage.sh" disable
+        docker exec -t "${CONTAINER_NAME}" /root/setup/setup_code_coverage.sh disable
         ;;
 
     runtests)
+        # @todo allow auto-deleting the container after execution - use either a cli option or an env var?
         if [ "$(docker inspect --format '{{.State.Status}}' "${CONTAINER_NAME}" 2>/dev/null)" != running ]; then
             start
         fi
         test -t 1 && USE_TTY="-t"
-        # @todo clean up .phpunit.result.cache?
-        # run composer install if it was not yet run
-        if [ ! -f ../../composer.lock ] || [ ! -d ../../vendor ] ; then
-            # @todo do not swallow _all_ composer errors - just stuff such as an abandoned package
-            docker exec $USE_TTY "${CONTAINER_NAME}" /root/setup/setup_app.sh "${CONTAINER_WORKSPACE_DIR}" || true
-        fi
+        docker exec $USE_TTY "${CONTAINER_NAME}" /root/setup/setup_app.sh "${CONTAINER_WORKSPACE_DIR}"
         docker exec -i $USE_TTY \
             --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
             --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
