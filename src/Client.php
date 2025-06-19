@@ -1170,6 +1170,9 @@ class Client
             return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['http_error'], $this->errstr . ' (' . $this->errno . ')');
         }
 
+        /// @todo from here onwards, we can inject the results of stream_get_meta_data in the response. We could
+        ///       do that f.e. only in new debug level 3, or starting at v1
+
         if (!fputs($fp, $op, strlen($op))) {
             fclose($fp);
             $this->errstr = 'Write error';
