@@ -32,10 +32,8 @@ jobs:
                         sslversion: 6
                     -   php: '8.2'
                         operating-system: ubuntu-22.04
-                        sslversion: 5
                     -   php: '8.1'
                         operating-system: ubuntu-22.04
-                        sslversion: 4
                     -   php: '8.0'
                         operating-system: ubuntu-22.04
                     -   php: '7.4'

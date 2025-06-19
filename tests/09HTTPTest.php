@@ -293,12 +293,17 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
+
         /// @todo push this IF to the test matrix config?
         /*if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
         {
             $version = explode('.', PHP_VERSION);
             $this->client->setSSLVersion(min(4 + $version[1], 7));
         }*/
+
+        // it seems that curl will happily always use http2 whenever it has it compiled in. We thus force http 1.1
+        // for this test, as we have a dedicated test for http2
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_CURL_OPTS, array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1));
 
         $this->$method();
     }
