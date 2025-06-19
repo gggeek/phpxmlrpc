@@ -10,6 +10,7 @@
  * @todo check for presence of specific curl options, such as fe. the HTTP2 ones
  * @todo check for presence of mbstring
  * @todo check for presence of the xmlrpc extension
+ * @todo improve the curl check/message: since php 5.6 we can use socket mode with https
  */
 
 function phpxmlrpc_verify_compat($mode = 'client')

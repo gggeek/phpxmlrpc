@@ -1104,7 +1104,8 @@ class Server
         $outAr = array(
             // xml-rpc spec: always supported
             'xmlrpc' => array(
-                'specUrl' => 'http://www.xmlrpc.com/spec', // NB: the spec sits now at http://xmlrpc.com/spec.md
+                // NB: the spec sits now at https://xmlrpc.com/spec.md
+                'specUrl' => 'http://www.xmlrpc.com/spec',
                 'specVersion' => 1
             ),
             // if we support system.xxx functions, we always support multicall, too...
