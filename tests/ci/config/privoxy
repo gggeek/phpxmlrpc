@@ -1,1 +1,7 @@
+# @see https://www.privoxy.org/3.0.34/user-manual/config.html
 listen-address 127.0.0.1:8080
+# Enable verbose logging. NB: this does not seem to work well / at all, you might want to instead run privoxy
+# manually using `/usr/sbin/privoxy --user privoxy --no-daemon` after having stopped its service
+debug 12303
+# disable content filtering
+toggle 0
