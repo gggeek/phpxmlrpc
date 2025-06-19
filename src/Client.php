@@ -145,7 +145,8 @@ class Client
     /**
      * @var int Corresponds to CURL_SSLVERSION_DEFAULT. Other CURL_SSLVERSION_ values are supported when in curl mode,
      *          and in socket mode different values from 0 to 7, matching the corresponding curl value. Old php versions
-     *          do not support all values, php 5.4 and 5.5 do not support any in fact
+     *          do not support all values, php 5.4 and 5.5 do not support any in fact.
+     *          NB: please do not use any version lower than TLS 1.3 (value: 7) as they are considered insecure.
      */
     protected $sslversion = 0;
     /**
@@ -587,8 +588,9 @@ class Client
      * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let PHP decide.
      *
      * @param int $i use CURL_SSLVERSION_ constants. When in socket mode, use the same values: 2 (SSLv2) to 7 (TLSv1.3),
-     *               0 for auto
-     *               (note that old php versions do not support all TLS versions)
+     *               0 for auto (note that old php versions do not support all TLS versions).
+     *               Note that, in curl mode, the actual ssl version in use might be higher than requested.
+     *               NB: please do not use any version lower than TLS 1.3 as they are considered insecure.
      * @return $this
      * @deprecated use setOption
      */
@@ -717,6 +719,7 @@ class Client
 
     /**
      * @param int $useCurlMode self::USE_CURL_ALWAYS, self::USE_CURL_AUTO or self::USE_CURL_NEVER
+     *                         In 'auto' mode, curl is picked up based on features used, such as fe. NTLM auth, or https
      * @return $this
      * @deprecated use setOption
      */
@@ -727,7 +730,6 @@ class Client
         $this->use_curl = $useCurlMode;
         return $this;
     }
-
 
     /**
      * Set user-agent string that will be used by this client instance in http headers sent to the server.
@@ -1424,6 +1426,7 @@ class Client
             curl_setopt($curl, CURLOPT_TIMEOUT, $opts['timeout']);
         }
 
+        // nb: for 'https' we leave it up to curl to decide
         switch ($method) {
             case 'http10':
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);

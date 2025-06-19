@@ -271,6 +271,7 @@ class HTTPTest extends ServerTest
     /**
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
+     * @todo bring back tests for sslversion values 1 to 5, once we figure out how to make curl actually enforce those
      */
     public function testHttpsCurl($method)
     {
@@ -294,15 +295,9 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
 
-        /// @todo push this IF to the test matrix config?
-        /*if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
-        {
-            $version = explode('.', PHP_VERSION);
-            $this->client->setSSLVersion(min(4 + $version[1], 7));
-        }*/
-
-        // it seems that curl will happily always use http2 whenever it has it compiled in. We thus force http 1.1
-        // for this test, as we have a dedicated test for http2
+        // It seems that curl will happily always use http2 whenever it has it compiled in. We thus force http 1.1
+        // for this test, as we have a dedicated test for http2.
+        /// @todo for completeness, we should run at least one test where we also set CURLOPT_SSL_ENABLE_ALPN = false
         $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_CURL_OPTS, array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1));
 
         $this->$method();
@@ -311,6 +306,8 @@ class HTTPTest extends ServerTest
     /**
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
+     * @todo bring back tests for sslversion values 1 to 5, once we figure out the correct combination of php, ssl and
+     *       apache which actually work with those
      */
     public function testHttpsSocket($method)
     {
@@ -366,12 +363,6 @@ class HTTPTest extends ServerTest
                     //'capture_session_meta' => true,
                 ))
             );
-            /// @todo we should probably look deeper into the Apache config / ssl version in use to find out why this
-            ///       does not work well with TLS < 1.2.
-            /// @todo push this IF to the test matrix config, leave here only the setting of security_level?
-            /*if ($this->args['SSLVERSION'] == 0) {
-                $this->client->setSSLVersion(min(5 + $version[1], 7));
-            }*/
         }
         $this->$method();
     }
