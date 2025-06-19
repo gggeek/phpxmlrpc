@@ -272,7 +272,7 @@ class HTTPTest extends ServerTest
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
      */
-    public function testHttps($method)
+    public function testHttpsCurl($method)
     {
         if (!function_exists('curl_init'))
         {
@@ -293,6 +293,7 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
+        /// @todo push this IF to the test matrix config?
         if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
         {
             $version = explode('.', PHP_VERSION);
@@ -317,6 +318,7 @@ class HTTPTest extends ServerTest
         /// @todo investigate: can we make this work?
         ///       See changes in STREAM_CRYPTO_METHOD_TLS constants in 7.2 at https://wiki.php.net/rfc/improved-tls-constants
         ///       and in 5.6 at https://www.php.net/manual/en/migration56.openssl.php#migration56.openssl.crypto-method
+        ///       Take into account also that the issue might in fact relate to the server-side (Apache) ssl config
         if (version_compare(PHP_VERSION, '7.2', '<'))
         {
             if (is_readable('/etc/os-release')) {
@@ -328,7 +330,7 @@ class HTTPTest extends ServerTest
                 preg_match('/ubunutu([0-9]+)/', $output[0], $matches);
                 $ubuntuVersion = @$matches[1];
             }
-            if ($ubuntuVersion >= 20) {
+            if ($ubuntuVersion >= 20 && $this->args['SSLVERSION'] != 6) {
                 $this->markTestSkipped('HTTPS via Socket known to fail on php less than 7.2 on Ubuntu 20 and higher');
                 return;
             }
@@ -341,18 +343,23 @@ class HTTPTest extends ServerTest
         /// @todo replace with setOptions when dropping the BC layer
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
-        $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
+        $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
 
         if (version_compare(PHP_VERSION, '8.1', '>='))
         {
             $version = explode('.', PHP_VERSION);
             /// @see https://docs.openssl.org/1.1.1/man3/SSL_CTX_set_security_level/#default-callback-behaviour for levels
             $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_SOCKET_OPTS,
-                array('ssl' => array('security_level' => min(2 + $version[1], 5))));
+                array('ssl' => array(
+                    // security level is available as of php 7.2.0 + openssl 1.1.0 according to the docs
+                    'security_level' => min(2 + $version[1], 5),
+                    'capture_session_meta' => true,
+                ))
+            );
             /// @todo we should probably look deeper into the Apache config / ssl version in use to find out why this
             ///       does not work well with TLS < 1.2.
-            ///       Also: push this IF to the test matrix config, leave here only setting of security_level
+            /// @todo push this IF to the test matrix config, leave here only the setting of security_level?
             if ($this->args['SSLVERSION'] == 0) {
                 $this->client->setSSLVersion(min(5 + $version[1], 7));
             }
@@ -364,7 +371,7 @@ class HTTPTest extends ServerTest
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
      */
-    public function testHttpsProxy($method)
+    public function testHttpsProxyCurl($method)
     {
         if (!function_exists('curl_init'))
         {
@@ -391,6 +398,7 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
+        /// @todo push this override to the test matrix config?
         if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
         {
             $version = explode('.', PHP_VERSION);
@@ -399,6 +407,62 @@ class HTTPTest extends ServerTest
 
         $this->$method();
     }
+
+/*  NB: this is not yet supported by the Client class
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     * /
+    public function testHttpsProxySocket($method)
+    {
+        if ($this->args['PROXYSERVER'] == '')
+        {
+            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. https');
+            return;
+        }
+        else if ($this->args['HTTPSSERVER'] == '')
+        {
+            $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https w. proxy');
+            return;
+        }
+
+        if (version_compare(PHP_VERSION, '7.2', '<'))
+        {
+            if (is_readable('/etc/os-release')) {
+                $output = file_get_contents('/etc/os-release');
+                preg_match('/VERSION="?([0-9]+)/', $output, $matches);
+                $ubuntuVersion = @$matches[1];
+            } else {
+                exec('uname -a', $output, $retval);
+                preg_match('/ubunutu([0-9]+)/', $output[0], $matches);
+                $ubuntuVersion = @$matches[1];
+            }
+            if ($ubuntuVersion >= 20 && $this->args['SSLVERSION'] != 6) {
+                $this->markTestSkipped('HTTPS via Socket known to fail on php less than 7.2 on Ubuntu 20 and higher');
+                return;
+            }
+        }
+
+        $this->method = 'https';
+        $this->client->method = 'https';
+        $this->client->server = $this->args['HTTPSSERVER'];
+        $this->client->path = $this->args['HTTPSURI'];
+        /// @todo replace with setOptions when dropping the BC layer
+        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
+        $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
+        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
+        $this->client->setSSLVersion($this->args['SSLVERSION']);
+        $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
+        /// @todo push this override to the test matrix config?
+        if (version_compare(PHP_VERSION, '8.1', '>=') && $this->args['SSLVERSION'] == 0)
+        {
+            $version = explode('.', PHP_VERSION);
+            $this->client->setSSLVersion(min(5 + $version[1], 7));
+        }
+
+        $this->$method();
+    }
+*/
 
     /**
      * @dataProvider getSingleHttpTestMethods
@@ -595,7 +659,7 @@ class HTTPTest extends ServerTest
     {
         if ($this->expectHttp2) {
             $hr = $r->httpResponse();
-            $this->assertEquals("2", @$hr['protocol_version']);
+            $this->assertEquals("2", @$hr['protocol_version'], 'Server response not using http version 2');
         }
     }
 }
