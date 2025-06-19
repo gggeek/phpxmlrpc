@@ -6,6 +6,7 @@
     "keywords": [ "xmlrpc", "xml-rpc","webservices" ],
     "require": {
         "php": "^5.4.0 || ^7.0 || ^8.0",
+        "ext-ctype": "*",
         "ext-xml": "*"
     },
     "require-dev": {
