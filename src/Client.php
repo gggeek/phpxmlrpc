@@ -144,10 +144,10 @@ class Client
     protected $verifyhost = 2;
     /**
      * @var int Corresponds to CURL_SSLVERSION_DEFAULT. Other CURL_SSLVERSION_ values are supported when in curl mode,
-     *          and in socket mode different values from 0 to 7, with old php versions not supporting all of them
-     *          (php 5.4 and 5.5 not supporting any in fact)
+     *          and in socket mode different values from 0 to 7, matching the corresponding curl value. Old php versions
+     *          do not support all values, php 5.4 and 5.5 do not support any in fact
      */
-    protected $sslversion = 0; //
+    protected $sslversion = 0;
     /**
      * @var string
      */
@@ -586,7 +586,8 @@ class Client
     /**
      * Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let PHP decide.
      *
-     * @param int $i use CURL_SSLVERSION_ constants. When in socket mode, use values 2 (SSLv2) to 7 (TLSv1.3). 0 for auto
+     * @param int $i use CURL_SSLVERSION_ constants. When in socket mode, use the same values: 2 (SSLv2) to 7 (TLSv1.3),
+     *               0 for auto
      *               (note that old php versions do not support all TLS versions)
      * @return $this
      * @deprecated use setOption
@@ -846,12 +847,17 @@ class Client
         // where req is a Request
         $req->setDebug($this->debug);
 
-        /// @todo we could be smarter about this and not force usage of curl for https if not present as well as use the
-        ///       presence of curl_extra_opts or socket_extra_opts as a hint
+        /// @todo we could be smarter about this:
+        ///       - not force usage of curl if it is not present
+        ///       - not force usage of curl for https (minor BC)
+        ///       - use the presence of curl_extra_opts or socket_extra_opts as a hint
         $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO && (
             in_array($method, array('https', 'http11', 'h2c', 'h2')) ||
             ($this->username != '' && $this->authtype != 1) ||
             ($this->proxy != '' && $this->proxy_user != '' && $this->proxy_authtype != 1)
+            // uncomment the following if not forcing curl always for 'https'
+            //|| ($this->sslversion == 7 && PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION == '7.3')
+            //|| ($this->sslversion != 0 && PHP_MAJOR_VERSION < 6)
         ));
 
         // BC - we go through sendPayloadCURL/sendPayloadSocket in case some subclass reimplemented those
@@ -1079,24 +1085,32 @@ class Client
             $contextOptions['ssl']['verify_peer_name'] = $opts['verifypeer'];
 
             if ($opts['sslversion'] != 0) {
-                /// @see https://www.php.net/manual/en/function.curl-setopt.php, https://www.php.net/manual/en/migration56.openssl.php
+                /// @see https://www.php.net/manual/en/curl.constants.php,
+                ///      https://www.php.net/manual/en/function.stream-socket-enable-crypto.php
+                ///      https://www.php.net/manual/en/migration56.openssl.php,
+                ///      https://wiki.php.net/rfc/improved-tls-constants
                 switch($opts['sslversion']) {
-                    /// @todo what does this map to? 1.0-1.3?
-                    //case 1: // TLSv1
-                    //    break;
+                    case 1: // TLSv1x
+                        if (version_compare(PHP_VERSION, '7.2.0', '>=')) {
+                            $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLS_CLIENT;
+                        } else {
+                            return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['unsupported_option'],
+                                PhpXmlRpc::$xmlrpcerr['unsupported_option'] . ': TLS-any only is supported with PHP 7.2 or later');
+                        }
+                        break;
                     case 2: // SSLv2
                         $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_SSLv2_CLIENT;
                         break;
                     case 3: // SSLv3
                         $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_SSLv3_CLIENT;
                         break;
-                    case 4: // TLSv1.0 - not always available
+                    case 4: // TLSv1.0 - not always available?
                         $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT;
                         break;
-                    case 5: // TLSv1.1 - not always available
+                    case 5: // TLSv1.1 - not always available?
                         $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT;
                         break;
-                    case 6: // TLSv1.2 - not always available
+                    case 6: // TLSv1.2 - not always available?
                         $contextOptions['ssl']['crypto_method'] = STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
                         break;
                     case 7: // TLSv1.3 - not always available

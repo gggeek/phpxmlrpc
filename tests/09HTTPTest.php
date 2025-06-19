@@ -294,11 +294,11 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
         $this->client->setSSLVersion($this->args['SSLVERSION']);
         /// @todo push this IF to the test matrix config?
-        if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
+        /*if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
         {
             $version = explode('.', PHP_VERSION);
             $this->client->setSSLVersion(min(4 + $version[1], 7));
-        }
+        }*/
 
         $this->$method();
     }
@@ -315,7 +315,7 @@ class HTTPTest extends ServerTest
             return;
         }
 
-        /// @todo investigate: can we make this work?
+        /// @todo investigate deeper: can we make this test work with php < 7.2?
         ///       See changes in STREAM_CRYPTO_METHOD_TLS constants in 7.2 at https://wiki.php.net/rfc/improved-tls-constants
         ///       and in 5.6 at https://www.php.net/manual/en/migration56.openssl.php#migration56.openssl.crypto-method
         ///       Take into account also that the issue might in fact relate to the server-side (Apache) ssl config
@@ -346,23 +346,27 @@ class HTTPTest extends ServerTest
         $this->client->setSSLVersion($this->args['SSLVERSION']);
         $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
 
-        if (version_compare(PHP_VERSION, '8.1', '>='))
+        /// @todo find a value for OPT_EXTRA_SOCKET_OPTS that we can check via an assertion
+        /// @see https://www.php.net/manual/en/context.php
+
+        if (version_compare(PHP_VERSION, '8.0', '>='))
         {
             $version = explode('.', PHP_VERSION);
             /// @see https://docs.openssl.org/1.1.1/man3/SSL_CTX_set_security_level/#default-callback-behaviour for levels
             $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_SOCKET_OPTS,
                 array('ssl' => array(
                     // security level is available as of php 7.2.0 + openssl 1.1.0 according to the docs
-                    'security_level' => min(2 + $version[1], 5),
-                    'capture_session_meta' => true,
+                    'security_level' => min(1 + $version[1], 5),
+                    // capture_session_meta was deprecated in php 7.0
+                    //'capture_session_meta' => true,
                 ))
             );
             /// @todo we should probably look deeper into the Apache config / ssl version in use to find out why this
             ///       does not work well with TLS < 1.2.
             /// @todo push this IF to the test matrix config, leave here only the setting of security_level?
-            if ($this->args['SSLVERSION'] == 0) {
+            /*if ($this->args['SSLVERSION'] == 0) {
                 $this->client->setSSLVersion(min(5 + $version[1], 7));
-            }
+            }*/
         }
         $this->$method();
     }
