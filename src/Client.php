@@ -748,7 +748,8 @@ class Client
     /**
      * @param null|int $component allowed values: PHP_URL_SCHEME, PHP_URL_HOST, PHP_URL_PORT, PHP_URL_PATH
      * @return string|int Notes: the path component will include query string and fragment; NULL is a valid value for port
-     *                    (in which case the default port for http/https will be used);
+     *                    (in which case the default port for http/https will be used); the url scheme component will
+     *                    reflect the `$method` used in the constructor, so it might not be http or https
      * @throws ValueErrorException on unsupported component
      */
     public function getUrl($component = null)
@@ -984,13 +985,24 @@ class Client
             $connectServer = $opts['proxy'];
             $connectPort = $opts['proxyport'];
             $transport = 'tcp';
-            /// @todo check: should we not use https in some cases?
-            $uri = 'http://' . $server . ':' . $port . $path;
+            $protocol = $method;
+            if ($method === 'http10' || $method === 'http11') {
+                $protocol = 'http';
+            } elseif ($method === 'h2') {
+                $protocol = 'https';
+            } else if (strpos($protocol, ':') !== false) {
+                $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ": warning - attempted hacking attempt?. The protocol requested for the call is: '$protocol'");
+                return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['unsupported_option'], PhpXmlRpc::$xmlrpcerr['unsupported_option'] .
+                    " attempted hacking attempt?. The protocol requested for the call is: '$protocol'");
+            }
+            /// @todo this does not work atm (tested at least with an http proxy forwarding to an https server) - we
+            ///       should implement the CONNECT protocol
+            $uri = $protocol . '://' . $server . ':' . $port . $path;
             if ($opts['proxy_user'] != '') {
                 if ($opts['proxy_authtype'] != 1) {
                     $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported with HTTP 1.0');
                     return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['unsupported_option'],
-                        PhpXmlRpc::$xmlrpcerr['unsupported_option'] . ': only Basic auth to proxy is supported with HTTP 1.0');
+                        PhpXmlRpc::$xmlrpcerr['unsupported_option'] . ': only Basic auth to proxy is supported with socket transport');
                 }
                 $proxyCredentials = 'Proxy-Authorization: Basic ' . base64_encode($opts['proxy_user'] . ':' .
                     $opts['proxy_pass']) . "\r\n";
@@ -998,6 +1010,7 @@ class Client
         } else {
             $connectServer = $server;
             $connectPort = $port;
+            /// @todo should we add support for 'h2' method? If so, is it 'tls' or 'tcp' ?
             $transport = ($method === 'https') ? 'tls' : 'tcp';
             $uri = $path;
         }
@@ -1020,7 +1033,8 @@ class Client
         }
 
         // omit port if default
-        if (($port == 80 && in_array($method, array('http', 'http10'))) || ($port == 443 && $method == 'https')) {
+        /// @todo add handling of http2, h2c in case they start being supported by fosckopen
+        if (($port == 80 && in_array($method, array('http', 'http10', 'http11'))) || ($port == 443 && $method == 'https')) {
             $port = '';
         } else {
             $port = ':' . $port;
@@ -1739,6 +1753,8 @@ class Client
     // *** BC layer ***
 
     /**
+     * NB: always goes via socket, never curl
+     *
      * @deprecated
      *
      * @param Request $req
@@ -1767,6 +1783,8 @@ class Client
     }
 
     /**
+     * NB: always goes via curl, never socket
+     *
      * @deprecated
      *
      * @param Request $req
