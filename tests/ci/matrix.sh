@@ -5,9 +5,11 @@ set -e
 VM_CMD='./vm.sh'
 LOGS_DIR='./var/logs/matrix'
 
+# @todo add a 'list' (config?) action, listing the OS/PHP matrix values
+
 # @todo use better config for this. If yq is present, we could eg. parse the github config
 OS_LIST=${OS_LIST:-focal jammy noble}
-# NB: as of 2025/06, the php install scripts fail for focal with php 5.6, 7.x except 7.4, and 8.x
+# NB: as of 2025/06, the php install scripts fail for focal (presumably xenial and bionic, too) with php 5.6, 7.x except 7.4, and 8.x
 # Default php versions: xenial: 7.0.33, bionic: 7.2.24, focal 7.4.3, jammy 8.1.1, noble 8.3.6
 PHP_LIST_xenial=${PHP_LIST_xenial:-default 5.3}
 PHP_LIST_bionic=${PHP_LIST_bionic:-default 5.5}
@@ -76,7 +78,7 @@ loop() {
         do
             export UBUNTU_VERSION=$ubuntu_version
             export PHP_VERSION=$php_version
-            case "${ACTION}" in
+            case "${1}" in
                 build)
                     $VM_CMD build 2>"${LOGS_DIR}/${ubuntu_version}_${php_version}.build.log" &
                     ;;
@@ -91,7 +93,8 @@ loop() {
                     if [ -f ../../composer.lock ]; then
                         rm ../../composer.lock
                     fi
-                    if ! $VM_CMD runtests "$@"; then
+                    # note: 'runtests' is the 1st arg in "$@"
+                    if ! $VM_CMD "$@"; then
                         FAILURES=$((FAILURES + 1))
                     fi
                     # @todo (optionally) abort as soon as one test fails?
@@ -100,6 +103,7 @@ loop() {
                     $VM_CMD "$1"
                     ;;
                 exec)
+                    # note: 'exec' is the 1st arg in "$@"
                     $VM_CMD "$@"
                     ;;
             esac

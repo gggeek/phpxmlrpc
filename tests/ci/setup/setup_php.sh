@@ -26,18 +26,15 @@ configure_php_ini() {
     fi
 }
 
-# install php
 PHP_VERSION="$1"
-# `lsb-release` is not necessarily onboard. We parse /etc/os-release instead
-DEBIAN_VERSION=$(cat /etc/os-release | grep 'VERSION_CODENAME=' | sed 's/VERSION_CODENAME=//')
+
+DEBIAN_VERSION=$(grep 'VERSION_CODENAME=' /etc/os-release | sed 's/VERSION_CODENAME=//')
 if [ -z "${DEBIAN_VERSION}" ]; then
-    # Example strings:
-    # VERSION="14.04.6 LTS, Trusty Tahr"
-    # VERSION="8 (jessie)"
-    DEBIAN_VERSION=$(cat /etc/os-release | grep 'VERSION=' | grep 'VERSION=' | sed 's/VERSION=//' | sed 's/"[0-9.]\+ *(\?//' | sed 's/)\?"//' | tr '[:upper:]' '[:lower:]' | sed 's/lts, *//' | sed 's/ \+tahr//')
+    DEBIAN_VERSION=$(grep 'VERSION=' /etc/os-release | sed 's/VERSION= *//' | sed 's/["0-9.,()]\+ *//g'| tr '[:upper:]' '[:lower:]' | sed 's/ *lts *//' | cut -d' ' -f 1)
 fi
 
-# @todo use native packages if requested for a specific version and that is the same as available in the os repos
+# @todo should we use native packages if requested for a specific version and that is the same as available in the os repos?
+#       Not doing that allows us to test more combinations, eg. php 7.3 from ondrej vs php 7.3 from ubuntu
 
 if [ "${PHP_VERSION}" = default ]; then
     echo "Using native PHP packages..."
@@ -68,7 +65,7 @@ else
     if [ "${PHP_VERSION}" = 5.3 -o "${PHP_VERSION}" = 5.4 -o "${PHP_VERSION}" = 5.5 ]; then
         echo "Using PHP from shivammathur/php5-ubuntu..."
 
-        # @todo this set of packages has only been tested on Bionic, Focal and Jammy so far
+        # @todo this set of packages has only been tested on Xenial to Jammy so far
         if [ "${DEBIAN_VERSION}" = jammy -o "${DEBIAN_VERSION}" = noble ]; then
             ENCHANTSUFFIX='-2'
         fi
