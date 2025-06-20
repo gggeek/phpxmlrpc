@@ -9,9 +9,10 @@ LOGS_DIR='./var/logs/matrix'
 
 # @todo use better config for this. If yq is present, we could eg. parse the github config
 OS_LIST=${OS_LIST:-focal jammy noble}
-# NB: as of 2025/06, the php install scripts fail for focal (presumably xenial and bionic, too) with php 5.6, 7.x except 7.4, and 8.x
+# NB: as of 2025/06, the php install scripts fail for focal (presumably xenial and bionic, too) with php 5.6, 7.x except 7.4,
+# and 8.x - presumably because of dropped support by the ondrej repos
 # Default php versions: xenial: 7.0.33, bionic: 7.2.24, focal 7.4.3, jammy 8.1.1, noble 8.3.6
-PHP_LIST_xenial=${PHP_LIST_xenial:-default 5.3}
+PHP_LIST_xenial=${PHP_LIST_xenial:-default 5.4}
 PHP_LIST_bionic=${PHP_LIST_bionic:-default 5.5}
 PHP_LIST_focal=${PHP_LIST_focal:-default 5.4}
 PHP_LIST_jammy=${PHP_LIST_jammy:-default 5.5 7.1 7.3 8.2 8.3}
@@ -55,7 +56,6 @@ Environment variables:
 }
 
 loop() {
-    FAILURES=0
     if [ ! -d "$LOGS_DIR" ]; then
         mkdir -p "$LOGS_DIR"
     fi
@@ -66,6 +66,7 @@ loop() {
         PARALLEL=true
     fi
 
+    FAILURES=''
     for ubuntu_version in ${OS_LIST}
     do
         php_var="PHP_LIST_${ubuntu_version}"
@@ -95,7 +96,10 @@ loop() {
                     fi
                     # note: 'runtests' is the 1st arg in "$@"
                     if ! $VM_CMD "$@"; then
-                        FAILURES=$((FAILURES + 1))
+                        if [ -n "$FAILURES" ]; then
+                            FAILURES="${FAILURES}, "
+                        fi
+                        FAILURES="${FAILURES}${UBUNTU_VERSION}/${PHP_VERSION}"
                     fi
                     # @todo (optionally) abort as soon as one test fails?
                     ;;
@@ -118,10 +122,10 @@ loop() {
     if [ "$PARALLEL" = true ]; then
         wait
     fi
-    if [ "${ACTION}" = runtests ] && [ $FAILURES -gt 0 ]; then
-        printf "\n\e[31mERROR:\e[0m tests failed in $FAILURES environments\n\n" >&2
+    if [ -n "$FAILURES" ]; then
+        printf "\n\e[31mERROR:\e[0m tests failed in environments: $FAILURES\n\n" >&2
+        return 1
     fi
-    return $FAILURES
 }
 
 case "${ACTION}" in

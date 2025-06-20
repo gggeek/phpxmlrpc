@@ -103,6 +103,13 @@ function sleepSeconds($secs) {
     return $secs;
 }
 
+$hashttp2_sig = array(array(Value::$xmlrpcBoolean));
+$hashttp2_doc = 'Checks whether the server supports http2';
+function hasHTTP2() {
+    // NB: only works for apache2 on debian/ubuntu, that we know of...!
+    return is_file('/etc/apache2/mods-enabled/http2.load');
+}
+
 return array(
     "tests.getallheaders" => array(
         "function" => 'getAllHeaders_xmlrpc',
@@ -144,6 +151,13 @@ return array(
         "function" => 'sleepSeconds',
         "signature" => $sleep_sig,
         "docstring" => $sleep_doc,
+        "parameters_type" => 'phpvals',
+    ),
+
+    'tests.hasHTTP2' => array(
+        "function" => 'hasHTTP2',
+        "signature" => $hashttp2_sig,
+        "docstring" => $hashttp2_doc,
         "parameters_type" => 'phpvals',
     ),
 );

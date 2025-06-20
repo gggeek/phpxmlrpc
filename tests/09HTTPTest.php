@@ -9,6 +9,7 @@ include_once __DIR__ . '/08ServerTest.php';
  * @todo refactor:
  *       - pick a smaller subset of 'base tests' to iterate over, for every http feature
  *       - test more exhaustive combinations of compression/auth/ssl/charset/curl-or-socket/proxy/etc.. features
+ *       - move SSLVERSION from being passed in as an arg to being something we exhaustively test using a dataprovider
  */
 class HTTPTest extends ServerTest
 {
@@ -63,7 +64,6 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1');
-            return;
         }
 
         $this->method = 'http11';
@@ -86,7 +86,6 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test redirects');
-            return;
         }
 
         /// @todo replace with setOption when dropping the BC layer
@@ -105,7 +104,6 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1');
-            return;
         }
 
         $this->method = 'http11'; // not an error the double assignment!
@@ -124,7 +122,6 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1');
-            return;
         }
 
         $this->method = 'http10'; // not an error the double assignment!
@@ -208,7 +205,6 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test digest auth functionality');
-            return;
         }
 
         $this->client->setCredentials('test', 'test', CURLAUTH_DIGEST);
@@ -233,7 +229,6 @@ class HTTPTest extends ServerTest
         if (!function_exists('gzdeflate'))
         {
             $this->markTestSkipped('Zlib missing: cannot test deflate functionality');
-            return;
         }
 
         $this->client->accepted_compression = array('deflate');
@@ -251,7 +246,6 @@ class HTTPTest extends ServerTest
         if (!function_exists('gzdeflate'))
         {
             $this->markTestSkipped('Zlib missing: cannot test gzip functionality');
-            return;
         }
 
         $this->client->accepted_compression = array('gzip');
@@ -269,7 +263,6 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1');
-            return;
         }
         $this->method = 'http11'; // not an error the double assignment!
         $this->client->method = 'http11';
@@ -289,7 +282,6 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1');
-            return;
         }
         $this->method = 'http11'; // not an error the double assignment!
         $this->client->method = 'http11';
@@ -312,12 +304,10 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test https functionality');
-            return;
         }
         else if ($this->args['HTTPSSERVER'] == '')
         {
             $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https');
-            return;
         }
 
         $this->client->server = $this->args['HTTPSSERVER'];
@@ -348,7 +338,6 @@ class HTTPTest extends ServerTest
         if ($this->args['HTTPSSERVER'] == '')
         {
             $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https');
-            return;
         }
 
         /// @todo investigate deeper: can we make this test work with php < 7.2?
@@ -368,7 +357,6 @@ class HTTPTest extends ServerTest
             }
             if ($ubuntuVersion >= 20 && $this->args['SSLVERSION'] != 6) {
                 $this->markTestSkipped('HTTPS via Socket known to fail on php less than 7.2 on Ubuntu 20 and higher');
-                return;
             }
         }
 
@@ -412,11 +400,13 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http/2');
-            return;
         } else if (!defined('CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE'))
         {
             $this->markTestSkipped('CURL http/2 support missing: cannot test http/2');
-            return;
+        }
+        $r = $this->send(new \PhpXmlRpc\Request('tests.hasHTTP2'));
+        if ($r->scalarVal() != true) {
+            $this->markTestSkipped('Server-side support missing: cannot test http/2');
         }
 
         $this->method = 'h2c'; // not an error the double assignment!
@@ -437,15 +427,16 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http/2 tls');
-            return;
         } else if ($this->args['HTTPSSERVER'] == '')
         {
             $this->markTestSkipped('HTTPS SERVER definition missing: cannot test http/2 tls');
-            return;
         } else if (!defined('CURL_HTTP_VERSION_2_0'))
         {
             $this->markTestSkipped('CURL http/2 support missing: cannot test http/2 tls');
-            return;
+        }
+        $r = $this->send(new \PhpXmlRpc\Request('tests.hasHTTP2'));
+        if ($r->scalarVal() != true) {
+            $this->markTestSkipped('Server-side support missing: cannot test http/2');
         }
 
         $this->method = 'h2';
@@ -473,7 +464,6 @@ class HTTPTest extends ServerTest
         if ($this->args['PROXYSERVER'] == '')
         {
             $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy');
-            return;
         }
 
         $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
@@ -490,12 +480,10 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test http 1.1 w. proxy');
-            return;
         }
         else if ($this->args['PROXYSERVER'] == '')
         {
             $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. http 1.1');
-            return;
         }
 
         $this->method = 'http11'; // not an error the double assignment!
@@ -515,17 +503,14 @@ class HTTPTest extends ServerTest
         if (!function_exists('curl_init'))
         {
             $this->markTestSkipped('CURL missing: cannot test https w. proxy');
-            return;
         }
         else if ($this->args['PROXYSERVER'] == '')
         {
             $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. https');
-            return;
         }
         else if ($this->args['HTTPSSERVER'] == '')
         {
             $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https w. proxy');
-            return;
         }
 
         $this->method = 'https';
@@ -557,12 +542,10 @@ class HTTPTest extends ServerTest
         if ($this->args['PROXYSERVER'] == '')
         {
             $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. https');
-            return;
         }
         else if ($this->args['HTTPSSERVER'] == '')
         {
             $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https w. proxy');
-            return;
         }
 
         if (version_compare(PHP_VERSION, '7.2', '<'))
@@ -578,7 +561,6 @@ class HTTPTest extends ServerTest
             }
             if ($ubuntuVersion >= 20 && $this->args['SSLVERSION'] != 6) {
                 $this->markTestSkipped('HTTPS via Socket known to fail on php less than 7.2 on Ubuntu 20 and higher');
-                return;
             }
         }
 
@@ -610,12 +592,10 @@ class HTTPTest extends ServerTest
         if (version_compare(PHP_VERSION, '5.6.0', '<'))
         {
             $this->markTestSkipped('Cannot test accept-charset on php < 5.6');
-            return;
         }
         if (!function_exists('mb_list_encodings'))
         {
             $this->markTestSkipped('mbstring missing: cannot test accept-charset');
-            return;
         }
 
         $r = new \PhpXmlRpc\Request('examples.stringecho', array(new \PhpXmlRpc\Value('€'))); // chr(164)

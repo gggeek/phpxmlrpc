@@ -102,6 +102,7 @@ else
         # as well as the conf to enable php-fpm in apache
         cp "$SCRIPT_DIR/../config/apache_phpfpm_proxyfcgi" "/etc/apache2/conf-available/php${PHP_VERSION}-fpm.conf"
     else
+        # @todo this line might be misleading, as in fact on focal/7.4 this might be installing native packages
         echo "Using PHP packages from ondrej/php..."
 
         DEBIAN_FRONTEND=noninteractive apt-get install -y language-pack-en-base software-properties-common
