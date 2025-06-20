@@ -101,10 +101,12 @@ loop() {
                     ;;
                 diff | inspect | kill | logs | port | ps | top)
                     $VM_CMD "$1"
+                    echo
                     ;;
                 exec)
                     # note: 'exec' is the 1st arg in "$@"
                     $VM_CMD "$@"
+                    echo
                     ;;
             esac
             export HOST_HTTPPORT=$((HOST_HTTPPORT + 1))
