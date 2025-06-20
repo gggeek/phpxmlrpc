@@ -6,11 +6,11 @@
 
 * fixed: the Client would not honour options set via `OPT_EXTRA_SOCKET_OPTS`
 
-* fixed: teach the vm.sh script how to properly configure test envs using ubuntu 24 noble
+* fixed: teach the vm.sh script how to properly configure test envs using Ubuntu versions from xenial (16) to noble (24)
 
 * improved: default the local testing container to using PHP 8.1 on Ubuntu Jammy
 
-* improved: make the vm.sh more amenable to be used in parallel / quickly switching between different test envs
+* improved: make the vm.sh script more amenable to be used in parallel / quickly switching between different test envs
 
 * improved: added script `tests/ci/matrix.sh` to run the testsuite locally against a matrix of environments, kinda
   like the test matrix which is run on commit on github
