@@ -495,6 +495,8 @@ class HTTPTest extends ServerTest
     }
 
     /**
+     * @todo this method is known to fail on bionic/php5.5. Investigate if we can fix that.
+     *       Error message: "CURL error: gnutls_handshake() failed: The TLS connection was non-properly terminated"
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
      */

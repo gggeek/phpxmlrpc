@@ -1,6 +1,6 @@
 = XML-RPC for PHP User Manual
 Gaetano Giunta; Edd Dumbill
-4.11.0
+4.12.0
 :keywords: xml-rpc, xml, rpc, webservices, http
 :title-page:
 :toc:
@@ -363,6 +363,8 @@ The constructor accepts one of two possible syntax forms:
     Client new Client(string $server_url)
     Client new Client(string $server_path, string $server_hostname, int $server_port = 80, string $transport = 'http')
 
+Note that the second syntax does not allow to express a username and password to be used for basic HTTP authorization.
+
 Here are a couple of usage examples of the first form:
 
 [source, php]
@@ -374,10 +376,6 @@ $another_client = new Client("https://james:bond@secret.service.com:443/xmlrpcse
 ----
 
 Note that 'http11', 'http10', 'h2' (for HTTP2) and 'h2c' can be used as valid alternatives to 'http' and 'https' in the provided url.
-
-The second syntax does not allow to express a username and password to be used for basic HTTP authorization as in the
-second example above, but instead it allows to choose whether xml-rpc calls will be made using the HTTP protocol version
-1.0, 1.1 or 2.
 
 Here's another example client set up to query Userland's XML-RPC server at __betty.userland.com__:
 
@@ -491,7 +489,7 @@ details on the valid values of all the options.
 ===== cURL vs socket calls
 
 Please note that, depending on the HTTP protocol version used and the options set to the client, the client will
-transparently switch between using a socket-based HTTP implementation and a cURL based implementation. If needed, you
+transparently switch between using a socket-based HTTP implementation and a CURL based implementation. If needed, you
 can make use of a `setOption(Client::OPT_USE_CURL, ...)` method call to force or disable usage of the cURL based implementation.
 
 When using cURL as the underlying transport, it is possible to set directly into the client any of the cURL options
@@ -1119,7 +1117,7 @@ string.
 
 ==== $xmlrpcVersion
 
-    PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion = "4.11.1"
+    PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion = "4.11.2"
 
 The string representation of the version number of the PHPXMLRPC library in use. It is used by the Client for
 building the User-Agent HTTP header that is sent with every request to the server. You can change its value if you need
@@ -1489,6 +1487,8 @@ order to have it available locally.
   passing in an array of Request objects to `+$client->send()+` is usually enough. If the server you are talking to does
   not support `system.multicall`, see the __demo/client/parallel.php__ example instead for how to send multiple requests
   in parallel using cURL
+
+* use http2
 
 == Upgrading [[upgrading]]
 
