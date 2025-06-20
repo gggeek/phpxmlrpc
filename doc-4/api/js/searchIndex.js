@@ -83,7 +83,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003AsetSSLVersion\u0028\u0029",
             "name": "setSSLVersion",
-            "summary": "Set\u0020attributes\u0020for\u0020SSL\u0020communication\u003A\u0020SSL\u0020version\u0020to\u0020use.\u0020Best\u0020left\u0020at\u00200\u0020\u0028default\u0020value\u0029\u003A\u0020let\u0020cURL\u0020decide",
+            "summary": "Set\u0020attributes\u0020for\u0020SSL\u0020communication\u003A\u0020SSL\u0020version\u0020to\u0020use.\u0020Best\u0020left\u0020at\u00200\u0020\u0028default\u0020value\u0029\u003A\u0020let\u0020PHP\u0020decide.",
             "url": "classes/PhpXmlRpc-Client.html#method_setSSLVersion"
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003AsetProxy\u0028\u0029",
@@ -158,12 +158,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003AsendPayloadHTTP10\u0028\u0029",
             "name": "sendPayloadHTTP10",
-            "summary": "",
+            "summary": "NB\u003A\u0020always\u0020goes\u0020via\u0020socket,\u0020never\u0020curl",
             "url": "classes/PhpXmlRpc-Client.html#method_sendPayloadHTTP10"
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003AsendPayloadHTTPS\u0028\u0029",
             "name": "sendPayloadHTTPS",
-            "summary": "",
+            "summary": "NB\u003A\u0020always\u0020goes\u0020via\u0020curl,\u0020never\u0020socket",
             "url": "classes/PhpXmlRpc-Client.html#method_sendPayloadHTTPS"
         },                {
             "fqsen": "\\PhpXmlRpc\\Client\u003A\u003AsendPayloadSocket\u0028\u0029",

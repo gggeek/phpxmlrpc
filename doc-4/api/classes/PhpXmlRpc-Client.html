@@ -25,7 +25,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.1</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.2</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -379,42 +379,6 @@
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
-            <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a class="" href="classes/PhpXmlRpc-Client.html#property_errno">$errno</a>
-    <span>
-                        &nbsp;: int            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a class="" href="classes/PhpXmlRpc-Client.html#property_errstr">$errstr</a>
-    <span>
-                        &nbsp;: string            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a class="" href="classes/PhpXmlRpc-Client.html#property_method">$method</a>
-    <span>
-                        &nbsp;: string            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a class="" href="classes/PhpXmlRpc-Client.html#property_path">$path</a>
-    <span>
-                        &nbsp;: string            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a class="" href="classes/PhpXmlRpc-Client.html#property_port">$port</a>
-    <span>
-                        &nbsp;: int            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a class="" href="classes/PhpXmlRpc-Client.html#property_server">$server</a>
-    <span>
-                        &nbsp;: string            </span>
-</dt>
-
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a class="" href="classes/PhpXmlRpc-Client.html#property_accepted_charset_encodings">$accepted_charset_encodings</a>
     <span>
@@ -836,7 +800,7 @@ if the cert verification fails.</dd>
     <span>
                                 &nbsp;: $this    </span>
 </dt>
-<dd>Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let cURL decide</dd>
+<dd>Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let PHP decide.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="-deprecated" href="classes/PhpXmlRpc-Client.html#method_setUseCurl">setUseCurl()</a>
@@ -886,12 +850,14 @@ if the cert verification fails.</dd>
     <span>
                                 &nbsp;: <a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>    </span>
 </dt>
+<dd>NB: always goes via socket, never curl</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a class="-deprecated" href="classes/PhpXmlRpc-Client.html#method_sendPayloadHTTPS">sendPayloadHTTPS()</a>
     <span>
                                 &nbsp;: <a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>    </span>
 </dt>
+<dd>NB: always goes via curl, never socket</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a class="-deprecated" href="classes/PhpXmlRpc-Client.html#method_sendPayloadSocket">sendPayloadSocket()</a>
@@ -2030,256 +1996,28 @@ NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!</dd>
         class="
             phpdocumentor-element
             -property
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_errno">
-        $errno
-        <a href="classes/PhpXmlRpc-Client.html#property_errno" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">0</span>
-
-    </aside>
-
-    
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">int</span>
-    <span class="phpdocumentor-signature__name">$errno</span>
-    </code>
-
-        <section class="phpdocumentor-description"><p>deprecated - public access left in purely for BC.</p>
-</section>
-
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_errstr">
-        $errstr
-        <a href="classes/PhpXmlRpc-Client.html#property_errstr" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">0</span>
-
-    </aside>
-
-    
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">$errstr</span>
-    </code>
-
-        <section class="phpdocumentor-description"><p>deprecated - public access left in purely for BC.</p>
-</section>
-
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_method">
-        $method
-        <a href="classes/PhpXmlRpc-Client.html#property_method" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">0</span>
-
-    </aside>
-
-    
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">$method</span>
-    </code>
-
-        <section class="phpdocumentor-description"><p>deprecated - public access left in purely for BC. Access via getUrl()/__construct()</p>
-</section>
-
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_path">
-        $path
-        <a href="classes/PhpXmlRpc-Client.html#property_path" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">0</span>
-
-    </aside>
-
-    
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">$path</span>
-    </code>
-
-        <section class="phpdocumentor-description"><p>deprecated - public access left in purely for BC. Access via getUrl()/__construct()</p>
-</section>
-
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_port">
-        $port
-        <a href="classes/PhpXmlRpc-Client.html#property_port" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">0</span>
-
-    </aside>
-
-    
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">int</span>
-    <span class="phpdocumentor-signature__name">$port</span>
-    </code>
-
-        <section class="phpdocumentor-description"><p>deprecated - public access left in purely for BC. Access via getUrl()/__construct()</p>
-</section>
-
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_server">
-        $server
-        <a href="classes/PhpXmlRpc-Client.html#property_server" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">0</span>
-
-    </aside>
-
-    
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">string</span>
-    <span class="phpdocumentor-signature__name">$server</span>
-    </code>
-
-        <section class="phpdocumentor-description"><p>deprecated - public access left in purely for BC. Access via getUrl()/__construct()</p>
-</section>
-
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_accepted_charset_encodings">
         $accepted_charset_encodings
         <a href="classes/PhpXmlRpc-Client.html#property_accepted_charset_encodings" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">227</span>
+    <span class="phpdocumentor-element-found-in__line">230</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
     <span class="phpdocumentor-signature__name">$accepted_charset_encodings</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
@@ -2291,33 +2029,35 @@ NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!</dd>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_accepted_compression">
         $accepted_compression
         <a href="classes/PhpXmlRpc-Client.html#property_accepted_compression" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">208</span>
+    <span class="phpdocumentor-element-found-in__line">211</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$accepted_compression</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
@@ -2333,20 +2073,22 @@ curl_version() to determine whether compression is supported or not</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_authtype">
         $authtype
         <a href="classes/PhpXmlRpc-Client.html#property_authtype" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2358,13 +2100,15 @@ curl_version() to determine whether compression is supported or not</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$authtype</span>
      = <span class="phpdocumentor-signature__default-value">1</span></code>
 
     
     
+    
+
     
 
     
@@ -2375,14 +2119,14 @@ curl_version() to determine whether compression is supported or not</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_cacert">
         $cacert
         <a href="classes/PhpXmlRpc-Client.html#property_cacert" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2394,13 +2138,15 @@ curl_version() to determine whether compression is supported or not</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$cacert</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
     
     
+    
+
     
 
     
@@ -2411,14 +2157,14 @@ curl_version() to determine whether compression is supported or not</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_cacertdir">
         $cacertdir
         <a href="classes/PhpXmlRpc-Client.html#property_cacertdir" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2430,13 +2176,15 @@ curl_version() to determine whether compression is supported or not</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$cacertdir</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
     
     
+    
+
     
 
     
@@ -2447,14 +2195,14 @@ curl_version() to determine whether compression is supported or not</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_cert">
         $cert
         <a href="classes/PhpXmlRpc-Client.html#property_cert" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2466,13 +2214,15 @@ curl_version() to determine whether compression is supported or not</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$cert</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
     
     
+    
+
     
 
     
@@ -2483,14 +2233,14 @@ curl_version() to determine whether compression is supported or not</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_certpass">
         $certpass
         <a href="classes/PhpXmlRpc-Client.html#property_certpass" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2502,8 +2252,8 @@ curl_version() to determine whether compression is supported or not</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$certpass</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
@@ -2513,33 +2263,35 @@ curl_version() to determine whether compression is supported or not</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_cookies">
         $cookies
         <a href="classes/PhpXmlRpc-Client.html#property_cookies" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">172</span>
+    <span class="phpdocumentor-element-found-in__line">175</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$cookies</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
@@ -2549,20 +2301,22 @@ curl_version() to determine whether compression is supported or not</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_debug">
         $debug
         <a href="classes/PhpXmlRpc-Client.html#property_debug" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2574,13 +2328,15 @@ curl_version() to determine whether compression is supported or not</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$debug</span>
      = <span class="phpdocumentor-signature__default-value">0</span></code>
 
     
     
+    
+
     
 
     
@@ -2591,14 +2347,14 @@ curl_version() to determine whether compression is supported or not</p>
             phpdocumentor-element
             -property
             -protected
-                        -deprecated                                "
+                        -deprecated                                            "
 >
     <h4 class="phpdocumentor-element__name" id="property_errno">
         $errno
         <a href="classes/PhpXmlRpc-Client.html#property_errno" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2617,13 +2373,15 @@ curl_version() to determine whether compression is supported or not</p>
         </div>
     
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$errno</span>
     </code>
 
     
     
+    
+
     
 
     
@@ -2634,14 +2392,14 @@ curl_version() to determine whether compression is supported or not</p>
             phpdocumentor-element
             -property
             -protected
-                        -deprecated                                "
+                        -deprecated                                            "
 >
     <h4 class="phpdocumentor-element__name" id="property_errstr">
         $errstr
         <a href="classes/PhpXmlRpc-Client.html#property_errstr" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2660,8 +2418,8 @@ curl_version() to determine whether compression is supported or not</p>
         </div>
     
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$errstr</span>
     </code>
 
@@ -2671,25 +2429,27 @@ curl_version() to determine whether compression is supported or not</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_extra_headers">
         $extra_headers
         <a href="classes/PhpXmlRpc-Client.html#property_extra_headers" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">267</span>
+    <span class="phpdocumentor-element-found-in__line">270</span>
 
     </aside>
 
@@ -2697,8 +2457,8 @@ curl_version() to determine whether compression is supported or not</p>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
     <span class="phpdocumentor-signature__name">$extra_headers</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
@@ -2708,33 +2468,35 @@ curl_version() to determine whether compression is supported or not</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_extracurlopts">
         $extracurlopts
         <a href="classes/PhpXmlRpc-Client.html#property_extracurlopts" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">180</span>
+    <span class="phpdocumentor-element-found-in__line">183</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$extracurlopts</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
@@ -2744,33 +2506,35 @@ curl_version() to determine whether compression is supported or not</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_extrasockopts">
         $extrasockopts
         <a href="classes/PhpXmlRpc-Client.html#property_extrasockopts" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">176</span>
+    <span class="phpdocumentor-element-found-in__line">179</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$extrasockopts</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
@@ -2780,33 +2544,35 @@ curl_version() to determine whether compression is supported or not</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_keepalive">
         $keepalive
         <a href="classes/PhpXmlRpc-Client.html#property_keepalive" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">221</span>
+    <span class="phpdocumentor-element-found-in__line">224</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">bool</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">bool</span>
     <span class="phpdocumentor-signature__name">$keepalive</span>
      = <span class="phpdocumentor-signature__default-value">false</span></code>
 
@@ -2818,20 +2584,22 @@ curl_version() to determine whether compression is supported or not</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_key">
         $key
         <a href="classes/PhpXmlRpc-Client.html#property_key" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2843,13 +2611,15 @@ curl_version() to determine whether compression is supported or not</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$key</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
     
     
+    
+
     
 
     
@@ -2860,14 +2630,14 @@ curl_version() to determine whether compression is supported or not</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_keypass">
         $keypass
         <a href="classes/PhpXmlRpc-Client.html#property_keypass" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2879,13 +2649,15 @@ curl_version() to determine whether compression is supported or not</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$keypass</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
     
     
+    
+
     
 
     
@@ -2896,14 +2668,14 @@ curl_version() to determine whether compression is supported or not</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_method">
         $method
         <a href="classes/PhpXmlRpc-Client.html#property_method" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -2915,13 +2687,15 @@ curl_version() to determine whether compression is supported or not</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$method</span>
      = <span class="phpdocumentor-signature__default-value">&#039;http&#039;</span></code>
 
     
     
+    
+
     
 
     
@@ -2932,27 +2706,27 @@ curl_version() to determine whether compression is supported or not</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_no_multicall">
         $no_multicall
         <a href="classes/PhpXmlRpc-Client.html#property_no_multicall" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">197</span>
+    <span class="phpdocumentor-element-found-in__line">200</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">bool</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">bool</span>
     <span class="phpdocumentor-signature__name">$no_multicall</span>
      = <span class="phpdocumentor-signature__default-value">false</span></code>
 
@@ -2967,33 +2741,35 @@ system.multicall.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-            -static                                            "
+            -static                                                        "
 >
     <h4 class="phpdocumentor-element__name" id="property_options">
         $options
         <a href="classes/PhpXmlRpc-Client.html#property_options" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">278</span>
+    <span class="phpdocumentor-element-found-in__line">281</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$options</span>
      = <span class="phpdocumentor-signature__default-value">array(self::OPT_ACCEPTED_CHARSET_ENCODINGS, self::OPT_ACCEPTED_COMPRESSION, self::OPT_AUTH_TYPE, self::OPT_CA_CERT, self::OPT_CA_CERT_DIR, self::OPT_CERT, self::OPT_CERT_PASS, self::OPT_COOKIES, self::OPT_DEBUG, self::OPT_EXTRA_CURL_OPTS, self::OPT_EXTRA_SOCKET_OPTS, self::OPT_KEEPALIVE, self::OPT_KEY, self::OPT_KEY_PASS, self::OPT_NO_MULTICALL, self::OPT_PASSWORD, self::OPT_PROXY, self::OPT_PROXY_AUTH_TYPE, self::OPT_PROXY_PASS, self::OPT_PROXY_USER, self::OPT_PROXY_PORT, self::OPT_REQUEST_CHARSET_ENCODING, self::OPT_REQUEST_COMPRESSION, self::OPT_RETURN_TYPE, self::OPT_SSL_VERSION, self::OPT_TIMEOUT, self::OPT_USE_CURL, self::OPT_USER_AGENT, self::OPT_USERNAME, self::OPT_VERIFY_HOST, self::OPT_VERIFY_PEER, self::OPT_EXTRA_HEADERS)</span></code>
 
@@ -3003,20 +2779,22 @@ system.multicall.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_password">
         $password
         <a href="classes/PhpXmlRpc-Client.html#property_password" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -3028,13 +2806,15 @@ system.multicall.</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$password</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
     
     
+    
+
     
 
     
@@ -3045,14 +2825,14 @@ system.multicall.</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_path">
         $path
         <a href="classes/PhpXmlRpc-Client.html#property_path" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -3064,13 +2844,15 @@ system.multicall.</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$path</span>
     </code>
 
     
     
+    
+
     
 
     
@@ -3081,14 +2863,14 @@ system.multicall.</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_port">
         $port
         <a href="classes/PhpXmlRpc-Client.html#property_port" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -3100,8 +2882,8 @@ system.multicall.</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$port</span>
      = <span class="phpdocumentor-signature__default-value">0</span></code>
 
@@ -3111,33 +2893,35 @@ system.multicall.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_proxy">
         $proxy
         <a href="classes/PhpXmlRpc-Client.html#property_proxy" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">152</span>
+    <span class="phpdocumentor-element-found-in__line">155</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$proxy</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
@@ -3147,33 +2931,35 @@ system.multicall.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_proxy_authtype">
         $proxy_authtype
         <a href="classes/PhpXmlRpc-Client.html#property_proxy_authtype" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">168</span>
+    <span class="phpdocumentor-element-found-in__line">171</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$proxy_authtype</span>
      = <span class="phpdocumentor-signature__default-value">1</span></code>
 
@@ -3183,33 +2969,35 @@ system.multicall.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_proxy_pass">
         $proxy_pass
         <a href="classes/PhpXmlRpc-Client.html#property_proxy_pass" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">164</span>
+    <span class="phpdocumentor-element-found-in__line">167</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$proxy_pass</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
@@ -3219,33 +3007,35 @@ system.multicall.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_proxy_user">
         $proxy_user
         <a href="classes/PhpXmlRpc-Client.html#property_proxy_user" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">160</span>
+    <span class="phpdocumentor-element-found-in__line">163</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$proxy_user</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
@@ -3255,33 +3045,35 @@ system.multicall.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_proxyport">
         $proxyport
         <a href="classes/PhpXmlRpc-Client.html#property_proxyport" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">156</span>
+    <span class="phpdocumentor-element-found-in__line">159</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$proxyport</span>
      = <span class="phpdocumentor-signature__default-value">0</span></code>
 
@@ -3291,33 +3083,35 @@ system.multicall.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_request_charset_encoding">
         $request_charset_encoding
         <a href="classes/PhpXmlRpc-Client.html#property_request_charset_encoding" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">238</span>
+    <span class="phpdocumentor-element-found-in__line">241</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$request_charset_encoding</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
@@ -3334,33 +3128,35 @@ For the fastest mode of operation, set your both your app internal encoding and 
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_request_compression">
         $request_compression
         <a href="classes/PhpXmlRpc-Client.html#property_request_compression" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">215</span>
+    <span class="phpdocumentor-element-found-in__line">218</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string|null</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string|null</span>
     <span class="phpdocumentor-signature__name">$request_compression</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
@@ -3373,20 +3169,22 @@ Either null, 'gzip' or 'deflate'.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-            -static                                            "
+            -static                                                        "
 >
     <h4 class="phpdocumentor-element__name" id="property_requestClass">
         $requestClass
         <a href="classes/PhpXmlRpc-Client.html#property_requestClass" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -3398,13 +3196,15 @@ Either null, 'gzip' or 'deflate'.</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$requestClass</span>
      = <span class="phpdocumentor-signature__default-value">&#039;\PhpXmlRpc\Request&#039;</span></code>
 
     
     
+    
+
     
 
     
@@ -3415,14 +3215,14 @@ Either null, 'gzip' or 'deflate'.</p>
             phpdocumentor-element
             -property
             -protected
-            -static                                            "
+            -static                                                        "
 >
     <h4 class="phpdocumentor-element__name" id="property_responseClass">
         $responseClass
         <a href="classes/PhpXmlRpc-Client.html#property_responseClass" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -3434,13 +3234,15 @@ Either null, 'gzip' or 'deflate'.</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$responseClass</span>
      = <span class="phpdocumentor-signature__default-value">&#039;\PhpXmlRpc\Response&#039;</span></code>
 
     
     
+    
+
     
 
     
@@ -3451,27 +3253,27 @@ Either null, 'gzip' or 'deflate'.</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_return_type">
         $return_type
         <a href="classes/PhpXmlRpc-Client.html#property_return_type" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">254</span>
+    <span class="phpdocumentor-element-found-in__line">257</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$return_type</span>
      = <span class="phpdocumentor-signature__default-value">\PhpXmlRpc\Helper\XMLParser::RETURN_XMLRPCVALS</span></code>
 
@@ -3492,20 +3294,22 @@ server as an xml-rpc string or base64 value.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_server">
         $server
         <a href="classes/PhpXmlRpc-Client.html#property_server" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -3517,8 +3321,8 @@ server as an xml-rpc string or base64 value.</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$server</span>
     </code>
 
@@ -3528,38 +3332,47 @@ server as an xml-rpc string or base64 value.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_sslversion">
         $sslversion
         <a href="classes/PhpXmlRpc-Client.html#property_sslversion" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">148</span>
+    <span class="phpdocumentor-element-found-in__line">151</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$sslversion</span>
      = <span class="phpdocumentor-signature__default-value">0</span></code>
 
     
+        <section class="phpdocumentor-description"><p>Corresponds to CURL_SSLVERSION_DEFAULT. Other CURL_SSLVERSION_ values are supported when in curl mode,
+and in socket mode different values from 0 to 7, matching the corresponding curl value. Old php versions
+do not support all values, php 5.4 and 5.5 do not support any in fact.
+NB: please do not use any version lower than TLS 1.3 (value: 7) as they are considered insecure.</p>
+</section>
+
     
+
     
 
     
@@ -3570,27 +3383,27 @@ server as an xml-rpc string or base64 value.</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_timeout">
         $timeout
         <a href="classes/PhpXmlRpc-Client.html#property_timeout" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">184</span>
+    <span class="phpdocumentor-element-found-in__line">187</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$timeout</span>
      = <span class="phpdocumentor-signature__default-value">0</span></code>
 
@@ -3600,33 +3413,35 @@ server as an xml-rpc string or base64 value.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_use_curl">
         $use_curl
         <a href="classes/PhpXmlRpc-Client.html#property_use_curl" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">188</span>
+    <span class="phpdocumentor-element-found-in__line">191</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$use_curl</span>
      = <span class="phpdocumentor-signature__default-value">self::USE_CURL_AUTO</span></code>
 
@@ -3636,33 +3451,35 @@ server as an xml-rpc string or base64 value.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_user_agent">
         $user_agent
         <a href="classes/PhpXmlRpc-Client.html#property_user_agent" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">260</span>
+    <span class="phpdocumentor-element-found-in__line">263</span>
 
     </aside>
 
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$user_agent</span>
     </code>
 
@@ -3674,20 +3491,22 @@ server as an xml-rpc string or base64 value.</p>
 
     
 
+    
+
 </article>
                     <article
         class="
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_username">
         $username
         <a href="classes/PhpXmlRpc-Client.html#property_username" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -3699,13 +3518,15 @@ server as an xml-rpc string or base64 value.</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">string</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">string</span>
     <span class="phpdocumentor-signature__name">$username</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
     
     
+    
+
     
 
     
@@ -3716,14 +3537,14 @@ server as an xml-rpc string or base64 value.</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_verifyhost">
         $verifyhost
         <a href="classes/PhpXmlRpc-Client.html#property_verifyhost" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -3735,13 +3556,15 @@ server as an xml-rpc string or base64 value.</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">int</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">int</span>
     <span class="phpdocumentor-signature__name">$verifyhost</span>
      = <span class="phpdocumentor-signature__default-value">2</span></code>
 
     
     
+    
+
     
 
     
@@ -3752,14 +3575,14 @@ server as an xml-rpc string or base64 value.</p>
             phpdocumentor-element
             -property
             -protected
-                                                        "
+                                                                    "
 >
     <h4 class="phpdocumentor-element__name" id="property_verifypeer">
         $verifypeer
         <a href="classes/PhpXmlRpc-Client.html#property_verifypeer" class="headerlink"><i class="fas fa-link"></i></a>
 
         <span class="phpdocumentor-element__modifiers">
-                                </span>
+                                            </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
@@ -3771,13 +3594,15 @@ server as an xml-rpc string or base64 value.</p>
     
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">bool</span>
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">bool</span>
     <span class="phpdocumentor-signature__name">$verifypeer</span>
      = <span class="phpdocumentor-signature__default-value">true</span></code>
 
     
     
+    
+
     
 
     
@@ -3805,7 +3630,7 @@ server as an xml-rpc string or base64 value.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">330</span>
+    <span class="phpdocumentor-element-found-in__line">333</span>
 
     </aside>
 
@@ -3889,7 +3714,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1982</span>
+    <span class="phpdocumentor-element-found-in__line">2047</span>
 
     </aside>
 
@@ -3933,7 +3758,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">2032</span>
+    <span class="phpdocumentor-element-found-in__line">2097</span>
 
     </aside>
 
@@ -3977,7 +3802,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">2007</span>
+    <span class="phpdocumentor-element-found-in__line">2072</span>
 
     </aside>
 
@@ -4028,7 +3853,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">2053</span>
+    <span class="phpdocumentor-element-found-in__line">2118</span>
 
     </aside>
 
@@ -4072,7 +3897,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">413</span>
+    <span class="phpdocumentor-element-found-in__line">416</span>
 
     </aside>
 
@@ -4135,7 +3960,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">426</span>
+    <span class="phpdocumentor-element-found-in__line">429</span>
 
     </aside>
 
@@ -4174,7 +3999,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">751</span>
+    <span class="phpdocumentor-element-found-in__line">758</span>
 
     </aside>
 
@@ -4226,7 +4051,8 @@ request are not compatible with h2c upgrade.</p>
         <span class="phpdocumentor-signature__response_type">string|int</span>
                     &mdash;
                 <section class="phpdocumentor-description"><p>Notes: the path component will include query string and fragment; NULL is a valid value for port
-(in which case the default port for http/https will be used);</p>
+(in which case the default port for http/https will be used); the url scheme component will
+reflect the <code class="prettyprint">$method</code> used in the constructor, so it might not be http or https</p>
 </section>
 
             </section>
@@ -4246,7 +4072,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1502</span>
+    <span class="phpdocumentor-element-found-in__line">1563</span>
 
     </aside>
 
@@ -4303,7 +4129,7 @@ Please use the constructor to set an http protocol variant.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">bool</span>
                  = <span class="phpdocumentor-signature__argument__default-value">true</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>deprecated. Was: &quot;w&quot;hen true, upon receiving an error during multicall, multiple single
+                    <section class="phpdocumentor-description"><p>deprecated. Was: &quot;when true, upon receiving an error during multicall, multiple single
 calls will be attempted&quot;</p>
 </section>
 
@@ -4334,7 +4160,7 @@ calls will be attempted&quot;</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">812</span>
+    <span class="phpdocumentor-element-found-in__line">822</span>
 
     </aside>
 
@@ -4380,7 +4206,10 @@ string using the native php xml-rpc functions (see http://www.php.net/xmlrpc)</p
 will be used. If that is 0, a platform specific timeout will apply.
 This timeout value is passed to fsockopen(). It is also used for detecting server
 timeouts during communication (i.e. if the server does not send anything to the client
-for $timeout seconds, the connection will be closed).</p>
+for $timeout seconds, the connection will be closed). When in CURL mode, this is the
+CURL timeout.
+NB: in both CURL and Socket modes, some conditions might lead to the client not
+respecting the given timeout. Eg. if the network is not connected</p>
 </section>
 
             </dd>
@@ -4454,7 +4283,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">633</span>
+    <span class="phpdocumentor-element-found-in__line">639</span>
 
     </aside>
 
@@ -4510,7 +4339,7 @@ It is up to the xml-rpc server to return compressed responses when receiving suc
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">521</span>
+    <span class="phpdocumentor-element-found-in__line">524</span>
 
     </aside>
 
@@ -4572,7 +4401,7 @@ It is up to the xml-rpc server to return compressed responses when receiving suc
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">505</span>
+    <span class="phpdocumentor-element-found-in__line">508</span>
 
     </aside>
 
@@ -4636,7 +4465,7 @@ variables.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">686</span>
+    <span class="phpdocumentor-element-found-in__line">692</span>
 
     </aside>
 
@@ -4767,7 +4596,7 @@ as php, and allow $path to be an array of attributes...)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">486</span>
+    <span class="phpdocumentor-element-found-in__line">489</span>
 
     </aside>
 
@@ -4843,7 +4672,7 @@ extension is enabled.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">706</span>
+    <span class="phpdocumentor-element-found-in__line">712</span>
 
     </aside>
 
@@ -4901,7 +4730,7 @@ extension is enabled.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">465</span>
+    <span class="phpdocumentor-element-found-in__line">468</span>
 
     </aside>
 
@@ -4961,7 +4790,7 @@ the server returns. Never leave it enabled for production!</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">541</span>
+    <span class="phpdocumentor-element-found-in__line">544</span>
 
     </aside>
 
@@ -5024,7 +4853,7 @@ Thanks to Daniel Convissor.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">398</span>
+    <span class="phpdocumentor-element-found-in__line">401</span>
 
     </aside>
 
@@ -5098,7 +4927,7 @@ Thanks to Daniel Convissor.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">440</span>
+    <span class="phpdocumentor-element-found-in__line">443</span>
 
     </aside>
 
@@ -5165,7 +4994,7 @@ Thanks to Daniel Convissor.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">612</span>
+    <span class="phpdocumentor-element-found-in__line">618</span>
 
     </aside>
 
@@ -5253,7 +5082,7 @@ to use NTLM auth with proxy (has effect only when the client uses the HTTP 1.1 p
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">656</span>
+    <span class="phpdocumentor-element-found-in__line">662</span>
 
     </aside>
 
@@ -5315,7 +5144,7 @@ uncompressed requests is not yet implemented).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">576</span>
+    <span class="phpdocumentor-element-found-in__line">579</span>
 
     </aside>
 
@@ -5375,7 +5204,7 @@ uncompressed requests is not yet implemented).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">559</span>
+    <span class="phpdocumentor-element-found-in__line">562</span>
 
     </aside>
 
@@ -5437,11 +5266,11 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">591</span>
+    <span class="phpdocumentor-element-found-in__line">597</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let cURL decide</p>
+        <p class="phpdocumentor-summary">Set attributes for SSL communication: SSL version to use. Best left at 0 (default value): let PHP decide.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -5465,7 +5294,10 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>see  CURL_SSLVERSION_ constants</p>
+                    <section class="phpdocumentor-description"><p>use CURL_SSLVERSION_ constants. When in socket mode, use the same values: 2 (SSLv2) to 7 (TLSv1.3),
+0 for auto (note that old php versions do not support all TLS versions).
+Note that, in curl mode, the actual ssl version in use might be higher than requested.
+NB: please do not use any version lower than TLS 1.3 as they are considered insecure.</p>
 </section>
 
             </dd>
@@ -5495,7 +5327,7 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">719</span>
+    <span class="phpdocumentor-element-found-in__line">726</span>
 
     </aside>
 
@@ -5522,7 +5354,8 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>self::USE_CURL_ALWAYS, self::USE_CURL_AUTO or self::USE_CURL_NEVER</p>
+                    <section class="phpdocumentor-description"><p>self::USE_CURL_ALWAYS, self::USE_CURL_AUTO or self::USE_CURL_NEVER
+In 'auto' mode, curl is picked up based on features used, such as fe. NTLM auth, or https</p>
 </section>
 
             </dd>
@@ -5552,7 +5385,7 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">737</span>
+    <span class="phpdocumentor-element-found-in__line">743</span>
 
     </aside>
 
@@ -5610,7 +5443,7 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1250</span>
+    <span class="phpdocumentor-element-found-in__line">1309</span>
 
     </aside>
 
@@ -5801,7 +5634,7 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1940</span>
+    <span class="phpdocumentor-element-found-in__line">2005</span>
 
     </aside>
 
@@ -5995,7 +5828,7 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1872</span>
+    <span class="phpdocumentor-element-found-in__line">1937</span>
 
     </aside>
 
@@ -6191,11 +6024,12 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1732</span>
+    <span class="phpdocumentor-element-found-in__line">1795</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">NB: always goes via socket, never curl</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">sendPayloadHTTP10</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$req</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$server</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$port</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$timeout</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$username</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$password</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$authType</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">1</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxyHost</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxyPort</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxyUsername</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxyPassword</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxyAuthType</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">1</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;http&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a></span></code>
@@ -6329,11 +6163,12 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1767</span>
+    <span class="phpdocumentor-element-found-in__line">1832</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">NB: always goes via curl, never socket</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature -deprecated">
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">sendPayloadHTTPS</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$req</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$server</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$port</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$timeout</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$username</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$password</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$authType</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">1</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$cert</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$certPass</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$caCert</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$caCertDir</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxyHost</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxyPort</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxyUsername</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxyPassword</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$proxyAuthType</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">1</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$keepAlive</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$keyPass</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sslVersion</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a></span></code>
@@ -6516,7 +6351,7 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1804</span>
+    <span class="phpdocumentor-element-found-in__line">1869</span>
 
     </aside>
 
@@ -6683,9 +6518,7 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                  = <span class="phpdocumentor-signature__argument__default-value">0</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>@todo not implemented yet. See http://php.net/manual/en/migration56.openssl.php</p>
-</section>
-
+                
             </dd>
             </dl>
 
@@ -6713,7 +6546,7 @@ To specify custom SSL certificates to validate the server with, use the setCaCer
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1166</span>
+    <span class="phpdocumentor-element-found-in__line">1225</span>
 
     </aside>
 
@@ -6817,7 +6650,7 @@ NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">913</span>
+    <span class="phpdocumentor-element-found-in__line">928</span>
 
     </aside>
 
@@ -6900,7 +6733,7 @@ NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1563</span>
+    <span class="phpdocumentor-element-found-in__line">1624</span>
 
     </aside>
 
@@ -7108,12 +6941,6 @@ from a multicall response</p>
                             <li class="phpdocumentor-on-this-page-section__title">Properties</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
-                                                    <li class=""><a href="classes/PhpXmlRpc-Client.html#property_errno">$errno</a></li>
-                                                    <li class=""><a href="classes/PhpXmlRpc-Client.html#property_errstr">$errstr</a></li>
-                                                    <li class=""><a href="classes/PhpXmlRpc-Client.html#property_method">$method</a></li>
-                                                    <li class=""><a href="classes/PhpXmlRpc-Client.html#property_path">$path</a></li>
-                                                    <li class=""><a href="classes/PhpXmlRpc-Client.html#property_port">$port</a></li>
-                                                    <li class=""><a href="classes/PhpXmlRpc-Client.html#property_server">$server</a></li>
                                                     <li class=""><a href="classes/PhpXmlRpc-Client.html#property_accepted_charset_encodings">$accepted_charset_encodings</a></li>
                                                     <li class=""><a href="classes/PhpXmlRpc-Client.html#property_accepted_compression">$accepted_compression</a></li>
                                                     <li class=""><a href="classes/PhpXmlRpc-Client.html#property_authtype">$authtype</a></li>
