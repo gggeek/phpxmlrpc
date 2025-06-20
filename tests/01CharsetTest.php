@@ -101,7 +101,6 @@ class CharsetTest extends PhpXmlRpc_PolyfillTestCase
     {
         if (!function_exists('mb_convert_encoding')) {
             $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
-            return;
         }
 
         // euro symbol in ISO-8859-15

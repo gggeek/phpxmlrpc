@@ -4,7 +4,11 @@ include_once __DIR__ . '/08ServerTest.php';
 
 /**
  * Tests which stress http features of the library.
- * Each of these tests iterates over (almost) all the 'Server' tests
+ * Each of these tests iterates over (almost) all the 'Server' tests.
+ *
+ * @todo refactor:
+ *       - pick a smaller subset of 'base tests' to iterate over, for every http feature
+ *       - test more exhaustive combinations of compression/auth/ssl/charset/curl-or-socket/proxy/etc.. features
  */
 class HTTPTest extends ServerTest
 {
@@ -23,6 +27,7 @@ class HTTPTest extends ServerTest
      * @todo (re)introduce skipping of tests which failed when executed individually even if test runs happen as separate processes
      * @todo reintroduce skipping of tests within the loop
      * @todo testTimeout is actually good to be tested with proxies etc - but it slows down the testsuite a lot!
+     * @todo see also 'refactor' todo at the top of the class declaration
      */
     public function getSingleHttpTestMethods()
     {
@@ -42,39 +47,15 @@ class HTTPTest extends ServerTest
     }
 
     /**
-     * @dataProvider getSingleHttpTestMethods
-     * @param string $method
+     * @param \PhpXmlRpc\Response $r
+     * @return void
      */
-    public function testDeflate($method)
+    protected function validateResponse($r)
     {
-        if (!function_exists('gzdeflate'))
-        {
-            $this->markTestSkipped('Zlib missing: cannot test deflate functionality');
-            return;
+        if ($this->expectHttp2) {
+            $hr = $r->httpResponse();
+            $this->assertEquals("2", @$hr['protocol_version'], 'Server response not using http version 2');
         }
-
-        $this->client->accepted_compression = array('deflate');
-        $this->client->request_compression = 'deflate';
-
-        $this->$method();
-    }
-
-    /**
-     * @dataProvider getSingleHttpTestMethods
-     * @param string $method
-     */
-    public function testGzip($method)
-    {
-        if (!function_exists('gzdeflate'))
-        {
-            $this->markTestSkipped('Zlib missing: cannot test gzip functionality');
-            return;
-        }
-
-        $this->client->accepted_compression = array('gzip');
-        $this->client->request_compression = 'gzip';
-
-        $this->$method();
     }
 
     public function testKeepAlives()
@@ -111,54 +92,6 @@ class HTTPTest extends ServerTest
         /// @todo replace with setOption when dropping the BC layer
         $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_ALWAYS);
         $this->client->setCurlOptions(array(CURLOPT_FOLLOWLOCATION => true, CURLOPT_POSTREDIR => 3));
-
-        $this->$method();
-    }
-
-    public function testAcceptCharset()
-    {
-        if (version_compare(PHP_VERSION, '5.6.0', '<'))
-        {
-            $this->markTestSkipped('Cannot test accept-charset on php < 5.6');
-            return;
-        }
-        if (!function_exists('mb_list_encodings'))
-        {
-            $this->markTestSkipped('mbstring missing: cannot test accept-charset');
-            return;
-        }
-
-        $r = new \PhpXmlRpc\Request('examples.stringecho', array(new \PhpXmlRpc\Value('€')));
-        //chr(164)
-
-        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'UTF-8';
-
-        $this->addQueryParams(array('RESPONSE_ENCODING' => 'auto'));
-        $this->client->accepted_charset_encodings = array(
-            'utf-1234;q=0.1',
-            'windows-1252;q=0.8'
-        );
-        $v = $this->send($r, 0, true);
-        $h = $v->httpResponse();
-        $this->assertEquals('text/xml; charset=Windows-1252', $h['headers']['content-type']);
-        if ($v) {
-            $this->assertEquals('€', $v->value()->scalarval());
-        }
-    }
-
-    /**
-     * @dataProvider getSingleHttpTestMethods
-     * @param string $method
-     */
-    public function testProxy($method)
-    {
-        if ($this->args['PROXYSERVER'] == '')
-        {
-            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy');
-            return;
-        }
-
-        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
 
         $this->$method();
     }
@@ -204,6 +137,130 @@ class HTTPTest extends ServerTest
     }
 
     /**
+     * @dataProvider getAvailableUseCurlOptions
+     */
+    public function testTimeout($curlOpt)
+    {
+        $this->client->setOption(\PhpXmlRpc\Client::OPT_USE_CURL, $curlOpt);
+
+        // decrease the timeout to avoid slowing down the testsuite too much
+        $this->timeout = 3;
+
+        // the server will wait for 1 second before sending back the response - should pass
+        $m = new xmlrpcmsg('tests.sleep', array(new xmlrpcval(1, 'int')));
+        // this checks for a non-failed call
+        $time = microtime(true);
+        $this->send($m);
+        $time = microtime(true) - $time;
+        $this->assertGreaterThan(1.0, $time);
+        $this->assertLessThan(2.0, $time);
+
+        // the server will wait for 5 seconds before sending back the response - fail
+        $m = new xmlrpcmsg('tests.sleep', array(new xmlrpcval(5, 'int')));
+        $time = microtime(true);
+        $r = $this->send($m, array(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
+        $time = microtime(true) - $time;
+        $this->assertGreaterThan(2.0, $time);
+        $this->assertLessThan(4.0, $time);
+
+        /*
+        // the server will send back the response one chunk per second, waiting 5 seconds in between chunks
+        $m = new xmlrpcmsg('examples.addtwo', array(new xmlrpcval(1, 'int'), new xmlrpcval(2, 'int')));
+        $this->addQueryParams(array('SLOW_LORIS' => 5));
+        $time = microtime(true);
+        $this->send($m, array(PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
+        $time = microtime(true) - $time;
+        $this->assertGreaterThan(2.0, $time);
+        $this->assertLessThan(4.0, $time);
+        */
+
+        // pesky case: the server will send back the response one chunk per second, taking 10 seconds in total
+        $m = new xmlrpcmsg('examples.addtwo', array(new xmlrpcval(1, 'int'), new xmlrpcval(2, 'int')));
+        $this->addQueryParams(array('SLOW_LORIS' => 1));
+        $time = microtime(true);
+        $this->send($m, array(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
+        $time = microtime(true) - $time;
+        $this->assertGreaterThan(2.0, $time);
+        $this->assertLessThan(4.0, $time);
+    }
+
+    // *** auth tests ***
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     * @todo add a basic-auth test using curl
+     */
+    public function testBasicAuth($method)
+    {
+        $this->client->setCredentials('test', 'test');
+        $this->addQueryParams(array('FORCE_AUTH' => 'Basic'));
+
+        $this->$method();
+    }
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
+    public function testDigestAuth($method)
+    {
+        if (!function_exists('curl_init'))
+        {
+            $this->markTestSkipped('CURL missing: cannot test digest auth functionality');
+            return;
+        }
+
+        $this->client->setCredentials('test', 'test', CURLAUTH_DIGEST);
+        $this->addQueryParams(array('FORCE_AUTH' => 'Digest'));
+        $this->method = 'http11';
+        $this->client->method = 'http11';
+
+        $this->$method();
+    }
+
+    /// @todo if curl is onboard, add a test for NTLM auth - note that that will require server-side support,
+    ///       see eg. https://modntlm.sourceforge.net/ , https://blog.mayflower.de/125-Accessing-NTLM-secured-resources-with-PHP.html
+
+    // *** compression tests ***
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
+    public function testDeflate($method)
+    {
+        if (!function_exists('gzdeflate'))
+        {
+            $this->markTestSkipped('Zlib missing: cannot test deflate functionality');
+            return;
+        }
+
+        $this->client->accepted_compression = array('deflate');
+        $this->client->request_compression = 'deflate';
+
+        $this->$method();
+    }
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
+    public function testGzip($method)
+    {
+        if (!function_exists('gzdeflate'))
+        {
+            $this->markTestSkipped('Zlib missing: cannot test gzip functionality');
+            return;
+        }
+
+        $this->client->accepted_compression = array('gzip');
+        $this->client->request_compression = 'gzip';
+
+        $this->$method();
+    }
+
+    /**
      * @dataProvider getSingleHttpTestMethods
      * @param string $method
      */
@@ -243,30 +300,7 @@ class HTTPTest extends ServerTest
         $this->$method();
     }
 
-    /**
-     * @dataProvider getSingleHttpTestMethods
-     * @param string $method
-     */
-    public function testHttp11Proxy($method)
-    {
-        if (!function_exists('curl_init'))
-        {
-            $this->markTestSkipped('CURL missing: cannot test http 1.1 w. proxy');
-            return;
-        }
-        else if ($this->args['PROXYSERVER'] == '')
-        {
-            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. http 1.1');
-            return;
-        }
-
-        $this->method = 'http11'; // not an error the double assignment!
-        $this->client->method = 'http11';
-        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
-        $this->client->keepalive = false;
-
-        $this->$method();
-    }
+    // *** https tests ***
 
     /**
      * @dataProvider getSingleHttpTestMethods
@@ -367,102 +401,7 @@ class HTTPTest extends ServerTest
         $this->$method();
     }
 
-    /**
-     * @dataProvider getSingleHttpTestMethods
-     * @param string $method
-     */
-    public function testHttpsProxyCurl($method)
-    {
-        if (!function_exists('curl_init'))
-        {
-            $this->markTestSkipped('CURL missing: cannot test https w. proxy');
-            return;
-        }
-        else if ($this->args['PROXYSERVER'] == '')
-        {
-            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. https');
-            return;
-        }
-        else if ($this->args['HTTPSSERVER'] == '')
-        {
-            $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https w. proxy');
-            return;
-        }
-
-        $this->method = 'https';
-        $this->client->method = 'https';
-        $this->client->server = $this->args['HTTPSSERVER'];
-        $this->client->path = $this->args['HTTPSURI'];
-        /// @todo replace with setOptions when dropping the BC layer
-        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
-        $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
-        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
-        $this->client->setSSLVersion($this->args['SSLVERSION']);
-        /// @todo push this override to the test matrix config?
-        if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
-        {
-            $version = explode('.', PHP_VERSION);
-            $this->client->setSSLVersion(min(4 + $version[1], 7));
-        }
-
-        $this->$method();
-    }
-
-/*  NB: this is not yet supported by the Client class
-    /**
-     * @dataProvider getSingleHttpTestMethods
-     * @param string $method
-     * /
-    public function testHttpsProxySocket($method)
-    {
-        if ($this->args['PROXYSERVER'] == '')
-        {
-            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. https');
-            return;
-        }
-        else if ($this->args['HTTPSSERVER'] == '')
-        {
-            $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https w. proxy');
-            return;
-        }
-
-        if (version_compare(PHP_VERSION, '7.2', '<'))
-        {
-            if (is_readable('/etc/os-release')) {
-                $output = file_get_contents('/etc/os-release');
-                preg_match('/VERSION="?([0-9]+)/', $output, $matches);
-                $ubuntuVersion = @$matches[1];
-            } else {
-                exec('uname -a', $output, $retval);
-                preg_match('/ubunutu([0-9]+)/', $output[0], $matches);
-                $ubuntuVersion = @$matches[1];
-            }
-            if ($ubuntuVersion >= 20 && $this->args['SSLVERSION'] != 6) {
-                $this->markTestSkipped('HTTPS via Socket known to fail on php less than 7.2 on Ubuntu 20 and higher');
-                return;
-            }
-        }
-
-        $this->method = 'https';
-        $this->client->method = 'https';
-        $this->client->server = $this->args['HTTPSSERVER'];
-        $this->client->path = $this->args['HTTPSURI'];
-        /// @todo replace with setOptions when dropping the BC layer
-        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
-        $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
-        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
-        $this->client->setSSLVersion($this->args['SSLVERSION']);
-        $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
-        /// @todo push this override to the test matrix config?
-        if (version_compare(PHP_VERSION, '8.1', '>=') && $this->args['SSLVERSION'] == 0)
-        {
-            $version = explode('.', PHP_VERSION);
-            $this->client->setSSLVersion(min(5 + $version[1], 7));
-        }
-
-        $this->$method();
-    }
-*/
+    // *** http2 tests ***
 
     /**
      * @dataProvider getSingleHttpTestMethods
@@ -523,6 +462,179 @@ class HTTPTest extends ServerTest
         $this->expectHttp2 = false;
     }
 
+    // *** proxy tests ***
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
+    public function testProxy($method)
+    {
+        if ($this->args['PROXYSERVER'] == '')
+        {
+            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy');
+            return;
+        }
+
+        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
+
+        $this->$method();
+    }
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
+    public function testHttp11Proxy($method)
+    {
+        if (!function_exists('curl_init'))
+        {
+            $this->markTestSkipped('CURL missing: cannot test http 1.1 w. proxy');
+            return;
+        }
+        else if ($this->args['PROXYSERVER'] == '')
+        {
+            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. http 1.1');
+            return;
+        }
+
+        $this->method = 'http11'; // not an error the double assignment!
+        $this->client->method = 'http11';
+        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
+        $this->client->keepalive = false;
+
+        $this->$method();
+    }
+
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     */
+    public function testHttpsProxyCurl($method)
+    {
+        if (!function_exists('curl_init'))
+        {
+            $this->markTestSkipped('CURL missing: cannot test https w. proxy');
+            return;
+        }
+        else if ($this->args['PROXYSERVER'] == '')
+        {
+            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. https');
+            return;
+        }
+        else if ($this->args['HTTPSSERVER'] == '')
+        {
+            $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https w. proxy');
+            return;
+        }
+
+        $this->method = 'https';
+        $this->client->method = 'https';
+        $this->client->server = $this->args['HTTPSSERVER'];
+        $this->client->path = $this->args['HTTPSURI'];
+        /// @todo replace with setOptions when dropping the BC layer
+        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
+        $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
+        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
+        $this->client->setSSLVersion($this->args['SSLVERSION']);
+        /// @todo push this override to the test matrix config?
+        if (version_compare(PHP_VERSION, '8.0', '>=') && $this->args['SSLVERSION'] == 0)
+        {
+            $version = explode('.', PHP_VERSION);
+            $this->client->setSSLVersion(min(4 + $version[1], 7));
+        }
+
+        $this->$method();
+    }
+
+    /*  NB: this is not yet supported by the Client class
+    /**
+     * @dataProvider getSingleHttpTestMethods
+     * @param string $method
+     * /
+    public function testHttpsProxySocket($method)
+    {
+        if ($this->args['PROXYSERVER'] == '')
+        {
+            $this->markTestSkipped('PROXYSERVER definition missing: cannot test proxy w. https');
+            return;
+        }
+        else if ($this->args['HTTPSSERVER'] == '')
+        {
+            $this->markTestSkipped('HTTPS SERVER definition missing: cannot test https w. proxy');
+            return;
+        }
+
+        if (version_compare(PHP_VERSION, '7.2', '<'))
+        {
+            if (is_readable('/etc/os-release')) {
+                $output = file_get_contents('/etc/os-release');
+                preg_match('/VERSION="?([0-9]+)/', $output, $matches);
+                $ubuntuVersion = @$matches[1];
+            } else {
+                exec('uname -a', $output, $retval);
+                preg_match('/ubunutu([0-9]+)/', $output[0], $matches);
+                $ubuntuVersion = @$matches[1];
+            }
+            if ($ubuntuVersion >= 20 && $this->args['SSLVERSION'] != 6) {
+                $this->markTestSkipped('HTTPS via Socket known to fail on php less than 7.2 on Ubuntu 20 and higher');
+                return;
+            }
+        }
+
+        $this->method = 'https';
+        $this->client->method = 'https';
+        $this->client->server = $this->args['HTTPSSERVER'];
+        $this->client->path = $this->args['HTTPSURI'];
+        /// @todo replace with setOptions when dropping the BC layer
+        $this->client->setProxy($this->args['PROXYSERVER'], $this->args['PROXYPORT']);
+        $this->client->setSSLVerifyPeer(!$this->args['HTTPSIGNOREPEER']);
+        $this->client->setSSLVerifyHost($this->args['HTTPSVERIFYHOST']);
+        $this->client->setSSLVersion($this->args['SSLVERSION']);
+        $this->client->setUseCurl(\PhpXmlRpc\Client::USE_CURL_NEVER);
+        /// @todo push this override to the test matrix config?
+        if (version_compare(PHP_VERSION, '8.1', '>=') && $this->args['SSLVERSION'] == 0)
+        {
+            $version = explode('.', PHP_VERSION);
+            $this->client->setSSLVersion(min(5 + $version[1], 7));
+        }
+
+        $this->$method();
+    }
+    */
+
+    // *** charset tests ***
+
+    public function testAcceptCharset()
+    {
+        if (version_compare(PHP_VERSION, '5.6.0', '<'))
+        {
+            $this->markTestSkipped('Cannot test accept-charset on php < 5.6');
+            return;
+        }
+        if (!function_exists('mb_list_encodings'))
+        {
+            $this->markTestSkipped('mbstring missing: cannot test accept-charset');
+            return;
+        }
+
+        $r = new \PhpXmlRpc\Request('examples.stringecho', array(new \PhpXmlRpc\Value('€'))); // chr(164)
+
+        \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'UTF-8';
+
+        $this->addQueryParams(array('RESPONSE_ENCODING' => 'auto'));
+        $this->client->accepted_charset_encodings = array(
+            'utf-1234;q=0.1',
+            'windows-1252;q=0.8'
+        );
+        $v = $this->send($r, 0, true);
+        $h = $v->httpResponse();
+        $this->assertEquals('text/xml; charset=Windows-1252', $h['headers']['content-type']);
+        if ($v) {
+            $this->assertEquals('€', $v->value()->scalarval());
+        }
+    }
+
     /// @todo a better organization of tests could be to move the 4 tests below and all charset-related tests from
     ///       class ServerTest to a dedicated class - and make sure we iterate over each of those with different
     ///       proxy/auth/compression/etc... settings
@@ -569,97 +681,5 @@ class HTTPTest extends ServerTest
         $this->client->request_charset_encoding = 'ISO-8859-1';
 
         $this->$method();
-    }
-
-    /**
-     * @dataProvider getSingleHttpTestMethods
-     * @param string $method
-     */
-    public function testBasicAuth($method)
-    {
-        $this->client->setCredentials('test', 'test');
-        $this->addQueryParams(array('FORCE_AUTH' => 'Basic'));
-
-        $this->$method();
-    }
-
-    /**
-     * @dataProvider getSingleHttpTestMethods
-     * @param string $method
-     */
-    public function testDigestAuth($method)
-    {
-        if (!function_exists('curl_init'))
-        {
-            $this->markTestSkipped('CURL missing: cannot test digest auth functionality');
-            return;
-        }
-
-        $this->client->setCredentials('test', 'test', CURLAUTH_DIGEST);
-        $this->addQueryParams(array('FORCE_AUTH' => 'Digest'));
-        $this->method = 'http11';
-        $this->client->method = 'http11';
-
-        $this->$method();
-    }
-
-    /**
-     * @dataProvider getAvailableUseCurlOptions
-     */
-    public function testTimeout($curlOpt)
-    {
-        $this->client->setOption(\PhpXmlRpc\Client::OPT_USE_CURL, $curlOpt);
-
-        // decrease the timeout to avoid slowing down the testsuite too much
-        $this->timeout = 3;
-
-        // the server will wait for 1 second before sending back the response - should pass
-        $m = new xmlrpcmsg('tests.sleep', array(new xmlrpcval(1, 'int')));
-        // this checks for a non-failed call
-        $time = microtime(true);
-        $this->send($m);
-        $time = microtime(true) - $time;
-        $this->assertGreaterThan(1.0, $time);
-        $this->assertLessThan(2.0, $time);
-
-        // the server will wait for 5 seconds before sending back the response - fail
-        $m = new xmlrpcmsg('tests.sleep', array(new xmlrpcval(5, 'int')));
-        $time = microtime(true);
-        $r = $this->send($m, array(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
-        $time = microtime(true) - $time;
-        $this->assertGreaterThan(2.0, $time);
-        $this->assertLessThan(4.0, $time);
-
-        /*
-        // the server will send back the response one chunk per second, waiting 5 seconds in between chunks
-        $m = new xmlrpcmsg('examples.addtwo', array(new xmlrpcval(1, 'int'), new xmlrpcval(2, 'int')));
-        $this->addQueryParams(array('SLOW_LORIS' => 5));
-        $time = microtime(true);
-        $this->send($m, array(PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
-        $time = microtime(true) - $time;
-        $this->assertGreaterThan(2.0, $time);
-        $this->assertLessThan(4.0, $time);
-        */
-
-        // pesky case: the server will send back the response one chunk per second, taking 10 seconds in total
-        $m = new xmlrpcmsg('examples.addtwo', array(new xmlrpcval(1, 'int'), new xmlrpcval(2, 'int')));
-        $this->addQueryParams(array('SLOW_LORIS' => 1));
-        $time = microtime(true);
-        $this->send($m, array(0, PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['http_error'], PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['curl_fail']));
-        $time = microtime(true) - $time;
-        $this->assertGreaterThan(2.0, $time);
-        $this->assertLessThan(4.0, $time);
-    }
-
-    /**
-     * @param \PhpXmlRpc\Response $r
-     * @return void
-     */
-    protected function validateResponse($r)
-    {
-        if ($this->expectHttp2) {
-            $hr = $r->httpResponse();
-            $this->assertEquals("2", @$hr['protocol_version'], 'Server response not using http version 2');
-        }
     }
 }

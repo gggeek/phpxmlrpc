@@ -194,12 +194,6 @@ runtests() {
             --env "SSLVERSION=${SSLVERSION}" \
             --env DEBUG="${DEBUG}" \
             "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v $TESTSUITE"
-        docker exec -i $USE_TTY \
-            --env "HTTPSVERIFYHOST=${HTTPSVERIFYHOST}" \
-            --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
-            --env "SSLVERSION=${SSLVERSION}" \
-            --env DEBUG="${DEBUG}" \
-            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "php ./tests/legacy_loader_test.php"
     } || {
         RETCODE="$?"
     }

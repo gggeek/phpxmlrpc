@@ -60,7 +60,6 @@ class EncoderTest extends PhpXmlRpc_LoggerAwareTestCase
     {
         if (!function_exists('mb_convert_encoding')) {
             $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
-            return;
         }
 
         $string = chr(164);

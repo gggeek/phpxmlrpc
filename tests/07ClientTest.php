@@ -3,7 +3,8 @@
 include_once __DIR__ . '/ServerAwareTestCase.php';
 
 /**
- * Tests involving the Client class (and mostly no server).
+ * Tests involving the Client class features (and mostly no server).
+ * @todo review: are there any tests which belong to the ServerTest class?
  */
 class ClientTest extends PhpXmlRpc_ServerAwareTestCase
 {
@@ -40,6 +41,7 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         \PhpXmlRpc\PhpXmlRpc::useInteropFaults();
         $r = $this->client->send($m, $this->timeout);
         $this->assertEquals(-32300, $r->faultCode());
+        /// @todo reset this via tear_down
         \PhpXmlRpc\PhpXmlRpc::$xmlrpcerr = $orig;
     }
 
@@ -75,9 +77,8 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
     {
         if (!function_exists('curl_init')) {
             $this->markTestSkipped('CURL missing: cannot test curl keepalive errors');
-
-            return;
         }
+
         $m = new xmlrpcmsg('examples.stringecho', array(
             new xmlrpcval('hello', 'string'),
         ));
@@ -116,7 +117,8 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         $this->assertArrayHasKey('X-Pxr-Test', $ro->scalarVal(), "Testing with curl mode: $curlOpt");
     }
 
-    public function testgetUrl()
+    /// @todo add more permutations, eg. check that PHP_URL_SCHEME is ok with http10, http11, h2 etc...
+    public function testGetUrl()
     {
         $m = $this->client->getUrl(PHP_URL_SCHEME);
         $this->assertEquals($m, $this->client->method);

@@ -103,7 +103,6 @@ class ParsingTest extends PhpXmlRpc_LoggerAwareTestCase
     {
         if (PHP_INT_SIZE == 4 ) {
             $this->markTestSkipped('Can not test i8 as php is compiled in 32 bit mode');
-            return;
         }
 
         $m = $this->newRequest('dummy');

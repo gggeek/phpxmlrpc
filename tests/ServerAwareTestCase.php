@@ -86,6 +86,7 @@ abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LoggerAwareTestCa
     protected function getClient()
     {
         $server = explode(':', $this->args['HTTPSERVER']);
+        /// @todo use the non-legacy API calling convention, except in a dedicated test
         if (count($server) > 1) {
             $client = new xmlrpc_client($this->args['HTTPURI'], $server[0], $server[1]);
         } else {
@@ -103,6 +104,10 @@ abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LoggerAwareTestCa
         return $client;
     }
 
+    /**
+     * Dataprovider method: generates the list of test cases for tests which have to be run on curl vs. socket
+     * @return array[]
+     */
     public function getAvailableUseCurlOptions()
     {
         $opts = array(array(\PhpXmlRpc\Client::USE_CURL_NEVER));

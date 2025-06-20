@@ -3,7 +3,10 @@
 include_once __DIR__ . '/ServerAwareTestCase.php';
 
 /**
- * Long-term, this should replace all testing of the legacy API done via the main test-suite...
+ * @todo Long-term, this should replace all testing of the legacy API done via the main test-suite...
+ * - usage of xmlrpc_ class names
+ * - calling deprecated methods
+ * - calling of methods using deprecated conventions
  */
 class LegacyAPITest extends PhpXmlRpc_ServerAwareTestCase
 {

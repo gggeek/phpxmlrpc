@@ -52,9 +52,13 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
     {
         parent::set_up();
 
+        // these 2 values are injected into the client when calling `send`, and are modified by some tests - reset them
         $this->timeout = 10;
+        $this->method = 'http';
 
         $this->client = $this->getClient();
+
+        /// @todo replace with setOption when dropping the BC layer
         $this->client->request_compression = $this->request_compression;
         $this->client->accepted_compression = $this->accepted_compression;
     }
@@ -75,6 +79,7 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
      */
     protected function send($msg, $errorCode = 0, $returnResponse = false)
     {
+        /// @todo move to injecting timeout and method into `getClient`, use the non-legacy API calling convention
         $r = $this->client->send($msg, $this->timeout, $this->method);
         // for multicall, return directly array of responses
         if (is_array($r)) {
@@ -160,8 +165,8 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
         // note that we should disable this call also when mbstring is missing server-side
         if (!function_exists('mb_convert_encoding')) {
             $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
-            return;
         }
+
         $sendString = 'κόσμε'; // Greek word 'kosme'
         $str = '<?xml version="1.0" encoding="_ENC_"?>
 <methodCall>
@@ -192,8 +197,8 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
         // note that we should disable this call also when mbstring is missing server-side
         if (!function_exists('mb_convert_encoding')) {
             $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
-            return;
         }
+
         $sendString = '安室奈美恵'; // Japanese name "Namie Amuro"
         $str = '<?xml version="1.0"?>
 <methodCall>
@@ -219,8 +224,8 @@ class ServerTest extends PhpXmlRpc_ServerAwareTestCase
         // note that we should disable this call also when mbstring is missing server-side
         if (!function_exists('mb_convert_encoding')) {
             $this->markTestSkipped('Miss mbstring extension to test exotic charsets');
-            return;
         }
+
         // the warning suppression is due to utf8_decode being deprecated in php 8.2
         $sendString = @utf8_decode('élève');
         $str = '<?xml version="1.0"?>
@@ -635,7 +640,6 @@ And turned it into nylon';
         if (version_compare(PHP_VERSION, '7.0.0', '<'))
         {
             $this->markTestSkipped('Cannot test php Error on php < 7.0');
-            return;
         }
 
         // these test for the different server error catching modes

@@ -116,9 +116,6 @@ jobs:
                         fi
                     fi
 
-            -   name: test legacy php classes loader
-                run: 'php ./tests/legacy_loader_test.php'
-
             # @todo would it be useful to run a 2nd test with composer --prefer-lowest? After all the only dependencies we have are testing tools
 
             -   name: test python demo files
