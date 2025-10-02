@@ -66,7 +66,7 @@ class ParallelClient extends Client
                 $errors[$k] = curl_error($h);
             }
 
-            //curl_close($h);
+            //@curl_close($h);
             curl_multi_remove_handle($curl, $h);
         }
         curl_multi_close($curl);

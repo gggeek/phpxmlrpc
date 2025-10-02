@@ -41,7 +41,7 @@ abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_ServerAwareTestCase
         }
         $page = curl_exec($ch);
         $info = curl_getinfo($ch);
-        curl_close($ch);
+        @curl_close($ch);
 
         $this->assertNotFalse($page, 'Curl request should not fail. Url: ' . @$info['url'] . ', Http code: ' . @$info['http_code']);
         if (!$emptyPageOk) {

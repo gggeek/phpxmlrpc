@@ -1,5 +1,7 @@
 ## XML-RPC for PHP EXTRAS version XX (unreleased)
 
+- improved: fixed deprecation errors on PHP 8.5
+
 - improved: added CI testing on PHP 8.5
 
 - improved: teach the vm.sh script how to properly configure test envs using PHP 8.5
