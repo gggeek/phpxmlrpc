@@ -109,7 +109,7 @@ function _xmlrpcs_listMethods($server, $m=null) // if called in plain php values
     return Server::_xmlrpcs_listMethods($server, $m);
 }
 
-$_xmlrpcs_methodSignature_sig=array(array(\PhpXmlRpc\Value::$xmlrpcArray, $GLOBALS['xmlrpcString']));
+$_xmlrpcs_methodSignature_sig=array(array(\PhpXmlRpc\Value::$xmlrpcArray, \PhpXmlRpc\Value::$xmlrpcString));
 $_xmlrpcs_methodSignature_doc='Returns an array of known signatures (an array of arrays) for the method name passed. If no signatures are known, returns a none-array (test for type != array to detect missing signature)';
 $_xmlrpcs_methodSignature_sdoc=array(array('list of known signatures, each sig being an array of xmlrpc type names', 'name of method to be described'));
 function _xmlrpcs_methodSignature($server, $m)
@@ -117,7 +117,7 @@ function _xmlrpcs_methodSignature($server, $m)
     return Server::_xmlrpcs_methodSignature($server, $m);
 }
 
-$_xmlrpcs_methodHelp_sig=array(array($GLOBALS['xmlrpcString'], $GLOBALS['xmlrpcString']));
+$_xmlrpcs_methodHelp_sig=array(array(\PhpXmlRpc\Value::$xmlrpcString, \PhpXmlRpc\Value::$xmlrpcString));
 $_xmlrpcs_methodHelp_doc='Returns help text if defined for the method passed, otherwise returns an empty string';
 $_xmlrpcs_methodHelp_sdoc=array(array('method description', 'name of the method to be described'));
 function _xmlrpcs_methodHelp($server, $m)
