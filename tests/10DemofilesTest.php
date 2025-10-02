@@ -71,6 +71,10 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
 
     public function testCodegenServer()
     {
+        if (!extension_loaded('sqlite3')) {
+            $this->markTestSkipped('PHP extension sqlite3 is required for this test');
+        }
+
         $page = $this->request('?demo=server/codegen.php');
         $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
@@ -84,6 +88,10 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
 
     public function testDiscussServer()
     {
+        if (!extension_loaded('sqlite3')) {
+            $this->markTestSkipped('PHP extension sqlite3 is required for this test');
+        }
+
         $page = $this->request('?demo=server/discuss.php');
         $this->assertStringContainsString('<name>faultCode</name>', $page);
         $this->assertRegexp('#<int>10(5|3)</int>#', $page);
