@@ -4,24 +4,37 @@ set -e
 
 # has to be run as sudoer
 function setup_tools() {
-    PHPPKG=$(dpkg --list | grep php | grep cli | grep -v -F '(default)' | awk '{print $2}')
+    sudo=
+    if [ "$(id -u)" != "0" ]; then
+        sudo="sudo --preserve-env=GITHUB_ACTIONS DEBIAN_FRONTEND=noninteractive"
+    fi
+
+    PHPPKG=$(apt-cache search php-cli | grep php | grep cli | grep -v -F '(default)' | awk '{print $1}')
+    if [ -z "${PHPPKG}" ]; then
+        echo "Can not find a php-cli package in the apt repositories for this server" >&2
+        exit 1
+    fi
 
     # git, curl, gpg are needed by phive, used to install phpdocumentor
+    # phive nowadays requires ext-mbstring and ext-curl
     # @todo besides php-cli, there are other php extensions used by phpdocumentor that we should make sure are onboard?
-    sudo --preserve-env=GITHUB_ACTIONS DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        asciidoctor curl git gpg unzip zip "${PHPPKG}"
+    #       The list at https://packagist.org/packages/phpdocumentor/phpdocumentor says: php: ^8.1, ext-ctype, ext-hash,
+    #       ext-iconv, ext-json, ext-mbstring, ext-simplexml, ext-xml
+    # @todo what about the zip, unzip cli tools?
+    $sudo apt-get install -y \
+        asciidoctor curl git gpg unzip zip "${PHPPKG}" "${PHPPKG/cli/mbstring}" "${PHPPKG/cli/curl}"
 
     # pandoc toolchain
-    #sudo --preserve-env=GITHUB_ACTIONS DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    #$sudo apt-get install -y \
     #    pandoc texlive-xetex texlive-fonts-extra texlive-latex-extra
 
     # FOP toolchain
-    #sudo --preserve-env=GITHUB_ACTIONS DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    #$sudo apt-get install -y \
     #    fop \
     #    "${PHPPKG/cli/xsl}" \
 
     # ascidoctor-pdf toolchain
-    sudo --preserve-env=GITHUB_ACTIONS gem install asciidoctor-pdf rouge
+    $sudo gem install asciidoctor-pdf rouge
 
     #cd build
 
@@ -34,7 +47,7 @@ function setup_tools() {
     #composer install --no-dev
     # required as of phpdoc 3.1.2
     #sed -r -i -e "s|resource: '%kernel\\.project_dir%/vendor/phpdocumentor/reflection/src/phpDocumentor/Reflection/Php'|resource: '%kernel.project_dir%/../reflection/src/phpDocumentor/Reflection/Php'|g" ./vendor/phpdocumentor/phpdocumentor/config/reflection.yaml
-    #sudo chown -R "$(id -u):$(id -g)" vendor
+    #$sudo chown -R "$(id -u):$(id -g)" vendor
 
     # Install the DocBook xslt
     #if [ ! -d docbook-xsl ]; then
@@ -68,7 +81,7 @@ function setup_tools() {
     # phive behaves weirdly... fix that
     if [ -L ./build/phpDocumentor ]; then mv  ./build/phpDocumentor ./build/phpdocumentor; fi
 
-    #sudo chown -R "$(id -u):$(id -g)" build/vendor
+    #$sudo chown -R "$(id -u):$(id -g)" build/vendor
 
     #cd ..
 }
