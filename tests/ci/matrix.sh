@@ -10,8 +10,9 @@ LOGS_DIR='./var/logs/matrix'
 # @todo use better config for this. If yq is present, we could eg. parse the github config
 OS_LIST=${OS_LIST:-focal jammy noble}
 # NB: as of 2025/06, the php install scripts fail for focal (presumably xenial and bionic, too) with php 5.6, 7.x except 7.4,
-# and 8.x - presumably because of dropped support by the ondrej repos
-# Default php versions: xenial: 7.0.33, bionic: 7.2.24, focal 7.4.3, jammy 8.1.1, noble 8.3.6
+# and 8.x - presumably because of dropped support by the ondrej repos. We could test suing shivammatur binaries instead...
+# Default php versions: trusty 5.5.9, xenial: 7.0.33, bionic: 7.2.24, focal 7.4.3, jammy 8.1.1, noble 8.3.6
+#PHP_LIST_trusty=${PHP_LIST_trusty:-default 5.4}
 PHP_LIST_xenial=${PHP_LIST_xenial:-default 5.4}
 PHP_LIST_bionic=${PHP_LIST_bionic:-default 5.5}
 PHP_LIST_focal=${PHP_LIST_focal:-default 5.4}
