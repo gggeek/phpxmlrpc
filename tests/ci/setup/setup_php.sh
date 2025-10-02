@@ -107,11 +107,11 @@ install_shivammatur() {
 
         # @todo check if this script works with all php versions from 5.6 onwards
         # @todo the amount of cleanup and hacks required to get shivammathur/php-ubuntu working is huge. Can we find a better installer?
+        echo "Using PHP from shivammathur/php-ubuntu..."
 
-# @todo Fix - some of these packages create issues on GHA ubuntu containers...
+        # Some of these packages create issues on GHA ubuntu containers...
         if [ -z "${GITHUB_ACTIONS}" ]; then
             # @todo this set of packages has only been tested on Noble so far (it should work on Jammy too)
-            echo "Using PHP from shivammathur/php-ubuntu..."
             if [ "${DEBIAN_VERSION}" = noble ]; then
                 PACKAGES="gir1.2-girepository-2.0 libelf1t64 libglib2.0-0t64"
             else
@@ -160,7 +160,7 @@ install_shivammatur() {
             if [ -d "/etc/php/${PHP_VERSION}/${DIR}/conf.d" ]; then
                 rm -rf "/etc/php/${PHP_VERSION}/${DIR}/conf.d/"*.ini
                 # this list includes the php exts required by composer, phpxmlrpc as well as phpunit
-                for EXT in dom curl mbstring phar sqlite3 tokenizer xml xmlwriter; do
+                for EXT in ctype dom curl mbstring phar sqlite3 tokenizer xml xmlwriter; do
                     ln -s "/etc/php/${PHP_VERSION}/mods-available/${EXT}.ini" "/etc/php/${PHP_VERSION}/${DIR}/conf.d/20-${EXT}.ini"
                 done
             fi
