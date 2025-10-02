@@ -65,8 +65,8 @@ install_shivammatur() {
         rm libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
     fi
 
-    set +e
     if [ "${PHP_VERSION}" = 5.3 ] || [ "${PHP_VERSION}" = 5.4 ] || [ "${PHP_VERSION}" = 5.5 ]; then
+
         echo "Using PHP from shivammathur/php5-ubuntu..."
         if [ "${DEBIAN_VERSION}" = jammy ] || [ "${DEBIAN_VERSION}" = noble ]; then
             PACKAGES='enchant-2'
@@ -98,11 +98,16 @@ install_shivammatur() {
             mysql-common \
             zstd $PACKAGES
 
+        set +e
         curl -sSL https://github.com/shivammathur/php5-ubuntu/releases/latest/download/install.sh | bash -s "${PHP_VERSION}"
+        set -e
 
         # @todo check which php extensions are enabled, and disable all except the desired ones
     else
+
         # @todo check if this script works with all php versions from 5.6 onwards
+        # @todo the amount of cleanup and hacks required to get shivammathur/php-ubuntu working is huge. Can we find a better installer?
+
         # @todo this set of packages has only been tested on Noble so far (it should work on Jammy too)
         echo "Using PHP from shivammathur/php-ubuntu..."
         if [ "${DEBIAN_VERSION}" = noble ]; then
@@ -111,7 +116,6 @@ install_shivammatur() {
             # @todo add also gir1.2-girepository-2.0 - check if name/availability is the same as on noble.
             PACKAGES="libelf1 libglib2.0-0"
         fi
-
         # Most of these tools are used by the `sudo update-alternatives` part in the install.sh script, and
         # will be downloaded at that time, along with some ominous warnings.
         # We are just as good preinstalling them anyway.
@@ -136,9 +140,17 @@ install_shivammatur() {
             zlib1g-dev \
               zstd $PACKAGES
 
+        set +e
         curl -sSL https://github.com/shivammathur/php-ubuntu/releases/latest/download/install.sh | bash -s "${PHP_VERSION}"
+        set -e
 
-        # Disable all extensions, as there are too many enabled. Many of these require .so libs which we did not install
+        # sadly, the above seems to remove these 3 libs. Force reinstalling them
+        apt-get install -y libargon2-1 libonig5 libsodium23
+
+        # it also resets apache config. So we force it again
+        "${SCRIPT_DIR}/setup_apache.sh"
+
+        # Disable all php extensions, as there are too many enabled. Many of these require .so libs which we did not install
         for DIR in apache2 cgi cli embed fpm phpdbg; do
             if [ -d "/etc/php/${PHP_VERSION}/${DIR}/conf.d" ]; then
                 rm -rf "/etc/php/${PHP_VERSION}/${DIR}/conf.d/"*.ini
@@ -149,7 +161,6 @@ install_shivammatur() {
             fi
         done
     fi
-    set -e
 
     # we have to do this as the init script we get for starting/stopping php-fpm seems to be faulty...
     if [ -n "$(ps auxwww | grep php-fpm | grep -v ' grep ')" ]; then pkill php-fpm; fi
@@ -224,6 +235,8 @@ else
     done
 
     # @todo use ondrej packages for php 8.5 when they are available
+    # @todo also use shivammatur packages for os versions for which the ondrej repos are not available any more.
+    #       Test eg. on focal
     # @todo move this to looping over an array
     if [ "${PHP_VERSION}" = 5.3 ] || [ "${PHP_VERSION}" = 5.4 ] || [ "${PHP_VERSION}" = 5.5 ] || [ "${PHP_VERSION}" = 8.5 ]; then
         install_shivammatur

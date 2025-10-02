@@ -35,6 +35,8 @@ if [ -f /etc/apache2/sites-available/default-ssl.conf ]; then
     rm /etc/apache2/sites-available/default-ssl.conf
 fi
 
+# NB: TESTS_ROOT_DIR in /etc/apache2/envvars is reset by entrypoint.sh when running in a local container
+# @todo avoid adding these lines if they already exist
 if [ -n "${GITHUB_ACTIONS}" ]; then
     echo "export TESTS_ROOT_DIR=$(pwd)" >> /etc/apache2/envvars
 else
