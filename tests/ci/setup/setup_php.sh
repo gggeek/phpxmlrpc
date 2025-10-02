@@ -50,6 +50,7 @@ install_native() {
         php${PHPSUFFIX}-curl \
         php${PHPSUFFIX}-fpm \
         php${PHPSUFFIX}-mbstring \
+        php${PHPSUFFIX}-sqlite3 \
         php${PHPSUFFIX}-xdebug
 }
 
@@ -189,6 +190,7 @@ install_ondrej() {
         php${PHP_VERSION}-curl \
         php${PHP_VERSION}-fpm \
         php${PHP_VERSION}-mbstring \
+        php${PHPSUFFIX}-sqlite3 \
         php${PHP_VERSION}-xdebug"
     apt-get install -y ${PHP_PACKAGES}
 
