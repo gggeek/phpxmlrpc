@@ -108,37 +108,42 @@ install_shivammatur() {
         # @todo check if this script works with all php versions from 5.6 onwards
         # @todo the amount of cleanup and hacks required to get shivammathur/php-ubuntu working is huge. Can we find a better installer?
 
-        # @todo this set of packages has only been tested on Noble so far (it should work on Jammy too)
-        echo "Using PHP from shivammathur/php-ubuntu..."
-        if [ "${DEBIAN_VERSION}" = noble ]; then
-            PACKAGES="gir1.2-girepository-2.0 libelf1t64 libglib2.0-0t64"
-        else
-            # @todo add also gir1.2-girepository-2.0 - check if name/availability is the same as on noble.
-            PACKAGES="libelf1 libglib2.0-0"
+# @todo Fix - some of these packages create issues on GHA ubuntu containers...
+        if [ -z "${GITHUB_ACTIONS}" ]; then
+            # @todo this set of packages has only been tested on Noble so far (it should work on Jammy too)
+            echo "Using PHP from shivammathur/php-ubuntu..."
+            if [ "${DEBIAN_VERSION}" = noble ]; then
+                PACKAGES="gir1.2-girepository-2.0 libelf1t64 libglib2.0-0t64"
+            else
+                # @todo add also gir1.2-girepository-2.0 - check if name/availability is the same as on noble.
+                PACKAGES="libelf1 libglib2.0-0"
+            fi
+
+            # Most of these tools are used by the `sudo update-alternatives` part in the install.sh script, and
+            # will be downloaded at that time, along with some ominous warnings.
+            # We are just as good preinstalling them anyway.
+
+            apt-get install -y \
+                autoconf \
+                automake \
+                autotools-dev \
+                build-essential \
+                  curl \
+                icu-devtools \
+                  libargon2-1 \
+                libgirepository-1.0-1 \
+                libicu-dev \
+                libltdl7 \
+                  libonig5 \
+                  libsodium23 \
+                libxml2-dev \
+                pkg-config \
+                python3 \
+                python3-apt \
+                  systemd-standalone-tmpfiles \
+                zlib1g-dev \
+                  zstd $PACKAGES
         fi
-        # Most of these tools are used by the `sudo update-alternatives` part in the install.sh script, and
-        # will be downloaded at that time, along with some ominous warnings.
-        # We are just as good preinstalling them anyway.
-        apt-get install -y \
-            autoconf \
-            automake \
-            autotools-dev \
-            build-essential \
-              curl \
-            icu-devtools \
-              libargon2-1 \
-            libgirepository-1.0-1 \
-            libicu-dev \
-            libltdl7 \
-              libonig5 \
-              libsodium23 \
-            libxml2-dev \
-            pkg-config \
-            python3 \
-            python3-apt \
-              systemd-standalone-tmpfiles \
-            zlib1g-dev \
-              zstd $PACKAGES
 
         set +e
         curl -sSL https://github.com/shivammathur/php-ubuntu/releases/latest/download/install.sh | bash -s "${PHP_VERSION}"
