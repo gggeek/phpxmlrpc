@@ -13,7 +13,7 @@ require_once __DIR__.'/methodProviders/CommentManager.php';
 use PhpXmlRpc\Wrapper;
 
 // CommentManager is the "xml-rpc-unaware" class, whose methods we want to make accessible via xml-rpc calls
-$cm = new CommentManager();
+$cm = new CommentManager(sys_get_temp_dir() . "/comments.db");
 
 // analyze the CommentManager instance and generate both code defining stub-methods and a dispatch map for the xml-rpc Server
 $w = new Wrapper();
