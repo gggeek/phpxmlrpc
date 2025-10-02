@@ -118,11 +118,9 @@ install_shivammatur() {
                 # @todo add also gir1.2-girepository-2.0 - check if name/availability is the same as on noble.
                 PACKAGES="libelf1 libglib2.0-0"
             fi
-
             # Most of these tools are used by the `sudo update-alternatives` part in the install.sh script, and
             # will be downloaded at that time, along with some ominous warnings.
             # We are just as good preinstalling them anyway.
-
             apt-get install -y \
                 autoconf \
                 automake \
