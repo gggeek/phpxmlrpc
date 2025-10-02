@@ -138,7 +138,7 @@ install_shivammatur() {
         for DIR in apache2 cgi cli embed fpm phpdbg; do
             if [ -d "/etc/php/${PHP_VERSION}/${DIR}/conf.d" ]; then
                 rm -rf /etc/php/${PHP_VERSION}/${DIR}/conf.d/*.ini
-                for EXT in dom curl mbstring phar; do
+                for EXT in dom curl mbstring phar xml; do
                     ln -s /etc/php/${PHP_VERSION}/mods-available/${EXT}.ini /etc/php/${PHP_VERSION}/${DIR}/conf.d/20-${EXT}.ini
                 done
             fi

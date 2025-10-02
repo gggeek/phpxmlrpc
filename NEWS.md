@@ -1,3 +1,8 @@
+## XML-RPC for PHP EXTRAS version XX (unreleased)
+
+- improved: added CI testing on php 8.5. Default the local testing container to using PHP 8.1 on Ubuntu Jammy
+
+
 ## XML-RPC for PHP version 4.11.2 - 2025/6/20
 
 * fixed: the Client would not honour the timeout when in Socket mode (issue #127, thanks to @dima-bzzz for PR #84)
