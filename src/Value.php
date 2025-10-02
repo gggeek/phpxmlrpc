@@ -303,7 +303,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         $this->logDeprecationUnlessCalledBy('serialize');
 
-        if (!isset(static::$xmlrpcTypes[$typ])) {
+        if (!isset(static::$xmlrpcTypes[(string)$typ])) {
             return '';
         }
 

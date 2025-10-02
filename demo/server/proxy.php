@@ -87,7 +87,7 @@ function forward_request($req)
                     $client->setOption(Client::OPT_VERIFY_PEER, $val);
                     break;
                 case 'Timeout':
-                    $timeout = (integer)$val;
+                    $timeout = (int)$val;
                     break;
             } // switch
         }

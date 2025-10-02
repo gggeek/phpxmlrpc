@@ -61,7 +61,14 @@ function setCookies($cookies)
 {
     foreach ($cookies as $name => $cookieDesc) {
         if (is_array($cookieDesc)) {
-            setcookie($name, @$cookieDesc['value'], @$cookieDesc['expires'], @$cookieDesc['path'], @$cookieDesc['domain'], @$cookieDesc['secure']);
+            setcookie($name,
+                isset($cookieDesc['value']) ? (string)$cookieDesc['value'] : '',
+                isset($cookieDesc['expires']) ? $cookieDesc['expires'] : 0,
+                isset($cookieDesc['path']) ? (string)$cookieDesc['path'] : '',
+                isset($cookieDesc['domain']) ? (string)$cookieDesc['domain'] : '',
+                isset($cookieDesc['secure']) ? (bool)$cookieDesc['secure'] : false,
+                isset($cookieDesc['httponly']) ? (bool)$cookieDesc['httponly'] : false
+            );
         } else {
             /// @todo
         }

@@ -17,7 +17,7 @@ use PhpXmlRpc\Value;
 $stateNo = "";
 
 if (isset($_POST['stateno']) && $_POST['stateno'] != "") {
-    $stateNo = (integer)$_POST['stateno'];
+    $stateNo = (int)$_POST['stateno'];
     $method = 'examples.getStateName';
     $arguments = array(
         new Value($stateNo, Value::$xmlrpcInt),

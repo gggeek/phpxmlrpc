@@ -757,7 +757,7 @@ class Client
      */
     public function getUrl($component = null)
     {
-        if (is_int($component) || ctype_digit($component)) {
+        if (is_int($component) || ($component !== null && ctype_digit($component))) {
             switch ($component) {
                 case PHP_URL_SCHEME:
                     return $this->method;
