@@ -331,7 +331,7 @@ class Value implements \Countable, \IteratorAggregate, \ArrayAccess
                         // sprintf('%F') could be most likely ok, but it fails e.g. on 2e-14.
                         // The code below tries its best at keeping max precision while avoiding exp notation,
                         // but there is of course no limit in the number of decimal places to be used...
-                        $rs = "<{$typ}>" . preg_replace('/\\.?0+$/', '', number_format((double)$val, PhpXmlRpc::$xmlpc_double_precision, '.', '')) . "</{$typ}>";
+                        $rs = "<{$typ}>" . preg_replace('/\\.?0+$/', '', number_format((float)$val, PhpXmlRpc::$xmlpc_double_precision, '.', '')) . "</{$typ}>";
                         break;
                     case static::$xmlrpcDateTime:
                         if (is_string($val)) {
