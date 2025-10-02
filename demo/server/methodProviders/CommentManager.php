@@ -7,7 +7,15 @@
  */
 class CommentManager
 {
-    protected $dbFile = "/tmp/comments.db";
+    protected $dbFile;
+
+    /**
+     * @param string $dbFile
+     */
+    public function __construct($dbFile)
+    {
+        $this->dbFile = $dbFile;
+    }
 
     protected function createTable($db)
     {

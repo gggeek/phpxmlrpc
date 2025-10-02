@@ -15,7 +15,7 @@ require_once __DIR__.'/methodProviders/CommentManager.php';
 use PhpXmlRpc\Server;
 use PhpXmlRpc\Value;
 
-$manager = new CommentManager();
+$manager = new CommentManager(sys_get_temp_dir() . "/comments.db");
 
 $addComment_sig = array(array(Value::$xmlrpcInt, Value::$xmlrpcString, Value::$xmlrpcString, Value::$xmlrpcString));
 

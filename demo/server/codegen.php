@@ -31,9 +31,9 @@ $code = $w->wrapPhpClass(
 // and a controller, to be accessed from the internet. This split allows to a) hand-edit the controller code if needed,
 // and b) later regenerate the stub-methods-holder and dispatch map without touching the controller.
 // NB: good security practices dictate that none of those files should be writeable by the webserver user account
-$targetClassFile = '/tmp/MyServerClass.php';
-$targetDispatchMapFile = '/tmp/myServerDispatchMap.php';
-$targetControllerFile = '/tmp/myServerController.php';
+$targetClassFile = sys_get_temp_dir() . '/MyServerClass.php';
+$targetDispatchMapFile = sys_get_temp_dir() . '/myServerDispatchMap.php';
+$targetControllerFile = sys_get_temp_dir() . '/myServerController.php';
 
 // generate a file with a class definition
 

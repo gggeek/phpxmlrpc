@@ -28,7 +28,7 @@ $code = $w->wrapXmlrpcServer(
 // the generated code does not have an autoloader included - we need to add in one
 $autoloader = __DIR__ . "/_prepend.php";
 
-$targetFile = '/tmp/MyClient.php';
+$targetFile = sys_get_temp_dir() . '/MyClient.php';
 $generated = file_put_contents($targetFile,
     "<?php\n\n" .
     "require_once '$autoloader';\n\n" .
