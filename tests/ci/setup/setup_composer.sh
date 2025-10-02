@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Installs Composer (latest version, to avoid relying on old ones bundled with the OS)
-# @todo allow users to lock down to Composer v1 if needed
+# @todo allow users to lock down to Composer v1 or v2.2 if needed
 
 echo "Installing Composer..."
 

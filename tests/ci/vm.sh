@@ -7,7 +7,7 @@ set -e
 
 ACTION="${1}"
 
-# Valid values: 'default', 5.6, 7.0 .. 7.4, 8.0 .. 8.4
+# Valid values: 'default', 5.4 .. 5.6, 7.0 .. 7.4, 8.0 .. 8.5
 export PHP_VERSION=${PHP_VERSION:-default}
 # Valid values: precise (12), trusty (14), xenial (16), bionic (18), focal (20), jammy (22), noble (24)
 # For end of support dates, see: https://wiki.ubuntu.com/Releases
@@ -50,7 +50,6 @@ Main actions:
     runcoverage       execute the test suite and generate a code coverage report (in build/coverage);
                       build and start the container if required
     start             start the container; build it if required
-    stats
     stop              stop the container
     top
 

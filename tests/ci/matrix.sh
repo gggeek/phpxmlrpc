@@ -16,7 +16,7 @@ PHP_LIST_xenial=${PHP_LIST_xenial:-default 5.4}
 PHP_LIST_bionic=${PHP_LIST_bionic:-default 5.5}
 PHP_LIST_focal=${PHP_LIST_focal:-default 5.4}
 PHP_LIST_jammy=${PHP_LIST_jammy:-default 5.5 7.1 7.3 8.2 8.3}
-PHP_LIST_noble=${PHP_LIST_noble:-default 5.6 7.2 7.4 8.1 8.4}
+PHP_LIST_noble=${PHP_LIST_noble:-default 5.6 7.2 7.4 8.1 8.4 8.5}
 
 STARTING_HTTPPORT="${STARTING_HTTPPORT:-81}"
 STARTING_HTTPSPORT="${STARTING_HTTPSPORT:-444}"

@@ -2,7 +2,7 @@
 
 # Install and configure apache2
 # Has to be run as admin
-# @todo make this work across all ubuntu versions (precise to jammy)
+# @todo make this work across all ubuntu versions (precise to noble)
 
 echo "Installing and configuring Apache2..."
 
@@ -10,7 +10,9 @@ set -e
 
 SCRIPT_DIR="$(dirname -- "$(readlink -f "$0")")"
 
-DEBIAN_FRONTEND=noninteractive apt-get install -y apache2
+export DEBIAN_FRONTEND=noninteractive
+
+apt-get install -y apache2
 
 # set up Apache for php-fpm
 
