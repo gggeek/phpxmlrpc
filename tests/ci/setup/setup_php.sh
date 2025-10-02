@@ -126,7 +126,6 @@ install_shivammatur() {
               libsodium23 \
             libxml2-dev \
             pkg-config \
-            pkgconf \
             python3 \
             python3-apt \
               systemd-standalone-tmpfiles \
@@ -140,7 +139,7 @@ install_shivammatur() {
             if [ -d "/etc/php/${PHP_VERSION}/${DIR}/conf.d" ]; then
                 rm -rf /etc/php/${PHP_VERSION}/${DIR}/conf.d/*.ini
                 for EXT in dom curl mbstring phar; do
-                    ln -s /etc/php/mods-available/${EXT}.ini /etc/php/${PHP_VERSION}/${DIR}/conf.d/20-${EXT}.ini
+                    ln -s /etc/php/${PHP_VERSION}/mods-available/${EXT}.ini /etc/php/${PHP_VERSION}/${DIR}/conf.d/20-${EXT}.ini
                 done
             fi
         done
