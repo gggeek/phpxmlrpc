@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Gaetano Giunta
- * @copyright (C) 2006-2023 G. Giunta
+ * @copyright (C) 2006-2025 G. Giunta
  * @license code licensed under the BSD License: see file license.txt
  */
 
@@ -46,7 +46,7 @@ class Wrapper
      * @return string
      *
      * @todo support notation `something[]` as 'array'
-     * @todo check if nil support is enabled when finding null
+     * @todo check if nil support is enabled when finding null or void (which makes sense in php for return type)
      */
     public function php2XmlrpcType($phpType)
     {
@@ -315,6 +315,14 @@ class Wrapper
             }
         }
 
+        // for php 7+, we can take advantage of type declarations!
+        if (method_exists($func, 'getReturnType')) {
+            $returnType = $func->getReturnType();
+            if ($returnType !== null) {
+/// @todo
+            }
+        }
+
         // execute introspection of actual function prototype
         $params = array();
         $i = 0;
@@ -322,6 +330,12 @@ class Wrapper
             $params[$i] = array();
             $params[$i]['name'] = '$' . $paramObj->getName();
             $params[$i]['isoptional'] = $paramObj->isOptional();
+            if (method_exists($paramObj, 'getType')) {
+                $paramType = $paramObj->getType();
+                if ($paramType !== null) {
+/// @todo
+                }
+            }
             $i++;
         }
 
@@ -342,7 +356,8 @@ class Wrapper
      * @return array
      *
      * @todo support better docs with multiple types separated by pipes by creating multiple signatures
-     *       (this is questionable, as it might produce a big matrix of possible signatures with many such occurrences)
+     *       (this is questionable, as it might produce a big matrix of possible signatures with many such occurrences,
+     *       but it makes a lot of sense in a php >= 8 world)
      */
     protected function buildMethodSignatures($funcDesc)
     {
