@@ -1,6 +1,10 @@
 ## XML-RPC for PHP EXTRAS version XX (unreleased)
 
-- improved: added CI testing on php 8.5. Default the local testing container to using PHP 8.1 on Ubuntu Jammy
+- improved: added CI testing on PHP 8.5
+
+- improved: teach the vm.sh script how to properly configure test envs using PHP 8.5
+
+- improved: do not hardcode `/tmp` as temporary dir in demo files
 
 
 ## XML-RPC for PHP version 4.11.2 - 2025/6/20

@@ -25,10 +25,10 @@ configure_php_ini() {
     # @todo make this optional
     if which phpdismod >/dev/null 2>/dev/null; then
         phpdismod xdebug
-    elif [ -f /etc/php/$PHP_VERSION/mods-available/xdebug.ini ]; then
-        mv /etc/php/$PHP_VERSION/mods-available/xdebug.ini /etc/php/$PHP_VERSION/mods-available/xdebug.ini.bak
-    elif [ -f /usr/local/php/$PHP_VERSION/etc/conf.d/20-xdebug.ini ]; then
-        mv /usr/local/php/$PHP_VERSION/etc/conf.d/20-xdebug.ini /usr/local/php/$PHP_VERSION/etc/conf.d/20-xdebug.ini.bak
+    elif [ -f "/etc/php/$PHP_VERSION/mods-available/xdebug.ini" ]; then
+        mv "/etc/php/$PHP_VERSION/mods-available/xdebug.ini" "/etc/php/$PHP_VERSION/mods-available/xdebug.ini.bak"
+    elif [ -f "/usr/local/php/$PHP_VERSION/etc/conf.d/20-xdebug.ini" ]; then
+        mv "/usr/local/php/$PHP_VERSION/etc/conf.d/20-xdebug.ini" "/usr/local/php/$PHP_VERSION/etc/conf.d/20-xdebug.ini.bak"
     else
         echo "Could not disable loading of xdebug - xdebug.ini file not found" >&2
     fi
@@ -37,21 +37,21 @@ configure_php_ini() {
 install_native() {
     echo "Using native PHP packages..."
 
-    if [ "${DEBIAN_VERSION}" = jessie -o "${DEBIAN_VERSION}" = precise -o "${DEBIAN_VERSION}" = trusty ]; then
+    if [ "${DEBIAN_VERSION}" = jessie ] || [ "${DEBIAN_VERSION}" = precise ] || [ "${DEBIAN_VERSION}" = trusty ]; then
         PHPSUFFIX=5
     else
         PHPSUFFIX=
     fi
     # @todo check for mbstring presence in php5 (jessie) packages
     apt-get install -y \
-        php${PHPSUFFIX} \
-        php${PHPSUFFIX}-cli \
-        php${PHPSUFFIX}-dom \
-        php${PHPSUFFIX}-curl \
-        php${PHPSUFFIX}-fpm \
-        php${PHPSUFFIX}-mbstring \
-        php${PHPSUFFIX}-sqlite3 \
-        php${PHPSUFFIX}-xdebug
+        "php${PHPSUFFIX}" \
+        "php${PHPSUFFIX}-cli" \
+        "php${PHPSUFFIX}-dom" \
+        "php${PHPSUFFIX}-curl" \
+        "php${PHPSUFFIX}-fpm" \
+        "php${PHPSUFFIX}-mbstring" \
+        "php${PHPSUFFIX}-sqlite3" \
+        "php${PHPSUFFIX}-xdebug"
 }
 
 install_shivammatur() {
@@ -66,25 +66,26 @@ install_shivammatur() {
     fi
 
     set +e
-    if [ "${PHP_VERSION}" = 5.3 -o "${PHP_VERSION}" = 5.4 -o "${PHP_VERSION}" = 5.5 ]; then
+    if [ "${PHP_VERSION}" = 5.3 ] || [ "${PHP_VERSION}" = 5.4 ] || [ "${PHP_VERSION}" = 5.5 ]; then
         echo "Using PHP from shivammathur/php5-ubuntu..."
-        if [ "${DEBIAN_VERSION}" = jammy -o "${DEBIAN_VERSION}" = noble ]; then
-            ENCHANTSUFFIX='-2'
+        if [ "${DEBIAN_VERSION}" = jammy ] || [ "${DEBIAN_VERSION}" = noble ]; then
+            PACKAGES='enchant-2'
+        else
+            PACKAGES='enchant'
         fi
         # note: on ubuntu 24, libtinfo5 is missing, and libodbc1 is replaced by libodbc2
         if [ "${DEBIAN_VERSION}" = noble ]; then
-            PACKAGES="libodbc2"
+            PACKAGES="$PACKAGES libodbc2"
             # @todo is libtinfo required?
             #wget https://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb
             #apt install ./libtinfo5_6.3-2ubuntu0.1_amd64.deb
             #rm ./libtinfo5_6.3-2ubuntu0.1_amd64.deb
         else
-            PACKAGES="libodbc1 libtinfo5"
+            PACKAGES="$PACKAGES libodbc1 libtinfo5"
         fi
         # @todo this set of packages has only been tested on Bionic, Focal, Jammy and Noble so far
         apt-get install -y \
             curl \
-            enchant${ENCHANTSUFFIX} \
             imagemagick \
             libc-client2007e \
             libcurl3-gnutls \
@@ -102,6 +103,7 @@ install_shivammatur() {
         # @todo check which php extensions are enabled, and disable all except the desired ones
     else
         # @todo check if this script works with all php versions from 5.6 onwards
+        # @todo this set of packages has only been tested on Noble so far (it should work on Jammy too)
         echo "Using PHP from shivammathur/php-ubuntu..."
         if [ "${DEBIAN_VERSION}" = noble ]; then
             PACKAGES="gir1.2-girepository-2.0 libelf1t64 libglib2.0-0t64"
@@ -124,6 +126,7 @@ install_shivammatur() {
             libgirepository-1.0-1 \
             libicu-dev \
             libltdl7 \
+              libonig5 \
               libsodium23 \
             libxml2-dev \
             pkg-config \
@@ -138,10 +141,10 @@ install_shivammatur() {
         # Disable all extensions, as there are too many enabled. Many of these require .so libs which we did not install
         for DIR in apache2 cgi cli embed fpm phpdbg; do
             if [ -d "/etc/php/${PHP_VERSION}/${DIR}/conf.d" ]; then
-                rm -rf /etc/php/${PHP_VERSION}/${DIR}/conf.d/*.ini
+                rm -rf "/etc/php/${PHP_VERSION}/${DIR}/conf.d/"*.ini
                 # this list includes the php exts required by composer, phpxmlrpc as well as phpunit
                 for EXT in dom curl mbstring phar sqlite3 tokenizer xml xmlwriter; do
-                    ln -s /etc/php/${PHP_VERSION}/mods-available/${EXT}.ini /etc/php/${PHP_VERSION}/${DIR}/conf.d/20-${EXT}.ini
+                    ln -s "/etc/php/${PHP_VERSION}/mods-available/${EXT}.ini" "/etc/php/${PHP_VERSION}/${DIR}/conf.d/20-${EXT}.ini"
                 done
             fi
         done
@@ -194,18 +197,18 @@ install_ondrej() {
         php${PHP_VERSION}-xdebug"
     apt-get install -y ${PHP_PACKAGES}
 
-    update-alternatives --set php /usr/bin/php${PHP_VERSION}
+    update-alternatives --set php "/usr/bin/php${PHP_VERSION}"
 }
 
 # install php
 PHP_VERSION="$1"
 # `lsb-release` is not necessarily onboard. We parse /etc/os-release instead
-DEBIAN_VERSION=$(cat /etc/os-release | grep 'VERSION_CODENAME=' | sed 's/VERSION_CODENAME=//')
+DEBIAN_VERSION=$(grep 'VERSION_CODENAME=' /etc/os-release | sed 's/VERSION_CODENAME=//')
 if [ -z "${DEBIAN_VERSION}" ]; then
     # Example strings:
     # VERSION="14.04.6 LTS, Trusty Tahr"
     # VERSION="8 (jessie)"
-    DEBIAN_VERSION=$(cat /etc/os-release | grep 'VERSION=' | grep 'VERSION=' | sed 's/VERSION=//' | sed 's/"[0-9.]\+ *(\?//' | sed 's/)\?"//' | tr '[:upper:]' '[:lower:]' | sed 's/lts, *//' | sed 's/ \+tahr//')
+    DEBIAN_VERSION=$(grep 'VERSION=' /etc/os-release | grep 'VERSION=' | sed 's/VERSION=//' | sed 's/"[0-9.]\+ *(\?//' | sed 's/)\?"//' | tr '[:upper:]' '[:lower:]' | sed 's/lts, *//' | sed 's/ \+tahr//')
 fi
 
 # @todo use native packages if requested for a specific version and that is the same as available in the os repos
@@ -222,7 +225,7 @@ else
 
     # @todo use ondrej packages for php 8.5 when they are available
     # @todo move this to looping over an array
-    if [ "${PHP_VERSION}" = 5.3 -o "${PHP_VERSION}" = 5.4 -o "${PHP_VERSION}" = 5.5 -o "${PHP_VERSION}" = 8.5 ]; then
+    if [ "${PHP_VERSION}" = 5.3 ] || [ "${PHP_VERSION}" = 5.4 ] || [ "${PHP_VERSION}" = 5.5 ] || [ "${PHP_VERSION}" = 8.5 ]; then
         install_shivammatur
     else
         install_ondrej
@@ -234,10 +237,10 @@ PHPVER=$(php -r 'echo implode(".",array_slice(explode(".",PHP_VERSION),0,2));' 2
 
 service "php${PHPVER}-fpm" stop || true
 
-if [ -d /etc/php/${PHPVER}/fpm ]; then
-    configure_php_ini /etc/php/${PHPVER}/fpm/php.ini
-elif [ -f /usr/local/php/${PHPVER}/etc/php.ini ]; then
-    configure_php_ini /usr/local/php/${PHPVER}/etc/php.ini
+if [ -d "/etc/php/${PHPVER}/fpm" ]; then
+    configure_php_ini "/etc/php/${PHPVER}/fpm/php.ini"
+elif [ -f "/usr/local/php/${PHPVER}/etc/php.ini" ]; then
+    configure_php_ini "/usr/local/php/${PHPVER}/etc/php.ini"
 fi
 
 # @todo shall we configure php-fpm?
