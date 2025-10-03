@@ -49,7 +49,7 @@ Extras
 * A companion PHP library, which adds support for XML-RPC servers to automatically generate API documentation, and more,
   is available at https://github.com/gggeek/phpxmlrpc-extras
 
-* Lats but not least, a Javascript library, implementing both XML-RPC and JSON-RPC clients using a very similar API, is
+* Last but not least, a Javascript library, implementing both XML-RPC and JSON-RPC clients using a very similar API, is
   available at https://github.com/gggeek/jsxmlrpc
 
 License
