@@ -1,12 +1,12 @@
 #!/bin/sh
 
-# Has to be run as admin
+# Has to be run as root
 
 # @todo make it optional to install xdebug. It is fe. missing in sury's ppa for Xenial
 # @todo make it optional to install fpm. It is not needed for the cd workflow
 # @todo make it optional to disable xdebug ?
 # @todo set the list of required php extensions in a variable, allow it to be overridden
-# @todo allow to force usage of shivammatur/ondrej repos regardless of php version in use
+# @todo allow to force usage of shivammatur or ondrej repos regardless of php version in use
 
 set -e
 

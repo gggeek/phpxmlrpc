@@ -7,6 +7,8 @@ set -e
 echo "Creating user account..."
 
 USERNAME="${1:-docker}"
+USER_ID=2000
+USER_GID=2000
 
 # adduser is not preinstalled on noble
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -18,8 +20,8 @@ if [ -d /home/ubuntu ]; then
     rm -rf ubuntu
 fi
 
-addgroup --gid 2000 "${USERNAME}"
-adduser --system --uid=2000 --gid=2000 --home "/home/${USERNAME}" --shell /bin/bash "${USERNAME}"
+addgroup --gid "${USER_GID}" "${USERNAME}"
+adduser --system --uid="${USER_ID}" --gid="${USER_GID}" --home "/home/${USERNAME}" --shell /bin/bash "${USERNAME}"
 adduser "${USERNAME}" "${USERNAME}"
 
 mkdir -p "/home/${USERNAME}/.ssh"

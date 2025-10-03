@@ -29,7 +29,7 @@ rm composer-setup.php
 
 ###
 
-if [ -f /usr/local/bin/composer.phar -a "$RESULT" = 0 ]; then
+if [ -f /usr/local/bin/composer.phar ] && [ "$RESULT" = 0 ]; then
     mv /usr/local/bin/composer.phar /usr/local/bin/composer && chmod 755 /usr/local/bin/composer
 fi
 

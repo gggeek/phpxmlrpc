@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # @todo rename: this is not based on a vm. Also, the 'ci' folder should really be called 'env' or 'testenv'...
-# @todo support getting the various settings as cli options as well as via env vars?
+# @todo support getting the various settings as cli options as well as via env vars (use getopts)
 
 set -e
 
@@ -315,6 +315,11 @@ case "${ACTION}" in
 
     unlock)
         unlock
+        ;;
+
+    -h)
+        help
+        exit 0
         ;;
 
     *)

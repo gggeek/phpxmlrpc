@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Install and configure apache2
-# Has to be run as admin
-# @todo make this work across all ubuntu versions (precise to noble)
+# Has to be run as root
+# @todo make sure this works across all ubuntu versions (precise to noble)
 
 echo "Installing and configuring Apache2..."
 
@@ -35,11 +35,11 @@ if [ -f /etc/apache2/sites-available/default-ssl.conf ]; then
     rm /etc/apache2/sites-available/default-ssl.conf
 fi
 
-# NB: TESTS_ROOT_DIR in /etc/apache2/envvars is reset by entrypoint.sh when running in a local container
-# @todo avoid adding these lines if they already exist
+# @todo avoid adding these lines if they already exist - rewrite them instead
 if [ -n "${GITHUB_ACTIONS}" ]; then
     echo "export TESTS_ROOT_DIR=$(pwd)" >> /etc/apache2/envvars
 else
+    # NB: TESTS_ROOT_DIR in /etc/apache2/envvars is reset by entrypoint.sh when running in a local container
     echo "export TESTS_ROOT_DIR=/var/www/html" >> /etc/apache2/envvars
 fi
 echo "export HTTPSERVER=localhost" >> /etc/apache2/envvars

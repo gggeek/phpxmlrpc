@@ -1,20 +1,35 @@
 #!/bin/sh
 
-# Has to be run as admin
+# Has to be run as root
 
 set -e
 
 echo "Installing base software packages..."
 
-# @todo make updating of preinstalled sw optional, so that f.e. we can have faster builds as part of CI
+UPDATE_INSTALLED=false
 
 export DEBIAN_FRONTEND=noninteractive
+
+while getopts ":u" opt
+do
+    case $opt in
+        u)
+          UPDATE_INSTALLED=true
+          ;;
+        \?)
+          echo "Invalid option: -$OPTARG" >&2
+          exit 1
+          ;;
+    esac
+done
 
 if [ ! -d /usr/share/man/man1 ]; then mkdir -p /usr/share/man/man1; fi
 
 apt-get update
 
-apt-get upgrade -y
+if [ "$UPDATE_INSTALLED" = true ]; then
+    apt-get upgrade -y
+fi
 
 apt-get install -y \
     git locales sudo unzip wget

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Install and configure the 'app'
-# Has to be run as admin
+# Has to be run as root
 
 set -e
 

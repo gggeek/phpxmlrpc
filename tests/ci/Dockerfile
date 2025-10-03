@@ -10,7 +10,7 @@ COPY config/* /root/config/
 
 RUN if [ ! -f /.dockerenv ]; then touch /.dockerenv; fi && \
   cd /root/setup && \
-  ./install_packages.sh && \
+  ./install_packages.sh -u && \
   ./create_user.sh && \
   ./setup_perl.sh && \
   ./setup_apache.sh && \

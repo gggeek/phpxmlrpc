@@ -2,7 +2,7 @@
 
 # Installs php modules necessary to test the Perl file in the extras dir
 
-# Has to be run as admin
+# Has to be run as root
 
 # @todo test in the VM env: do we need any ubuntu dev packages ?
 
