@@ -1,6 +1,6 @@
-## XML-RPC for PHP EXTRAS version XX (unreleased)
+## XML-RPC for PHP version 4.11.3 - 2025/10/3
 
-- improved: fixed deprecation errors on PHP 8.5
+- improved: fixed deprecation warnings on PHP 8.5
 
 - improved: added CI testing on PHP 8.5
 
