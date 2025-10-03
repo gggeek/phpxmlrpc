@@ -26,7 +26,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.2</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.3</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -633,7 +633,7 @@ addScalar/addStruct in that, when adding an element to an array, it wraps it int
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
                             <td class="phpdocumentor-cell">51</td>
-                            <td class="phpdocumentor-cell">check if nil support is enabled when finding null</td>
+                            <td class="phpdocumentor-cell">check if nil support is enabled when finding null or void (which makes sense in php for return type)</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
@@ -677,76 +677,77 @@ addScalar/addStruct in that, when adding an element to an array, it wraps it int
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">347</td>
+                            <td class="phpdocumentor-cell">362</td>
                             <td class="phpdocumentor-cell">support better docs with multiple types separated by pipes by creating multiple signatures
-(this is questionable, as it might produce a big matrix of possible signatures with many such occurrences)</td>
+(this is questionable, as it might produce a big matrix of possible signatures with many such occurrences,
+but it makes a lot of sense in a php &gt;= 8 world)</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">418</td>
+                            <td class="phpdocumentor-cell">433</td>
                             <td class="phpdocumentor-cell">validate params? In theory all validation is left to the dispatch map...</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">418</td>
+                            <td class="phpdocumentor-cell">433</td>
                             <td class="phpdocumentor-cell">add support for $catchWarnings</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">640</td>
+                            <td class="phpdocumentor-cell">655</td>
                             <td class="phpdocumentor-cell">allow the generated function to be able to reuse an external Encoder instance instead of creating one on
 each invocation, for the case where all the generated functions will be saved as methods of a class</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">676</td>
+                            <td class="phpdocumentor-cell">691</td>
                             <td class="phpdocumentor-cell">php allows many more characters in identifiers than the xml-rpc spec does. We should make sure to
 replace those (while trying to make sure we are not running in collisions)</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">746</td>
+                            <td class="phpdocumentor-cell">761</td>
                             <td class="phpdocumentor-cell">allow caller to give us the method signature instead of querying for it, or just say &#039;skip it&#039;</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">746</td>
+                            <td class="phpdocumentor-cell">761</td>
                             <td class="phpdocumentor-cell">if we can not retrieve method signature, create a php function with varargs</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">746</td>
+                            <td class="phpdocumentor-cell">761</td>
                             <td class="phpdocumentor-cell">if caller did not specify a specific sig, shall we support all of them?
 It might be hard (hence slow) to match based on type and number of arguments...</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">746</td>
+                            <td class="phpdocumentor-cell">761</td>
                             <td class="phpdocumentor-cell">when wrapping methods without obj rebuilding, use return_type = &#039;phpvals&#039; (faster)</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">746</td>
+                            <td class="phpdocumentor-cell">761</td>
                             <td class="phpdocumentor-cell">allow creating functions which have an extra `$debug=0` parameter</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">862</td>
+                            <td class="phpdocumentor-cell">877</td>
                             <td class="phpdocumentor-cell">should we allow usage of parameter simple_client_copy to mean &#039;do not clone&#039; in this case?</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">1102</td>
+                            <td class="phpdocumentor-cell">1117</td>
                             <td class="phpdocumentor-cell">add support for anonymous classes in the &#039;buildIt&#039; case for php &gt; 7</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">1102</td>
+                            <td class="phpdocumentor-cell">1117</td>
                             <td class="phpdocumentor-cell">add method setDebug() to new class, to enable/disable debugging</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">1102</td>
+                            <td class="phpdocumentor-cell">1117</td>
                             <td class="phpdocumentor-cell">optimization - move the generated Encoder instance to be a property of the created class, instead of creating
 it on every generated method invocation</td>
                         </tr>
