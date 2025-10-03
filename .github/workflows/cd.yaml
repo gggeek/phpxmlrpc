@@ -146,7 +146,7 @@ jobs:
                     local-dir: ./demo/
                     server-dir: demo/
                     dangerous-clean-slate: true
-                    # NB: codegen and discuss demos will not work anyway because /tmp is not writeable
+                    # NB: codegen and discuss demos might not work anyway unless sys_get_temp_dir() is writeable
                     exclude: |
                         **/*.pl
                         **/*.py

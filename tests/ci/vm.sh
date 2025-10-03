@@ -211,7 +211,7 @@ runcoverage() {
     lock
     trap unlock INT
     {
-        # @todo clean up /tmp/phpxmlrpc (in setup_code_coverage.sh?)
+        # @todo clean up /tmp/phpxmlrpc_coverage and .phpunit.result.cache (in setup_code_coverage.sh?)
         docker exec $USE_TTY "${CONTAINER_NAME}" /root/setup/setup_app.sh "${CONTAINER_WORKSPACE_DIR}" || true
         if [ ! -d ./var/coverage ]; then mkdir -p ./var/coverage; fi
         docker exec -t "${CONTAINER_NAME}" /root/setup/setup_code_coverage.sh enable

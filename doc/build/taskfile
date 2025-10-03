@@ -17,7 +17,7 @@ function setup_tools() {
 
     # git, curl, gpg are needed by phive, used to install phpdocumentor
     # phive nowadays requires ext-mbstring and ext-curl
-    # @todo besides php-cli, there are other php extensions used by phpdocumentor that we should make sure are onboard?
+    # @todo besides php-cli, are there other php extensions used by phpdocumentor that we should make sure are onboard?
     #       The list at https://packagist.org/packages/phpdocumentor/phpdocumentor says: php: ^8.1, ext-ctype, ext-hash,
     #       ext-iconv, ext-json, ext-mbstring, ext-simplexml, ext-xml
     # @todo what about the zip, unzip cli tools?
