@@ -1274,19 +1274,19 @@ class Client
             $this->errstr = 'no response';
             $resp = new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['curl_fail'], PhpXmlRpc::$xmlrpcstr['curl_fail'] .
                 ': ' . curl_error($curl));
-            @curl_close($curl);
+            if (PHP_MAJOR_VERSION < 8) curl_close($curl);
             if ($opts['keepalive']) {
                 $this->xmlrpc_curl_handle = null;
             }
         } else {
             if (!$opts['keepalive']) {
-                @curl_close($curl);
+                if (PHP_MAJOR_VERSION < 8) curl_close($curl);
             }
             $resp = $req->parseResponse($result, true, $opts['return_type']);
             if ($opts['keepalive']) {
                 /// @todo if we got back a 302 or 308, we should not reuse the curl handle for later calls
                 if ($resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error']) {
-                    @curl_close($curl);
+                    if (PHP_MAJOR_VERSION < 8) curl_close($curl);
                     $this->xmlrpc_curl_handle = null;
                 }
             }
@@ -1442,7 +1442,7 @@ class Client
                     curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
                 } else {
                     $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. HTTP2 is not supported by the current PHP/curl install');
-                    @curl_close($curl);
+                    if (PHP_MAJOR_VERSION < 8) curl_close($curl);
                     return false;
                 }
                 break;
@@ -1457,7 +1457,7 @@ class Client
                 curl_setopt($curl, CURLOPT_HTTPAUTH, $opts['authtype']);
             } elseif ($opts['authtype'] != 1) {
                 $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth is supported by the current PHP/curl install');
-                @curl_close($curl);
+                if (PHP_MAJOR_VERSION < 8) curl_close($curl);
                 return false;
             }
         }
@@ -1508,7 +1508,7 @@ class Client
                     curl_setopt($curl, CURLOPT_PROXYAUTH, $opts['proxy_authtype']);
                 } elseif ($opts['proxy_authtype'] != 1) {
                     $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': warning. Only Basic auth to proxy is supported by the current PHP/curl install');
-                    @curl_close($curl);
+                    if (PHP_MAJOR_VERSION < 8) curl_close($curl);
                     return false;
                 }
             }

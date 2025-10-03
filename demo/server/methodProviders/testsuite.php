@@ -70,7 +70,7 @@ function setCookies($cookies)
                 isset($cookieDesc['httponly']) ? (bool)$cookieDesc['httponly'] : false
             );
         } else {
-            /// @todo
+            /// @todo what to do?
         }
     }
 
