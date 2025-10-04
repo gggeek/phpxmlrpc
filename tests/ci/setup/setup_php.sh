@@ -90,7 +90,6 @@ install_shivammatur() {
             libc-client2007e \
             libcurl3-gnutls \
             libmcrypt4 \
-            libodbc2 \
             libpq5 \
             libqdbm14 \
             libxpm4 \

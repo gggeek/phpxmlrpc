@@ -22,6 +22,7 @@ class argParser
 {
     /**
      * @return array
+     * @todo check how to grab the parameters from phpunit config
      */
     public static function getArgs()
     {
