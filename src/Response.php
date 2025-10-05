@@ -314,7 +314,7 @@ class Response
             case 'errstr':
             case 'payload':
             case 'content_type':
-                $this->logDeprecation('Setting property Response::' . $name . ' is deprecated');
+                $this->logDeprecation('Unsetting property Response::' . $name . ' is deprecated');
                 unset($this->$name);
                 break;
             case 'hdrs':
