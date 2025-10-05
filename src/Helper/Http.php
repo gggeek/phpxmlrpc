@@ -10,6 +10,8 @@ class Http
 {
     use LoggerAware;
 
+    protected $acceptedStatusCodes = array('200');
+
     /**
      * Decode a string that is encoded with "chunked" transfer encoding as defined in RFC 2068 par. 19.4.6.
      * Code shamelessly stolen from nusoap library by Dietrich Ayala.
@@ -131,7 +133,7 @@ class Http
             $httpResponse['status_code'] = $matches[2];
         }
 
-        if ($httpResponse['status_code'] !== '200') {
+        if (!in_array($httpResponse['status_code'], $this->acceptedStatusCodes)) {
             $errstr = substr($data, 0, strpos($data, "\n") - 1);
             $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': HTTP error, got response: ' . $errstr);
             throw new HttpException(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (' . $errstr . ')', PhpXmlRpc::$xmlrpcerr['http_error'], null, $httpResponse['status_code']);
@@ -279,5 +281,14 @@ class Http
         }
         arsort($accepted);
         return array_keys($accepted);
+    }
+
+    /**
+     * @param string[] $statusCodes
+     * @return void
+     */
+    public function setAcceptedStatusCodes($statusCodes)
+    {
+        $this->acceptedStatusCodes = $statusCodes;
     }
 }

@@ -2,6 +2,10 @@
 
 - improved: allow to force usage of HTTP 1.1. when using curl for calls, via usage of 'http11_only'
 
+- improved: added new methods: `Server::generatePayload($resp, $respCharset)`,
+  `Server::printPayload($payload, $resp->getContentType(), $respEncoding)` and `HTTP::setAcceptedStatusCodes($statusCodes)`
+  to help subclasses such as the Json-Rpc server and request
+
 
 ## XML-RPC for PHP version 4.11.3 - 2025/10/3
 
