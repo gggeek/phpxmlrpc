@@ -850,6 +850,7 @@ class Client
         // where req is a Request
         $req->setDebug($this->debug);
 
+        /// @todo move to its own function, to make it easier to change in subclasses
         /// @todo we could be smarter about this:
         ///       - not force usage of curl if it is not present
         ///       - not force usage of curl for https (minor BC)
