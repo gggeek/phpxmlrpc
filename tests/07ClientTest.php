@@ -85,7 +85,7 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         // test 2 calls w. keepalive: 1st time connection ko, second time ok
         $this->client->server .= 'XXX';
         $this->client->keepalive = true;
-        $r = $this->client->send($m, $this->timeout, 'http11');
+        $r = $this->client->send($m, $this->timeout, 'http11_only');
         // in case we have a "universal dns resolver" getting in the way, we might get a 302 instead of a 404
         $this->assertTrue($r->faultCode() === 8 || $r->faultCode() == 5);
 
@@ -97,7 +97,7 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         $this->client->server = $server[0];
         //$this->client->path = $this->args['HTTPURI'];
         //$this->client->setCookie('PHPUNIT_RANDOM_TEST_ID', static::$randId);
-        $r = $this->client->send($m, $this->timeout, 'http11');
+        $r = $this->client->send($m, $this->timeout, 'http11_only');
         $this->assertEquals(0, $r->faultCode());
         $ro = $r->value();
         is_object($ro) && $this->assertEquals('hello', $ro->scalarVal());

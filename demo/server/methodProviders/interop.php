@@ -9,6 +9,7 @@
  * http://www.xmlrpc.com/stories/storyReader$1636
  */
 
+use PhpXmlRpc\Encoder;
 use PhpXmlRpc\Response;
 use PhpXmlRpc\Value;
 
@@ -64,7 +65,7 @@ function i_whichToolkit($req)
         "toolkitOperatingSystem" => $_SERVER['SERVER_SOFTWARE'],
     );
 
-    $encoder = new PhpXmlRpc\Encoder();
+    $encoder = new Encoder();
     return new Response($encoder->encode($ret));
 }
 

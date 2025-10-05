@@ -6,7 +6,7 @@ Requirements
 
 The following requirements should be met prior to using 'XMLRPC for PHP':
 
-* PHP 5.3.0 or later
+* PHP 5.4.0 or later
 
 * the php "curl" extension is needed if you wish to use HTTPS, HTTP2, HTTP 1.1 or NTLM Auth to communicate with remote
   servers

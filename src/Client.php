@@ -204,7 +204,7 @@ class Client
      * List of http compression methods accepted by the client for responses.
      * NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib.
      *
-     * NNB: you can set it to any non-empty array for HTTP11 and HTTPS, since in those cases it will be up to CURL to
+     * NNB: you can set it to any non-empty array for HTTP11+ and HTTPS, since in those cases it will be up to CURL to
      * decide the compression methods it supports. You might check for the presence of 'zlib' in the output of
      * curl_version() to determine whether compression is supported or not
      */
@@ -775,7 +775,7 @@ class Client
         }
 
         $url = $this->method . '://' . $this->server;
-        if ($this->port == 0 || ($this->port == 80 && in_array($this->method, array('http', 'http10', 'http11', 'h2c'))) ||
+        if ($this->port == 0 || ($this->port == 80 && in_array($this->method, array('http', 'http10', 'http11',  'http11_only', 'h2c'))) ||
             ($this->port == 443 && in_array($this->method, array('https', 'h2')))) {
             return $url . $this->path;
         } else {
@@ -814,6 +814,7 @@ class Client
      *                       for http/2 without tls. Note that 'h2c' will not use the h2c 'upgrade' method, and be
      *                       thus incompatible with any server/proxy not supporting http/2. This is because POST
      *                       request are not compatible with h2c upgrade.
+     *                       You can also use 'http11_only' to force usage of curl with http 1.1 (no http2)
      * @return Response|Response[] Note that the client will always return a Response object, even if the call fails
      *
      * @todo allow throwing exceptions instead of returning responses in case of failed calls and/or Fault responses
@@ -854,7 +855,7 @@ class Client
         ///       - not force usage of curl for https (minor BC)
         ///       - use the presence of curl_extra_opts or socket_extra_opts as a hint
         $useCurl = ($this->use_curl == self::USE_CURL_ALWAYS) || ($this->use_curl == self::USE_CURL_AUTO && (
-            in_array($method, array('https', 'http11', 'h2c', 'h2')) ||
+            in_array($method, array('https', 'http11', 'http11_only', 'h2c', 'h2')) ||
             ($this->username != '' && $this->authtype != 1) ||
             ($this->proxy != '' && $this->proxy_user != '' && $this->proxy_authtype != 1)
             // uncomment the following if not forcing curl always for 'https'
@@ -881,8 +882,8 @@ class Client
                 $this->proxy_user,
                 $this->proxy_pass,
                 $this->proxy_authtype,
-                // BC
-                $method == 'http11' ? 'http' : $method,
+                // BC - http11 was used to force enabling curl
+                $method == 'http11' ? 'http' : ($method == 'http11_only' ? 'http11' : $method),
                 $this->keepalive,
                 $this->key,
                 $this->keypass,
@@ -906,7 +907,7 @@ class Client
                 $this->proxy_user,
                 $this->proxy_pass,
                 $this->proxy_authtype,
-                $method,
+                $method == 'http11_only' ? 'http11' : $method,
                 $this->key,
                 $this->keypass,
                 $this->sslversion
@@ -1429,7 +1430,10 @@ class Client
             curl_setopt($curl, CURLOPT_TIMEOUT, $opts['timeout']);
         }
 
-        // nb: for 'https' we leave it up to curl to decide
+        // nb: for 'http' and 'https' we leave it up to curl to decide
+        /// @see https://www.php.net/manual/en/curl.constants.php#constant.curl-http-version-1-0
+        /// @see https://curl.se/libcurl/c/CURLOPT_HTTP_VERSION.html
+        /// @todo add support for CURL_VERSION_HTTP3
         switch ($method) {
             case 'http10':
                 curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);

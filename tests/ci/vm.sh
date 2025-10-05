@@ -96,7 +96,12 @@ start() {
         if docker inspect "${CONTAINER_NAME}" >/dev/null 2>/dev/null; then
             echo "starting existing container ${CONTAINER_NAME}..."
             # @todo we should check that the env vars have not changed since cont. creation, and give a warning if so.
-            #       Doable using `docker container inspect`...
+            #       That should be doable using `docker container inspect`.
+            #       We now put UBUNTU_VERSION and PHP_VERSION in the cont. name, but there are other env vars used at
+            #       container `run` time, such as f.e. CONTAINER_USER.
+            #       But also, what if the container (and image) were built by a different version of the ci codebase?
+            #       That should not be a case happening frequently. But if we really wanted to protect against it, we
+            #       would have to create a checksum of the contents of tests/ci and it store somehow as container metadata...
             if docker start "${CONTAINER_NAME}"; then
                 wait_for_bootstrap
             fi
