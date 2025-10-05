@@ -7,7 +7,7 @@ namespace PhpXmlRpc\Helper;
  */
 class Interop
 {
-    /// @todo review - should we use the range -32099 .. -32000 for some server erors?
+    /// @todo review - should we use the range -32099 .. -32000 for some server errors?
     public static $xmlrpcerr = array(
         'unknown_method' => -32601,
         'invalid_return' => 2,

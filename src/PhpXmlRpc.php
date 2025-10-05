@@ -241,7 +241,7 @@ class PhpXmlRpc
      *
      * @return void
      *
-     * @tofo feature creep - allow switching back to the original set of codes; querying the current mode
+     * @todo feature creep - allow switching back to the original set of codes; querying the current mode
      */
     public static function useInteropFaults()
     {
