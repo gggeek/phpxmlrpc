@@ -5,7 +5,7 @@
 /demo/ export-ignore
 /doc/api_changes_v4.md export-ignore
 /doc/build/ export-ignore
-/doc/Changelog
+/doc/Changelog export-ignore
 /extras/ export-ignore
 /tests/ export-ignore
 
