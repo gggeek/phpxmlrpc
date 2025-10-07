@@ -128,7 +128,8 @@ class PhpXmlRpc
     public static $xmlrpcerruser = 800;
     /**
      * @var int
-     * Let XML parse errors start at 100
+     * Let XML parse errors start at 100.
+     * The final code will be 100 + X, with X coming from https://www.php.net/manual/en/xml.error-codes.php
      */
     public static $xmlrpcerrxml = 100;
 
