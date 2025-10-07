@@ -43,7 +43,7 @@ class PhpXmlRpc
         'xml_not_compliant' => 2, // client
         'xml_parsing_error' => 2, // client
 
-        /// @todo verify: can these conflict with $xmlrpcerrxml?
+        /// @todo fix: those do all conflict with $xmlrpcerrxml+X (with X being an `xml_get_error_code` error). Start at 150?
         'cannot_decompress' => 103,
         'decompress_fail' => 104,
         'dechunk_fail' => 105,
