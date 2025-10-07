@@ -117,7 +117,7 @@ start() {
                 PORTMAPPING="${PORTMAPPING}-p $((HOST_HTTPSPORT)):443 "
             fi
             if [ "$HOST_PROXYPORT" != no ] && [ "$HOST_PROXYPORT" != '' ]; then
-                PORTMAPPING="-p $((HOST_PROXYPORT-0)):8080 "
+                PORTMAPPING="${PORTMAPPING}-p $((HOST_PROXYPORT-0)):8080 "
             fi
 
             if [ ! -d "${ROOT_DIR}/tests/ci/var/composer_cache" ]; then mkdir -p "${ROOT_DIR}/tests/ci/var/composer_cache"; fi
