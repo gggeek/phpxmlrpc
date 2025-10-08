@@ -106,6 +106,7 @@ install_shivammatur() {
 
         # @todo check if this script works with all php versions from 5.6 onwards
         # @todo the amount of cleanup and hacks required to get shivammathur/php-ubuntu working is huge. Can we find a better installer?
+        #       It seems that https://github.com/shivammathur/php-builder might in fact be the one to use!
         echo "Using PHP from shivammathur/php-ubuntu..."
 
         # Some of these packages create issues on GHA ubuntu containers...
@@ -236,11 +237,9 @@ else
         fi
     done
 
-    # @todo use ondrej packages for php 8.5 when they are available
-    # @todo also use shivammatur packages for os versions for which the ondrej repos are not available any more.
-    #       Test eg. on focal
-    # @todo move this to looping over an array
-    if [ "${PHP_VERSION}" = 5.3 ] || [ "${PHP_VERSION}" = 5.4 ] || [ "${PHP_VERSION}" = 5.5 ] || [ "${PHP_VERSION}" = 8.5 ]; then
+    # @todo move to using ondrej packages for php 8.5 when they become available
+    if [ "${PHP_VERSION}" = 5.3 ] || [ "${PHP_VERSION}" = 5.4 ] || [ "${PHP_VERSION}" = 5.5 ] || [ "${PHP_VERSION}" = 8.5 ] || \
+        [ "${DEBIAN_VERSION}" = focal ] || [ "${DEBIAN_VERSION}" = bionic ] || [ "${DEBIAN_VERSION}" = xenial ] || [ "${DEBIAN_VERSION}" = trusty ]; then
         install_shivammatur
     else
         install_ondrej
