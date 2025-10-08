@@ -17,7 +17,12 @@
 // Make sure we set the correct charset type for output, so that we can display all characters
 header('Content-Type: text/html; charset=utf-8');
 
+global $inputcharset, $debug, $protocol, $run, $hasjsonrpcclient, $wstype, $id, $host, $port, $path, $action, $method, $methodsig,
+       $payload, $alt_payload, $username, $password, $authtype, $verifyhost, $verifypeer, $cainfo, $proxy, $proxyuser,
+       $proxypwd, $timeout, $requestcompression, $responsecompression, $clientcookies;
+
 include __DIR__ . '/common.php';
+
 if ($action == '') {
     $action = 'list';
 }
@@ -66,7 +71,7 @@ if (defined('JSXMLRPC_BASEURL')) {
 <html lang="en">
 <head>
     <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
-    <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSON-RPC'; else echo 'XML-RPC'; ?> Debugger</title>
+    <title><?php if (defined('DEFAULT_WSTYPE') && (DEFAULT_WSTYPE == 1 || DEFAULT_WSTYPE == 2)) echo 'JSON-RPC'; else echo 'XML-RPC'; ?> Debugger</title>
     <meta name="robots" content="index,nofollow"/>
     <script type="text/javascript" language="Javascript">
         if (window.name != 'frmcontroller')
@@ -209,17 +214,25 @@ if (defined('JSXMLRPC_BASEURL')) {
         }
 
         function switchtransport(is_json) {
-            if (is_json == 0) {
-                document.getElementById("idcell").style.visibility = 'hidden';
-                document.frmjsonrpc.yes.checked = false;
-                document.frmxmlrpc.yes.checked = true;
-                document.frmaction.wstype.value = "0";
-            }
-            else {
+            if (is_json == 2) {
                 document.getElementById("idcell").style.visibility = 'visible';
-                document.frmjsonrpc.yes.checked = true;
+                document.frmjsonrpc2.yes.checked = true;
+                document.frmjsonrpc1.yes.checked = false;
+                document.frmxmlrpc.yes.checked = false;
+                document.frmaction.wstype.value = "2";
+            } else if (is_json == 1) {
+                document.getElementById("idcell").style.visibility = 'visible';
+                document.frmjsonrpc2.yes.checked = false;
+                document.frmjsonrpc1.yes.checked = true;
                 document.frmxmlrpc.yes.checked = false;
                 document.frmaction.wstype.value = "1";
+            }
+            else {
+                document.getElementById("idcell").style.visibility = 'hidden';
+                document.frmjsonrpc2.yes.checked = false;
+                document.frmjsonrpc1.yes.checked = false;
+                document.frmxmlrpc.yes.checked = true;
+                document.frmaction.wstype.value = "0";
             }
         }
 
@@ -234,7 +247,7 @@ if (defined('JSXMLRPC_BASEURL')) {
 
         function activateeditor() {
             var url = '<?php echo $editorurlpath; ?>visualeditor.html?params=<?php echo str_replace(array("\\", "'"), array( "\\\\", "\\'"), $alt_payload); ?>';
-            if (document.frmaction.wstype.value == "1")
+            if (document.frmaction.wstype.value == "1" || document.frmaction.wstype.value == "2")
                 url += '&type=jsonrpc';
             var wnd = window.open(url, '_blank', 'width=750, height=400, location=0, resizable=1, menubar=0, scrollbars=1');
         }
@@ -274,8 +287,11 @@ if (defined('JSXMLRPC_BASEURL')) {
     echo '<form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);"';
     // q: does this if make sense at all?
     if (!class_exists('\PhpXmlRpc\Client')) echo ' disabled="disabled"';
-    echo ' /></form> / <form name="frmjsonrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>
-    JSON-RPC';
+    echo ' /></form>';
+    echo ' / <form name="frmjsonrpc2" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(2);"/></form>
+    JSON-RPC 2.0 ';
+    echo ' / <form name="frmjsonrpc1" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>
+    JSON-RPC 1.0 ';
 } ?>
 Debugger</h1><h3>(based on <a href="https://gggeek.github.io/phpxmlrpc/">PHPXMLRPC</a>, ver. <?php echo htmlspecialchars(\PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion)?>
 <?php if (class_exists('\PhpXmlRpc\JsonRpc\PhpJsonRpc')) echo ' and <a href="https://gggeek.github.io/phpxmlrpc-jsonrpc/">PHPJOSNRPC</a>, ver. ' . htmlspecialchars(\PhpXmlRpc\JsonRpc\PhpJsonRpc::$jsonrpcVersion); ?>)</h3>

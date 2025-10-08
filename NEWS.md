@@ -1,23 +1,25 @@
 ## XML-RPC for PHP version 4.XXX - (unreleased)
 
-- improved: allow to force usage of HTTP 1.1. when using curl for calls, via usage of 'http11_only'
+* improved: allow to force usage of HTTP 1.1. when using curl for calls, via usage of 'http11_only'
 
-- improved: added new methods: `Server::generatePayload($resp, $respCharset)`,
+* improved: added new methods: `Server::generatePayload($resp, $respCharset)`,
   `Server::printPayload($payload, $resp->getContentType(), $respEncoding)` and `HTTP::setAcceptedStatusCodes($statusCodes)`
   to help subclasses such as the Json-Rpc server and request
 
-- fixed: the `vm.sh` script would not expose the http ports of the test contaienr to the host
+* fixed: the `vm.sh` script would not expose the http ports of the test container to the host
+
+* changed: the debugger does now require phpjsonrpc 1.0.0-beta3 or later in order to support json-rpc calls
 
 
 ## XML-RPC for PHP version 4.11.3 - 2025/10/3
 
-- improved: fixed deprecation warnings on PHP 8.5
+* improved: fixed deprecation warnings on PHP 8.5
 
-- improved: added CI testing on PHP 8.5
+* improved: added CI testing on PHP 8.5
 
-- improved: teach the vm.sh script how to properly configure test envs using PHP 8.5
+* improved: teach the vm.sh script how to properly configure test envs using PHP 8.5
 
-- improved: do not hardcode `/tmp` as temporary dir in demo files
+* improved: do not hardcode `/tmp` as temporary dir in demo files
 
 
 ## XML-RPC for PHP version 4.11.2 - 2025/6/20

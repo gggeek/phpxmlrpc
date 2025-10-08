@@ -13,7 +13,7 @@ if (isset($_GET['run'])) {
 <html lang="en">
 <head>
     <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
-    <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSON-RPC'; else echo 'XML-RPC'; ?> Debugger</title>
+    <title><?php if (defined('DEFAULT_WSTYPE') && (DEFAULT_WSTYPE == 1 || DEFAULT_WSTYPE == 2)) echo 'JSON-RPC'; else echo 'XML-RPC'; ?> Debugger</title>
 </head>
 <frameset rows="360,*">
     <frame name="frmcontroller" src="controller.php<?php echo htmlspecialchars($query); ?>" marginwidth="0"

@@ -15,7 +15,7 @@ header('Content-Type: text/html; charset=utf-8');
 <html lang="en">
 <head>
     <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
-    <title><?php if (defined('DEFAULT_WSTYPE') && DEFAULT_WSTYPE == 1) echo 'JSON-RPC'; else echo 'XML-RPC'; ?> Debugger</title>
+    <title><?php if (defined('DEFAULT_WSTYPE') && (DEFAULT_WSTYPE == 1 || DEFAULT_WSTYPE == 2)) echo 'JSON-RPC'; else echo 'XML-RPC'; ?> Debugger</title>
     <meta name="robots" content="index,nofollow"/>
     <style type="text/css">
         <!--
@@ -78,6 +78,10 @@ header('Content-Type: text/html; charset=utf-8');
 <body>
 <?php
 
+global $inputcharset, $debug, $protocol, $run, $hasjsonrpcclient, $wstype, $id, $host, $port, $path, $action, $method, $methodsig,
+  $payload, $alt_payload, $username, $password, $authtype, $verifyhost, $verifypeer, $cainfo, $proxy, $proxyuser,
+  $proxypwd, $timeout, $requestcompression, $responsecompression, $clientcookies;
+
 include __DIR__ . '/common.php';
 
 if ($action) {
@@ -100,7 +104,7 @@ if ($action) {
             set_time_limit($timeout + 10);
         }
 
-        if ($wstype == 1) {
+        if ($wstype == 1 || $wstype == 2) {
             $clientClass = '\PhpXmlRpc\JsonRpc\Client';
             $requestClass = '\PhpXmlRpc\JsonRpc\Request';
             $protoName = 'JSON-RPC';
@@ -197,14 +201,26 @@ if ($action) {
             // fall thru intentionally
             case 'describe':
             case 'wrap':
-                $msg[0] = new $requestClass('system.methodHelp', array(), $id);
+                $msg[0] = new $requestClass('system.methodHelp', array(), (int)$id);
                 $msg[0]->addparam(new PhpXmlRpc\Value($method));
                 $msg[1] = new $requestClass('system.methodSignature', array(), (int)$id + 1);
                 $msg[1]->addparam(new PhpXmlRpc\Value($method));
+                if ($wstype == 2) {
+                    $msg[0]->setJsonRpcVersion('2.0');
+                    $msg[1]->setJsonRpcVersion('2.0');
+                } elseif ($wstype == 1) {
+                    $msg[0]->setJsonRpcVersion('1.0');
+                    $msg[1]->setJsonRpcVersion('1.0');
+                }
                 $actionname = 'Description of method "' . $method . '"';
                 break;
             case 'list':
-                $msg[0] = new $requestClass('system.listMethods', array(), $id);
+                $msg[0] = new $requestClass('system.listMethods', array(), (int)$id);
+                if ($wstype == 2) {
+                    $msg[0]->setJsonRpcVersion('2.0');
+                } elseif ($wstype == 1) {
+                    $msg[0]->setJsonRpcVersion('1.0');
+                }
                 $actionname = 'List of available methods';
                 break;
             case 'execute':
@@ -213,7 +229,24 @@ if ($action) {
                 }
                 $msg[0] = new $requestClass($method, array(), $id);
                 // hack! build payload by hand
-                if ($wstype == 1) {
+                if ($wstype == 2) {
+                    $payload = "{\n" .
+                        '"jsonrpc": "2.0"' . "\n" .
+                        '"method": "' . $method . "\",\n\"params\": [" .
+                        $payload .
+                        "\n],\n";
+                    // fix: if user gave an empty string, use NULL, or we'll break json syntax
+                    if ($id != "") {
+                        if (is_numeric($id) || $id == 'false' || $id == 'true') {
+                            $payload .= "\"id\": $id\n";
+                        } else {
+                            $payload .= "\"id\": \"$id\"\n";
+                        }
+                    }
+                    $payload .= '}';
+                    $msg[0]->setPayload($payload);
+                    $msg[0]->setJsonRpcVersion('2.0');
+                } elseif ($wstype == 1) {
                     $payload = "{\n" .
                         '"method": "' . $method . "\",\n\"params\": [" .
                         $payload .
@@ -229,6 +262,7 @@ if ($action) {
                         }
                     }
                     $msg[0]->setPayload($payload);
+                    $msg[0]->setJsonRpcVersion('1.0');
                 } else {
                     $msg[0]->setPayload(
                         $msg[0]->xml_header($inputcharset) .
@@ -372,7 +406,7 @@ if ($action) {
                                     foreach($x as $k => $y) {
                                         if ($k == 0) continue;
                                         echo htmlspecialchars($y->scalarval(), ENT_COMPAT, \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding);
-                                        if ($wstype == 1) {
+                                        if ($wstype == 1 || $wstype == 2) {
                                             switch($y->scalarval()) {
                                                 case 'string':
                                                 case 'dateTime.iso8601':
@@ -423,7 +457,7 @@ if ($action) {
                                         $alt_payload .= $y->scalarval();
                                         if ($k < $x->count() - 1) {
                                             $alt_payload .= ';';
-                                            if ($wstype == 1) {
+                                            if ($wstype == 1 || $wstype == 2) {
                                                 $payload .= ', ';
                                             }
                                             echo ", ";
@@ -519,12 +553,12 @@ if ($action) {
                         } else {
                             $opts = 0; // complete client copy in stub code
                         }
-                        if ($wstype == 1) {
+                        if ($wstype == 1 || $wstype == 2) {
                             $prefix = 'jsonrpc';
                         } else {
                             $prefix = 'xmlrpc';
                         }
-                        if ($wstype == 1) {
+                        if ($wstype == 1 || $wstype == 2) {
                             $wrapper = new PhpXmlRpc\JsonRpc\Wrapper();
                         } else {
                             $wrapper = new PhpXmlRpc\Wrapper();
@@ -586,6 +620,7 @@ if ($action) {
 
     <h3>Changelog</h3>
     <ul>
+        <li>2025-10-08: added support for json-rpc 2.0. The debugger now require phpjsonrpc 1.0.0-beta3 or later for json-rpc support</li>
         <li>2023-02-11: display in the top row the version of the libraries in use; made the generated code throw instead
             of returning a Response object on error; fixes for the json-rpc debugger</li>
         <li>2022-12-18: fix XSS vulnerability in the debugger; load jsxmlrpc from CDN; minor improvements</li>

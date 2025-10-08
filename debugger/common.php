@@ -85,12 +85,12 @@ $hasjsonrpcclient = class_exists('\PhpXmlRpc\JsonRpc\Client');
 $wstype = defined('DEFAULT_WSTYPE') ? DEFAULT_WSTYPE : 0;
 $id = '';
 if (isset($_GET['action'])) {
-    if (isset($_GET['wstype']) && ($_GET['wstype'] == '1' || $_GET['wstype'] == '0')) {
+    if (isset($_GET['wstype']) && ($_GET['wstype'] == '2'  || $_GET['wstype'] == '1' || $_GET['wstype'] == '0')) {
         $wstype = (int)$_GET['wstype'];
-        if ($wstype === 1 && !$hasjsonrpcclient) {
+        if (($wstype === 1 || $wstype === 2) && !$hasjsonrpcclient) {
             $wstype = 0;
         }
-        if ($wstype === 1 && isset($_GET['id'])) {
+        if (($wstype === 1 || $wstype === 2) && isset($_GET['id'])) {
             $id = $_GET['id'];
         }
     }
