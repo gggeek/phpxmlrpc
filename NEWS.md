@@ -4,7 +4,9 @@
 
 - improved: added new methods: `Server::generatePayload($resp, $respCharset)`,
   `Server::printPayload($payload, $resp->getContentType(), $respEncoding)` and `HTTP::setAcceptedStatusCodes($statusCodes)`
-  to help subclasses such as the Json-Rpc server and request. Also: new static property `CharsetEncoderAware::$charsetEncoderClass`
+  to help subclasses such as the Json-Rpc server and request
+
+- fixed: the `vm.sh` script would not expose the http ports of the test contaienr to the host
 
 
 ## XML-RPC for PHP version 4.11.3 - 2025/10/3
