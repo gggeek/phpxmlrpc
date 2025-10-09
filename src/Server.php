@@ -1332,6 +1332,7 @@ class Server
 
         $req = new Request($methName->scalarVal());
         foreach ($params as $i => $param) {
+            /// @todo allow support for named parameters, if this is a jsonrpc 2.0 call
             if (!$req->addParam($param)) {
                 $i++; // for error message, we count params from 1
                 return static::_xmlrpcs_multicall_error(new static::$responseClass(0,
