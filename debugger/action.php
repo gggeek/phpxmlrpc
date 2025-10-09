@@ -107,10 +107,16 @@ if ($action) {
         if ($wstype == 1 || $wstype == 2) {
             $clientClass = '\PhpXmlRpc\JsonRpc\Client';
             $requestClass = '\PhpXmlRpc\JsonRpc\Request';
+            if ($hasjsonrpc2) {
+                $notificationClass = '\PhpXmlRpc\JsonRpc\Notification';
+            } else {
+                $notificationClass = '\PhpXmlRpc\JsonRpc\Request';
+            }
             $protoName = 'JSON-RPC';
         } else {
             $clientClass = '\PhpXmlRpc\Client';
             $requestClass = '\PhpXmlRpc\Request';
+            $notificationClass = '\PhpXmlRpc\Request';
             $protoName = 'XML-RPC';
         }
 
@@ -224,10 +230,15 @@ if ($action) {
                 $actionname = 'List of available methods';
                 break;
             case 'execute':
+            case 'notification':
                 if (!payload_is_safe($payload)) {
                     die("Tsk tsk tsk, please stop it or I will have to call in the cops!");
                 }
-                $msg[0] = new $requestClass($method, array(), $id);
+                if ($action == 'notification') {
+                    $msg[0] = new $notificationClass($method, array());
+                } else {
+                    $msg[0] = new $requestClass($method, array(), $id);
+                }
                 // hack! build payload by hand
                 if ($wstype == 2) {
                     $payload = "{\n" .
@@ -235,15 +246,14 @@ if ($action) {
                         '"method": "' . $method . "\",\n\"params\": [" .
                         $payload .
                         "\n]";
-                    // fix: if user gave an empty string, use NULL, or we'll break json syntax
-                    if ($id != "") {
-                        if (is_numeric($id) || $id == 'false' || $id == 'true') {
+                    if ($action == "notification") {
+                        $payload .= "\n";
+                    } else {
+                        if (is_numeric($id)) {
                             $payload .= ",\n\"id\": $id\n";
                         } else {
                             $payload .= ",\n\"id\": \"$id\"\n";
                         }
-                    } else {
-                        $payload .= "\n";
                     }
                     $payload .= '}';
                     $msg[0]->setPayload($payload);
@@ -253,13 +263,13 @@ if ($action) {
                         '"method": "' . $method . "\",\n\"params\": [" .
                         $payload .
                         "\n],\n\"id\": ";
-                    // fix: if user gave an empty string, use NULL, or we'll break json syntax
-                    if ($id == "") {
+                    if ($action == "notification") {
                         $payload .= "null\n}";
                     } else {
-                        if (is_numeric($id) || $id == 'false' || $id == 'true' || $id == 'null') {
+                        if (is_numeric($id) || $id == 'false' || $id == 'true') {
                             $payload .= "$id\n}";
                         } else {
+                            // this includes the empty string ;-)
                             $payload .= "\"$id\"\n}";
                         }
                     }
@@ -275,7 +285,11 @@ if ($action) {
                         "</params>\n" . $msg[0]->xml_footer()
                     );
                 }
-                $actionname = 'Execution of method ' . $method;
+                if ($action == 'notification') {
+                    $actionname = 'Execution of notification ' . $method;
+                } else {
+                    $actionname = 'Execution of method ' . $method;
+                }
                 break;
             default: // give a warning
                 $actionname = '[ERROR: unknown action] "' . $action . '"';
@@ -297,7 +311,8 @@ if ($action) {
     foreach ($msg as $message) {
         $response = $client->send($message, $timeout, $httpprotocol);
         $resp[] = $response;
-        if (!$response || $response->faultCode()) {
+
+        if (!$response || (is_object($response) && $response->faultCode())) {
             break;
         }
     }
@@ -307,7 +322,11 @@ if ($action) {
     }
 
     if ($response) {
-        if ($response->faultCode()) {
+        if ($response === true) {
+            // we assume that only notification calls can return true instead of a response
+            printf("<h3>%s notification call OK (%.2f secs.)</h3>\n", $protoName, $time);
+            echo(date("d/M/Y:H:i:s\n"));
+        } else if ($response->faultCode()) {
             // call failed! echo out error msg!
             //echo '<h2>'.htmlspecialchars($actionname, ENT_COMPAT, $inputcharset).' on server '.htmlspecialchars($server, ENT_COMPAT, $inputcharset).'</h2>';
             echo "<h3>$protoName call FAILED!</h3>\n";
@@ -587,6 +606,10 @@ if ($action) {
                     break;
 
                 case 'execute':
+                    echo '<div id="response"><h2>Response:</h2>' . htmlspecialchars($response->serialize()) . '</div>';
+                    break;
+
+                case 'notification':
                     echo '<div id="response"><h2>Response:</h2>' . htmlspecialchars($response->serialize()) . '</div>';
                     break;
 
