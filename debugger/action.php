@@ -241,9 +241,10 @@ if ($action) {
                 }
                 // hack! build payload by hand
                 if ($wstype == 2) {
+                    $payload = rtrim($payload, "\n");
                     $payload = "{\n" .
                         '"jsonrpc": "2.0"' . ",\n" .
-                        '"method": "' . $method . "\",\n\"params\": [" .
+                        '"method": "' . $method . "\",\n\"params\": [\n" .
                         $payload .
                         "\n]";
                     if ($action == "notification") {
@@ -259,8 +260,9 @@ if ($action) {
                     $msg[0]->setPayload($payload);
                     $msg[0]->setJsonRpcVersion('2.0');
                 } elseif ($wstype == 1) {
+                    $payload = rtrim($payload, "\n");
                     $payload = "{\n" .
-                        '"method": "' . $method . "\",\n\"params\": [" .
+                        '"method": "' . $method . "\",\n\"params\": [\n" .
                         $payload .
                         "\n],\n\"id\": ";
                     if ($action == "notification") {
