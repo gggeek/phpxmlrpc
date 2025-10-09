@@ -740,7 +740,7 @@ class Wrapper
      *                                                          trusted servers ---
      *                            - mixed   return_on_fault     a php value to be returned when the xml-rpc call fails/returns
      *                                                          a fault response (by default the Response object is returned
-     *                                                          in this case).  If a string is used, '%faultCode%' and
+     *                                                          in this case). If a string is used, '%faultCode%' and
      *                                                          '%faultString%' tokens  will be substituted with actual error values
      *                            - bool    throw_on_fault      if true, throw an exception instead of returning a Response
      *                                                          in case of errors/faults;
@@ -877,7 +877,7 @@ class Wrapper
     protected function buildWrapMethodClosure($client, $methodName, array $extraOptions, $mSig)
     {
         // we clone the client, so that we can modify it a bit independently of the original
-        $clientClone = clone $client;
+        $clientClone = $this->cloneClientForClosure($client);
         $function = function() use($clientClone, $methodName, $extraOptions, $mSig)
         {
             $timeout = isset($extraOptions['timeout']) ? (int)$extraOptions['timeout'] : 0;
@@ -1269,5 +1269,14 @@ class Wrapper
         }
 
         throw new ValueErrorException("No object held for index '$index'");
+    }
+
+    /**
+     * @param Client $client
+     * @return Client
+     */
+    protected function cloneClientForClosure($client)
+    {
+        return clone $client;
     }
 }

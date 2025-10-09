@@ -585,6 +585,9 @@ if ($action) {
                         }
                         if ($wstype == 1 || $wstype == 2) {
                             $wrapper = new PhpXmlRpc\JsonRpc\Wrapper();
+                            if ($hasjsonrpc2) {
+                                $wrapper->setJsonRpcVersion($wstype == 1 ? \PhpXmlRpc\JsonRpc\PhpJsonRpc::VERSION_1_0 : \PhpXmlRpc\JsonRpc\PhpJsonRpc::VERSION_2_0);
+                            }
                         } else {
                             $wrapper = new PhpXmlRpc\Wrapper();
                         }
