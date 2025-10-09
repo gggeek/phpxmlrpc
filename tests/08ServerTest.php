@@ -632,7 +632,7 @@ And turned it into nylon';
         $this->addQueryParams(array('EXCEPTION_HANDLING' => 2));
         // depending on whether display_errors is ON or OFF on the server, we will get back a different error here,
         // as php will generate an http status code of either 200 or 500...
-        $v = $this->send($m, array($GLOBALS['xmlrpcerr']['invalid_return'], $GLOBALS['xmlrpcerr']['http_error']));
+        $v = $this->send($m, array($GLOBALS['xmlrpcerr']['invalid_xml'], $GLOBALS['xmlrpcerr']['http_error']));
     }
 
     public function testCatchErrors()
@@ -650,7 +650,7 @@ And turned it into nylon';
         $this->addQueryParams(array('EXCEPTION_HANDLING' => 2));
         // depending on whether display_errors is ON or OFF on the server, we will get back a different error here,
         // as php will generate an http status code of either 200 or 500...
-        $v = $this->send($m, array($GLOBALS['xmlrpcerr']['invalid_return'], $GLOBALS['xmlrpcerr']['http_error']));
+        $v = $this->send($m, array($GLOBALS['xmlrpcerr']['invalid_xml'], $GLOBALS['xmlrpcerr']['http_error']));
     }
 
     public function testZeroParams()

@@ -372,6 +372,7 @@ class Encoder
                 // EPI api emulation
                 $v = $_xh['value'];
                 // use a known error code
+                /// @todo shouldn't we use PhpXmlRpc::$xmlrpcerr['invalid_xml']?
                 /** @var Value $vc */
                 $vc = isset($v['faultCode']) ? $v['faultCode']->scalarVal() : PhpXmlRpc::$xmlrpcerr['invalid_return'];
                 /** @var Value $vs */

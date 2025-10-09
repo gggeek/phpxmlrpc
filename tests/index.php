@@ -4,6 +4,9 @@
 // It makes all errors visible, triggers generation of code-coverage information, and runs the target file,
 // which is specified as GET param.
 
+/// @todo inject a custom Logger which logs in a parseable format + known location, so that the test code can check
+///       the log as part of (or after) test execution
+
 // In case this file is made available on an open-access server, avoid it being useable by anyone who can not also
 // write a specific file to disk.
 // NB: keep filename, cookie name in sync with the code within the TestCase classes sending http requests to this file
