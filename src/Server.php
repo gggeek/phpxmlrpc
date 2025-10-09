@@ -1157,6 +1157,7 @@ class Server
         // support for "standard" error codes
         if (PhpXmlRpc::$xmlrpcerr['unknown_method'] === Interop::$xmlrpcerr['unknown_method']) {
             $outAr['faults_interop'] = array(
+                // Note that, as of 2025/10, the following URL does not respond anymore
                 'specUrl' => 'http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php',
                 'specVersion' => 20010516
             );

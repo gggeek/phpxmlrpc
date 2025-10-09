@@ -6,6 +6,8 @@
   `Server::printPayload($payload, $resp->getContentType(), $respEncoding)` and `HTTP::setAcceptedStatusCodes($statusCodes)`
   to help subclasses such as the Json-Rpc server and request
 
+* improved: prepare the debugger for json-rpc 2.0 support, which will be in a pending release of the PHPJSONRPC library
+
 * fixed: the `vm.sh` script would not expose the http ports of the test container to the host
 
 
