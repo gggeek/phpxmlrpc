@@ -139,7 +139,7 @@ if (function_exists('xmlrpc_set_type')) {
 
 // test 'old style' data decoding vs. 'automatic style' decoding
 $dummy = new Request('');
-$out = new Response($data);
+$out = new Response($value);
 $in = '<?xml version="1.0" ?>' . "\n" . $out->serialize();
 
 begin_test('Data decoding (large array)', 'manual decoding');
