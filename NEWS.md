@@ -8,8 +8,6 @@
 
 * fixed: the `vm.sh` script would not expose the http ports of the test container to the host
 
-* changed: the debugger does now require phpjsonrpc 1.0.0-beta3 or later in order to support json-rpc calls
-
 
 ## XML-RPC for PHP version 4.11.3 - 2025/10/3
 

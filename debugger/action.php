@@ -78,9 +78,9 @@ header('Content-Type: text/html; charset=utf-8');
 <body>
 <?php
 
-global $inputcharset, $debug, $protocol, $run, $hasjsonrpcclient, $wstype, $id, $host, $port, $path, $action, $method, $methodsig,
-  $payload, $alt_payload, $username, $password, $authtype, $verifyhost, $verifypeer, $cainfo, $proxy, $proxyuser,
-  $proxypwd, $timeout, $requestcompression, $responsecompression, $clientcookies;
+global $inputcharset, $debug, $protocol, $run, $hasjsonrpcclient, $hasjsonrpc2, $wstype, $id, $host, $port, $path, $action,
+       $method, $methodsig, $payload, $alt_payload, $username, $password, $authtype, $verifyhost, $verifypeer, $cainfo, $proxy,
+       $proxyuser, $proxypwd, $timeout, $requestcompression, $responsecompression, $clientcookies;
 
 include __DIR__ . '/common.php';
 
@@ -208,7 +208,7 @@ if ($action) {
                 if ($wstype == 2) {
                     $msg[0]->setJsonRpcVersion('2.0');
                     $msg[1]->setJsonRpcVersion('2.0');
-                } elseif ($wstype == 1) {
+                } elseif ($wstype == 1 && $hasjsonrpc2) {
                     $msg[0]->setJsonRpcVersion('1.0');
                     $msg[1]->setJsonRpcVersion('1.0');
                 }
@@ -218,7 +218,7 @@ if ($action) {
                 $msg[0] = new $requestClass('system.listMethods', array(), (int)$id);
                 if ($wstype == 2) {
                     $msg[0]->setJsonRpcVersion('2.0');
-                } elseif ($wstype == 1) {
+                } elseif ($wstype == 1 && $hasjsonrpc2) {
                     $msg[0]->setJsonRpcVersion('1.0');
                 }
                 $actionname = 'List of available methods';
@@ -262,7 +262,9 @@ if ($action) {
                         }
                     }
                     $msg[0]->setPayload($payload);
-                    $msg[0]->setJsonRpcVersion('1.0');
+                    if ($hasjsonrpc2) {
+                        $msg[0]->setJsonRpcVersion('1.0');
+                    }
                 } else {
                     $msg[0]->setPayload(
                         $msg[0]->xml_header($inputcharset) .
@@ -628,7 +630,7 @@ if ($action) {
         <li>2020-12-11: fix problems with running the debugger on php 8</li>
         <li>2015-05-30: fix problems with generating method payloads for NIL and Undefined parameters</li>
         <li>2015-04-19: fix problems with LATIN-1 characters in payload</li>
-        <li>2007-02-20: add visual editor for method payload; allow strings, bools as jsonrpc msg id</li>
+        <li>2007-02-20: add visual editor for method payload; allow strings, bools as jsonrpc req id</li>
         <li>2006-06-26: support building php code stub for calling remote methods</li>
         <li>2006-05-25: better support for long running queries; check for no-curl installs</li>
         <li>2006-05-02: added support for JSON-RPC. Note that many interesting json-rpc features are not implemented

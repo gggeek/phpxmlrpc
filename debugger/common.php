@@ -82,13 +82,18 @@ $debug = 0;
 $protocol = 0;
 $run = false;
 $hasjsonrpcclient = class_exists('\PhpXmlRpc\JsonRpc\Client');
+$hasjsonrpc2 = $hasjsonrpcclient && method_exists('\PhpXmlRpc\JsonRpc\Client', 'setJsonRpcVersion');
 $wstype = defined('DEFAULT_WSTYPE') ? DEFAULT_WSTYPE : 0;
 $id = '';
 if (isset($_GET['action'])) {
     if (isset($_GET['wstype']) && ($_GET['wstype'] == '2'  || $_GET['wstype'] == '1' || $_GET['wstype'] == '0')) {
         $wstype = (int)$_GET['wstype'];
-        if (($wstype === 1 || $wstype === 2) && !$hasjsonrpcclient) {
-            $wstype = 0;
+        if ($wstype === 1 || $wstype === 2) {
+            if (!$hasjsonrpcclient) {
+                $wstype = 0;
+            } else if (!$hasjsonrpc2) {
+                $wstype = 1;
+            }
         }
         if (($wstype === 1 || $wstype === 2) && isset($_GET['id'])) {
             $id = $_GET['id'];

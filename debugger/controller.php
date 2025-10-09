@@ -17,9 +17,9 @@
 // Make sure we set the correct charset type for output, so that we can display all characters
 header('Content-Type: text/html; charset=utf-8');
 
-global $inputcharset, $debug, $protocol, $run, $hasjsonrpcclient, $wstype, $id, $host, $port, $path, $action, $method, $methodsig,
-       $payload, $alt_payload, $username, $password, $authtype, $verifyhost, $verifypeer, $cainfo, $proxy, $proxyuser,
-       $proxypwd, $timeout, $requestcompression, $responsecompression, $clientcookies;
+global $inputcharset, $debug, $protocol, $run, $hasjsonrpcclient, $hasjsonrpc2, $wstype, $id, $host, $port, $path, $action,
+    $method, $methodsig, $payload, $alt_payload, $username, $password, $authtype, $verifyhost, $verifypeer, $cainfo, $proxy,
+    $proxyuser, $proxypwd, $timeout, $requestcompression, $responsecompression, $clientcookies;
 
 include __DIR__ . '/common.php';
 
@@ -284,14 +284,13 @@ if (defined('JSXMLRPC_BASEURL')) {
     } ?>">
 <h1>XML-RPC
 <?php if ($hasjsonrpcclient) {
-    echo '<form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);"';
-    // q: does this if make sense at all?
-    if (!class_exists('\PhpXmlRpc\Client')) echo ' disabled="disabled"';
-    echo ' /></form>';
-    echo ' / <form name="frmjsonrpc2" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(2);"/></form>
-    JSON-RPC 2.0 ';
-    echo ' / <form name="frmjsonrpc1" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>
-    JSON-RPC 1.0 ';
+    echo '<form name="frmxmlrpc" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(0);"' .
+        // q: does this check make sense at all?
+        (!class_exists('\PhpXmlRpc\Client') ? ' disabled="disabled"' : '') . ' /></form>';
+    if ($hasjsonrpc2) {
+        echo ' / <form name="frmjsonrpc2" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(2);"/></form>JSON-RPC 2.0 ';
+    }
+    echo ' / <form name="frmjsonrpc1" style="display: inline;" action="."><input name="yes" type="radio" onclick="switchtransport(1);"/></form>JSON-RPC 1.0 ';
 } ?>
 Debugger</h1><h3>(based on <a href="https://gggeek.github.io/phpxmlrpc/">PHPXMLRPC</a>, ver. <?php echo htmlspecialchars(\PhpXmlRpc\PhpXmlRpc::$xmlrpcVersion)?>
 <?php if (class_exists('\PhpXmlRpc\JsonRpc\PhpJsonRpc')) echo ' and <a href="https://gggeek.github.io/phpxmlrpc-jsonrpc/">PHPJOSNRPC</a>, ver. ' . htmlspecialchars(\PhpXmlRpc\JsonRpc\PhpJsonRpc::$jsonrpcVersion); ?>)</h3>
@@ -338,7 +337,7 @@ Debugger</h1><h3>(based on <a href="https://gggeek.github.io/phpxmlrpc/">PHPXMLR
                 <div id="methodpayloadbtn"></div>
             </td>
             <td><textarea id="methodpayload" name="methodpayload" rows="1" cols="40"><?php echo htmlspecialchars($payload, ENT_COMPAT, $inputcharset); ?></textarea></td>
-            <td class="labelcell" id="idcell">Msg id: <input type="text" name="id" size="3" value="<?php echo htmlspecialchars($id, ENT_COMPAT, $inputcharset); ?>"/></td>
+            <td class="labelcell" id="idcell">Req id: <input type="text" name="id" size="3" value="<?php echo htmlspecialchars($id, ENT_COMPAT, $inputcharset); ?>"/></td>
             <td><input type="hidden" name="wstype" value="<?php echo $wstype; ?>"/>
                 <input type="submit" value="Execute" onclick="return verifyserver();"/></td>
         </tr>
