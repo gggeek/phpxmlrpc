@@ -2,6 +2,11 @@
 
 include_once __DIR__ . '/LoggerAwareTestCase.php';
 
+use PhpXmlRpc\Encoder;
+use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Request;
+use PhpXmlRpc\Value;
+
 /**
  * Tests involving the Value class.
  * NB: these tests do not involve the parsing of xml into Value objects - look in 04ParsingTest for that
@@ -170,7 +175,7 @@ class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
             }
         }
 
-        $v2 = new \PhpXmlRpc\Value(array(new \PhpXmlRpc\Value('one'), new \PhpXmlRpc\Value('two')), 'array');
+        $v2 = new Value(array(new Value('one'), new Value('two')), 'array');
         $this->assertequals(2, count($v2));
         $out = array(array('key' => 0, 'value'  => 'object'), array('key' => 1, 'value'  => 'object'));
         $i = 0;
@@ -182,7 +187,7 @@ class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
             $i++;
         }
 
-        $v3 = new \PhpXmlRpc\Value(10, 'i4');
+        $v3 = new Value(10, 'i4');
         $this->assertEquals(1, count($v3));
         $this->assertEquals(true, isset($v3['int']));
         $this->assertEquals(true, isset($v3['i4']));
@@ -196,7 +201,7 @@ class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
         $this->assertEquals(1000, $v3['i4']);
     }
 
-    /// @todo do not use \PhpXmlRpc\Encoder for this test
+    /// @todo do not use Encoder for this test
     public function testBigXML()
     {
         // nb: make sure that  the serialized xml corresponding to this is > 10MB in size
@@ -205,11 +210,11 @@ class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
             $data[] = 'hello world';
         }
 
-        $encoder = new \PhpXmlRpc\Encoder();
+        $encoder = new Encoder();
         $val = $encoder->encode($data);
-        $req = new \PhpXmlRpc\Request('test', array($val));
+        $req = new Request('test', array($val));
         $xml = $req->serialize();
-        $parser = new \PhpXmlRpc\Helper\XMLParser();
+        $parser = new XMLParser();
         $_xh = $parser->parse($xml);
 
         $this->assertequals(0, $_xh['isf']);
@@ -222,7 +227,7 @@ class ValueTest extends PhpXmlRpc_LoggerAwareTestCase
         }
 
         $string = chr(164);
-        $v = new \PhpXmlRpc\Value($string);
+        $v = new Value($string);
 
         $originalEncoding = \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding;
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-15';

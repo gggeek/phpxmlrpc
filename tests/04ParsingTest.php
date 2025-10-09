@@ -2,6 +2,8 @@
 
 include_once __DIR__ . '/LoggerAwareTestCase.php';
 
+use \PhpXmlRpc\Request;
+
 /**
  * Tests involving xml parsing.
  *
@@ -727,7 +729,7 @@ and there they were.</value></member><member><name>postid</name><value>7414222</
     </params>
 </methodResponse>
 ';
-        $req = new \PhpXmlRpc\Request('hi');
+        $req = new Request('hi');
         $resp = $req->parseResponse($xml, true);
         $val = $resp->value();
         if (version_compare(PHP_VERSION, '5.6.0', '>=')) {

@@ -106,8 +106,24 @@ install_shivammatur() {
 
         # @todo check if this script works with all php versions from 5.6 onwards
         # @todo the amount of cleanup and hacks required to get shivammathur/php-ubuntu working is huge. Can we find a better installer?
-        #       It seems that https://github.com/shivammathur/php-builder might in fact be the one to use!
+        #       It seems that https://github.com/shivammathur/php-builder might in fact be the one to use...
         echo "Using PHP from shivammathur/php-ubuntu..."
+
+###!!!
+#        @todo this atm fails on focal/5.6, with `108.9 Reading package lists...zstd: /*stdin*\: unsupported format
+#                                                 109.2 tar: Child returned status 1
+#                                                 109.2 tar: Error is not recoverable: exiting now`
+#              Try running manually install.sh and see if we can fix it
+#
+#        apt-get install -y \
+#            apt-utils \
+#            curl \
+#            zstd
+#
+#        set +e
+#        curl -sSL https://github.com/shivammathur/php-builder/releases/latest/download/install.sh | bash -s "${PHP_VERSION}"
+#        set -e
+###!!!
 
         # Some of these packages create issues on GHA ubuntu containers...
         if [ -z "${GITHUB_ACTIONS}" ]; then

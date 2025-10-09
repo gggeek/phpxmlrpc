@@ -2,6 +2,8 @@
 
 include_once __DIR__ . '/ServerAwareTestCase.php';
 
+use PhpXmlRpc\Client;
+
 abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_ServerAwareTestCase
 {
     /**
@@ -58,11 +60,11 @@ abstract class PhpXmlRpc_WebTestCase extends PhpXmlRpc_ServerAwareTestCase
      * @see also ServerTest::set_up
      *
      * @param string $path
-     * @return \PhpXmlRpc\Client
+     * @return Client
      */
     protected function newClient($path)
     {
-        $client = new \PhpXmlRpc\Client($this->baseUrl . $path);
+        $client = new Client($this->baseUrl . $path);
         $client->setCookie('PHPUNIT_RANDOM_TEST_ID', static::$randId);
         if ($this->collectCodeCoverageInformation) {
             $client->setCookie('PHPUNIT_SELENIUM_TEST_ID', $this->testId);

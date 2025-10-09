@@ -4,6 +4,7 @@ include_once __DIR__ . '/LoggerAwareTestCase.php';
 
 use PHPUnit\Extensions\SeleniumCommon\RemoteCoverage;
 use PHPUnit\Framework\TestResult;
+use PhpXmlRpc\Client;
 
 abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LoggerAwareTestCase
 {
@@ -110,10 +111,10 @@ abstract class PhpXmlRpc_ServerAwareTestCase extends PhpXmlRpc_LoggerAwareTestCa
      */
     public function getAvailableUseCurlOptions()
     {
-        $opts = array(array(\PhpXmlRpc\Client::USE_CURL_NEVER));
+        $opts = array(array(Client::USE_CURL_NEVER));
         if (function_exists('curl_init'))
         {
-            $opts[] = array(\PhpXmlRpc\Client::USE_CURL_ALWAYS);
+            $opts[] = array(Client::USE_CURL_ALWAYS);
         }
 
         return $opts;

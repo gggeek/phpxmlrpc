@@ -2,6 +2,10 @@
 
 include_once __DIR__ . '/LoggerAwareTestCase.php';
 
+use PhpXmlRpc\Encoder;
+use PhpXmlRpc\Request;
+use PhpXmlRpc\Response;
+
 /**
  * Tests involving automatic encoding/decoding of php values into xmlrpc values (the Encoder class).
  *
@@ -46,11 +50,11 @@ class EncoderTest extends PhpXmlRpc_LoggerAwareTestCase
         $v1 = php_xmlrpc_encode($data, array('auto_dates'));
         $v2 = php_xmlrpc_decode_xml($v1->serialize());
         $this->assertEquals($v1, $v2);
-        $r1 = new PhpXmlRpc\Response($v1);
+        $r1 = new Response($v1);
         $r2 = php_xmlrpc_decode_xml($r1->serialize());
         $r2->serialize(); // needed to set internal member payload
         $this->assertEquals($r1, $r2);
-        $m1 = new PhpXmlRpc\Request('hello dolly', array($v1));
+        $m1 = new Request('hello dolly', array($v1));
         $m2 = php_xmlrpc_decode_xml($m1->serialize());
         $m2->serialize(); // needed to set internal member payload
         $this->assertEquals($m1, $m2);
@@ -63,7 +67,7 @@ class EncoderTest extends PhpXmlRpc_LoggerAwareTestCase
         }
 
         $string = chr(164);
-        $e = new \PhpXmlRpc\Encoder();
+        $e = new Encoder();
 
         $originalEncoding = \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding;
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_internalencoding = 'ISO-8859-15';

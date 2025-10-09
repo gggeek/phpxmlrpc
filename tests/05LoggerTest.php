@@ -5,6 +5,7 @@ include_once __DIR__ . '/PolyfillTestCase.php';
 use PhpXmlRpc\Helper\Charset;
 use PhpXmlRpc\Helper\Http;
 use PhpXmlRpc\Helper\XMLParser;
+use PhpXmlRpc\Value;
 
 class LoggerTest extends PhpXmlRpc_PolyfillTestCase
 {
@@ -69,13 +70,13 @@ class LoggerTest extends PhpXmlRpc_PolyfillTestCase
 
     public function testDeprecations()
     {
-        $v = new \PhpXmlRpc\Value(array(), \PhpXmlRpc\Value::$xmlrpcStruct);
+        $v = new Value(array(), Value::$xmlrpcStruct);
         $l = $v->getLogger();
-        \PhpXmlRpc\Value::setLogger($this);
+        Value::setLogger($this);
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_silence_deprecations = false;
         $c = $v->structSize();
         \PhpXmlRpc\PhpXmlRpc::$xmlrpc_silence_deprecations = true;
-        \PhpXmlRpc\Value::setLogger($l);
+        Value::setLogger($l);
         $this->assertStringContainsString("Method PhpXmlRpc\Value::structSize is deprecated", $this->warningBuffer);
     }
 

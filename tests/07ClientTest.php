@@ -2,6 +2,8 @@
 
 include_once __DIR__ . '/ServerAwareTestCase.php';
 
+use PhpXmlRpc\Client;
+
 /**
  * Tests involving the Client class features (and mostly no server).
  * @todo review: are there any tests which belong to the ServerTest class?
@@ -50,9 +52,9 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
         $m = new xmlrpcmsg('examples.echo', array(
             new xmlrpcval('hello', 'string'),
         ));
-        $this->client->setOption(\PhpXmlRpc\Client::OPT_USERNAME, 'user');
-        $this->client->setOption(\PhpXmlRpc\Client::OPT_AUTH_TYPE, 2);
-        $this->client->setOption(\PhpXmlRpc\Client::OPT_USE_CURL, \PhpXmlRpc\Client::USE_CURL_NEVER);
+        $this->client->setOption(Client::OPT_USERNAME, 'user');
+        $this->client->setOption(Client::OPT_AUTH_TYPE, 2);
+        $this->client->setOption(Client::OPT_USE_CURL, Client::USE_CURL_NEVER);
         $r = $this->client->send($m);
         $this->assertEquals(\PhpXmlRpc\PhpXmlRpc::$xmlrpcerr['unsupported_option'], $r->faultCode());
     }
@@ -108,8 +110,8 @@ class ClientTest extends PhpXmlRpc_ServerAwareTestCase
      */
     public function testCustomHeaders($curlOpt)
     {
-        $this->client->setOption(\PhpXmlRpc\Client::OPT_USE_CURL, $curlOpt);
-        $this->client->setOption(\PhpXmlRpc\Client::OPT_EXTRA_HEADERS, array('X-PXR-Test: yes'));
+        $this->client->setOption(Client::OPT_USE_CURL, $curlOpt);
+        $this->client->setOption(Client::OPT_EXTRA_HEADERS, array('X-PXR-Test: yes'));
         $r = new \PhpXmlRpc\Request('tests.getallheaders');
         $r = $this->client->send($r);
         $this->assertEquals(0, $r->faultCode());
