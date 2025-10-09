@@ -231,17 +231,19 @@ if ($action) {
                 // hack! build payload by hand
                 if ($wstype == 2) {
                     $payload = "{\n" .
-                        '"jsonrpc": "2.0"' . "\n" .
+                        '"jsonrpc": "2.0"' . ",\n" .
                         '"method": "' . $method . "\",\n\"params\": [" .
                         $payload .
-                        "\n],\n";
+                        "\n]";
                     // fix: if user gave an empty string, use NULL, or we'll break json syntax
                     if ($id != "") {
                         if (is_numeric($id) || $id == 'false' || $id == 'true') {
-                            $payload .= "\"id\": $id\n";
+                            $payload .= ",\n\"id\": $id\n";
                         } else {
-                            $payload .= "\"id\": \"$id\"\n";
+                            $payload .= ",\n\"id\": \"$id\"\n";
                         }
+                    } else {
+                        $payload .= "\n";
                     }
                     $payload .= '}';
                     $msg[0]->setPayload($payload);
