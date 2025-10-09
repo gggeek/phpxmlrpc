@@ -1287,7 +1287,7 @@ class Client
             $resp = $req->parseResponse($result, true, $opts['return_type']);
             if ($opts['keepalive']) {
                 /// @todo if we got back a 302 or 308, we should not reuse the curl handle for later calls
-                if ($resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error']) {
+                if (is_object($resp) && $resp->faultCode() == PhpXmlRpc::$xmlrpcerr['http_error']) {
                     if (PHP_MAJOR_VERSION < 8) curl_close($curl);
                     $this->xmlrpc_curl_handle = null;
                 }
