@@ -8,6 +8,9 @@
 
 * improved: prepare the debugger for json-rpc 2.0 support, which will be in a pending release of the PhpJsonRpc library
 
+* improved: changes some error numbers to avoid conflicts - now errors related to http compression use the range 153-157,
+  while the range 103-107 is reserved for xml parsing errors
+
 * fixed: the `vm.sh` script would not expose the http ports of the test container to the host
 
 

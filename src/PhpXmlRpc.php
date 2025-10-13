@@ -43,12 +43,11 @@ class PhpXmlRpc
         'xml_not_compliant' => 2, // client
         'xml_parsing_error' => 2, // client
 
-        /// @todo fix: those do all conflict with $xmlrpcerrxml+X (with X being an `xml_get_error_code` error). Start at 150?
-        'cannot_decompress' => 103,
-        'decompress_fail' => 104,
-        'dechunk_fail' => 105,
-        'server_cannot_decompress' => 106,
-        'server_decompress_fail' => 107,
+        'cannot_decompress' => 153,
+        'decompress_fail' => 154,
+        'dechunk_fail' => 155,
+        'server_cannot_decompress' => 156,
+        'server_decompress_fail' => 157,
     );
 
     /**
@@ -129,7 +128,8 @@ class PhpXmlRpc
     /**
      * @var int
      * Let XML parse errors start at 100.
-     * The final code will be 100 + X, with X coming from https://www.php.net/manual/en/xml.error-codes.php
+     * The final code will be 100 + X, with X coming from https://www.php.net/manual/en/xml.error-codes.php.
+     * Values are known to go from 1 (XML_ERROR_NO_MEMORY) to 21 (XML_ERROR_EXTERNAL_ENTITY_HANDLING)
      */
     public static $xmlrpcerrxml = 100;
 
