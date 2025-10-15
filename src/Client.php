@@ -1626,7 +1626,7 @@ class Client
      * @return Response[]|Response a single Response when the call returned a fault / does not conform to what we expect
      *                             from a multicall response
      */
-    private function _try_multicall($reqs, $timeout, $method)
+    protected function _try_multicall($reqs, $timeout, $method)
     {
         // Construct multicall request
         $calls = array();
