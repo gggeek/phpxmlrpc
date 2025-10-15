@@ -1657,6 +1657,7 @@ class Client
 
         if ($this->return_type == 'xml') {
             for ($i = 0; $i < count($reqs); $i++) {
+                /// @todo can we do better? we set the complete xml into each response...
                 $response[] = new static::$responseClass($rets, 0, '', 'xml', $result->httpResponse());
             }
 
@@ -1749,17 +1750,17 @@ class Client
                                 'phpvals', $result->httpResponse());
                         }
                         /** @var Value $code */
-                        $code = $val['faultCode'];
-                        if ($code->kindOf() != 'scalar' || $code->scalarTyp() != 'int') {
+                        $code = @$val['faultCode'];
+                        if (!$code || $code->kindOf() != 'scalar' || $code->scalarTyp() != 'int') {
                             return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
                                 PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has invalid or no faultCode",
                                 'xmlrpcvals', $result->httpResponse());
                         }
                         /** @var Value $str */
-                        $str = $val['faultString'];
-                        if ($str->kindOf() != 'scalar' || $str->scalarTyp() != 'string') {
+                        $str = @$val['faultString'];
+                        if (!$str || $str->kindOf() != 'scalar' || $str->scalarTyp() != 'string') {
                             return new static::$responseClass(0, PhpXmlRpc::$xmlrpcerr['multicall_error'],
-                                PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has invalid or no faultCode",
+                                PhpXmlRpc::$xmlrpcstr['multicall_error'] . ": response element $i has invalid or no faultString",
                                 'xmlrpcvals', $result->httpResponse());
                         }
                         $response[] = new static::$responseClass(0, $code->scalarVal(), $str->scalarVal(), 'xmlrpcvals', $result->httpResponse());
