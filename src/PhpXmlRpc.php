@@ -39,7 +39,7 @@ class PhpXmlRpc
         'unsupported_option' => 20, // client
         // the following 3 are meant to give greater insight than 'invalid_return'. They use the same code for BC,
         // but you can override their value in your own code
-        'invalid_xml' => 2, // client
+        'invalid_xml' => 2, // client (and server, when interop mode is enabled)
         'xml_not_compliant' => 2, // client
         'xml_parsing_error' => 2, // client
 
@@ -129,7 +129,8 @@ class PhpXmlRpc
      * @var int
      * Let XML parse errors start at 100.
      * The final code will be 100 + X, with X coming from https://www.php.net/manual/en/xml.error-codes.php.
-     * Values are known to go from 1 (XML_ERROR_NO_MEMORY) to 21 (XML_ERROR_EXTERNAL_ENTITY_HANDLING)
+     * Values are known to go from 1 (XML_ERROR_NO_MEMORY) to 21 (XML_ERROR_EXTERNAL_ENTITY_HANDLING).
+     * Used only server-side
      */
     public static $xmlrpcerrxml = 100;
 
@@ -249,6 +250,11 @@ class PhpXmlRpc
         self::$xmlrpcerr = Interop::$xmlrpcerr;
 
         self::$xmlrpcerruser = -Interop::$xmlrpcerruser;
+    }
+
+    public static function isUsingInteropFaults()
+    {
+        return self::$xmlrpcerruser == -Interop::$xmlrpcerruser;
     }
 
     /**

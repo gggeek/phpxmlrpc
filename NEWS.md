@@ -9,6 +9,8 @@
 
 * improved: prepare the debugger for json-rpc 2.0 support, which will be in a pending release of the PhpJsonRpc library
 
+* improved: when using "Interop" error codes, use error code -32700 when xml parsing fails server-side, instead of 100+X
+
 * improved: changes some error numbers to avoid conflicts - now errors related to http compression use the range 153-157,
   while the range 103-107 is reserved for xml parsing errors
 

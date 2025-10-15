@@ -334,9 +334,9 @@ class Request
 
             // BC break: in the past for some cases we used the error message: 'XML error at line 1, check URL'
 
-            // Q: should we give back an error with variable error number, as we do server-side? But if we do, will
-            //    we be able to tell apart the two cases? In theory, we never emit invalid xml on our end, but
-            //    there could be proxies meddling with the request, or network data corruption...
+            // @todo should we give back an error with variable error number, as we do server-side? But if we do, will
+            //       we be able to tell apart the two cases? In theory, we never emit invalid xml on our end, but
+            //       there could be proxies meddling with the request, or network data corruption...
 
             $r = new Response(0, PhpXmlRpc::$xmlrpcerr['invalid_xml'],
                 PhpXmlRpc::$xmlrpcstr['invalid_xml'] . ' ' . $_xh['isf_reason'], '', $httpResponse);

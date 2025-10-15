@@ -680,10 +680,11 @@ class Server
 
         if ($_xh['isf'] == 3) {
             // (BC) we return XML error as a faultCode
+            // unless we are in "interop faults" mode
             preg_match('/^XML error ([0-9]+)/', $_xh['isf_reason'], $matches);
             return new static::$responseClass(
                 0,
-                PhpXmlRpc::$xmlrpcerrxml + (int)$matches[1],
+                (PhpXmlRpc::isUsingInteropFaults() ? PhpXmlRpc::$xmlrpcerr['invalid_xml'] : PhpXmlRpc::$xmlrpcerrxml + (int)$matches[1]),
                 $_xh['isf_reason']);
         } elseif ($_xh['isf']) {
             /// @todo separate better the various cases, as we have done in Request::parseResponse: invalid xml-rpc vs.
