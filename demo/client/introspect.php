@@ -13,6 +13,7 @@ output('<html lang="en">
 use PhpXmlRpc\Client;
 use PhpXmlRpc\Helper\XMLParser as XMLRPCParser;
 use PhpXmlRpc\Request;
+use PhpXmlRpc\Value;
 
 function display_error($r)
 {
@@ -49,9 +50,9 @@ if ($resp->faultCode()) {
     foreach ($v as $methodName) {
         output("<h4>" . htmlspecialchars($methodName) . "</h4>\n");
         // build requests first, add params later
-        $r1 = new PhpXmlRpc\Request('system.methodHelp');
-        $r2 = new PhpXmlRpc\Request('system.methodSignature');
-        $val = new PhpXmlRpc\Value($methodName, "string");
+        $r1 = new Request('system.methodHelp');
+        $r2 = new Request('system.methodSignature');
+        $val = new Value($methodName, "string");
         $r1->addParam($val);
         $r2->addParam($val);
         // Send multiple requests in one/many http calls.
