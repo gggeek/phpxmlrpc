@@ -6,7 +6,7 @@ output('<html lang="en">
 <body>
 <h1>Which toolkit demo</h1>
 <h2>Query server for toolkit information</h2>
-<h3>The code demonstrates support for http redirects, the `interopEchoTests.whichToolkit` xml-rpc methods, request compression and use of pre-built xml</h3>
+<h3>The code demonstrates support for http redirects, the `interopEchoTests.whichToolkit` xml-rpc method, request compression and use of pre-built xml</h3>
 <p>You can see the source to this page here: <a href="which.php?showSource=1">which.php</a></p>
 ');
 
@@ -45,20 +45,24 @@ if (!$resp->faultCode()) {
     $encoder = new Encoder();
     // from xml to xml-rpc Response
     $response = $encoder->decodeXml($xml);
-    // from Response to Value
-    $value = $response->value();
-    // from Value to php
-    $value = $encoder->decode($value);
+    if ($response !== false) {
+        // from Response to Value
+        $value = $response->value();
+        // from Value to php
+        $value = $encoder->decode($value);
 
-    output("Toolkit info:<br/>\n");
-    output("<pre>");
-    output("name: " . htmlspecialchars($value["toolkitName"]) . "\n");
-    output("version: " . htmlspecialchars($value["toolkitVersion"]) . "\n");
-    output("docs: " . htmlspecialchars($value["toolkitDocsUrl"]) . "\n");
-    output("os: " . htmlspecialchars($value["toolkitOperatingSystem"]) . "\n");
-    output("</pre>");
+        output("Toolkit info:<br/>\n");
+        output("<pre>");
+        output("name: " . htmlspecialchars($value["toolkitName"]) . "\n");
+        output("version: " . htmlspecialchars($value["toolkitVersion"]) . "\n");
+        output("docs: " . htmlspecialchars($value["toolkitDocsUrl"]) . "\n");
+        output("os: " . htmlspecialchars($value["toolkitOperatingSystem"]) . "\n");
+        output("</pre>");
+    } else {
+        output("An xml-rpc error occurred");
+    }
 } else {
-    output("An error occurred: ");
+    output("An http error occurred: ");
     output("Code: " . htmlspecialchars($resp->faultCode()) . " Reason: '" . htmlspecialchars($resp->faultString()) . "'\n");
 }
 
