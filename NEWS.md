@@ -14,6 +14,8 @@
 
 * improved: prepare the debugger for json-rpc 2.0 support, which will be in an upcoming release of the PhpJsonRpc library
 
+* fixed: the `client/parallel.php` demo was not sending separate requests when using curl "multi" mode
+
 * fixed: the `vm.sh` script would not expose the http ports of the test container to the host
 
 

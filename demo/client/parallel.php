@@ -27,6 +27,8 @@ class ParallelClient extends Client
 
         $opts = $this->getOptions();
         $opts['timeout'] = $timeout;
+        // this is required to avoid $this->createCurlHandle reusing the same handle
+        $opts['keepalive'] = false;
 
         /// @todo validate that $method can be handled by the current curl install
 
@@ -36,19 +38,41 @@ class ParallelClient extends Client
         foreach($requests as $k => $req) {
             $req->setDebug($this->debug);
             $handle = $this->createCurlHandle($req, $method, $this->server, $this->port, $this->path, $opts);
-            curl_multi_add_handle($curl, $handle);
+            if (($error = curl_multi_add_handle($curl, $handle)) !== 0) {
+                throw new \Exception("Curl multi error: $error");
+            }
             $handles[$k] = $handle;
         }
 
+        // loop code taken from php manual
         $running = 0;
         do {
-            curl_multi_exec($curl, $running);
-        } while($running > 0);
+            $status = curl_multi_exec($curl, $running);
+            if ($status !== CURLM_OK) {
+                throw new \Exception("Curl multi error");
+            }
+            while (($info = curl_multi_info_read($curl)) !== false) {
+                if ($info['msg'] === CURLMSG_DONE) {
+                    $handle = $info['handle'];
+                    curl_multi_remove_handle($curl, $handle);
+                    if ($info['result'] !== CURLE_OK) {
+                        /// @todo should we handle this, or is it enough to call curl_error in the loop below?
+                    }
+                }
+            }
+            if ($running > 0) {
+                if (curl_multi_select($curl) === -1) {
+                    throw new \Exception("Curl multi error");
+                }
+            }
+        } while ($running > 0);
+
+        curl_multi_close($curl);
 
         $responses = array();
         $errors = array();
         foreach($handles as $k => $h) {
-            $responses[$k] = curl_multi_getcontent($handles[$k]);
+            $responses[$k] = curl_multi_getcontent($h);
 
             if ($this->debug > 1) {
                 $message = "---CURL INFO---\n";
@@ -65,11 +89,7 @@ class ParallelClient extends Client
             if (!$responses[$k]) {
                 $errors[$k] = curl_error($h);
             }
-
-            //@curl_close($h);
-            curl_multi_remove_handle($curl, $h);
         }
-        curl_multi_close($curl);
 
         foreach($responses as $k => $resp) {
             if (!$resp) {
@@ -83,17 +103,17 @@ class ParallelClient extends Client
     }
 }
 
-// a minimal benchmark - use 3 strategies to execute the same 25 calls: sequentially, using parallel http requests, and
-// using a single system.multiCall request
+// a minimal benchmark - use 4 strategies to execute 25 similar calls: sequentially, sequentially w. http keep-alive,
+// using parallel http requests, and using a single system.multiCall request
 
 $num_tests = 25;
 
-$data = array(1, 1.0, 'hello world', true, '20051021T23:43:00', -1, 11.0, '~!@#$%^&*()_+|', false, '20051021T23:43:00');
 $encoder = new Encoder();
-$value = $encoder->encode($data, array('auto_dates'));
-$req = new Request('interopEchoTests.echoValue', array($value));
 $reqs = array();
 for ($i = 0; $i < $num_tests; $i++) {
+    $data = array($i, 1.0, 'hello world', true, '20051021T23:43:00', -1, 11.0, '~!@#$%^&*()_+|', false, '20051021T23:43:00');
+    $value = $encoder->encode($data, array('auto_dates'));
+    $req = new Request('interopEchoTests.echoValue', array($value));
     $reqs[] = $req;
 }
 
