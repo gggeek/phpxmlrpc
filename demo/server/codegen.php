@@ -13,82 +13,86 @@ require_once __DIR__.'/methodProviders/CommentManager.php';
 use PhpXmlRpc\Wrapper;
 
 if (isset($_GET['generate']) && $_GET['generate']) {
-// CommentManager is the "xml-rpc-unaware" class, whose methods we want to make accessible via xml-rpc calls
-$cm = new CommentManager(sys_get_temp_dir() . "/comments.db");
+    // *** NB do not do this in prod! The whole concept of code-generation is to do it offline using console scripts/ci/cd ***
 
-// analyze the CommentManager instance and generate both code defining stub-methods and a dispatch map for the xml-rpc Server
-$w = new Wrapper();
-$code = $w->wrapPhpClass(
-    $cm,
-    array(
-        'method_type' => 'nonstatic',
-        'return_source' => true,
-        // this is used to encode php NULL values into xml-rpc <NIL/> elements. If the partner does not support that, disable it
-        'encode_nulls' => true,
-    )
-);
+    // CommentManager is the "xml-rpc-unaware" class, whose methods we want to make accessible via xml-rpc calls
+    $cm = new CommentManager(sys_get_temp_dir() . "/comments.db");
 
-// save the generated code in 3 files: a new class definition, holding all the stub methods, a file with the dispatch-map,
-// and a controller, to be accessed from the internet. This split allows to a) hand-edit the controller code if needed,
-// and b) later regenerate the stub-methods-holder and dispatch map without touching the controller.
-// NB: good security practices dictate that none of those files should be writeable by the webserver user account
-$targetClassFile = sys_get_temp_dir() . '/MyServerClass.php';
-$targetDispatchMapFile = sys_get_temp_dir() . '/myServerDispatchMap.php';
-$targetControllerFile = sys_get_temp_dir() . '/myServerController.php';
+    // analyze the CommentManager instance and generate both code defining stub-methods and a dispatch map for the xml-rpc Server
+    $w = new Wrapper();
+    $code = $w->wrapPhpClass(
+        $cm,
+        array(
+            'method_type' => 'nonstatic',
+            'return_source' => true,
+            // this is used to encode php NULL values into xml-rpc <NIL/> elements. If the partner does not support that, disable it
+            'encode_nulls' => true,
+        )
+    );
 
-// generate a file with a class definition
+    // save the generated code in 3 files: a new class definition, holding all the stub methods, a file with the dispatch-map,
+    // and a controller, to be accessed from the internet. This split allows to a) hand-edit the controller code if needed,
+    // and b) later regenerate the stub-methods-holder and dispatch map without touching the controller.
+    // NB: good security practices dictate that none of those files should be writeable by the webserver user account
+    $targetClassFile = sys_get_temp_dir() . '/MyServerClass.php';
+    $targetDispatchMapFile = sys_get_temp_dir() . '/myServerDispatchMap.php';
+    $targetControllerFile = sys_get_temp_dir() . '/myServerController.php';
 
-// the generated code does not have an autoloader included - we need to add in one
-$autoloader = __DIR__ . "/_prepend.php";
+    // generate a file with a class definition
 
-file_put_contents($targetClassFile,
-    "<?php\n\n" .
-    "require_once '$autoloader';\n\n" .
-    "class MyServerClass\n{\n\n"
-) || die('uh oh');
+    // the generated code does not have an autoloader included - we need to add in one
+    $autoloader = __DIR__ . "/_prepend.php";
 
-// we mangle a bit the code we get from wrapPhpClass to turn it into a php class definition instead of a bunch of functions
+    file_put_contents($targetClassFile,
+        "<?php\n\n" .
+        "require_once '$autoloader';\n\n" .
+        "class MyServerClass\n{\n\n"
+    ) || die('uh oh');
 
-foreach ($code as $methodName => $methodDef) {
-    file_put_contents($targetClassFile, '  ' . str_replace(array('function ', "\n"), array('public static function ', "\n  "), $methodDef['source']) . "\n\n", FILE_APPEND) || die('uh oh');
-    $code[$methodName]['function'] = 'MyServerClass::' . $methodDef['function'];
-    unset($code[$methodName]['source']);
-}
-file_put_contents($targetClassFile, "}\n", FILE_APPEND) || die('uh oh');
+    // we mangle a bit the code we get from wrapPhpClass to turn it into a php class definition instead of a bunch of functions
 
-// generate separate files with the xml-rpc server instantiation and its dispatch map
+    foreach ($code as $methodName => $methodDef) {
+        file_put_contents($targetClassFile, '  ' . str_replace(array('function ', "\n"), array('public static function ', "\n  "), $methodDef['source']) . "\n\n", FILE_APPEND) || die('uh oh');
+        $code[$methodName]['function'] = 'MyServerClass::' . $methodDef['function'];
+        unset($code[$methodName]['source']);
+    }
+    file_put_contents($targetClassFile, "}\n", FILE_APPEND) || die('uh oh');
 
-file_put_contents($targetDispatchMapFile, "<?php\n\nreturn " . var_export($code, true) . ";\n");
+    // generate separate files with the xml-rpc server instantiation and its dispatch map
 
-file_put_contents($targetControllerFile,
-    "<?php\n\n" .
+    file_put_contents($targetDispatchMapFile, "<?php\n\nreturn " . var_export($code, true) . ";\n");
 
-    "// autoloader\n" .
-    "require_once '$autoloader';\n\n" .
+    file_put_contents($targetControllerFile,
+        "<?php\n\n" .
 
-    "require_once '$targetClassFile';\n\n" .
+        "// class autoloader\n" .
+        "require_once '$autoloader';\n\n" .
 
         // NB: if we were running the generated code within the same script, the existing CommentManager instance would be
         // available for usage by the methods of MyServerClass, as we keep a reference to them within the variable Wrapper::$objHolder,
         // but since we are generating a php file for later use, it is up to us to initialize that variable with a
-        // CommentManager instance:
+        // CommentManager instance
+        "// business logic setup\n" .
         "\$cm = new CommentManager(sys_get_temp_dir() . '/comments.db');\n" .
+        "// save reference to the biz logic object so that it can be used by the code in the generated class\n" .
         "\PhpXmlRpc\Wrapper::holdObject('*', \$cm);\n\n" .
 
-    "\$dm = require_once '$targetDispatchMapFile';\n" .
-    '$s = new \PhpXmlRpc\Server($dm, false);' . "\n\n" .
-    '// NB: do not leave these 2 debug lines enabled on publicly accessible servers!' . "\n" .
-    '$s->setOption(\PhpXmlRpc\Server::OPT_DEBUG, 2);' . "\n" .
-    '$s->setOption(\PhpXmlRpc\Server::OPT_EXCEPTION_HANDLING, 1);' . "\n\n" .
-    '$s->service();' . "\n"
-) || die('uh oh');
+        "// the generated class implementing the json-rpc methods is not namespaced, load it explicitly\n" .
+        "require_once '$targetClassFile';\n\n" .
+
+        "// load the dispatch map and feed it to the json-rpc server\n" .
+        "\$dm = require_once '$targetDispatchMapFile';\n" .
+        '$s = new \PhpXmlRpc\Server($dm, false);' . "\n\n" .
+        '// NB: do not leave these 2 debug lines enabled on publicly accessible servers!' . "\n" .
+        '$s->setOption(\PhpXmlRpc\Server::OPT_DEBUG, 2);' . "\n" .
+        '$s->setOption(\PhpXmlRpc\Server::OPT_EXCEPTION_HANDLING, 1);' . "\n\n" .
+        '$s->service();' . "\n"
+    ) || die('uh oh');
 
     echo "Code generated";
 } else {
     // test that everything worked by running it in realtime (note that this script will return an xml-rpc error message if
     // run from the command line, as the server will find no xml-rpc payload to operate on)
-
-    // *** NB do not do this in prod! The whole concept of code-generation is to do it offline using console scripts/ci/cd ***
 
     $targetControllerFile = sys_get_temp_dir() . '/myServerController.php';
     require $targetControllerFile;
