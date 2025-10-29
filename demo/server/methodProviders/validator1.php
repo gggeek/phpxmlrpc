@@ -66,8 +66,8 @@ return array(
     "validator1.manyTypesTest" => array(
         "signature" => array(
             array(Value::$xmlrpcArray, Value::$xmlrpcInt, Value::$xmlrpcBoolean,
-                Value::$xmlrpcString, Value::$xmlrpcDouble, Value::$xmlrpcDateTime,
-                Value::$xmlrpcBase64,
+                Value::$xmlrpcString, Value::$xmlrpcDouble,
+                Value::$xmlrpcDateTime, Value::$xmlrpcBase64,
             )
         ),
         "docstring" => 'This handler takes six parameters, and returns an array containing all the parameters.',
