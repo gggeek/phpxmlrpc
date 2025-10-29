@@ -33,6 +33,9 @@ class Wrapper
     /** @var string */
     protected static $namespace = '\\PhpXmlRpc\\';
 
+    /** @var string */
+    protected static $prefix = 'xmlrpc';
+
     /**
      * Given a string defining a php type or phpxmlrpc type (loosely defined: strings
      * accepted come from javadoc blocks), return corresponding phpxmlrpc type.
@@ -468,6 +471,7 @@ class Wrapper
 
             $result = call_user_func_array($callable, $params);
 
+/// @todo when namespaces is under PhpXmlRpc, use root-class checking
             if (! is_a($result, $responseClass)) {
                 // q: why not do the same for int, float, bool, string?
                 if ($funcDesc['returns'] == Value::$xmlrpcDateTime || $funcDesc['returns'] == Value::$xmlrpcBase64) {
@@ -502,7 +506,7 @@ class Wrapper
     {
         // determine name of new php function
 
-        $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : 'xmlrpc';
+        $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : static::$prefix;
 
         if ($newFuncName == '') {
             if (is_array($callable)) {
@@ -588,7 +592,8 @@ class Wrapper
         }
 
         // since we are building source code for later use, if we are given an object instance,
-        // we go out of our way and store a pointer to it in a static class var...
+        // we go out of our way and store a pointer to it in a static class var.
+        // NB: if the code is used in a _separate_ php request, then a class to Wrapper::holdObject() will be necessary!
         if (is_array($callable) && is_object($callable[0])) {
             static::holdObject($newFuncName, $callable[0]);
             $class = get_class($callable[0]);
@@ -606,6 +611,7 @@ class Wrapper
             if ($i < (count($parsVariations) - 1))
                 $innerCode .= "  else\n";
         }
+/// @todo here we should (could?) check for PhpXmlRpc/Response when dealing with a subclass namespace
         $innerCode .= "  if (is_a(\$retVal, '" . static::$namespace . "Response'))\n    return \$retVal;\n  else\n";
         /// q: why not do the same for int, float, bool, string?
         if ($funcDesc['returns'] == Value::$xmlrpcDateTime || $funcDesc['returns'] == Value::$xmlrpcBase64) {
@@ -987,7 +993,8 @@ class Wrapper
         $decodePhpObjects = isset($extraOptions['decode_php_objs']) ? (bool)$extraOptions['decode_php_objs'] : false;
         $encodeNulls = isset($extraOptions['encode_nulls']) ? (bool)$extraOptions['encode_nulls'] : false;
         $clientCopyMode = isset($extraOptions['simple_client_copy']) ? (int)($extraOptions['simple_client_copy']) : 0;
-        $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : 'xmlrpc';
+        $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : static::$prefix;
+        $clientReturnType = isset($extraOptions['client_return_type']) ? $extraOptions['client_return_type'] : $prefix;
         $throwFault = false;
         $decodeFault = false;
         $faultResponse = null;
@@ -1002,7 +1009,7 @@ class Wrapper
         if ($clientCopyMode < 2) {
             // client copy mode 0 or 1 == full / partial client copy in emitted code
             $verbatimClientCopy = !$clientCopyMode;
-            $innerCode = '  ' . str_replace("\n", "\n  ", $this->buildClientWrapperCode($client, $verbatimClientCopy, $prefix, static::$namespace));
+            $innerCode = '  ' . str_replace("\n", "\n  ", $this->buildClientWrapperCode($client, $verbatimClientCopy, $clientReturnType, static::$namespace));
             $innerCode .= "\$client->setDebug(\$debug);\n";
             $this_ = '';
         } else {
@@ -1126,7 +1133,8 @@ class Wrapper
         $verbatimClientCopy = isset($extraOptions['simple_client_copy']) ? !($extraOptions['simple_client_copy']) : true;
         $throwOnFault = isset($extraOptions['throw_on_fault']) ? (bool)$extraOptions['throw_on_fault'] : false;
         $buildIt = isset($extraOptions['return_source']) ? !($extraOptions['return_source']) : true;
-        $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : 'xmlrpc';
+        $prefix = isset($extraOptions['prefix']) ? $extraOptions['prefix'] : static::$prefix;
+        $clientReturnType = isset($extraOptions['client_return_type']) ? $extraOptions['client_return_type'] : $prefix;
 
         $reqClass = static::$namespace . 'Request';
         $decoderClass = static::$namespace . 'Encoder';
@@ -1166,7 +1174,7 @@ class Wrapper
 
         $source = "class $xmlrpcClassName\n{\n  public \$client;\n\n";
         $source .= "  function __construct()\n  {\n";
-        $source .= '    ' . str_replace("\n", "\n    ", $this->buildClientWrapperCode($client, $verbatimClientCopy, $prefix, static::$namespace));
+        $source .= '    ' . str_replace("\n", "\n    ", $this->buildClientWrapperCode($client, $verbatimClientCopy, $clientReturnType, static::$namespace));
         $source .= "\$this->client = \$client;\n  }\n\n";
         $opts = array(
             'return_source' => true,
@@ -1223,7 +1231,7 @@ class Wrapper
      * Take care that no full checking of input parameters is done to ensure that valid php code is emitted.
      * @param Client $client
      * @param bool $verbatimClientCopy when true, copy the whole options of the client, except for 'debug' and 'return_type'
-     * @param string $prefix used for the return_type of the created client
+     * @param string $prefix used for the return_type of the created client (postfixed with 'vals')
      * @param string $namespace
      * @return string
      */
@@ -1248,7 +1256,7 @@ class Wrapper
     }
 
     /**
-     * @param string $index
+     * @param string $index use '*' as wildcard for an objet to be used whenever one with the appropriate index is not found
      * @param object $object
      * @return void
      */
@@ -1266,6 +1274,9 @@ class Wrapper
     {
         if (isset(self::$objHolder[$index])) {
             return self::$objHolder[$index];
+        }
+        if (isset(self::$objHolder['*'])) {
+            return self::$objHolder['*'];
         }
 
         throw new ValueErrorException("No object held for index '$index'");

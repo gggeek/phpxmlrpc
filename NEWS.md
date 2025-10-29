@@ -10,7 +10,8 @@
 * improved: added new methods: `Server::generatePayload($resp, $respCharset)`,
   `Server::printPayload($payload, $respContentType, $respEncoding)` , `HTTP::setAcceptedStatusCodes($statusCodes)`
   and `Wrapper::cloneClientForClosure($client)`. Made private method `Client::_try_multicall` protected.
-  All of this to help subclasses such as the Json-Rpc client, server and request
+  Added to `Wrapper` a protected member `$prefix = 'xmlrpc'`.
+  All of this to help subclasses such as the Json-Rpc client, server, request and wrapper.
 
 * improved: prepare the debugger for json-rpc 2.0 support, which will be in an upcoming release of the PhpJsonRpc library
 
