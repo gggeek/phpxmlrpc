@@ -2,6 +2,9 @@
 
 include_once __DIR__ . '/WebTestCase.php';
 
+use PhpXmlRpc\Request;
+use PhpXmlRpc\Value;
+
 /**
  * Tests for php files in the 'demo' directory.
  *
@@ -75,13 +78,12 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
             $this->markTestSkipped('PHP extension sqlite3 is required for this test');
         }
 
-        $page = $this->request('?demo=server/codegen.php');
-        $this->assertStringContainsString('<name>faultCode</name>', $page);
-        $this->assertRegexp('#<int>10(5|3)</int>#', $page);
+        $page = $this->request('?demo=server/codegen.php&generate=1');
+        $this->assertStringContainsString('Code generated', $page);
 
         $c = $this->newClient('?demo=server/codegen.php');
-        $r = $c->send(new \PhpXmlRpc\Request('CommentManager.getComments', array(
-            new \PhpXmlRpc\Value('aCommentId')
+        $r = $c->send(new Request('CommentManager.getComments', array(
+            new Value('aCommentId')
         )));
         $this->assertEquals(0, $r->faultCode());
     }
@@ -98,16 +100,16 @@ class DemoFilesTest extends PhpXmlRpc_WebTestCase
 
         $c = $this->newClient('?demo=server/discuss.php');
 
-        $r = $c->send(new \PhpXmlRpc\Request('discuss.addComment', array(
-            new \PhpXmlRpc\Value('aCommentId'),
-            new \PhpXmlRpc\Value('aCommentUser'),
-            new \PhpXmlRpc\Value('a Comment')
+        $r = $c->send(new Request('discuss.addComment', array(
+            new Value('aCommentId'),
+            new Value('aCommentUser'),
+            new Value('a Comment')
         )));
         $this->assertEquals(0, $r->faultCode());
         $this->assertGreaterThanOrEqual(1, $r->value()->scalarval());
 
-        $r = $c->send(new \PhpXmlRpc\Request('discuss.getComments', array(
-            new \PhpXmlRpc\Value('aCommentId')
+        $r = $c->send(new Request('discuss.getComments', array(
+            new Value('aCommentId')
         )));
         $this->assertEquals(0, $r->faultCode());
         $this->assertEquals(0, $r->faultCode());

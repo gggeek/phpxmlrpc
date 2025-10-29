@@ -4,20 +4,22 @@
 
 * improved: when using "Interop" error codes, use error code -32700 when xml parsing fails server-side, instead of 100+X
 
-* improved: changes some error numbers to avoid conflicts - now errors related to http compression use the range 153-157,
+* improved: changed some error numbers to avoid conflicts - now errors related to http compression use the range 153-157,
   while the range 103-107 is reserved for xml parsing errors
 
 * improved: added new methods: `Server::generatePayload($resp, $respCharset)`,
   `Server::printPayload($payload, $respContentType, $respEncoding)` , `HTTP::setAcceptedStatusCodes($statusCodes)`
-  and `Wrapper::cloneClientForClosure($client)`. Made private method `Client::_try_multicall` protected.
+  and `Wrapper::cloneClientForClosure($client)`. Made previously private method `Client::_try_multicall` protected.
   Added to `Wrapper` a protected member `$prefix = 'xmlrpc'`.
   All of this to help subclasses such as the Json-Rpc client, server, request and wrapper.
 
-* improved: prepare the debugger for json-rpc 2.0 support, which will be in an upcoming release of the PhpJsonRpc library
+* improved: prepared the debugger for json-rpc 2.0 support, which will be in an upcoming release of the PhpJsonRpc library
+
+* improved: the `server/codegen.php` demo file now works in 2 steps, to better exemplify real-world usage
 
 * fixed: the `client/parallel.php` demo was not sending separate requests when using curl "multi" mode
 
-* fixed: `PhpXmlRpc::setLogger` was not resetting the Response Logger
+* fixed: method `PhpXmlRpc::setLogger` was not resetting the Response Logger
 
 * fixed: the `vm.sh` script would not expose the http ports of the test container to the host
 
