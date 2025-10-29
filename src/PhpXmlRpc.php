@@ -232,6 +232,7 @@ class PhpXmlRpc
         Encoder::setLogger($logger);
         Http::setLogger($logger);
         Request::setLogger($logger);
+        Response::setLogger($logger);
         Server::setLogger($logger);
         Value::setLogger($logger);
         Wrapper::setLogger($logger);

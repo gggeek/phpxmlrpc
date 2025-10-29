@@ -16,6 +16,8 @@
 
 * fixed: the `client/parallel.php` demo was not sending separate requests when using curl "multi" mode
 
+* fixed: `PhpXmlRpc::setLogger` was not resetting the Response Logger
+
 * fixed: the `vm.sh` script would not expose the http ports of the test container to the host
 
 
