@@ -36,6 +36,9 @@ class Wrapper
     /** @var string */
     protected static $prefix = 'xmlrpc';
 
+    /** @var null|string set to a namespaced class. If empty, static::$namespace . 'Response' will be used */
+    protected static $allowedResponseClass = null;
+
     /**
      * Given a string defining a php type or phpxmlrpc type (loosely defined: strings
      * accepted come from javadoc blocks), return corresponding phpxmlrpc type.
@@ -445,6 +448,7 @@ class Wrapper
             $encoderClass = static::$namespace.'Encoder';
             $responseClass = static::$namespace.'Response';
             $valueClass = static::$namespace.'Value';
+            $allowedResponseClass = static::$allowedResponseClass != '' ? static::$allowedResponseClass : $responseClass;
 
             // validate number of parameters received
             // this should be optional really, as we assume the server does the validation
@@ -471,8 +475,7 @@ class Wrapper
 
             $result = call_user_func_array($callable, $params);
 
-/// @todo when namespaces is under PhpXmlRpc, use root-class checking
-            if (! is_a($result, $responseClass)) {
+            if (! is_a($result, $allowedResponseClass)) {
                 // q: why not do the same for int, float, bool, string?
                 if ($funcDesc['returns'] == Value::$xmlrpcDateTime || $funcDesc['returns'] == Value::$xmlrpcBase64) {
                     $result = new $valueClass($result, $funcDesc['returns']);
@@ -601,7 +604,7 @@ class Wrapper
                 $class = '\\' . $class;
             }
             $innerCode .= "  /// @var $class \$obj\n";
-            $innerCode .= "  \$obj = PhpXmlRpc\\Wrapper::getHeldObject('$newFuncName');\n";
+            $innerCode .= "  \$obj = " . static::$namespace . "Wrapper::getHeldObject('$newFuncName');\n";
             $realFuncName = '$obj->' . $callable[1];
         } else {
             $realFuncName = $plainFuncName;
@@ -611,8 +614,8 @@ class Wrapper
             if ($i < (count($parsVariations) - 1))
                 $innerCode .= "  else\n";
         }
-/// @todo here we should (could?) check for PhpXmlRpc/Response when dealing with a subclass namespace
-        $innerCode .= "  if (is_a(\$retVal, '" . static::$namespace . "Response'))\n    return \$retVal;\n  else\n";
+        $allowedResponseClass = static::$allowedResponseClass != '' ? static::$allowedResponseClass : static::$namespace . 'Response';
+        $innerCode .= "  if (is_a(\$retVal, '" . $allowedResponseClass . "'))\n    return \$retVal;\n  else\n";
         /// q: why not do the same for int, float, bool, string?
         if ($funcDesc['returns'] == Value::$xmlrpcDateTime || $funcDesc['returns'] == Value::$xmlrpcBase64) {
             $innerCode .= "    return new " . static::$namespace . "Response(new " . static::$namespace . "Value(\$retVal, '{$funcDesc['returns']}'));";
