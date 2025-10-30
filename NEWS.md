@@ -1,4 +1,4 @@
-## XML-RPC for PHP version 4.XXX - (unreleased)
+## XML-RPC for PHP version 4.11.4 - 2025/10/3
 
 * improved: allow to force usage of HTTP 1.1. when using curl for calls, via usage of 'http11_only'
 
