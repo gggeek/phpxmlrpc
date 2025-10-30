@@ -180,6 +180,8 @@ jobs:
                     # and not released yet, which make them work ok with us, but those tend to be tested when pushing
                     # to them (and we do not push to dependents changes which make them use an unreleased version
                     # of us anyway)
+                    # @todo remove the `--stability=alpha` option as soon as all deps have hit a 1.0 release
+                    #       (either that, or run tests twice, once with the latest stable and once with master)
                     composer create-project --prefer-source --no-install --remove-vcs --stability=alpha "${{ matrix.dependency }}" .
                     # avoid rewriting 'source' line - we should figure out how to use negative lookahead...
                     sed -i -E -e 's|"phpxmlrpc/phpxmlrpc" *: *"source"|"phpxmlrpc/phpxmlrpc_": "source"|g' composer.json
