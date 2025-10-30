@@ -25,7 +25,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.3</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.4</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -816,6 +816,13 @@ if the cert verification fails.</dd>
 <dd>Set user-agent string that will be used by this client instance in http headers sent to the server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a class="" href="classes/PhpXmlRpc-Client.html#method__try_multicall">_try_multicall()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, <a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>&gt;|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>    </span>
+</dt>
+<dd>Attempt to boxcar $reqs via system.multicall.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a class="" href="classes/PhpXmlRpc-Client.html#method_createCURLHandle">createCURLHandle()</a>
     <span>
                                 &nbsp;: <abbr title="\CurlHandle">CurlHandle</abbr>|resource|false    </span>
@@ -879,13 +886,6 @@ NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!</dd>
     <span>
                                 &nbsp;: <a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>    </span>
 </dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a class="" href="classes/PhpXmlRpc-Client.html#method__try_multicall">_try_multicall()</a>
-    <span>
-                                &nbsp;: array&lt;string|int, <a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>&gt;|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>    </span>
-</dt>
-<dd>Attempt to boxcar $reqs via system.multicall.</dd>
 
     </dl>
 
@@ -2064,7 +2064,7 @@ NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!</dd>
     
         <section class="phpdocumentor-description"><p>List of http compression methods accepted by the client for responses.
 NB: PHP supports deflate, gzip compressions out of the box if compiled w. zlib.</p>
-<p>NNB: you can set it to any non-empty array for HTTP11 and HTTPS, since in those cases it will be up to CURL to
+<p>NNB: you can set it to any non-empty array for HTTP11+ and HTTPS, since in those cases it will be up to CURL to
 decide the compression methods it supports. You might check for the presence of 'zlib' in the output of
 curl_version() to determine whether compression is supported or not</p>
 </section>
@@ -3714,7 +3714,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">2047</span>
+    <span class="phpdocumentor-element-found-in__line">2053</span>
 
     </aside>
 
@@ -3758,7 +3758,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">2097</span>
+    <span class="phpdocumentor-element-found-in__line">2103</span>
 
     </aside>
 
@@ -3802,7 +3802,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">2072</span>
+    <span class="phpdocumentor-element-found-in__line">2078</span>
 
     </aside>
 
@@ -3853,7 +3853,7 @@ request are not compatible with h2c upgrade.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">2118</span>
+    <span class="phpdocumentor-element-found-in__line">2124</span>
 
     </aside>
 
@@ -4072,7 +4072,7 @@ reflect the <code class="prettyprint">$method</code> used in the constructor, so
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1563</span>
+    <span class="phpdocumentor-element-found-in__line">1568</span>
 
     </aside>
 
@@ -4160,7 +4160,7 @@ calls will be attempted&quot;</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">822</span>
+    <span class="phpdocumentor-element-found-in__line">823</span>
 
     </aside>
 
@@ -4224,7 +4224,8 @@ the http protocol chosen during creation of the object will be used.
 Use 'h2' to make the lib attempt to use http/2 over a secure connection, and 'h2c'
 for http/2 without tls. Note that 'h2c' will not use the h2c 'upgrade' method, and be
 thus incompatible with any server/proxy not supporting http/2. This is because POST
-request are not compatible with h2c upgrade.</p>
+request are not compatible with h2c upgrade.
+You can also use 'http11_only' to force usage of curl with http 1.1 (no http2)</p>
 </section>
 
             </dd>
@@ -5435,6 +5436,74 @@ In 'auto' mode, curl is picked up based on features used, such as fe. NTLM auth,
             -protected
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method__try_multicall">
+        _try_multicall()
+        <a href="classes/PhpXmlRpc-Client.html#method__try_multicall" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1629</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Attempt to boxcar $reqs via system.multicall.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">_try_multicall</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reqs</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$timeout</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>&gt;|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a></span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$reqs</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$timeout</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$method</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>&gt;|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a></span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>a single Response when the call returned a fault / does not conform to what we expect
+from a multicall response</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_createCURLHandle">
         createCURLHandle()
         <a href="classes/PhpXmlRpc-Client.html#method_createCURLHandle" class="headerlink"><i class="fas fa-link"></i></a>
@@ -5443,7 +5512,7 @@ In 'auto' mode, curl is picked up based on features used, such as fe. NTLM auth,
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1309</span>
+    <span class="phpdocumentor-element-found-in__line">1311</span>
 
     </aside>
 
@@ -5634,7 +5703,7 @@ In 'auto' mode, curl is picked up based on features used, such as fe. NTLM auth,
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">2005</span>
+    <span class="phpdocumentor-element-found-in__line">2011</span>
 
     </aside>
 
@@ -5828,7 +5897,7 @@ In 'auto' mode, curl is picked up based on features used, such as fe. NTLM auth,
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1937</span>
+    <span class="phpdocumentor-element-found-in__line">1943</span>
 
     </aside>
 
@@ -6024,7 +6093,7 @@ In 'auto' mode, curl is picked up based on features used, such as fe. NTLM auth,
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1795</span>
+    <span class="phpdocumentor-element-found-in__line">1801</span>
 
     </aside>
 
@@ -6163,7 +6232,7 @@ In 'auto' mode, curl is picked up based on features used, such as fe. NTLM auth,
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1832</span>
+    <span class="phpdocumentor-element-found-in__line">1838</span>
 
     </aside>
 
@@ -6351,7 +6420,7 @@ In 'auto' mode, curl is picked up based on features used, such as fe. NTLM auth,
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1869</span>
+    <span class="phpdocumentor-element-found-in__line">1875</span>
 
     </aside>
 
@@ -6546,7 +6615,7 @@ In 'auto' mode, curl is picked up based on features used, such as fe. NTLM auth,
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1225</span>
+    <span class="phpdocumentor-element-found-in__line">1227</span>
 
     </aside>
 
@@ -6650,7 +6719,7 @@ NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">928</span>
+    <span class="phpdocumentor-element-found-in__line">930</span>
 
     </aside>
 
@@ -6716,74 +6785,6 @@ NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!</p>
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a></span>
-            </section>
-
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method__try_multicall">
-        _try_multicall()
-        <a href="classes/PhpXmlRpc-Client.html#method__try_multicall" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="Client.php"><a href="files/client.html">Client.php</a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">1624</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Attempt to boxcar $reqs via system.multicall.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">_try_multicall</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$reqs</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$timeout</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>&gt;|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a></span></code>
-
-    <div class="phpdocumentor-label-line">
-        </div>
-    
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$reqs</span>
-                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, <a href="classes/PhpXmlRpc-Request.html"><abbr title="\PhpXmlRpc\Request">Request</abbr></a>&gt;</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$timeout</span>
-                : <span class="phpdocumentor-signature__argument__return-type">int</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$method</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                
-            </dd>
-            </dl>
-
-    
-
-    
-
-            <section>
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">array&lt;string|int, <a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a>&gt;|<a href="classes/PhpXmlRpc-Response.html"><abbr title="\PhpXmlRpc\Response">Response</abbr></a></span>
-                    &mdash;
-                <section class="phpdocumentor-description"><p>a single Response when the call returned a fault / does not conform to what we expect
-from a multicall response</p>
-</section>
-
             </section>
 
 </article>
@@ -7017,6 +7018,7 @@ from a multicall response</p>
                                             <li class="-deprecated"><a href="classes/PhpXmlRpc-Client.html#method_setSSLVersion">setSSLVersion()</a></li>
                                             <li class="-deprecated"><a href="classes/PhpXmlRpc-Client.html#method_setUseCurl">setUseCurl()</a></li>
                                             <li class="-deprecated"><a href="classes/PhpXmlRpc-Client.html#method_setUserAgent">setUserAgent()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Client.html#method__try_multicall">_try_multicall()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Client.html#method_createCURLHandle">createCURLHandle()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecation">logDeprecation()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Traits-DeprecationLogger.html#method_logDeprecationUnlessCalledBy">logDeprecationUnlessCalledBy()</a></li>
@@ -7027,7 +7029,6 @@ from a multicall response</p>
                                             <li class="-deprecated"><a href="classes/PhpXmlRpc-Client.html#method_sendPayloadSocket">sendPayloadSocket()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Client.html#method_sendViaCURL">sendViaCURL()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Client.html#method_sendViaSocket">sendViaSocket()</a></li>
-                                            <li class=""><a href="classes/PhpXmlRpc-Client.html#method__try_multicall">_try_multicall()</a></li>
                                     </ul>
             </li>
                     </ul>

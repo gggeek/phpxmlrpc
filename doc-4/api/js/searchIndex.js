@@ -751,6 +751,16 @@ Search.appendIndex(
             "summary": "Parses\u0020one\u0020of\u0020the\u0020http\u0020headers\u0020which\u0020can\u0020have\u0020a\u0020list\u0020of\u0020values\u0020with\u0020quality\u0020param.",
             "url": "classes/PhpXmlRpc-Helper-Http.html#method_parseAcceptHeader"
         },                {
+            "fqsen": "\\PhpXmlRpc\\Helper\\Http\u003A\u003AsetAcceptedStatusCodes\u0028\u0029",
+            "name": "setAcceptedStatusCodes",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Helper-Http.html#method_setAcceptedStatusCodes"
+        },                {
+            "fqsen": "\\PhpXmlRpc\\Helper\\Http\u003A\u003A\u0024acceptedStatusCodes",
+            "name": "acceptedStatusCodes",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Helper-Http.html#property_acceptedStatusCodes"
+        },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\Interop",
             "name": "Interop",
             "summary": "A\u0020helper\u0020dedicated\u0020to\u0020support\u0020Interoperability\u0020features",
@@ -930,6 +940,11 @@ Search.appendIndex(
             "name": "useInteropFaults",
             "summary": "Makes\u0020the\u0020library\u0020use\u0020the\u0020error\u0020codes\u0020detailed\u0020at\u0020https\u003A\/\/xmlrpc\u002Depi.sourceforge.net\/specs\/rfc.fault_codes.php",
             "url": "classes/PhpXmlRpc-PhpXmlRpc.html#method_useInteropFaults"
+        },                {
+            "fqsen": "\\PhpXmlRpc\\PhpXmlRpc\u003A\u003AisUsingInteropFaults\u0028\u0029",
+            "name": "isUsingInteropFaults",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-PhpXmlRpc.html#method_isUsingInteropFaults"
         },                {
             "fqsen": "\\PhpXmlRpc\\PhpXmlRpc\u003A\u003AexportGlobals\u0028\u0029",
             "name": "exportGlobals",
@@ -1300,6 +1315,16 @@ Search.appendIndex(
             "name": "execute",
             "summary": "Execute\u0020a\u0020method\u0020invoked\u0020by\u0020the\u0020client,\u0020checking\u0020parameters\u0020used.",
             "url": "classes/PhpXmlRpc-Server.html#method_execute"
+        },                {
+            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003AgeneratePayload\u0028\u0029",
+            "name": "generatePayload",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Server.html#method_generatePayload"
+        },                {
+            "fqsen": "\\PhpXmlRpc\\Server\u003A\u003AprintPayload\u0028\u0029",
+            "name": "printPayload",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Server.html#method_printPayload"
         },                {
             "fqsen": "\\PhpXmlRpc\\Server\u003A\u003AdebugMsg\u0028\u0029",
             "name": "debugMsg",
@@ -1861,10 +1886,25 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpXmlRpc-Wrapper.html#method_getHeldObject"
         },                {
+            "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003AcloneClientForClosure\u0028\u0029",
+            "name": "cloneClientForClosure",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Wrapper.html#method_cloneClientForClosure"
+        },                {
             "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003A\u0024namespace",
             "name": "namespace",
             "summary": "",
             "url": "classes/PhpXmlRpc-Wrapper.html#property_namespace"
+        },                {
+            "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003A\u0024prefix",
+            "name": "prefix",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Wrapper.html#property_prefix"
+        },                {
+            "fqsen": "\\PhpXmlRpc\\Wrapper\u003A\u003A\u0024allowedResponseClass",
+            "name": "allowedResponseClass",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Wrapper.html#property_allowedResponseClass"
         },                {
             "fqsen": "\\",
             "name": "\\",

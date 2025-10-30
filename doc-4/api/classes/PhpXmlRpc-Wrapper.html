@@ -25,7 +25,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.3</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.4</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -208,6 +208,12 @@
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a class="" href="classes/PhpXmlRpc-Wrapper.html#property_allowedResponseClass">$allowedResponseClass</a>
+    <span>
+                        &nbsp;: null|string            </span>
+</dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a class="" href="classes/PhpXmlRpc-Traits-LoggerAware.html#property_logger">$logger</a>
     <span>
                         &nbsp;: mixed            </span>
@@ -215,6 +221,12 @@
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a class="" href="classes/PhpXmlRpc-Wrapper.html#property_namespace">$namespace</a>
+    <span>
+                        &nbsp;: string            </span>
+</dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a class="" href="classes/PhpXmlRpc-Wrapper.html#property_prefix">$prefix</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
@@ -334,6 +346,12 @@ server as own methods.</dd>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a class="" href="classes/PhpXmlRpc-Wrapper.html#method_cloneClientForClosure">cloneClientForClosure()</a>
+    <span>
+                                &nbsp;: <a href="classes/PhpXmlRpc-Client.html"><abbr title="\PhpXmlRpc\Client">Client</abbr></a>    </span>
+</dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a class="" href="classes/PhpXmlRpc-Wrapper.html#method_generateMethodNameForClassMethod">generateMethodNameForClassMethod()</a>
     <span>
                                 &nbsp;: string    </span>
@@ -379,6 +397,46 @@ server as own methods.</dd>
             <a href="classes/PhpXmlRpc-Wrapper.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_allowedResponseClass">
+        $allowedResponseClass
+        <a href="classes/PhpXmlRpc-Wrapper.html#property_allowedResponseClass" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                            </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">40</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">null|string</span>
+    <span class="phpdocumentor-signature__name">$allowedResponseClass</span>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>set to a namespaced class. If empty, static::$namespace . 'Response' will be used</p>
+</section>
+
+    
+
+    
+
+    
+
+</article>
                     <article
         class="
             phpdocumentor-element
@@ -455,6 +513,44 @@ server as own methods.</dd>
     
 
 </article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+            -static                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_prefix">
+        $prefix
+        <a href="classes/PhpXmlRpc-Wrapper.html#property_prefix" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                            </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">37</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$prefix</span>
+     = <span class="phpdocumentor-signature__default-value">&#039;xmlrpc&#039;</span></code>
+
+    
+    
+    
+
+    
+
+    
+
+</article>
             </section>
 
             <section class="phpdocumentor-methods">
@@ -477,7 +573,7 @@ server as own methods.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1265</span>
+    <span class="phpdocumentor-element-found-in__line">1276</span>
 
     </aside>
 
@@ -574,7 +670,7 @@ server as own methods.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1255</span>
+    <span class="phpdocumentor-element-found-in__line">1266</span>
 
     </aside>
 
@@ -594,7 +690,9 @@ server as own methods.</dd>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"><p>use '*' as wildcard for an objet to be used whenever one with the appropriate index is not found</p>
+</section>
+
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$object</span>
@@ -625,7 +723,7 @@ server as own methods.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">57</span>
 
     </aside>
 
@@ -752,7 +850,7 @@ accepted come from javadoc blocks), return corresponding phpxmlrpc type.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">655</span>
+    <span class="phpdocumentor-element-found-in__line">664</span>
 
     </aside>
 
@@ -841,7 +939,7 @@ each invocation, for the case where all the generated functions will be saved as
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">168</span>
+    <span class="phpdocumentor-element-found-in__line">174</span>
 
     </aside>
 
@@ -1022,7 +1120,7 @@ its signature and docs, to be used in the server dispatch map</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">761</span>
+    <span class="phpdocumentor-element-found-in__line">770</span>
 
     </aside>
 
@@ -1096,7 +1194,7 @@ notation, so server can deserialize them as php objects</li>
 trusted servers ---</li>
 <li>mixed   return_on_fault     a php value to be returned when the xml-rpc call fails/returns
 a fault response (by default the Response object is returned
-in this case).  If a string is used, '%faultCode%' and
+in this case). If a string is used, '%faultCode%' and
 '%faultString%' tokens  will be substituted with actual error values</li>
 <li>bool    throw_on_fault      if true, throw an exception instead of returning a Response
 in case of errors/faults;
@@ -1192,7 +1290,7 @@ It might be hard (hence slow) to match based on type and number of arguments...<
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1117</span>
+    <span class="phpdocumentor-element-found-in__line">1127</span>
 
     </aside>
 
@@ -1312,7 +1410,7 @@ it on every generated method invocation</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">98</span>
+    <span class="phpdocumentor-element-found-in__line">104</span>
 
     </aside>
 
@@ -1361,7 +1459,7 @@ it on every generated method invocation</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1230</span>
+    <span class="phpdocumentor-element-found-in__line">1241</span>
 
     </aside>
 
@@ -1400,7 +1498,7 @@ it on every generated method invocation</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&#039;xmlrpc&#039;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>used for the return_type of the created client</p>
+                    <section class="phpdocumentor-description"><p>used for the return_type of the created client (postfixed with 'vals')</p>
 </section>
 
             </dd>
@@ -1437,7 +1535,7 @@ it on every generated method invocation</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">362</span>
+    <span class="phpdocumentor-element-found-in__line">368</span>
 
     </aside>
 
@@ -1506,7 +1604,7 @@ but it makes a lot of sense in a php &gt;= 8 world)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">433</span>
+    <span class="phpdocumentor-element-found-in__line">439</span>
 
     </aside>
 
@@ -1601,7 +1699,7 @@ but it makes a lot of sense in a php &gt;= 8 world)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">542</span>
+    <span class="phpdocumentor-element-found-in__line">549</span>
 
     </aside>
 
@@ -1677,7 +1775,7 @@ but it makes a lot of sense in a php &gt;= 8 world)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">877</span>
+    <span class="phpdocumentor-element-found-in__line">886</span>
 
     </aside>
 
@@ -1756,6 +1854,54 @@ but it makes a lot of sense in a php &gt;= 8 world)</p>
             -protected
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_cloneClientForClosure">
+        cloneClientForClosure()
+        <a href="classes/PhpXmlRpc-Wrapper.html#method_cloneClientForClosure" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1292</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">cloneClientForClosure</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpXmlRpc-Client.html"><abbr title="\PhpXmlRpc\Client">Client</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$client</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Client.html"><abbr title="\PhpXmlRpc\Client">Client</abbr></a></span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$client</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpXmlRpc-Client.html"><abbr title="\PhpXmlRpc\Client">Client</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><a href="classes/PhpXmlRpc-Client.html"><abbr title="\PhpXmlRpc\Client">Client</abbr></a></span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_generateMethodNameForClassMethod">
         generateMethodNameForClassMethod()
         <a href="classes/PhpXmlRpc-Wrapper.html#method_generateMethodNameForClassMethod" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1764,7 +1910,7 @@ but it makes a lot of sense in a php &gt;= 8 world)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">691</span>
+    <span class="phpdocumentor-element-found-in__line">700</span>
 
     </aside>
 
@@ -1843,7 +1989,7 @@ replace those (while trying to make sure we are not running in collisions)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">239</span>
+    <span class="phpdocumentor-element-found-in__line">245</span>
 
     </aside>
 
@@ -1899,7 +2045,7 @@ replace those (while trying to make sure we are not running in collisions)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">501</span>
+    <span class="phpdocumentor-element-found-in__line">508</span>
 
     </aside>
 
@@ -1966,7 +2112,7 @@ replace those (while trying to make sure we are not running in collisions)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">840</span>
+    <span class="phpdocumentor-element-found-in__line">849</span>
 
     </aside>
 
@@ -2032,7 +2178,7 @@ replace those (while trying to make sure we are not running in collisions)</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Wrapper.php"><a href="files/wrapper.html">Wrapper.php</a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">796</span>
+    <span class="phpdocumentor-element-found-in__line">805</span>
 
     </aside>
 
@@ -2196,8 +2342,10 @@ replace those (while trying to make sure we are not running in collisions)</p>
                             <li class="phpdocumentor-on-this-page-section__title">Properties</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/PhpXmlRpc-Wrapper.html#property_allowedResponseClass">$allowedResponseClass</a></li>
                                                     <li class=""><a href="classes/PhpXmlRpc-Traits-LoggerAware.html#property_logger">$logger</a></li>
                                                     <li class=""><a href="classes/PhpXmlRpc-Wrapper.html#property_namespace">$namespace</a></li>
+                                                    <li class=""><a href="classes/PhpXmlRpc-Wrapper.html#property_prefix">$prefix</a></li>
                                             </ul>
                 </li>
             
@@ -2219,6 +2367,7 @@ replace those (while trying to make sure we are not running in collisions)</p>
                                             <li class=""><a href="classes/PhpXmlRpc-Wrapper.html#method_buildWrapFunctionClosure">buildWrapFunctionClosure()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Wrapper.html#method_buildWrapFunctionSource">buildWrapFunctionSource()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Wrapper.html#method_buildWrapMethodClosure">buildWrapMethodClosure()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Wrapper.html#method_cloneClientForClosure">cloneClientForClosure()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Wrapper.html#method_generateMethodNameForClassMethod">generateMethodNameForClassMethod()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Wrapper.html#method_introspectFunction">introspectFunction()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Wrapper.html#method_newFunctionName">newFunctionName()</a></li>

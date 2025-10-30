@@ -25,7 +25,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.3</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.4</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -163,6 +163,12 @@
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a class="" href="classes/PhpXmlRpc-Helper-Http.html#property_acceptedStatusCodes">$acceptedStatusCodes</a>
+    <span>
+                        &nbsp;: mixed            </span>
+</dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a class="" href="classes/PhpXmlRpc-Traits-LoggerAware.html#property_logger">$logger</a>
     <span>
                         &nbsp;: mixed            </span>
@@ -197,6 +203,12 @@
 <dd>Parses HTTP an http response&#039;s headers and separates them from the body.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/PhpXmlRpc-Helper-Http.html#method_setAcceptedStatusCodes">setAcceptedStatusCodes()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_setLogger">setLogger()</a>
     <span>
                                 &nbsp;: void    </span>
@@ -215,6 +227,44 @@
             <a href="classes/PhpXmlRpc-Helper-Http.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -protected
+                                                                    "
+>
+    <h4 class="phpdocumentor-element__name" id="property_acceptedStatusCodes">
+        $acceptedStatusCodes
+        <a href="classes/PhpXmlRpc-Helper-Http.html#property_acceptedStatusCodes" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                            </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Helper/Http.php"><a href="files/helper-http.html"><abbr title="Helper/Http.php">Http.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">13</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+        <span class="phpdocumentor-signature__visibility">protected</span>
+            <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$acceptedStatusCodes</span>
+     = <span class="phpdocumentor-signature__default-value">array(&#039;200&#039;)</span></code>
+
+    
+    
+    
+
+    
+
+    
+
+</article>
                     <article
         class="
             phpdocumentor-element
@@ -309,7 +359,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/Http.php"><a href="files/helper-http.html"><abbr title="Helper/Http.php">Http.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">267</span>
+    <span class="phpdocumentor-element-found-in__line">269</span>
 
     </aside>
 
@@ -373,7 +423,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="Helper/Http.php"><a href="files/helper-http.html"><abbr title="Helper/Http.php">Http.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">78</span>
+    <span class="phpdocumentor-element-found-in__line">80</span>
 
     </aside>
 
@@ -456,6 +506,50 @@ be a weird API... (note that we still need to always have headers parsed for con
 
             </section>
 
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setAcceptedStatusCodes">
+        setAcceptedStatusCodes()
+        <a href="classes/PhpXmlRpc-Helper-Http.html#method_setAcceptedStatusCodes" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="Helper/Http.php"><a href="files/helper-http.html"><abbr title="Helper/Http.php">Http.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">290</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">setAcceptedStatusCodes</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, string&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$statusCodes</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$statusCodes</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, string&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+
+    
 </article>
                     <article
         class="phpdocumentor-element
@@ -616,6 +710,7 @@ be a weird API... (note that we still need to always have headers parsed for con
                             <li class="phpdocumentor-on-this-page-section__title">Properties</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/PhpXmlRpc-Helper-Http.html#property_acceptedStatusCodes">$acceptedStatusCodes</a></li>
                                                     <li class=""><a href="classes/PhpXmlRpc-Traits-LoggerAware.html#property_logger">$logger</a></li>
                                             </ul>
                 </li>
@@ -626,6 +721,7 @@ be a weird API... (note that we still need to always have headers parsed for con
                                             <li class=""><a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_getLogger">getLogger()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Helper-Http.html#method_parseAcceptHeader">parseAcceptHeader()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Helper-Http.html#method_parseResponseHeaders">parseResponseHeaders()</a></li>
+                                            <li class=""><a href="classes/PhpXmlRpc-Helper-Http.html#method_setAcceptedStatusCodes">setAcceptedStatusCodes()</a></li>
                                             <li class=""><a href="classes/PhpXmlRpc-Traits-LoggerAware.html#method_setLogger">setLogger()</a></li>
                                     </ul>
             </li>
