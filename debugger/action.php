@@ -627,20 +627,31 @@ if ($action) {
     ?>
 
     <h3>Instructions on usage of the debugger</h3>
+    <b>If the server supports introspection methods `<i>system.listMethods</i>`, `<i>system.methodHelp</i>` and co.</b>
     <ol>
-        <li>Run a 'list available methods' action against desired server</li>
-        <li>If list of methods appears, click on 'describe method' for desired method</li>
-        <li>To run method: click on 'load method synopsis' for desired method. This will load a skeleton for method call
-            parameters in the form above. Complete all xml-rpc values with appropriate data and click 'Execute'
+        <li>Fill in values for <i>Address</i>, <i>Port</i>, <i>Path</i></li>
+        <li>Run a <i>'List available methods'</i> action against desired server</li>
+        <li>If list of methods appears, click on <i>'Describe method'</i> for desired method</li>
+        <li>To run method: click on <i>'Load method synopsis'</i> for desired method. This will load a skeleton for method call
+            parameters in the form above. Complete all xml-rpc values with appropriate data and click <i>'Execute'</i>
         </li>
     </ol>
+    <b>If the server does not support introspection methods</b>
+    <ol>
+        <li>Fill in values for <i>Address</i>, <i>Port</i>, <i>Path</i></li>
+        <li>Select <i>'Execute method'</i></li>
+        <li>Fill in method name and payload - fe. &quot;&lt;param&gt;&lt;value&gt;&lt;string&gt;hello&lt;/string&gt;&lt;/value&gt;&lt;/param&gt;&quot;
+            (you can use a wizard to help creating the payload by clicking on the <i>'Edit'</i> link)</li>
+        <li>Click <i>'Execute'</i></li>
+    </ol>
+    <p class="evidence">Use the <i>'Show debug info'</i> switch for troubleshooting.</p>
     <?php
     if (!extension_loaded('curl')) {
         echo "<p class=\"evidence\">You will need to enable the cURL extension to use the HTTPS, HTTP 1.1 and HTTP/2 transports</p>\n";
     }
     ?>
 
-    <h3>Example</h3>
+    <h3>Demo server</h3>
     <p>
         Server Address: gggeek.altervista.org<br/>
         Path: /sw/xmlrpc/demo/server/server.php
@@ -652,7 +663,7 @@ if ($action) {
 
     <h3>Changelog</h3>
     <ul>
-        <li>2025-10-08: added support for json-rpc 2.0. The debugger now require phpjsonrpc 1.0.0-beta3 or later for json-rpc support</li>
+        <li>2025-10-08: added support for json-rpc 2.0. The debugger now require phpjsonrpc 1.0.0 or later for json-rpc support</li>
         <li>2023-02-11: display in the top row the version of the libraries in use; made the generated code throw instead
             of returning a Response object on error; fixes for the json-rpc debugger</li>
         <li>2022-12-18: fix XSS vulnerability in the debugger; load jsxmlrpc from CDN; minor improvements</li>

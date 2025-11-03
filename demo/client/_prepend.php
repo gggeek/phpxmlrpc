@@ -18,7 +18,7 @@ if (isset($_SERVER['HTTPSERVER'])) {
     define('XMLRPCSERVER', 'http://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php');
 }
 
-// A helper for cli vs web output:
+// A helper for cli vs web output
 function output($text)
 {
     /// @todo we should only strip html tags, and let through all xml tags
