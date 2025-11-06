@@ -14,7 +14,7 @@
 // xml-rpc requests (generated via javascript) to this server.
 // Doing so has serious security implications, so we lock it by default to only be enabled on the well-known demo server.
 // If enabling it on your server, you most likely want to set up an allowed domains whitelist, rather than using'*'
-if ($_SERVER['SERVER_ADMIN'] == 'info@altervista.org') {
+if (defined('CORS_ALLOWED_FOR_DEMO_SERVERS')) {
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Methods: POST");
     header("Access-Control-Allow-Headers: Accept, Accept-Charset, Accept-Encoding, Content-Type, User-Agent");
