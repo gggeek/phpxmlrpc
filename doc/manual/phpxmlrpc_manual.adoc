@@ -1596,7 +1596,7 @@ The interface should be self-explicative enough to need little documentation.
 image::debugger.jpg[debugger,458,385,,align="center"]
 
 To make sure that the debugger is working properly, you can use it make f.e. a "list available methods" call against the
-public demo server available at: Address: __gggeek.altervista.org__, Path: __/sw/xmlrpc/demo/server/server.php__
+public demo server available at: Address: __tanoconsulting.com__, Path: __/sw/xmlrpc/demo/server/server.php__
 
 The most useful feature of the debugger is without doubt the "Show debug info" option. It allows to have a screen dump
 of the complete http communication between client and server, including the http headers as well as the request and

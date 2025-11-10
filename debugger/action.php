@@ -653,7 +653,7 @@ if ($action) {
 
     <h3>Demo server</h3>
     <p>
-        Server Address: gggeek.altervista.org<br/>
+        Server Address: tanoconsulting.com<br/>
         Path: /sw/xmlrpc/demo/server/server.php
     </p>
 

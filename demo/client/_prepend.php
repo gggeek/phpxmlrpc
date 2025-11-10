@@ -15,7 +15,7 @@ PhpXmlRpc\Autoloader::register();
 if (isset($_SERVER['HTTPSERVER'])) {
     define('XMLRPCSERVER', 'http://'.$_SERVER['HTTPSERVER'].'/demo/server/server.php');
 } else {
-    define('XMLRPCSERVER', 'http://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php');
+    define('XMLRPCSERVER', 'http://tanoconsulting.com/sw/xmlrpc/demo/server/server.php');
 }
 
 // A helper for cli vs web output

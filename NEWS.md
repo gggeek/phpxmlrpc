@@ -2,6 +2,8 @@
 
 * improved: make it easy to allow CORS requests to the demo server on hosts other than the altervista one
 
+* changed the default public demo server and debugger to be hosted at tanoconsulting.com
+
 
 ## XML-RPC for PHP version 4.11.4 - 2025/10/3
 

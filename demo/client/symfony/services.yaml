@@ -1,5 +1,5 @@
 parameters:
-    xml_rpc_server: https://gggeek.altervista.org/sw/xmlrpc/demo/server/server.php
+    xml_rpc_server: https://tanoconsulting.com/sw/xmlrpc/demo/server/server.php
     xml_rpc_client_options: []
 
 services:
