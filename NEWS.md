@@ -1,4 +1,4 @@
-## XML-RPC for PHP version 4.XXX - unreleased
+## XML-RPC for PHP version 4.11.5 - 2025/11/11
 
 * improved: make it easy to allow CORS requests to the demo server on hosts other than the altervista one
 
