@@ -4,6 +4,10 @@ namespace PhpXmlRpc\Traits;
 
 use PhpXmlRpc\Helper\Logger;
 
+/**
+ * NB: if a class implements this trait, and it is subclassed, instances of the class and of the subclass will share
+ * the same logger instance, unless the subclass reimplements these methods
+ */
 trait LoggerAware
 {
     protected static $logger;
