@@ -128,4 +128,4 @@ jobs:
                     #protocol: ftps
                     local-dir: ./canary/
                     #server-dir: ./
-                    log-level: verbose
+                    #log-level: verbose
