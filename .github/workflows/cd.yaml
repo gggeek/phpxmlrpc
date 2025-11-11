@@ -108,61 +108,24 @@ jobs:
                     git push
                     git checkout ${{ github.ref_name }}
 
-#    deploy_to_altervista:
-#        if: ${{ startsWith(github.ref_name, '4.') && !(contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc')) }}
-#        runs-on: ubuntu-latest
-#        steps:
-#            -   name: checkout code
-#                uses: actions/checkout@v3
-#
-#            # add the bits of jsxmlrpc that make the debugger nicer, so that they get uploaded to the demo server
-#            -   name: setup visualeditor for the debugger
-#                #if: ${{ steps.changed-manual.outputs.any_changed == 'true' || (github.ref_type == 'tag' && startsWith(github.ref_name, '4.')) }}
-#                run: |
-#                    chmod 755 ./taskfile
-#                    ./taskfile setup_debugger_visualeditor
-#
-#            # upload the lib to gggeek.altervista.org via ftp
-#
-#            -   name: upload lib to gggeek.altervista.org - src
-#                #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
-#                uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-#                with:
-#                    server: ftp.gggeek.altervista.org
-#                    username: ${{ secrets.ftp_gggeek_altervista_org_user }}
-#                    password: ${{ secrets.ftp_gggeek_altervista_org_password }}
-#                    protocol: ftps
-#                    local-dir: ./src/
-#                    server-dir: src/
-#                    dangerous-clean-slate: true
-#            -   name: upload lib to gggeek.altervista.org - demo
-#                #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
-#                uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-#                with:
-#                    server: ftp.gggeek.altervista.org
-#                    username: ${{ secrets.ftp_gggeek_altervista_org_user }}
-#                    password: ${{ secrets.ftp_gggeek_altervista_org_password }}
-#                    protocol: ftps
-#                    local-dir: ./demo/
-#                    server-dir: demo/
-#                    dangerous-clean-slate: true
-#                    # NB: codegen and discuss demos might not work anyway unless sys_get_temp_dir() is writeable
-#                    exclude: |
-#                        **/*.pl
-#                        **/*.py
-#                        **/readme.md
-#                        **/codegen.php
-#                        **/discuss.php
-#                        **/testsuite.php
-#                        **/wrapper.php
-#            -   name: upload lib to gggeek.altervista.org - debugger
-#                #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
-#                uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-#                with:
-#                    server: ftp.gggeek.altervista.org
-#                    username: ${{ secrets.ftp_gggeek_altervista_org_user }}
-#                    password: ${{ secrets.ftp_gggeek_altervista_org_password }}
-#                    protocol: ftps
-#                    local-dir: ./debugger/
-#                    server-dir: debugger/
-#                    dangerous-clean-slate: true
+    deploy_to_tanoconsulting_dot_com:
+        # testing: run this on every tag, not only proper releases
+        #if: ${{ startsWith(github.ref_name, '4.') && !(contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc')) }}
+        runs-on: ubuntu-latest
+        steps:
+            -   name: create canary file
+                run: |
+                    mkdir canary
+                    touch canary/please_update.txt
+
+            -   name: upload canary file to tanoconsulting.com
+                #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
+                uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+                with:
+                    server: ftp.tanoconsulting.com
+                    username: ${{ secrets.ftp_tanoconsulting_com_user }}
+                    password: ${{ secrets.ftp_tanoconsulting_com_password }}
+                    #protocol: ftps
+                    local-dir: ./canary/
+                    #server-dir: ./
+                    log-level: verbose
