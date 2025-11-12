@@ -1503,7 +1503,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Traits\\CharsetEncoderAware",
             "name": "CharsetEncoderAware",
-            "summary": "",
+            "summary": "NB\u003A\u0020if\u0020a\u0020class\u0020implements\u0020this\u0020trait,\u0020and\u0020it\u0020is\u0020subclassed,\u0020instances\u0020of\u0020the\u0020class\u0020and\u0020of\u0020the\u0020subclass\u0020will\u0020share\nthe\u0020same\u0020charset\u0020encoder\u0020instance,\u0020unless\u0020the\u0020subclass\u0020reimplements\u0020these\u0020methods",
             "url": "classes/PhpXmlRpc-Traits-CharsetEncoderAware.html"
         },                {
             "fqsen": "\\PhpXmlRpc\\Traits\\CharsetEncoderAware\u003A\u003AgetCharsetEncoder\u0028\u0029",
@@ -1538,7 +1538,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Traits\\LoggerAware",
             "name": "LoggerAware",
-            "summary": "",
+            "summary": "NB\u003A\u0020if\u0020a\u0020class\u0020implements\u0020this\u0020trait,\u0020and\u0020it\u0020is\u0020subclassed,\u0020instances\u0020of\u0020the\u0020class\u0020and\u0020of\u0020the\u0020subclass\u0020will\u0020share\nthe\u0020same\u0020logger\u0020instance,\u0020unless\u0020the\u0020subclass\u0020reimplements\u0020these\u0020methods",
             "url": "classes/PhpXmlRpc-Traits-LoggerAware.html"
         },                {
             "fqsen": "\\PhpXmlRpc\\Traits\\LoggerAware\u003A\u003AgetLogger\u0028\u0029",
@@ -1558,7 +1558,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpXmlRpc\\Traits\\ParserAware",
             "name": "ParserAware",
-            "summary": "",
+            "summary": "NB\u003A\u0020if\u0020a\u0020class\u0020implements\u0020this\u0020trait,\u0020and\u0020it\u0020is\u0020subclassed,\u0020instances\u0020of\u0020the\u0020class\u0020and\u0020of\u0020the\u0020subclass\u0020will\u0020share\nthe\u0020same\u0020parser\u0020instance,\u0020unless\u0020the\u0020subclass\u0020reimplements\u0020these\u0020methods",
             "url": "classes/PhpXmlRpc-Traits-ParserAware.html"
         },                {
             "fqsen": "\\PhpXmlRpc\\Traits\\ParserAware\u003A\u003AgetParser\u0028\u0029",
