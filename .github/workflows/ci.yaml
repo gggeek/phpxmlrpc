@@ -60,7 +60,7 @@ jobs:
                         operating-system: ubuntu-22.04
         steps:
             -    name: checkout code
-                 uses: actions/checkout@v3
+                 uses: actions/checkout@v7
 
             # Although this action is quite nice, we prefer to use the same script to set up php that we use for the
             # docker image used for local testing. This allows us to make sure that script is always in good shape
@@ -91,7 +91,7 @@ jobs:
             # Avoid downloading composer deps on every workflow run. Is this useful for us? Caching the installation of
             # php/apache/privoxy/perl would be more useful...
             #-
-            #    uses: actions/cache@v2
+            #    uses: actions/cache@v6
             #    with:
             #        path: /tmp/composer-cache
             #        key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
@@ -128,7 +128,7 @@ jobs:
 
             # disabled for the moment (2023/02), as we get only noise from the scans...
             #- name: Qodana scan
-            #  uses: JetBrains/qodana-action@main
+            #  uses: JetBrains/qodana-action@v2026.2
             #  env:
             #      QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
 

@@ -16,27 +16,27 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: checkout code
-                uses: actions/checkout@v3
+                uses: actions/checkout@v7
                 with:
                     fetch-depth: 0 # apparently required by tj-actions/changed-files
 
             # these could be useful to update the generated docs on any pushes to master which have changes to docs sources
             #-   name: get changed files - manual
             #    id: changed-manual
-            #    uses: tj-actions/changed-files@v35
+            #    uses: tj-actions/changed-files@v47
             #    with:
             #        files: |
             #            doc/manual/**
 
             #-   name: get changed files - source
             #    id: changed-source
-            #    uses: tj-actions/changed-files@v35
+            #    uses: tj-actions/changed-files@v47
             #    with:
             #        files: |
             #            src/**
 
             -   name: set git credentials as user triggering the build
-                uses: fregante/setup-git-user@v1
+                uses: fregante/setup-git-user@v2
 
             # build and upload api docs
             # (was: NB: this happens independently of releases!)
@@ -85,7 +85,7 @@ jobs:
 
             -   name: create release on github
                 #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
-                uses: softprops/action-gh-release@v1
+                uses: softprops/action-gh-release@v3
                 with:
                     body_path: announcement.txt
                     files: |
@@ -119,7 +119,7 @@ jobs:
 
             -   name: upload canary file to tanoconsulting.com
                 #if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, '4.') }}
-                uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+                uses: SamKirkland/FTP-Deploy-Action@v4.4.0
                 with:
                     server: ftp.tanoconsulting.com
                     username: ${{ secrets.ftp_tanoconsulting_com_user }}
