@@ -9,7 +9,7 @@ ACTION="${1}"
 
 # Valid values: 'default', 5.4 .. 5.6, 7.0 .. 7.4, 8.0 .. 8.5
 export PHP_VERSION=${PHP_VERSION:-default}
-# Valid values: precise (12), trusty (14), xenial (16), bionic (18), focal (20), jammy (22), noble (24)
+# Valid values: precise (12), trusty (14), xenial (16), bionic (18), focal (20), jammy (22), noble (24), resolute (26)
 # For end of support dates, see: https://wiki.ubuntu.com/Releases
 export UBUNTU_VERSION=${UBUNTU_VERSION:-jammy}
 
@@ -61,8 +61,8 @@ Options:
 
 Environment variables:
   used by the 'build' action
-    PHP_VERSION       default value: 'default', ie. the stock php version from the Ubuntu version in use. Other possible values: 5.6, 7.0 .. 7.4, 8.0 .. 8.4
-    UBUNTU_VERSION    default value: jammy. Other possible values: xenial, bionic, focal, noble
+    PHP_VERSION       default value: 'default', ie. the stock php version from the Ubuntu version in use. Other possible values: 5.6, 7.0 .. 7.4, 8.0 .. 8.5
+    UBUNTU_VERSION    default value: jammy. Other possible values: xenial, bionic, focal, noble, resolute
   used by the 'start' action
     HOST_HTTPPORT     default value: 80. Set to 'no' not to publish the container's http port to the host
     HOST_HTTPSPORT    default value: 443. Set to 'no' not to publish the container's https port to the host
@@ -197,7 +197,7 @@ runtests() {
             --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
             --env "SSLVERSION=${SSLVERSION}" \
             --env DEBUG="${DEBUG}" \
-            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit -v $TESTSUITE"
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --verbose $TESTSUITE"
     } || {
         RETCODE="$?"
     }
@@ -225,7 +225,7 @@ runcoverage() {
             --env "HTTPSIGNOREPEER=${HTTPSIGNOREPEER}" \
             --env "SSLVERSION=${SSLVERSION}" \
             --env DEBUG="${DEBUG}" \
-            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html tests/ci/var/coverage -v tests"
+            "${CONTAINER_NAME}" su "${CONTAINER_USER}" -c "./vendor/bin/phpunit --coverage-html tests/ci/var/coverage --verbose tests"
         docker exec -t "${CONTAINER_NAME}" /root/setup/setup_code_coverage.sh disable
     } || {
        RETCODE="$?"
