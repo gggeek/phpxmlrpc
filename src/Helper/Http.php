@@ -76,6 +76,8 @@ class Http
      *
      * @todo if $debug is < 0, we could avoid populating 'raw_data' in the returned value - but that would
      *       be a weird API... (note that we still need to always have headers parsed for content charset)
+     *
+     * @todo align the parsing to rfc9112, rfc 9110 - see f.e. handling of CRLF vs LF, extra whitespace at the start, etc...
      */
     public function parseResponseHeaders(&$data, $headersProcessed = false, $debug = 0)
     {
@@ -134,12 +136,13 @@ class Http
         }
 
         if (!in_array($httpResponse['status_code'], $this->acceptedStatusCodes)) {
+            /// @todo truncate $errstr if it is too long
             $errstr = substr($data, 0, strpos($data, "\n") - 1);
             $this->getLogger()->error('XML-RPC: ' . __METHOD__ . ': HTTP error, got response: ' . $errstr);
             throw new HttpException(PhpXmlRpc::$xmlrpcstr['http_error'] . ' (' . $errstr . ')', PhpXmlRpc::$xmlrpcerr['http_error'], null, $httpResponse['status_code']);
         }
 
-        // be tolerant to usage of \n instead of \r\n to separate headers and data (even though it is not valid http)
+        // be tolerant to usage of \n instead of \r\n to separate headers and data
         $pos = strpos($data, "\r\n\r\n");
         if ($pos || is_int($pos)) {
             $bd = $pos + 4;
@@ -162,7 +165,8 @@ class Http
             $arr = explode(':', $line, 2);
             if (count($arr) > 1) {
                 /// @todo according to https://www.rfc-editor.org/rfc/rfc7230#section-3.2.4, we should reject with error
-                ///       400 any messages where a space is present between the header name and colon
+                ///       400 any messages where a space is present between the header name and colon.
+                ///       Also, CTRL characters are invalid, as well as any chars >= 127
                 $headerName = strtolower(trim($arr[0]));
                 if ($headerName == 'set-cookie') {
                     $cookie = $arr[1];
@@ -191,7 +195,7 @@ class Http
                         }
                     }
                 } else {
-                    /// @todo some other headers (the ones that allow a CSV list of values) do allow many values to be
+                    /// @todo most other headers (the ones that allow a CSV list of values) do allow many values to be
                     ///       passed using multiple header lines.
                     ///       We should add content to $xmlrpc->_xh['headers'][$headerName] instead of replacing it for those...
                     $httpResponse['headers'][$headerName] = trim($arr[1]);
