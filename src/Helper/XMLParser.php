@@ -242,18 +242,15 @@ class XMLParser
 
         switch ($returnType) {
             case self::RETURN_PHP:
-                //xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee_fast'));
                 $this->currentReturnType = 0;
                 break;
             case self::RETURN_EPIVALS:
-                //xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee_epi'));
                 $this->currentReturnType = -1;
                 break;
             /// @todo log an error / throw / error-out on unsupported return type
             case XMLParser::RETURN_XMLRPCVALS:
             default:
                 $this->currentReturnType = 1;
-                //xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee'));
         }
 
         xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee'));

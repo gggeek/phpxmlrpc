@@ -1,3 +1,16 @@
+## XML-RPC for PHP version 4.11.6 - 2026/10/26
+
+* fixed: changes to php 8.4 and 8.5 broke support for having xml-rpc methods declared server-side in the dispatch map
+  that pass on different types of values to user code (xmlrpcVals vs. plain php values). This has now been fixed.
+
+* BC notes:
+
+  in order to fix the above, a change had to be made to the signature of method `XMLParser::xmlrpc_ee`: the default
+  value for its 3rd argument is now 2 instead of 1, and that value has now a precise, new meaning. Also, methods
+  `XMLParser::xmlrpc_ee_fast` and `XMLParser::xmlrpc_ee_epi` are not invoked any more by default. This should only
+  affect users who have subclassed the library's classes or make custom usage of the `XMLParser` class.
+
+
 ## XML-RPC for PHP version 4.11.5 - 2025/11/11
 
 * improved: make it easy to allow CORS requests to the demo server on hosts other than the altervista one

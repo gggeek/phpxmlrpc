@@ -1024,18 +1024,15 @@ class Server
             /// @todo this should be done by a method of the XMLParser
             switch ($dmap[$methodName]['parameters_type']) {
                 case XMLParser::RETURN_PHP:
-                    //xml_set_element_handler($parser, array($xmlParser, 'xmlrpc_se'), array($xmlParser, 'xmlrpc_ee_fast'));
                     $xmlParser->setCurrentReturnType(0);
                     break;
                 case XMLParser::RETURN_EPIVALS:
-                    //xml_set_element_handler($parser, array($xmlParser, 'xmlrpc_se'), array($xmlParser, 'xmlrpc_ee_epi'));
                     $xmlParser->setCurrentReturnType(-1);
                     break;
                 /// @todo log a warning on unsupported return type
                 case XMLParser::RETURN_XMLRPCVALS:
                 default:
                     $xmlParser->setCurrentReturnType(1);
-                    //xml_set_element_handler($parser, array($xmlParser, 'xmlrpc_se'), array($xmlParser, 'xmlrpc_ee'));
             }
         }
     }
