@@ -119,6 +119,9 @@ class XMLParser
         'xmlrpc_reject_invalid_values' => false
     );
 
+    /** @var int */
+    protected $currentReturnType = 1;
+
     /**
      * @param array $options integer keys: options passed to the inner xml parser
      *                       string keys:
@@ -239,16 +242,21 @@ class XMLParser
 
         switch ($returnType) {
             case self::RETURN_PHP:
-                xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee_fast'));
+                //xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee_fast'));
+                $this->currentReturnType = 0;
                 break;
             case self::RETURN_EPIVALS:
-                xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee_epi'));
+                //xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee_epi'));
+                $this->currentReturnType = -1;
                 break;
             /// @todo log an error / throw / error-out on unsupported return type
             case XMLParser::RETURN_XMLRPCVALS:
             default:
-                xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee'));
+                $this->currentReturnType = 1;
+                //xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee'));
         }
+
+        xml_set_element_handler($parser, array($this, 'xmlrpc_se'), array($this, 'xmlrpc_ee'));
 
         xml_set_character_data_handler($parser, array($this, 'xmlrpc_cd'));
         xml_set_default_handler($parser, array($this, 'xmlrpc_dh'));
@@ -293,6 +301,15 @@ class XMLParser
         }
 
         return $this->_xh;
+    }
+
+    /**
+     * @param int $returnType
+     * @return void
+     */
+    public function setCurrentReturnType($returnType)
+    {
+        $this->currentReturnType = $returnType;
     }
 
     /**
@@ -494,17 +511,23 @@ class XMLParser
      *
      * @param resource $parser
      * @param string $name
-     * @param int $rebuildXmlrpcvals >1 for rebuilding xmlrpcvals, 0 for rebuilding php values, -1 for xmlrpc-extension compatibility
+     * @param int $rebuildXmlrpcvals 1 for forcing rebuilding xmlrpcvals, 0 for rebuilding php values, -1 for xmlrpc-extension
+     *                               compatibility. The default value of 2 is used to indicate 'use the current return type',
+     *                               which gets set in self::parse()
      * @return void
      * @throws \Exception this can happen if a callback function is set and it does throw (i.e. we do not catch exceptions)
      *
      * @todo optimization creep: throw when setting $this->_xh['isf'] > 1, to completely avoid further xml parsing
      *       and remove the checking for $this->_xh['isf'] >= 2 everywhere
      */
-    public function xmlrpc_ee($parser, $name, $rebuildXmlrpcvals = 1)
+    public function xmlrpc_ee($parser, $name, $rebuildXmlrpcvals = 2)
     {
         if ($this->_xh['isf'] >= 2) {
             return;
+        }
+
+        if ($rebuildXmlrpcvals === 2) {
+            $rebuildXmlrpcvals = $this->currentReturnType;
         }
 
         // push this element name from stack
@@ -793,7 +816,7 @@ class XMLParser
 
     /**
      * Used in decoding xml-rpc requests/responses without rebuilding xml-rpc Values.
-     * @internal
+     * @deprecated Equivalent functionality is now achieved via changing $this->currentReturnType
      *
      * @param resource $parser
      * @param string $name
@@ -806,7 +829,7 @@ class XMLParser
 
     /**
      * Used in decoding xml-rpc requests/responses while building xmlrpc-extension Values (plain php for all but base64 and datetime).
-     * @internal
+     * @deprecated Equivalent functionality is now achieved via changing $this->currentReturnType
      *
      * @param resource $parser
      * @param string $name
