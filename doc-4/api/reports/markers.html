@@ -7,7 +7,10 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
     <link rel="icon" href="images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -26,7 +29,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.5</a></h1>
+    <h1 class="phpdocumentor-title"><a href="index.html" class="phpdocumentor-title__link">PHPXMLRPC 4.11.6</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -122,7 +125,7 @@
                             </tr>
                                                                                                 <tr>
                                 <td class="phpdocumentor-cell"><a href="reports/markers.html#Helper/Http.php">Helper/Http.php</a></td>
-                                <td class="phpdocumentor-cell">1</td>
+                                <td class="phpdocumentor-cell">2</td>
                             </tr>
                                                                                                 <tr>
                                 <td class="phpdocumentor-cell"><a href="reports/markers.html#Helper/Logger.php">Helper/Logger.php</a></td>
@@ -338,9 +341,14 @@ but then take those into account as well in other methods, ie. isValidCharset)</
                     <tbody>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">80</td>
+                            <td class="phpdocumentor-cell">82</td>
                             <td class="phpdocumentor-cell">if $debug is &lt; 0, we could avoid populating &#039;raw_data&#039; in the returned value - but that would
 be a weird API... (note that we still need to always have headers parsed for content charset)</td>
+                        </tr>
+                                            <tr>
+                            <td class="phpdocumentor-cell">TODO</td>
+                            <td class="phpdocumentor-cell">82</td>
+                            <td class="phpdocumentor-cell">align the parsing to rfc9112, rfc 9110 - see f.e. handling of CRLF vs LF, extra whitespace at the start, etc...</td>
                         </tr>
                                         </tbody>
                 </table>
@@ -399,35 +407,35 @@ while parsing, which is faster than doing it later by going over the rebuilt dat
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">154</td>
+                            <td class="phpdocumentor-cell">157</td>
                             <td class="phpdocumentor-cell">refactor? we could 1. return the parsed data structure, and 2. move $returnType and $accept into options</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">154</td>
+                            <td class="phpdocumentor-cell">157</td>
                             <td class="phpdocumentor-cell">feature-creep make it possible to pass in options overriding usage of PhpXmlRpc::$xmlrpc_XXX_format, so
 that parsing will be completely independent of global state. Note that it might incur a small perf hit...</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">888</td>
+                            <td class="phpdocumentor-cell">908</td>
                             <td class="phpdocumentor-cell">as of 2023, the relevant RFC for XML Media Types is now 7303, and for HTTP it is 9110. Check if the order of
 precedence implemented here is still correct</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">888</td>
+                            <td class="phpdocumentor-cell">908</td>
                             <td class="phpdocumentor-cell">explore usage of mb_http_input(): does it detect http headers + post data? if so, use it instead of hand-detection!!!</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">888</td>
+                            <td class="phpdocumentor-cell">908</td>
                             <td class="phpdocumentor-cell">feature-creep make it possible to pass in options overriding usage of PhpXmlRpc static variables, to make
 the method independent of global state</td>
                         </tr>
                                             <tr>
                             <td class="phpdocumentor-cell">TODO</td>
-                            <td class="phpdocumentor-cell">976</td>
+                            <td class="phpdocumentor-cell">996</td>
                             <td class="phpdocumentor-cell">rename to hasEncodingDeclaration</td>
                         </tr>
                                         </tbody>

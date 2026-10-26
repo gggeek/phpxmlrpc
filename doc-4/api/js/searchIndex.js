@@ -816,6 +816,21 @@ Search.appendIndex(
             "summary": "Parses\u0020an\u0020xml\u002Drpc\u0020xml\u0020string.\u0020Results\u0020of\u0020the\u0020parsing\u0020are\u0020found\u0020in\u0020\u0024this\u002D\u003E\u005B\u0027_xh\u0027\u005D.",
             "url": "classes/PhpXmlRpc-Helper-XMLParser.html#method_parse"
         },                {
+            "fqsen": "\\PhpXmlRpc\\Helper\\XMLParser\u003A\u003AsetCurrentReturnType\u0028\u0029",
+            "name": "setCurrentReturnType",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Helper-XMLParser.html#method_setCurrentReturnType"
+        },                {
+            "fqsen": "\\PhpXmlRpc\\Helper\\XMLParser\u003A\u003Axmlrpc_ee_fast\u0028\u0029",
+            "name": "xmlrpc_ee_fast",
+            "summary": "Used\u0020in\u0020decoding\u0020xml\u002Drpc\u0020requests\/responses\u0020without\u0020rebuilding\u0020xml\u002Drpc\u0020Values.",
+            "url": "classes/PhpXmlRpc-Helper-XMLParser.html#method_xmlrpc_ee_fast"
+        },                {
+            "fqsen": "\\PhpXmlRpc\\Helper\\XMLParser\u003A\u003Axmlrpc_ee_epi\u0028\u0029",
+            "name": "xmlrpc_ee_epi",
+            "summary": "Used\u0020in\u0020decoding\u0020xml\u002Drpc\u0020requests\/responses\u0020while\u0020building\u0020xmlrpc\u002Dextension\u0020Values\u0020\u0028plain\u0020php\u0020for\u0020all\u0020but\u0020base64\u0020and\u0020datetime\u0029.",
+            "url": "classes/PhpXmlRpc-Helper-XMLParser.html#method_xmlrpc_ee_epi"
+        },                {
             "fqsen": "\\PhpXmlRpc\\Helper\\XMLParser\u003A\u003AguessEncoding\u0028\u0029",
             "name": "guessEncoding",
             "summary": "xml\u0020charset\u0020encoding\u0020guessing\u0020helper\u0020function.",
@@ -925,6 +940,11 @@ Search.appendIndex(
             "name": "current_parsing_options",
             "summary": "",
             "url": "classes/PhpXmlRpc-Helper-XMLParser.html#property_current_parsing_options"
+        },                {
+            "fqsen": "\\PhpXmlRpc\\Helper\\XMLParser\u003A\u003A\u0024currentReturnType",
+            "name": "currentReturnType",
+            "summary": "",
+            "url": "classes/PhpXmlRpc-Helper-XMLParser.html#property_currentReturnType"
         },                {
             "fqsen": "\\PhpXmlRpc\\PhpXmlRpc",
             "name": "PhpXmlRpc",
